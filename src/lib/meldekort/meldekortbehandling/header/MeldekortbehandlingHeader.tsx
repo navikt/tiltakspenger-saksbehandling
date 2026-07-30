@@ -8,7 +8,7 @@ import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
-import { MeldekortbehandlingMeny } from '~/lib/meldekort/meldekortbehandling/meny/MeldekortbehandlingMeny';
+import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import {
     erBehandlingSattPåVent,
     erBehandlingUnderkjent,
@@ -77,7 +77,10 @@ export const MeldekortbehandlingHeader = () => {
                     </VStack>
 
                     <VStack justify={'end'}>
-                        <MeldekortbehandlingMeny meldekortbehandling={meldekortbehandling} />
+                        <MeldekortbehandlingMeny
+                            meldekortbehandling={meldekortbehandling}
+                            skalNavigereTilBehandling={false}
+                        />
                     </VStack>
                 </HStack>
 

@@ -3,8 +3,6 @@ import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { meldekortbehandlingUrl } from '~/utils/urls';
-import { useRouter } from 'next/router';
 import { SakProps } from '~/lib/sak/SakTyper';
 import {
     MeldekortbehandlingProps,
@@ -15,12 +13,16 @@ type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const MeldekortbehandlingOverta = ({ meldekortbehandling, åpen, onClose }: Props) => {
-    const { sak, setSak } = useSak();
-
-    const router = useRouter();
+export const MeldekortbehandlingOverta = ({
+    meldekortbehandling,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
+    const { sak } = useSak();
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
         `/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/overta`,
@@ -35,10 +37,9 @@ export const MeldekortbehandlingOverta = ({ meldekortbehandling, åpen, onClose 
               : 'Ukjent saksbehandler/beslutter';
 
     const overta = () => {
-        trigger({ overtarFra }).then((response) => {
-            if (response) {
-                setSak(response);
-                router.push(meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id));
+        trigger({ overtarFra }).then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

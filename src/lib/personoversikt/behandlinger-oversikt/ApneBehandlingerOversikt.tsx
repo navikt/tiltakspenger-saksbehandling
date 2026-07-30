@@ -31,7 +31,7 @@ import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { MeldekortbehandlingMeny } from '~/lib/meldekort/meldekortbehandling/meny/MeldekortbehandlingMeny';
+import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import NextLink from 'next/link';
 
 type Props = {
@@ -196,6 +196,7 @@ const propsForRad = (
                             <MeldekortbehandlingMeny
                                 meldekortbehandling={meldekortbehandling}
                                 size={'small'}
+                                skalNavigereTilBehandling={true}
                             />
                         </HStack>
                     ),

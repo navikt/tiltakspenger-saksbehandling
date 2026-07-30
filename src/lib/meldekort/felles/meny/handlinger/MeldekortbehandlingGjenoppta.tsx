@@ -1,5 +1,5 @@
 import { Button, Dialog } from '@navikt/ds-react';
-import { PersonIcon } from '@navikt/aksel-icons';
+import { PlayIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
@@ -11,22 +11,27 @@ type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const MeldekortbehandlingTildelMeg = ({ meldekortbehandling, åpen, onClose }: Props) => {
-    const { sak, setSak } = useSak();
+export const MeldekortbehandlingGjenoppta = ({
+    meldekortbehandling,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
+    const { sak } = useSak();
     const { id } = meldekortbehandling;
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
-        `/sak/${sak.sakId}/meldekort/${id}/ta`,
-        'POST',
+        `/sak/${sak.sakId}/meldekort/${id}/gjenoppta`,
+        'PATCH',
     );
 
-    const tildelMeg = () => {
+    const gjenoppta = () => {
         trigger().then((oppdatertSak) => {
             if (oppdatertSak) {
-                setSak(oppdatertSak);
-                onClose();
+                onSuccess(oppdatertSak);
             }
         });
     };
@@ -35,16 +40,16 @@ export const MeldekortbehandlingTildelMeg = ({ meldekortbehandling, åpen, onClo
         <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Tildel deg meldekortbehandlingen?'}</strong>
+                    <strong>{'Gjenoppta meldekortbehandlingen?'}</strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
-                    {'Er du sikker på at du vil tildele deg meldekortbehandlingen?'}
+                    {'Er du sikker på at du vil gjenoppta meldekortbehandlingen?'}
 
                     {error && (
                         <Infokort
                             variant={'feil'}
-                            header={'Feil ved tildeling'}
+                            header={'Feil ved gjenopptak'}
                         >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
                     )}
                 </Dialog.Body>
@@ -52,11 +57,11 @@ export const MeldekortbehandlingTildelMeg = ({ meldekortbehandling, åpen, onClo
                 <Dialog.Footer>
                     <Button
                         variant={'primary'}
-                        icon={<PersonIcon aria-hidden />}
+                        icon={<PlayIcon aria-hidden />}
                         loading={isMutating}
-                        onClick={tildelMeg}
+                        onClick={gjenoppta}
                     >
-                        {'Tildel meg'}
+                        {'Gjenoppta'}
                     </Button>
 
                     <Dialog.CloseTrigger>
