@@ -1,6 +1,5 @@
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { BrukersMeldekortDagStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
-import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import React, { ReactElement } from 'react';
 import { Tag } from '@navikt/ds-react';
 import {
@@ -11,7 +10,6 @@ import {
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { ÅpenBehandlingForOversiktType } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Behandlingsårsak, Søknadstype } from '~/types/Søknad';
 import {
     SøknadBehandlingsårsakManueltRegistrertSøknad,
@@ -122,95 +120,9 @@ export const meldekortbehandlingDagStatusTekst: Record<MeldekortbehandlingDagSta
     [MeldekortbehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
 } as const;
 
-export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, string> = {
-    [MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]: 'Avventer meldekort',
-    [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
-    [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: 'Ikke klar til behandling',
-    [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
-    [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: 'Under behandling',
-    [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
-    [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: 'Under beslutning',
-    [MeldeperiodeKjedeStatus.GODKJENT]: 'Godkjent',
-    [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
-    [MeldeperiodeKjedeStatus.AVBRUTT]: 'Avsluttet',
-    [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
-    [MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]: 'Venter på automatisk behandling',
-} as const;
-
-export const meldeperiodeKjedeStatusTag: Record<MeldeperiodeKjedeStatus, React.ReactElement> = {
-    [MeldeperiodeKjedeStatus.GODKJENT]: (
-        <Tag data-color="success" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.GODKJENT]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: (
-        <Tag data-color="success" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: (
-        <Tag data-color="info" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: (
-        <Tag data-color="info" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: (
-        <Tag data-color="info" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.UNDER_BEHANDLING]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: (
-        <Tag data-color="info" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.UNDER_BESLUTNING]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.AVBRUTT]: (
-        <Tag data-color="neutral" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AVBRUTT]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]: (
-        <Tag data-color="neutral" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: (
-        <Tag data-color="neutral" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: (
-        <Tag data-color="neutral" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: (
-        <Tag data-color="info" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]}
-        </Tag>
-    ),
-    [MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]: (
-        <Tag data-color="neutral" variant="outline">
-            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]}
-        </Tag>
-    ),
-} as const;
-
 export const finnBehandlingstypeTekst: Record<Rammebehandlingstype, string> = {
     [Rammebehandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
     [Rammebehandlingstype.REVURDERING]: 'Revurdering',
-} as const;
-
-export const finnTypeBehandlingTekstForOversikt: Record<ÅpenBehandlingForOversiktType, string> = {
-    [ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING]: 'Søknadsbehandling',
-    [ÅpenBehandlingForOversiktType.REVURDERING]: 'Revurdering',
-    [ÅpenBehandlingForOversiktType.SØKNAD]: 'Søknad',
-    [ÅpenBehandlingForOversiktType.MELDEKORT]: 'Meldekort',
-    [ÅpenBehandlingForOversiktType.KLAGE]: 'Klage',
 } as const;
 
 export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {

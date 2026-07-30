@@ -1,5 +1,4 @@
 import { ÅpenBehandlingForOversikt } from '../personoversikt/typer/ÅpenBehandlingForOversikt';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { UtbetalingstidslinjePeriode } from '~/types/Utbetaling';
 import { Rammebehandling } from '../rammebehandling/typer/Rammebehandling';
@@ -9,9 +8,12 @@ import { Klagevedtak } from '../klage/typer/Klagevedtak';
 import { Søknad } from '~/types/Søknad';
 import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
-import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
-import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 export type SakId = `sak_${string}`;
 
@@ -20,14 +22,12 @@ export type SakProps = {
     saksnummer: string;
     fnr: string;
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
-    meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
     behandlinger: Rammebehandling[];
     klageBehandlinger: Klagebehandling[];
     tidslinje: TidslinjeRammevedtak;
     innvilgetTidslinje: TidslinjeRammevedtak;
-    // Alle rammevedtak på saken med opprinnelige perioder
     alleRammevedtak: Rammevedtak[];
     alleKlagevedtak: Klagevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
@@ -35,7 +35,7 @@ export type SakProps = {
     tilbakekrevinger: TilbakekrevingBehandling[];
     kanSendeInnHelgForMeldekort: boolean;
     meldekortvedtak: Meldekortvedtak[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
-    meldeperiodeKjederV2: MeldeperiodeKjedePropsV2[];
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
+    meldeperiodeKjederV2: MeldeperiodekjedeProps[];
     åpenMeldekortbehandlingId: Nullable<MeldekortbehandlingId>;
 };

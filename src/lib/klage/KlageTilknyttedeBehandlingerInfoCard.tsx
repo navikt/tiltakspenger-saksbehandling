@@ -5,15 +5,17 @@ import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunktKort } from '~/utils/date';
 import { finnBehandlingstypeTekst, behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
-import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '../meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
 import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
 
 const KlageTilknyttedeBehandlingerInfoCard = (props: {
     klage: Klagebehandling;
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
 }) => {
     const tilknyttedeIkkeÅpneBehandlinger = props.klage.tilknyttedeBehandlingIder.filter(
         (id) => id !== props.klage.åpenBehandlingId,

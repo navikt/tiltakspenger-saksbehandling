@@ -36,16 +36,16 @@ import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortved
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import {
     hentMeldekortvedtakMedBehandlinger,
     hentRammevedtakMedBehandlinger,
 } from '~/lib/sak/sakUtils';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>;
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>;
     rammevedtakOgBehandling: RammevedtakMedBehandling[];
     meldekortvedtakOgBehandling: MeldekortvedtakMedBehandling[];
 };

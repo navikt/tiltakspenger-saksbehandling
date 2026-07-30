@@ -1,19 +1,17 @@
 import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
-import { Periode } from '~/types/Periode';
-import { BrukersMeldekortId } from './BrukersMeldekort';
-import { Avbrutt } from '../../behandling-felles/typer/Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
-import {
-    BeløpProps,
-    MeldeperiodeBeregningProps,
-} from '~/lib/beregning-og-simulering/typer/Beregning';
-import { SakId } from '../../sak/SakTyper';
-import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
+import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { Periode } from '~/types/Periode';
+import { MeldeperiodeBeregningPropsV2 } from '~/lib/beregning-og-simulering/typer/Beregning';
+import { SakId } from '~/lib/sak/SakTyper';
+import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
 import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
-import { Attestering } from '../../behandling-felles/typer/Attestering';
+import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
+import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { VentestatusHendelse } from '~/types/Ventestatus';
 import { KlageId } from '~/lib/klage/typer/Klage';
+import { VentestatusHendelse } from '~/types/Ventestatus';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export const MeldekortbehandlingPrefix = 'meldekort_' as const;
 
@@ -55,39 +53,6 @@ export enum MeldeperiodebehandlingType {
     KORRIGERING = 'KORRIGERING',
 }
 
-export type MeldekortbehandlingProps = {
-    id: MeldekortbehandlingId;
-    sakId: SakId;
-    meldeperiodeId: MeldeperiodeId;
-    brukersMeldekortId?: BrukersMeldekortId;
-    saksbehandler?: string;
-    beslutter?: string;
-    opprettet: string;
-    godkjentTidspunkt?: string;
-    status: MeldekortbehandlingStatus;
-    erAvsluttet: boolean;
-    navkontor: string;
-    navkontorNavn?: string;
-    begrunnelse?: string;
-    type: MeldeperiodebehandlingType;
-    attesteringer: Attestering[];
-    utbetalingsstatus: Utbetalingsstatus;
-    periode: Periode;
-    dager: MeldekortDagProps[];
-    beregning?: MeldekortBeregning;
-    avbrutt?: Avbrutt;
-    simulertBeregning: Nullable<SimulertBeregning>;
-    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
-    /** Melding fra backend som kan vises direkte. Null når grunnen alene er dekkende. */
-    kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
-    tekstTilVedtaksbrev: Nullable<string>;
-    tilbakekrevingId: Nullable<TilbakekrevingId>;
-    skalSendeVedtaksbrev: boolean;
-    ventestatus: VentestatusHendelse[];
-    harFlereMeldeperioder: boolean;
-    klagebehandlingId: Nullable<KlageId>;
-};
-
 export type MeldekortDagProps = {
     dato: string;
     status: MeldekortbehandlingDagStatus;
@@ -98,12 +63,6 @@ export type MeldekortDagBeregnetProps = {
     status: MeldekortbehandlingDagStatus;
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag?: MeldekortBeregningsdag;
-};
-
-export type MeldekortBeregning = {
-    totalBeløp: BeløpProps;
-    beregningForMeldekortetsPeriode: MeldeperiodeBeregningProps;
-    beregningerForPåfølgendePerioder: MeldeperiodeBeregningProps[];
 };
 
 export type MeldekortBeregningsdag = {
@@ -129,6 +88,42 @@ type OppdaterMeldekortdagDTO = {
     status: MeldekortbehandlingDagStatus;
 };
 
-export type OpprettMeldekortbehandlingDTO = {
-    v2: boolean;
+export type MeldeperiodebehandlingProps = {
+    meldeperiodeId: MeldeperiodeId;
+    kjedeId: MeldeperiodeKjedeId;
+    brukersMeldekortId: Nullable<BrukersMeldekortId>;
+    periode: Periode;
+    dager: MeldekortDagProps[];
+    beregning: Nullable<MeldeperiodeBeregningPropsV2>;
+    type: MeldeperiodebehandlingType;
+};
+
+export type MeldekortbehandlingProps = {
+    id: MeldekortbehandlingId;
+    sakId: SakId;
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
+    opprettet: string;
+    sistEndret: string;
+    godkjentTidspunkt: Nullable<string>;
+    status: MeldekortbehandlingStatus;
+    erAvsluttet: boolean;
+    navkontor: string;
+    navkontorNavn: Nullable<string>;
+    begrunnelse: Nullable<string>;
+    attesteringer: Attestering[];
+    utbetalingsstatus: Utbetalingsstatus;
+    /** Sammenhengende totalperiode på tvers av alle meldeperioder */
+    periode: Periode;
+    meldeperioder: MeldeperiodebehandlingProps[];
+    avbrutt: Nullable<Avbrutt>;
+    simulertBeregning: Nullable<SimulertBeregning>;
+    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
+    kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
+    tekstTilVedtaksbrev: Nullable<string>;
+    tilbakekrevingId: Nullable<TilbakekrevingId>;
+    klagebehandlingId: Nullable<KlageId>;
+    skalSendeVedtaksbrev: boolean;
+    ventestatus: VentestatusHendelse[];
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };

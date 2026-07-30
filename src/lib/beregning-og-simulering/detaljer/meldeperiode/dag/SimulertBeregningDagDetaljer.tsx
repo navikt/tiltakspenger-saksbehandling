@@ -7,12 +7,13 @@ import {
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erHelg, formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/0-felles-komponenter/MeldekortIkoner';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 import { tilKompakteMerker } from './simuleringsmerker';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
 
 import style from './SimulertBeregningDagDetaljer.module.css';
+import { PartialRecord } from '~/types/UtilTypes';
 
 type Props = {
     dag: SimulertBeregningDag;
@@ -86,7 +87,7 @@ const BeregningCells = ({ beregning, status }: SimulertBeregningDagMedBeregning)
  * Kortversjoner for den tette beregningstabellen.
  * Full tekst brukes ellers i løsningen; her leser bare saksbehandlere, og plassen er knapp.
  */
-const kortStatusTekst: Partial<Record<MeldekortbehandlingDagStatus, string>> = {
+const kortStatusTekst: PartialRecord<MeldekortbehandlingDagStatus, string> = {
     [MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger]: 'Ikke rett',
 };
 

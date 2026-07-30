@@ -214,7 +214,6 @@ const lagSak = (klage: Klagebehandling | null, options?: { søknader?: Søknad[]
     saksnummer,
     fnr,
     åpneBehandlinger: [],
-    meldeperiodeKjeder: [],
     behandlinger: [lagRammebehandling()],
     klageBehandlinger: klage ? [klage] : [],
     tidslinje: { elementer: [] },

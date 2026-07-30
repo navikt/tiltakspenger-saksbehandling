@@ -1,0 +1,21 @@
+.heading {
+    display: flex;
+    align-items: center;
+    gap: var(--ax-space-8);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+}
+
+.tabsPanel {
+    margin-top: 1rem;
+}
+
+.seksjon {
+    margin-left: -1rem;
+    padding: 1rem;
+    border-top-right-radius: var(--ax-radius-4);
+    border-bottom-right-radius: var(--ax-radius-4);
+    border: 2px solid var(--ax-border-info-subtle);
+    border-left: none;
+    background: var(--ax-bg-info-soft);
+}

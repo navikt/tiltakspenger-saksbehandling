@@ -1,0 +1,97 @@
+import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
+import { formaterTidspunkt } from '~/utils/date';
+import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
+import { BrukersMeldekortUker } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortUker';
+import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/meldekortForhåndsutfyllingUtils';
+import {
+    useMeldekortbehandlingSkjema,
+    useMeldekortbehandlingSkjemaDispatch,
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
+import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
+import { useState } from 'react';
+import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+type Props = {
+    meldeperiodeKjede: MeldeperiodekjedeProps;
+};
+
+export const BrukersMeldekortForKjede = ({ meldeperiodeKjede }: Props) => {
+    const { brukersMeldekort, sisteMeldeperiode, id } = meldeperiodeKjede;
+
+    const sisteBrukersMeldekort = brukersMeldekort.at(-1);
+
+    const [valgtMeldekortId, setValgtMeldekortId] = useState<BrukersMeldekortId | undefined>(
+        sisteBrukersMeldekort?.id,
+    );
+
+    const { erReadonly } = useMeldekortbehandlingSkjema();
+    const dispatch = useMeldekortbehandlingSkjemaDispatch();
+
+    if (!sisteBrukersMeldekort) {
+        return (
+            <InlineMessage status={'info'} size={'small'}>
+                {'Ingen meldekort mottatt fra bruker for denne perioden'}
+            </InlineMessage>
+        );
+    }
+
+    const valgtMeldekort =
+        brukersMeldekort.find((meldekort) => meldekort.id === valgtMeldekortId) ??
+        sisteBrukersMeldekort;
+
+    return (
+        <VStack gap={'space-16'}>
+            <HStack justify={'space-between'} align={'center'}>
+                <Heading size={'xsmall'} level={'4'} spacing={true}>
+                    {'Meldekort fra bruker'}
+                </Heading>
+
+                <Select
+                    label={'Velg meldekort'}
+                    hideLabel={true}
+                    size={'small'}
+                    value={valgtMeldekort.id}
+                    onChange={(e) => setValgtMeldekortId(e.target.value as BrukersMeldekortId)}
+                >
+                    {brukersMeldekort
+                        .toSorted((a, b) => b.mottatt.localeCompare(a.mottatt))
+                        .map((meldekort, index) => (
+                            <option key={meldekort.id} value={meldekort.id}>
+                                {`Mottatt ${formaterTidspunkt(meldekort.mottatt)}${index === 0 ? ' (siste)' : ''}`}
+                            </option>
+                        ))}
+                </Select>
+            </HStack>
+
+            <BrukersMeldekortAutomatiskBehandlingStatus meldekort={valgtMeldekort} />
+
+            {!erReadonly && (
+                <Button
+                    variant={'tertiary'}
+                    size={'xsmall'}
+                    icon={<ChevronRightDoubleIcon />}
+                    iconPosition={'right'}
+                    onClick={() => {
+                        const dager = hentMeldekortForhåndsutfyllingFraBrukersMeldekort(
+                            valgtMeldekort,
+                            sisteMeldeperiode,
+                        );
+
+                        dispatch({
+                            type: 'setDager',
+                            payload: {
+                                dager,
+                                kjedeId: id,
+                            },
+                        });
+                    }}
+                >
+                    {'Fyll inn disse dagene'}
+                </Button>
+            )}
+
+            <BrukersMeldekortUker brukersMeldekort={valgtMeldekort} kompakt={true} />
+        </VStack>
+    );
+};

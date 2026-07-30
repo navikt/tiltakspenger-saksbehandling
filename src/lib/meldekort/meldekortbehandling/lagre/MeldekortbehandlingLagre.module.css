@@ -1,0 +1,38 @@
+.outer {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    padding: 0.5rem 1rem;
+    margin: 0 -1rem;
+
+    border-bottom: 1px dashed var(--ax-border-neutral);
+
+    background: var(--ax-bg-default);
+
+    &.dirty {
+        background: var(--ax-bg-warning-moderate);
+    }
+}
+
+.knapp {
+    width: fit-content;
+
+    &.dirty {
+        animation-duration: 0.5s;
+        animation-name: pulse;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: ease-in;
+    }
+}
+
+@keyframes pulse {
+    from {
+        box-shadow: 0 0 2px 2px var(--ax-warning-100);
+    }
+
+    to {
+        box-shadow: 0 0 3px 3px var(--ax-warning-400);
+    }
+}

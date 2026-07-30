@@ -44,12 +44,14 @@ import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/ram
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 type Props = {
     sak: SakProps;
@@ -61,8 +63,8 @@ type Props = {
     meldekortvedtak: Meldekortvedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -102,7 +104,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             omgjøringsbehandling: omgjøringsbehandling,
             rammebehandlinger: sak.behandlinger,
             meldekortbehandlinger: sak.meldekortbehandlinger,
-            meldeperiodekjeder: sak.meldeperiodeKjeder,
+            meldeperiodekjeder: sak.meldeperiodeKjederV2,
         } satisfies Props,
     };
 });

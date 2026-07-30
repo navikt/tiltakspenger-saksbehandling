@@ -5,9 +5,11 @@ import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
-import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
@@ -44,7 +46,7 @@ export const hentTilbakekreving = (sak: SakProps, tilbakekrevingId: Tilbakekrevi
 export const hentMeldeperiodekjede = (
     sak: SakProps,
     kjedeId: MeldeperiodeKjedeId,
-): MeldeperiodeKjedePropsV2 => {
+): MeldeperiodekjedeProps => {
     const kjede = sak.meldeperiodeKjederV2.find((it) => it.id === kjedeId);
 
     if (!kjede) {
@@ -58,7 +60,7 @@ export const hentMeldeperiodekjede = (
 export const hentMeldekortbehandling = (
     sak: SakProps,
     id: MeldekortbehandlingId,
-): MeldekortbehandlingPropsV2 => {
+): MeldekortbehandlingProps => {
     const meldekortbehandling = sak.meldekortbehandlinger[id];
 
     if (!meldekortbehandling) {

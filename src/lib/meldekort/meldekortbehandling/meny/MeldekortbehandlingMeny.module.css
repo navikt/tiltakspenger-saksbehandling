@@ -1,0 +1,6 @@
+.divider {
+    &:first-child,
+    &:last-child {
+        display: none;
+    }
+}

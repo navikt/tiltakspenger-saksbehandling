@@ -21,20 +21,22 @@ import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
 } from '../behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '../meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '../meldekort/typer/Meldekortvedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
-import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
-import { MeldeperiodeKjedeProps } from '../meldekort/typer/Meldeperiode';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 const Omgjøringsresultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
     rammevedtak: Rammevedtak[];
     meldekortvedtak: Meldekortvedtak[];
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
     innloggetSaksbehandler: Saksbehandler;
 }) => {
     return (
@@ -131,8 +133,8 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
     meldekortvedtak: Meldekortvedtak[];
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
-    omgjøringsbehandling: Nullable<MeldekortbehandlingPropsV2 | Rammebehandling>;
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
+    omgjøringsbehandling: Nullable<MeldekortbehandlingProps | Rammebehandling>;
 }) => {
     const erReadonlyForSaksbehandler =
         props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
@@ -167,7 +169,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                             variant="secondary"
                             href={meldeperiodeUrl(
                                 props.klage.saksnummer,
-                                (props.omgjøringsbehandling as MeldekortbehandlingPropsV2).periode,
+                                (props.omgjøringsbehandling as MeldekortbehandlingProps).periode,
                             )}
                         >
                             Gå til omgjøringsbehandling
