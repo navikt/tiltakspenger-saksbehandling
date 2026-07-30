@@ -226,7 +226,7 @@ const lagSak = (klage: Klagebehandling | null, options?: { søknader?: Søknad[]
     kanSendeInnHelgForMeldekort: false,
     meldekortvedtak: [],
     meldekortbehandlinger: {},
-    meldeperiodeKjederV2: [],
+    meldeperiodeKjeder: [],
     åpenMeldekortbehandlingId: null,
 });
 

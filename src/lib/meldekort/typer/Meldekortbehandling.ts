@@ -2,7 +2,7 @@ import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
 import { Nullable } from '~/types/UtilTypes';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Periode } from '~/types/Periode';
-import { MeldeperiodeBeregningPropsV2 } from '~/lib/beregning-og-simulering/typer/Beregning';
+import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
 import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
@@ -94,7 +94,7 @@ export type MeldeperiodebehandlingProps = {
     brukersMeldekortId: Nullable<BrukersMeldekortId>;
     periode: Periode;
     dager: MeldekortDagProps[];
-    beregning: Nullable<MeldeperiodeBeregningPropsV2>;
+    beregning: Nullable<MeldeperiodeBeregningProps>;
     type: MeldeperiodebehandlingType;
 };
 

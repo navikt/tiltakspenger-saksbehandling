@@ -61,7 +61,7 @@ export const Personoversikt = () => {
         alleRammevedtak,
         alleKlagevedtak,
         tilbakekrevinger,
-        meldeperiodeKjederV2,
+        meldeperiodeKjeder,
     } = sak;
 
     const avbrutteRammebehandlinger = behandlinger.filter((behandling) => behandling.avbrutt);
@@ -146,7 +146,7 @@ export const Personoversikt = () => {
                         />
                         <Tabs.Tab
                             value={PersonoversiktTab.Meldekort}
-                            label={labelWithCounter('Meldekort', meldeperiodeKjederV2.length)}
+                            label={labelWithCounter('Meldekort', meldeperiodeKjeder.length)}
                             icon={<InboxIcon aria-hidden />}
                             className={styles.tab}
                         />

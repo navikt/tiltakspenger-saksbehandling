@@ -19,11 +19,6 @@ export type MeldeperiodeBeregningProps = {
     beregningKilde: BeregningKilde;
 };
 
-export type MeldeperiodeBeregningPropsV2 = {
-    beløp: BeløpProps;
-    dager: MeldekortDagBeregnetProps[];
-};
-
 export type BeregningerSummert = {
     totalt: BeløpFørOgNå;
     ordinært: BeløpFørOgNå;

@@ -47,7 +47,7 @@ export const hentMeldeperiodekjede = (
     sak: SakProps,
     kjedeId: MeldeperiodeKjedeId,
 ): MeldeperiodekjedeProps => {
-    const kjede = sak.meldeperiodeKjederV2.find((it) => it.id === kjedeId);
+    const kjede = sak.meldeperiodeKjeder.find((it) => it.id === kjedeId);
 
     if (!kjede) {
         throw Error(`Fant ikke meldeperiodekjede med id ${kjedeId}`);

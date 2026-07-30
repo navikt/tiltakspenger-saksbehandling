@@ -104,7 +104,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             omgjøringsbehandling: omgjøringsbehandling,
             rammebehandlinger: sak.behandlinger,
             meldekortbehandlinger: sak.meldekortbehandlinger,
-            meldeperiodekjeder: sak.meldeperiodeKjederV2,
+            meldeperiodekjeder: sak.meldeperiodeKjeder,
         } satisfies Props,
     };
 });

@@ -30,7 +30,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
     const kjedeId = periodeTilMeldeperiodeKjedeId(periodeFraParam);
 
-    const meldeperiodeKjede = sak.meldeperiodeKjederV2.find((kjede) => kjede.id === kjedeId);
+    const meldeperiodeKjede = sak.meldeperiodeKjeder.find((kjede) => kjede.id === kjedeId);
 
     if (!meldeperiodeKjede) {
         return {

@@ -18,7 +18,7 @@ enum OversiktVisning {
 
 export const MeldekortOversikt = () => {
     const { sak } = useSak();
-    const { saksnummer, meldeperiodeKjederV2 } = sak;
+    const { saksnummer, meldeperiodeKjeder } = sak;
 
     const [visning, setVisning] = useState<OversiktVisning>(OversiktVisning.Meldeperiodekjeder);
 
@@ -29,7 +29,7 @@ export const MeldekortOversikt = () => {
     return (
         <VStack gap={'space-16'}>
             <VStack gap={'space-16'} className={style.toppSeksjon}>
-                <UbehandledeMeldekortVarsel meldeperiodekjeder={meldeperiodeKjederV2} />
+                <UbehandledeMeldekortVarsel meldeperiodekjeder={meldeperiodeKjeder} />
 
                 <ApenMeldekortbehandlingOppsummering />
             </VStack>
@@ -40,7 +40,7 @@ export const MeldekortOversikt = () => {
                     onChange={(value) => setVisning(value as OversiktVisning)}
                 >
                     <ToggleGroup.Item value={OversiktVisning.Meldeperiodekjeder}>
-                        {`Meldeperioder (${meldeperiodeKjederV2.length})`}
+                        {`Meldeperioder (${meldeperiodeKjeder.length})`}
                     </ToggleGroup.Item>
                     <ToggleGroup.Item value={OversiktVisning.Meldekortbehandlinger}>
                         {`Meldekortbehandlinger (${meldekortbehandlinger.length})`}
@@ -48,7 +48,7 @@ export const MeldekortOversikt = () => {
                 </ToggleGroup>
 
                 <HStack gap={'space-16'} align={'center'}>
-                    <MeldekortOversiktIkkeKlar meldeperiodekjeder={meldeperiodeKjederV2} />
+                    <MeldekortOversiktIkkeKlar meldeperiodekjeder={meldeperiodeKjeder} />
                     <MeldekortHelgToggle />
                 </HStack>
             </HStack>
@@ -56,7 +56,7 @@ export const MeldekortOversikt = () => {
             {visning === OversiktVisning.Meldeperiodekjeder ? (
                 <MeldeperiodeKjederOversikt
                     saksnummer={saksnummer}
-                    meldeperiodeKjeder={meldeperiodeKjederV2}
+                    meldeperiodeKjeder={meldeperiodeKjeder}
                 />
             ) : (
                 <MeldekortbehandlingerOversikt

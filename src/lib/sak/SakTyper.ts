@@ -30,12 +30,12 @@ export type SakProps = {
     innvilgetTidslinje: TidslinjeRammevedtak;
     alleRammevedtak: Rammevedtak[];
     alleKlagevedtak: Klagevedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
     søknader: Søknad[];
     tilbakekrevinger: TilbakekrevingBehandling[];
     kanSendeInnHelgForMeldekort: boolean;
-    meldekortvedtak: Meldekortvedtak[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
-    meldeperiodeKjederV2: MeldeperiodekjedeProps[];
+    meldeperiodeKjeder: MeldeperiodekjedeProps[];
     åpenMeldekortbehandlingId: Nullable<MeldekortbehandlingId>;
 };

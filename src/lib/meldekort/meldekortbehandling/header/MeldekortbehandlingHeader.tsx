@@ -108,7 +108,7 @@ export const MeldekortbehandlingHeader = () => {
 
                 {!erMeldekortbehandlingGodkjent(meldekortbehandling) && (
                     <UbehandledeMeldekortVarsel
-                        meldeperiodekjeder={sak.meldeperiodeKjederV2}
+                        meldeperiodekjeder={sak.meldeperiodeKjeder}
                         skjema={meldeperioder}
                     />
                 )}

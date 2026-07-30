@@ -13,9 +13,9 @@ type Props = {
 };
 
 export const MeldeperiodekjedeSide = ({ kjedeId }: Props) => {
-    const { sakId, saksnummer, meldeperiodeKjederV2 } = useSak().sak;
+    const { sakId, saksnummer, meldeperiodeKjeder } = useSak().sak;
 
-    const kjede = meldeperiodeKjederV2.find((it) => it.id === kjedeId);
+    const kjede = meldeperiodeKjeder.find((it) => it.id === kjedeId);
 
     return (
         <>

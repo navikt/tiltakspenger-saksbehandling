@@ -27,7 +27,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
 
     const valgteKjedeIder = new Set<MeldeperiodeKjedeId>(meldeperioder.map((m) => m.kjedeId));
 
-    const tilgjengeligeKjeder = sak.meldeperiodeKjederV2.filter(
+    const tilgjengeligeKjeder = sak.meldeperiodeKjeder.filter(
         (kjede) => kjede.kanBehandles && !valgteKjedeIder.has(kjede.id),
     );
 
