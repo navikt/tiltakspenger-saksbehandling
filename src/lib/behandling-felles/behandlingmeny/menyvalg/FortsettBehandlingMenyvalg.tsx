@@ -6,6 +6,7 @@ import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const visFortsettBehandlingMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
@@ -27,10 +28,12 @@ type Props = {
 };
 
 const FortsettBehandlingMenyvalg = ({ behandling }: Props) => {
+    const { saksnummer } = useSak().sak;
+
     return (
         <ActionMenu.Item
             as={Link}
-            href={behandlingUrl(behandling)}
+            href={behandlingUrl({ saksnummer, id: behandling.id })}
             icon={<ArrowRightIcon aria-hidden />}
         >
             Fortsett

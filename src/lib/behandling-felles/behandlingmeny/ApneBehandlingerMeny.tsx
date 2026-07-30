@@ -64,6 +64,7 @@ const visAvsluttBehandlingMenyvalg = (
 export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props) => {
     const { id } = behandling;
     const { sak, setSak } = useSak();
+    const { sakId, saksnummer } = sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visOvertaBehandlingModal, setVisOvertaBehandlingModal] = useState(false);
@@ -101,30 +102,30 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
         visAvsluttBehandling;
 
     const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
-        useAvsluttBehandling(behandling.saksnummer, (oppdatertSak) => {
+        useAvsluttBehandling(saksnummer, (oppdatertSak) => {
             setSak(oppdatertSak);
             setVisAvsluttBehandlingModal(false);
         });
 
     const { settBehandlingPåVent, isSettBehandlingPåVentMutating, settBehandlingPåVentError } =
-        useSettBehandlingPåVent(behandling.sakId, behandling.id);
+        useSettBehandlingPåVent(sakId, id);
 
     const overtaBehandlingApi = useFetchJsonFraApi<Rammebehandling, { overtarFra: string }>(
-        `/sak/${sak.sakId}/behandling/${behandling.id}/overta`,
+        `/sak/${sakId}/behandling/${id}/overta`,
         'PATCH',
         {
-            onSuccess: (behandling) => {
-                if (behandling) {
-                    router.push(behandlingUrl(behandling));
+            onSuccess: (oppdatertBehandling) => {
+                if (oppdatertBehandling) {
+                    router.push(behandlingUrl(oppdatertBehandling));
                 }
             },
         },
     );
 
-    const behandlingLenke = behandlingUrl(behandling);
+    const behandlingLenke = behandlingUrl({ saksnummer, id });
 
     const taBehandling = useFetchJsonFraApi<Rammebehandling>(
-        `/sak/${behandling.sakId}/behandling/${behandling.id}/ta`,
+        `/sak/${sakId}/behandling/${id}/ta`,
         'POST',
         {
             onSuccess: () => {
@@ -136,7 +137,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
 
     if (!menySkalVises) {
         return (
-            <Button variant={'secondary'} as={Link} href={behandlingUrl(behandling)} size={'small'}>
+            <Button variant={'secondary'} as={Link} href={behandlingLenke} size={'small'}>
                 Se behandling
             </Button>
         );
@@ -202,7 +203,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     {menySkalVises && !visFortsettBehandling && (
                         <>
                             <ActionMenu.Divider />
-                            <SeBehandlingMenyvalg behandlingHref={behandlingUrl(behandling)} />
+                            <SeBehandlingMenyvalg behandlingHref={behandlingLenke} />
                         </>
                     )}
                     {visAvsluttBehandling && (
@@ -231,7 +232,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     footer={{
                         isMutating: avsluttBehandlingIsMutating,
                         error: avsluttBehandlingError ?? null,
-                        saksnummer: behandling.saksnummer,
+                        saksnummer,
                     }}
                 />
             )}
@@ -260,8 +261,8 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     api={{
                         trigger: (begrunnelse, frist) =>
                             settBehandlingPåVent({
-                                sakId: behandling.sakId,
-                                behandlingId: behandling.id,
+                                sakId,
+                                behandlingId: id,
                                 begrunnelse: begrunnelse,
                                 frist: frist,
                             }).then((oppdatertSak) => {

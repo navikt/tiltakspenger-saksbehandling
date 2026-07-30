@@ -15,7 +15,7 @@ import {
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { OmgjørVedtakMenyvalg } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
+import { OmgjørVedtakMenyvalg } from '~/lib/personoversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 import { classNames } from '~/utils/classNames';
 import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import Link from 'next/link';

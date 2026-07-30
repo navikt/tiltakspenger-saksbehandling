@@ -3,7 +3,7 @@ import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandling
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
 import { AvbrutteBehandlingerOversikt } from './avbrutte-behandlinger/AvbrutteBehandlingerOversikt';
-import { VedtatteBehandlinger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
+import { VedtatteBehandlinger } from '~/lib/personoversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useRouter } from 'next/router';
@@ -44,7 +44,6 @@ export const Personoversikt = () => {
         sakId,
         saksnummer,
         rammebehandlinger,
-        åpneBehandlinger,
         klagebehandlinger,
         alleRammevedtak,
         alleKlagevedtak,
@@ -90,7 +89,7 @@ export const Personoversikt = () => {
                 <Tabs.List className={styles.tabsList}>
                     <Tabs.Tab
                         value={PersonoversiktTab.ÅpneBehandlinger}
-                        label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
+                        label={'Åpne behandlinger'}
                         icon={<FileIcon aria-hidden />}
                         className={styles.tab}
                     />

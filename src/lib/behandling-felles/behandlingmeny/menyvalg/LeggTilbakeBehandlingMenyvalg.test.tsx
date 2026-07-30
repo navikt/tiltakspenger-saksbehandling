@@ -7,6 +7,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import LeggTilbakeBehandlingMenyvalg from './LeggTilbakeBehandlingMenyvalg';
+import { SakProvider } from '~/lib/sak/SakContext';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 // jsdom implementerer ikke ResizeObserver, som Aksel sin ActionMenu (Radix) baserer seg på.
 beforeAll(() => {
@@ -42,10 +44,13 @@ afterEach(() => {
 });
 
 const behandling = {
-    sakId: 'sak_123',
     id: 'beh_123',
-    saksnummer: '12345678',
 } as unknown as ÅpenRammebehandlingForOversikt;
+
+const sak = {
+    sakId: 'sak_123',
+    saksnummer: '12345678',
+} as unknown as SakProps;
 
 const renderMenyvalg = ({
     onSuccess = jest.fn(),
@@ -55,18 +60,20 @@ const renderMenyvalg = ({
     onError?: (error: unknown) => void;
 }) =>
     render(
-        <ActionMenu open>
-            <ActionMenu.Trigger>
-                <button>Velg</button>
-            </ActionMenu.Trigger>
-            <ActionMenu.Content>
-                <LeggTilbakeBehandlingMenyvalg
-                    behandling={behandling}
-                    onSuccess={onSuccess}
-                    onError={onError}
-                />
-            </ActionMenu.Content>
-        </ActionMenu>,
+        <SakProvider sak={sak}>
+            <ActionMenu open>
+                <ActionMenu.Trigger>
+                    <button>Velg</button>
+                </ActionMenu.Trigger>
+                <ActionMenu.Content>
+                    <LeggTilbakeBehandlingMenyvalg
+                        behandling={behandling}
+                        onSuccess={onSuccess}
+                        onError={onError}
+                    />
+                </ActionMenu.Content>
+            </ActionMenu>
+        </SakProvider>,
     );
 
 const klikkLeggTilbake = () => {

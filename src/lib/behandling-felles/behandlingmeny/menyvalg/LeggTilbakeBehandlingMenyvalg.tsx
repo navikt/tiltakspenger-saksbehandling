@@ -7,6 +7,7 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const visLeggTilbakeMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
@@ -26,7 +27,9 @@ type Props = {
 };
 
 const LeggTilbakeMenyvalg = ({ behandling, onSuccess, onError }: Props) => {
-    const { leggTilbakeBehandling } = useLeggTilbakeBehandling(behandling.sakId, behandling.id, {
+    const { sakId } = useSak().sak;
+
+    const { leggTilbakeBehandling } = useLeggTilbakeBehandling(sakId, behandling.id, {
         onSuccess,
         onError,
     });

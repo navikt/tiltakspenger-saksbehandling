@@ -9,7 +9,7 @@ import {
     VedtakType,
 } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { OmgjortGradVisningVelger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/omgjort-grad-velger/OmgjortGradVisningVelger';
+import { OmgjortGradVisningVelger } from '~/lib/personoversikt/vedtatte-behandlinger/omgjort-grad-velger/OmgjortGradVisningVelger';
 
 export const VedtatteBehandlinger = () => {
     const { sak } = useSak();

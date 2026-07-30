@@ -1,5 +1,4 @@
 import { Periode } from '~/types/Periode';
-import { SakId } from '../../sak/SakTyper';
 import {
     RammebehandlingId,
     Rammebehandlingsstatus,
@@ -43,15 +42,13 @@ export enum ÅpentMeldekortSubType {
     KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
 }
 
-interface ÅpenBehandlingBase {
+type ÅpenBehandlingBase = {
     id: SøknadId | RammebehandlingId | MeldeperiodeKjedeId | KlageId | MeldekortbehandlingId;
-    sakId: SakId;
-    saksnummer: string;
     opprettet: string;
     type: ÅpenBehandlingForOversiktType;
-}
+};
 
-interface ÅpenRammebehandlingBase extends ÅpenBehandlingBase {
+type ÅpenRammebehandlingBase = ÅpenBehandlingBase & {
     id: RammebehandlingId;
     type:
         | ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING
@@ -63,44 +60,44 @@ interface ÅpenRammebehandlingBase extends ÅpenBehandlingBase {
     beslutter: Nullable<string>;
     underkjent: boolean;
     erSattPåVent: boolean;
-}
+};
 
-export interface SøknadUtenBehandling extends ÅpenBehandlingBase {
+export type SøknadUtenBehandling = ÅpenBehandlingBase & {
     id: SøknadId;
     type: ÅpenBehandlingForOversiktType.SØKNAD;
     kravtidspunkt: string;
-}
+};
 
-export interface ÅpenSøknadsbehandling extends ÅpenRammebehandlingBase {
+export type ÅpenSøknadsbehandling = ÅpenRammebehandlingBase & {
     type: ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING;
     kravtidspunkt: string;
     resultat: SøknadsbehandlingResultat;
-}
+};
 
-export interface ÅpenRevurdering extends ÅpenRammebehandlingBase {
+export type ÅpenRevurdering = ÅpenRammebehandlingBase & {
     type: ÅpenBehandlingForOversiktType.REVURDERING;
     resultat: RevurderingResultat;
-}
+};
 
-export interface ÅpenMeldekortbehandling extends ÅpenBehandlingBase {
+export type ÅpenMeldekortbehandling = ÅpenBehandlingBase & {
     id: MeldekortbehandlingId;
     type: ÅpenBehandlingForOversiktType.MELDEKORT;
     subtype: ÅpentMeldekortSubType.MELDEKORTBEHANDLING;
     periode: Periode;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
-}
+};
 
-export interface BrukersMeldekortUtenBehandling extends ÅpenBehandlingBase {
+export type BrukersMeldekortUtenBehandling = ÅpenBehandlingBase & {
     id: MeldeperiodeKjedeId;
     type: ÅpenBehandlingForOversiktType.MELDEKORT;
     subtype: ÅpentMeldekortSubType.INNSENDT_MELDEKORT | ÅpentMeldekortSubType.KORRIGERT_MELDEKORT;
     periode: Periode;
-}
+};
 
-export interface KlageBehandlingForOversikt extends ÅpenBehandlingBase {
+export type KlageBehandlingForOversikt = ÅpenBehandlingBase & {
     type: ÅpenBehandlingForOversiktType.KLAGE;
     saksbehandler: Nullable<string>;
     resultat: Nullable<KlagebehandlingResultat>;
     status: KlagebehandlingStatus;
-}
+};
