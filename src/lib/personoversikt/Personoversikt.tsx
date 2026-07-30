@@ -1,41 +1,32 @@
-import styles from './Personoversikt.module.css';
-import { ActionMenu, Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
+import { Heading, Tabs } from '@navikt/ds-react';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
-import { StartRevurderingModal } from './opprett-revurdering/StartRevurderingModal';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
-import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
+import { AvbrutteBehandlingerOversikt } from './avbrutte-behandlinger/AvbrutteBehandlingerOversikt';
 import { VedtatteBehandlinger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
-import {
-    Rammebehandling,
-    Rammebehandlingsstatus,
-    Rammebehandlingstype,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useRouter } from 'next/router';
 import {
-    ArrowsCirclepathIcon,
     BankNoteIcon,
-    ChevronDownIcon,
     EnvelopeClosedIcon,
     FileCheckmarkIcon,
     FileIcon,
-    FilePlusIcon,
     FileXMarkIcon,
     InboxIcon,
-    TasklistSaveIcon,
 } from '@navikt/aksel-icons';
-import Divider from '~/lib/_felles/divider/Divider';
 import { useEffect, useState } from 'react';
-import { OpprettSøknadModal } from '~/lib/personoversikt/manuell-søknad/OpprettSøknadModal';
-import { KlagebehandlingStatus, KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
+import { OpprettBehandlingMeny } from '~/lib/personoversikt/opprett-behandling/OpprettBehandlingMeny';
+import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
 import Klageoversikt, {
     KlagebehandlingerMedOmgjøringsbehandling,
 } from './klageoversikt/Klageoversikt';
 import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingOversikt';
 import { personoversiktUrl } from '~/utils/urls';
 import { MeldekortOversikt } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
+import { classNames } from '~/utils/classNames';
+
+import styles from './Personoversikt.module.css';
 
 export enum PersonoversiktTab {
     ÅpneBehandlinger = 'apne-behandlinger',
@@ -46,11 +37,11 @@ export enum PersonoversiktTab {
     Tilbakekreving = 'Tilbakekreving',
 }
 
+const DEFAULT_TAB = PersonoversiktTab.ÅpneBehandlinger;
+
 export const Personoversikt = () => {
     const router = useRouter();
     const { sak } = useSak();
-    const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
-    const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
     const {
         sakId,
@@ -64,15 +55,20 @@ export const Personoversikt = () => {
         meldeperiodeKjeder,
     } = sak;
 
-    const avbrutteRammebehandlinger = behandlinger.filter((behandling) => behandling.avbrutt);
-    const avbrutteKlagebehandlinger = klageBehandlinger.filter(
-        (klage) => klage.status === KlagebehandlingStatus.AVBRUTT,
-    );
+    const [aktivTab, setAktivTab] = useState<PersonoversiktTab>(DEFAULT_TAB);
+
+    useEffect(() => {
+        /* eslint-disable-next-line react-hooks/set-state-in-effect */
+        setAktivTab(hentAktivTabFraHash(window.location.hash));
+    }, []);
+
+    const avbrutteRammebehandlinger = behandlinger.filter((behandling) => !!behandling.avbrutt);
+    const avbrutteKlagebehandlinger = klageBehandlinger.filter((klage) => !!klage.avbrutt);
 
     const klagevedtakMedBehandling: KlagevedtakMedBehandling[] = alleKlagevedtak.map((vedtak) => {
         return {
-            type: 'klagevedtak',
             ...vedtak,
+            type: 'klagevedtak',
             behandling: klageBehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId)!,
         };
     });
@@ -93,195 +89,134 @@ export const Personoversikt = () => {
                 };
             });
 
-    const hentAktivTabFraHash = (hash: string) => {
-        const tab = hash.replace(/^#/, '');
-        return Object.values(PersonoversiktTab).includes(tab as PersonoversiktTab)
-            ? (tab as PersonoversiktTab)
-            : PersonoversiktTab.ÅpneBehandlinger;
-    };
-
-    const [aktivTab, setAktivTab] = useState<PersonoversiktTab>(PersonoversiktTab.ÅpneBehandlinger);
-
-    useEffect(() => {
-        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
-        setAktivTab(hentAktivTabFraHash(window.location.hash));
-    }, []);
-
-    const labelWithCounter = (label: string, count: number) => {
-        return `${label} (${count})`;
-    };
-
     return (
         <>
             <NotificationBanner />
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
-            <Box className={styles.wrapper}>
-                <HStack align={'center'} justify={'space-between'} className={styles.tittelRad}>
-                    <Heading spacing size={'medium'} level={'2'}>
-                        {'Personoversikt'}
-                    </Heading>
-                </HStack>
 
-                <Tidslinjer sak={sak} heading={false} className={styles.tabellwrapper} />
-                <Divider />
-                <Tabs
-                    value={aktivTab}
-                    className={styles.tabs}
-                    onChange={(value) => {
-                        setAktivTab(value as PersonoversiktTab);
-                        router.replace(
-                            personoversiktUrl(saksnummer, value as PersonoversiktTab),
-                            undefined,
-                            { shallow: true },
-                        );
-                    }}
-                >
-                    <Tabs.List className={styles.tabsList}>
-                        <Tabs.Tab
-                            value={PersonoversiktTab.ÅpneBehandlinger}
-                            label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
-                            icon={<FileIcon aria-hidden />}
-                            className={styles.tab}
-                        />
-                        <Tabs.Tab
-                            value={PersonoversiktTab.Meldekort}
-                            label={labelWithCounter('Meldekort', meldeperiodeKjeder.length)}
-                            icon={<InboxIcon aria-hidden />}
-                            className={styles.tab}
-                        />
-                        <Tabs.Tab
-                            value={PersonoversiktTab.VedtatteBehandlinger}
-                            label={labelWithCounter(
-                                `Vedtatte behandlinger`,
-                                alleRammevedtak.length + alleKlagevedtak.length,
-                            )}
-                            icon={<FileCheckmarkIcon aria-hidden />}
-                            className={styles.tab}
-                        />
-                        <Tabs.Tab
-                            value={PersonoversiktTab.AvsluttedeBehandlinger}
-                            label={labelWithCounter(
-                                'Avsluttede behandlinger',
-                                avbrutteRammebehandlinger.length + avbrutteKlagebehandlinger.length,
-                            )}
-                            icon={<FileXMarkIcon aria-hidden />}
-                            className={styles.tab}
-                        />
-                        <Tabs.Tab
-                            value={PersonoversiktTab.Klage}
-                            label={labelWithCounter('Klage', klageBehandlinger.length)}
-                            icon={<EnvelopeClosedIcon aria-hidden />}
-                            className={styles.tab}
-                        />
-                        <Tabs.Tab
-                            value={PersonoversiktTab.Tilbakekreving}
-                            label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
-                            icon={<BankNoteIcon aria-hidden />}
-                            className={styles.tab}
-                        />
-                        <ActionMenu>
-                            <ActionMenu.Trigger>
-                                <Button
-                                    variant={'tertiary'}
-                                    icon={<ChevronDownIcon aria-hidden />}
-                                    iconPosition={'right'}
-                                    className={styles.tab}
-                                >
-                                    {'Opprett behandling'}
-                                </Button>
-                            </ActionMenu.Trigger>
-                            <ActionMenu.Content>
-                                <ActionMenu.Item
-                                    icon={<FilePlusIcon aria-hidden />}
-                                    onSelect={() => router.push(`/sak/${saksnummer}/klage/opprett`)}
-                                >
-                                    {'Registrer klage'}
-                                </ActionMenu.Item>
+            <Heading size={'medium'} level={'1'} className={styles.tittel}>
+                {'Personoversikt'}
+            </Heading>
 
-                                <ActionMenu.Item
-                                    icon={<TasklistSaveIcon aria-hidden />}
-                                    onClick={() => setRegistrerSøknadManueltModalÅpen(true)}
-                                >
-                                    {'Registrer søknad manuelt'}
-                                </ActionMenu.Item>
+            <Tidslinjer sak={sak} heading={false} className={styles.tidslinje} />
 
-                                <ActionMenu.Item
-                                    icon={<ArrowsCirclepathIcon aria-hidden />}
-                                    onClick={() => setStartRevurderingModalÅpen(true)}
-                                    disabled={!harVedtattSøknadsbehandling(behandlinger)}
-                                >
-                                    {'Opprett revurdering'}
-                                </ActionMenu.Item>
-                            </ActionMenu.Content>
-                        </ActionMenu>
-                    </Tabs.List>
-
-                    <Tabs.Panel value={PersonoversiktTab.ÅpneBehandlinger} className={styles.panel}>
-                        <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
-                    </Tabs.Panel>
-
-                    <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
-                        <MeldekortOversikt />
-                    </Tabs.Panel>
-
-                    <Tabs.Panel
+            <Tabs
+                value={aktivTab}
+                className={styles.tabs}
+                onChange={(value) => {
+                    setAktivTab(value as PersonoversiktTab);
+                    router.replace(
+                        personoversiktUrl(saksnummer, value as PersonoversiktTab),
+                        undefined,
+                        { shallow: true },
+                    );
+                }}
+            >
+                <Tabs.List className={styles.tabsList}>
+                    <Tabs.Tab
+                        value={PersonoversiktTab.ÅpneBehandlinger}
+                        label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
+                        icon={<FileIcon aria-hidden />}
+                        className={styles.tab}
+                    />
+                    <Tabs.Tab
+                        value={PersonoversiktTab.Meldekort}
+                        label={labelWithCounter('Meldekort', meldeperiodeKjeder.length)}
+                        icon={<InboxIcon aria-hidden />}
+                        className={styles.tab}
+                    />
+                    <Tabs.Tab
                         value={PersonoversiktTab.VedtatteBehandlinger}
-                        className={styles.panel}
-                    >
-                        <VedtatteBehandlinger
-                            sakId={sakId}
-                            rammebehandlinger={behandlinger}
-                            alleRammevedtak={alleRammevedtak}
-                            klagebehandlinger={klageBehandlinger}
-                            alleKlagevedtak={alleKlagevedtak}
-                        />
-                    </Tabs.Panel>
-
-                    <Tabs.Panel
+                        label={labelWithCounter(
+                            `Vedtatte behandlinger`,
+                            alleRammevedtak.length + alleKlagevedtak.length,
+                        )}
+                        icon={<FileCheckmarkIcon aria-hidden />}
+                        className={styles.tab}
+                    />
+                    <Tabs.Tab
                         value={PersonoversiktTab.AvsluttedeBehandlinger}
-                        className={styles.panel}
-                    >
-                        <AvsluttedeBehandlinger
-                            saksnummer={saksnummer}
-                            avbrutteBehandlinger={avbrutteRammebehandlinger}
-                            avbrutteKlageBehandlinger={avbrutteKlagebehandlinger}
-                        />
-                    </Tabs.Panel>
+                        label={labelWithCounter(
+                            'Avsluttede behandlinger',
+                            avbrutteRammebehandlinger.length + avbrutteKlagebehandlinger.length,
+                        )}
+                        icon={<FileXMarkIcon aria-hidden />}
+                        className={styles.tab}
+                    />
+                    <Tabs.Tab
+                        value={PersonoversiktTab.Klage}
+                        label={labelWithCounter('Klage', klageBehandlinger.length)}
+                        icon={<EnvelopeClosedIcon aria-hidden />}
+                        className={styles.tab}
+                    />
+                    <Tabs.Tab
+                        value={PersonoversiktTab.Tilbakekreving}
+                        label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
+                        icon={<BankNoteIcon aria-hidden />}
+                        className={styles.tab}
+                    />
 
-                    <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
-                        <Klageoversikt
-                            klagebehandlingerMedOmgjøringsbehandling={
-                                klagebehandlingerMedOmgjøringsbehandling
-                            }
-                            klagevedtakMedBehandling={klagevedtakMedBehandling}
-                        />
-                    </Tabs.Panel>
+                    <OpprettBehandlingMeny
+                        sakId={sakId}
+                        saksnummer={saksnummer}
+                        behandlinger={behandlinger}
+                        className={classNames(styles.opprettBehandling, styles.tab)}
+                    />
+                </Tabs.List>
 
-                    <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
-                        <TilbakekrevingOversikt tilbakekrevinger={tilbakekrevinger} />
-                    </Tabs.Panel>
-                </Tabs>
-            </Box>
+                <Tabs.Panel value={PersonoversiktTab.ÅpneBehandlinger} className={styles.panel}>
+                    <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
+                </Tabs.Panel>
 
-            <OpprettSøknadModal
-                saksnummer={saksnummer}
-                åpen={registrerSøknadManueltModalÅpen}
-                setÅpen={setRegistrerSøknadManueltModalÅpen}
-            />
+                <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
+                    <MeldekortOversikt />
+                </Tabs.Panel>
 
-            <StartRevurderingModal
-                sakId={sakId}
-                åpen={startRevurderingModalÅpen}
-                setÅpen={setStartRevurderingModalÅpen}
-            />
+                <Tabs.Panel value={PersonoversiktTab.VedtatteBehandlinger} className={styles.panel}>
+                    <VedtatteBehandlinger
+                        sakId={sakId}
+                        rammebehandlinger={behandlinger}
+                        alleRammevedtak={alleRammevedtak}
+                        klagebehandlinger={klageBehandlinger}
+                        alleKlagevedtak={alleKlagevedtak}
+                    />
+                </Tabs.Panel>
+
+                <Tabs.Panel
+                    value={PersonoversiktTab.AvsluttedeBehandlinger}
+                    className={styles.panel}
+                >
+                    <AvbrutteBehandlingerOversikt
+                        saksnummer={saksnummer}
+                        avbrutteRammebehandlinger={avbrutteRammebehandlinger}
+                        avbrutteKlagebehandlinger={avbrutteKlagebehandlinger}
+                    />
+                </Tabs.Panel>
+
+                <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
+                    <Klageoversikt
+                        klagebehandlingerMedOmgjøringsbehandling={
+                            klagebehandlingerMedOmgjøringsbehandling
+                        }
+                        klagevedtakMedBehandling={klagevedtakMedBehandling}
+                    />
+                </Tabs.Panel>
+
+                <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
+                    <TilbakekrevingOversikt tilbakekrevinger={tilbakekrevinger} />
+                </Tabs.Panel>
+            </Tabs>
         </>
     );
 };
 
-const harVedtattSøknadsbehandling = (behandlingsoversikt: Rammebehandling[]) =>
-    behandlingsoversikt.some(
-        (behandling) =>
-            behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING &&
-            behandling.status === Rammebehandlingsstatus.VEDTATT,
-    );
+const labelWithCounter = (label: string, count: number) => {
+    return `${label} (${count})`;
+};
+
+const hentAktivTabFraHash = (hash: string) => {
+    const tab = hash.replace(/^#/, '');
+    return Object.values(PersonoversiktTab).includes(tab as PersonoversiktTab)
+        ? (tab as PersonoversiktTab)
+        : DEFAULT_TAB;
+};

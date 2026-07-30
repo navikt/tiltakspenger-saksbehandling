@@ -25,6 +25,7 @@ import { useResettableState } from '~/hooks/useResettableState';
 import { personoversiktUrl } from '~/utils/urls';
 import OppsummeringAvAvbruttKlagebehandling from '~/lib/klage/oppsummering/avbrutt/OppsummeringAvAvbruttKlagebehandling';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 type Props = {
     children: ReactElement;
@@ -217,26 +218,50 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
         switch (value) {
             case KlageSteg.FORMKRAV: {
                 if (props.klage && kanNavigereTilKlageSteg(props.klage, value)) {
-                    router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/formkrav`);
+                    router.push(
+                        klagebehandlingUrl(
+                            props.klage.saksnummer,
+                            props.klage.id,
+                            KlageStegUrlSegment.Formkrav,
+                        ),
+                    );
                 }
                 return;
             }
             case KlageSteg.VURDERING: {
                 if (props.klage && kanNavigereTilKlageSteg(props.klage, value)) {
-                    router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/vurdering`);
+                    router.push(
+                        klagebehandlingUrl(
+                            props.klage.saksnummer,
+                            props.klage.id,
+                            KlageStegUrlSegment.Vurdering,
+                        ),
+                    );
                 }
                 return;
             }
 
             case KlageSteg.BREV: {
                 if (props.klage && kanNavigereTilBrev) {
-                    router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/brev`);
+                    router.push(
+                        klagebehandlingUrl(
+                            props.klage.saksnummer,
+                            props.klage.id,
+                            KlageStegUrlSegment.Brev,
+                        ),
+                    );
                 }
                 return;
             }
             case KlageSteg.RESULTAT: {
                 if (props.klage && kanNavigereTilResultat) {
-                    router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/resultat`);
+                    router.push(
+                        klagebehandlingUrl(
+                            props.klage.saksnummer,
+                            props.klage.id,
+                            KlageStegUrlSegment.Resultat,
+                        ),
+                    );
                 }
                 return;
             }

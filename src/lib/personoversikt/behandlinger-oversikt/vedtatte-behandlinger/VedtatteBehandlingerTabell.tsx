@@ -22,6 +22,7 @@ import style from './VedtatteBehandlinger.module.css';
 import { VedtattRammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
 import Link from 'next/link';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 type Props = {
     sakId: SakId;
@@ -173,7 +174,11 @@ const KlagevedtakMedBehandlingRad = (props: { klagevedtak: KlagevedtakMedBehandl
                     <ActionMenu.Content>
                         <ActionMenu.Item
                             as={Link}
-                            href={`/sak/${props.klagevedtak.behandling.saksnummer}/klage/${props.klagevedtak.behandling.id}/formkrav`}
+                            href={klagebehandlingUrl(
+                                props.klagevedtak.behandling.saksnummer,
+                                props.klagevedtak.behandling.id,
+                                KlageStegUrlSegment.Formkrav,
+                            )}
                             icon={<FileIcon aria-hidden />}
                         >
                             Se vedtak

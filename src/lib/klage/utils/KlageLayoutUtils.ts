@@ -5,6 +5,7 @@ import {
     erKlageOpprettholdtEllerEtter,
     kanVurdereKlage,
 } from './klageUtils';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 export enum KlageSteg {
     FORMKRAV = 'FORMKRAV',
@@ -17,28 +18,28 @@ export const finnNesteKlageSteg = (k: Klagebehandling, fra: KlageSteg): string =
     switch (fra) {
         case KlageSteg.FORMKRAV: {
             if (k.resultat?.type === KlagebehandlingResultat.AVVIST) {
-                return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
+                return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Brev);
             }
 
-            return `/sak/${k.saksnummer}/klage/${k.id}/vurdering`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Vurdering);
         }
 
         case KlageSteg.VURDERING: {
             if (k.resultat?.type === KlagebehandlingResultat.OMGJØR) {
-                return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+                return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Resultat);
             }
 
             if (k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT) {
-                return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
+                return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Brev);
             }
 
-            return `/sak/${k.saksnummer}/klage/${k.id}/vurdering`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Vurdering);
         }
         case KlageSteg.BREV: {
-            return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Resultat);
         }
         case KlageSteg.RESULTAT: {
-            return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Resultat);
         }
     }
 };

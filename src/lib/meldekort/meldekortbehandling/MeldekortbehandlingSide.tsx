@@ -111,10 +111,7 @@ const Steg = ({ steg, children }: StegProps) => {
     const { id } = useMeldekortbehandling();
 
     return (
-        <Stepper.Step
-            as={InternLenke}
-            href={`${meldekortbehandlingUrl(saksnummer, id)}#steg-${steg}`}
-        >
+        <Stepper.Step as={InternLenke} href={meldekortbehandlingUrl(saksnummer, id, steg)}>
             {children}
         </Stepper.Step>
     );

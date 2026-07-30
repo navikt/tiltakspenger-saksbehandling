@@ -23,6 +23,7 @@ import {
 } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 /**
  *
@@ -130,22 +131,22 @@ export const erKlageUnderAktivOmgjøring = (
 export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
     switch (k.resultat?.type) {
         case KlagebehandlingResultat.AVVIST: {
-            return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Brev);
         }
         case undefined: {
             if (kanVurdereKlage(k)) {
-                return `/sak/${k.saksnummer}/klage/${k.id}/vurdering`;
+                return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Vurdering);
             }
             throw new Error(`Kunne ikke finne url for klagebehandling ${k.id} uten resultat`);
         }
         case KlagebehandlingResultat.OMGJØR: {
-            return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Resultat);
         }
         case KlagebehandlingResultat.OPPRETTHOLDT: {
             if (erKlageOpprettholdtEllerEtter(k)) {
-                return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+                return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Resultat);
             }
-            return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Brev);
         }
     }
     throw new Error(`Safe guard for making the switch exhaustive`, k.resultat satisfies never);

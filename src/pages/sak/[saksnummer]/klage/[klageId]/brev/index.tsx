@@ -47,6 +47,7 @@ import Link from 'next/link';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 type Props = {
     sak: SakProps;
@@ -139,7 +140,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         klageId: klage.id,
         onSuccess: (oppdatertKlage) => {
             setKlage(oppdatertKlage!);
-            router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/resultat`);
+            router.push(klagebehandlingUrl(sak.saksnummer, klage.id, KlageStegUrlSegment.Resultat));
         },
     });
 
@@ -254,7 +255,11 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                                 erKlageOpprettholdtEllerEtter(klage) && (
                                     <Button
                                         as={Link}
-                                        href={`/sak/${sak.saksnummer}/klage/${klage.id}/resultat`}
+                                        href={klagebehandlingUrl(
+                                            sak.saksnummer,
+                                            klage.id,
+                                            KlageStegUrlSegment.Resultat,
+                                        )}
                                     >
                                         Fortsett
                                     </Button>

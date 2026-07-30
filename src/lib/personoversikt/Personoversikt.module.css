@@ -1,14 +1,12 @@
-.tabellwrapper {
-    background-color: #ffffff;
-
+.tidslinje {
     &:not(:last-child) {
         margin-bottom: 1rem;
     }
 }
 
 .tabs {
-    background-color: #ffffff;
     padding-top: 1rem;
+    border-top: 1px solid var(--ax-border-neutral-subtle);
 }
 
 .tabsList:first-child {
@@ -19,24 +17,15 @@
     margin-bottom: 1.5rem;
 }
 
+.opprettBehandling {
+    margin-left: 1rem;
+}
+
 .panel {
-    background-color: #ffffff;
     padding: 1rem;
     margin-bottom: 1rem;
 }
 
-.tittelRad {
+.tittel {
     padding: 1rem 1rem 0 1rem;
-}
-
-.wrapper {
-    height: 100vh;
-}
-
-.meldekortHeaderRad {
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
 }

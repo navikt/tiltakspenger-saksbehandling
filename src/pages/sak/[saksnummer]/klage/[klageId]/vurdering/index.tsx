@@ -52,6 +52,7 @@ import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 type Props = {
     sak: SakProps;
@@ -282,7 +283,14 @@ const VurderingKlagePage = ({
                     )}
 
                     {erKlageOpprettholdelse(klage) ? (
-                        <Button as={Link} href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}>
+                        <Button
+                            as={Link}
+                            href={klagebehandlingUrl(
+                                sak.saksnummer,
+                                klage.id,
+                                KlageStegUrlSegment.Brev,
+                            )}
+                        >
                             Fortsett
                         </Button>
                     ) : (

@@ -15,7 +15,7 @@ import { MottarPengestøtterSpørsmål } from '~/lib/manuell-søknad/MottarPenge
 import { Periodevelger } from '~/lib/manuell-søknad/Periodevelger';
 import { VelgTiltak } from '~/lib/manuell-søknad/tiltak/VelgTiltak';
 import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
-import { useOpprettSøknad } from '~/lib/personoversikt/manuell-søknad/useOpprettSøknad';
+import { useOpprettSøknad } from '~/lib/personoversikt/opprett-behandling/manuell-søknad/useOpprettSøknad';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';

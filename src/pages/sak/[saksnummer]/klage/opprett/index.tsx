@@ -22,6 +22,7 @@ import {
     hentMeldekortvedtakMedBehandlinger,
     hentRammevedtakMedBehandlinger,
 } from '~/lib/sak/sakUtils';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 type Props = {
     sak: SakProps;
@@ -59,7 +60,13 @@ const OprettKlagePage = ({ sak }: Props) => {
     const opprettKlage = useOpprettKlage({
         sakId: sak.sakId,
         onSuccess: (klagebehandling) => {
-            router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
+            router.push(
+                klagebehandlingUrl(
+                    sak.saksnummer,
+                    klagebehandling!.id,
+                    KlageStegUrlSegment.Formkrav,
+                ),
+            );
         },
     });
 
