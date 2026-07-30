@@ -1,7 +1,6 @@
 import {
     ÅpenBehandlingForOversikt,
     ÅpenBehandlingForOversiktType,
-    ÅpentMeldekortSubType,
 } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Alert, Button, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import {
@@ -10,7 +9,7 @@ import {
     klagebehandlingResultatTilTag,
     klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
-import { formaterMeldeperiode, formaterPeriode, formaterTidspunkt } from '~/utils/date';
+import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
@@ -26,9 +25,7 @@ import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
 import { hentMeldekortbehandling, hentTilbakekreving } from '~/lib/sak/sakUtils';
-import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
-import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
+import { meldekortbehandlingUrl } from '~/utils/urls';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import NextLink from 'next/link';
@@ -41,13 +38,7 @@ type Props = {
 };
 
 export const ApneBehandlingerTabell = ({ sak }: Props) => {
-    /* Brukers meldekort uten behandling vises i en egen seksjon (utledet fra meldeperiodekjedene).
-     * Filteret kan fjernes når backend slutter å returnere disse blant de åpne behandlingene. */
-    const åpneBehandlinger = sak.åpneBehandlinger.filter(
-        (behandling) =>
-            behandling.type !== ÅpenBehandlingForOversiktType.MELDEKORT ||
-            behandling.subtype === ÅpentMeldekortSubType.MELDEKORTBEHANDLING,
-    );
+    const { åpneBehandlinger } = sak;
 
     return (
         <VStack gap={'space-8'}>
@@ -183,71 +174,42 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingForOversiktType.MELDEKORT: {
-            const { periode, subtype } = åpenBehandling;
+            const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
 
-            if (subtype === ÅpentMeldekortSubType.MELDEKORTBEHANDLING) {
-                const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
-
-                const { status, id, saksbehandler, beslutter } = meldekortbehandling;
-
-                return {
-                    typeTekst: meldekortSubTypeTekst[subtype],
-                    statusTag: (
-                        <HStack gap="space-4">
-                            <Tag
-                                data-color={meldekortbehandlingStatusFarge[status]}
-                                variant="outline"
-                            >
-                                {meldekortbehandlingStatusTekst[status]}
-                            </Tag>
-                            {erMeldekortbehandlingSattPaVent(meldekortbehandling) && (
-                                <Tag data-color="warning">{'Satt på vent'}</Tag>
-                            )}
-                        </HStack>
-                    ),
-                    saksbehandler,
-                    beslutter,
-                    periodeTekst: formaterMeldeperioder(meldekortbehandling),
-                    meny: (
-                        <HStack gap={'space-8'} justify={'end'}>
-                            <Button
-                                as={NextLink}
-                                variant={'secondary'}
-                                size={'small'}
-                                href={meldekortbehandlingUrl(saksnummer, id)}
-                            >
-                                {'Se behandling'}
-                            </Button>
-
-                            <MeldekortbehandlingMeny
-                                meldekortbehandling={meldekortbehandling}
-                                size={'small'}
-                                skalNavigereTilBehandling={true}
-                            />
-                        </HStack>
-                    ),
-                };
-            }
+            const { status, id, saksbehandler, beslutter } = meldekortbehandling;
 
             return {
-                typeTekst: meldekortSubTypeTekst[subtype],
-                statusTag: null,
-                saksbehandler: null,
-                beslutter: null,
-                periodeTekst: periode ? formaterMeldeperiode(periode) : undefined,
-                meny: (
-                    <Button
-                        as={InternLenke}
-                        variant={'secondary'}
-                        size={'small'}
-                        href={meldeperiodeUrl(
-                            saksnummer,
-                            periode,
-                            MeldeperiodekjedeTab.BrukersMeldekort,
+                typeTekst,
+                statusTag: (
+                    <HStack gap="space-4">
+                        <Tag data-color={meldekortbehandlingStatusFarge[status]} variant="outline">
+                            {meldekortbehandlingStatusTekst[status]}
+                        </Tag>
+                        {erMeldekortbehandlingSattPaVent(meldekortbehandling) && (
+                            <Tag data-color="warning">{'Satt på vent'}</Tag>
                         )}
-                    >
-                        {'Se meldekort'}
-                    </Button>
+                    </HStack>
+                ),
+                saksbehandler,
+                beslutter,
+                periodeTekst: formaterMeldeperioder(meldekortbehandling),
+                meny: (
+                    <HStack gap={'space-8'} justify={'end'}>
+                        <Button
+                            as={NextLink}
+                            variant={'secondary'}
+                            size={'small'}
+                            href={meldekortbehandlingUrl(saksnummer, id)}
+                        >
+                            {'Se behandling'}
+                        </Button>
+
+                        <MeldekortbehandlingMeny
+                            meldekortbehandling={meldekortbehandling}
+                            size={'small'}
+                            skalNavigereTilBehandling={true}
+                        />
+                    </HStack>
                 ),
             };
         }
@@ -325,13 +287,7 @@ const typeBehandlingTekst: Record<ÅpenBehandlingForOversiktType, string> = {
     SØKNADSBEHANDLING: 'Søknadsbehandling',
     REVURDERING: 'Revurdering',
     SØKNAD: 'Søknad',
-    MELDEKORT: 'Meldekort',
+    MELDEKORT: 'Meldekortbehandling',
     KLAGE: 'Klage',
     TILBAKEKREVING: 'Tilbakekreving',
-} as const;
-
-const meldekortSubTypeTekst: Record<ÅpentMeldekortSubType, string> = {
-    INNSENDT_MELDEKORT: 'Innsendt meldekort',
-    KORRIGERT_MELDEKORT: 'Korrigert meldekort',
-    MELDEKORTBEHANDLING: 'Meldekortbehandling',
 } as const;

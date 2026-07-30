@@ -4,8 +4,8 @@ import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldek
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
+import NextLink from 'next/link';
 
 type Props = {
     saksnummer: string;
@@ -73,7 +73,7 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
                                     </Table.DataCell>
                                     <Table.DataCell align={'right'}>
                                         <Button
-                                            as={InternLenke}
+                                            as={NextLink}
                                             variant={'secondary'}
                                             size={'small'}
                                             href={meldeperiodeUrl(
