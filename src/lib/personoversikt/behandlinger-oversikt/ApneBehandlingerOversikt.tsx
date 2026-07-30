@@ -3,7 +3,7 @@ import {
     ÅpenBehandlingForOversiktType,
     ÅpentMeldekortSubType,
 } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
-import { Alert, HStack, Table, Tag } from '@navikt/ds-react';
+import { Alert, Button, HStack, Table, Tag } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
     finnBehandlingStatusTag,
@@ -31,6 +31,8 @@ import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { MeldekortbehandlingMeny } from '~/lib/meldekort/meldekortbehandling/meny/MeldekortbehandlingMeny';
+import NextLink from 'next/link';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -181,9 +183,21 @@ const propsForRad = (
                     beslutter,
                     periodeTekst: formaterMeldeperioder(meldekortbehandling),
                     meny: (
-                        <InternLenke href={meldekortbehandlingUrl(saksnummer, id)}>
-                            {'Åpne'}
-                        </InternLenke>
+                        <HStack gap={'space-8'} justify={'end'}>
+                            <Button
+                                as={NextLink}
+                                variant={'secondary'}
+                                size={'small'}
+                                href={meldekortbehandlingUrl(saksnummer, id)}
+                            >
+                                {'Se behandling'}
+                            </Button>
+
+                            <MeldekortbehandlingMeny
+                                meldekortbehandling={meldekortbehandling}
+                                size={'small'}
+                            />
+                        </HStack>
                     ),
                 };
             }
@@ -195,15 +209,18 @@ const propsForRad = (
                 beslutter: null,
                 periodeTekst: periode ? formaterMeldeperiode(periode) : undefined,
                 meny: (
-                    <InternLenke
+                    <Button
+                        as={InternLenke}
+                        variant={'secondary'}
+                        size={'small'}
                         href={meldeperiodeUrl(
                             saksnummer,
                             periode,
                             MeldeperiodekjedeTab.BrukersMeldekort,
                         )}
                     >
-                        {'Åpne'}
-                    </InternLenke>
+                        {'Se meldekort'}
+                    </Button>
                 ),
             };
         }

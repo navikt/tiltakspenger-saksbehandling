@@ -10,7 +10,7 @@ import {
     HourglassTopFilledIcon,
     BulletListIcon,
 } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/meldekortbehandling/meny/handlinger/MeldekortbehandlingTildelMeg';
 import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/meldekortbehandling/meny/handlinger/MeldekortbehandlingGjenoppta';
@@ -26,9 +26,10 @@ import style from './MeldekortbehandlingMeny.module.css';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
+    size?: ComponentProps<typeof Button>['size'];
 };
 
-export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {
+export const MeldekortbehandlingMeny = ({ meldekortbehandling, size }: Props) => {
     const { gyldigeKommandoer, ventestatus, attesteringer } = meldekortbehandling;
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
@@ -63,6 +64,7 @@ export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {
                         variant={'secondary'}
                         icon={<MenuElipsisVerticalIcon aria-hidden />}
                         iconPosition={'right'}
+                        size={size}
                     >
                         {'Meny'}
                     </Button>

@@ -10,6 +10,7 @@ import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { classNames } from '~/utils/classNames';
 
 import style from './ApenMeldekortbehandlingOppsummering.module.css';
+import { MeldekortbehandlingMeny } from '~/lib/meldekort/meldekortbehandling/meny/MeldekortbehandlingMeny';
 
 type Props = {
     className?: string;
@@ -36,7 +37,10 @@ export const ApenMeldekortbehandlingOppsummering = ({ className }: Props) => {
                     </Heading>
                 </InlineMessage>
 
-                <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
+                <HStack gap={'space-8'}>
+                    <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
+                    <MeldekortbehandlingMeny meldekortbehandling={meldekortbehandling} />
+                </HStack>
             </HStack>
 
             <InternLenke href={meldekortbehandlingUrl(saksnummer, id)} className={style.lenke}>
