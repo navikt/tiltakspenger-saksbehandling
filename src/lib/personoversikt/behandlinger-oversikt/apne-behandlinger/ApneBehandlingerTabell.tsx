@@ -25,13 +25,16 @@ import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlin
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
-import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
+import { hentMeldekortbehandling, hentTilbakekreving } from '~/lib/sak/sakUtils';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import NextLink from 'next/link';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { formatterBeløp } from '~/utils/beløp';
+import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 
 type Props = {
     sak: SakProps;
@@ -287,6 +290,34 @@ const propsForRad = (
                 ),
             };
         }
+        case ÅpenBehandlingForOversiktType.TILBAKEKREVING: {
+            const { periode, status, totaltFeilutbetaltBeløp, saksbehandler, beslutter } =
+                åpenBehandling;
+
+            const { url, venter } = hentTilbakekreving(sak, åpenBehandling.id);
+
+            return {
+                typeTekst,
+                resultatTag: `Feilutbetalt: ${formatterBeløp(totaltFeilutbetaltBeløp)}`,
+                statusTag: <TilbakekrevingStatusTags status={status} venter={venter} />,
+                saksbehandler,
+                beslutter,
+                periodeTekst: formaterPeriode(periode),
+                meny: (
+                    <Button
+                        as={'a'}
+                        href={url}
+                        variant={'secondary'}
+                        size={'small'}
+                        icon={<ExternalLinkIcon aria-hidden />}
+                        iconPosition={'right'}
+                        target={'_blank'}
+                    >
+                        {'Åpne tilbakekreving'}
+                    </Button>
+                ),
+            };
+        }
     }
 };
 
@@ -296,6 +327,7 @@ const typeBehandlingTekst: Record<ÅpenBehandlingForOversiktType, string> = {
     SØKNAD: 'Søknad',
     MELDEKORT: 'Meldekort',
     KLAGE: 'Klage',
+    TILBAKEKREVING: 'Tilbakekreving',
 } as const;
 
 const meldekortSubTypeTekst: Record<ÅpentMeldekortSubType, string> = {

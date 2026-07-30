@@ -19,14 +19,6 @@ export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
 
     const tilbakekreving = hentTilbakekreving(sak, tilbakekrevingId);
 
-    if (!tilbakekreving) {
-        return (
-            <Alert
-                variant={'error'}
-            >{`Teknisk feil: fant ikke tilbakekreving for id ${tilbakekrevingId}`}</Alert>
-        );
-    }
-
     const {
         status,
         totaltFeilutbetaltBeløp,

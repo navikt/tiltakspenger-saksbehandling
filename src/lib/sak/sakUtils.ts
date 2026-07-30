@@ -4,7 +4,10 @@ import { RammevedtakMedBehandling, VedtakId } from '~/lib/rammebehandling/typer/
 import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
-import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
+import {
+    TilbakekrevingBehandling,
+    TilbakekrevingId,
+} from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     MeldekortbehandlingId,
@@ -40,8 +43,18 @@ export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode
         .filter(removeDuplicatesFilter((a, b) => a.id === b.id));
 };
 
-export const hentTilbakekreving = (sak: SakProps, tilbakekrevingId: TilbakekrevingId) => {
-    return sak.tilbakekrevinger.find((tilbakekreving) => tilbakekreving.id === tilbakekrevingId);
+// Henter tilbakekrevingen for id, eller kaster dersom den ikke finnes
+export const hentTilbakekreving = (
+    sak: SakProps,
+    tilbakekrevingId: TilbakekrevingId,
+): TilbakekrevingBehandling => {
+    const tilbakekreving = sak.tilbakekrevinger.find((it) => it.id === tilbakekrevingId);
+
+    if (!tilbakekreving) {
+        throw Error(`Fant ikke tilbakekreving med id ${tilbakekrevingId}`);
+    }
+
+    return tilbakekreving;
 };
 
 // Henter meldeperiodekjeden for kjedeId, eller kaster dersom den ikke finnes

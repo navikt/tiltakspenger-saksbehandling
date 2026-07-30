@@ -148,7 +148,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                     <Button
                                         as={'a'}
                                         href={url}
-                                        variant={'primary'}
+                                        variant={'secondary'}
                                         size={'small'}
                                         icon={<ExternalLinkIcon />}
                                         iconPosition={'right'}

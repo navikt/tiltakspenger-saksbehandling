@@ -11,6 +11,10 @@ import { Nullable } from '~/types/UtilTypes';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { KlagebehandlingResultat, KlagebehandlingStatus, KlageId } from '../../klage/typer/Klage';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+import {
+    TilbakekrevingBehandlingsstatus,
+    TilbakekrevingId,
+} from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 // Kan være:
 // 1. Søknad uten opprettet behandling
@@ -18,13 +22,15 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 // 3. Åpen meldekortbehandling
 // 4. Meldeperiodekjede med et brukers meldekort som ikke er behandlet
 // 5. klage
+// 6. Åpen tilbakekreving
 export type ÅpenBehandlingForOversikt =
     | SøknadUtenBehandling
     | ÅpenSøknadsbehandling
     | ÅpenRevurdering
     | ÅpenMeldekortbehandling
     | BrukersMeldekortUtenBehandling
-    | KlageBehandlingForOversikt;
+    | KlageBehandlingForOversikt
+    | ÅpenTilbakekreving;
 
 export type ÅpenRammebehandlingForOversikt = ÅpenSøknadsbehandling | ÅpenRevurdering;
 
@@ -34,6 +40,7 @@ export enum ÅpenBehandlingForOversiktType {
     REVURDERING = 'REVURDERING',
     MELDEKORT = 'MELDEKORT',
     KLAGE = 'KLAGE',
+    TILBAKEKREVING = 'TILBAKEKREVING',
 }
 
 export enum ÅpentMeldekortSubType {
@@ -43,7 +50,13 @@ export enum ÅpentMeldekortSubType {
 }
 
 type ÅpenBehandlingBase = {
-    id: SøknadId | RammebehandlingId | MeldeperiodeKjedeId | KlageId | MeldekortbehandlingId;
+    id:
+        | SøknadId
+        | RammebehandlingId
+        | MeldeperiodeKjedeId
+        | KlageId
+        | MeldekortbehandlingId
+        | TilbakekrevingId;
     opprettet: string;
     type: ÅpenBehandlingForOversiktType;
 };
@@ -100,4 +113,14 @@ export type KlageBehandlingForOversikt = ÅpenBehandlingBase & {
     saksbehandler: Nullable<string>;
     resultat: Nullable<KlagebehandlingResultat>;
     status: KlagebehandlingStatus;
+};
+
+export type ÅpenTilbakekreving = ÅpenBehandlingBase & {
+    id: TilbakekrevingId;
+    type: ÅpenBehandlingForOversiktType.TILBAKEKREVING;
+    periode: Periode;
+    status: TilbakekrevingBehandlingsstatus;
+    totaltFeilutbetaltBeløp: number;
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
 };
