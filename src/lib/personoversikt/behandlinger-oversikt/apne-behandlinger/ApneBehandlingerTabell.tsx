@@ -1,4 +1,4 @@
-import { ÅpenBehandlingId, ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
+import { ÅpenBehandling, ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
 import { Alert, Button, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
@@ -45,29 +45,29 @@ type Props = {
 };
 
 export const ApneBehandlingerTabell = ({ sak }: Props) => {
-    const { åpneBehandlingerIder } = sak;
+    const { åpneBehandlinger } = sak;
 
     return (
         <VStack gap={'space-8'}>
             <Heading size={'small'} level={'2'}>
-                {`Åpne behandlinger (${åpneBehandlingerIder.length})`}
+                {`Åpne behandlinger (${åpneBehandlinger.length})`}
             </Heading>
 
-            {åpneBehandlingerIder.length === 0 ? (
+            {åpneBehandlinger.length === 0 ? (
                 <Infokort variant={'info'}>{'Ingen åpne behandlinger på denne saken'}</Infokort>
             ) : (
-                <Tabell åpneBehandlingerIder={åpneBehandlingerIder} sak={sak} />
+                <Tabell åpneBehandlinger={åpneBehandlinger} sak={sak} />
             )}
         </VStack>
     );
 };
 
 type TabellProps = {
-    åpneBehandlingerIder: ÅpenBehandlingId[];
+    åpneBehandlinger: ÅpenBehandling[];
     sak: SakProps;
 };
 
-const Tabell = ({ åpneBehandlingerIder, sak }: TabellProps) => {
+const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
     return (
         <Table>
             <Table.Header>
@@ -84,7 +84,7 @@ const Tabell = ({ åpneBehandlingerIder, sak }: TabellProps) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {åpneBehandlingerIder.map((åpenBehandlingId) => {
+                {åpneBehandlinger.map((åpenBehandling) => {
                     const {
                         typeTekst,
                         resultatTag,
@@ -95,10 +95,10 @@ const Tabell = ({ åpneBehandlingerIder, sak }: TabellProps) => {
                         saksbehandler,
                         beslutter,
                         meny,
-                    } = propsForRad(åpenBehandlingId, sak);
+                    } = propsForRad(åpenBehandling, sak);
 
                     return (
-                        <Table.Row shadeOnHover={false} key={åpenBehandlingId.id}>
+                        <Table.Row shadeOnHover={false} key={åpenBehandling.id}>
                             <Table.DataCell>{typeTekst}</Table.DataCell>
                             <Table.DataCell>{resultatTag ?? '-'}</Table.DataCell>
                             <Table.DataCell>{statusTag}</Table.DataCell>
@@ -131,16 +131,16 @@ type ÅpenBehandlingOversiktRadProps = {
 };
 
 const propsForRad = (
-    åpenBehandlingId: ÅpenBehandlingId,
+    åpenBehandling: ÅpenBehandling,
     sak: SakProps,
 ): ÅpenBehandlingOversiktRadProps => {
     const { saksnummer } = sak;
 
-    const typeTekst = typeBehandlingTekst[åpenBehandlingId.type];
+    const typeTekst = typeBehandlingTekst[åpenBehandling.type];
 
-    switch (åpenBehandlingId.type) {
+    switch (åpenBehandling.type) {
         case ÅpenBehandlingType.SØKNAD: {
-            const { opprettet, tidsstempelHosOss } = hentSøknad(sak, åpenBehandlingId.id);
+            const { opprettet, tidsstempelHosOss } = hentSøknad(sak, åpenBehandling.id);
 
             return {
                 typeTekst,
@@ -160,7 +160,7 @@ const propsForRad = (
         }
         case ÅpenBehandlingType.SØKNADSBEHANDLING:
         case ÅpenBehandlingType.REVURDERING: {
-            const rammebehandling = hentRammebehandling(sak, åpenBehandlingId.id);
+            const rammebehandling = hentRammebehandling(sak, åpenBehandling.id);
 
             const { opprettet, status, resultat, saksbehandler, beslutter, vedtaksperiode } =
                 rammebehandling;
@@ -190,7 +190,7 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingType.MELDEKORT: {
-            const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandlingId.id);
+            const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
 
             const { id, opprettet, status, saksbehandler, beslutter } = meldekortbehandling;
 
@@ -231,7 +231,7 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingType.KLAGE: {
-            const klagebehandling = hentKlagebehandling(sak, åpenBehandlingId.id);
+            const klagebehandling = hentKlagebehandling(sak, åpenBehandling.id);
 
             const {
                 opprettet,
@@ -281,7 +281,7 @@ const propsForRad = (
                 totaltFeilutbetaltBeløp,
                 saksbehandler,
                 beslutter,
-            } = hentTilbakekreving(sak, åpenBehandlingId.id);
+            } = hentTilbakekreving(sak, åpenBehandling.id);
 
             return {
                 typeTekst,

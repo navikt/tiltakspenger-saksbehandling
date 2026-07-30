@@ -16,34 +16,34 @@ export enum ÅpenBehandlingType {
 /**
  * Peker på en åpen behandling på saken. Selve behandlingen hentes fra saken med id og type.
  */
-export type ÅpenBehandlingId =
-    | ÅpenSøknadId
-    | ÅpenRammebehandlingId
-    | ÅpenMeldekortbehandlingId
-    | ÅpenKlagebehandlingId
-    | ÅpenTilbakekrevingId;
+export type ÅpenBehandling =
+    | ÅpenSøknad
+    | ÅpenRammebehandling
+    | ÅpenMeldekortbehandling
+    | ÅpenKlagebehandling
+    | ÅpenTilbakekreving;
 
-export type ÅpenSøknadId = {
+export type ÅpenSøknad = {
     id: SøknadId;
     type: ÅpenBehandlingType.SØKNAD;
 };
 
-export type ÅpenRammebehandlingId = {
+export type ÅpenRammebehandling = {
     id: RammebehandlingId;
     type: ÅpenBehandlingType.SØKNADSBEHANDLING | ÅpenBehandlingType.REVURDERING;
 };
 
-export type ÅpenMeldekortbehandlingId = {
+export type ÅpenMeldekortbehandling = {
     id: MeldekortbehandlingId;
     type: ÅpenBehandlingType.MELDEKORT;
 };
 
-export type ÅpenKlagebehandlingId = {
+export type ÅpenKlagebehandling = {
     id: KlageId;
     type: ÅpenBehandlingType.KLAGE;
 };
 
-export type ÅpenTilbakekrevingId = {
+export type ÅpenTilbakekreving = {
     id: TilbakekrevingId;
     type: ÅpenBehandlingType.TILBAKEKREVING;
 };
