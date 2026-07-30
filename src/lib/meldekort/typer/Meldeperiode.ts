@@ -34,5 +34,6 @@ export type MeldeperiodekjedeProps = {
     brukersMeldekort: BrukersMeldekortProps[];
     brukersMeldekortStatus: BrukersMeldekortKjedeStatus;
     gjeldendeBeregning: MeldeperiodeBeregningProps | null;
+    erKlarTilUtfylling: boolean;
     kanBehandles: boolean;
 };

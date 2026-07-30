@@ -5,7 +5,6 @@ import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortH
 import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 import { nonNullishPredicate } from '~/utils/array';
-import { MeldekortOversiktIkkeKlar } from '~/lib/personoversikt/meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 import { ApenMeldekortbehandlingOppsummering } from '~/lib/personoversikt/meldekort-oversikt/åpen-behandling/ApenMeldekortbehandlingOppsummering';
 import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
 
@@ -47,10 +46,7 @@ export const MeldekortOversikt = () => {
                     </ToggleGroup.Item>
                 </ToggleGroup>
 
-                <HStack gap={'space-16'} align={'center'}>
-                    <MeldekortOversiktIkkeKlar meldeperiodekjeder={meldeperiodeKjeder} />
-                    <MeldekortHelgToggle />
-                </HStack>
+                <MeldekortHelgToggle />
             </HStack>
 
             {visning === OversiktVisning.Meldeperiodekjeder ? (

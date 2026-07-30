@@ -17,7 +17,14 @@ import style from './MeldekortbehandlingOpprett.module.css';
 
 export const MeldekortbehandlingOpprett = () => {
     const { sakId, saksnummer, åpenMeldekortbehandlingId } = useSak().sak;
-    const { id: kjedeId, meldekortbehandlingIder } = useMeldeperiodekjede().meldeperiodeKjede;
+    const {
+        id: kjedeId,
+        meldekortbehandlingIder,
+        kanBehandles,
+        erKlarTilUtfylling,
+        sisteMeldeperiode,
+    } = useMeldeperiodekjede().meldeperiodeKjede;
+    const { ingenDagerGirRett } = sisteMeldeperiode;
 
     const { trigger, isMutating, error } = useFetchJsonFraApi<MeldekortbehandlingProps>(
         `/sak/${encodeURIComponent(sakId)}/meldeperiode/${encodeURIComponent(kjedeId)}/opprettBehandling`,
@@ -37,6 +44,8 @@ export const MeldekortbehandlingOpprett = () => {
 
     const lukkModal = () => modalRef.current?.close();
 
+    const kanOppretteBehandling = !åpenMeldekortbehandlingId && kanBehandles;
+
     return (
         <VStack gap={'space-16'}>
             {error && <Infokort variant={'feil'}>{error.message}</Infokort>}
@@ -52,8 +61,30 @@ export const MeldekortbehandlingOpprett = () => {
                 </InlineMessage>
             )}
 
+            {!kanOppretteBehandling && (
+                <Infokort
+                    variant={'advarsel'}
+                    header={'Kan ikke starte behandling.'}
+                    size={'small'}
+                >
+                    <ul>
+                        {!!åpenMeldekortbehandlingId && (
+                            <li>
+                                {
+                                    'Saken har en åpen meldekortbehandling. Du kan legge til flere perioder i den eksisterende behandlingen.'
+                                }
+                            </li>
+                        )}
+                        {ingenDagerGirRett && <li>{'Ingen dager gir rett.'}</li>}
+                        {!erKlarTilUtfylling && (
+                            <li>{'Meldekortet er ikke klart til utfylling.'}</li>
+                        )}
+                    </ul>
+                </Infokort>
+            )}
+
             <Button
-                disabled={!!åpenMeldekortbehandlingId}
+                disabled={!kanOppretteBehandling}
                 onClick={() => modalRef.current?.showModal()}
                 className={style.knapp}
             >
