@@ -66,7 +66,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         throw e;
     });
 
-    const initialKlage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+    const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 
     if (!initialKlage) {
         logger.error(`Fant ikke klage ${klageId} på sak ${sak.sakId}`);

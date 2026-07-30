@@ -223,14 +223,14 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingForOversiktType.KLAGE: {
-            const klagebehandling = sak.klageBehandlinger.find(
+            const klagebehandling = sak.klagebehandlinger.find(
                 (klage) => klage.id === åpenBehandling.id,
             )!;
 
             const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
 
             const omgjøringsbehandling =
-                sak.behandlinger.find(
+                sak.rammebehandlinger.find(
                     (omgjøring) => omgjøring.id === klagebehandling.åpenBehandlingId,
                 ) ??
                 (klagebehandling.åpenBehandlingId &&

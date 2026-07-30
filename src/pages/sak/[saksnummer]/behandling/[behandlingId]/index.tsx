@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
         throw e;
     });
 
-    const behandling = sak.behandlinger.find((behandling) => behandling.id === behandlingId);
+    const behandling = sak.rammebehandlinger.find((behandling) => behandling.id === behandlingId);
 
     if (!behandling) {
         logger.error(`Fant ikke behandlingen ${behandlingId} på sak ${sak.sakId}`);
@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
     }
 
     const behandlingensKlage = behandling.klagebehandlingId
-        ? sak.klageBehandlinger.find((klage) => klage.id === behandling.klagebehandlingId)
+        ? sak.klagebehandlinger.find((klage) => klage.id === behandling.klagebehandlingId)
         : null;
 
     return {

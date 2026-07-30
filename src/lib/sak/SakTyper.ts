@@ -21,21 +21,28 @@ export type SakProps = {
     sakId: SakId;
     saksnummer: string;
     fnr: string;
-    åpneBehandlinger: ÅpenBehandlingForOversikt[];
+
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
-    behandlinger: Rammebehandling[];
-    klageBehandlinger: Klagebehandling[];
-    tidslinje: TidslinjeRammevedtak;
-    innvilgetTidslinje: TidslinjeRammevedtak;
+    kanSendeInnHelgForMeldekort: boolean;
+
+    søknader: Søknad[];
+
+    åpneBehandlinger: ÅpenBehandlingForOversikt[];
+
+    rammebehandlinger: Rammebehandling[];
+    klagebehandlinger: Klagebehandling[];
+    tilbakekrevinger: TilbakekrevingBehandling[];
+
     alleRammevedtak: Rammevedtak[];
     alleKlagevedtak: Klagevedtak[];
+
     meldekortvedtak: Meldekortvedtak[];
-    utbetalingstidslinje: UtbetalingstidslinjePeriode[];
-    søknader: Søknad[];
-    tilbakekrevinger: TilbakekrevingBehandling[];
-    kanSendeInnHelgForMeldekort: boolean;
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
     meldeperiodeKjeder: MeldeperiodekjedeProps[];
     åpenMeldekortbehandlingId: Nullable<MeldekortbehandlingId>;
+
+    tidslinje: TidslinjeRammevedtak;
+    innvilgetTidslinje: TidslinjeRammevedtak;
+    utbetalingstidslinje: UtbetalingstidslinjePeriode[];
 };

@@ -28,7 +28,7 @@ export const BehandlingPage = () => {
     const { behandling } = useBehandling();
 
     const behandlingensKlage =
-        sak.klageBehandlinger.find((kb) => kb.id === behandling.klagebehandlingId) ?? null;
+        sak.klagebehandlinger.find((kb) => kb.id === behandling.klagebehandlingId) ?? null;
 
     const {
         id,

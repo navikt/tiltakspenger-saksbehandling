@@ -43,9 +43,9 @@ export const Personoversikt = () => {
     const {
         sakId,
         saksnummer,
-        behandlinger,
+        rammebehandlinger,
         åpneBehandlinger,
-        klageBehandlinger,
+        klagebehandlinger,
         alleRammevedtak,
         alleKlagevedtak,
         tilbakekrevinger,
@@ -59,8 +59,10 @@ export const Personoversikt = () => {
         setAktivTab(hentAktivTabFraHash(window.location.hash));
     }, []);
 
-    const avbrutteRammebehandlinger = behandlinger.filter((behandling) => !!behandling.avbrutt);
-    const avbrutteKlagebehandlinger = klageBehandlinger.filter((klage) => !!klage.avbrutt);
+    const avbrutteRammebehandlinger = rammebehandlinger.filter(
+        (behandling) => !!behandling.avbrutt,
+    );
+    const avbrutteKlagebehandlinger = klagebehandlinger.filter((klage) => !!klage.avbrutt);
 
     return (
         <>
@@ -118,7 +120,7 @@ export const Personoversikt = () => {
                     />
                     <Tabs.Tab
                         value={PersonoversiktTab.Klage}
-                        label={labelWithCounter('Klage', klageBehandlinger.length)}
+                        label={labelWithCounter('Klage', klagebehandlinger.length)}
                         icon={<EnvelopeClosedIcon aria-hidden />}
                         className={styles.tab}
                     />
@@ -132,7 +134,7 @@ export const Personoversikt = () => {
                     <OpprettBehandlingMeny
                         sakId={sakId}
                         saksnummer={saksnummer}
-                        behandlinger={behandlinger}
+                        behandlinger={rammebehandlinger}
                         className={classNames(styles.opprettBehandling, styles.tab)}
                     />
                 </Tabs.List>

@@ -503,7 +503,7 @@ test.describe('Klage', () => {
             http.get('*/sak/:saksnummer', () => {
                 const sak = lagSak(klage, { søknader: [lagSøknad()] });
                 if (omgjøringsbehandling) {
-                    sak.behandlinger = [...sak.behandlinger, omgjøringsbehandling];
+                    sak.rammebehandlinger = [...sak.rammebehandlinger, omgjøringsbehandling];
                 }
                 return HttpResponse.json(sak);
             }),

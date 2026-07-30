@@ -80,7 +80,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         throw e;
     });
 
-    const initialKlage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+    const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 
     if (!initialKlage) {
         logger.error(`Fant ikke klage ${klageId} på sak ${sak.sakId}`);
@@ -91,7 +91,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const omgjøringsbehandling =
-        sak.behandlinger.find((b) => initialKlage.åpenBehandlingId === b.id) ?? null;
+        sak.rammebehandlinger.find((b) => initialKlage.åpenBehandlingId === b.id) ?? null;
 
     return {
         props: {
@@ -101,7 +101,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             rammevedtak: sak.alleRammevedtak,
             meldekortvedtak: sak.meldekortvedtak,
             søknader: sak.søknader,
-            rammebehandlinger: sak.behandlinger,
+            rammebehandlinger: sak.rammebehandlinger,
             meldekortbehandlinger: sak.meldekortbehandlinger,
             meldeperiodekjeder: sak.meldeperiodeKjeder,
         } satisfies Props,

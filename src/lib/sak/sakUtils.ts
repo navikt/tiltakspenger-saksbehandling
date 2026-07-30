@@ -17,10 +17,10 @@ import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
-    const { alleRammevedtak, behandlinger } = sak;
+    const { alleRammevedtak, rammebehandlinger } = sak;
 
     return alleRammevedtak
-        .map((vedtak) => behandlinger.find((beh) => beh.id === vedtak.behandlingId)!)
+        .map((vedtak) => rammebehandlinger.find((beh) => beh.id === vedtak.behandlingId)!)
         .filter((beh) => beh.resultat === SøknadsbehandlingResultat.INNVILGELSE)
         .toSorted((a, b) => (a.iverksattTidspunkt! > b.iverksattTidspunkt! ? -1 : 1));
 };
@@ -74,7 +74,7 @@ export const hentMeldekortbehandling = (
 
 // Henter rammebehandlingen for id, eller kaster dersom den ikke finnes
 export const hentRammebehandling = (sak: SakProps, id: RammebehandlingId): Rammebehandling => {
-    const rammebehandling = sak.behandlinger.find((beh) => beh.id === id);
+    const rammebehandling = sak.rammebehandlinger.find((beh) => beh.id === id);
 
     if (!rammebehandling) {
         throw Error(`Fant ikke rammebehandling med id ${id}`);
@@ -106,7 +106,7 @@ export const hentMeldekortvedtakMedBehandlinger = (
 };
 
 export const hentKlagebehandling = (sak: SakProps, klageId: KlageId): Klagebehandling => {
-    const klagebehandling = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+    const klagebehandling = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 
     if (!klagebehandling) {
         throw Error(`Fant ikke klagebehandling med id ${klageId}`);

@@ -25,12 +25,12 @@ type KlagebehandlingerMedOmgjøringsbehandling = {
 
 export const Klageoversikt = () => {
     const { sak } = useSak();
-    const { klageBehandlinger, behandlinger } = sak;
+    const { klagebehandlinger, rammebehandlinger } = sak;
 
     const klagevedtakMedBehandling = hentKlagevedtakMedBehandlinger(sak);
 
     const klagebehandlingerMedOmgjøringsbehandling: KlagebehandlingerMedOmgjøringsbehandling[] =
-        klageBehandlinger
+        klagebehandlinger
             .filter(
                 (klage) =>
                     !klagevedtakMedBehandling.some((vedtak) => vedtak.behandling.id === klage.id),
@@ -39,7 +39,7 @@ export const Klageoversikt = () => {
                 return {
                     klagebehandling: klage,
                     omgjøringsbehandling:
-                        behandlinger.find(
+                        rammebehandlinger.find(
                             (behandling) => behandling.klagebehandlingId === klage.id,
                         ) ?? null,
                 };
