@@ -34,12 +34,9 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import NextLink from 'next/link';
 
-type Props = {
-    åpneBehandlinger: ÅpenBehandlingForOversikt[];
-};
-
-export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
+export const ApneBehandlingerOversikt = () => {
     const { sak } = useSak();
+    const { åpneBehandlinger } = sak;
 
     if (åpneBehandlinger.length === 0) {
         return <Infokort variant={'info'}>{'Ingen åpne behandlinger på denne saken'}</Infokort>;

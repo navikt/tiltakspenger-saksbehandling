@@ -1,6 +1,6 @@
 import { Tag, Table } from '@navikt/ds-react';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
-import { Klagebehandling, KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterTidspunkt } from '~/utils/date';
@@ -15,19 +15,39 @@ import {
     klagebehandlingResultatTilTag,
 } from '~/utils/tekstformateringUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { useSak } from '~/lib/sak/SakContext';
+import { hentKlagevedtakMedBehandlinger } from '~/lib/sak/sakUtils';
 
-export type KlagebehandlingerMedOmgjøringsbehandling = {
+type KlagebehandlingerMedOmgjøringsbehandling = {
     klagebehandling: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
 };
 
-const Klageoversikt = (props: {
-    klagebehandlingerMedOmgjøringsbehandling: KlagebehandlingerMedOmgjøringsbehandling[];
-    klagevedtakMedBehandling: KlagevedtakMedBehandling[];
-}) => {
-    const harOverlappendeklagebehandlinger = props.klagebehandlingerMedOmgjøringsbehandling.some(
+export const Klageoversikt = () => {
+    const { sak } = useSak();
+    const { klageBehandlinger, behandlinger } = sak;
+
+    const klagevedtakMedBehandling = hentKlagevedtakMedBehandlinger(sak);
+
+    const klagebehandlingerMedOmgjøringsbehandling: KlagebehandlingerMedOmgjøringsbehandling[] =
+        klageBehandlinger
+            .filter(
+                (klage) =>
+                    !klagevedtakMedBehandling.some((vedtak) => vedtak.behandling.id === klage.id),
+            )
+            .map((klage) => {
+                return {
+                    klagebehandling: klage,
+                    omgjøringsbehandling:
+                        behandlinger.find(
+                            (behandling) => behandling.klagebehandlingId === klage.id,
+                        ) ?? null,
+                };
+            });
+
+    const harOverlappendeklagebehandlinger = klagebehandlingerMedOmgjøringsbehandling.some(
         (klagebehandling) =>
-            props.klagevedtakMedBehandling.some(
+            klagevedtakMedBehandling.some(
                 (klagevedtak) => klagevedtak.behandling.id === klagebehandling.klagebehandling.id,
             ),
     );
@@ -38,7 +58,7 @@ const Klageoversikt = (props: {
         );
     }
 
-    const klagevedtakMedBehandlingOversikt = props.klagevedtakMedBehandling.map(
+    const klagevedtakMedBehandlingOversikt = klagevedtakMedBehandling.map(
         (klagevedtakMedBehandling) => {
             return {
                 status: klagebehandlingStatusTilTag({
@@ -61,7 +81,7 @@ const Klageoversikt = (props: {
         },
     );
 
-    const klagebehandlingerOversikt = props.klagebehandlingerMedOmgjøringsbehandling.map(
+    const klagebehandlingerOversikt = klagebehandlingerMedOmgjøringsbehandling.map(
         ({ klagebehandling, omgjøringsbehandling }) => {
             const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
 
@@ -126,5 +146,3 @@ const Klageoversikt = (props: {
         </Table>
     );
 };
-
-export default Klageoversikt;

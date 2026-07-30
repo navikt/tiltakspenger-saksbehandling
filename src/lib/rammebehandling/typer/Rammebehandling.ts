@@ -1,5 +1,5 @@
 import { ArenaTPVedtak } from './ArenaTPVedtak';
-import { Periode } from '../../../types/Periode';
+import { Periode } from '~/types/Periode';
 import {
     Revurdering,
     RevurderingInnvilgelse,
@@ -14,15 +14,15 @@ import {
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
 import { Tiltaksdeltakelse } from './Tiltaksdeltakelse';
-import { BehandlingUtbetalingProps, Utbetalingskontroll } from '../../../types/Utbetaling';
-import { Nullable } from '../../../types/UtilTypes';
+import { BehandlingUtbetalingProps, Utbetalingskontroll } from '~/types/Utbetaling';
+import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from './Ytelse';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
 import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
-import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { KlageId } from '../../klage/typer/Klage';
-import { VentestatusHendelse } from '../../../types/Ventestatus';
+import { VentestatusHendelse } from '~/types/Ventestatus';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 export const RammebehandlingPrefix = 'beh_' as const;
@@ -97,7 +97,3 @@ export type RammebehandlingMedInnvilgelse =
     | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];
-
-export type VedtattRammevedtakMedBehandling = { type: 'rammevedtak' } & Rammevedtak & {
-        behandling: Rammebehandling;
-    };

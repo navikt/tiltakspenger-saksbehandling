@@ -100,7 +100,9 @@ export const AvbrutteBehandlingerOversikt = ({
     );
 };
 
-const avbruttBehandlingToDataCellInfo = (behandling: Rammebehandling): AvbruttBehandlingInfo => {
+const avbruttBehandlingToDataCellInfo = (
+    behandling: Rammebehandling,
+): AvbruttRammebehandlingInfo => {
     return {
         id: behandling.id,
         behandlingsperiode: behandling.vedtaksperiode,
@@ -112,7 +114,7 @@ const avbruttBehandlingToDataCellInfo = (behandling: Rammebehandling): AvbruttBe
     };
 };
 
-const avbruttKlageToDataCellInfo = (klage: Klagebehandling): AvbruttBehandlingInfo => {
+const avbruttKlageToDataCellInfo = (klage: Klagebehandling): AvbruttKlagebehandlingInfo => {
     return {
         id: klage.id,
         behandlingsperiode: null,
@@ -151,8 +153,6 @@ type AvbruttRammebehandlingInfo = AvbruttBehandlingInfoBase & {
     behandlingstype: Rammebehandlingstype;
     resultat: RammebehandlingResultat;
 };
-
-type AvbruttBehandlingInfo = AvbruttKlagebehandlingInfo | AvbruttRammebehandlingInfo;
 
 type AvbruttBehandlingstype = Rammebehandlingstype | 'KLAGEBEHANDLING';
 type AvbruttBehandlingResultat = RammebehandlingResultat | KlagebehandlingResultat;

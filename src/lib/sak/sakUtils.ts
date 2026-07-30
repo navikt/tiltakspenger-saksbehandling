@@ -13,6 +13,8 @@ import {
 import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
+import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
+import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -85,6 +87,7 @@ export const hentRammevedtakMedBehandlinger = (sak: SakProps): RammevedtakMedBeh
     return sak.alleRammevedtak.map((vedtak) => {
         return {
             ...vedtak,
+            vedtakType: VedtakType.Rammebehandling,
             behandling: hentRammebehandling(sak, vedtak.behandlingId),
         };
     });
@@ -96,6 +99,7 @@ export const hentMeldekortvedtakMedBehandlinger = (
     return sak.meldekortvedtak.map((vedtak) => {
         return {
             ...vedtak,
+            vedtakType: VedtakType.Meldekort,
             behandling: hentMeldekortbehandling(sak, vedtak.meldekortId),
         };
     });
@@ -109,4 +113,14 @@ export const hentKlagebehandling = (sak: SakProps, klageId: KlageId): Klagebehan
     }
 
     return klagebehandling;
+};
+
+export const hentKlagevedtakMedBehandlinger = (sak: SakProps): KlagevedtakMedBehandling[] => {
+    return sak.alleKlagevedtak.map((vedtak) => {
+        return {
+            ...vedtak,
+            vedtakType: VedtakType.Klage,
+            behandling: hentKlagebehandling(sak, vedtak.klagebehandlingId),
+        };
+    });
 };

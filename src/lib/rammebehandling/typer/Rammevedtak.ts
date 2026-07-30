@@ -3,6 +3,7 @@ import { Periode } from '~/types/Periode';
 import { Barnetillegg } from './Barnetillegg';
 import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type VedtakId = `vedtak_${string}`;
 
@@ -36,6 +37,7 @@ type GyldigeKommandoerMap = {
 
 export type RammevedtakMedBehandling = Rammevedtak & {
     behandling: Rammebehandling;
+    vedtakType: VedtakType.Rammebehandling;
 };
 
 export enum RammevedtakKommandoType {

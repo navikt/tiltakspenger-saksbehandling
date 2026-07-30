@@ -17,14 +17,11 @@ import {
 } from '@navikt/aksel-icons';
 import { useEffect, useState } from 'react';
 import { OpprettBehandlingMeny } from '~/lib/personoversikt/opprett-behandling/OpprettBehandlingMeny';
-import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
-import Klageoversikt, {
-    KlagebehandlingerMedOmgjøringsbehandling,
-} from './klageoversikt/Klageoversikt';
 import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingOversikt';
 import { personoversiktUrl } from '~/utils/urls';
 import { MeldekortOversikt } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
 import { classNames } from '~/utils/classNames';
+import { Klageoversikt } from './klageoversikt/Klageoversikt';
 
 import styles from './Personoversikt.module.css';
 
@@ -64,30 +61,6 @@ export const Personoversikt = () => {
 
     const avbrutteRammebehandlinger = behandlinger.filter((behandling) => !!behandling.avbrutt);
     const avbrutteKlagebehandlinger = klageBehandlinger.filter((klage) => !!klage.avbrutt);
-
-    const klagevedtakMedBehandling: KlagevedtakMedBehandling[] = alleKlagevedtak.map((vedtak) => {
-        return {
-            ...vedtak,
-            type: 'klagevedtak',
-            behandling: klageBehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId)!,
-        };
-    });
-
-    const klagebehandlingerMedOmgjøringsbehandling: KlagebehandlingerMedOmgjøringsbehandling[] =
-        klageBehandlinger
-            .filter(
-                (klage) =>
-                    !klagevedtakMedBehandling.some((vedtak) => vedtak.behandling.id === klage.id),
-            )
-            .map((klage) => {
-                return {
-                    klagebehandling: klage,
-                    omgjøringsbehandling:
-                        behandlinger.find(
-                            (behandling) => behandling.klagebehandlingId === klage.id,
-                        ) ?? null,
-                };
-            });
 
     return (
         <>
@@ -165,7 +138,7 @@ export const Personoversikt = () => {
                 </Tabs.List>
 
                 <Tabs.Panel value={PersonoversiktTab.ÅpneBehandlinger} className={styles.panel}>
-                    <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
+                    <ApneBehandlingerOversikt />
                 </Tabs.Panel>
 
                 <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
@@ -173,13 +146,7 @@ export const Personoversikt = () => {
                 </Tabs.Panel>
 
                 <Tabs.Panel value={PersonoversiktTab.VedtatteBehandlinger} className={styles.panel}>
-                    <VedtatteBehandlinger
-                        sakId={sakId}
-                        rammebehandlinger={behandlinger}
-                        alleRammevedtak={alleRammevedtak}
-                        klagebehandlinger={klageBehandlinger}
-                        alleKlagevedtak={alleKlagevedtak}
-                    />
+                    <VedtatteBehandlinger />
                 </Tabs.Panel>
 
                 <Tabs.Panel
@@ -194,16 +161,11 @@ export const Personoversikt = () => {
                 </Tabs.Panel>
 
                 <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
-                    <Klageoversikt
-                        klagebehandlingerMedOmgjøringsbehandling={
-                            klagebehandlingerMedOmgjøringsbehandling
-                        }
-                        klagevedtakMedBehandling={klagevedtakMedBehandling}
-                    />
+                    <Klageoversikt />
                 </Tabs.Panel>
 
                 <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
-                    <TilbakekrevingOversikt tilbakekrevinger={tilbakekrevinger} />
+                    <TilbakekrevingOversikt />
                 </Tabs.Panel>
             </Tabs>
         </>

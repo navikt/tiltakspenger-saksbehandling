@@ -1,123 +1,51 @@
-import { Alert, Checkbox, CheckboxGroup, HStack, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
-import {
-    Rammebehandling,
-    VedtattRammevedtakMedBehandling,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
-import { SakId } from '~/lib/sak/SakTyper';
-import { Omgjøringsgrad, Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { useState } from 'react';
-import { classNames } from '~/utils/classNames';
+import { useSak } from '~/lib/sak/SakContext';
+import { hentKlagevedtakMedBehandlinger, hentRammevedtakMedBehandlinger } from '~/lib/sak/sakUtils';
+import {
+    RammevedtakEllerKlageMedBehandling,
+    VedtakType,
+} from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { OmgjortGradVisningVelger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/omgjort-grad-velger/OmgjortGradVisningVelger';
 
-import style from './VedtatteBehandlinger.module.css';
-import { Klagevedtak } from '~/lib/klage/typer/Klagevedtak';
-import { Klagebehandling, KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
+export const VedtatteBehandlinger = () => {
+    const { sak } = useSak();
+    const { sakId } = sak;
 
-type Props = {
-    sakId: SakId;
-    rammebehandlinger: Rammebehandling[];
-    alleRammevedtak: Rammevedtak[];
-    klagebehandlinger: Klagebehandling[];
-    alleKlagevedtak: Klagevedtak[];
-    className?: string;
-};
-
-export const VedtatteBehandlinger = ({
-    sakId,
-    rammebehandlinger,
-    alleRammevedtak,
-    klagebehandlinger,
-    alleKlagevedtak,
-    className,
-}: Props) => {
     const [visOmgjorte, setVisOmgjorte] = useState<Omgjøringsgrad[]>([
         Omgjøringsgrad.HELT,
         Omgjøringsgrad.DELVIS,
     ]);
 
-    if (alleRammevedtak.length === 0 && alleKlagevedtak.length === 0) {
-        return null;
+    const vedtakMedBehandling: RammevedtakEllerKlageMedBehandling[] = [
+        ...hentRammevedtakMedBehandlinger(sak),
+        ...hentKlagevedtakMedBehandlinger(sak),
+    ].toSorted((a, b) => b.opprettet.localeCompare(a.opprettet));
+
+    if (vedtakMedBehandling.length === 0) {
+        return <Infokort variant={'info'}>{'Ingen vedtatte behandlinger på denne saken'}</Infokort>;
     }
-
-    const rammevedtakMedBehandling = alleRammevedtak.map((vedtak) => {
-        return {
-            type: 'rammevedtak',
-            ...vedtak,
-            behandling: rammebehandlinger.find(
-                (behandling) => behandling.id === vedtak.behandlingId,
-            ),
-        };
-    }) as VedtattRammevedtakMedBehandling[];
-
-    const klagevedtakMedBehandling = alleKlagevedtak.map((vedtak) => {
-        return {
-            type: 'klagevedtak',
-            ...vedtak,
-            behandling: klagebehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId),
-        };
-    }) as KlagevedtakMedBehandling[];
-
-    const vedtakMedBehandling = [...rammevedtakMedBehandling, ...klagevedtakMedBehandling].toSorted(
-        (a, b) => b.opprettet.localeCompare(a.opprettet),
-    );
-
-    const antallVedtakUtenBehandling =
-        alleRammevedtak.length + alleKlagevedtak.length - vedtakMedBehandling.length;
-
-    const antallHeltOmgjort = alleRammevedtak.reduce(
-        (acc, vedtak) => (vedtak.omgjortGrad === Omgjøringsgrad.HELT ? acc + 1 : acc),
-        0,
-    );
-    const antallDelvisOmgjort = alleRammevedtak.reduce(
-        (acc, vedtak) => (vedtak.omgjortGrad === Omgjøringsgrad.DELVIS ? acc + 1 : acc),
-        0,
-    );
 
     const vedtakSomSkalVises = vedtakMedBehandling.filter(
         (vedtak) =>
             !(
-                vedtak.type === 'rammevedtak' &&
+                vedtak.vedtakType === VedtakType.Rammebehandling &&
                 vedtak.omgjortGrad &&
                 !visOmgjorte.includes(vedtak.omgjortGrad)
             ),
     );
 
     return (
-        <VStack className={className}>
-            <HStack justify={'space-between'}>
-                <CheckboxGroup
-                    legend={'Vis omgjorte vedtak'}
-                    hideLegend={true}
-                    size={'small'}
-                    value={visOmgjorte}
-                    onChange={(values: Omgjøringsgrad[]) => {
-                        setVisOmgjorte(values);
-                    }}
-                    className={style.omgjortGroup}
-                >
-                    {antallHeltOmgjort > 0 && (
-                        <Checkbox
-                            value={Omgjøringsgrad.HELT}
-                            className={classNames(style.omgjortCheckbox, style.heltOmgjortBg)}
-                        >
-                            {`Vis helt omgjort (${antallHeltOmgjort})`}
-                        </Checkbox>
-                    )}
-                    {antallDelvisOmgjort > 0 && (
-                        <Checkbox
-                            value={Omgjøringsgrad.DELVIS}
-                            className={classNames(style.omgjortCheckbox, style.delvisOmgjortBg)}
-                        >
-                            {`Vis delvis omgjort (${antallDelvisOmgjort})`}
-                        </Checkbox>
-                    )}
-                </CheckboxGroup>
-            </HStack>
-            {antallVedtakUtenBehandling > 0 && (
-                <Alert
-                    variant={'error'}
-                >{`Teknisk feil: ${antallVedtakUtenBehandling} vedtak mangler behandling på denne saken`}</Alert>
-            )}
+        <VStack>
+            <OmgjortGradVisningVelger
+                vedtakMedBehandling={vedtakMedBehandling}
+                visOmgjorte={visOmgjorte}
+                setVisOmgjorte={setVisOmgjorte}
+            />
+
             <VedtatteBehandlingerTabell sakId={sakId} vedtakMedBehandling={vedtakSomSkalVises} />
         </VStack>
     );

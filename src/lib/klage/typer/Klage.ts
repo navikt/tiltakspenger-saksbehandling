@@ -1,9 +1,8 @@
 import { Klageinstanshendelse } from './Klageinstanshendelse';
 import { VedtakId } from '../../rammebehandling/typer/Rammevedtak';
 import { SakId } from '../../sak/SakTyper';
-import { Nullable } from '../../../types/UtilTypes';
-import { VentestatusHendelse } from '../../../types/Ventestatus';
-import { Klagevedtak } from '~/lib/klage/typer/Klagevedtak';
+import { Nullable } from '~/types/UtilTypes';
+import { VentestatusHendelse } from '~/types/Ventestatus';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type KlageId = `klage_${string}`;
@@ -176,10 +175,6 @@ export interface OpprettOmgjøringsbehandlingForKlageRequest {
     vedtakIdSomSkalOmgjøres: Nullable<string>;
     kjedeId: Nullable<string>;
 }
-
-export type KlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
-        behandling: Klagebehandling;
-    };
 
 export enum Klagehjemmel {
     ARBEIDSMARKEDSLOVEN_2 = 'ARBEIDSMARKEDSLOVEN_2',

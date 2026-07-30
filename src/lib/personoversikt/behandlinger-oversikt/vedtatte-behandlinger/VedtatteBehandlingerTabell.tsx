@@ -17,19 +17,21 @@ import {
 import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 import { classNames } from '~/utils/classNames';
-
-import style from './VedtatteBehandlinger.module.css';
-import { VedtattRammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
+import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import Link from 'next/link';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
+import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
+import {
+    RammevedtakEllerKlageMedBehandling,
+    VedtakType,
+} from '~/lib/behandling-felles/typer/BehandlingFelles';
+
+import style from './OmgjortGradBakgrunn.module.css';
 
 type Props = {
     sakId: SakId;
-    vedtakMedBehandling: VedtakMedBehandling[];
+    vedtakMedBehandling: RammevedtakEllerKlageMedBehandling[];
 };
-
-type VedtakMedBehandling = VedtattRammevedtakMedBehandling | KlagevedtakMedBehandling;
 
 export const VedtatteBehandlingerTabell = ({ vedtakMedBehandling }: Props) => {
     return (
@@ -50,14 +52,13 @@ export const VedtatteBehandlingerTabell = ({ vedtakMedBehandling }: Props) => {
             </Table.Header>
             <Table.Body>
                 {vedtakMedBehandling.map((vedtak) => {
-                    const { type } = vedtak;
-                    switch (type) {
-                        case 'rammevedtak':
+                    switch (vedtak.vedtakType) {
+                        case VedtakType.Rammebehandling:
                             return (
                                 <RammevedtakMedBehandlingRad key={vedtak.id} rammevedtak={vedtak} />
                             );
 
-                        case 'klagevedtak':
+                        case VedtakType.Klage:
                             return (
                                 <KlagevedtakMedBehandlingRad
                                     key={vedtak.klagevedtakId}
@@ -67,49 +68,50 @@ export const VedtatteBehandlingerTabell = ({ vedtakMedBehandling }: Props) => {
                     }
 
                     //hvis denne fjernes vil ikke funksjonen få compile error dersom en case mangler
-                    throw type satisfies never;
+                    throw vedtak satisfies never;
                 })}
             </Table.Body>
         </Table>
     );
 };
 
-const omgjortGradStyle: Record<Omgjøringsgrad | string, string> = {
-    DELVIS: style.delvisOmgjortBg,
-    HELT: style.heltOmgjortBg,
-};
+const RammevedtakMedBehandlingRad = ({
+    rammevedtak,
+}: {
+    rammevedtak: RammevedtakMedBehandling;
+}) => {
+    const {
+        omgjortGrad,
+        resultat,
+        opprettet,
+        opprinneligInnvilgetPerioder,
+        gjeldendeInnvilgetPerioder,
+        saksbehandler,
+        beslutter,
+        behandling,
+    } = rammevedtak;
 
-const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMedBehandling }) => {
     return (
         <Table.Row
             shadeOnHover={false}
-            className={classNames(
-                props.rammevedtak.omgjortGrad && omgjortGradStyle[props.rammevedtak.omgjortGrad],
-            )}
-            key={props.rammevedtak.id}
+            className={classNames(omgjortGrad && omgjortGradStyle[omgjortGrad])}
         >
-            <Table.DataCell>
-                {finnBehandlingstypeTekst[props.rammevedtak.behandling.type]}
-            </Table.DataCell>
+            <Table.DataCell>{finnBehandlingstypeTekst[behandling.type]}</Table.DataCell>
             <Table.DataCell>
                 {behandlingResultatTilTag(
-                    props.rammevedtak.resultat,
-                    props.rammevedtak.behandling.klagebehandlingId ? 'Klage - ' : undefined,
+                    resultat,
+                    behandling.klagebehandlingId ? 'Klage - ' : undefined,
                 )}
             </Table.DataCell>
-            <Table.DataCell>{formaterTidspunkt(props.rammevedtak.opprettet)}</Table.DataCell>
+            <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
             <Table.DataCell>
-                {props.rammevedtak.opprinneligInnvilgetPerioder
-                    .map((periode) => formaterPeriode(periode))
-                    .join(', ')}
+                {opprinneligInnvilgetPerioder.map((periode) => formaterPeriode(periode)).join(', ')}
             </Table.DataCell>
             <Table.DataCell>
-                {props.rammevedtak.gjeldendeInnvilgetPerioder
-                    .map((periode) => formaterPeriode(periode))
-                    .join(', ')}
+                {gjeldendeInnvilgetPerioder.map((periode) => formaterPeriode(periode)).join(', ')}
             </Table.DataCell>
-            <Table.DataCell>{props.rammevedtak.saksbehandler}</Table.DataCell>
-            <Table.DataCell>{props.rammevedtak.beslutter}</Table.DataCell>
+            <Table.DataCell>{saksbehandler}</Table.DataCell>
+            <Table.DataCell>{beslutter}</Table.DataCell>
             <Table.DataCell align={'right'}>
                 <ActionMenu>
                     <ActionMenu.Trigger>
@@ -123,23 +125,16 @@ const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMed
                         </Button>
                     </ActionMenu.Trigger>
                     <ActionMenu.Content>
-                        {props.rammevedtak.resultat === SøknadsbehandlingResultat.AVSLAG ? (
+                        {resultat === SøknadsbehandlingResultat.AVSLAG ? (
                             <MenyValgBehandleSøknadPåNytt
-                                sakId={props.rammevedtak.behandling.sakId}
-                                søknadId={
-                                    (props.rammevedtak.behandling as Søknadsbehandling).søknad.id
-                                }
+                                sakId={behandling.sakId}
+                                søknadId={(behandling as Søknadsbehandling).søknad.id}
                             />
                         ) : (
-                            <OmgjørVedtakMenyvalg
-                                vedtak={props.rammevedtak}
-                                sakId={props.rammevedtak.behandling.sakId}
-                            />
+                            <OmgjørVedtakMenyvalg vedtak={rammevedtak} sakId={behandling.sakId} />
                         )}
                         <ActionMenu.Divider />
-                        <SeBehandlingMenyvalg
-                            behandlingHref={behandlingUrl(props.rammevedtak.behandling)}
-                        />
+                        <SeBehandlingMenyvalg behandlingHref={behandlingUrl(behandling)} />
                     </ActionMenu.Content>
                 </ActionMenu>
             </Table.DataCell>
@@ -147,18 +142,22 @@ const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMed
     );
 };
 
-const KlagevedtakMedBehandlingRad = (props: { klagevedtak: KlagevedtakMedBehandling }) => {
+const KlagevedtakMedBehandlingRad = ({
+    klagevedtak,
+}: {
+    klagevedtak: KlagevedtakMedBehandling;
+}) => {
+    const { resultat, opprettet, behandling } = klagevedtak;
+
     return (
-        <Table.Row shadeOnHover={false} key={props.klagevedtak.klagevedtakId}>
-            <Table.DataCell>Klage</Table.DataCell>
-            <Table.DataCell>
-                {klagebehandlingResultatTilText[props.klagevedtak.resultat]}
-            </Table.DataCell>
-            <Table.DataCell>{formaterTidspunkt(props.klagevedtak.opprettet)}</Table.DataCell>
-            <Table.DataCell>-</Table.DataCell>
-            <Table.DataCell>-</Table.DataCell>
-            <Table.DataCell>{props.klagevedtak.behandling.saksbehandler}</Table.DataCell>
-            <Table.DataCell>-</Table.DataCell>
+        <Table.Row shadeOnHover={false}>
+            <Table.DataCell>{'Klage'}</Table.DataCell>
+            <Table.DataCell>{klagebehandlingResultatTilText[resultat]}</Table.DataCell>
+            <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
+            <Table.DataCell>{'-'}</Table.DataCell>
+            <Table.DataCell>{'-'}</Table.DataCell>
+            <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
+            <Table.DataCell>{'-'}</Table.DataCell>
             <Table.DataCell align={'right'}>
                 <ActionMenu>
                     <ActionMenu.Trigger>
@@ -168,20 +167,20 @@ const KlagevedtakMedBehandlingRad = (props: { klagevedtak: KlagevedtakMedBehandl
                             icon={<ChevronDownIcon title="Menyvalg" />}
                             size="small"
                         >
-                            Velg
+                            {'Velg'}
                         </Button>
                     </ActionMenu.Trigger>
                     <ActionMenu.Content>
                         <ActionMenu.Item
                             as={Link}
                             href={klagebehandlingUrl(
-                                props.klagevedtak.behandling.saksnummer,
-                                props.klagevedtak.behandling.id,
+                                behandling.saksnummer,
+                                behandling.id,
                                 KlageStegUrlSegment.Formkrav,
                             )}
                             icon={<FileIcon aria-hidden />}
                         >
-                            Se vedtak
+                            {'Se vedtak'}
                         </ActionMenu.Item>
                     </ActionMenu.Content>
                 </ActionMenu>
@@ -189,3 +188,8 @@ const KlagevedtakMedBehandlingRad = (props: { klagevedtak: KlagevedtakMedBehandl
         </Table.Row>
     );
 };
+
+const omgjortGradStyle: Record<Omgjøringsgrad | string, string> = {
+    DELVIS: style.delvisOmgjortBg,
+    HELT: style.heltOmgjortBg,
+} as const;

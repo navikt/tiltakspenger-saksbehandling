@@ -15,11 +15,9 @@ import { TilbakekrevingTildeling } from '~/lib/personoversikt/tilbakekreving/Til
 
 import style from './TIlbakekrevingOversikt.module.css';
 
-type Props = {
-    tilbakekrevinger: TilbakekrevingBehandling[];
-};
+export const TilbakekrevingOversikt = () => {
+    const { tilbakekrevinger } = useSak().sak;
 
-export const TilbakekrevingOversikt = ({ tilbakekrevinger }: Props) => {
     if (tilbakekrevinger.length === 0) {
         return (
             <Alert variant={'info'} inline={true}>
