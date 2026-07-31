@@ -24,6 +24,7 @@ import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { KlageId } from '../../klage/typer/Klage';
 import { VentestatusHendelse } from '~/types/Ventestatus';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export const RammebehandlingPrefix = 'beh_' as const;
 export type RammebehandlingId = `${typeof RammebehandlingPrefix}${string}`;
@@ -53,6 +54,7 @@ export interface RammebehandlingBase {
     klagebehandlingId: Nullable<KlageId>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;
