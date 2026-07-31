@@ -32,30 +32,20 @@ export const tidslinjeResultatStatus: Record<TidslinjeResultat, TimelinePeriodPr
     [TidslinjeResultat.OMGJØRING_INNVILGELSE]: 'success',
 } as const;
 
+const TOMT_ANTALL: NumberRange = { min: 0, max: 0 };
+
 export const tellAntallBarnFraVedtak = (vedtak: Rammevedtak): NumberRange => {
-    if (!vedtak.gjeldendeBarnetillegg) {
-        return {
-            min: 0,
-            max: 0,
-        };
-    }
+    const antallBarn = vedtak.gjeldendeBarnetilleggPerioder.map((bt) => bt.antallBarn);
 
-    const antallBarnFraAllePerioder = vedtak.gjeldendeBarnetillegg.perioder.map(
-        (bt) => bt.antallBarn,
-    );
-
-    return minOgMax(antallBarnFraAllePerioder);
+    return antallBarn.length > 0 ? minOgMax(antallBarn) : TOMT_ANTALL;
 };
 
 export const tellAntallDagerFraVedtak = (vedtak: Rammevedtak): NumberRange => {
     if (!vedtak.innvilgelsesperioder) {
-        return {
-            min: 0,
-            max: 0,
-        };
+        return TOMT_ANTALL;
     }
 
-    const fraAllePerioder = vedtak.innvilgelsesperioder.map((it) => it.antallDagerPerMeldeperiode);
+    const antallDager = vedtak.innvilgelsesperioder.map((it) => it.antallDagerPerMeldeperiode);
 
-    return minOgMax(fraAllePerioder);
+    return antallDager.length > 0 ? minOgMax(antallDager) : TOMT_ANTALL;
 };

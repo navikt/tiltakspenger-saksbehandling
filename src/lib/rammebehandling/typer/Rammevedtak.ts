@@ -1,6 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
-import { Barnetillegg } from './Barnetillegg';
+import { Barnetillegg, BarnetilleggPeriode } from './Barnetillegg';
 import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
@@ -23,10 +23,11 @@ export type Rammevedtak = {
     gjeldendeInnvilgetPerioder: Periode[];
     saksbehandler: string;
     beslutter: string;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
-    gjeldendeBarnetillegg: Nullable<Barnetillegg>;
+    // Barnetilleggsperiodene som fortsatt er gjeldende i vedtaket for sakens nå-tilstand
+    gjeldendeBarnetilleggPerioder: BarnetilleggPeriode[];
     erGjeldende: boolean;
     gyldigeKommandoer: GyldigeKommandoerMap;
     omgjortGrad: Nullable<Omgjøringsgrad>;
