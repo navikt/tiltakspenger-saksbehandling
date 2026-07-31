@@ -22,7 +22,7 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
 
     return (
         <VStack gap={'space-8'}>
-            <HStack justify={'start'} align={'center'} gap={'space-16'}>
+            <HStack justify={'start'} align={'center'} gap={'space-24'}>
                 <Heading size={'small'} level={'2'}>
                     {`Ubehandlede meldekort (${ubehandledeMeldekort.length})`}
                 </Heading>

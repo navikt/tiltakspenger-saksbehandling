@@ -14,6 +14,14 @@ export const brukersMeldekortKjedeStatusTekst: Record<BrukersMeldekortKjedeStatu
     [BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET]: 'Behandlet (korrigering)',
 } as const;
 
+export const brukersMeldekortInnsendingstypeTekst: Record<BrukersMeldekortKjedeStatus, string> = {
+    [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',
+    [BrukersMeldekortKjedeStatus.VENTER_BEHANDLING]: 'Første innsending',
+    [BrukersMeldekortKjedeStatus.BEHANDLET]: 'Første innsending',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING]: 'Korrigering',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET]: 'Korrigering',
+} as const;
+
 export const meldeperiodebehandlingTypeTekst: Record<MeldeperiodebehandlingType, string> = {
     [MeldeperiodebehandlingType.FØRSTE_BEHANDLING]: 'Førstegangsbehandling',
     [MeldeperiodebehandlingType.KORRIGERING]: 'Korrigering',

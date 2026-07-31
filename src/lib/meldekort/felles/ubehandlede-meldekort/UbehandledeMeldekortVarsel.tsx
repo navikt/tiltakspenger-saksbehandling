@@ -2,7 +2,7 @@ import { HStack, VStack } from '@navikt/ds-react';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/tekster';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useSak } from '~/lib/sak/SakContext';
@@ -40,15 +40,10 @@ export const UbehandledeMeldekortVarsel = ({ meldeperiodekjeder, skjema }: Props
                             <InternLenke href={meldeperiodeUrl(saksnummer, kjede.periode)}>
                                 {`${formaterMeldeperiode(kjede.periode)}`}
                             </InternLenke>
-                            {` - ${innsendingstypeTekst(kjede.brukersMeldekortStatus)}`}
+                            {` - ${brukersMeldekortInnsendingstypeTekst[kjede.brukersMeldekortStatus]}`}
                         </HStack>
                     ))}
             </VStack>
         </Infokort>
     );
 };
-
-const innsendingstypeTekst = (status: BrukersMeldekortKjedeStatus) =>
-    status === BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING
-        ? 'Korrigering'
-        : 'Første innsending';
