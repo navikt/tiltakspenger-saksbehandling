@@ -126,6 +126,21 @@ export const skalKunneGjenopptaBehandling = (
     );
 };
 
+export const kanFortsetteBehandling = (
+    behandling: Rammebehandling,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const erRelevantStatus =
+        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
+
+    return (
+        erRelevantStatus &&
+        !erBehandlingSattPåVent(behandling) &&
+        eierBehandling(behandling, innloggetSaksbehandler)
+    );
+};
+
 export const skalKunneSetteBehandlingPaVent = (
     behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,

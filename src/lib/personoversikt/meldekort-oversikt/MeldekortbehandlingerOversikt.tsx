@@ -1,12 +1,12 @@
-import { Button, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
-import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
 
 type Props = {
     saksnummer: string;
@@ -33,7 +33,6 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell scope="col"></Table.HeaderCell>
                     <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beregnet beløp</Table.HeaderCell>
@@ -41,40 +40,28 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Opprettet</Table.HeaderCell>
+                    <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
                 {meldekortbehandlinger
                     .toSorted((a, b) => (a.opprettet > b.opprettet ? -1 : 1))
                     .map((meldekortbehandling) => {
-                        const {
-                            id,
-                            status,
-                            utbetalingsstatus,
-                            saksbehandler,
-                            beslutter,
-                            opprettet,
-                        } = meldekortbehandling;
+                        const { id, utbetalingsstatus, saksbehandler, beslutter, opprettet } =
+                            meldekortbehandling;
 
                         const beregnetBeløp = beregnetBeløpForBehandling(meldekortbehandling);
 
                         return (
                             <Table.Row shadeOnHover={false} key={id}>
                                 <Table.DataCell>
-                                    <Button
-                                        as={InternLenke}
-                                        href={meldekortbehandlingUrl(saksnummer, id)}
-                                        variant={'tertiary'}
-                                        size={'small'}
-                                    >
-                                        {'Åpne'}
-                                    </Button>
-                                </Table.DataCell>
-                                <Table.DataCell>
                                     {formaterMeldeperioder(meldekortbehandling)}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {meldekortbehandlingStatusTekst[status]}
+                                    <MeldekortbehandlingStatusTags
+                                        meldekortbehandling={meldekortbehandling}
+                                        kompakt={true}
+                                    />
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {beregnetBeløp !== null ? formatterBeløp(beregnetBeløp) : '-'}
@@ -85,6 +72,13 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                                 <Table.DataCell>{saksbehandler ?? '-'}</Table.DataCell>
                                 <Table.DataCell>{beslutter ?? '-'}</Table.DataCell>
                                 <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
+                                <Table.DataCell align={'right'}>
+                                    <SeBehandlingKnapp
+                                        href={meldekortbehandlingUrl(saksnummer, id)}
+                                    >
+                                        {'Se behandling'}
+                                    </SeBehandlingKnapp>
+                                </Table.DataCell>
                             </Table.Row>
                         );
                     })}

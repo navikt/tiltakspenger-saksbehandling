@@ -5,13 +5,13 @@ import {
     Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
-import { Button, Table } from '@navikt/ds-react';
+import { Table } from '@navikt/ds-react';
 import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
-import Link from 'next/link';
 import { behandlingUrl, klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
 
 type Props = {
     saksnummer: string;
@@ -72,10 +72,7 @@ export const AvbrutteBehandlingerOversikt = ({
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell align={'right'}>
-                                <Button
-                                    size={'small'}
-                                    variant={'secondary'}
-                                    as={Link}
+                                <SeBehandlingKnapp
                                     href={
                                         behandlingstype === 'KLAGEBEHANDLING'
                                             ? klagebehandlingUrl(
@@ -90,7 +87,7 @@ export const AvbrutteBehandlingerOversikt = ({
                                     }
                                 >
                                     {'Se behandling'}
-                                </Button>
+                                </SeBehandlingKnapp>
                             </Table.DataCell>
                         </Table.Row>
                     );

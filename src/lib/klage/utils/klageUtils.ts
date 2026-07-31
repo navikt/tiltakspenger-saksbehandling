@@ -24,6 +24,7 @@ import {
 import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 /**
  *
@@ -55,6 +56,17 @@ export const kanVidereBehandleKlage = (
     k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
     (k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
         erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring(omgjøringsbehandling));
+
+/**
+ * Om innlogget saksbehandler kan gå videre med klagen, i motsetning til bare å se på den
+ */
+export const kanFortsetteKlagebehandling = (
+    k: Klagebehandling,
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>,
+    innloggetSaksbehandler: Saksbehandler,
+): boolean =>
+    k.saksbehandler === innloggetSaksbehandler.navIdent &&
+    (kanBehandleKlage(k, omgjøringsbehandling) || kanVidereBehandleKlage(k, omgjøringsbehandling));
 
 export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'AVBRUTT' ||
@@ -137,7 +149,7 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
             if (kanVurdereKlage(k)) {
                 return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Vurdering);
             }
-            throw new Error(`Kunne ikke finne url for klagebehandling ${k.id} uten resultat`);
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Formkrav);
         }
         case KlagebehandlingResultat.OMGJØR: {
             return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Resultat);

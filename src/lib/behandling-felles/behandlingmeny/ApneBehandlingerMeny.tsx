@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { visOvertaBehandlingMenyvalg } from './menyvalg/OvertaBehandlingMenyvalg';
 import AvsluttBehandlingMenyvalg from '~/lib/personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
-import FortsettBehandlingMenyvalg, {
-    visFortsettBehandlingMenyvalg,
-} from '~/lib/behandling-felles/behandlingmeny/menyvalg/FortsettBehandlingMenyvalg';
 import LeggTilbakeBehandlingMenyValg, {
     visLeggTilbakeMenyvalg,
 } from '~/lib/behandling-felles/behandlingmeny/menyvalg/LeggTilbakeBehandlingMenyvalg';
 import { visTildelMegMenyvalg } from '~/lib/behandling-felles/behandlingmeny/menyvalg/TildelMegMenyvalg';
-import { ArrowRightIcon, ChevronDownIcon, PersonIcon } from '@navikt/aksel-icons';
+import { ArrowRightIcon, MenuElipsisVerticalIcon, PersonIcon } from '@navikt/aksel-icons';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import SeBehandlingMenyvalg from '~/lib/behandling-felles/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 
 import OvertabehandlingModal from '~/lib/behandling-felles/behandlingmeny/OvertaBehandlingModal';
 import Link from 'next/link';
@@ -73,7 +69,6 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
     });
 
     const visTildelMeg = visTildelMegMenyvalg(behandling, innloggetSaksbehandler);
-    const visFortsettBehandling = visFortsettBehandlingMenyvalg(behandling, innloggetSaksbehandler);
     const visLeggTilbake = visLeggTilbakeMenyvalg(behandling, innloggetSaksbehandler);
     const visOvertaBehandling = visOvertaBehandlingMenyvalg(behandling, innloggetSaksbehandler);
     const visSettBehandlingPåVent = visSettBehandlingPåVentMenyvalg(
@@ -92,7 +87,6 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
 
     const menySkalVises =
         visTildelMeg ||
-        visFortsettBehandling ||
         visLeggTilbake ||
         visOvertaBehandling ||
         visSettBehandlingPåVent ||
@@ -134,11 +128,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
     );
 
     if (!menySkalVises) {
-        return (
-            <Button variant={'secondary'} as={Link} href={behandlingLenke} size={'small'}>
-                Se behandling
-            </Button>
-        );
+        return null;
     }
 
     const erRevurdering = behandling.type === Rammebehandlingstype.REVURDERING;
@@ -148,12 +138,12 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button
-                        variant="secondary"
-                        iconPosition="right"
-                        icon={<ChevronDownIcon title="Menyvalg" />}
-                        size="small"
+                        variant={'secondary'}
+                        iconPosition={'right'}
+                        icon={<MenuElipsisVerticalIcon aria-hidden />}
+                        size={'small'}
                     >
-                        Velg
+                        {'Meny'}
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
@@ -166,9 +156,6 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         >
                             Overta behandling
                         </ActionMenu.Item>
-                    )}
-                    {visFortsettBehandling && (
-                        <FortsettBehandlingMenyvalg behandling={behandling} />
                     )}
                     {visLeggTilbake && (
                         <LeggTilbakeBehandlingMenyValg
@@ -197,12 +184,6 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         >
                             {'Tildel meg'}
                         </ActionMenu.Item>
-                    )}
-                    {menySkalVises && !visFortsettBehandling && (
-                        <>
-                            <ActionMenu.Divider />
-                            <SeBehandlingMenyvalg behandlingHref={behandlingLenke} />
-                        </>
                     )}
                     {visAvsluttBehandling && (
                         <>

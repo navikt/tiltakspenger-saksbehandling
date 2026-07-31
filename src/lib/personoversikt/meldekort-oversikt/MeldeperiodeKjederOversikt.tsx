@@ -1,4 +1,4 @@
-import { Button, Checkbox, Table, VStack } from '@navikt/ds-react';
+import { Checkbox, Table, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
@@ -7,8 +7,8 @@ import {
     meldekortbehandlingStatusTekst,
 } from '~/lib/meldekort/utils/tekster';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
 
 import style from './MeldeperiodeKjederOversikt.module.css';
 
@@ -41,7 +41,6 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell scope="col" />
                         <Table.HeaderCell scope="col">{'Periode'}</Table.HeaderCell>
                         <Table.HeaderCell scope="col">
                             {'Siste meldekort status (antall)'}
@@ -52,6 +51,7 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                         <Table.HeaderCell scope="col">{'Tiltak'}</Table.HeaderCell>
                         <Table.HeaderCell scope="col">{'Tiltaksdager'}</Table.HeaderCell>
                         <Table.HeaderCell scope="col">{'Beregnet beløp'}</Table.HeaderCell>
+                        <Table.HeaderCell scope="col" />
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -79,16 +79,6 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                                     key={id}
                                     className={erKlarTilUtfylling ? undefined : style.ikkeKlarRad}
                                 >
-                                    <Table.DataCell>
-                                        <Button
-                                            as={InternLenke}
-                                            href={meldeperiodeUrl(saksnummer, periode)}
-                                            variant={'tertiary'}
-                                            size={'small'}
-                                        >
-                                            {'Åpne'}
-                                        </Button>
-                                    </Table.DataCell>
                                     <Table.DataCell>{`${formaterMeldeperiode(periode)}${erKlarTilUtfylling ? '' : ' (ikke klar)'}`}</Table.DataCell>
                                     <Table.DataCell>
                                         {`${brukersMeldekortKjedeStatusTekst[brukersMeldekortStatus]} (${brukersMeldekort.length})`}
@@ -109,6 +99,13 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                                         {gjeldendeBeregning
                                             ? formatterBeløp(gjeldendeBeregning.beløp.totalt)
                                             : '-'}
+                                    </Table.DataCell>
+                                    <Table.DataCell align={'right'}>
+                                        <SeBehandlingKnapp
+                                            href={meldeperiodeUrl(saksnummer, periode)}
+                                        >
+                                            {'Se oversikt'}
+                                        </SeBehandlingKnapp>
                                     </Table.DataCell>
                                 </Table.Row>
                             );

@@ -1,13 +1,13 @@
-import { ActionMenu, Button, Table } from '@navikt/ds-react';
+import { ActionMenu, Button, HStack, Table } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
     finnBehandlingstypeTekst,
     klagebehandlingResultatTilText,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
-import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/lib/behandling-felles/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
-import SeBehandlingMenyvalg from '~/lib/behandling-felles/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
+import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
 import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/lib/sak/SakTyper';
 import {
@@ -18,7 +18,6 @@ import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/lib/personoversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 import { classNames } from '~/utils/classNames';
 import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
-import Link from 'next/link';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
 import {
@@ -113,30 +112,37 @@ const RammevedtakMedBehandlingRad = ({
             <Table.DataCell>{saksbehandler}</Table.DataCell>
             <Table.DataCell>{beslutter}</Table.DataCell>
             <Table.DataCell align={'right'}>
-                <ActionMenu>
-                    <ActionMenu.Trigger>
-                        <Button
-                            variant="secondary"
-                            iconPosition="right"
-                            icon={<ChevronDownIcon title="Menyvalg" />}
-                            size="small"
-                        >
-                            {'Velg'}
-                        </Button>
-                    </ActionMenu.Trigger>
-                    <ActionMenu.Content>
-                        {resultat === SøknadsbehandlingResultat.AVSLAG ? (
-                            <MenyValgBehandleSøknadPåNytt
-                                sakId={behandling.sakId}
-                                søknadId={(behandling as Søknadsbehandling).søknad.id}
-                            />
-                        ) : (
-                            <OmgjørVedtakMenyvalg vedtak={rammevedtak} sakId={behandling.sakId} />
-                        )}
-                        <ActionMenu.Divider />
-                        <SeBehandlingMenyvalg behandlingHref={behandlingUrl(behandling)} />
-                    </ActionMenu.Content>
-                </ActionMenu>
+                <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                    <SeBehandlingKnapp href={behandlingUrl(behandling)}>
+                        {'Se behandling'}
+                    </SeBehandlingKnapp>
+
+                    <ActionMenu>
+                        <ActionMenu.Trigger>
+                            <Button
+                                variant="secondary"
+                                iconPosition="right"
+                                icon={<MenuElipsisVerticalIcon aria-hidden />}
+                                size="small"
+                            >
+                                {'Meny'}
+                            </Button>
+                        </ActionMenu.Trigger>
+                        <ActionMenu.Content>
+                            {resultat === SøknadsbehandlingResultat.AVSLAG ? (
+                                <MenyValgBehandleSøknadPåNytt
+                                    sakId={behandling.sakId}
+                                    søknadId={(behandling as Søknadsbehandling).søknad.id}
+                                />
+                            ) : (
+                                <OmgjørVedtakMenyvalg
+                                    vedtak={rammevedtak}
+                                    sakId={behandling.sakId}
+                                />
+                            )}
+                        </ActionMenu.Content>
+                    </ActionMenu>
+                </HStack>
             </Table.DataCell>
         </Table.Row>
     );
@@ -159,31 +165,15 @@ const KlagevedtakMedBehandlingRad = ({
             <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
             <Table.DataCell>{'-'}</Table.DataCell>
             <Table.DataCell align={'right'}>
-                <ActionMenu>
-                    <ActionMenu.Trigger>
-                        <Button
-                            variant="secondary"
-                            iconPosition="right"
-                            icon={<ChevronDownIcon title="Menyvalg" />}
-                            size="small"
-                        >
-                            {'Velg'}
-                        </Button>
-                    </ActionMenu.Trigger>
-                    <ActionMenu.Content>
-                        <ActionMenu.Item
-                            as={Link}
-                            href={klagebehandlingUrl(
-                                behandling.saksnummer,
-                                behandling.id,
-                                KlageStegUrlSegment.Formkrav,
-                            )}
-                            icon={<FileIcon aria-hidden />}
-                        >
-                            {'Se vedtak'}
-                        </ActionMenu.Item>
-                    </ActionMenu.Content>
-                </ActionMenu>
+                <SeBehandlingKnapp
+                    href={klagebehandlingUrl(
+                        behandling.saksnummer,
+                        behandling.id,
+                        KlageStegUrlSegment.Formkrav,
+                    )}
+                >
+                    {'Se vedtak'}
+                </SeBehandlingKnapp>
             </Table.DataCell>
         </Table.Row>
     );

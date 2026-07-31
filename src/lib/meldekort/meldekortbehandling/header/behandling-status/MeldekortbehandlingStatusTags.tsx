@@ -20,30 +20,34 @@ import style from './MeldekortbehandlingStatusTags.module.css';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
+    /** Mindre tags uten ikoner, til bruk i tabeller og lignende */
+    kompakt?: boolean;
 };
 
-export const MeldekortbehandlingStatusTags = ({ meldekortbehandling }: Props) => {
+export const MeldekortbehandlingStatusTags = ({ meldekortbehandling, kompakt }: Props) => {
     const { status } = meldekortbehandling;
 
     const erSattPåVent = erMeldekortbehandlingSattPaVent(meldekortbehandling);
 
+    const tagProps = kompakt
+        ? ({ variant: 'outline' } as const)
+        : ({ variant: 'moderate', className: style.tag } as const);
+
     return (
-        <HStack gap={'space-8'}>
+        <HStack gap={kompakt ? 'space-4' : 'space-8'}>
             {erSattPåVent && (
                 <Tag
-                    variant={'moderate'}
+                    {...tagProps}
                     data-color={'warning'}
-                    icon={<HourglassTopFilledIcon />}
-                    className={style.tag}
+                    icon={kompakt ? undefined : <HourglassTopFilledIcon />}
                 >
                     {'Satt på vent'}
                 </Tag>
             )}
             <Tag
-                variant={'moderate'}
+                {...tagProps}
                 data-color={meldekortbehandlingStatusFarge[status]}
-                icon={meldekortStatusIkon[status]}
-                className={style.tag}
+                icon={kompakt ? undefined : meldekortStatusIkon[status]}
             >
                 {meldekortbehandlingStatusTekst[status]}
             </Tag>

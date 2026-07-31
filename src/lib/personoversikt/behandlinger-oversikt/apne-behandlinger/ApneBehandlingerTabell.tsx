@@ -11,19 +11,18 @@ import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/Apn
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
-import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
-import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import {
-    erMeldekortbehandlingSattPaVent,
-    formaterMeldeperioder,
-} from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+    finnSisteGyldigeStegForKlage,
+    hentSisteKlagehendelseUtfallFraKlagebehandling,
+    kanFortsetteKlagebehandling,
+} from '~/lib/klage/utils/klageUtils';
+import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
+import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import {
     erBehandlingSattPåVent,
     erBehandlingUnderkjent,
 } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
-import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
 import {
     hentKlagebehandling,
     hentMeldekortbehandling,
@@ -31,10 +30,14 @@ import {
     hentSøknad,
     hentTilbakekreving,
 } from '~/lib/sak/sakUtils';
-import { meldekortbehandlingUrl } from '~/utils/urls';
+import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
-import NextLink from 'next/link';
+import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
+import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
@@ -68,6 +71,8 @@ type TabellProps = {
 };
 
 const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
+    const { innloggetSaksbehandler } = useSaksbehandler();
+
     return (
         <Table>
             <Table.Header>
@@ -95,7 +100,7 @@ const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
                         saksbehandler,
                         beslutter,
                         meny,
-                    } = propsForRad(åpenBehandling, sak);
+                    } = propsForRad(åpenBehandling, sak, innloggetSaksbehandler);
 
                     return (
                         <Table.Row shadeOnHover={false} key={åpenBehandling.id}>
@@ -133,6 +138,7 @@ type ÅpenBehandlingOversiktRadProps = {
 const propsForRad = (
     åpenBehandling: ÅpenBehandling,
     sak: SakProps,
+    innloggetSaksbehandler: Saksbehandler,
 ): ÅpenBehandlingOversiktRadProps => {
     const { saksnummer } = sak;
 
@@ -182,44 +188,45 @@ const propsForRad = (
                         ? formaterTidspunkt(rammebehandling.søknad.tidsstempelHosOss)
                         : undefined,
                 meny: (
-                    <ApneBehandlingerMeny
-                        behandling={rammebehandling}
-                        medAvsluttBehandling={true}
-                    />
+                    <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                        <SeBehandlingKnapp
+                            href={behandlingUrl({ saksnummer, id: rammebehandling.id })}
+                        >
+                            {kanFortsetteBehandling(rammebehandling, innloggetSaksbehandler)
+                                ? 'Fortsett'
+                                : 'Se behandling'}
+                        </SeBehandlingKnapp>
+
+                        <ApneBehandlingerMeny
+                            behandling={rammebehandling}
+                            medAvsluttBehandling={true}
+                        />
+                    </HStack>
                 ),
             };
         }
         case ÅpenBehandlingType.MELDEKORT: {
             const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
 
-            const { id, opprettet, status, saksbehandler, beslutter } = meldekortbehandling;
+            const { id, opprettet, saksbehandler, beslutter } = meldekortbehandling;
 
             return {
                 typeTekst,
                 opprettet,
                 statusTag: (
-                    <HStack gap="space-4">
-                        <Tag data-color={meldekortbehandlingStatusFarge[status]} variant="outline">
-                            {meldekortbehandlingStatusTekst[status]}
-                        </Tag>
-                        {erMeldekortbehandlingSattPaVent(meldekortbehandling) && (
-                            <Tag data-color="warning">{'Satt på vent'}</Tag>
-                        )}
-                    </HStack>
+                    <MeldekortbehandlingStatusTags
+                        meldekortbehandling={meldekortbehandling}
+                        kompakt={true}
+                    />
                 ),
                 saksbehandler,
                 beslutter,
                 periodeTekst: formaterMeldeperioder(meldekortbehandling),
                 meny: (
-                    <HStack gap={'space-8'} justify={'end'}>
-                        <Button
-                            as={NextLink}
-                            variant={'secondary'}
-                            size={'small'}
-                            href={meldekortbehandlingUrl(saksnummer, id)}
-                        >
+                    <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                        <SeBehandlingKnapp href={meldekortbehandlingUrl(saksnummer, id)}>
                             {'Se behandling'}
-                        </Button>
+                        </SeBehandlingKnapp>
 
                         <MeldekortbehandlingMeny
                             meldekortbehandling={meldekortbehandling}
@@ -264,10 +271,22 @@ const propsForRad = (
                 ) : undefined,
                 saksbehandler,
                 meny: (
-                    <KlageMeny
-                        klage={klagebehandling}
-                        omgjøringsbehandling={omgjøringsbehandling}
-                    />
+                    <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                        <SeBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
+                            {kanFortsetteKlagebehandling(
+                                klagebehandling,
+                                omgjøringsbehandling,
+                                innloggetSaksbehandler,
+                            )
+                                ? 'Fortsett'
+                                : 'Se behandling'}
+                        </SeBehandlingKnapp>
+
+                        <KlageMeny
+                            klage={klagebehandling}
+                            omgjøringsbehandling={omgjøringsbehandling}
+                        />
+                    </HStack>
                 ),
             };
         }

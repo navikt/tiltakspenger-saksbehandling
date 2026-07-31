@@ -1,4 +1,4 @@
-import { Tag, Table } from '@navikt/ds-react';
+import { HStack, Tag, Table } from '@navikt/ds-react';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -8,7 +8,9 @@ import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/Klageinstanshendels
 import {
     erKlageFerdigbehandlet,
     erKlageFerdigstilt,
+    finnSisteGyldigeStegForKlage,
     hentSisteKlagehendelseUtfallFraKlagebehandling,
+    kanFortsetteKlagebehandling,
 } from '~/lib/klage/utils/klageUtils';
 import {
     klagebehandlingStatusTilTag,
@@ -17,6 +19,8 @@ import {
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentKlagevedtakMedBehandlinger } from '~/lib/sak/sakUtils';
+import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 type KlagebehandlingerMedOmgjøringsbehandling = {
     klagebehandling: Klagebehandling;
@@ -25,6 +29,7 @@ type KlagebehandlingerMedOmgjøringsbehandling = {
 
 export const Klageoversikt = () => {
     const { sak } = useSak();
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { klagebehandlinger, rammebehandlinger } = sak;
 
     const klagevedtakMedBehandling = hentKlagevedtakMedBehandlinger(sak);
@@ -72,10 +77,16 @@ export const Klageoversikt = () => {
                 ferdigstilt: formaterTidspunkt(klagevedtakMedBehandling.opprettet),
                 saksbehandler: klagevedtakMedBehandling.behandling.saksbehandler!,
                 meny: (
-                    <KlageMeny
-                        klage={klagevedtakMedBehandling.behandling}
-                        omgjøringsbehandling={null}
-                    />
+                    <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                        <SeBehandlingKnapp
+                            href={finnSisteGyldigeStegForKlage(klagevedtakMedBehandling.behandling)}
+                        />
+
+                        <KlageMeny
+                            klage={klagevedtakMedBehandling.behandling}
+                            omgjøringsbehandling={null}
+                        />
+                    </HStack>
                 ),
             };
         },
@@ -103,10 +114,22 @@ export const Klageoversikt = () => {
                       : '-',
                 saksbehandler: klagebehandling.saksbehandler ?? 'Ikke tildelt',
                 meny: (
-                    <KlageMeny
-                        klage={klagebehandling}
-                        omgjøringsbehandling={omgjøringsbehandling}
-                    />
+                    <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                        <SeBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
+                            {kanFortsetteKlagebehandling(
+                                klagebehandling,
+                                omgjøringsbehandling,
+                                innloggetSaksbehandler,
+                            )
+                                ? 'Fortsett'
+                                : 'Se behandling'}
+                        </SeBehandlingKnapp>
+
+                        <KlageMeny
+                            klage={klagebehandling}
+                            omgjøringsbehandling={omgjøringsbehandling}
+                        />
+                    </HStack>
                 ),
             };
         },
@@ -139,7 +162,7 @@ export const Klageoversikt = () => {
                         <Table.DataCell>{klage.opprettet}</Table.DataCell>
                         <Table.DataCell>{klage.ferdigstilt}</Table.DataCell>
                         <Table.DataCell>{klage.saksbehandler}</Table.DataCell>
-                        <Table.DataCell>{klage.meny}</Table.DataCell>
+                        <Table.DataCell align={'right'}>{klage.meny}</Table.DataCell>
                     </Table.Row>
                 ))}
             </Table.Body>
