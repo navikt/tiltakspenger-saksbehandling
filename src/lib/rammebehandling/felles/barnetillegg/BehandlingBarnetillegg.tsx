@@ -1,6 +1,5 @@
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading, Radio, RadioGroup } from '@navikt/ds-react';
-import { classNames } from '~/utils/classNames';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BarnetilleggTidslinje } from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
@@ -65,10 +64,12 @@ export const BehandlingBarnetillegg = () => {
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
 
-            <VedtakSeksjon className={classNames(style.input, !harBarnetillegg && style.skjult)}>
-                <BehandlingBarnetilleggPerioder />
-                <BarnetilleggBegrunnelse />
-            </VedtakSeksjon>
+            {harBarnetillegg && (
+                <VedtakSeksjon>
+                    <BehandlingBarnetilleggPerioder />
+                    <BarnetilleggBegrunnelse />
+                </VedtakSeksjon>
+            )}
         </>
     );
 };

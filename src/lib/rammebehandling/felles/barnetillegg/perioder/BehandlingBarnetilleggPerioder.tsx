@@ -1,4 +1,4 @@
-import { Alert, Button, HStack, Select, VStack } from '@navikt/ds-react';
+import { Alert, Button, HStack, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -45,74 +45,72 @@ export const BehandlingBarnetilleggPerioder = () => {
         barnetilleggPerioder.at(-1)?.antallBarn || antallBarnFraSøknad || 1;
 
     return (
-        <VedtakSeksjon.FullBredde className={style.wrapper}>
-            <VStack gap={'space-12'} align={'start'}>
-                {barnetilleggPerioder.map((bt, index) => (
-                    <PeriodeVelger
-                        btPeriode={bt}
-                        index={index}
-                        readOnly={erReadonly}
-                        key={`${bt.periode.fraOgMed}-${bt.periode.tilOgMed}`}
-                    />
-                ))}
+        <VedtakSeksjon.FullBredde gap={'space-12'} align={'start'} className={style.wrapper}>
+            {barnetilleggPerioder.map((bt, index) => (
+                <PeriodeVelger
+                    btPeriode={bt}
+                    index={index}
+                    readOnly={erReadonly}
+                    key={`${bt.periode.fraOgMed}-${bt.periode.tilOgMed}`}
+                />
+            ))}
 
-                {!erReadonly && (
-                    <HStack gap={'space-12'}>
+            {!erReadonly && (
+                <HStack gap={'space-12'}>
+                    <Button
+                        type={'button'}
+                        variant={'secondary'}
+                        size={'small'}
+                        onClick={() => {
+                            dispatch({
+                                type: 'addBarnetilleggPeriode',
+                                payload: { antallBarn: antallBarnForNyPeriode },
+                            });
+                        }}
+                    >
+                        {'Ny periode'}
+                    </Button>
+
+                    {erSøknadsbehandling ? (
                         <Button
-                            type={'button'}
+                            variant={'secondary'}
+                            size={'small'}
+                            onClick={() =>
+                                dispatch({
+                                    type: 'settBarnetilleggPerioder',
+                                    payload: {
+                                        barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
+                                            behandling.søknad.barnetillegg,
+                                            innvilgelsesperioder,
+                                        ),
+                                    },
+                                })
+                            }
+                        >
+                            {'Periodiser fra søknaden'}
+                        </Button>
+                    ) : (
+                        <Button
                             variant={'secondary'}
                             size={'small'}
                             onClick={() => {
                                 dispatch({
-                                    type: 'addBarnetilleggPeriode',
-                                    payload: { antallBarn: antallBarnForNyPeriode },
+                                    type: 'settBarnetilleggPerioder',
+                                    payload: {
+                                        barnetilleggPerioder:
+                                            hentBarnetilleggForhåndsutfyltForRevurdering(
+                                                sak,
+                                                innvilgelsesperioder,
+                                            ),
+                                    },
                                 });
                             }}
                         >
-                            {'Ny periode'}
+                            {'Periodiser fra gjeldende vedtak'}
                         </Button>
-
-                        {erSøknadsbehandling ? (
-                            <Button
-                                variant={'secondary'}
-                                size={'small'}
-                                onClick={() =>
-                                    dispatch({
-                                        type: 'settBarnetilleggPerioder',
-                                        payload: {
-                                            barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
-                                                behandling.søknad.barnetillegg,
-                                                innvilgelsesperioder,
-                                            ),
-                                        },
-                                    })
-                                }
-                            >
-                                {'Periodiser fra søknaden'}
-                            </Button>
-                        ) : (
-                            <Button
-                                variant={'secondary'}
-                                size={'small'}
-                                onClick={() => {
-                                    dispatch({
-                                        type: 'settBarnetilleggPerioder',
-                                        payload: {
-                                            barnetilleggPerioder:
-                                                hentBarnetilleggForhåndsutfyltForRevurdering(
-                                                    sak,
-                                                    innvilgelsesperioder,
-                                                ),
-                                        },
-                                    });
-                                }}
-                            >
-                                {'Periodiser fra gjeldende vedtak'}
-                            </Button>
-                        )}
-                    </HStack>
-                )}
-            </VStack>
+                    )}
+                </HStack>
+            )}
         </VedtakSeksjon.FullBredde>
     );
 };
