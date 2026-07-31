@@ -5,7 +5,11 @@ import { Periode } from '~/types/Periode';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
-import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
+import {
+    KanIkkeIverksetteUtbetalingGrunn,
+    Utbetalingskontroll,
+    Utbetalingsstatus,
+} from '~/types/Utbetaling';
 import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
@@ -118,6 +122,11 @@ export type MeldekortbehandlingProps = {
     meldeperioder: MeldeperiodebehandlingProps[];
     avbrutt: Nullable<Avbrutt>;
     simulertBeregning: Nullable<SimulertBeregning>;
+    /**
+     * Kontrollberegningen og -simuleringen som kjøres når behandlingen sendes videre i flyten.
+     * Null dersom kontrollen ikke er kjørt enda.
+     */
+    utbetalingskontroll: Nullable<Utbetalingskontroll>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;

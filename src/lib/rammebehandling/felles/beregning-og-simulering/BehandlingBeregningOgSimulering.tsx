@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
@@ -13,12 +13,13 @@ import {
     RammebehandlingId,
     Rammebehandlingsstatus,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { formaterTidspunkt } from '~/utils/date';
 import {
     BehandlingUtbetalingProps,
     UtbetalingskontrollMedEndring,
     UtbetalingskontrollStatus,
 } from '~/types/Utbetaling';
+import { AlertMedTidspunkt } from '~/lib/beregning-og-simulering/utbetalingskontroll/AlertMedTidspunkt';
+import { KontrollsimuleringUtførtAlert } from '~/lib/beregning-og-simulering/utbetalingskontroll/KontrollsimuleringUtførtAlert';
 import { PartialRecord } from '~/types/UtilTypes';
 import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
@@ -133,10 +134,7 @@ const BeregningOgSimuleringSeksjon = ({
                 )}
 
                 {utbetalingskontroll && (
-                    <AlertMedTidspunkt
-                        tekst={`Kontroll-simulering sist utført (${utbetalingskontrollStatusTekst[utbetalingskontroll.status]})`}
-                        tidspunkt={utbetalingskontroll.tidspunkt}
-                    />
+                    <KontrollsimuleringUtførtAlert utbetalingskontroll={utbetalingskontroll} />
                 )}
             </VedtakSeksjon.Høyre>
 
@@ -210,29 +208,9 @@ const UtbetalingskontrollSeksjon = ({
     );
 };
 
-type AlertMedTidspunktProps = {
-    tekst: string;
-    tidspunkt: string;
-};
-
-const AlertMedTidspunkt = ({ tekst, tidspunkt }: AlertMedTidspunktProps) => {
-    return (
-        <Alert variant={'info'} inline={true}>
-            <BodyShort>{tekst}</BodyShort>
-            <BodyShort weight={'semibold'}>{formaterTidspunkt(tidspunkt)}</BodyShort>
-        </Alert>
-    );
-};
-
 const behandlingsstatusTekst: PartialRecord<Rammebehandlingsstatus, string> = {
     [Rammebehandlingsstatus.UNDER_BEHANDLING]:
         'Behandlingen må simuleres på nytt og utbetalingen må vurderes på nytt før den sendes til beslutning.',
     [Rammebehandlingsstatus.UNDER_BESLUTNING]:
         'Behandlingen må underkjennes og saksbehandler må vurdere utbetalingen på nytt.',
-} as const;
-
-const utbetalingskontrollStatusTekst: Record<UtbetalingskontrollStatus, string> = {
-    [UtbetalingskontrollStatus.ENDRET]: 'med endringer',
-    [UtbetalingskontrollStatus.UENDRET]: 'uten endringer',
-    [UtbetalingskontrollStatus.UTDATERT]: 'utdatert',
 } as const;
