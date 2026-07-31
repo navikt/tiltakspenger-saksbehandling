@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const OpprettMeldekortbehandlingKnapp = ({ size }: Props) => {
-    const { sakId, saksnummer, åpenMeldekortbehandlingId, meldeperiodeKjeder } = useSak().sak;
+    const { sakId, saksnummer, meldeperiodeKjeder } = useSak().sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
     const router = useRouter();
 
@@ -32,11 +32,7 @@ export const OpprettMeldekortbehandlingKnapp = ({ size }: Props) => {
 
     const ubehandledeMeldekort = finnUbehandledeMeldekort(meldeperiodeKjeder);
 
-    if (
-        ubehandledeMeldekort.length === 0 ||
-        !!åpenMeldekortbehandlingId ||
-        !erSaksbehandler(innloggetSaksbehandler)
-    ) {
+    if (ubehandledeMeldekort.length === 0 || !erSaksbehandler(innloggetSaksbehandler)) {
         return null;
     }
 

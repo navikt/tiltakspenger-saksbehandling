@@ -230,7 +230,6 @@ const lagSak = (klage: Klagebehandling | null, options?: { søknader?: Søknad[]
     meldekortvedtak: [],
     meldekortbehandlinger: {},
     meldeperiodeKjeder: [],
-    åpenMeldekortbehandlingId: null,
 });
 
 const saksbehandler: Saksbehandler = {

@@ -5,27 +5,20 @@ import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 import { MeldekortbehandlingOppsummering } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/behandling-oppsummering/MeldekortbehandlingOppsummering';
-import { useSak } from '~/lib/sak/SakContext';
-import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BrukersMeldekortForKjede } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/brukers-meldekort/BrukersMeldekortForKjede';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
-import { meldekortbehandlingUrl } from '~/utils/urls';
 
 import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 
 export const MeldeperiodekjedeHøyreSeksjon = () => {
-    const { åpenMeldekortbehandlingId, saksnummer } = useSak().sak;
     const router = useRouter();
 
     const { meldeperiodeKjede } = useMeldeperiodekjede();
     const { id, gjeldendeBeregning, brukersMeldekort, meldekortbehandlingIder } = meldeperiodeKjede;
 
-    const harÅpenBehandling = åpenMeldekortbehandlingId
-        ? meldekortbehandlingIder.includes(åpenMeldekortbehandlingId)
-        : false;
+    const harBehandlinger = meldekortbehandlingIder.length > 0;
 
     const [aktivTab, setAktivTab] = useState<MeldeperiodekjedeTab>(
-        harÅpenBehandling ? MeldeperiodekjedeTab.Behandlinger : MeldeperiodekjedeTab.Beregning,
+        harBehandlinger ? MeldeperiodekjedeTab.Behandlinger : MeldeperiodekjedeTab.Beregning,
     );
 
     useEffect(() => {
@@ -38,17 +31,6 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
 
     return (
         <VStack gap={'space-24'} className={style.seksjon}>
-            {harÅpenBehandling && (
-                <Infokort icon={<DocPencilIcon />}>
-                    {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden. '}
-                    <InternLenke
-                        href={meldekortbehandlingUrl(saksnummer, åpenMeldekortbehandlingId!)}
-                    >
-                        {'Til behandlingen'}
-                    </InternLenke>
-                </Infokort>
-            )}
-
             <Tabs
                 value={aktivTab}
                 onChange={(value) => {

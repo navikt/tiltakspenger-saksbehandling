@@ -1,11 +1,10 @@
-import { BodyShort, Button, InlineMessage, Loader, VStack } from '@navikt/ds-react';
+import { Button, Loader, VStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useRouter } from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useOpprettMeldekortbehandling } from '../../../felles/opprett/useOpprettMeldekortbehandling';
@@ -13,7 +12,7 @@ import { useOpprettMeldekortbehandling } from '../../../felles/opprett/useOppret
 import style from './MeldekortbehandlingOpprett.module.css';
 
 export const MeldekortbehandlingOpprett = () => {
-    const { sakId, saksnummer, åpenMeldekortbehandlingId } = useSak().sak;
+    const { sakId, saksnummer } = useSak().sak;
     const {
         id: kjedeId,
         meldekortbehandlingIder,
@@ -42,39 +41,19 @@ export const MeldekortbehandlingOpprett = () => {
 
     const lukkModal = () => modalRef.current?.close();
 
-    const kanOppretteBehandling = !åpenMeldekortbehandlingId && kanBehandles;
-
     return (
         <VStack gap={'space-16'}>
             {opprettMeldekortbehandlingError && (
                 <Infokort variant={'feil'}>{opprettMeldekortbehandlingError.message}</Infokort>
             )}
 
-            {åpenMeldekortbehandlingId && (
-                <InlineMessage status={'info'}>
-                    <BodyShort spacing={true}>{'Saken har en åpen meldekortbehandling'}</BodyShort>
-                    <InternLenke
-                        href={meldekortbehandlingUrl(saksnummer, åpenMeldekortbehandlingId)}
-                    >
-                        {'Til behandlingen'}
-                    </InternLenke>
-                </InlineMessage>
-            )}
-
-            {!kanOppretteBehandling && (
+            {!kanBehandles && (
                 <Infokort
                     variant={'advarsel'}
                     header={'Kan ikke starte behandling.'}
                     size={'small'}
                 >
                     <ul>
-                        {!!åpenMeldekortbehandlingId && (
-                            <li>
-                                {
-                                    'Saken har en åpen meldekortbehandling. Du kan legge til flere perioder i den eksisterende behandlingen.'
-                                }
-                            </li>
-                        )}
                         {ingenDagerGirRett && <li>{'Ingen dager gir rett.'}</li>}
                         {!erKlarTilUtfylling && (
                             <li>{'Meldekortet er ikke klart til utfylling.'}</li>
@@ -84,7 +63,7 @@ export const MeldekortbehandlingOpprett = () => {
             )}
 
             <Button
-                disabled={!kanOppretteBehandling}
+                disabled={!kanBehandles}
                 onClick={() => modalRef.current?.showModal()}
                 className={style.knapp}
             >
