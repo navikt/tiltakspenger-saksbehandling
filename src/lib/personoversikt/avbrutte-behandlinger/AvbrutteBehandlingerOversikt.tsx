@@ -27,7 +27,7 @@ export const AvbrutteBehandlingerOversikt = ({
     const avbrutteBehandlinger = [
         ...avbrutteRammebehandlinger.map(avbruttBehandlingToDataCellInfo),
         ...avbrutteKlagebehandlinger.map(avbruttKlageToDataCellInfo),
-    ].toSorted((a, b) => b.tidspunktAvsluttet.localeCompare(a.tidspunktAvsluttet));
+    ].toSorted((a, b) => b.avbruttTidspunkt.localeCompare(a.avbruttTidspunkt));
 
     if (avbrutteBehandlinger.length === 0) {
         return (
@@ -40,7 +40,7 @@ export const AvbrutteBehandlingerOversikt = ({
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell scope="col">Behandlingstype</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Tidspunkt avsluttet</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Tidspunkt avbrutt</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Behandlingsperiode</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
@@ -50,7 +50,7 @@ export const AvbrutteBehandlingerOversikt = ({
             <Table.Body>
                 {avbrutteBehandlinger.map((behandling, idx) => {
                     const {
-                        tidspunktAvsluttet,
+                        avbruttTidspunkt,
                         behandlingstype,
                         behandlingsperiode,
                         saksbehandler,
@@ -59,11 +59,11 @@ export const AvbrutteBehandlingerOversikt = ({
                     } = behandling;
 
                     return (
-                        <Table.Row shadeOnHover={false} key={`${tidspunktAvsluttet}-${idx}`}>
+                        <Table.Row shadeOnHover={false} key={`${avbruttTidspunkt}-${idx}`}>
                             <Table.DataCell>
                                 {avbruttbehandlingstypeTekst[behandlingstype]}
                             </Table.DataCell>
-                            <Table.DataCell>{formaterTidspunkt(tidspunktAvsluttet)}</Table.DataCell>
+                            <Table.DataCell>{formaterTidspunkt(avbruttTidspunkt)}</Table.DataCell>
                             <Table.DataCell>
                                 {behandlingsperiode
                                     ? formaterPeriode(behandlingsperiode)
@@ -108,7 +108,7 @@ const avbruttBehandlingToDataCellInfo = (
         behandlingsperiode: behandling.vedtaksperiode,
         resultat: behandling.resultat,
         behandlingstype: behandling.type,
-        tidspunktAvsluttet: behandling.avbrutt!.avbruttTidspunkt,
+        avbruttTidspunkt: behandling.avbrutt!.avbruttTidspunkt,
         saksbehandler: behandling.saksbehandler,
         beslutter: behandling.beslutter,
     };
@@ -120,7 +120,7 @@ const avbruttKlageToDataCellInfo = (klage: Klagebehandling): AvbruttKlagebehandl
         behandlingsperiode: null,
         resultat: klage.resultat?.type ?? KlagebehandlingResultat.AVVIST,
         behandlingstype: 'KLAGEBEHANDLING',
-        tidspunktAvsluttet: klage.sistEndret,
+        avbruttTidspunkt: klage.avbrutt!.avbruttTidspunkt,
         saksbehandler: klage.saksbehandler,
         beslutter: null,
     };
@@ -136,7 +136,7 @@ type AvbruttBehandlingInfoBase = {
     id: RammebehandlingId | KlageId;
     behandlingstype: AvbruttBehandlingstype;
     resultat: AvbruttBehandlingResultat;
-    tidspunktAvsluttet: string;
+    avbruttTidspunkt: string;
     behandlingsperiode: Nullable<Periode>;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;

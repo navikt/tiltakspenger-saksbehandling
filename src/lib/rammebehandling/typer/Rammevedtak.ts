@@ -26,6 +26,7 @@ export type Rammevedtak = {
     innvilgelsesperioder: Innvilgelsesperiode[];
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
+    gjeldendeBarnetillegg: Nullable<Barnetillegg>;
     erGjeldende: boolean;
     gyldigeKommandoer: GyldigeKommandoerMap;
     omgjortGrad: Nullable<Omgjøringsgrad>;

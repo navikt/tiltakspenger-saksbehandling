@@ -10,7 +10,6 @@ import {
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Revurdering } from '~/lib/rammebehandling/typer/Revurdering';
 import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { utvidPeriodisering } from '~/utils/periode';
 
@@ -31,15 +30,15 @@ export const hentBarnetilleggForRevurdering = (
 ): BarnetilleggPeriode[] => {
     return (
         hentLagredePerioderMedBarn(behandling) ||
-        hentBarnetilleggForhåndsutfyltForRevurdering(sak.tidslinje, innvilgelsesperioder)
+        hentBarnetilleggForhåndsutfyltForRevurdering(sak, innvilgelsesperioder)
     );
 };
 
 export const hentBarnetilleggForhåndsutfyltForRevurdering = (
-    tidslinje: TidslinjeRammevedtak,
+    sak: SakProps,
     innvilgelsesperioder: Innvilgelsesperiode[],
 ) => {
-    const btFraVedtak = hentBarnetilleggFraVedtakKunMedBarn(tidslinje);
+    const btFraVedtak = hentBarnetilleggFraVedtakKunMedBarn(sak);
 
     const btPerioder = innvilgelsesperioder.flatMap((ip) =>
         utvidPeriodisering(btFraVedtak, ip.periode, true),

@@ -33,14 +33,16 @@ export const tidslinjeResultatStatus: Record<TidslinjeResultat, TimelinePeriodPr
 } as const;
 
 export const tellAntallBarnFraVedtak = (vedtak: Rammevedtak): NumberRange => {
-    if (!vedtak.barnetillegg) {
+    if (!vedtak.gjeldendeBarnetillegg) {
         return {
             min: 0,
             max: 0,
         };
     }
 
-    const antallBarnFraAllePerioder = vedtak.barnetillegg.perioder.map((bt) => bt.antallBarn);
+    const antallBarnFraAllePerioder = vedtak.gjeldendeBarnetillegg.perioder.map(
+        (bt) => bt.antallBarn,
+    );
 
     return minOgMax(antallBarnFraAllePerioder);
 };

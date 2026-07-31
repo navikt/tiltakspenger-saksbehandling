@@ -1,6 +1,10 @@
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { RammevedtakMedBehandling, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
+import {
+    Rammevedtak,
+    RammevedtakMedBehandling,
+    VedtakId,
+} from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
@@ -29,18 +33,33 @@ export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
         .toSorted((a, b) => (a.iverksattTidspunkt! > b.iverksattTidspunkt! ? -1 : 1));
 };
 
-export const hentRammevedtak = (sak: SakProps, vedtakId: VedtakId) => {
-    return sak.alleRammevedtak.find((vedtak) => vedtak.id === vedtakId);
+// Henter rammevedtaket for id, eller kaster dersom det ikke finnes
+export const hentRammevedtak = (sak: SakProps, vedtakId: VedtakId): Rammevedtak => {
+    const vedtak = sak.alleRammevedtak.find((it) => it.id === vedtakId);
+
+    if (!vedtak) {
+        throw Error(`Fant ikke rammevedtak med id ${vedtakId}`);
+    }
+
+    return vedtak;
 };
 
-export const hentGjeldendeRammevedtak = (sak: SakProps, vedtakId: VedtakId) => {
-    return sak.tidslinje.elementer.find((el) => el.rammevedtak.id === vedtakId)?.rammevedtak;
+export const hentGjeldendeRammevedtak = (
+    sak: SakProps,
+    vedtakId: VedtakId,
+): Rammevedtak | undefined => {
+    return sak.tidslinje.elementer.some((el) => el.rammevedtakId === vedtakId)
+        ? hentRammevedtak(sak, vedtakId)
+        : undefined;
 };
 
-export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode) => {
+export const hentGjeldendeRammevedtakIPeriode = (
+    sak: SakProps,
+    periode: Periode,
+): Rammevedtak[] => {
     return sak.tidslinje.elementer
         .filter((el) => perioderOverlapper(el.periode, periode))
-        .map((el) => el.rammevedtak)
+        .map((el) => hentRammevedtak(sak, el.rammevedtakId))
         .filter(removeDuplicatesFilter((a, b) => a.id === b.id));
 };
 

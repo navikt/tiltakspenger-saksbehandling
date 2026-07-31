@@ -1,28 +1,27 @@
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
+import { krympPeriodisering } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { Periode } from '~/types/Periode';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
-    barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;
+    gjeldendeBarnetillegg: NonNullable<Rammevedtak['gjeldendeBarnetillegg']>;
 };
 
 type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: RammebehandlingId };
 
-const hentBarnetilleggFraVedtak = (
-    tidslinje: TidslinjeRammevedtak,
-): BarnetilleggMedBehandlingId[] => {
-    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje.elementer
-        .map((el) => el.rammevedtak)
-        .filter((vedtak): vedtak is VedtakMedBarnetillegg => !!vedtak.barnetillegg)
+const hentBarnetilleggFraVedtak = (sak: SakProps): BarnetilleggMedBehandlingId[] => {
+    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = sak.tidslinje.elementer
+        .map((el) => hentRammevedtak(sak, el.rammevedtakId))
+        .filter((vedtak): vedtak is VedtakMedBarnetillegg => !!vedtak.gjeldendeBarnetillegg)
         .flatMap((vedtak) =>
-            vedtak.barnetillegg.perioder.map((bt) => ({
+            vedtak.gjeldendeBarnetillegg.perioder.map((bt) => ({
                 ...bt,
                 behandlingId: vedtak.behandlingId,
             })),
@@ -32,33 +31,18 @@ const hentBarnetilleggFraVedtak = (
 };
 
 export const hentBarnetilleggFraVedtakKunMedBarn = (
-    tidslinje: TidslinjeRammevedtak,
+    sak: SakProps,
 ): BarnetilleggMedBehandlingId[] => {
-    return hentBarnetilleggFraVedtak(tidslinje).filter(kunPerioderMedBarn);
+    return hentBarnetilleggFraVedtak(sak).filter(kunPerioderMedBarn);
 };
 
 export const barnetilleggKrympetTilPeriode = (
-    tidslinje: TidslinjeRammevedtak,
+    sak: SakProps,
     periode: Periode,
     kunMedBarn: boolean,
 ): BarnetilleggMedBehandlingId[] => {
     return krympPeriodisering(
-        kunMedBarn
-            ? hentBarnetilleggFraVedtakKunMedBarn(tidslinje)
-            : hentBarnetilleggFraVedtak(tidslinje),
-        periode,
-    );
-};
-
-export const barnetilleggUtvidetTilPeriode = (
-    tidslinje: TidslinjeRammevedtak,
-    periode: Periode,
-    kunMedBarn: boolean,
-): BarnetilleggMedBehandlingId[] => {
-    return utvidPeriodisering(
-        kunMedBarn
-            ? hentBarnetilleggFraVedtakKunMedBarn(tidslinje)
-            : hentBarnetilleggFraVedtak(tidslinje),
+        kunMedBarn ? hentBarnetilleggFraVedtakKunMedBarn(sak) : hentBarnetilleggFraVedtak(sak),
         periode,
     );
 };

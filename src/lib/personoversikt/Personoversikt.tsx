@@ -109,15 +109,6 @@ export const Personoversikt = () => {
                         className={styles.tab}
                     />
                     <Tabs.Tab
-                        value={PersonoversiktTab.AvsluttedeBehandlinger}
-                        label={labelWithCounter(
-                            'Avsluttede behandlinger',
-                            avbrutteRammebehandlinger.length + avbrutteKlagebehandlinger.length,
-                        )}
-                        icon={<FileXMarkIcon aria-hidden />}
-                        className={styles.tab}
-                    />
-                    <Tabs.Tab
                         value={PersonoversiktTab.Klage}
                         label={labelWithCounter('Klage', klagebehandlinger.length)}
                         icon={<EnvelopeClosedIcon aria-hidden />}
@@ -127,6 +118,15 @@ export const Personoversikt = () => {
                         value={PersonoversiktTab.Tilbakekreving}
                         label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
                         icon={<BankNoteIcon aria-hidden />}
+                        className={styles.tab}
+                    />
+                    <Tabs.Tab
+                        value={PersonoversiktTab.AvsluttedeBehandlinger}
+                        label={labelWithCounter(
+                            'Avsluttede behandlinger',
+                            avbrutteRammebehandlinger.length + avbrutteKlagebehandlinger.length,
+                        )}
+                        icon={<FileXMarkIcon aria-hidden />}
                         className={styles.tab}
                     />
 
@@ -150,6 +150,14 @@ export const Personoversikt = () => {
                     <VedtatteBehandlinger />
                 </Tabs.Panel>
 
+                <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
+                    <Klageoversikt />
+                </Tabs.Panel>
+
+                <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
+                    <TilbakekrevingOversikt />
+                </Tabs.Panel>
+
                 <Tabs.Panel
                     value={PersonoversiktTab.AvsluttedeBehandlinger}
                     className={styles.panel}
@@ -159,14 +167,6 @@ export const Personoversikt = () => {
                         avbrutteRammebehandlinger={avbrutteRammebehandlinger}
                         avbrutteKlagebehandlinger={avbrutteKlagebehandlinger}
                     />
-                </Tabs.Panel>
-
-                <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
-                    <Klageoversikt />
-                </Tabs.Panel>
-
-                <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
-                    <TilbakekrevingOversikt />
                 </Tabs.Panel>
             </Tabs>
         </>

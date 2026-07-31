@@ -1,12 +1,12 @@
 import { Periode } from './Periode';
-import { Rammevedtak } from '../lib/rammebehandling/typer/Rammevedtak';
+import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 
 export type TidslinjeRammevedtak = {
     elementer: TidslinjeElement[];
 };
 
 type TidslinjeElement = {
-    rammevedtak: Rammevedtak;
+    rammevedtakId: VedtakId;
     periode: Periode;
     tidslinjeResultat: TidslinjeResultat;
 };

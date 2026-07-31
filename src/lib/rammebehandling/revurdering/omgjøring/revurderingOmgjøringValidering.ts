@@ -3,7 +3,11 @@ import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/vali
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
+import {
+    hentGjeldendeRammevedtak,
+    hentRammevedtak,
+    hentVedtatteSøknadsbehandlinger,
+} from '~/lib/sak/sakUtils';
 import { perioderOverlapper, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 
@@ -90,10 +94,10 @@ export const revurderingOmgjøringValidering = (
             const overlapper = perioderOverlapper(skjema.vedtaksperiode, tidslinjeElement.periode);
 
             // Tidslinja kan inneholde samme rammevedtak flere ganger dersom det er delvis omgjort
-            const erDuplikat = acc.some((vedtak) => vedtak.id === tidslinjeElement.rammevedtak.id);
+            const erDuplikat = acc.some((vedtak) => vedtak.id === tidslinjeElement.rammevedtakId);
 
             if (overlapper && !erDuplikat) {
-                acc.push(tidslinjeElement.rammevedtak);
+                acc.push(hentRammevedtak(sak, tidslinjeElement.rammevedtakId));
             }
 
             return acc;

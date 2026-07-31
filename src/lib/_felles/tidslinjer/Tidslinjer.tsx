@@ -23,9 +23,10 @@ import {
 } from '~/lib/_felles/tidslinjer/tidslinjerUtils';
 import { classNames } from '~/utils/classNames';
 import { numberRangeToString } from '~/utils/tall';
+import { perioderOverlapper } from '~/utils/periode';
+import { hentRammevedtak } from '~/lib/sak/sakUtils';
 
 import style from './Tidslinjer.module.css';
-import { perioderOverlapper } from '~/utils/periode';
 
 type Props = {
     sak: SakProps;
@@ -72,13 +73,16 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
             <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={'Vedtak'} icon={<TasklistIcon />}>
                     {tidslinje.elementer.map((tidslinjeElement) => {
-                        const { rammevedtak, tidslinjeResultat } = tidslinjeElement;
+                        const { rammevedtakId, tidslinjeResultat } = tidslinjeElement;
+
+                        const rammevedtak = hentRammevedtak(sak, rammevedtakId);
 
                         const {
                             id,
                             vedtaksdato,
                             saksbehandler,
                             beslutter,
+                            behandlingId,
                             gjeldendeInnvilgetPerioder,
                         } = rammevedtak;
 
@@ -159,7 +163,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                         as={NextLink}
                                         href={behandlingUrl({
                                             saksnummer,
-                                            id: tidslinjeElement.rammevedtak.behandlingId,
+                                            id: behandlingId,
                                         })}
                                         className={style.behandlingLink}
                                     >

@@ -16,7 +16,7 @@ type Props = {
 export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
     const { sak } = useSak();
 
-    const barnetillegg = barnetilleggKrympetTilPeriode(sak.tidslinje, innvilgelsesperiode, false);
+    const barnetillegg = barnetilleggKrympetTilPeriode(sak, innvilgelsesperiode, false);
 
     if (barnetillegg.length === 0) {
         return (

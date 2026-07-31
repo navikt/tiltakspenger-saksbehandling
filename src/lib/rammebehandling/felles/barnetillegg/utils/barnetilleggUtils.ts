@@ -10,7 +10,7 @@ export const kunPerioderMedBarn = (it: BarnetilleggPeriode) => it.antallBarn > 0
 export const harSøktBarnetillegg = (periode: Periode, behandling: Rammebehandling, sak: SakProps) =>
     (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
         ? behandling.søknad.barnetillegg
-        : barnetilleggKrympetTilPeriode(sak.tidslinje, periode, true)
+        : barnetilleggKrympetTilPeriode(sak, periode, true)
     ).length > 0;
 
 export const slåSammenBarnetillegg = <T extends BarnetilleggPeriode>(periodisering: T[]): T[] => {

@@ -100,7 +100,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                         payload: {
                                             barnetilleggPerioder:
                                                 hentBarnetilleggForhåndsutfyltForRevurdering(
-                                                    sak.tidslinje,
+                                                    sak,
                                                     innvilgelsesperioder,
                                                 ),
                                         },

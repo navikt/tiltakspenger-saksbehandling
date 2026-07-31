@@ -26,6 +26,7 @@ import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { hentRammevedtak } from '~/lib/sak/sakUtils';
 
 export const ANTALL_DAGER_DEFAULT = 10;
 
@@ -155,6 +156,6 @@ export const antallDagerPerMeldeperiodeForPeriode = (
 
 export const finnGjeldendeInnvilgelserIPeriode = (sak: SakProps, periode: Periode): Periode[] => {
     return krympPeriodisering(sak.innvilgetTidslinje.elementer, periode)
-        .flatMap((it) => it.rammevedtak.gjeldendeInnvilgetPerioder)
+        .flatMap((it) => hentRammevedtak(sak, it.rammevedtakId).gjeldendeInnvilgetPerioder)
         .filter((it) => perioderOverlapper(it, periode));
 };

@@ -92,6 +92,7 @@ const lagRammevedtak = (): Rammevedtak => ({
     beslutter: beslutterIdent,
     innvilgelsesperioder: [],
     barnetillegg: null,
+    gjeldendeBarnetillegg: null,
     erGjeldende: true,
     gyldigeKommandoer: {},
     omgjortGrad: null,
