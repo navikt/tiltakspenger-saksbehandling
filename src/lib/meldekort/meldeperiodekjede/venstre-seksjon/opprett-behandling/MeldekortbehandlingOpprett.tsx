@@ -2,16 +2,13 @@ import { BodyShort, Button, InlineMessage, Loader, VStack } from '@navikt/ds-rea
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
-import {
-    MeldekortbehandlingProps,
-    MeldeperiodebehandlingType,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useRouter } from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useOpprettMeldekortbehandling } from '../../../felles/opprett/useOpprettMeldekortbehandling';
 
 import style from './MeldekortbehandlingOpprett.module.css';
 
@@ -26,10 +23,11 @@ export const MeldekortbehandlingOpprett = () => {
     } = useMeldeperiodekjede().meldeperiodeKjede;
     const { ingenDagerGirRett } = sisteMeldeperiode;
 
-    const { trigger, isMutating, error } = useFetchJsonFraApi<MeldekortbehandlingProps>(
-        `/sak/${encodeURIComponent(sakId)}/meldeperiode/${encodeURIComponent(kjedeId)}/opprettBehandling`,
-        'POST',
-    );
+    const {
+        opprettMeldekortbehandling,
+        opprettMeldekortbehandlingLaster,
+        opprettMeldekortbehandlingError,
+    } = useOpprettMeldekortbehandling(sakId);
 
     const router = useRouter();
 
@@ -48,7 +46,9 @@ export const MeldekortbehandlingOpprett = () => {
 
     return (
         <VStack gap={'space-16'}>
-            {error && <Infokort variant={'feil'}>{error.message}</Infokort>}
+            {opprettMeldekortbehandlingError && (
+                <Infokort variant={'feil'}>{opprettMeldekortbehandlingError.message}</Infokort>
+            )}
 
             {åpenMeldekortbehandlingId && (
                 <InlineMessage status={'info'}>
@@ -94,21 +94,26 @@ export const MeldekortbehandlingOpprett = () => {
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={tekster.modalTittel}
-                feil={error}
+                feil={opprettMeldekortbehandlingError}
                 lukkModal={lukkModal}
                 bekreftKnapp={
                     <Button
-                        icon={isMutating && <Loader />}
-                        disabled={isMutating}
+                        icon={opprettMeldekortbehandlingLaster && <Loader />}
+                        disabled={opprettMeldekortbehandlingLaster}
                         onClick={() => {
-                            trigger().then((meldekortbehandling) => {
-                                if (meldekortbehandling) {
-                                    lukkModal();
-                                    router.push(
-                                        meldekortbehandlingUrl(saksnummer, meldekortbehandling.id),
-                                    );
-                                }
-                            });
+                            opprettMeldekortbehandling({ kjedeIder: [kjedeId] }).then(
+                                (meldekortbehandling) => {
+                                    if (meldekortbehandling) {
+                                        lukkModal();
+                                        router.push(
+                                            meldekortbehandlingUrl(
+                                                saksnummer,
+                                                meldekortbehandling.id,
+                                            ),
+                                        );
+                                    }
+                                },
+                            );
                         }}
                     >
                         {tekster.start}

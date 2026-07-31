@@ -1,5 +1,5 @@
 import { Heading, Tabs } from '@navikt/ds-react';
-import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
+import { ApneBehandlingerOversikt } from '~/lib/personoversikt/åpne-behandlinger/ApneBehandlingerOversikt';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
 import { AvbrutteBehandlingerOversikt } from './avbrutte-behandlinger/AvbrutteBehandlingerOversikt';

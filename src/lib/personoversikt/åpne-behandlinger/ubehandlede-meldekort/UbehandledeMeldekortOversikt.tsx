@@ -1,4 +1,4 @@
-import { Button, Heading, Table, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
@@ -6,6 +6,7 @@ import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import NextLink from 'next/link';
+import { OpprettMeldekortbehandlingKnapp } from '~/lib/meldekort/felles/opprett/OpprettMeldekortbehandlingKnapp';
 
 type Props = {
     saksnummer: string;
@@ -21,9 +22,13 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
 
     return (
         <VStack gap={'space-8'}>
-            <Heading size={'small'} level={'2'}>
-                {`Ubehandlede meldekort (${ubehandledeMeldekort.length})`}
-            </Heading>
+            <HStack justify={'start'} align={'center'} gap={'space-16'}>
+                <Heading size={'small'} level={'2'}>
+                    {`Ubehandlede meldekort (${ubehandledeMeldekort.length})`}
+                </Heading>
+
+                <OpprettMeldekortbehandlingKnapp size={'small'} />
+            </HStack>
 
             <Table>
                 <Table.Header>

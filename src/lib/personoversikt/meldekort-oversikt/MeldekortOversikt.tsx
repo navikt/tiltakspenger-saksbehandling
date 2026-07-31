@@ -7,6 +7,7 @@ import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 import { nonNullishPredicate } from '~/utils/array';
 import { ApenMeldekortbehandlingOppsummering } from '~/lib/personoversikt/meldekort-oversikt/åpen-behandling/ApenMeldekortbehandlingOppsummering';
 import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
+import { OpprettMeldekortbehandlingKnapp } from '~/lib/meldekort/felles/opprett/OpprettMeldekortbehandlingKnapp';
 
 import style from './MeldekortOversikt.module.css';
 
@@ -29,6 +30,8 @@ export const MeldekortOversikt = () => {
         <VStack gap={'space-16'}>
             <VStack gap={'space-16'} className={style.toppSeksjon}>
                 <UbehandledeMeldekortVarsel meldeperiodekjeder={meldeperiodeKjeder} />
+
+                <OpprettMeldekortbehandlingKnapp />
 
                 <ApenMeldekortbehandlingOppsummering />
             </VStack>
