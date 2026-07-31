@@ -14,12 +14,8 @@ import {
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { parseMultipartPdfs } from '~/utils/fetch/multipartPdf';
-import {
-    useFetchBlobFraApi,
-    useFetchJsonFraApi,
-    useFetchResponseFromApi,
-} from '~/utils/fetch/useFetchFraApi';
+
+import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
 
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -131,25 +127,12 @@ export const useGjenopptaKlagebehandling = (args: {
 export const useForhåndsvisKlagebrev = (args: {
     sakId: string;
     klageId: KlageId;
-    onSuccess: (blobs: Blob[]) => void;
+    onSuccess: (blob: Blob) => void;
 }) =>
-    useFetchResponseFromApi<ForhåndsvisBrevKlageRequest>(
+    useFetchBlobFraApi<ForhåndsvisBrevKlageRequest>(
         `/sak/${args.sakId}/klage/${args.klageId}/forhandsvis`,
         'POST',
-        {
-            onSuccess: async (response) => {
-                const contentType = response.headers.get('content-type');
-
-                if (contentType?.includes('multipart')) {
-                    const pdfs = await parseMultipartPdfs(response);
-                    args.onSuccess(pdfs);
-                } else {
-                    response.blob().then((blob) => {
-                        args.onSuccess([blob]);
-                    });
-                }
-            },
-        },
+        { onSuccess: args.onSuccess },
     );
 
 export const useLagreKlagebrev = (args: {

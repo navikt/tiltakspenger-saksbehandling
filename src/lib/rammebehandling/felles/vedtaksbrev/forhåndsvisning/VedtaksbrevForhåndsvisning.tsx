@@ -1,9 +1,6 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import {
-    BrevForhåndsvisningDTO,
-    useHentVedtaksbrevForhåndsvisning,
-} from './useHentVedtaksbrevForhåndsvisning';
+import { BrevForhåndsvisningDTO } from './useHentVedtaksbrevForhåndsvisning';
 
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { useEffect, useState } from 'react';
@@ -11,6 +8,7 @@ import { useEffect, useState } from 'react';
 import style from './VedtaksbrevForhåndsvisning.module.css';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { erAvsluttet } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {
     behandling: Rammebehandling;
@@ -25,8 +23,15 @@ export const VedtaksbrevForhåndsvisning = ({
     validering,
     readonly,
 }: Props) => {
-    const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
-        useHentVedtaksbrevForhåndsvisning(behandling);
+    const { trigger, error, isMutating } = useFetchBlobFraApi<BrevForhåndsvisningDTO>(
+        `/sak/${behandling.sakId}/behandling/${behandling.id}/forhandsvis`,
+        'POST',
+        {
+            onSuccess: (blob) => {
+                window.open(URL.createObjectURL(blob));
+            },
+        },
+    );
 
     const [showValidationError, setShowValidationError] = useState(false);
 
@@ -48,7 +53,7 @@ export const VedtaksbrevForhåndsvisning = ({
                 variant={'secondary'}
                 icon={<EnvelopeOpenIcon />}
                 className={style.knapp}
-                loading={forhåndsvisningLaster}
+                loading={isMutating}
                 disabled={erAvsluttet(behandling) || readonly}
                 onClick={async () => {
                     if (harValideringsfeil) {
@@ -56,11 +61,7 @@ export const VedtaksbrevForhåndsvisning = ({
                         return;
                     }
 
-                    return hentForhåndsvisning(hentDto()).then((blobs) => {
-                        blobs?.forEach((blob) => {
-                            window.open(URL.createObjectURL(blob));
-                        });
-                    });
+                    return trigger(hentDto());
                 }}
             >
                 {'Forhåndsvis brev'}
@@ -71,12 +72,12 @@ export const VedtaksbrevForhåndsvisning = ({
                         {error}
                     </Alert>
                 ))}
-            {forhåndsvisningError && (
+            {error && (
                 <Alert
                     variant={'error'}
                     size={'small'}
                     inline={true}
-                >{`Feil ved forhåndsvisning av brev: [${forhåndsvisningError.status}] ${forhåndsvisningError.message}`}</Alert>
+                >{`Feil ved forhåndsvisning av brev: [${error.status}] ${error.message}`}</Alert>
             )}
         </>
     );
