@@ -1,6 +1,6 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
-import { søknadsbehandlingValidering } from '~/lib/rammebehandling/søknadsbehandling/send-og-godkjenn/søknadsbehandlingValidering';
+import { søknadsbehandlingValidering } from '~/lib/rammebehandling/søknadsbehandling/handlinger/søknadsbehandlingValidering';
 import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';

@@ -2,7 +2,7 @@ import { Heading } from '@navikt/ds-react';
 import { SøknadsbehandlingResultatVelger } from '~/lib/rammebehandling/søknadsbehandling/resultat-velger/SøknadsbehandlingResultatVelger';
 import { SøknadsbehandlingBrev } from '~/lib/rammebehandling/søknadsbehandling/brev/SøknadsbehandlingBrev';
 import { Separator } from '~/lib/_felles/separator/Separator';
-import { SøknadsbehandlingSend } from '~/lib/rammebehandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
+import { SøknadsbehandlingHandlinger } from '~/lib/rammebehandling/søknadsbehandling/handlinger/SøknadsbehandlingHandlinger';
 import { SøknadsbehandlingAvslagsgrunner } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
 import { SøknadsbehandlingAutomatiskBehandling } from '~/lib/rammebehandling/søknadsbehandling/automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
 import { BehandlingBeregningOgSimulering } from '~/lib/rammebehandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
@@ -30,7 +30,7 @@ export const SøknadsbehandlingVedtak = () => {
             {resultat === SøknadsbehandlingResultat.IKKE_VALGT && <IkkeValgt />}
             {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
             {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
-            <SøknadsbehandlingSend />
+            <SøknadsbehandlingHandlinger />
         </>
     );
 };

@@ -1,6 +1,6 @@
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
+import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
 import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import {
     OppdaterRevurderingInnvilgelseDTO,
@@ -13,7 +13,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/lib/sak/SakContext';
 
-export const RevurderingInnvilgelseSend = () => {
+export const RevurderingInnvilgelseHandlinger = () => {
     const { behandling } = useRevurderingBehandling();
     const vedtak = useRevurderingInnvilgelseSkjema();
     const { sak } = useSak();
@@ -24,7 +24,7 @@ export const RevurderingInnvilgelseSend = () => {
         validerSkjema: () => revurderingInnvilgelseValidering(behandling, vedtak, sak),
     });
 
-    return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
+    return <RammebehandlingHandlinger behandling={behandling} lagringProps={lagringProps} />;
 };
 
 const tilDTO = (

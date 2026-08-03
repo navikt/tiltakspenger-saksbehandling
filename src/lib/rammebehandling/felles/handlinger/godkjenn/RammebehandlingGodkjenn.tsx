@@ -2,48 +2,31 @@ import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
-import { Underkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/underkjenn/Underkjenn';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useGodkjennBehandling } from '~/lib/rammebehandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
+import { RammebehandlingUnderkjenn } from '~/lib/rammebehandling/felles/handlinger/underkjenn/RammebehandlingUnderkjenn';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
-type Props = {
-    behandling: Rammebehandling;
-};
-
-export const BehandlingGodkjenn = ({ behandling }: Props) => {
+export const RammebehandlingGodkjenn = () => {
     const { navigateWithNotification } = useNotification();
-    const { setBehandling } = useBehandling();
+    const { behandling, setBehandling } = useBehandling();
+
     const [visGodkjennVedtakModal, setVisGodkjennVedtakModal] = useState(false);
 
-    const { godkjennBehandling, godkjennBehandlingLaster, godkjennBehandlingError } =
-        useGodkjennBehandling(behandling);
-
-    const underkjennApi = useFetchJsonFraApi<Rammebehandling, { begrunnelse: string }>(
-        `/sak/${behandling.sakId}/behandling/${behandling.id}/underkjenn`,
-        'POST',
-        {
-            onSuccess: (oppdatertBehandling) => {
-                if (oppdatertBehandling) {
-                    setBehandling(oppdatertBehandling);
-                    navigateWithNotification('/', 'Vedtaket har blitt underkjent!');
-                }
-            },
-        },
-    );
+    const { trigger, isMutating, error } = useFetchJsonFraApi<
+        Rammebehandling,
+        undefined,
+        FetcherError<Rammebehandling>
+    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/iverksett`, 'POST', {
+        throwOnError: true,
+    });
 
     return (
         <>
             <HStack gap="space-8">
-                <Underkjenn
-                    onUnderkjenn={{
-                        click: (begrunnelse) => underkjennApi.trigger({ begrunnelse }),
-                        pending: underkjennApi.isMutating,
-                        error: underkjennApi.error,
-                    }}
-                />
+                <RammebehandlingUnderkjenn behandling={behandling} />
+
                 <Button onClick={() => setVisGodkjennVedtakModal(true)}>
                     {'Godkjenn vedtaket'}
                 </Button>
@@ -51,14 +34,14 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
             <BekreftelsesModal
                 tittel={'Godkjenn vedtaket?'}
                 åpen={visGodkjennVedtakModal}
-                feil={godkjennBehandlingError}
+                feil={error}
                 lukkModal={() => setVisGodkjennVedtakModal(false)}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
-                        loading={godkjennBehandlingLaster}
+                        loading={isMutating}
                         onClick={() => {
-                            godkjennBehandling()
+                            trigger()
                                 .then((oppdatertBehandling) => {
                                     setBehandling(oppdatertBehandling);
                                     setVisGodkjennVedtakModal(false);

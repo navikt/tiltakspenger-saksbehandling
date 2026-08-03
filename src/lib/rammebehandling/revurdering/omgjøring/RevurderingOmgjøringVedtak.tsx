@@ -8,7 +8,7 @@ import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilg
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { RevurderingOmgjøringBrev } from '~/lib/rammebehandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
-import { RevurderingOmgjøringSend } from '~/lib/rammebehandling/revurdering/omgjøring/send-og-godkjenn/RevurderingOmgjøringSend';
+import { RevurderingOmgjøringHandlinger } from '~/lib/rammebehandling/revurdering/omgjøring/handlinger/RevurderingOmgjøringHandlinger';
 import { RevurderingOmgjøringHeader } from '~/lib/rammebehandling/revurdering/omgjøring/header/RevurderingOmgjøringHeader';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { OmgjøringResultatVelger } from '~/lib/rammebehandling/revurdering/omgjøring/resultat-velger/OmgjøringResultatVelger';
@@ -42,7 +42,7 @@ export const RevurderingOmgjøringVedtak = () => {
             ) : (
                 <IkkeValgt />
             )}
-            <RevurderingOmgjøringSend />
+            <RevurderingOmgjøringHandlinger />
         </>
     );
 };

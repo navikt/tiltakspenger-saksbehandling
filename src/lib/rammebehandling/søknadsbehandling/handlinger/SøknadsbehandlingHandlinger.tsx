@@ -1,7 +1,7 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
-import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
+import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
 import {
     SøknadsbehandlingResultat,
     OppdaterSøknadsbehandlingAvslagDTO,
@@ -16,7 +16,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/lib/sak/SakContext';
 
-export const SøknadsbehandlingSend = () => {
+export const SøknadsbehandlingHandlinger = () => {
     const { sak } = useSak();
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
@@ -27,7 +27,7 @@ export const SøknadsbehandlingSend = () => {
         validerSkjema: søknadsbehandlingValidering(sak, behandling, skjema),
     });
 
-    return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
+    return <RammebehandlingHandlinger behandling={behandling} lagringProps={lagringProps} />;
 };
 
 const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøknadsbehandlingDTO> => {

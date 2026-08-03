@@ -10,13 +10,13 @@ import {
     OppdaterOmgjøringOpphørDTO,
     OppdaterOmgjøringIkkeValgtDTO,
 } from '~/lib/rammebehandling/typer/Revurdering';
-import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
 import { revurderingOmgjøringValidering } from '~/lib/rammebehandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useSak } from '~/lib/sak/SakContext';
-import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
+import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 
-export const RevurderingOmgjøringSend = () => {
+export const RevurderingOmgjøringHandlinger = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
     const skjema = useOmgjøringSkjema();
@@ -27,7 +27,7 @@ export const RevurderingOmgjøringSend = () => {
         validerSkjema: () => revurderingOmgjøringValidering(behandling, skjema, sak),
     });
 
-    return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
+    return <RammebehandlingHandlinger behandling={behandling} lagringProps={lagringProps} />;
 };
 
 const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {

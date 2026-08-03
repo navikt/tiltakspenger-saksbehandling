@@ -1,7 +1,7 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { revurderingStansValidering } from '../revurderingStansValidering';
-import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
+import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
 import {
     RevurderingResultat,
     OppdaterRevurderingStansDTO,
@@ -11,7 +11,7 @@ import {
     useRevurderingStansSkjema,
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 
-export const RevurderingStansSend = () => {
+export const RevurderingStansHandlinger = () => {
     const skjema = useRevurderingStansSkjema();
     const { behandling } = useRevurderingBehandling();
 
@@ -21,7 +21,7 @@ export const RevurderingStansSend = () => {
         validerSkjema: () => revurderingStansValidering(skjema),
     });
 
-    return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
+    return <RammebehandlingHandlinger behandling={behandling} lagringProps={lagringProps} />;
 };
 
 const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO => {

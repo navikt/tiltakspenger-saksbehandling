@@ -2,11 +2,12 @@ import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
-import { useSendBehandlingTilBeslutning } from '~/lib/rammebehandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
+import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/handlinger/varsler/BehandlingValideringVarsler';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 type Props = {
     behandling: Rammebehandling;
@@ -21,8 +22,12 @@ export const BehandlingSendTilBeslutning = ({
     valideringResultat,
     disabled,
 }: Props) => {
-    const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
-        useSendBehandlingTilBeslutning(behandling);
+    const { trigger, isMutating, error } = useFetchJsonFraApi<
+        Rammebehandling,
+        undefined,
+        FetcherError<Rammebehandling>
+    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
+
     const { navigateWithNotification } = useNotification();
     const { setBehandling } = useBehandling();
 
@@ -43,14 +48,14 @@ export const BehandlingSendTilBeslutning = ({
             <BekreftelsesModal
                 åpen={visSendTilBeslutningModal}
                 tittel={'Send vedtaket til beslutning?'}
-                feil={sendTilBeslutningError}
+                feil={error}
                 lukkModal={() => setVisSendTilBeslutningModal(false)}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
-                        loading={sendTilBeslutningLaster}
+                        loading={isMutating}
                         onClick={() => {
-                            sendTilBeslutning().then((oppdatertBehandling) => {
+                            trigger().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setBehandling(oppdatertBehandling);
                                     navigateWithNotification(
@@ -58,8 +63,8 @@ export const BehandlingSendTilBeslutning = ({
                                         'Vedtaket er sendt til beslutning!',
                                     );
                                     setVisSendTilBeslutningModal(false);
-                                } else if (sendTilBeslutningError?.data) {
-                                    setBehandling(sendTilBeslutningError.data);
+                                } else if (error?.data) {
+                                    setBehandling(error.data);
                                 }
                             });
                         }}

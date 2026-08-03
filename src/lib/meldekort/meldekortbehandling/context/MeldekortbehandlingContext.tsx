@@ -25,6 +25,7 @@ import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
+import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 
@@ -37,11 +38,8 @@ type Props = PropsWithChildren<{
 }>;
 
 export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
-    const meldekortbehandling = useSak().sak.meldekortbehandlinger[id];
-
-    if (!meldekortbehandling) {
-        throw Error(`Fant ikke meldekortbehandlingen med id ${id}`);
-    }
+    const { sak } = useSak();
+    const meldekortbehandling = hentMeldekortbehandling(sak, id);
 
     const { innloggetSaksbehandler } = useSaksbehandler();
 

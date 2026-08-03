@@ -1,7 +1,7 @@
 import { Alert, Heading } from '@navikt/ds-react';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/lib/rammebehandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
-import { RevurderingInnvilgelseSend } from '~/lib/rammebehandling/revurdering/innvilgelse/send-og-godkjenn/RevurderingInnvilgelseSend';
+import { RevurderingInnvilgelseHandlinger } from '~/lib/rammebehandling/revurdering/innvilgelse/handlinger/RevurderingInnvilgelseHandlinger';
 import { BehandlingBeregningOgSimulering } from '~/lib/rammebehandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingInnvilgelseSkjema } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
@@ -49,7 +49,7 @@ export const RevurderingInnvilgelseVedtak = () => {
                             <BehandlingBeregningOgSimulering />
                         </>
                     )}
-                    <RevurderingInnvilgelseSend />
+                    <RevurderingInnvilgelseHandlinger />
                 </>
             ) : (
                 <Alert variant={'error'}>
