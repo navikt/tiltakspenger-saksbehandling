@@ -53,7 +53,7 @@ export const hentRolleForBehandling = (
           : null;
 };
 
-export const eierBehandling = (
+const eierBehandling = (
     behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
@@ -67,79 +67,6 @@ export const eierBehandling = (
         default:
             return false;
     }
-};
-
-export const eierBehandlingSomKanAvbrytes = (
-    behandling: Rammebehandling,
-    innloggetSaksbehandler: Saksbehandler,
-): boolean => {
-    const { status, saksbehandler, beslutter } = behandling;
-    switch (status) {
-        case Rammebehandlingsstatus.UNDER_BEHANDLING:
-        case Rammebehandlingsstatus.KLAR_TIL_BESLUTNING:
-            return innloggetSaksbehandler.navIdent === saksbehandler;
-        case Rammebehandlingsstatus.UNDER_BESLUTNING:
-            return innloggetSaksbehandler.navIdent === beslutter;
-        default:
-            return false;
-    }
-};
-
-export const skalKunneTaBehandling = (
-    behandling: Rammebehandling,
-    innloggetSaksbehandler: Saksbehandler,
-) => {
-    const { status, saksbehandler } = behandling;
-
-    switch (status) {
-        case Rammebehandlingsstatus.KLAR_TIL_BESLUTNING:
-            return (
-                erBeslutter(innloggetSaksbehandler) &&
-                innloggetSaksbehandler.navIdent != saksbehandler
-            );
-        case Rammebehandlingsstatus.KLAR_TIL_BEHANDLING:
-            return erSaksbehandler(innloggetSaksbehandler);
-        default:
-            return false;
-    }
-};
-
-export const skalKunneOvertaBehandling = (
-    behandling: Rammebehandling,
-    innloggetSaksbehandler: Saksbehandler,
-) => {
-    const { status, saksbehandler, beslutter } = behandling;
-
-    switch (status) {
-        case Rammebehandlingsstatus.UNDER_BESLUTNING:
-            return (
-                beslutter &&
-                erBeslutter(innloggetSaksbehandler) &&
-                !eierBehandling(behandling, innloggetSaksbehandler) &&
-                innloggetSaksbehandler.navIdent !== saksbehandler
-            );
-        case Rammebehandlingsstatus.UNDER_BEHANDLING:
-        case Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
-            return (
-                saksbehandler &&
-                erSaksbehandler(innloggetSaksbehandler) &&
-                !eierBehandling(behandling, innloggetSaksbehandler)
-            );
-        default:
-            return false;
-    }
-};
-
-export const skalKunneGjenopptaBehandling = (
-    behandling: Rammebehandling,
-    innloggetSaksbehandler: Saksbehandler,
-) => {
-    return (
-        erBehandlingSattPåVent(behandling) &&
-        (skalKunneTaBehandling(behandling, innloggetSaksbehandler) ||
-            skalKunneOvertaBehandling(behandling, innloggetSaksbehandler) ||
-            eierBehandling(behandling, innloggetSaksbehandler))
-    );
 };
 
 export const kanFortsetteBehandling = (
@@ -152,20 +79,6 @@ export const kanFortsetteBehandling = (
 
     return (
         erRelevantStatus &&
-        !erBehandlingSattPåVent(behandling) &&
-        eierBehandling(behandling, innloggetSaksbehandler)
-    );
-};
-
-export const skalKunneSetteBehandlingPaVent = (
-    behandling: Rammebehandling,
-    innloggetSaksbehandler: Saksbehandler,
-) => {
-    const erRelevantMenyValgForStatus =
-        behandling.status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
-    return (
-        erRelevantMenyValgForStatus &&
         !erBehandlingSattPåVent(behandling) &&
         eierBehandling(behandling, innloggetSaksbehandler)
     );

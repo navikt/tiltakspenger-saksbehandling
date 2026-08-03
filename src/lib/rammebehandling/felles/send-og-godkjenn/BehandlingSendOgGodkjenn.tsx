@@ -1,4 +1,4 @@
-import { useRolleForBehandling, useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, HStack, VStack } from '@navikt/ds-react';
 import { BehandlingAvslutt } from '~/lib/rammebehandling/felles/send-og-godkjenn/avslutt/BehandlingAvslutt';
@@ -16,16 +16,9 @@ import { BehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-god
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { BehandlingSettPåVent } from '~/lib/rammebehandling/felles/send-og-godkjenn/sett-på-vent/BehandlingSettPåVent';
 import { BehandlingGjenoppta } from '~/lib/rammebehandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
-import {
-    skalKunneGjenopptaBehandling,
-    skalKunneSetteBehandlingPaVent,
-} from '~/lib/saksbehandler/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
-import {
-    Rammebehandling,
-    Rammebehandlingsstatus,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
-import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
@@ -36,7 +29,6 @@ type Props = {
 
 export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) => {
     const rolleForBehandling = useRolleForBehandling(behandling);
-    const { innloggetSaksbehandler } = useSaksbehandler();
 
     const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
         errors: [],
@@ -62,19 +54,15 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
     const erBeslutter = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
 
-    const kanAvslutteBehandling =
-        (behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
-            behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
-        behandling.avbrutt === null &&
-        !erBehandlingSattPåVent(behandling) &&
-        erSaksbehandler;
-
-    const kanSettePaVent = skalKunneSetteBehandlingPaVent(behandling, innloggetSaksbehandler);
-    const kanGjenopptaBehandling = skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler);
-
     if (!erSaksbehandler && !erBeslutter) {
         return null;
     }
+
+    const { gyldigeKommandoer } = behandling;
+
+    const kanAvslutteBehandling = gyldigeKommandoer.includes(Kommando.Avbryt);
+    const kanSettePaVent = gyldigeKommandoer.includes(Kommando.SettPåVent);
+    const kanGjenopptaBehandling = gyldigeKommandoer.includes(Kommando.Gjenoppta);
 
     return (
         <VedtakSeksjon>
