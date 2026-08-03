@@ -69,6 +69,22 @@ export const eierBehandling = (
     }
 };
 
+export const eierBehandlingSomKanAvbrytes = (
+    behandling: Rammebehandling,
+    innloggetSaksbehandler: Saksbehandler,
+): boolean => {
+    const { status, saksbehandler, beslutter } = behandling;
+    switch (status) {
+        case Rammebehandlingsstatus.UNDER_BEHANDLING:
+        case Rammebehandlingsstatus.KLAR_TIL_BESLUTNING:
+            return innloggetSaksbehandler.navIdent === saksbehandler;
+        case Rammebehandlingsstatus.UNDER_BESLUTNING:
+            return innloggetSaksbehandler.navIdent === beslutter;
+        default:
+            return false;
+    }
+};
+
 export const skalKunneTaBehandling = (
     behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,

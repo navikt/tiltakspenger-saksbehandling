@@ -27,7 +27,7 @@ import {
 import { useAvsluttBehandling } from './useAvsluttBehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { eierBehandling } from '~/lib/saksbehandler/tilganger';
+import { eierBehandlingSomKanAvbrytes } from '~/lib/saksbehandler/tilganger';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -45,12 +45,9 @@ const visAvsluttBehandlingMenyvalg = (
     innloggetSaksbehandler: Saksbehandler,
     behandlingKanAvsluttes: boolean,
 ) => {
-    const erRelevantMenyValgForStatus =
-        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
     return (
         behandlingKanAvsluttes &&
-        erRelevantMenyValgForStatus &&
-        eierBehandling(behandling, innloggetSaksbehandler) &&
+        eierBehandlingSomKanAvbrytes(behandling, innloggetSaksbehandler) &&
         !erBehandlingSattPåVent(behandling)
     );
 };
