@@ -4,9 +4,7 @@ import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
@@ -14,20 +12,25 @@ type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const MeldekortbehandlingAvslutt = ({ meldekortbehandling, åpen, onClose }: Props) => {
+export const MeldekortbehandlingAvslutt = ({
+    meldekortbehandling,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const { sak } = useSak();
     const { id } = meldekortbehandling;
-    const { navigateWithNotification } = useNotification();
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<
-        MeldekortbehandlingProps,
-        { begrunnelse: string }
-    >(`/sak/${sak.sakId}/meldekort/${id}/avbryt`, 'POST');
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { begrunnelse: string }>(
+        `/sak/${sak.sakId}/meldekort/${id}/avbryt`,
+        'POST',
+    );
 
     const avslutt = () => {
         const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();
@@ -36,12 +39,9 @@ export const MeldekortbehandlingAvslutt = ({ meldekortbehandling, åpen, onClose
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet }).then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
-                    'Meldekortbehandlingen er avsluttet',
-                );
+        trigger({ begrunnelse: begrunnelseTrimmet }).then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

@@ -1,10 +1,12 @@
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { useState } from 'react';
-import { useSettBehandlingPåVent } from '~/lib/behandling-felles/behandlingmeny/useSettBehandlingPåVent';
 import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { personoversiktUrl } from '~/utils/urls';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
     behandling: Rammebehandling;
@@ -14,8 +16,16 @@ type Props = {
 export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
     const [modalÅpen, setModalÅpen] = useState(false);
 
-    const { settBehandlingPåVent, isSettBehandlingPåVentMutating, settBehandlingPåVentError } =
-        useSettBehandlingPåVent(behandling.sakId, behandling.id);
+    const { sakId, id } = behandling;
+
+    const {
+        trigger: settBehandlingPåVent,
+        isMutating: isSettBehandlingPåVentMutating,
+        error: settBehandlingPåVentError,
+    } = useFetchJsonFraApi<SakProps, SettBehandlingPåVentDTO>(
+        `/sak/${sakId}/behandling/${id}/pause`,
+        'POST',
+    );
 
     return (
         <>
@@ -49,4 +59,11 @@ export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
             />
         </>
     );
+};
+
+type SettBehandlingPåVentDTO = {
+    sakId: Nullable<string>;
+    behandlingId: Nullable<string>;
+    begrunnelse: string;
+    frist: Nullable<string>;
 };

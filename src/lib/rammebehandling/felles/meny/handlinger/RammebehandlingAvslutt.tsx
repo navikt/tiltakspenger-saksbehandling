@@ -5,9 +5,6 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import {
     Rammebehandling,
     RammebehandlingId,
@@ -18,12 +15,12 @@ type Props = {
     behandling: Rammebehandling;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingAvslutt = ({ behandling, åpen, onClose }: Props) => {
+export const RammebehandlingAvslutt = ({ behandling, åpen, onClose, onSuccess }: Props) => {
     const { sak } = useSak();
     const { id, type } = behandling;
-    const { navigateWithNotification } = useNotification();
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
@@ -42,12 +39,9 @@ export const RammebehandlingAvslutt = ({ behandling, åpen, onClose }: Props) =>
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, behandlingId: id }).then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.AvsluttedeBehandlinger),
-                    `${erRevurdering ? 'Revurderingen' : 'Behandlingen'} er avsluttet`,
-                );
+        trigger({ begrunnelse: begrunnelseTrimmet, behandlingId: id }).then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

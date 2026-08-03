@@ -6,7 +6,7 @@ type Props = PropsWithChildren<{
     href: string;
 }>;
 
-export const SeBehandlingKnapp = ({ href, children }: Props) => {
+export const TilBehandlingKnapp = ({ href, children }: Props) => {
     return (
         <Button as={Link} href={href} variant={'secondary'} size={'small'}>
             {children}

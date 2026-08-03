@@ -7,9 +7,6 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { dateTilISOTekst } from '~/utils/date';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
@@ -17,12 +14,12 @@ type Props = {
     behandling: Rammebehandling;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingSettPåVent = ({ behandling, åpen, onClose }: Props) => {
+export const RammebehandlingSettPåVent = ({ behandling, åpen, onClose, onSuccess }: Props) => {
     const { sak } = useSak();
     const { id } = behandling;
-    const { navigateWithNotification } = useNotification();
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
@@ -40,12 +37,9 @@ export const RammebehandlingSettPåVent = ({ behandling, åpen, onClose }: Props
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, frist }).then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.ÅpneBehandlinger),
-                    'Behandlingen er satt på vent',
-                );
+        trigger({ begrunnelse: begrunnelseTrimmet, frist }).then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

@@ -4,9 +4,6 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
@@ -14,12 +11,17 @@ type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const MeldekortbehandlingLeggTilbake = ({ meldekortbehandling, åpen, onClose }: Props) => {
+export const MeldekortbehandlingLeggTilbake = ({
+    meldekortbehandling,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const { sak } = useSak();
     const { id } = meldekortbehandling;
-    const { navigateWithNotification } = useNotification();
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/meldekort/${id}/legg-tilbake`,
@@ -27,12 +29,9 @@ export const MeldekortbehandlingLeggTilbake = ({ meldekortbehandling, åpen, onC
     );
 
     const leggTilbake = () => {
-        trigger().then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
-                    'Meldekortbehandlingen er lagt tilbake',
-                );
+        trigger().then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

@@ -25,7 +25,7 @@ import {
     useTaKlagebehandling,
 } from '~/lib/klage/api/KlageApi';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import OvertabehandlingModal from './OvertaBehandlingModal';
+import OvertaKlagebehandlingModal from '../modaler/overta/OvertaKlagebehandlingModal';
 import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
 import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -206,7 +206,7 @@ const KlageMeny = (props: {
                 />
             )}
             {visVilOvertaModal && (
-                <OvertabehandlingModal
+                <OvertaKlagebehandlingModal
                     åpen={visVilOvertaModal}
                     onClose={() => setVisVilOvertaModal(false)}
                     //knappen for å overta rendres kun dersom saksbehandler finnes

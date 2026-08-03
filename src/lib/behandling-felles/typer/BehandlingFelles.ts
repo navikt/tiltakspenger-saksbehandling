@@ -15,6 +15,12 @@ export type RammevedtakEllerKlageMedBehandling =
     | RammevedtakMedBehandling
     | KlagevedtakMedBehandling;
 
+/**
+ * Sidene en behandlingsmeny kan kalles fra. Styrer om handlingene i menyen navigerer,
+ * eller oppdaterer saken vi allerede står i.
+ */
+export type BehandlingsmenyKallesFra = 'personoversikt' | 'behandling';
+
 export enum SaksbehandlerBehandlingKommando {
     TildelSaksbehandler = 'TildelSaksbehandler',
     TildelBeslutter = 'TildelBeslutter',

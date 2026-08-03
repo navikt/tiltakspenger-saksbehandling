@@ -79,7 +79,7 @@ export const MeldekortbehandlingHeader = () => {
                     <VStack justify={'end'}>
                         <MeldekortbehandlingMeny
                             meldekortbehandling={meldekortbehandling}
-                            skalNavigereTilBehandling={false}
+                            kallesFra={'behandling'}
                         />
                     </VStack>
                 </HStack>

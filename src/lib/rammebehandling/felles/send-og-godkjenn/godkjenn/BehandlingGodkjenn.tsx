@@ -2,7 +2,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
-import { Underkjenn } from '~/lib/behandling-felles/underkjenn/Underkjenn';
+import { Underkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useGodkjennBehandling } from '~/lib/rammebehandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';

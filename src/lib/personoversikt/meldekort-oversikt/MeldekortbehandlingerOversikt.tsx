@@ -5,7 +5,7 @@ import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
 
 type Props = {
@@ -73,11 +73,11 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                                 <Table.DataCell>{beslutter ?? '-'}</Table.DataCell>
                                 <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                                 <Table.DataCell align={'right'}>
-                                    <SeBehandlingKnapp
+                                    <TilBehandlingKnapp
                                         href={meldekortbehandlingUrl(saksnummer, id)}
                                     >
                                         {'Se behandling'}
-                                    </SeBehandlingKnapp>
+                                    </TilBehandlingKnapp>
                                 </Table.DataCell>
                             </Table.Row>
                         );

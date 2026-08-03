@@ -4,21 +4,18 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingLeggTilbake = ({ behandling, åpen, onClose }: Props) => {
+export const RammebehandlingLeggTilbake = ({ behandling, åpen, onClose, onSuccess }: Props) => {
     const { sak } = useSak();
     const { id } = behandling;
-    const { navigateWithNotification } = useNotification();
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/behandling/${id}/legg-tilbake`,
@@ -26,12 +23,9 @@ export const RammebehandlingLeggTilbake = ({ behandling, åpen, onClose }: Props
     );
 
     const leggTilbake = () => {
-        trigger().then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.ÅpneBehandlinger),
-                    'Behandlingen er lagt tilbake',
-                );
+        trigger().then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

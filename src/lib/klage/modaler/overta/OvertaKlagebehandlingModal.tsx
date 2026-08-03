@@ -1,10 +1,10 @@
 import { BodyShort, Button, Heading, HStack, LocalAlert, Modal, VStack } from '@navikt/ds-react';
-
-import styles from './OvertaBehandlingModal.module.css';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { Nullable } from '~/types/UtilTypes';
 
-const OvertabehandlingModal = (props: {
+import styles from './OvertaKlagebehandlingModal.module.css';
+
+const OvertaKlagebehandlingModal = (props: {
     overtarFra: string;
     åpen: boolean;
     onClose: () => void;
@@ -62,4 +62,4 @@ const OvertabehandlingModal = (props: {
     );
 };
 
-export default OvertabehandlingModal;
+export default OvertaKlagebehandlingModal;

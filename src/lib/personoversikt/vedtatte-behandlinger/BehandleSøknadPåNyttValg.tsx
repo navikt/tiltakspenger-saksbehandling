@@ -1,22 +1,25 @@
 import router from 'next/router';
-import { useBehandleSøknadPåNytt } from '~/lib/behandling-felles/behandlingmeny/behandle-søknad-på-nytt/useBehandleSøknadPåNytt';
 import { FileResetIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 import { SakId } from '~/lib/sak/SakTyper';
-
 import { behandlingUrl } from '~/utils/urls';
 import { SøknadId } from '~/types/Søknad';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 
 type Props = {
     sakId: SakId;
     søknadId: SøknadId;
 };
 
-const MenyValgBehandleSøknadPåNytt = ({ sakId, søknadId }: Props) => {
-    const { behandleSøknadPåNytt } = useBehandleSøknadPåNytt(sakId, søknadId);
+export const BehandleSøknadPåNyttValg = ({ sakId, søknadId }: Props) => {
+    const { trigger } = useFetchJsonFraApi<Søknadsbehandling>(
+        `/sak/${sakId}/soknad/${søknadId}/behandling/ny-behandling`,
+        'POST',
+    );
 
     const opprettSøknadPåNytt = () => {
-        behandleSøknadPåNytt().then((behandling) => {
+        trigger().then((behandling) => {
             if (behandling) {
                 router.push(behandlingUrl(behandling));
             }
@@ -25,9 +28,7 @@ const MenyValgBehandleSøknadPåNytt = ({ sakId, søknadId }: Props) => {
 
     return (
         <ActionMenu.Item icon={<FileResetIcon aria-hidden />} onClick={opprettSøknadPåNytt}>
-            Behandle søknad på nytt
+            {'Behandle søknad på nytt'}
         </ActionMenu.Item>
     );
 };
-
-export default MenyValgBehandleSøknadPåNytt;

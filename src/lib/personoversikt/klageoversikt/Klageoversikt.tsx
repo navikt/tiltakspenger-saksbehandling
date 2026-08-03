@@ -1,5 +1,5 @@
 import { HStack, Tag, Table } from '@navikt/ds-react';
-import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
+import KlageMeny from '~/lib/klage/meny/KlageMeny';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
@@ -19,7 +19,7 @@ import {
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentKlagevedtakMedBehandlinger } from '~/lib/sak/sakUtils';
-import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 type KlagebehandlingerMedOmgjøringsbehandling = {
@@ -78,7 +78,7 @@ export const Klageoversikt = () => {
                 saksbehandler: klagevedtakMedBehandling.behandling.saksbehandler!,
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <SeBehandlingKnapp
+                        <TilBehandlingKnapp
                             href={finnSisteGyldigeStegForKlage(klagevedtakMedBehandling.behandling)}
                         />
 
@@ -115,7 +115,7 @@ export const Klageoversikt = () => {
                 saksbehandler: klagebehandling.saksbehandler ?? 'Ikke tildelt',
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <SeBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
+                        <TilBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
                             {kanFortsetteKlagebehandling(
                                 klagebehandling,
                                 omgjøringsbehandling,
@@ -123,7 +123,7 @@ export const Klageoversikt = () => {
                             )
                                 ? 'Fortsett'
                                 : 'Se behandling'}
-                        </SeBehandlingKnapp>
+                        </TilBehandlingKnapp>
 
                         <KlageMeny
                             klage={klagebehandling}

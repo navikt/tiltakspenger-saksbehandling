@@ -11,7 +11,10 @@ import {
     BulletListIcon,
 } from '@navikt/aksel-icons';
 import { ComponentProps, useState } from 'react';
-import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import {
+    BehandlingsmenyKallesFra,
+    SaksbehandlerBehandlingKommando as Kommando,
+} from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingTildelMeg';
 import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingGjenoppta';
 import { MeldekortbehandlingLeggTilbake } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingLeggTilbake';
@@ -23,27 +26,26 @@ import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attest
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { meldekortbehandlingUrl } from '~/utils/urls';
+import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { meldekortbehandlingUrl, personoversiktUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
 
 import style from './MeldekortbehandlingMeny.module.css';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
-    /** Når denne er true navigerer vi til meldekortbehandlingen etter at den er tildelt, gjenopptatt eller overtatt */
-    skalNavigereTilBehandling: boolean;
+    /** Siden menyen vises på, som avgjør om handlingene navigerer eller oppdaterer saken */
+    kallesFra: BehandlingsmenyKallesFra;
     size?: ComponentProps<typeof Button>['size'];
 };
 
-export const MeldekortbehandlingMeny = ({
-    meldekortbehandling,
-    size,
-    skalNavigereTilBehandling,
-}: Props) => {
+export const MeldekortbehandlingMeny = ({ meldekortbehandling, kallesFra, size }: Props) => {
     const { gyldigeKommandoer, ventestatus, attesteringer } = meldekortbehandling;
 
     const { sak, setSak } = useSak();
     const router = useRouter();
+    const { setNotification, navigateWithNotification } = useNotification();
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
 
@@ -69,16 +71,37 @@ export const MeldekortbehandlingMeny = ({
 
     const onClose = () => setAktivDialog(null);
 
-    const oppdaterSak = (oppdatertSak: SakProps) => {
-        setSak(oppdatertSak);
+    /**
+     * Vi navigerer til meldekortbehandlingen, med mindre menyen kalles fra behandlingen - da
+     * oppdaterer vi saken i konteksten i stedet, siden vi ikke henter den på nytt fra serveren.
+     */
+    const onSuccessTilBehandling = (oppdatertSak: SakProps) => {
         onClose();
+
+        if (kallesFra === 'behandling') {
+            setSak(oppdatertSak);
+        } else {
+            router.push(meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id));
+        }
     };
 
-    const onSuccess = skalNavigereTilBehandling
-        ? () => {
-              router.push(meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id));
-          }
-        : oppdaterSak;
+    /**
+     * Vi navigerer til personoversikten, med mindre menyen kalles derfra - da oppdaterer vi saken
+     * i konteksten i stedet, siden vi ikke henter den på nytt fra serveren.
+     */
+    const onSuccessTilPersonoversikt = (melding: string) => (oppdatertSak: SakProps) => {
+        onClose();
+
+        if (kallesFra === 'personoversikt') {
+            setSak(oppdatertSak);
+            setNotification(melding);
+        } else {
+            navigateWithNotification(
+                personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
+                melding,
+            );
+        }
+    };
 
     return (
         <>
@@ -181,7 +204,7 @@ export const MeldekortbehandlingMeny = ({
                     meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'tildelMeg'}
                     onClose={onClose}
-                    onSuccess={onSuccess}
+                    onSuccess={onSuccessTilBehandling}
                 />
             )}
 
@@ -190,7 +213,7 @@ export const MeldekortbehandlingMeny = ({
                     meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'gjenoppta'}
                     onClose={onClose}
-                    onSuccess={onSuccess}
+                    onSuccess={onSuccessTilBehandling}
                 />
             )}
 
@@ -199,6 +222,7 @@ export const MeldekortbehandlingMeny = ({
                     meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'leggTilbake'}
                     onClose={onClose}
+                    onSuccess={onSuccessTilPersonoversikt('Meldekortbehandlingen er lagt tilbake')}
                 />
             )}
 
@@ -207,6 +231,7 @@ export const MeldekortbehandlingMeny = ({
                     meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
+                    onSuccess={onSuccessTilPersonoversikt('Meldekortbehandlingen er satt på vent')}
                 />
             )}
 
@@ -215,7 +240,7 @@ export const MeldekortbehandlingMeny = ({
                     meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'overta'}
                     onClose={onClose}
-                    onSuccess={onSuccess}
+                    onSuccess={onSuccessTilBehandling}
                 />
             )}
 
@@ -224,6 +249,7 @@ export const MeldekortbehandlingMeny = ({
                     meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'avslutt'}
                     onClose={onClose}
+                    onSuccess={onSuccessTilPersonoversikt('Meldekortbehandlingen er avsluttet')}
                 />
             )}
 

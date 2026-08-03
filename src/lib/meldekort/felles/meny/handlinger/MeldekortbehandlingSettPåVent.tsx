@@ -7,9 +7,6 @@ import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { dateTilISOTekst } from '~/utils/date';
 
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -18,12 +15,17 @@ type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const MeldekortbehandlingSettPåVent = ({ meldekortbehandling, åpen, onClose }: Props) => {
+export const MeldekortbehandlingSettPåVent = ({
+    meldekortbehandling,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const { sak } = useSak();
     const { id } = meldekortbehandling;
-    const { navigateWithNotification } = useNotification();
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
@@ -41,12 +43,9 @@ export const MeldekortbehandlingSettPåVent = ({ meldekortbehandling, åpen, onC
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, frist }).then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
-                    'Meldekortbehandlingen er satt på vent',
-                );
+        trigger({ begrunnelse: begrunnelseTrimmet, frist }).then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

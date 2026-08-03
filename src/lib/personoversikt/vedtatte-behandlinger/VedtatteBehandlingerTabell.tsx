@@ -6,8 +6,8 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import MenyValgBehandleSøknadPåNytt from '~/lib/behandling-felles/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
-import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { BehandleSøknadPåNyttValg } from '~/lib/personoversikt/vedtatte-behandlinger/BehandleSøknadPåNyttValg';
+import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/lib/sak/SakTyper';
 import {
@@ -113,9 +113,9 @@ const RammevedtakMedBehandlingRad = ({
             <Table.DataCell>{beslutter}</Table.DataCell>
             <Table.DataCell align={'right'}>
                 <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                    <SeBehandlingKnapp href={behandlingUrl(behandling)}>
+                    <TilBehandlingKnapp href={behandlingUrl(behandling)}>
                         {'Se behandling'}
-                    </SeBehandlingKnapp>
+                    </TilBehandlingKnapp>
 
                     <ActionMenu>
                         <ActionMenu.Trigger>
@@ -130,7 +130,7 @@ const RammevedtakMedBehandlingRad = ({
                         </ActionMenu.Trigger>
                         <ActionMenu.Content>
                             {resultat === SøknadsbehandlingResultat.AVSLAG ? (
-                                <MenyValgBehandleSøknadPåNytt
+                                <BehandleSøknadPåNyttValg
                                     sakId={behandling.sakId}
                                     søknadId={(behandling as Søknadsbehandling).søknad.id}
                                 />
@@ -165,7 +165,7 @@ const KlagevedtakMedBehandlingRad = ({
             <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
             <Table.DataCell>{'-'}</Table.DataCell>
             <Table.DataCell align={'right'}>
-                <SeBehandlingKnapp
+                <TilBehandlingKnapp
                     href={klagebehandlingUrl(
                         behandling.saksnummer,
                         behandling.id,
@@ -173,7 +173,7 @@ const KlagevedtakMedBehandlingRad = ({
                     )}
                 >
                     {'Se vedtak'}
-                </SeBehandlingKnapp>
+                </TilBehandlingKnapp>
             </Table.DataCell>
         </Table.Row>
     );

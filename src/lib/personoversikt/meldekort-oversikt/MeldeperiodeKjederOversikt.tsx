@@ -8,7 +8,7 @@ import {
 } from '~/lib/meldekort/utils/tekster';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
-import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 
 import style from './MeldeperiodeKjederOversikt.module.css';
 
@@ -101,11 +101,11 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                                             : '-'}
                                     </Table.DataCell>
                                     <Table.DataCell align={'right'}>
-                                        <SeBehandlingKnapp
+                                        <TilBehandlingKnapp
                                             href={meldeperiodeUrl(saksnummer, periode)}
                                         >
                                             {'Se oversikt'}
-                                        </SeBehandlingKnapp>
+                                        </TilBehandlingKnapp>
                                     </Table.DataCell>
                                 </Table.Row>
                             );

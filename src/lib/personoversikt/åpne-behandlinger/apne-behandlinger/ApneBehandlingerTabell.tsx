@@ -7,10 +7,9 @@ import {
     klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
 import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
-import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
-import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
+import KlageMeny from '~/lib/klage/meny/KlageMeny';
 import {
     finnSisteGyldigeStegForKlage,
     hentSisteKlagehendelseUtfallFraKlagebehandling,
@@ -37,11 +36,12 @@ import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
-import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
+import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 
 type Props = {
     sak: SakProps;
@@ -189,17 +189,18 @@ const propsForRad = (
                         : undefined,
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <SeBehandlingKnapp
+                        <TilBehandlingKnapp
                             href={behandlingUrl({ saksnummer, id: rammebehandling.id })}
                         >
                             {kanFortsetteBehandling(rammebehandling, innloggetSaksbehandler)
                                 ? 'Fortsett'
                                 : 'Se behandling'}
-                        </SeBehandlingKnapp>
+                        </TilBehandlingKnapp>
 
-                        <ApneBehandlingerMeny
+                        <RammebehandlingMeny
                             behandling={rammebehandling}
-                            medAvsluttBehandling={true}
+                            kallesFra={'personoversikt'}
+                            size={'small'}
                         />
                     </HStack>
                 ),
@@ -224,14 +225,14 @@ const propsForRad = (
                 periodeTekst: formaterMeldeperioder(meldekortbehandling),
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <SeBehandlingKnapp href={meldekortbehandlingUrl(saksnummer, id)}>
+                        <TilBehandlingKnapp href={meldekortbehandlingUrl(saksnummer, id)}>
                             {'Se behandling'}
-                        </SeBehandlingKnapp>
+                        </TilBehandlingKnapp>
 
                         <MeldekortbehandlingMeny
                             meldekortbehandling={meldekortbehandling}
+                            kallesFra={'personoversikt'}
                             size={'small'}
-                            skalNavigereTilBehandling={true}
                         />
                     </HStack>
                 ),
@@ -272,7 +273,7 @@ const propsForRad = (
                 saksbehandler,
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <SeBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
+                        <TilBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
                             {kanFortsetteKlagebehandling(
                                 klagebehandling,
                                 omgjøringsbehandling,
@@ -280,7 +281,7 @@ const propsForRad = (
                             )
                                 ? 'Fortsett'
                                 : 'Se behandling'}
-                        </SeBehandlingKnapp>
+                        </TilBehandlingKnapp>
 
                         <KlageMeny
                             klage={klagebehandling}

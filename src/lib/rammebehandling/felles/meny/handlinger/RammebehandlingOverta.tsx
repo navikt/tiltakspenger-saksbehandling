@@ -3,6 +3,7 @@ import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { SakProps } from '~/lib/sak/SakTyper';
 import {
     Rammebehandling,
     Rammebehandlingsstatus,
@@ -12,16 +13,16 @@ type Props = {
     behandling: Rammebehandling;
     åpen: boolean;
     onClose: () => void;
-    onSuccess: (oppdatertBehandling: Rammebehandling) => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
 export const RammebehandlingOverta = ({ behandling, åpen, onClose, onSuccess }: Props) => {
     const { sak } = useSak();
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<
-        Rammebehandling,
-        { overtarFra: string }
-    >(`/sak/${sak.sakId}/behandling/${behandling.id}/overta`, 'PATCH');
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
+        `/sak/${sak.sakId}/behandling/${behandling.id}/overta`,
+        'PATCH',
+    );
 
     const overtarFra =
         behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING
@@ -29,9 +30,9 @@ export const RammebehandlingOverta = ({ behandling, åpen, onClose, onSuccess }:
             : (behandling.saksbehandler ?? 'Ukjent saksbehandler');
 
     const overta = () => {
-        trigger({ overtarFra }).then((oppdatertBehandling) => {
-            if (oppdatertBehandling) {
-                onSuccess(oppdatertBehandling);
+        trigger({ overtarFra }).then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };

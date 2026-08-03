@@ -1,19 +1,23 @@
 import { Button } from '@navikt/ds-react';
-
-import { useGjenopptaBehandling } from '~/lib/behandling-felles/behandlingmeny/useGjenopptaBehandling';
 import router from 'next/router';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {
     behandling: Rammebehandling;
 };
 
 export const BehandlingGjenoppta = ({ behandling }: Props) => {
-    const { gjenopptaBehandling, isGjennopptaBehandlingMutating, gjenopptaBehandlingError } =
-        useGjenopptaBehandling(behandling.sakId, behandling.id);
+    const { sakId, id } = behandling;
+
+    const {
+        trigger: gjenopptaBehandling,
+        isMutating: isGjennopptaBehandlingMutating,
+        error: gjenopptaBehandlingError,
+    } = useFetchJsonFraApi<Rammebehandling>(`/sak/${sakId}/behandling/${id}/gjenoppta`, 'POST');
 
     const modalRef = useRef<HTMLDialogElement>(null);
 

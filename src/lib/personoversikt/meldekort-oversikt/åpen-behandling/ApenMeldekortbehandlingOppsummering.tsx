@@ -41,7 +41,7 @@ export const ApenMeldekortbehandlingOppsummering = ({ className }: Props) => {
                     <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
                     <MeldekortbehandlingMeny
                         meldekortbehandling={meldekortbehandling}
-                        skalNavigereTilBehandling={true}
+                        kallesFra={'personoversikt'}
                     />
                 </HStack>
             </HStack>

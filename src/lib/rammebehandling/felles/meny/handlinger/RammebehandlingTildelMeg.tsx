@@ -3,28 +3,29 @@ import { PersonIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;
     åpen: boolean;
     onClose: () => void;
-    onSuccess: (oppdatertBehandling: Rammebehandling) => void;
+    onSuccess: (oppdatertSak: SakProps) => void;
 };
 
 export const RammebehandlingTildelMeg = ({ behandling, åpen, onClose, onSuccess }: Props) => {
     const { sak } = useSak();
     const { id } = behandling;
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<Rammebehandling>(
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/behandling/${id}/ta`,
         'POST',
     );
 
     const tildelMeg = () => {
-        trigger().then((oppdatertBehandling) => {
-            if (oppdatertBehandling) {
-                onSuccess(oppdatertBehandling);
+        trigger().then((oppdatertSak) => {
+            if (oppdatertSak) {
+                onSuccess(oppdatertSak);
             }
         });
     };
