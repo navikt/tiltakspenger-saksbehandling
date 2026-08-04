@@ -25,8 +25,6 @@ export const behandlingsstatusTekst = (status: Behandlingsstatus): string => {
             return 'Vedtatt';
         case MeldekortbehandlingStatus.GODKJENT:
             return 'Godkjent';
-        case MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER:
-            return 'Ikke rett til tiltakspenger';
         case Rammebehandlingsstatus.AVBRUTT:
         case MeldekortbehandlingStatus.AVBRUTT:
             return 'Avbrutt';
@@ -51,8 +49,6 @@ export const behandlingsstatusFarge = (status: Behandlingsstatus): AkselColor =>
         case MeldekortbehandlingStatus.GODKJENT:
         case MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET:
             return 'success';
-        case MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER:
-            return 'warning';
         case Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
         case Rammebehandlingsstatus.AVBRUTT:
         case MeldekortbehandlingStatus.AVBRUTT:

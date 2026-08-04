@@ -8,19 +8,15 @@ import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/
 import { useRouter } from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useOpprettMeldekortbehandling } from '../../../felles/opprett/useOpprettMeldekortbehandling';
+import { kanIkkeBehandlesGrunnTekst } from '~/lib/meldekort/utils/tekster';
 
 import style from './MeldekortbehandlingOpprett.module.css';
+import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 export const MeldekortbehandlingOpprett = () => {
     const { sakId, saksnummer } = useSak().sak;
-    const {
-        id: kjedeId,
-        meldekortbehandlingIder,
-        kanBehandles,
-        erKlarTilUtfylling,
-        sisteMeldeperiode,
-    } = useMeldeperiodekjede().meldeperiodeKjede;
-    const { ingenDagerGirRett } = sisteMeldeperiode;
+    const { meldeperiodeKjede } = useMeldeperiodekjede();
+    const { id: kjedeId, meldekortbehandlingIder, kanIkkeBehandlesGrunn } = meldeperiodeKjede;
 
     const {
         opprettMeldekortbehandling,
@@ -47,23 +43,14 @@ export const MeldekortbehandlingOpprett = () => {
                 <Infokort variant={'feil'}>{opprettMeldekortbehandlingError.message}</Infokort>
             )}
 
-            {!kanBehandles && (
-                <Infokort
-                    variant={'advarsel'}
-                    header={'Kan ikke starte behandling.'}
-                    size={'small'}
-                >
-                    <ul>
-                        {ingenDagerGirRett && <li>{'Ingen dager gir rett.'}</li>}
-                        {!erKlarTilUtfylling && (
-                            <li>{'Meldekortet er ikke klart til utfylling.'}</li>
-                        )}
-                    </ul>
+            {kanIkkeBehandlesGrunn && (
+                <Infokort variant={'advarsel'} header={tekster.kanIkkeStarte} size={'small'}>
+                    {kanIkkeBehandlesGrunnTekst[kanIkkeBehandlesGrunn]}
                 </Infokort>
             )}
 
             <Button
-                disabled={!kanBehandles}
+                disabled={kanBehandleMeldeperiodekjede(meldeperiodeKjede)}
                 onClick={() => modalRef.current?.showModal()}
                 className={style.knapp}
             >

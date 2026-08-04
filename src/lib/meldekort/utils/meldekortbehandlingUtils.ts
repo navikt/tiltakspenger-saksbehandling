@@ -10,6 +10,10 @@ import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typ
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { formaterMeldeperiode, formaterPeriode, ukenummerFraPeriode } from '~/utils/date';
 
+export const kanBehandleMeldeperiodekjede = ({
+    kanIkkeBehandlesGrunn,
+}: MeldeperiodekjedeProps): boolean => kanIkkeBehandlesGrunn === null;
+
 export const kanSaksbehandleForMeldekort = (
     meldekortbehandling: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,

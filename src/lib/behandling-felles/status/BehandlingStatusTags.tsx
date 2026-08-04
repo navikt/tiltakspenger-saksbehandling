@@ -93,7 +93,6 @@ const behandlingsstatusIkon = (status: Behandlingsstatus): React.ReactNode => {
             return <CheckmarkIcon />;
         case Rammebehandlingsstatus.AVBRUTT:
         case MeldekortbehandlingStatus.AVBRUTT:
-        case MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER:
             return <CircleSlashIcon />;
         default:
             return ukjentStatus(status, undefined);

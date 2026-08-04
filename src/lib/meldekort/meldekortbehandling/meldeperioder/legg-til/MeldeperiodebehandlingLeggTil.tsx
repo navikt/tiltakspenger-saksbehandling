@@ -12,6 +12,7 @@ import { useRef } from 'react';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
@@ -28,8 +29,10 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
     const valgteKjedeIder = new Set<MeldeperiodeKjedeId>(meldeperioder.map((m) => m.kjedeId));
 
     const tilgjengeligeKjeder = sak.meldeperiodeKjeder.filter(
-        (kjede) => kjede.kanBehandles && !valgteKjedeIder.has(kjede.id),
+        (kjede) => kanBehandleMeldeperiodekjede(kjede) && !valgteKjedeIder.has(kjede.id),
     );
+
+    const harTilgjengeligeKjeder = tilgjengeligeKjeder.length > 0;
 
     const ubehandledeKjeder = tilgjengeligeKjeder.filter(
         (kjede) =>
@@ -81,25 +84,41 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                             {
                                 'Du kan legge til en og en valgt meldeperiode, eller alle meldeperioder som har et ubehandlet meldekort fra bruker. '
                             }
+                            {
+                                'Meldeperioder som allerede er under behandling kan ikke legges til i flere behandlinger.'
+                            }
                         </Infokort>
 
-                        <Select label={'Legg til meldeperiode'} hideLabel={true} ref={selectRef}>
-                            {tilgjengeligeKjeder.toReversed().map((kjede) => {
-                                const { id, brukersMeldekortStatus, periode } = kjede;
+                        <Select
+                            label={'Legg til meldeperiode'}
+                            hideLabel={true}
+                            ref={selectRef}
+                            disabled={!harTilgjengeligeKjeder}
+                        >
+                            {harTilgjengeligeKjeder ? (
+                                tilgjengeligeKjeder.toReversed().map((kjede) => {
+                                    const { id, brukersMeldekortStatus, periode } = kjede;
 
-                                return (
-                                    <option key={id} value={id}>
-                                        {`${formaterMeldeperiode(periode)} - ${brukersMeldekortKjedeStatusTekst[brukersMeldekortStatus]}`}
-                                    </option>
-                                );
-                            })}
+                                    return (
+                                        <option key={id} value={id}>
+                                            {`${formaterMeldeperiode(periode)} - ${brukersMeldekortKjedeStatusTekst[brukersMeldekortStatus]}`}
+                                        </option>
+                                    );
+                                })
+                            ) : (
+                                <option>{'Ingen tilgjengelige meldeperioder'}</option>
+                            )}
                         </Select>
                     </VStack>
                 </Dialog.Body>
 
                 <Dialog.Footer>
                     <Dialog.CloseTrigger>
-                        <Button variant={'primary'} onClick={leggTil}>
+                        <Button
+                            variant={'primary'}
+                            onClick={leggTil}
+                            disabled={!harTilgjengeligeKjeder}
+                        >
                             {'Legg til valgt'}
                         </Button>
                     </Dialog.CloseTrigger>

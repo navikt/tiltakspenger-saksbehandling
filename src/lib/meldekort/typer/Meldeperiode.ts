@@ -34,6 +34,13 @@ export type MeldeperiodekjedeProps = {
     brukersMeldekort: BrukersMeldekortProps[];
     brukersMeldekortStatus: BrukersMeldekortKjedeStatus;
     gjeldendeBeregning: MeldeperiodeBeregningProps | null;
-    erKlarTilUtfylling: boolean;
-    kanBehandles: boolean;
+    /** Satt kun når kjeden ikke kan behandles */
+    kanIkkeBehandlesGrunn: KanIkkeBehandlesGrunn | null;
 };
+
+export enum KanIkkeBehandlesGrunn {
+    /** Kjeden er allerede omfattet av en åpen meldekortbehandling, og en kjede kan bare være under behandling ett sted om gangen. */
+    HAR_ÅPEN_BEHANDLING = 'HAR_ÅPEN_BEHANDLING',
+    MELDEPERIODEN_HAR_IKKE_STARTET = 'MELDEPERIODEN_HAR_IKKE_STARTET',
+    INGEN_DAGER_GIR_RETT = 'INGEN_DAGER_GIR_RETT',
+}
