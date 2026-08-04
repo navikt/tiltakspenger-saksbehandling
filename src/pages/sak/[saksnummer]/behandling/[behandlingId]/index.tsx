@@ -1,5 +1,5 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BehandlingPage } from '~/lib/rammebehandling/BehandlingPage';
+import { RammebehandlingPage } from '~/lib/rammebehandling/RammebehandlingPage';
 import { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
 import { BehandlingProvider } from '~/lib/rammebehandling/context/BehandlingContext';
@@ -7,26 +7,23 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import {
-    RammebehandlingId,
-    Rammebehandling as BehandlingType,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
-    behandling: BehandlingType;
+    behandlingId: RammebehandlingId;
     sak: SakProps;
     klage: Nullable<Klagebehandling>;
 };
 
-const Behandling = ({ behandling, sak, klage }: Props) => {
+const Behandling = ({ behandlingId, sak, klage }: Props) => {
     return (
-        <BehandlingProvider behandling={behandling} klagebehandling={klage}>
-            <SakProvider sak={sak}>
-                <BehandlingPage />
-            </SakProvider>
-        </BehandlingProvider>
+        <SakProvider sak={sak}>
+            <BehandlingProvider behandlingId={behandlingId} klagebehandling={klage}>
+                <RammebehandlingPage />
+            </BehandlingProvider>
+        </SakProvider>
     );
 };
 
@@ -55,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
 
     return {
         props: {
-            behandling,
+            behandlingId,
             sak,
             klage: behandlingensKlage ?? null,
         } satisfies ComponentProps<typeof Behandling>,

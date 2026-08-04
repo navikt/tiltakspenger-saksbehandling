@@ -10,7 +10,6 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, Box, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
-import SideBarMain from '~/lib/_felles/layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useSak } from '~/lib/sak/SakContext';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
@@ -21,9 +20,9 @@ import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummerin
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
-import style from './BehandlingPage.module.css';
+import style from './RammebehandlingPage.module.css';
 
-export const BehandlingPage = () => {
+export const RammebehandlingPage = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
@@ -69,49 +68,46 @@ export const BehandlingPage = () => {
             <BehandlingSkjemaProvider
                 key={`${id}-${sistEndret}-${saksopplysninger.oppslagstidspunkt}`}
             >
-                <SideBarMain
-                    sidebar={
-                        <VStack gap="space-32">
-                            <BehandlingSaksopplysninger />
-                            {ventestatus.length > 0 && !erSattPåVent && (
-                                <>
-                                    <Separator />
-                                    <OppsummeringAvVentestatuser ventestatuser={ventestatus} />
-                                </>
-                            )}
-                        </VStack>
-                    }
-                    main={
-                        <div className={style.main}>
-                            {erSattPåVent && (
-                                <OppsummeringAvVentestatus
-                                    ventestatus={ventestatus.at(0)!}
-                                    historikk={ventestatus}
+                <div className={style.container}>
+                    <VStack className={style.sidebar} gap="space-32">
+                        <BehandlingSaksopplysninger />
+                        {ventestatus.length > 0 && !erSattPåVent && (
+                            <>
+                                <Separator />
+                                <OppsummeringAvVentestatuser ventestatuser={ventestatus} />
+                            </>
+                        )}
+                    </VStack>
+
+                    <VStack className={style.main} gap="space-16">
+                        {erSattPåVent && (
+                            <OppsummeringAvVentestatus
+                                ventestatus={ventestatus.at(0)!}
+                                historikk={ventestatus}
+                            />
+                        )}
+                        <Tidslinjer sak={sak} />
+                        {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
+                        {behandlingensKlage && (
+                            <Box borderWidth="1">
+                                <OppsummeringAvKlageForRammebehandling
+                                    klagebehandling={behandlingensKlage}
                                 />
+                            </Box>
+                        )}
+                        <div className={style.vedtakContainer}>
+                            {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
+                                <SøknadsbehandlingVedtak />
+                            ) : type === Rammebehandlingstype.REVURDERING ? (
+                                <RevurderingVedtak />
+                            ) : (
+                                <Alert
+                                    variant={'error'}
+                                >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
                             )}
-                            <Tidslinjer sak={sak} />
-                            {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
-                            {behandlingensKlage && (
-                                <Box borderWidth="1">
-                                    <OppsummeringAvKlageForRammebehandling
-                                        klagebehandling={behandlingensKlage}
-                                    />
-                                </Box>
-                            )}
-                            <div className={style.vedtakContainer}>
-                                {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
-                                    <SøknadsbehandlingVedtak />
-                                ) : type === Rammebehandlingstype.REVURDERING ? (
-                                    <RevurderingVedtak />
-                                ) : (
-                                    <Alert
-                                        variant={'error'}
-                                    >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
-                                )}
-                            </div>
                         </div>
-                    }
-                />
+                    </VStack>
+                </div>
             </BehandlingSkjemaProvider>
         </>
     );

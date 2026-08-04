@@ -30,6 +30,7 @@ export const SøknadsbehandlingVedtak = () => {
             {resultat === SøknadsbehandlingResultat.IKKE_VALGT && <IkkeValgt />}
             {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
             {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
+            <Separator />
             <SøknadsbehandlingHandlinger />
         </>
     );
@@ -52,13 +53,12 @@ const Innvilgelse = () => {
             <InnvilgelsesperioderVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
-            <Separator />
             {harValgtPeriode && (
                 <>
+                    <Separator />
                     <BehandlingBarnetillegg />
                     <Separator />
                     <SøknadsbehandlingBrev />
-                    <Separator />
                     <BehandlingBeregningOgSimulering />
                 </>
             )}

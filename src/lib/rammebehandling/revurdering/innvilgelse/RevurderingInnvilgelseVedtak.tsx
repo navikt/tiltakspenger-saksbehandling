@@ -39,16 +39,16 @@ export const RevurderingInnvilgelseVedtak = () => {
                     <InnvilgelsesperioderVelger />
                     <Separator />
                     <BegrunnelseVilkårsvurdering />
-                    <Separator />
                     {innvilgelse.harValgtPeriode && (
                         <>
+                            <Separator />
                             <BehandlingBarnetillegg />
                             <Separator />
                             <RevurderingInnvilgelseBrev />
-                            <Separator />
                             <BehandlingBeregningOgSimulering />
                         </>
                     )}
+                    <Separator />
                     <RevurderingInnvilgelseHandlinger />
                 </>
             ) : (

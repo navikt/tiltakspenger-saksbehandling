@@ -38,20 +38,20 @@ export const BehandlingBeregningOgSimulering = () => {
 
     return (
         <>
+            <Separator />
             {utbetaling ? (
                 <BeregningOgSimuleringSeksjon behandling={behandling} utbetaling={utbetaling} />
             ) : (
                 <UtenBeregnetUtbetaling />
             )}
-            <Separator />
             {harUtbetalingskontrollMedEndringer && (
                 <>
+                    <Separator />
                     <UtbetalingskontrollSeksjon
                         utbetalingskontroll={utbetalingskontroll}
                         behandlingsstatus={behandling.status}
                         behandlingId={behandling.id}
                     />
-                    <Separator />
                 </>
             )}
         </>

@@ -1,7 +1,7 @@
 .container {
-    height: 100vh;
     display: grid;
     grid-template-columns: minmax(400px, min-content) 1fr;
+    background-color: var(--ax-neutral-100);
 }
 
 .sidebar {
@@ -10,10 +10,13 @@
 }
 
 .main {
-    background-color: var(--ax-neutral-100);
     padding: 2rem;
+    max-width: 1200px;
 }
 
-.main > :not(:last-child) {
-    margin-bottom: 2rem;
+.vedtakContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--ax-neutral-000);
+    padding: 2rem;
 }

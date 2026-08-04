@@ -1,13 +1,19 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { Rammebehandlingstype, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandlingstype,
+    Rammebehandling,
+    RammebehandlingId,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Revurdering, Omgjøring } from '~/lib/rammebehandling/typer/Revurdering';
 import { erOmgjøringResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import { useResettableState } from '~/hooks/useResettableState';
+import { hentRammebehandling } from '~/lib/sak/sakUtils';
+import { useSak } from '~/lib/sak/SakContext';
 
 type BehandlingContext<Rammebehandling> = {
     behandling: Rammebehandling;
@@ -19,16 +25,15 @@ type BehandlingContext<Rammebehandling> = {
 const Context = createContext({} as BehandlingContext<Rammebehandling>);
 
 type Props = {
-    behandling: Rammebehandling;
+    behandlingId: RammebehandlingId;
     klagebehandling: Nullable<Klagebehandling>;
     children: ReactNode;
 };
 
-export const BehandlingProvider = ({
-    behandling: initialBehandling,
-    klagebehandling,
-    children,
-}: Props) => {
+export const BehandlingProvider = ({ behandlingId, klagebehandling, children }: Props) => {
+    const { sak } = useSak();
+    const initialBehandling = hentRammebehandling(sak, behandlingId);
+
     const [behandling, setBehandling] = useResettableState<Rammebehandling>(initialBehandling);
 
     const rolleForBehandling = useRolleForBehandling(behandling);

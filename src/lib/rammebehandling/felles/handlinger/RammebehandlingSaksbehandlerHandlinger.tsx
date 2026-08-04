@@ -2,15 +2,15 @@ import { HStack, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 import { BehandlingLagreKnapp } from '~/lib/rammebehandling/felles/handlinger/lagre/BehandlingLagreKnapp';
 import { BehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
-import { BehandlingSendTilBeslutning } from '~/lib/rammebehandling/felles/handlinger/send-til-beslutning/BehandlingSendTilBeslutning';
+import { RammebehandlingSendTilBeslutning } from '~/lib/rammebehandling/felles/handlinger/send-til-beslutning/RammebehandlingSendTilBeslutning';
 import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/handlinger/varsler/BehandlingValideringVarsler';
 import {
     BehandlingLagringResultat,
     BehandlingLagringVarsler,
 } from '~/lib/rammebehandling/felles/handlinger/varsler/BehandlingLagringVarsler';
+import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 
 import style from './RammebehandlingSaksbehandlerHandlinger.module.css';
 
@@ -48,10 +48,10 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
                 <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
             </VStack>
 
-            <HStack justify={'space-between'}>
+            <HStack gap={'space-16'} justify={'space-between'}>
                 <RammebehandlingMeny behandling={behandling} kallesFra={'behandling'} />
 
-                <HStack gap={'space-16'}>
+                <HStack gap={'space-16'} justify={'end'}>
                     <BehandlingLagreKnapp
                         behandling={behandling}
                         hentVedtakDTO={validerOgHentDTO}
@@ -62,7 +62,7 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
                             setLagringResultat(error);
                         }}
                     />
-                    <BehandlingSendTilBeslutning
+                    <RammebehandlingSendTilBeslutning
                         behandling={behandling}
                         valider={validerTilBeslutning}
                         valideringResultat={valideringResultat}
