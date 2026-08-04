@@ -5,9 +5,9 @@ import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { SeBehandlingKnapp } from '~/lib/behandling-felles/behandlingmeny/SeBehandlingKnapp';
-import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
+import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
+import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 
 type Props = {
     saksnummer: string;
@@ -49,8 +49,8 @@ export const MeldekortbehandlingerTabell = ({
                                     {formaterMeldeperioder(meldekortbehandling)}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    <MeldekortbehandlingStatusTags
-                                        meldekortbehandling={meldekortbehandling}
+                                    <BehandlingStatusTags
+                                        behandling={meldekortbehandling}
                                         kompakt={true}
                                     />
                                 </Table.DataCell>
@@ -70,17 +70,17 @@ export const MeldekortbehandlingerTabell = ({
                                         align={'center'}
                                         wrap={false}
                                     >
-                                        <SeBehandlingKnapp
+                                        <TilBehandlingKnapp
                                             href={meldekortbehandlingUrl(saksnummer, id)}
                                         >
                                             {'Se behandling'}
-                                        </SeBehandlingKnapp>
+                                        </TilBehandlingKnapp>
 
                                         {medMeny && (
                                             <MeldekortbehandlingMeny
                                                 meldekortbehandling={meldekortbehandling}
                                                 size={'small'}
-                                                skalNavigereTilBehandling={true}
+                                                kallesFra={'personoversikt'}
                                             />
                                         )}
                                     </HStack>
