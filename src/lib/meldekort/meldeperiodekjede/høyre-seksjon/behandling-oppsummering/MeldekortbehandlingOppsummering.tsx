@@ -8,16 +8,16 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortUker } from '~/lib/meldekort/felles/uker/MeldekortUker';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { formaterTidspunktKort } from '~/utils/date';
-import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
+import {
+    behandlingsstatusFarge,
+    behandlingsstatusTekst,
+} from '~/lib/behandling-felles/status/behandlingsstatus';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { hentKlagebehandling, hentMeldekortbehandling } from '~/lib/sak/sakUtils';
-import {
-    meldekortbehandlingStatusTekst,
-    meldeperiodebehandlingTypeTekst,
-} from '~/lib/meldekort/utils/tekster';
+import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/utils/tekster';
 
 import style from './MeldekortBehandlingOppsummering.module.css';
 
@@ -70,8 +70,8 @@ export const MeldekortbehandlingOppsummering = ({
                         {'Åpne behandlingen'}
                     </InternLenke>
                 </VStack>
-                <Tag data-color={meldekortbehandlingStatusFarge[status]} variant={'outline'}>
-                    {meldekortbehandlingStatusTekst[status]}
+                <Tag data-color={behandlingsstatusFarge(status)} variant={'outline'}>
+                    {behandlingsstatusTekst(status)}
                 </Tag>
             </HStack>
 

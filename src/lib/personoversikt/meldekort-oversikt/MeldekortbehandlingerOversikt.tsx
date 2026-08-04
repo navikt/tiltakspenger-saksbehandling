@@ -6,7 +6,7 @@ import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
-import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
+import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 
 type Props = {
     saksnummer: string;
@@ -58,8 +58,8 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                                     {formaterMeldeperioder(meldekortbehandling)}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    <MeldekortbehandlingStatusTags
-                                        meldekortbehandling={meldekortbehandling}
+                                    <BehandlingStatusTags
+                                        behandling={meldekortbehandling}
                                         kompakt={true}
                                     />
                                 </Table.DataCell>

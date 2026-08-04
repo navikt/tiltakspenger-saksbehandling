@@ -1,7 +1,7 @@
 import { Heading, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import { DetaljVertikal } from '~/lib/_felles/detaljer/DetaljVertikal';
-import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
+import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { formaterMeldeperiode, formaterPeriode, formaterTidspunktKort } from '~/utils/date';
@@ -38,7 +38,7 @@ export const ApenMeldekortbehandlingOppsummering = ({ className }: Props) => {
                 </InlineMessage>
 
                 <HStack gap={'space-8'}>
-                    <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
+                    <BehandlingStatusTags behandling={meldekortbehandling} />
                     <MeldekortbehandlingMeny
                         meldekortbehandling={meldekortbehandling}
                         kallesFra={'personoversikt'}

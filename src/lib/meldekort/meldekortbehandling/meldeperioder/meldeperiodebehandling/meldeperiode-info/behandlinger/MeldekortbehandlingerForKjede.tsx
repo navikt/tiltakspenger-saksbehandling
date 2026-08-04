@@ -6,7 +6,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import { MeldekortbehandlingForKjedeKompakt } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingForKjedeKompakt';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
-import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 type Props = {
@@ -60,7 +60,7 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
 
                         return (
                             <option key={id} value={id} disabled={erBehandlingenSomVises}>
-                                {`${formaterTidspunkt(sistEndret)} (${meldekortbehandlingStatusTekst[status]})${erBehandlingenSomVises ? ' (denne)' : ''}`}
+                                {`${formaterTidspunkt(sistEndret)} (${behandlingsstatusTekst(status)})${erBehandlingenSomVises ? ' (denne)' : ''}`}
                             </option>
                         );
                     })}

@@ -6,7 +6,7 @@ import {
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
-import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
+import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import {
@@ -46,7 +46,7 @@ export const MeldekortbehandlingHeader = () => {
                     {'Meldekortbehandling'}
                 </Heading>
 
-                <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
+                <BehandlingStatusTags behandling={meldekortbehandling} />
             </MeldekortbehandlingSeksjon.Venstre>
 
             <MeldekortbehandlingSeksjon.Høyre gap={'space-24'}>

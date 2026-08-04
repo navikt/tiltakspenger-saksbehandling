@@ -1,5 +1,8 @@
 import { Alert, BodyShort, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
-import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
+import {
+    behandlingsstatusFarge,
+    behandlingsstatusTekst,
+} from '~/lib/behandling-felles/status/behandlingsstatus';
 import {
     MeldekortbehandlingId,
     MeldekortDagBeregnetProps,
@@ -17,7 +20,6 @@ import {
 import { formatterBeløp } from '~/utils/beløp';
 import {
     meldekortbehandlingDagStatusTekstKort,
-    meldekortbehandlingStatusTekst,
     meldeperiodebehandlingTypeTekst,
 } from '~/lib/meldekort/utils/tekster';
 import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
@@ -61,12 +63,8 @@ export const MeldekortbehandlingForKjedeKompakt = ({ meldekortbehandlingId, kjed
                 <Heading level={'4'} size={'xsmall'}>
                     {meldeperiodebehandlingTypeTekst[meldeperiodebehandling.type]}
                 </Heading>
-                <Tag
-                    data-color={meldekortbehandlingStatusFarge[status]}
-                    variant={'outline'}
-                    size={'small'}
-                >
-                    {meldekortbehandlingStatusTekst[status]}
+                <Tag data-color={behandlingsstatusFarge(status)} variant={'outline'} size={'small'}>
+                    {behandlingsstatusTekst(status)}
                 </Tag>
             </HStack>
 

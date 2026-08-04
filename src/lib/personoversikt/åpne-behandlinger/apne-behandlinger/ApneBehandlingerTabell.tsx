@@ -31,8 +31,8 @@ import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
-import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
-import { RammebehandlingStatusTags } from '~/lib/rammebehandling/felles/status/RammebehandlingStatusTags';
+import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
+
 import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/utils/beløp';
@@ -172,9 +172,7 @@ const propsForRad = (
                 typeTekst,
                 opprettet,
                 resultatTag: behandlingResultatTilTag(resultat),
-                statusTag: (
-                    <RammebehandlingStatusTags behandling={rammebehandling} kompakt={true} />
-                ),
+                statusTag: <BehandlingStatusTags behandling={rammebehandling} kompakt={true} />,
                 saksbehandler,
                 beslutter,
                 periodeTekst: vedtaksperiode ? formaterPeriode(vedtaksperiode) : undefined,
@@ -209,12 +207,7 @@ const propsForRad = (
             return {
                 typeTekst,
                 opprettet,
-                statusTag: (
-                    <MeldekortbehandlingStatusTags
-                        meldekortbehandling={meldekortbehandling}
-                        kompakt={true}
-                    />
-                ),
+                statusTag: <BehandlingStatusTags behandling={meldekortbehandling} kompakt={true} />,
                 saksbehandler,
                 beslutter,
                 periodeTekst: formaterMeldeperioder(meldekortbehandling),

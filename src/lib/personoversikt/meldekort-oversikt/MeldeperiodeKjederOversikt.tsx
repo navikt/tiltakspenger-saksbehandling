@@ -2,10 +2,8 @@ import { Checkbox, Table, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
-import {
-    brukersMeldekortKjedeStatusTekst,
-    meldekortbehandlingStatusTekst,
-} from '~/lib/meldekort/utils/tekster';
+import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
@@ -85,7 +83,7 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                                     </Table.DataCell>
                                     <Table.DataCell>
                                         {meldekortbehandlingStatus
-                                            ? `${meldekortbehandlingStatusTekst[meldekortbehandlingStatus]} (${meldekortbehandlingIder.length})`
+                                            ? `${behandlingsstatusTekst(meldekortbehandlingStatus)} (${meldekortbehandlingIder.length})`
                                             : 'Ikke behandlet (0)'}
                                     </Table.DataCell>
                                     <Table.DataCell>
