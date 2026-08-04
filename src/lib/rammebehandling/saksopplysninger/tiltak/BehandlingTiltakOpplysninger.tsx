@@ -4,15 +4,41 @@ import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { VStack } from '@navikt/ds-react';
+import { BodyShort, ReadMore, VStack } from '@navikt/ds-react';
+import { Periode } from '~/types/Periode';
+import { Nullable } from '~/types/UtilTypes';
+import { delOppTiltaksdeltakelser } from './tiltaksdeltakelseVisning';
 
 type Props = {
     tiltaksdeltakelser: Tiltaksdeltakelse[];
+    vurderingsperiode: Nullable<Periode>;
 };
 
-export const BehandlingTiltakOpplysninger = ({ tiltaksdeltakelser }: Props) => {
+export const BehandlingTiltakOpplysninger = ({ tiltaksdeltakelser, vurderingsperiode }: Props) => {
+    const { aktuelle, historiske } = delOppTiltaksdeltakelser(
+        tiltaksdeltakelser,
+        vurderingsperiode,
+    );
+
     return (
         <VStack gap="space-8">
+            {aktuelle.length > 0 ? (
+                <TiltakListe tiltaksdeltakelser={aktuelle} />
+            ) : (
+                <BodyShort size={'small'}>{'Ingen aktuelle tiltaksdeltakelser'}</BodyShort>
+            )}
+            {historiske.length > 0 && (
+                <ReadMore size={'small'} header={`Tidligere tiltak (${historiske.length})`}>
+                    <TiltakListe tiltaksdeltakelser={historiske} />
+                </ReadMore>
+            )}
+        </VStack>
+    );
+};
+
+const TiltakListe = ({ tiltaksdeltakelser }: { tiltaksdeltakelser: Tiltaksdeltakelse[] }) => {
+    return (
+        <VStack gap="space-12">
             {tiltaksdeltakelser.map((tiltak) => {
                 const {
                     antallDagerPerUke,

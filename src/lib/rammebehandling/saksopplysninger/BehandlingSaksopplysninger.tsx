@@ -74,7 +74,10 @@ export const BehandlingSaksopplysninger = () => {
 
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 {harTiltaksdeltakelse ? (
-                    <BehandlingTiltakOpplysninger tiltaksdeltakelser={tiltaksdeltagelse} />
+                    <BehandlingTiltakOpplysninger
+                        tiltaksdeltakelser={tiltaksdeltagelse}
+                        vurderingsperiode={saksopplysninger.periode}
+                    />
                 ) : (
                     <BodyShort size={'small'}>Ingen relevante tiltaksdeltakelser</BodyShort>
                 )}
