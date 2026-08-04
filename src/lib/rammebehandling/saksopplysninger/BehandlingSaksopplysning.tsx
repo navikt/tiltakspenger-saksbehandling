@@ -1,10 +1,9 @@
-import style from './BehandlingSaksopplysning.module.css';
-import { BodyShort } from '@navikt/ds-react';
+import { BodyShort, HStack } from '@navikt/ds-react';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import { PeriodeSpm } from '~/types/Søknad';
-import { formaterPeriode } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
+
+import style from './BehandlingSaksopplysning.module.css';
 
 type Props = {
     navn: string;
@@ -15,7 +14,12 @@ type Props = {
 
 export const BehandlingSaksopplysning = ({ navn, verdi, spacing, visVarsel = false }: Props) => {
     return (
-        <div className={visVarsel ? classNames(style.soknadsopplysningVarsel) : ''}>
+        <HStack
+            gap={'space-8'}
+            justify={'space-between'}
+            align={'center'}
+            className={classNames(visVarsel && style.varsel)}
+        >
             <BodyShort
                 size={'small'}
                 className={classNames(style.opplysning, spacing && style.spacing)}
@@ -30,39 +34,6 @@ export const BehandlingSaksopplysning = ({ navn, verdi, spacing, visVarsel = fal
                 )}
             </BodyShort>
             {visVarsel && <ExclamationmarkTriangleFillIcon />}
-        </div>
-    );
-};
-type MedPeriodeProps = {
-    navn: string;
-    periodeSpm: PeriodeSpm;
-    spacing?: boolean;
-    visVarsel: boolean;
-};
-
-export const BehandlingSaksopplysningMedPeriodeSpm = ({
-    navn,
-    periodeSpm,
-    spacing,
-    visVarsel,
-}: MedPeriodeProps) => {
-    return periodeSpm.periode && visVarsel ? (
-        <BehandlingSaksopplysning
-            navn={navn}
-            verdi={`${formaterSøknadsspørsmålSvar(periodeSpm.svar)} (${formaterPeriode({
-                fraOgMed: periodeSpm.periode.fraOgMed,
-                tilOgMed: periodeSpm.periode.tilOgMed,
-            })})
-            `}
-            spacing={spacing}
-            visVarsel={visVarsel}
-        />
-    ) : (
-        <BehandlingSaksopplysning
-            navn={navn}
-            verdi={periodeSpm.svar}
-            spacing={spacing}
-            visVarsel={visVarsel}
-        />
+        </HStack>
     );
 };

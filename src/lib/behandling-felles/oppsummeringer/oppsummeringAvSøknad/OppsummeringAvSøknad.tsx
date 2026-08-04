@@ -1,9 +1,6 @@
 import { Periode } from '~/types/Periode';
 import { useConfig } from '~/context/ConfigContext';
-import {
-    BehandlingSaksopplysning,
-    BehandlingSaksopplysningMedPeriodeSpm,
-} from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
+import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { SøknadOpplysningerSvar } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
 import { SøknadOpplysningerBarn } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
@@ -12,13 +9,14 @@ import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
 import { SøknadsopplysningerTiltak } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/SøknadsopplysningerTiltak';
 import { formaterSøknadBehandlingsårsak, formaterSøknadstype } from '~/utils/tekstformateringUtils';
+import { BehandlingSaksopplysningMedPeriodeSpm } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningPeriodeSpm';
 
-interface Props {
+type Props = {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
     tiltaksperiode: Nullable<Periode>;
     søknad: Søknad;
     visBarnetilleggPeriodiseringKnapp?: boolean;
-}
+};
 
 export const OppsummeringAvSøknad = ({
     søknad,

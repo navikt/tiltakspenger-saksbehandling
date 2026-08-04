@@ -4,11 +4,6 @@
     background-color: var(--ax-neutral-100);
 }
 
-.sidebar {
-    padding: 2rem;
-    background-color: var(--ax-accent-200);
-}
-
 .main {
     padding: 2rem;
     max-width: 1200px;

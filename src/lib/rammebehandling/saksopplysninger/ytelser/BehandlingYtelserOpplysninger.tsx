@@ -1,8 +1,6 @@
 import { Ytelse } from '~/lib/rammebehandling/typer/Ytelse';
 import { BodyShort, Checkbox, VStack } from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import styles from './BehandlingYtelserOpplysninger.module.css';
 import { formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { sorterPerioder, totalPeriode } from '~/utils/periode';
@@ -13,18 +11,24 @@ type Props = {
 };
 
 export const BehandlingYtelserOpplysninger = ({ ytelser }: Props) => {
+    if (ytelser.length === 0) {
+        return <BodyShort size={'small'}>{'Ingen relevante ytelser'}</BodyShort>;
+    }
+
     return (
-        <VStack gap="space-8">
+        <VStack gap={'space-8'}>
             {ytelser.map((ytelse) => {
                 const { ytelsetype, perioder } = ytelse;
                 const flerePerioder = perioder.length > 1;
 
                 return (
                     <div key={ytelse.ytelsetype}>
-                        <div className={styles.ytelsesopplysningVarsel}>
-                            <BehandlingSaksopplysning navn={'Type'} verdi={ytelsetype} />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                        <BehandlingSaksopplysning
+                            navn={'Type'}
+                            verdi={ytelsetype}
+                            visVarsel={true}
+                        />
+
                         {flerePerioder ? (
                             <YtelseMedFlerePerioder perioder={perioder} />
                         ) : (

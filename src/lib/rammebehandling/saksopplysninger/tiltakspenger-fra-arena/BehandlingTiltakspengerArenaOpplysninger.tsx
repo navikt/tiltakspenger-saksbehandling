@@ -1,7 +1,5 @@
-import { VStack } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import styles from './BehandlingTiltakspengerArenaOpplysninger.module.css';
 import { ArenaTPVedtak } from '~/lib/rammebehandling/typer/ArenaTPVedtak';
 import { formaterDatotekst } from '~/utils/date';
 
@@ -10,30 +8,30 @@ type Props = {
 };
 
 export const BehandlingTiltakspengerArenaOpplysninger = ({ vedtak }: Props) => {
-    return (
-        <VStack gap="space-8">
-            {vedtak.map((tpvedtak) => (
-                <div key={`${tpvedtak.rettighet}-${tpvedtak.fraOgMed}`}>
-                    <TiltakspengerArenaOpplysning vedtak={tpvedtak} />
-                </div>
-            ))}
-        </VStack>
-    );
-};
+    if (vedtak.length === 0) {
+        return <BodyShort size={'small'}>{'Ingen relevante tiltakspengevedtak i Arena'}</BodyShort>;
+    }
 
-const TiltakspengerArenaOpplysning = (props: { vedtak: ArenaTPVedtak }) => {
-    const { fraOgMed, tilOgMed, rettighet } = props.vedtak;
-    const tilOgMedTekst = tilOgMed ? formaterDatotekst(tilOgMed) : '';
     return (
-        <>
-            <div className={styles.tiltakspengerArenaOpplysningVarsel}>
-                <BehandlingSaksopplysning navn={'Rettighet'} verdi={rettighet} />
-                <ExclamationmarkTriangleFillIcon />
-            </div>
-            <BehandlingSaksopplysning
-                navn={'Periode'}
-                verdi={`${formaterDatotekst(fraOgMed)} - ${tilOgMedTekst}`}
-            />
-        </>
+        <VStack gap={'space-8'}>
+            {vedtak.map((tpvedtak) => {
+                const { fraOgMed, tilOgMed, rettighet } = tpvedtak;
+                const tilOgMedTekst = tilOgMed ? formaterDatotekst(tilOgMed) : '';
+
+                return (
+                    <div key={`${tpvedtak.rettighet}-${tpvedtak.fraOgMed}`}>
+                        <BehandlingSaksopplysning
+                            navn={'Rettighet'}
+                            verdi={rettighet}
+                            visVarsel={true}
+                        />
+                        <BehandlingSaksopplysning
+                            navn={'Periode'}
+                            verdi={`${formaterDatotekst(fraOgMed)} - ${tilOgMedTekst}`}
+                        />
+                    </div>
+                );
+            })}
+        </VStack>
     );
 };

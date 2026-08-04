@@ -28,9 +28,10 @@ type Props = {
     behandling: BehandlingProps;
     /** Mindre tags uten ikoner, til bruk i tabeller og lignende */
     kompakt?: boolean;
+    className?: string;
 };
 
-export const BehandlingStatusTags = ({ behandling, kompakt }: Props) => {
+export const BehandlingStatusTags = ({ behandling, kompakt, className }: Props) => {
     const { status } = behandling;
 
     const erSattPåVent = erBehandlingSattPåVent(behandling);
@@ -41,7 +42,7 @@ export const BehandlingStatusTags = ({ behandling, kompakt }: Props) => {
         : ({ variant: 'moderate', className: style.tag } as const);
 
     return (
-        <HStack gap={kompakt ? 'space-4' : 'space-8'}>
+        <HStack gap={kompakt ? 'space-4' : 'space-8'} className={className}>
             {erSattPåVent && (
                 <Tag
                     {...tagProps}

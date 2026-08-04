@@ -15,6 +15,10 @@ type Props = {
 };
 
 export const BehandlingTiltakOpplysninger = ({ tiltaksdeltakelser, vurderingsperiode }: Props) => {
+    if (tiltaksdeltakelser.length === 0) {
+        return <BodyShort size={'small'}>{'Ingen relevante tiltaksdeltakelser'}</BodyShort>;
+    }
+
     const { aktuelle, historiske } = delOppTiltaksdeltakelser(
         tiltaksdeltakelser,
         vurderingsperiode,

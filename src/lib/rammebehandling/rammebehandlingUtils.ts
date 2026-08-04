@@ -3,19 +3,23 @@ import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseMedPeriode,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { perioderOverlapper, totalPeriode } from '../../utils/periode';
+import { erDatoIPeriode, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
     RammebehandlingResultat,
     Rammebehandlingsstatus,
+    Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     Søknadsbehandling,
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { finn18årsdag } from '~/utils/date';
+import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
@@ -163,3 +167,26 @@ export const erRammebehandlingUnderAktivOmgjøring = (rb: Rammebehandling): bool
 export const erAvsluttet = (behandling: Rammebehandling): boolean =>
     behandling.status === Rammebehandlingsstatus.AVBRUTT ||
     behandling.status === Rammebehandlingsstatus.VEDTATT;
+
+export const fyller18ÅrISøknadsperioden = (behandling: Rammebehandling, sak: SakProps): boolean => {
+    const { saksopplysninger } = behandling;
+    const { fødselsdato } = saksopplysninger;
+
+    const attendeBursdag = finn18årsdag(fødselsdato);
+
+    if (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING) {
+        const søknadsperiode = behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
+        return søknadsperiode ? erDatoIPeriode(attendeBursdag, søknadsperiode) : false;
+    }
+
+    // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
+    const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak).map(
+        (beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm,
+    );
+
+    if (perioderDetErSøktOm.length === 0) {
+        return false;
+    }
+
+    return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
+};

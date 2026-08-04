@@ -6,20 +6,12 @@
     }
 }
 
-.soknadsopplysningVarsel {
-    display: grid;
-    align-items: center;
-    grid-template-columns: 20fr 0.5fr;
-    grid-column-gap: 2rem;
-    gap: 0.25rem;
-    justify-content: space-between;
+.varsel {
     background-color: var(--ax-warning-100);
-    border-radius: var(--ax-radius-4);
-    padding: 0 5rem;
-    margin: 0 -6rem 0 -5rem;
+    padding: 0 2rem;
+    margin: 0 -2rem;
 
     & > svg {
-        align-self: center;
         width: 1.75rem;
         height: 1.75rem;
         color: var(--ax-warning-500);

@@ -1,5 +1,5 @@
 import { SøknadsbehandlingVedtak } from '~/lib/rammebehandling/søknadsbehandling/SøknadsbehandlingVedtak';
-import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
+import { RammebehandlingSaksopplysninger } from '~/lib/rammebehandling/saksopplysninger/RammebehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
 import {
@@ -8,7 +8,6 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, Box, VStack } from '@navikt/ds-react';
-import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useSak } from '~/lib/sak/SakContext';
@@ -17,6 +16,7 @@ import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/Behandli
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { hentKlagebehandling } from '~/lib/sak/sakUtils';
 
 import style from './RammebehandlingPage.module.css';
 
@@ -24,10 +24,11 @@ export const RammebehandlingPage = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const behandlingensKlage =
-        sak.klagebehandlinger.find((kb) => kb.id === behandling.klagebehandlingId) ?? null;
+    const { type, sakId, saksnummer, status, avbrutt, ventestatus, klagebehandlingId } = behandling;
 
-    const { type, sakId, saksnummer, status, avbrutt, ventestatus } = behandling;
+    const behandlingensKlage = klagebehandlingId
+        ? hentKlagebehandling(sak, klagebehandlingId)
+        : null;
 
     const erSattPåVent = erBehandlingSattPåVent(behandling);
 
@@ -46,10 +47,7 @@ export const RammebehandlingPage = () => {
 
             <BehandlingSkjemaProvider>
                 <div className={style.container}>
-                    <VStack className={style.sidebar} gap={'space-16'}>
-                        <BehandlingStatusTags behandling={behandling} />
-                        <BehandlingSaksopplysninger />
-                    </VStack>
+                    <RammebehandlingSaksopplysninger />
 
                     <VStack className={style.main} gap={'space-16'}>
                         {erSattPåVent && (

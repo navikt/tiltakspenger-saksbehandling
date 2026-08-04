@@ -1,5 +1,5 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { alderFraDato, finn18årsdag, formaterDatotekst } from '~/utils/date';
+import { alderFraDato, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '~/lib/_felles/separator/Separator';
@@ -7,51 +7,33 @@ import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 import OppsummeringAvAttesteringer from '~/lib/behandling-felles/attestering/OppsummeringAvAttestering';
-import { hentTiltaksperiode } from '~/lib/rammebehandling/rammebehandlingUtils';
+import {
+    fyller18ÅrISøknadsperioden,
+    hentTiltaksperiode,
+} from '~/lib/rammebehandling/rammebehandlingUtils';
 import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BehandlingYtelserOpplysninger } from '~/lib/rammebehandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/lib/rammebehandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
-import { erDatoIPeriode, totalPeriode } from '~/utils/periode';
-import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
+import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 
-import style from './BehandlingSaksopplysninger.module.css';
+import style from './RammebehandlingSaksopplysninger.module.css';
 
-export const BehandlingSaksopplysninger = () => {
+export const RammebehandlingSaksopplysninger = () => {
+    const { sak } = useSak();
     const { behandling } = useBehandling();
-    const sak = useSak().sak;
 
     const { saksopplysninger, type, attesteringer } = behandling;
     const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
         saksopplysninger;
 
-    const harYtelser = ytelser.length > 0;
-    const harTiltakspengevedtakFraArena = tiltakspengevedtakFraArena.length > 0;
-    const harTiltaksdeltakelse = tiltaksdeltagelse.length > 0;
-
-    const fyller18ÅrISøknadsperioden = (): boolean => {
-        const attendeBursdag = finn18årsdag(fødselsdato);
-
-        if (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING) {
-            const søknadsperiode = behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
-            return søknadsperiode ? erDatoIPeriode(attendeBursdag, søknadsperiode) : false;
-        }
-
-        // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
-        const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak)
-            .map((beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm)
-            .filter((periode) => periode !== null);
-
-        if (!perioderDetErSøktOm || perioderDetErSøktOm.length === 0) return false;
-
-        return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
-    };
-
     return (
-        <div>
+        <VStack className={style.container}>
+            <BehandlingStatusTags behandling={behandling} className={style.status} />
+
             <HStack justify={'space-between'} gap={'space-8'}>
                 <VStack>
                     <BehandlingSaksopplysning
@@ -63,44 +45,39 @@ export const BehandlingSaksopplysninger = () => {
                         verdi={behandling.beslutter ?? 'Ikke tildelt'}
                     />
                 </VStack>
+
                 <RammebehandlingMeny behandling={behandling} kallesFra={'behandling'} />
             </HStack>
+
             <Separator />
+
             <Heading size={'small'} level={'3'}>
                 {'Saksopplysninger'}
             </Heading>
             <BehandlingOppdaterSaksopplysninger />
+
             <Separator />
 
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
-                {harTiltaksdeltakelse ? (
-                    <BehandlingTiltakOpplysninger
-                        tiltaksdeltakelser={tiltaksdeltagelse}
-                        vurderingsperiode={saksopplysninger.periode}
-                    />
-                ) : (
-                    <BodyShort size={'small'}>Ingen relevante tiltaksdeltakelser</BodyShort>
-                )}
-                <Separator />
+                <BehandlingTiltakOpplysninger
+                    tiltaksdeltakelser={tiltaksdeltagelse}
+                    vurderingsperiode={saksopplysninger.periode}
+                />
             </OpplysningerSeksjon>
+
+            <Separator />
 
             <OpplysningerSeksjon header={'Andre ytelser'}>
-                {harYtelser ? (
-                    <BehandlingYtelserOpplysninger ytelser={ytelser} />
-                ) : (
-                    <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>
-                )}
-                <Separator />
+                <BehandlingYtelserOpplysninger ytelser={ytelser} />
             </OpplysningerSeksjon>
 
+            <Separator />
+
             <OpplysningerSeksjon header={'Tiltakspengevedtak fra Arena'}>
-                {harTiltakspengevedtakFraArena ? (
-                    <BehandlingTiltakspengerArenaOpplysninger vedtak={tiltakspengevedtakFraArena} />
-                ) : (
-                    <BodyShort size={'small'}>Ingen relevante tiltakspengevedtak i Arena</BodyShort>
-                )}
-                <Separator />
+                <BehandlingTiltakspengerArenaOpplysninger vedtak={tiltakspengevedtakFraArena} />
             </OpplysningerSeksjon>
+
+            <Separator />
 
             <OpplysningerSeksjon header={'Alder'}>
                 <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
@@ -108,7 +85,7 @@ export const BehandlingSaksopplysninger = () => {
                     navn={'Fødselsdato'}
                     verdi={formaterDatotekst(fødselsdato)}
                 />
-                {fyller18ÅrISøknadsperioden() && (
+                {fyller18ÅrISøknadsperioden(behandling, sak) && (
                     <BehandlingSaksopplysning
                         navn={'Fyller 18 i perioden bruker har søkt om'}
                         visVarsel
@@ -137,14 +114,14 @@ export const BehandlingSaksopplysninger = () => {
                     <OppsummeringAvAttesteringer attesteringer={attesteringer} />
                 </>
             )}
-        </div>
+        </VStack>
     );
 };
 
 const OpplysningerSeksjon = ({ header, children }: { header: string; children: ReactNode }) => {
     return (
         <div>
-            <Heading size={'small'} level={'3'} className={style.header}>
+            <Heading size={'small'} level={'3'} className={style.seksjonHeader}>
                 {header}
             </Heading>
             {children}
