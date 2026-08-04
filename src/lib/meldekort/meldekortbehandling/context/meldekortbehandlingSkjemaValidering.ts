@@ -13,7 +13,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
-type MeldekortDagValideringsfeil = {
+export type MeldekortDagValideringsfeil = {
     dato: string;
     feil: string;
 };
