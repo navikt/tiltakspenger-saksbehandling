@@ -28,9 +28,10 @@ import {
 import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/validering/MeldeperiodebehandlingValideringsfeil';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { classNames } from '~/utils/classNames';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
+import { hurtigtastTilDagStatus } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/dagStatusHurtigtaster';
 
 import style from './Meldeperiodebehandling.module.css';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
@@ -165,6 +166,12 @@ const MeldeperiodeUke = ({
                             (dag) => dag.dato === dato,
                         );
 
+                        const oppdaterStatus = (status: MeldekortbehandlingDagStatus) =>
+                            dispatch({
+                                type: 'oppdaterDagStatus',
+                                payload: { kjedeId, dagIndex, status },
+                            });
+
                         return (
                             <Table.Row key={dag.dato}>
                                 <Table.DataCell>{ukedagFraDatoKort(dag.dato)}</Table.DataCell>
@@ -172,7 +179,32 @@ const MeldeperiodeUke = ({
                                 <Table.DataCell className={style.ikon}>
                                     {ikonForMeldekortbehandlingDagStatus[dag.status]}
                                 </Table.DataCell>
-                                <Table.DataCell>
+                                <Table.DataCell
+                                    /**
+                                     * Aksel sin Select overskriver onKeyDown med sin egen handler,
+                                     * så vi lytter på cellen og fanger opp hendelsen når den bobler.
+                                     */
+                                    onKeyDown={(e) => {
+                                        if (
+                                            e.altKey ||
+                                            e.ctrlKey ||
+                                            e.metaKey ||
+                                            !(e.target instanceof HTMLSelectElement)
+                                        ) {
+                                            return;
+                                        }
+
+                                        const nyStatus =
+                                            hurtigtastTilDagStatus[e.key.toLowerCase()];
+
+                                        if (!nyStatus) {
+                                            return;
+                                        }
+
+                                        e.preventDefault();
+                                        oppdaterStatus(nyStatus);
+                                    }}
+                                >
                                     {kanEndres ? (
                                         <Select
                                             label={'Velg status for dag'}
@@ -182,15 +214,9 @@ const MeldeperiodeUke = ({
                                             className={style.status}
                                             error={harValideringsfeil}
                                             onChange={(e) =>
-                                                dispatch({
-                                                    type: 'oppdaterDagStatus',
-                                                    payload: {
-                                                        kjedeId,
-                                                        dagIndex,
-                                                        status: e.target
-                                                            .value as MeldekortbehandlingDagStatus,
-                                                    },
-                                                })
+                                                oppdaterStatus(
+                                                    e.target.value as MeldekortbehandlingDagStatus,
+                                                )
                                             }
                                         >
                                             {dagStatusOptions}
