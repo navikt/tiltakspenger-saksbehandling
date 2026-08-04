@@ -15,7 +15,7 @@ import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay, ukenummerFraDatotekst } from '~/utils/date';
 import { benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
-import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
+import { rammebehandlingResultatTekst } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
@@ -107,7 +107,7 @@ const FormkravForm = (props: {
                                             value={vedtak.id}
                                         >
                                             {benkBehandlingstypeTekst[behandling.type]} -{' '}
-                                            {behandlingResultatTilText[vedtak.resultat]} -{' '}
+                                            {rammebehandlingResultatTekst[vedtak.resultat]} -{' '}
                                             {formaterTidspunktKort(vedtak.opprettet)}
                                         </option>
                                     );

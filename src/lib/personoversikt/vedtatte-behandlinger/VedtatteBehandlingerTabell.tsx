@@ -1,7 +1,7 @@
 import { ActionMenu, Button, HStack, Table } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
-    finnBehandlingstypeTekst,
+    rammebehandlingstypeTekst,
     klagebehandlingResultatTilText,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
@@ -95,7 +95,7 @@ const RammevedtakMedBehandlingRad = ({
             shadeOnHover={false}
             className={classNames(omgjortGrad && omgjortGradStyle[omgjortGrad])}
         >
-            <Table.DataCell>{finnBehandlingstypeTekst[behandling.type]}</Table.DataCell>
+            <Table.DataCell>{rammebehandlingstypeTekst[behandling.type]}</Table.DataCell>
             <Table.DataCell>
                 {behandlingResultatTilTag(
                     resultat,

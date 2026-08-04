@@ -5,7 +5,7 @@ import router from 'next/router';
 import { useStartRevurdering } from './useStartRevurdering';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { behandlingUrl } from '~/utils/urls';
-import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
+import { rammebehandlingResultatTekst } from '~/utils/tekstformateringUtils';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 type Props = {
@@ -54,7 +54,7 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
                             });
                         }}
                     >
-                        {`Opprett revurdering${valgtType ? ` (${behandlingResultatTilText[valgtType]})` : ''}`}
+                        {`Opprett revurdering${valgtType ? ` (${rammebehandlingResultatTekst[valgtType]})` : ''}`}
                     </Button>
                 }
             >

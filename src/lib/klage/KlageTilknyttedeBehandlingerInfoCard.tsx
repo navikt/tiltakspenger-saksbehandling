@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunktKort } from '~/utils/date';
-import { finnBehandlingstypeTekst, behandlingResultatTilText } from '~/utils/tekstformateringUtils';
+import {
+    rammebehandlingstypeTekst,
+    rammebehandlingResultatTekst,
+} from '~/utils/tekstformateringUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import {
     MeldekortbehandlingId,
@@ -48,9 +51,9 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                                                 id: rammebehandling.id,
                                             })}
                                         >
-                                            {finnBehandlingstypeTekst[rammebehandling.type]} -{' '}
-                                            {behandlingResultatTilText[rammebehandling.resultat]} -{' '}
-                                            {formaterTidspunktKort(rammebehandling.opprettet)}
+                                            {rammebehandlingstypeTekst[rammebehandling.type]} -{' '}
+                                            {rammebehandlingResultatTekst[rammebehandling.resultat]}{' '}
+                                            - {formaterTidspunktKort(rammebehandling.opprettet)}
                                         </Link>
                                     </div>
                                 );

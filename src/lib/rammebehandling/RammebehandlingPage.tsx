@@ -8,7 +8,7 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, Box, VStack } from '@navikt/ds-react';
-import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
+import { RammebehandlingStatusTags } from '~/lib/rammebehandling/felles/status/RammebehandlingStatusTags';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useSak } from '~/lib/sak/SakContext';
@@ -16,8 +16,6 @@ import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ve
 import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
-import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { Separator } from '~/lib/_felles/separator/Separator';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 import style from './RammebehandlingPage.module.css';
@@ -29,17 +27,7 @@ export const RammebehandlingPage = () => {
     const behandlingensKlage =
         sak.klagebehandlinger.find((kb) => kb.id === behandling.klagebehandlingId) ?? null;
 
-    const {
-        id,
-        sistEndret,
-        type,
-        sakId,
-        saksnummer,
-        status,
-        avbrutt,
-        ventestatus,
-        saksopplysninger,
-    } = behandling;
+    const { type, sakId, saksnummer, status, avbrutt, ventestatus } = behandling;
 
     const erSattPåVent = erBehandlingSattPåVent(behandling);
 
@@ -54,32 +42,16 @@ export const RammebehandlingPage = () => {
                         ? PersonoversiktTab.VedtatteBehandlinger
                         : PersonoversiktTab.ÅpneBehandlinger
                 }
-            >
-                {finnBehandlingStatusTag(status, false, erSattPåVent)}
-            </PersonaliaHeader>
+            />
 
-            {/*
-            Veldig viktig at key ikke blir fjernet. På denne måten kan vi tvinge skjema-contextene til å rerendre seg når man bytter eller oppdaterer behandlingen.
-            For eksempel ved å bruke 'Til behandling' lenken i SøknadOpplysningerFraVedtak komponenten.
-            Uten denne keyen vil skjema-contextene beholde state fra forrige behandling, og dette kan føre til en error.
-
-            Raskeste, og enkleste fiks uten å endre for mye på eksisterende kode.
-            */}
-            <BehandlingSkjemaProvider
-                key={`${id}-${sistEndret}-${saksopplysninger.oppslagstidspunkt}`}
-            >
+            <BehandlingSkjemaProvider>
                 <div className={style.container}>
-                    <VStack className={style.sidebar} gap="space-32">
+                    <VStack className={style.sidebar} gap={'space-32'}>
+                        <RammebehandlingStatusTags behandling={behandling} />
                         <BehandlingSaksopplysninger />
-                        {ventestatus.length > 0 && !erSattPåVent && (
-                            <>
-                                <Separator />
-                                <OppsummeringAvVentestatuser ventestatuser={ventestatus} />
-                            </>
-                        )}
                     </VStack>
 
-                    <VStack className={style.main} gap="space-16">
+                    <VStack className={style.main} gap={'space-16'}>
                         {erSattPåVent && (
                             <OppsummeringAvVentestatus
                                 ventestatus={ventestatus.at(0)!}

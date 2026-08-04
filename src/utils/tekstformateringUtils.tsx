@@ -1,10 +1,9 @@
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { BrukersMeldekortDagStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Tag } from '@navikt/ds-react';
 import {
     RammebehandlingResultat,
-    Rammebehandlingsstatus,
     Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
@@ -20,76 +19,6 @@ import {
     KlagebehandlingStatus,
     OmgjøringÅrsak,
 } from '~/lib/klage/typer/Klage';
-
-export const finnBehandlingStatusTag = (
-    status: Rammebehandlingsstatus,
-    underkjent: boolean,
-    erSattPåVent: boolean = false,
-) => {
-    if (
-        (status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
-            status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
-            status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING ||
-            status === Rammebehandlingsstatus.UNDER_BESLUTNING) &&
-        erSattPåVent
-    ) {
-        return (
-            <Tag data-color="warning" variant="outline">
-                Satt på vent
-            </Tag>
-        );
-    }
-    if (
-        (status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
-            status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
-        underkjent
-    ) {
-        return (
-            <Tag data-color="warning" variant="outline">
-                Underkjent
-            </Tag>
-        );
-    }
-    return behandlingStatusTag[status];
-};
-
-const behandlingStatusTag: Record<Rammebehandlingsstatus, React.ReactElement> = {
-    [Rammebehandlingsstatus.VEDTATT]: (
-        <Tag data-color="success" variant="outline">
-            Vedtatt
-        </Tag>
-    ),
-    [Rammebehandlingsstatus.KLAR_TIL_BEHANDLING]: (
-        <Tag data-color="info" variant="outline">
-            Klar til behandling
-        </Tag>
-    ),
-    [Rammebehandlingsstatus.KLAR_TIL_BESLUTNING]: (
-        <Tag data-color="info" variant="outline">
-            Klar til beslutning
-        </Tag>
-    ),
-    [Rammebehandlingsstatus.UNDER_BEHANDLING]: (
-        <Tag data-color="info" variant="outline">
-            Under behandling
-        </Tag>
-    ),
-    [Rammebehandlingsstatus.UNDER_BESLUTNING]: (
-        <Tag data-color="info" variant="outline">
-            Under beslutning
-        </Tag>
-    ),
-    [Rammebehandlingsstatus.AVBRUTT]: (
-        <Tag data-color="neutral" variant="outline">
-            Avsluttet
-        </Tag>
-    ),
-    [Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: (
-        <Tag data-color="neutral" variant="outline">
-            Under automatisk behandling
-        </Tag>
-    ),
-};
 
 export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
     [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]: 'Deltatt',
@@ -120,12 +49,12 @@ export const meldekortbehandlingDagStatusTekst: Record<MeldekortbehandlingDagSta
     [MeldekortbehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
 } as const;
 
-export const finnBehandlingstypeTekst: Record<Rammebehandlingstype, string> = {
+export const rammebehandlingstypeTekst: Record<Rammebehandlingstype, string> = {
     [Rammebehandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
     [Rammebehandlingstype.REVURDERING]: 'Revurdering',
 } as const;
 
-export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {
+export const rammebehandlingResultatTekst: Record<RammebehandlingResultat, string> = {
     [SøknadsbehandlingResultat.AVSLAG]: 'Avslag',
     [SøknadsbehandlingResultat.INNVILGELSE]: 'Innvilgelse',
     [SøknadsbehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
@@ -134,13 +63,13 @@ export const behandlingResultatTilText: Record<RammebehandlingResultat, string> 
     [RevurderingResultat.OMGJØRING]: 'Omgjøring med innvilgelse',
     [RevurderingResultat.OMGJØRING_OPPHØR]: 'Opphør',
     [RevurderingResultat.OMGJØRING_IKKE_VALGT]: 'Ikke valgt',
-};
+} as const;
 
 export function behandlingResultatTilTag(
     resultat: RammebehandlingResultat,
     ekstraTekst?: string,
 ): ReactElement {
-    const resultatText = behandlingResultatTilText[resultat];
+    const resultatText = rammebehandlingResultatTekst[resultat];
 
     switch (resultat) {
         case SøknadsbehandlingResultat.AVSLAG:
@@ -356,7 +285,7 @@ export const utbetalingsstatusTekst: Record<Utbetalingsstatus, string> = {
     IKKE_GODKJENT: 'Ikke godkjent',
 };
 
-export const formaterSøknadsspørsmålSvar = (value: string | undefined) => {
+export const formaterSøknadsspørsmålSvar = (value: string | undefined): string => {
     switch (value) {
         case 'JA':
             return 'Ja';
@@ -371,7 +300,9 @@ export const formaterSøknadsspørsmålSvar = (value: string | undefined) => {
     }
 };
 
-export const formaterSøknadstype = (value: Søknadstype | SøknadstypeManueltRegistrertSøknad) => {
+export const formaterSøknadstype = (
+    value: Søknadstype | SøknadstypeManueltRegistrertSøknad,
+): string => {
     switch (value) {
         case 'DIGITAL':
             return 'Digital';
@@ -388,7 +319,7 @@ export const formaterSøknadstype = (value: Søknadstype | SøknadstypeManueltRe
 
 export const formaterSøknadBehandlingsårsak = (
     value: Behandlingsårsak | SøknadBehandlingsårsakManueltRegistrertSøknad,
-) => {
+): string => {
     switch (value) {
         case 'FORLENGELSE_FRA_ARENA':
             return 'Forlengelse fra Arena';

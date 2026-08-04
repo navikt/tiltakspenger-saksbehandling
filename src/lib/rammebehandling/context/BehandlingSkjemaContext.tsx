@@ -41,7 +41,21 @@ export type BehandlingSkjemaContext = BehandlingSkjemaContextBase<BehandlingSkje
 const StateContext = createContext({} as BehandlingSkjemaContext);
 const DispatchContext = createContext((() => ({})) as Dispatch<BehandlingSkjemaActions>);
 
+// Key for å sikre at skjema state resettes når behandlingen endres
 export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
+    const { behandling } = useBehandling();
+    const { id, sistEndret, saksopplysninger } = behandling;
+
+    return (
+        <BehandlingSkjemaProviderInner
+            key={`${id}-${sistEndret}-${saksopplysninger.oppslagstidspunkt}`}
+        >
+            {children}
+        </BehandlingSkjemaProviderInner>
+    );
+};
+
+const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
 

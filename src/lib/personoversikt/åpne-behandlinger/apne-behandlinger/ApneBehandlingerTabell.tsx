@@ -2,7 +2,6 @@ import { ÅpenBehandling, ÅpenBehandlingType } from '~/lib/personoversikt/typer
 import { Alert, Button, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
-    finnBehandlingStatusTag,
     klagebehandlingResultatTilTag,
     klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
@@ -17,10 +16,7 @@ import {
 } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import {
-    erBehandlingSattPåVent,
-    erBehandlingUnderkjent,
-} from '~/lib/behandling-felles/utils/behandlingUtils';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     hentKlagebehandling,
@@ -36,6 +32,7 @@ import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
+import { RammebehandlingStatusTags } from '~/lib/rammebehandling/felles/status/RammebehandlingStatusTags';
 import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/utils/beløp';
@@ -168,17 +165,15 @@ const propsForRad = (
         case ÅpenBehandlingType.REVURDERING: {
             const rammebehandling = hentRammebehandling(sak, åpenBehandling.id);
 
-            const { opprettet, status, resultat, saksbehandler, beslutter, vedtaksperiode } =
+            const { opprettet, resultat, saksbehandler, beslutter, vedtaksperiode } =
                 rammebehandling;
 
             return {
                 typeTekst,
                 opprettet,
                 resultatTag: behandlingResultatTilTag(resultat),
-                statusTag: finnBehandlingStatusTag(
-                    status,
-                    erBehandlingUnderkjent(rammebehandling),
-                    erBehandlingSattPåVent(rammebehandling),
+                statusTag: (
+                    <RammebehandlingStatusTags behandling={rammebehandling} kompakt={true} />
                 ),
                 saksbehandler,
                 beslutter,
