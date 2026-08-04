@@ -10,9 +10,6 @@ import {
     BehandlingLagringResultat,
     BehandlingLagringVarsler,
 } from '~/lib/rammebehandling/felles/handlinger/varsler/BehandlingLagringVarsler';
-import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
-
-import style from './RammebehandlingSaksbehandlerHandlinger.module.css';
 
 type Props = {
     behandling: Rammebehandling;
@@ -42,15 +39,13 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
     };
 
     return (
-        <>
-            <VStack className={style.varsler} gap={'space-8'}>
+        <VStack gap={'space-16'}>
+            <VStack gap={'space-8'}>
                 <BehandlingValideringVarsler resultat={valideringResultat} />
                 <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
             </VStack>
 
             <HStack gap={'space-16'} justify={'space-between'}>
-                <RammebehandlingMeny behandling={behandling} kallesFra={'behandling'} />
-
                 <HStack gap={'space-16'} justify={'end'}>
                     <BehandlingLagreKnapp
                         behandling={behandling}
@@ -70,6 +65,6 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
                     />
                 </HStack>
             </HStack>
-        </>
+        </VStack>
     );
 };

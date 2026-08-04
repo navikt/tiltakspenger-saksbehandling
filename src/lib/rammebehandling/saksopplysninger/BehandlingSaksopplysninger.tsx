@@ -1,4 +1,4 @@
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { alderFraDato, finn18årsdag, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
@@ -13,11 +13,12 @@ import { BehandlingYtelserOpplysninger } from '~/lib/rammebehandling/saksopplysn
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/lib/rammebehandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
-
-import style from './BehandlingSaksopplysninger.module.css';
 import { erDatoIPeriode, totalPeriode } from '~/utils/periode';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { useSak } from '~/lib/sak/SakContext';
+import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
+
+import style from './BehandlingSaksopplysninger.module.css';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
@@ -51,14 +52,19 @@ export const BehandlingSaksopplysninger = () => {
 
     return (
         <div>
-            <BehandlingSaksopplysning
-                navn="Saksbehandler"
-                verdi={behandling.saksbehandler ?? 'Ikke tildelt'}
-            />
-            <BehandlingSaksopplysning
-                navn="Beslutter"
-                verdi={behandling?.beslutter ?? 'Ikke tildelt'}
-            />
+            <HStack justify={'space-between'} gap={'space-8'}>
+                <VStack>
+                    <BehandlingSaksopplysning
+                        navn="Saksbehandler"
+                        verdi={behandling.saksbehandler ?? 'Ikke tildelt'}
+                    />
+                    <BehandlingSaksopplysning
+                        navn="Beslutter"
+                        verdi={behandling.beslutter ?? 'Ikke tildelt'}
+                    />
+                </VStack>
+                <RammebehandlingMeny behandling={behandling} kallesFra={'behandling'} />
+            </HStack>
             <Separator />
             <Heading size={'small'} level={'3'}>
                 {'Saksopplysninger'}

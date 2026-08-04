@@ -1,5 +1,0 @@
-.varsler {
-    &:not(:empty) {
-        margin-bottom: 1rem;
-    }
-}

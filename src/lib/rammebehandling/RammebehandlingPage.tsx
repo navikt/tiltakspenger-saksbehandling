@@ -8,7 +8,6 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, Box, VStack } from '@navikt/ds-react';
-
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
@@ -47,7 +46,7 @@ export const RammebehandlingPage = () => {
 
             <BehandlingSkjemaProvider>
                 <div className={style.container}>
-                    <VStack className={style.sidebar} gap={'space-32'}>
+                    <VStack className={style.sidebar} gap={'space-16'}>
                         <BehandlingStatusTags behandling={behandling} />
                         <BehandlingSaksopplysninger />
                     </VStack>

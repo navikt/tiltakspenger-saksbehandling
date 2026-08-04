@@ -1,4 +1,4 @@
-import { Alert, HStack } from '@navikt/ds-react';
+import { Alert, HStack, InlineMessage } from '@navikt/ds-react';
 import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
@@ -6,7 +6,6 @@ import { BehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/
 import { RammebehandlingSaksbehandlerHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingSaksbehandlerHandlinger';
 import { formaterTidspunkt } from '~/utils/date';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 import { RammebehandlingUnderkjenn } from '~/lib/rammebehandling/felles/handlinger/underkjenn/RammebehandlingUnderkjenn';
 import { RammebehandlingGodkjenn } from '~/lib/rammebehandling/felles/handlinger/godkjenn/RammebehandlingGodkjenn';
 
@@ -23,24 +22,24 @@ export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) =
 
     return (
         <VedtakSeksjon>
-            <VedtakSeksjon.Venstre>
-                {erSaksbehandler ? (
+            <VedtakSeksjon.Venstre gap={'space-16'}>
+                {erSaksbehandler && (
                     <RammebehandlingSaksbehandlerHandlinger
                         behandling={behandling}
                         lagringProps={lagringProps}
                     />
-                ) : (
-                    <HStack gap={'space-16'} justify={'space-between'}>
-                        <RammebehandlingMeny behandling={behandling} kallesFra={'behandling'} />
+                )}
 
-                        {erBeslutter && (
-                            <HStack gap={'space-16'} justify={'end'}>
-                                <RammebehandlingUnderkjenn behandling={behandling} />
-                                <RammebehandlingGodkjenn />
-                            </HStack>
-                        )}
+                {erBeslutter && (
+                    <HStack gap={'space-16'} justify={'end'}>
+                        <RammebehandlingUnderkjenn behandling={behandling} />
+                        <RammebehandlingGodkjenn />
                     </HStack>
                 )}
+
+                <InlineMessage status={'info'} size={'small'}>
+                    {'Handlinger er flyttet til menyen, øverst til venstre'}
+                </InlineMessage>
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Høyre>
