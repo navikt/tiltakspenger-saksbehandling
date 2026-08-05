@@ -29,6 +29,7 @@ export type MeldeperiodekjedeProps = {
     periode: Periode;
     tiltaksnavn: string[];
     sisteMeldeperiode: MeldeperiodeProps;
+    // Sortert på opprettet tidspunkt
     meldekortbehandlingIder: MeldekortbehandlingId[];
     meldekortbehandlingStatus: MeldekortbehandlingStatus | null;
     brukersMeldekort: BrukersMeldekortProps[];
@@ -36,6 +37,7 @@ export type MeldeperiodekjedeProps = {
     gjeldendeBeregning: MeldeperiodeBeregningProps | null;
     /** Satt kun når kjeden ikke kan behandles */
     kanIkkeBehandlesGrunn: KanIkkeBehandlesGrunn | null;
+    åpenBehandlingId: MeldekortbehandlingId | null;
 };
 
 export enum KanIkkeBehandlesGrunn {

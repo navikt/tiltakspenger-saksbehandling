@@ -15,7 +15,6 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { validerMeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import { DagStatusHurtigtasterHelpText } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/DagStatusHurtigtasterHelpText';
 
 import style from './Meldeperiodebehandlinger.module.css';
 
@@ -53,7 +52,7 @@ export const Meldeperiodebehandlinger = () => {
                             </>
                         )}
 
-                        <DagStatusHurtigtasterHelpText />
+                        {/*<DagStatusHurtigtasterHelpText />*/}
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>
             </MeldekortbehandlingSeksjon>

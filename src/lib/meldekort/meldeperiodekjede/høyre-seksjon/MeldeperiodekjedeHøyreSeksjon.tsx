@@ -13,12 +13,11 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
     const router = useRouter();
 
     const { meldeperiodeKjede } = useMeldeperiodekjede();
-    const { id, gjeldendeBeregning, brukersMeldekort, meldekortbehandlingIder } = meldeperiodeKjede;
-
-    const harBehandlinger = meldekortbehandlingIder.length > 0;
+    const { id, gjeldendeBeregning, brukersMeldekort, åpenBehandlingId, meldekortbehandlingIder } =
+        meldeperiodeKjede;
 
     const [aktivTab, setAktivTab] = useState<MeldeperiodekjedeTab>(
-        harBehandlinger ? MeldeperiodekjedeTab.Behandlinger : MeldeperiodekjedeTab.Beregning,
+        åpenBehandlingId ? MeldeperiodekjedeTab.Behandlinger : MeldeperiodekjedeTab.Beregning,
     );
 
     useEffect(() => {

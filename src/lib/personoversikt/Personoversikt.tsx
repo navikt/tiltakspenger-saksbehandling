@@ -49,6 +49,7 @@ export const Personoversikt = () => {
         alleKlagevedtak,
         tilbakekrevinger,
         meldeperiodeKjeder,
+        åpneBehandlinger,
     } = sak;
 
     const [aktivTab, setAktivTab] = useState<PersonoversiktTab>(DEFAULT_TAB);
@@ -89,7 +90,7 @@ export const Personoversikt = () => {
                 <Tabs.List className={styles.tabsList}>
                     <Tabs.Tab
                         value={PersonoversiktTab.ÅpneBehandlinger}
-                        label={'Åpne behandlinger'}
+                        label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
                         icon={<FileIcon aria-hidden />}
                         className={styles.tab}
                     />

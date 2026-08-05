@@ -9,9 +9,9 @@ import { useRouter } from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useOpprettMeldekortbehandling } from '../../../felles/opprett/useOpprettMeldekortbehandling';
 import { kanIkkeBehandlesGrunnTekst } from '~/lib/meldekort/utils/tekster';
+import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 import style from './MeldekortbehandlingOpprett.module.css';
-import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 export const MeldekortbehandlingOpprett = () => {
     const { sakId, saksnummer } = useSak().sak;
@@ -40,7 +40,9 @@ export const MeldekortbehandlingOpprett = () => {
     return (
         <VStack gap={'space-16'}>
             {opprettMeldekortbehandlingError && (
-                <Infokort variant={'feil'}>{opprettMeldekortbehandlingError.message}</Infokort>
+                <Infokort variant={'feil'} size={'small'}>
+                    {opprettMeldekortbehandlingError.message}
+                </Infokort>
             )}
 
             {kanIkkeBehandlesGrunn && (
@@ -50,7 +52,7 @@ export const MeldekortbehandlingOpprett = () => {
             )}
 
             <Button
-                disabled={kanBehandleMeldeperiodekjede(meldeperiodeKjede)}
+                disabled={!kanBehandleMeldeperiodekjede(meldeperiodeKjede)}
                 onClick={() => modalRef.current?.showModal()}
                 className={style.knapp}
             >
