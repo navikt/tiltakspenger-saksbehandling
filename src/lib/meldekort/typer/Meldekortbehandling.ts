@@ -121,10 +121,6 @@ export type MeldekortbehandlingProps = {
     meldeperioder: MeldeperiodebehandlingProps[];
     avbrutt: Nullable<Avbrutt>;
     simulertBeregning: Nullable<SimulertBeregning>;
-    /**
-     * Kontrollberegningen og -simuleringen som kjøres når behandlingen sendes videre i flyten.
-     * Null dersom kontrollen ikke er kjørt enda.
-     */
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
