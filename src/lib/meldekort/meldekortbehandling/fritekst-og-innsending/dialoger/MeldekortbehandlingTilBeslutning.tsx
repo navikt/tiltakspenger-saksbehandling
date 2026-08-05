@@ -13,10 +13,12 @@ import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { useMeldekortbehandlingSkjemaLagring } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { validerMeldekortbehandlingSkjema } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { MeldekortbehandlingValideringsfeil } from '~/lib/meldekort/meldekortbehandling/send-inn/validering/MeldekortbehandlingValideringsfeil';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { FetcherError } from '~/utils/fetch/fetch';
+import { useState } from 'react';
 
 export const MeldekortbehandlingTilBeslutning = () => {
-    const { sak } = useSak();
+    const { sak, setSak } = useSak();
     const meldekortbehandling = useMeldekortbehandling();
     const { id } = meldekortbehandling;
 
@@ -25,20 +27,33 @@ export const MeldekortbehandlingTilBeslutning = () => {
     const skjema = useMeldekortbehandlingSkjema();
     const { isDirty } = useMeldekortbehandlingSkjemaLagring();
 
-    const { trigger, error, isMutating, reset } = useFetchJsonFraApi<MeldeperiodekjedeProps>(
-        `/sak/${sak.sakId}/meldekort/${id}/sendtilbeslutning`,
-        'POST',
-    );
+    const [åpen, setÅpen] = useState(false);
+
+    const { trigger, error, isMutating, reset } = useFetchJsonFraApi<
+        SakProps,
+        undefined,
+        FetcherError<SakProps>
+    >(`/sak/${sak.sakId}/meldekort/${id}/sendtilbeslutning`, 'POST', {
+        throwOnError: true,
+    });
 
     const sendTilBeslutning = () => {
-        trigger().then((response) => {
-            if (response) {
+        trigger()
+            .then((oppdatertSak) => {
+                setSak(oppdatertSak);
+                setÅpen(false);
                 navigateWithNotification(
                     personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
                     'Meldekortet er sendt til beslutter!',
                 );
-            }
-        });
+            })
+            .catch((error: FetcherError<SakProps>) => {
+                if (error.data) {
+                    setSak(error.data);
+                } else {
+                    console.error('Forventet oppdatert sak ved feil fra backend');
+                }
+            });
     };
 
     const skjemaValideringsfeil = validerMeldekortbehandlingSkjema(
@@ -59,7 +74,13 @@ export const MeldekortbehandlingTilBeslutning = () => {
                 </InlineMessage>
             )}
 
-            <Dialog onOpenChange={reset}>
+            <Dialog
+                open={åpen}
+                onOpenChange={(nyÅpen) => {
+                    setÅpen(nyÅpen);
+                    reset();
+                }}
+            >
                 <Dialog.Trigger>
                     <Button
                         variant={'primary'}

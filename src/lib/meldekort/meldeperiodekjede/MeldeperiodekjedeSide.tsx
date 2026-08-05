@@ -4,7 +4,7 @@ import { MeldeperiodekjedeVenstreSeksjon } from '~/lib/meldekort/meldeperiodekje
 import { MeldeperiodekjedeHøyreSeksjon } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { MeldeperiodekjedeProvider } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 
 import style from './MeldeperiodekjedeSide.module.css';
 
@@ -13,25 +13,20 @@ type Props = {
 };
 
 export const MeldeperiodekjedeSide = ({ kjedeId }: Props) => {
-    const { sakId, saksnummer, meldeperiodeKjeder } = useSak().sak;
+    const { sak } = useSak();
+    const { sakId, saksnummer } = sak;
 
-    const kjede = meldeperiodeKjeder.find((it) => it.id === kjedeId);
+    const kjede = hentMeldeperiodekjede(sak, kjedeId);
 
     return (
         <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
-            {kjede ? (
-                <MeldeperiodekjedeProvider meldeperiodeKjede={kjede}>
-                    <div className={style.layout}>
-                        <MeldeperiodekjedeVenstreSeksjon />
-                        <MeldeperiodekjedeHøyreSeksjon />
-                    </div>
-                </MeldeperiodekjedeProvider>
-            ) : (
-                <Infokort data-color={'danger'}>
-                    {`Fant ikke meldeperiodekjede ${kjedeId}`}
-                </Infokort>
-            )}
+            <MeldeperiodekjedeProvider meldeperiodeKjede={kjede}>
+                <div className={style.layout}>
+                    <MeldeperiodekjedeVenstreSeksjon />
+                    <MeldeperiodekjedeHøyreSeksjon />
+                </div>
+            </MeldeperiodekjedeProvider>
         </>
     );
 };

@@ -12,7 +12,7 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { Nullable, PartialRecord } from '~/types/UtilTypes';
+import { PartialRecord } from '~/types/UtilTypes';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 export type SakId = `sak_${string}`;
@@ -40,7 +40,6 @@ export type SakProps = {
     meldekortvedtak: Meldekortvedtak[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
     meldeperiodeKjeder: MeldeperiodekjedeProps[];
-    åpenMeldekortbehandlingId: Nullable<MeldekortbehandlingId>;
 
     tidslinje: TidslinjeRammevedtak;
     innvilgetTidslinje: TidslinjeRammevedtak;

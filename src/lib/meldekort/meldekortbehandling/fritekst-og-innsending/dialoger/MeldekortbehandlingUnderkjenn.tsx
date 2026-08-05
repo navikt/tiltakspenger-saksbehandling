@@ -8,7 +8,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const MeldekortbehandlingUnderkjenn = () => {
     const { sak } = useSak();
@@ -19,10 +19,10 @@ export const MeldekortbehandlingUnderkjenn = () => {
 
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<
-        MeldeperiodekjedeProps,
-        { begrunnelse: string }
-    >(`/sak/${sak.sakId}/meldekort/${id}/underkjenn`, 'POST');
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { begrunnelse: string }>(
+        `/sak/${sak.sakId}/meldekort/${id}/underkjenn`,
+        'POST',
+    );
 
     const underkjenn = () => {
         const begrunnelseTrimmed = begrunnelse.trim();

@@ -1,0 +1,14 @@
+.tips {
+    margin-inline-start: auto;
+}
+
+.hurtigtaster {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+}
+
+.hurtigtaster dd {
+    margin: 0;
+}

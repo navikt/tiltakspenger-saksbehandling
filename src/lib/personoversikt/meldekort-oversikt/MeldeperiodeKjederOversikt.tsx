@@ -5,7 +5,7 @@ import { formatterBeløp } from '~/utils/beløp';
 import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodekjedeProps, KanIkkeBehandlesGrunn } from '~/lib/meldekort/typer/Meldeperiode';
 import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
 
 import style from './MeldeperiodeKjederOversikt.module.css';
@@ -16,23 +16,23 @@ type Props = {
 };
 
 export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: Props) => {
-    const [visIkkeKlare, setVisIkkeKlare] = useState(false);
+    const [visIkkeStartede, setVisIkkeStartede] = useState(false);
 
-    const antallIkkeKlare = meldeperiodeKjeder.filter((kjede) => !kjede.erKlarTilUtfylling).length;
+    const antallIkkeStartede = meldeperiodeKjeder.filter(harIkkeStartet).length;
 
-    const synligeKjeder = visIkkeKlare
+    const synligeKjeder = visIkkeStartede
         ? meldeperiodeKjeder
-        : meldeperiodeKjeder.filter((kjede) => kjede.erKlarTilUtfylling);
+        : meldeperiodeKjeder.filter((kjede) => !harIkkeStartet(kjede));
 
     return (
         <VStack gap={'space-8'}>
-            {antallIkkeKlare > 0 && (
+            {antallIkkeStartede > 0 && (
                 <Checkbox
                     size={'small'}
-                    checked={visIkkeKlare}
-                    onChange={(e) => setVisIkkeKlare(e.target.checked)}
+                    checked={visIkkeStartede}
+                    onChange={(e) => setVisIkkeStartede(e.target.checked)}
                 >
-                    {`Vis meldeperioder som ikke er klare til behandling (${antallIkkeKlare})`}
+                    {`Vis meldeperioder som ikke har startet (${antallIkkeStartede})`}
                 </Checkbox>
             )}
 
@@ -66,18 +66,19 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                                 meldekortbehandlingIder,
                                 brukersMeldekort,
                                 sisteMeldeperiode,
-                                erKlarTilUtfylling,
                             } = kjede;
 
                             const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
+
+                            const ikkeStartet = harIkkeStartet(kjede);
 
                             return (
                                 <Table.Row
                                     shadeOnHover={false}
                                     key={id}
-                                    className={erKlarTilUtfylling ? undefined : style.ikkeKlarRad}
+                                    className={ikkeStartet ? style.ikkeStartetRad : undefined}
                                 >
-                                    <Table.DataCell>{`${formaterMeldeperiode(periode)}${erKlarTilUtfylling ? '' : ' (ikke klar)'}`}</Table.DataCell>
+                                    <Table.DataCell>{`${formaterMeldeperiode(periode)}${ikkeStartet ? ' (ikke startet)' : ''}`}</Table.DataCell>
                                     <Table.DataCell>
                                         {`${brukersMeldekortKjedeStatusTekst[brukersMeldekortStatus]} (${brukersMeldekort.length})`}
                                     </Table.DataCell>
@@ -113,3 +114,6 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
         </VStack>
     );
 };
+
+const harIkkeStartet = ({ kanIkkeBehandlesGrunn }: MeldeperiodekjedeProps): boolean =>
+    kanIkkeBehandlesGrunn === KanIkkeBehandlesGrunn.MELDEPERIODEN_HAR_IKKE_STARTET;

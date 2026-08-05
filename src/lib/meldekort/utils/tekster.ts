@@ -3,6 +3,16 @@ import {
     MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { KanIkkeBehandlesGrunn } from '~/lib/meldekort/typer/Meldeperiode';
+
+export const kanIkkeBehandlesGrunnTekst: Record<KanIkkeBehandlesGrunn, string> = {
+    [KanIkkeBehandlesGrunn.HAR_ÅPEN_BEHANDLING]:
+        'Meldeperioden finnes allerede i en åpen behandling.',
+    [KanIkkeBehandlesGrunn.MELDEPERIODEN_HAR_IKKE_STARTET]:
+        'Meldeperioden har ikke startet, og kan ikke fylles ut ennå.',
+    [KanIkkeBehandlesGrunn.INGEN_DAGER_GIR_RETT]:
+        'Ingen dager i meldeperioden gir rett til tiltakspenger.',
+} as const;
 
 export const brukersMeldekortKjedeStatusTekst: Record<BrukersMeldekortKjedeStatus, string> = {
     [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',

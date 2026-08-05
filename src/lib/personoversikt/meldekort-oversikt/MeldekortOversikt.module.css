@@ -1,3 +1,7 @@
 .toppSeksjon {
     max-width: 1080px;
+
+    &:empty {
+        display: none;
+    }
 }

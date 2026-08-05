@@ -23,6 +23,7 @@ import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Søknad, SøknadId } from '~/types/Søknad';
+import { ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, rammebehandlinger } = sak;
@@ -148,6 +149,12 @@ export const hentMeldekortvedtakMedBehandlinger = (
         };
     });
 };
+
+// Henter de åpne meldekortbehandlingene på saken
+export const hentÅpneMeldekortbehandlinger = (sak: SakProps): MeldekortbehandlingProps[] =>
+    sak.åpneBehandlinger
+        .filter((åpenBehandling) => åpenBehandling.type === ÅpenBehandlingType.MELDEKORT)
+        .map((åpenBehandling) => hentMeldekortbehandling(sak, åpenBehandling.id));
 
 export const hentKlagebehandling = (sak: SakProps, klageId: KlageId): Klagebehandling => {
     const klagebehandling = sak.klagebehandlinger.find((klage) => klage.id === klageId);

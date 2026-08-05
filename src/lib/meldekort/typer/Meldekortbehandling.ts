@@ -5,7 +5,11 @@ import { Periode } from '~/types/Periode';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
-import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
+import {
+    KanIkkeIverksetteUtbetalingGrunn,
+    Utbetalingskontroll,
+    Utbetalingsstatus,
+} from '~/types/Utbetaling';
 import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
@@ -23,7 +27,6 @@ export enum MeldekortbehandlingStatus {
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
     GODKJENT = 'GODKJENT',
-    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
     AUTOMATISK_BEHANDLET = 'AUTOMATISK_BEHANDLET',
     AVBRUTT = 'AVBRUTT',
 }
@@ -118,6 +121,7 @@ export type MeldekortbehandlingProps = {
     meldeperioder: MeldeperiodebehandlingProps[];
     avbrutt: Nullable<Avbrutt>;
     simulertBeregning: Nullable<SimulertBeregning>;
+    utbetalingskontroll: Nullable<Utbetalingskontroll>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;

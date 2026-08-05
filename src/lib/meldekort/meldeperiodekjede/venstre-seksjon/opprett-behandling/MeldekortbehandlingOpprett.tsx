@@ -1,27 +1,22 @@
-import { BodyShort, Button, InlineMessage, Loader, VStack } from '@navikt/ds-react';
+import { Button, Loader, VStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useRouter } from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useOpprettMeldekortbehandling } from '../../../felles/opprett/useOpprettMeldekortbehandling';
+import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
+import { kanIkkeBehandlesGrunnTekst } from '~/lib/meldekort/utils/tekster';
+import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 import style from './MeldekortbehandlingOpprett.module.css';
 
 export const MeldekortbehandlingOpprett = () => {
-    const { sakId, saksnummer, åpenMeldekortbehandlingId } = useSak().sak;
-    const {
-        id: kjedeId,
-        meldekortbehandlingIder,
-        kanBehandles,
-        erKlarTilUtfylling,
-        sisteMeldeperiode,
-    } = useMeldeperiodekjede().meldeperiodeKjede;
-    const { ingenDagerGirRett } = sisteMeldeperiode;
+    const { sakId, saksnummer } = useSak().sak;
+    const { meldeperiodeKjede } = useMeldeperiodekjede();
+    const { id: kjedeId, meldekortbehandlingIder, kanIkkeBehandlesGrunn } = meldeperiodeKjede;
 
     const {
         opprettMeldekortbehandling,
@@ -42,49 +37,22 @@ export const MeldekortbehandlingOpprett = () => {
 
     const lukkModal = () => modalRef.current?.close();
 
-    const kanOppretteBehandling = !åpenMeldekortbehandlingId && kanBehandles;
-
     return (
         <VStack gap={'space-16'}>
             {opprettMeldekortbehandlingError && (
-                <Infokort variant={'feil'}>{opprettMeldekortbehandlingError.message}</Infokort>
+                <Infokort variant={'feil'} size={'small'}>
+                    {opprettMeldekortbehandlingError.message}
+                </Infokort>
             )}
 
-            {åpenMeldekortbehandlingId && (
-                <InlineMessage status={'info'}>
-                    <BodyShort spacing={true}>{'Saken har en åpen meldekortbehandling'}</BodyShort>
-                    <InternLenke
-                        href={meldekortbehandlingUrl(saksnummer, åpenMeldekortbehandlingId)}
-                    >
-                        {'Til behandlingen'}
-                    </InternLenke>
-                </InlineMessage>
-            )}
-
-            {!kanOppretteBehandling && (
-                <Infokort
-                    variant={'advarsel'}
-                    header={'Kan ikke starte behandling.'}
-                    size={'small'}
-                >
-                    <ul>
-                        {!!åpenMeldekortbehandlingId && (
-                            <li>
-                                {
-                                    'Saken har en åpen meldekortbehandling. Du kan legge til flere perioder i den eksisterende behandlingen.'
-                                }
-                            </li>
-                        )}
-                        {ingenDagerGirRett && <li>{'Ingen dager gir rett.'}</li>}
-                        {!erKlarTilUtfylling && (
-                            <li>{'Meldekortet er ikke klart til utfylling.'}</li>
-                        )}
-                    </ul>
+            {kanIkkeBehandlesGrunn && (
+                <Infokort variant={'advarsel'} header={tekster.kanIkkeStarte} size={'small'}>
+                    {kanIkkeBehandlesGrunnTekst[kanIkkeBehandlesGrunn]}
                 </Infokort>
             )}
 
             <Button
-                disabled={!kanOppretteBehandling}
+                disabled={!kanBehandleMeldeperiodekjede(meldeperiodeKjede)}
                 onClick={() => modalRef.current?.showModal()}
                 className={style.knapp}
             >
