@@ -7,14 +7,14 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const MeldekortbehandlingGodkjenn = () => {
     const { sak } = useSak();
     const { id } = useMeldekortbehandling();
     const { navigateWithNotification } = useNotification();
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<MeldeperiodekjedeProps>(
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/meldekort/${id}/iverksett`,
         'POST',
     );

@@ -13,7 +13,7 @@ import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { useMeldekortbehandlingSkjemaLagring } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { validerMeldekortbehandlingSkjema } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { MeldekortbehandlingValideringsfeil } from '~/lib/meldekort/meldekortbehandling/send-inn/validering/MeldekortbehandlingValideringsfeil';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const MeldekortbehandlingTilBeslutning = () => {
     const { sak } = useSak();
@@ -25,7 +25,7 @@ export const MeldekortbehandlingTilBeslutning = () => {
     const skjema = useMeldekortbehandlingSkjema();
     const { isDirty } = useMeldekortbehandlingSkjemaLagring();
 
-    const { trigger, error, isMutating, reset } = useFetchJsonFraApi<MeldeperiodekjedeProps>(
+    const { trigger, error, isMutating, reset } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/meldekort/${id}/sendtilbeslutning`,
         'POST',
     );
