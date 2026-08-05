@@ -84,7 +84,7 @@ export const OpprettForUbehandledeMeldekort = ({ size }: Props) => {
                     <VStack as={'ul'} gap={'space-4'} className={style.liste}>
                         {sortertMeldekort.map((kjede) => (
                             <BodyShort as={'li'} key={kjede.id}>
-                                {`${formaterMeldeperiode(kjede.periode)} - ${brukersMeldekortInnsendingstypeTekst[kjede.brukersMeldekortStatus]}`}
+                                {`${formaterMeldeperiode(kjede.periode)} - ${brukersMeldekortInnsendingstypeTekst(kjede.brukersMeldekortStatus)}`}
                             </BodyShort>
                         ))}
                     </VStack>

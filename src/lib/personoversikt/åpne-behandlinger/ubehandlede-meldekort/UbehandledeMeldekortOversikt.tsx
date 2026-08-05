@@ -103,6 +103,11 @@ const innsendingstypeTekst: Record<BrukersMeldekortKjedeStatus, string> = {
     [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',
     [BrukersMeldekortKjedeStatus.VENTER_BEHANDLING]: 'Innsendt meldekort',
     [BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING]: 'Korrigert meldekort',
+    [BrukersMeldekortKjedeStatus.UNDER_BEHANDLING]: 'Innsendt meldekort (under behandling)',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_UNDER_BEHANDLING]:
+        'Korrigert meldekort (under behandling)',
     [BrukersMeldekortKjedeStatus.BEHANDLET]: 'Behandlet',
     [BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET]: 'Behandlet (korrigering)',
+    [BrukersMeldekortKjedeStatus.AVBRUTT]: 'Innsendt meldekort (avbrutt behandling)',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_AVBRUTT]: 'Korrigert meldekort (avbrutt behandling)',
 } as const;

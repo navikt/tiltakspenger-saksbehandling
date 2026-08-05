@@ -17,19 +17,35 @@ export const kanIkkeBehandlesGrunnTekst: Record<KanIkkeBehandlesGrunn, string> =
 export const brukersMeldekortKjedeStatusTekst: Record<BrukersMeldekortKjedeStatus, string> = {
     [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',
     [BrukersMeldekortKjedeStatus.VENTER_BEHANDLING]: 'Mottatt, ikke behandlet',
+    [BrukersMeldekortKjedeStatus.UNDER_BEHANDLING]: 'Mottatt, under behandling',
     [BrukersMeldekortKjedeStatus.BEHANDLET]: 'Behandlet',
+    [BrukersMeldekortKjedeStatus.AVBRUTT]: 'Mottatt, behandling avbrutt',
     [BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING]:
         'Mottatt, ikke behandlet (korrigering)',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_UNDER_BEHANDLING]:
+        'Mottatt, under behandling (korrigering)',
     [BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET]: 'Behandlet (korrigering)',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_AVBRUTT]: 'Mottatt, behandling avbrutt (korrigering)',
 } as const;
 
-export const brukersMeldekortInnsendingstypeTekst: Record<BrukersMeldekortKjedeStatus, string> = {
-    [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',
-    [BrukersMeldekortKjedeStatus.VENTER_BEHANDLING]: 'Første innsending',
-    [BrukersMeldekortKjedeStatus.BEHANDLET]: 'Første innsending',
-    [BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING]: 'Korrigering',
-    [BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET]: 'Korrigering',
-} as const;
+export const brukersMeldekortInnsendingstypeTekst = (
+    status: BrukersMeldekortKjedeStatus,
+): string => {
+    switch (status) {
+        case BrukersMeldekortKjedeStatus.IKKE_MOTTATT:
+            return 'Ikke mottatt';
+        case BrukersMeldekortKjedeStatus.VENTER_BEHANDLING:
+        case BrukersMeldekortKjedeStatus.UNDER_BEHANDLING:
+        case BrukersMeldekortKjedeStatus.BEHANDLET:
+        case BrukersMeldekortKjedeStatus.AVBRUTT:
+            return 'Første innsending';
+        case BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING:
+        case BrukersMeldekortKjedeStatus.KORRIGERING_UNDER_BEHANDLING:
+        case BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET:
+        case BrukersMeldekortKjedeStatus.KORRIGERING_AVBRUTT:
+            return 'Korrigering';
+    }
+};
 
 export const meldeperiodebehandlingTypeTekst: Record<MeldeperiodebehandlingType, string> = {
     [MeldeperiodebehandlingType.FØRSTE_BEHANDLING]: 'Førstegangsbehandling',

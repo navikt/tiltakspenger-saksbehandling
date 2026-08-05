@@ -40,7 +40,7 @@ export const UbehandledeMeldekortVarsel = ({ meldeperiodekjeder, skjema }: Props
                             <InternLenke href={meldeperiodeUrl(saksnummer, kjede.periode)}>
                                 {`${formaterMeldeperiode(kjede.periode)}`}
                             </InternLenke>
-                            {` - ${brukersMeldekortInnsendingstypeTekst[kjede.brukersMeldekortStatus]}`}
+                            {` - ${brukersMeldekortInnsendingstypeTekst(kjede.brukersMeldekortStatus)}`}
                         </HStack>
                     ))}
             </VStack>
