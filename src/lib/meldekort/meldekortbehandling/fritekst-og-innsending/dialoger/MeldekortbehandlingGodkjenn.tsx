@@ -1,5 +1,6 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { CheckmarkIcon } from '@navikt/aksel-icons';
+import { useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
@@ -8,30 +9,42 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 export const MeldekortbehandlingGodkjenn = () => {
-    const { sak } = useSak();
+    const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
     const { navigateWithNotification } = useNotification();
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
-        `/sak/${sak.sakId}/meldekort/${id}/iverksett`,
-        'POST',
-    );
+    const [åpen, setÅpen] = useState(false);
+
+    const { trigger, error, isMutating } = useFetchJsonFraApi<
+        SakProps,
+        undefined,
+        FetcherError<SakProps>
+    >(`/sak/${sak.sakId}/meldekort/${id}/iverksett`, 'POST', {
+        throwOnError: true,
+    });
 
     const godkjenn = () => {
-        trigger().then((response) => {
-            if (response) {
+        trigger()
+            .then((oppdatertSak) => {
+                setSak(oppdatertSak);
+                setÅpen(false);
                 navigateWithNotification(
                     personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
                     'Meldekortet er godkjent',
                 );
-            }
-        });
+            })
+            .catch((error: FetcherError<SakProps>) => {
+                if (error.data) {
+                    setSak(error.data);
+                }
+            });
     };
 
     return (
-        <Dialog>
+        <Dialog open={åpen} onOpenChange={setÅpen}>
             <Dialog.Trigger>
                 <Button variant={'primary'} icon={<CheckmarkIcon />}>
                     {'Godkjenn meldekort'}
@@ -57,16 +70,14 @@ export const MeldekortbehandlingGodkjenn = () => {
                 </Dialog.Body>
 
                 <Dialog.Footer>
-                    <Dialog.CloseTrigger>
-                        <Button
-                            variant={'primary'}
-                            icon={<CheckmarkIcon />}
-                            loading={isMutating}
-                            onClick={godkjenn}
-                        >
-                            {'Godkjenn meldekort'}
-                        </Button>
-                    </Dialog.CloseTrigger>
+                    <Button
+                        variant={'primary'}
+                        icon={<CheckmarkIcon />}
+                        loading={isMutating}
+                        onClick={godkjenn}
+                    >
+                        {'Godkjenn meldekort'}
+                    </Button>
 
                     <Dialog.CloseTrigger>
                         <Button variant={'secondary'}>{'Avbryt'}</Button>

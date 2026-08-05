@@ -32,18 +32,22 @@ export const RammebehandlingSendTilBeslutning = ({
         Rammebehandling,
         undefined,
         FetcherError<Rammebehandling>
-    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
+    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST', {
+        throwOnError: true,
+    });
 
     const sendTilBeslutning = () => {
-        trigger().then((oppdatertBehandling) => {
-            if (oppdatertBehandling) {
+        trigger()
+            .then((oppdatertBehandling) => {
                 setBehandling(oppdatertBehandling);
                 setÅpen(false);
                 navigateWithNotification('/', 'Vedtaket er sendt til beslutning!');
-            } else if (error?.data) {
-                setBehandling(error.data);
-            }
-        });
+            })
+            .catch((error: FetcherError<Rammebehandling>) => {
+                if (error.data) {
+                    setBehandling(error.data);
+                }
+            });
     };
 
     return (

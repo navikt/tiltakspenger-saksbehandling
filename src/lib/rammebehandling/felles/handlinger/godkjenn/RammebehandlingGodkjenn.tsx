@@ -32,8 +32,6 @@ export const RammebehandlingGodkjenn = () => {
             .catch((error: FetcherError<Rammebehandling>) => {
                 if (error.data) {
                     setBehandling(error.data);
-                } else {
-                    console.error('Forventet oppdatert behandling ved feil fra backend');
                 }
             });
     };
