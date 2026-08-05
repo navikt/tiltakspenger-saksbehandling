@@ -1,0 +1,17 @@
+.velger {
+    position: absolute;
+    inset-inline-end: calc(100% + 0.125rem);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--ax-border-neutral);
+    border-radius: var(--ax-radius-8);
+    background: var(--ax-bg-default);
+    white-space: nowrap;
+}
+
+.tast {
+    font-family: monospace;
+    font-weight: bold;
+}

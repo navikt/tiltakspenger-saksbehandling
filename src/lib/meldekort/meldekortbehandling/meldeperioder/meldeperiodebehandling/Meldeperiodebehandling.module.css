@@ -22,6 +22,21 @@
     }
 }
 
+.statusCelle:global(.aksel-table__data-cell) {
+    position: relative;
+}
+
+.statusAktiv {
+    outline: 3px solid var(--ax-border-info);
+    outline-offset: 2px;
+    border-radius: var(--ax-radius-4);
+}
+
 .behandling {
     padding-top: 1rem;
+}
+
+.utfyllingHeader {
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+    padding-bottom: 0.5rem;
 }

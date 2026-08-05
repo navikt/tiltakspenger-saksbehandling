@@ -51,8 +51,6 @@ export const Meldeperiodebehandlinger = () => {
                                 )}
                             </>
                         )}
-
-                        {/*<DagStatusHurtigtasterHelpText />*/}
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>
             </MeldekortbehandlingSeksjon>

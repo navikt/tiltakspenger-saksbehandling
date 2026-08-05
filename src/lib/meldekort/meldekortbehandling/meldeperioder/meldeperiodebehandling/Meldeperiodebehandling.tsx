@@ -1,4 +1,5 @@
-import { BodyShort, Heading, Select, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Select, Table, VStack } from '@navikt/ds-react';
+import { useCallback } from 'react';
 import {
     MeldekortbehandlingDagStatus,
     MeldekortBeregningsdag,
@@ -29,7 +30,12 @@ import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/meldekort
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { classNames } from '~/utils/classNames';
 import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
-import { hurtigtastTilDagStatus } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/dagStatusHurtigtaster';
+import {
+    MeldekortHurtigutfylling,
+    useMeldekortHurtigutfylling,
+} from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/useMeldekortHurtigutfylling';
+import { MeldekortHurtigutfyllingStatusVelger } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/status-velger/MeldekortHurtigutfyllingStatusVelger';
+import { MeldekortHurtigutfyllingStart } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/utfylling-start/MeldekortHurtigutfyllingStart';
 
 import style from './Meldeperiodebehandling.module.css';
 
@@ -48,6 +54,21 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
     const { meldeperioder, simulertBeregning } = meldekortbehandling;
 
     const { erReadonly } = useMeldekortbehandlingSkjema();
+
+    const dispatch = useMeldekortbehandlingSkjemaDispatch();
+
+    const oppdaterDagStatus = useCallback(
+        (dagIndex: number, status: MeldekortbehandlingDagStatus) =>
+            dispatch({ type: 'oppdaterDagStatus', payload: { kjedeId, dagIndex, status } }),
+        [dispatch, kjedeId],
+    );
+
+    const hurtigutfylling = useMeldekortHurtigutfylling({
+        dager,
+        erReadonly,
+        kanFylleUtHelg: sak.kanSendeInnHelgForMeldekort,
+        oppdaterDagStatus,
+    });
 
     const meldeperiodebehandling = meldeperioder.find((it) => it.kjedeId === kjedeId);
 
@@ -80,7 +101,22 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                     </Infokort>
                 )}
 
-                <VStack className={style.uker} gap={'space-24'}>
+                <HStack
+                    gap={'space-16'}
+                    justify={'space-between'}
+                    className={style.utfyllingHeader}
+                >
+                    <Heading size={'small'} level={'4'}>
+                        {'Utfylling'}
+                    </Heading>
+                    <MeldekortHurtigutfyllingStart hurtigutfylling={hurtigutfylling} />
+                </HStack>
+
+                <VStack
+                    className={style.uker}
+                    gap={'space-24'}
+                    onKeyDown={hurtigutfylling.onKeyDown}
+                >
                     <MeldeperiodeUke
                         dager={dager.slice(0, 7)}
                         dagIndexOffset={0}
@@ -88,6 +124,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                         beregningsdagPerDato={beregningsdagPerDato}
                         erReadonly={erReadonly}
                         valideringsfeil={valideringsfeil}
+                        hurtigutfylling={hurtigutfylling}
                     />
 
                     <MeldeperiodeUke
@@ -97,6 +134,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                         beregningsdagPerDato={beregningsdagPerDato}
                         erReadonly={erReadonly}
                         valideringsfeil={valideringsfeil}
+                        hurtigutfylling={hurtigutfylling}
                     />
                 </VStack>
 
@@ -123,6 +161,7 @@ type UkeProps = {
     beregningsdagPerDato: Map<string, MeldekortBeregningsdag>;
     erReadonly: boolean;
     valideringsfeil: MeldeperiodeSkjemaValideringsfeil | null;
+    hurtigutfylling: MeldekortHurtigutfylling;
 };
 
 const MeldeperiodeUke = ({
@@ -132,6 +171,7 @@ const MeldeperiodeUke = ({
     beregningsdagPerDato,
     erReadonly,
     valideringsfeil,
+    hurtigutfylling,
 }: UkeProps) => {
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 
@@ -166,6 +206,8 @@ const MeldeperiodeUke = ({
                             (dag) => dag.dato === dato,
                         );
 
+                        const erAktivIHurtigutfylling = hurtigutfylling.aktivDagIndex === dagIndex;
+
                         const oppdaterStatus = (status: MeldekortbehandlingDagStatus) =>
                             dispatch({
                                 type: 'oppdaterDagStatus',
@@ -179,39 +221,24 @@ const MeldeperiodeUke = ({
                                 <Table.DataCell className={style.ikon}>
                                     {ikonForMeldekortbehandlingDagStatus[dag.status]}
                                 </Table.DataCell>
-                                <Table.DataCell
-                                    /**
-                                     * Aksel sin Select overskriver onKeyDown med sin egen handler,
-                                     * så vi lytter på cellen og fanger opp hendelsen når den bobler.
-                                     */
-                                    onKeyDown={(e) => {
-                                        if (
-                                            e.altKey ||
-                                            e.ctrlKey ||
-                                            e.metaKey ||
-                                            !(e.target instanceof HTMLSelectElement)
-                                        ) {
-                                            return;
-                                        }
-
-                                        const nyStatus =
-                                            hurtigtastTilDagStatus[e.key.toLowerCase()];
-
-                                        if (!nyStatus) {
-                                            return;
-                                        }
-
-                                        e.preventDefault();
-                                        oppdaterStatus(nyStatus);
-                                    }}
-                                >
+                                <Table.DataCell className={style.statusCelle}>
+                                    {erAktivIHurtigutfylling && (
+                                        <MeldekortHurtigutfyllingStatusVelger
+                                            hurtigutfylling={hurtigutfylling}
+                                            dato={dato}
+                                        />
+                                    )}
                                     {kanEndres ? (
                                         <Select
+                                            ref={hurtigutfylling.settSelectRef(dagIndex)}
                                             label={'Velg status for dag'}
                                             size={'small'}
                                             hideLabel={true}
                                             value={status}
-                                            className={style.status}
+                                            className={classNames(
+                                                style.status,
+                                                erAktivIHurtigutfylling && style.statusAktiv,
+                                            )}
                                             error={harValideringsfeil}
                                             onChange={(e) =>
                                                 oppdaterStatus(
