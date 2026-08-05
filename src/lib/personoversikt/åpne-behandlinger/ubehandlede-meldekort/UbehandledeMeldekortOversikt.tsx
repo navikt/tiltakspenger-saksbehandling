@@ -6,7 +6,7 @@ import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import NextLink from 'next/link';
-import { OpprettMeldekortbehandlingKnapp } from '~/lib/meldekort/felles/opprett/OpprettMeldekortbehandlingKnapp';
+import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
 
 type Props = {
     saksnummer: string;
@@ -27,7 +27,7 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
                     {`Ubehandlede meldekort (${ubehandledeMeldekort.length})`}
                 </Heading>
 
-                <OpprettMeldekortbehandlingKnapp size={'small'} />
+                <OpprettForUbehandledeMeldekort size={'small'} />
             </HStack>
 
             <Table>

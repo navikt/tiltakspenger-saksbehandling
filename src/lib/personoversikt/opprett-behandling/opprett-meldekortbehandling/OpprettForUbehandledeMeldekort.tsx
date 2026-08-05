@@ -4,20 +4,20 @@ import { useSak } from '~/lib/sak/SakContext';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { erSaksbehandler } from '~/lib/saksbehandler/tilganger';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { useOpprettMeldekortbehandling } from '~/lib/meldekort/felles/opprett/useOpprettMeldekortbehandling';
+import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
 import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/tekster';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { formaterMeldeperiode } from '~/utils/date';
 import { ComponentProps, useRef } from 'react';
 
-import style from './OpprettMeldekortbehandlingKnapp.module.css';
+import style from './OpprettForUbehandledeMeldekort.module.css';
 
 type Props = {
     size?: ComponentProps<typeof Button>['size'];
 };
 
-export const OpprettMeldekortbehandlingKnapp = ({ size }: Props) => {
+export const OpprettForUbehandledeMeldekort = ({ size }: Props) => {
     const { sakId, saksnummer, meldeperiodeKjeder } = useSak().sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
     const router = useRouter();

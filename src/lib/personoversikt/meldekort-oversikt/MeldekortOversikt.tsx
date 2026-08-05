@@ -8,7 +8,7 @@ import { ApneMeldekortbehandlingerOversikt } from './ApneMeldekortbehandlingerOv
 import { nonNullishPredicate } from '~/utils/array';
 import { hentÅpneMeldekortbehandlinger } from '~/lib/sak/sakUtils';
 import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
-import { OpprettMeldekortbehandlingKnapp } from '~/lib/meldekort/felles/opprett/OpprettMeldekortbehandlingKnapp';
+import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
 
 import style from './MeldekortOversikt.module.css';
 
@@ -35,7 +35,7 @@ export const MeldekortOversikt = () => {
             <VStack gap={'space-16'} className={style.toppSeksjon}>
                 <UbehandledeMeldekortVarsel meldeperiodekjeder={meldeperiodeKjeder} />
 
-                <OpprettMeldekortbehandlingKnapp />
+                <OpprettForUbehandledeMeldekort />
             </VStack>
 
             <ApneMeldekortbehandlingerOversikt
