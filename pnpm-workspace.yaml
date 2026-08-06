@@ -6,3 +6,6 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
   msw: true
+
+# en uke
+minimumReleaseAge: 10080
