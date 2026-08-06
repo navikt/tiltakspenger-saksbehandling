@@ -2,12 +2,12 @@ import {
     TilbakekrevingBehandling,
     TilbakekrevingBehandlingsstatus,
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { Alert, BodyLong, Button, Heading, HStack, Link, Table, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import NextLink from 'next/link';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useSak } from '~/lib/sak/SakContext';
 import { beregningKildeUrl } from '~/utils/urls';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
@@ -132,11 +132,11 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                 {varselSendt ? formaterDatotekst(varselSendt) : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                <Link as={NextLink} href={beregningKildeUrl(beregningKilde, sak)}>
+                                <InternLenke href={beregningKildeUrl(beregningKilde, sak)}>
                                     {beregningKilde.type === BeregningKildeType.MELDEKORT
                                         ? 'Meldekort'
                                         : 'Rammebehandling'}
-                                </Link>
+                                </InternLenke>
                             </Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? '-'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? '-'}</Table.DataCell>

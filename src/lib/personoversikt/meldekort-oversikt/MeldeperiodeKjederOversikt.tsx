@@ -5,7 +5,7 @@ import { formatterBeløp } from '~/utils/beløp';
 import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import {
     KanIkkeBehandlesGrunn,
     MeldeperiodekjedeProps,
@@ -103,11 +103,11 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                                             : '-'}
                                     </Table.DataCell>
                                     <Table.DataCell align={'right'}>
-                                        <TilBehandlingKnapp
+                                        <InternLenkeKnapp
                                             href={meldeperiodeUrl(saksnummer, periode)}
                                         >
                                             {'Se oversikt'}
-                                        </TilBehandlingKnapp>
+                                        </InternLenkeKnapp>
                                     </Table.DataCell>
                                 </Table.Row>
                             );

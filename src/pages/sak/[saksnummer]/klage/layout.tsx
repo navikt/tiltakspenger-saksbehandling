@@ -7,7 +7,7 @@ import styles from './Layout.module.css';
 import { BodyShort, Box, Heading, HStack, Loader, Tabs, Tag, VStack } from '@navikt/ds-react';
 import { Klagebehandling, KlagebehandlingStatus } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
-import Link from 'next/link';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import router from 'next/router';
 import { kanNavigereTilKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
@@ -196,11 +196,11 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                     <BodyShort>
                         Sist endret {props.klage ? formaterTidspunkt(props.klage.sistEndret) : '-'}
                     </BodyShort>
-                    <Link href={personoversiktUrl(props.saksnummer)}>
+                    <InternLenke href={personoversiktUrl(props.saksnummer)}>
                         <HStack align="start" gap="space-4">
                             <BodyShort>Gå til personoversikt</BodyShort>
                         </HStack>
-                    </Link>
+                    </InternLenke>
                 </HStack>
             </HStack>
         </div>

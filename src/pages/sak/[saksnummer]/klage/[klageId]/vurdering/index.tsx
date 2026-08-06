@@ -35,7 +35,7 @@ import {
     erKlagebehandlingSattPåVent,
 } from '~/lib/klage/utils/klageUtils';
 import styles from './index.module.css';
-import Link from 'next/link';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -283,8 +283,9 @@ const VurderingKlagePage = ({
                     )}
 
                     {erKlageOpprettholdelse(klage) ? (
-                        <Button
-                            as={Link}
+                        <InternLenkeKnapp
+                            variant={'primary'}
+                            size={'medium'}
                             href={klagebehandlingUrl(
                                 sak.saksnummer,
                                 klage.id,
@@ -292,16 +293,17 @@ const VurderingKlagePage = ({
                             )}
                         >
                             Fortsett
-                        </Button>
+                        </InternLenkeKnapp>
                     ) : (
                         kanNavigereVidere && (
-                            <Button
+                            <InternLenkeKnapp
                                 className={styles.fortsettKnapp}
-                                as={Link}
+                                variant={'primary'}
+                                size={'medium'}
                                 href={finnSisteGyldigeStegForKlage(klage)}
                             >
                                 Fortsett
-                            </Button>
+                            </InternLenkeKnapp>
                         )
                     )}
                     {klage.ventestatus.length > 0 && !erBehandlingSattPåVent(klage) && (

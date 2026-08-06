@@ -43,7 +43,7 @@ import {
     useOpprettholdKlage,
 } from '~/lib/klage/api/KlageApi';
 import { Nullable } from '~/types/UtilTypes';
-import Link from 'next/link';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
@@ -251,8 +251,9 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
 
                             {erKlageOpprettholdelse(klage) &&
                                 erKlageOpprettholdtEllerEtter(klage) && (
-                                    <Button
-                                        as={Link}
+                                    <InternLenkeKnapp
+                                        variant={'primary'}
+                                        size={'medium'}
                                         href={klagebehandlingUrl(
                                             sak.saksnummer,
                                             klage.id,
@@ -260,7 +261,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                                         )}
                                     >
                                         Fortsett
-                                    </Button>
+                                    </InternLenkeKnapp>
                                 )}
                         </HStack>
                     </VStack>

@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-    BodyShort,
-    Button,
-    CopyButton,
-    HStack,
-    Loader,
-    Skeleton,
-    Table,
-    Tag,
-} from '@navikt/ds-react';
+import { BodyShort, CopyButton, HStack, Loader, Skeleton, Table, Tag } from '@navikt/ds-react';
 import {
     BENK_SORTERING_DEFAULT,
     benkBehandlingsstatusColor,
@@ -18,7 +9,7 @@ import {
     parseBenkSortering,
 } from '../benkSideUtils';
 import { formaterTidspunkt } from '~/utils/date';
-import NextLink from 'next/link';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import {
     BenkBehandling,
     BenkBehandlingstype,
@@ -211,15 +202,9 @@ export const BenkTabell = ({ behandlinger, valgtType }: Props) => {
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell className={styles.handlinger}>
-                                <Button
-                                    type={'button'}
-                                    variant={'secondary'}
-                                    size={'small'}
-                                    as={NextLink}
-                                    href={personoversiktUrl(behandling.saksnummer)}
-                                >
+                                <InternLenkeKnapp href={personoversiktUrl(behandling.saksnummer)}>
                                     {'Se sak'}
-                                </Button>
+                                </InternLenkeKnapp>
                             </Table.DataCell>
                         </Table.Row>
                     );

@@ -1,5 +1,5 @@
 import { VStack, InfoCard, Button, HStack } from '@navikt/ds-react';
-import Link from 'next/link';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { useState } from 'react';
 import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/typer/Klage';
 import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -153,28 +153,26 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
             {harÅpenBehandling ? (
                 <>
                     {klagerPåRammebehandling && (
-                        <Button
-                            as={Link}
-                            variant="secondary"
+                        <InternLenkeKnapp
+                            size={'medium'}
                             href={behandlingUrl({
                                 saksnummer: props.klage.saksnummer,
                                 id: props.klage.åpenBehandlingId as RammebehandlingId,
                             })}
                         >
                             Gå til omgjøringsbehandling
-                        </Button>
+                        </InternLenkeKnapp>
                     )}
                     {klagerPåMeldekortbehandling && (
-                        <Button
-                            as={Link}
-                            variant="secondary"
+                        <InternLenkeKnapp
+                            size={'medium'}
                             href={meldeperiodeUrl(
                                 props.klage.saksnummer,
                                 (props.omgjøringsbehandling as MeldekortbehandlingProps).periode,
                             )}
                         >
                             Gå til omgjøringsbehandling
-                        </Button>
+                        </InternLenkeKnapp>
                     )}
                 </>
             ) : (

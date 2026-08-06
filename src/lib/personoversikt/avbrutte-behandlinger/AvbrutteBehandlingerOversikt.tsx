@@ -11,7 +11,7 @@ import { behandlingUrl, klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 
 type Props = {
     saksnummer: string;
@@ -72,7 +72,7 @@ export const AvbrutteBehandlingerOversikt = ({
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell align={'right'}>
-                                <TilBehandlingKnapp
+                                <InternLenkeKnapp
                                     href={
                                         behandlingstype === 'KLAGEBEHANDLING'
                                             ? klagebehandlingUrl(
@@ -87,7 +87,7 @@ export const AvbrutteBehandlingerOversikt = ({
                                     }
                                 >
                                     {'Se behandling'}
-                                </TilBehandlingKnapp>
+                                </InternLenkeKnapp>
                             </Table.DataCell>
                         </Table.Row>
                     );

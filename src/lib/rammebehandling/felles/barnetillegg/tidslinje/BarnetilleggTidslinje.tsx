@@ -1,10 +1,10 @@
-import { Alert, BodyShort, Link, Timeline } from '@navikt/ds-react';
+import { Alert, BodyShort, Timeline } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { barnetilleggKrympetTilPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { formaterPeriode } from '~/utils/date';
-import NextLink from 'next/link';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
 
 import style from './BarnetilleggTidslinje.module.css';
@@ -59,15 +59,14 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
                             >
                                 <BodyShort size={'small'} className={style.detaljer}>
                                     {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${formaterPeriode(periode)}`}
-                                    <Link
-                                        as={NextLink}
+                                    <InternLenke
                                         href={behandlingUrl({
                                             saksnummer: sak.saksnummer,
                                             id: behandlingId,
                                         })}
                                     >
                                         {'Til behandlingen'}
-                                    </Link>
+                                    </InternLenke>
                                 </BodyShort>
                             </Timeline.Period>
                         );

@@ -95,7 +95,7 @@ type OppdaterMeldekortdagDTO = {
 export type MeldeperiodebehandlingProps = {
     meldeperiodeId: MeldeperiodeId;
     kjedeId: MeldeperiodeKjedeId;
-    brukersMeldekortId: Nullable<BrukersMeldekortId>;
+    brukersMeldekortId: BrukersMeldekortId[];
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning: Nullable<MeldeperiodeBeregningProps>;

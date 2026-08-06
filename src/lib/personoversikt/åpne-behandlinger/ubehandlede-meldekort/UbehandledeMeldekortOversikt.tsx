@@ -1,10 +1,10 @@
-import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
-import NextLink from 'next/link';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
@@ -77,10 +77,7 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
                                         {`${antallDager} dag${antallDager !== 1 ? 'er' : ''}`}
                                     </Table.DataCell>
                                     <Table.DataCell align={'right'}>
-                                        <Button
-                                            as={NextLink}
-                                            variant={'secondary'}
-                                            size={'small'}
+                                        <InternLenkeKnapp
                                             href={meldeperiodeUrl(
                                                 saksnummer,
                                                 periode,
@@ -88,7 +85,7 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
                                             )}
                                         >
                                             {'Se meldekort'}
-                                        </Button>
+                                        </InternLenkeKnapp>
                                     </Table.DataCell>
                                 </Table.Row>
                             );

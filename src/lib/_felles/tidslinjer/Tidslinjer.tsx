@@ -7,9 +7,9 @@ import {
     TasklistIcon,
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Link, Timeline, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Timeline, VStack } from '@navikt/ds-react';
 import { SakProps } from '~/lib/sak/SakTyper';
-import NextLink from 'next/link';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
@@ -159,8 +159,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                         <InfoElement navn={'Saksbehandler'} verdi={saksbehandler} />
                                         <InfoElement navn={'Beslutter'} verdi={beslutter} />
                                     </div>
-                                    <Link
-                                        as={NextLink}
+                                    <InternLenke
                                         href={behandlingUrl({
                                             saksnummer,
                                             id: behandlingId,
@@ -168,7 +167,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                         className={style.behandlingLink}
                                     >
                                         {'Til behandlingen'}
-                                    </Link>
+                                    </InternLenke>
                                 </VStack>
                             </Timeline.Period>
                         );
@@ -212,13 +211,12 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                             verdi={formatterBeløp(totalt)}
                                         />
                                     </div>
-                                    <Link
-                                        as={NextLink}
+                                    <InternLenke
                                         href={meldeperiodeUrl(saksnummer, periode)}
                                         className={style.behandlingLink}
                                     >
                                         {'Til meldekortet'}
-                                    </Link>
+                                    </InternLenke>
                                 </VStack>
                             </Timeline.Period>
                         );

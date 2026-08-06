@@ -33,7 +33,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 
-import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
@@ -182,13 +182,13 @@ const propsForRad = (
                         : undefined,
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <TilBehandlingKnapp
+                        <InternLenkeKnapp
                             href={behandlingUrl({ saksnummer, id: rammebehandling.id })}
                         >
                             {kanFortsetteBehandling(rammebehandling, innloggetSaksbehandler)
                                 ? 'Fortsett'
                                 : 'Se behandling'}
-                        </TilBehandlingKnapp>
+                        </InternLenkeKnapp>
 
                         <RammebehandlingMeny
                             behandling={rammebehandling}
@@ -213,9 +213,9 @@ const propsForRad = (
                 periodeTekst: formaterMeldeperioder(meldekortbehandling),
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <TilBehandlingKnapp href={meldekortbehandlingUrl(saksnummer, id)}>
+                        <InternLenkeKnapp href={meldekortbehandlingUrl(saksnummer, id)}>
                             {'Se behandling'}
-                        </TilBehandlingKnapp>
+                        </InternLenkeKnapp>
 
                         <MeldekortbehandlingMeny
                             meldekortbehandling={meldekortbehandling}
@@ -261,7 +261,7 @@ const propsForRad = (
                 saksbehandler,
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <TilBehandlingKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
+                        <InternLenkeKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
                             {kanFortsetteKlagebehandling(
                                 klagebehandling,
                                 omgjøringsbehandling,
@@ -269,7 +269,7 @@ const propsForRad = (
                             )
                                 ? 'Fortsett'
                                 : 'Se behandling'}
-                        </TilBehandlingKnapp>
+                        </InternLenkeKnapp>
 
                         <KlageMeny
                             klage={klagebehandling}

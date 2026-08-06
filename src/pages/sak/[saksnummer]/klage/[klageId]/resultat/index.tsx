@@ -28,7 +28,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
-import Link from 'next/link';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import {
@@ -350,16 +350,15 @@ const OpprettholdResultat = (props: {
                     </Button>
                 )}
                 {props.omgjøringsbehandling && (
-                    <Button
-                        as={Link}
-                        variant="secondary"
+                    <InternLenkeKnapp
+                        size={'medium'}
                         href={behandlingUrl({
                             saksnummer: props.sak.saksnummer,
                             id: props.omgjøringsbehandling.id,
                         })}
                     >
                         Gå til omgjøringsbehandling
-                    </Button>
+                    </InternLenkeKnapp>
                 )}
                 {kanFerdigstilleKlage && (
                     <FerdigstillKlageModalWrapper

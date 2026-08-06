@@ -1,22 +1,14 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
-import {
-    BodyShort,
-    Button,
-    CopyButton,
-    HStack,
-    Link,
-    Skeleton,
-    Spacer,
-    Tag,
-} from '@navikt/ds-react';
+import { BodyShort, CopyButton, HStack, Skeleton, Spacer, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonopplysninger';
 import { SakId } from '~/lib/sak/SakTyper';
-import NextLink from 'next/link';
-
-import styles from './PersonaliaHeader.module.css';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { personoversiktUrl } from '~/utils/urls';
+
+import styles from './PersonaliaHeader.module.css';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
@@ -64,16 +56,14 @@ export const PersonaliaHeader = ({
             )}
             <Spacer />
             <strong>{visSakId ? 'Sak-id:' : 'Saksnr:'}</strong> {idSomVises}
-            <CopyButton copyText={idSomVises} variant="action" size="small" />
+            <CopyButton copyText={idSomVises} data-color={'accent'} size={'small'} />
             {visTilbakeKnapp && (
-                <Button
-                    as={NextLink}
+                <InternLenkeKnapp
+                    variant={'primary'}
                     href={personoversiktUrl(saksnummer, aktivTab)}
-                    type="submit"
-                    size="small"
                 >
                     Tilbake til personoversikt
-                </Button>
+                </InternLenkeKnapp>
             )}
             {children}
         </HStack>
@@ -99,11 +89,11 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
 
     return (
         <>
-            <Link as={NextLink} href={personoversiktUrl(saksnummer)}>
+            <InternLenke href={personoversiktUrl(saksnummer)}>
                 {fornavn} {mellomnavn} {etternavn}
-            </Link>
+            </InternLenke>
             <BodyShort>{fnr}</BodyShort>
-            <CopyButton copyText={fnr} variant="action" size="small" />
+            <CopyButton copyText={fnr} data-color={'accent'} size={'small'} />
             {(strengtFortrolig || strengtFortroligUtland) && (
                 <Tag data-color="danger" variant="outline">
                     Søker har strengt fortrolig adresse

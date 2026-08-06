@@ -7,7 +7,7 @@ import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandl
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
-import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 
 type Props = {
     saksnummer: string;
@@ -70,11 +70,11 @@ export const MeldekortbehandlingerTabell = ({
                                         align={'center'}
                                         wrap={false}
                                     >
-                                        <TilBehandlingKnapp
+                                        <InternLenkeKnapp
                                             href={meldekortbehandlingUrl(saksnummer, id)}
                                         >
                                             {'Se behandling'}
-                                        </TilBehandlingKnapp>
+                                        </InternLenkeKnapp>
 
                                         {medMeny && (
                                             <MeldekortbehandlingMeny

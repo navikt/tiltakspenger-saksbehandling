@@ -1,7 +1,7 @@
 import { useSak } from '~/lib/sak/SakContext';
 import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
-import { Alert, BodyShort, Link, Select, VStack } from '@navikt/ds-react';
-import NextLink from 'next/link';
+import { Alert, BodyShort, Select, VStack } from '@navikt/ds-react';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
 import { useState } from 'react';
 import { formaterTidspunkt } from '~/utils/date';
@@ -47,9 +47,9 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
             </Select>
             {valgtBehandling && (
                 <VStack gap={'space-8'}>
-                    <Link as={NextLink} href={behandlingUrl(valgtBehandling)}>
+                    <InternLenke href={behandlingUrl(valgtBehandling)}>
                         <BodyShort size={'small'}>{'Til behandlingen'}</BodyShort>
-                    </Link>
+                    </InternLenke>
 
                     <OppsummeringAvSøknad
                         tiltaksperiode={saksopplysninger.periode}

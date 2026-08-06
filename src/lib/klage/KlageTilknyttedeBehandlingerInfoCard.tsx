@@ -1,5 +1,5 @@
 import { BodyShort, InfoCard } from '@navikt/ds-react';
-import Link from 'next/link';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunktKort } from '~/utils/date';
@@ -45,7 +45,7 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                             if (rammebehandling) {
                                 return (
                                     <div key={id}>
-                                        <Link
+                                        <InternLenke
                                             href={behandlingUrl({
                                                 saksnummer: props.klage.saksnummer,
                                                 id: rammebehandling.id,
@@ -54,7 +54,7 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                                             {rammebehandlingstypeTekst[rammebehandling.type]} -{' '}
                                             {rammebehandlingResultatTekst[rammebehandling.resultat]}{' '}
                                             - {formaterTidspunktKort(rammebehandling.opprettet)}
-                                        </Link>
+                                        </InternLenke>
                                     </div>
                                 );
                             }
@@ -62,7 +62,7 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                             if (meldekortbehandling) {
                                 return (
                                     <div key={id}>
-                                        <Link
+                                        <InternLenke
                                             href={meldeperiodeUrl(
                                                 props.klage.saksnummer,
                                                 meldekortbehandling.periode,
@@ -70,7 +70,7 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                                         >
                                             Meldekortbehandling - {meldekortbehandling.status} -{' '}
                                             {formaterTidspunktKort(meldekortbehandling.opprettet)}
-                                        </Link>
+                                        </InternLenke>
                                     </div>
                                 );
                             }
