@@ -26,10 +26,10 @@ import {
 } from '~/lib/klage/api/KlageApi';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import OvertaKlagebehandlingModal from '../modaler/overta/OvertaKlagebehandlingModal';
-import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
+import SettKlagebehandlingPåVentModal from '~/lib/klage/modaler/sett-på-vent/SettKlagebehandlingPåVentModal';
 import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
+import { KlageApiErrorFeilModal, ApiErrorState } from '~/lib/klage/modaler/KlageApiErrorFeilModal';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
@@ -219,7 +219,7 @@ const KlageMeny = (props: {
                 />
             )}
             {visSettBehandlingPåVentModal && (
-                <SettBehandlingPåVentModal
+                <SettKlagebehandlingPåVentModal
                     åpen={visSettBehandlingPåVentModal}
                     onClose={() => setVisSettBehandlingPåVentModal(false)}
                     api={{
@@ -230,7 +230,7 @@ const KlageMeny = (props: {
                 />
             )}
             {apiError.visFeilModal && (
-                <ApiErrorFeilModal
+                <KlageApiErrorFeilModal
                     åpen={apiError.visFeilModal}
                     onClose={() => setApiError({ visFeilModal: false, feil: null })}
                     error={apiError.feil!}

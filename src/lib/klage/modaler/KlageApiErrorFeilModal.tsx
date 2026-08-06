@@ -7,7 +7,7 @@ export type ApiErrorState = {
     feil: Nullable<FetcherError>;
 };
 
-export const ApiErrorFeilModal = (props: {
+export const KlageApiErrorFeilModal = (props: {
     åpen: boolean;
     onClose: () => void;
     error: FetcherError;

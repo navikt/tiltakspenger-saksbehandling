@@ -1,0 +1,10 @@
+.opprettSakKnapp {
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    color: var(--ax-neutral-000);
+    background: var(--ax-bg-strong);
+}
+
+.opprettSakKnapp:hover {
+    background: var(--ax-bg-strong-hover);
+}

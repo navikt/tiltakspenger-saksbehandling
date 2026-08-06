@@ -1,14 +1,3 @@
-.opprettSakButton {
-    margin-top: 0.6rem;
-    margin-bottom: 0.6rem;
-    color: var(--ax-neutral-000);
-    background: var(--ax-bg-strong);
-}
-
-.opprettSakButton:hover {
-    background: var(--ax-bg-strong-hover);
-}
-
 .søkKnapp {
     background-color: transparent;
 }

@@ -1,14 +1,14 @@
 import { PauseIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, LocalAlert, Modal, Textarea } from '@navikt/ds-react';
 import { Controller, useForm } from 'react-hook-form';
-import styles from './SettBehandlingPåVentModal.module.css';
-
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 
-const SettBehandlingPåVentModal = (props: {
+import styles from './SettKlagebehandlingPåVentModal.module.css';
+
+const SettKlagebehandlingPåVentModal = (props: {
     åpen: boolean;
     onClose: () => void;
     api: {
@@ -100,4 +100,4 @@ const SettBehandlingPåVentModal = (props: {
     );
 };
 
-export default SettBehandlingPåVentModal;
+export default SettKlagebehandlingPåVentModal;
