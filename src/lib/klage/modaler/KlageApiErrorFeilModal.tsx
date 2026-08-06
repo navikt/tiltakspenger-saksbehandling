@@ -1,4 +1,4 @@
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog } from '@navikt/ds-react';
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
 
@@ -13,20 +13,24 @@ export const KlageApiErrorFeilModal = (props: {
     error: FetcherError;
 }) => {
     return (
-        <Modal
-            header={{ heading: 'Handlingen kunne ikke utføres' }}
-            open={props.åpen}
-            onClose={props.onClose}
-            width="small"
-        >
-            <Modal.Body>
-                <BodyLong>{props.error.message}</BodyLong>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={props.onClose} size="small">
-                    Lukk
-                </Button>
-            </Modal.Footer>
-        </Modal>
+        <Dialog open={props.åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup width={'small'}>
+                <Dialog.Header>
+                    <Dialog.Title>{'Handlingen kunne ikke utføres'}</Dialog.Title>
+                </Dialog.Header>
+
+                <Dialog.Body>
+                    <BodyLong>{props.error.message}</BodyLong>
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    <Dialog.CloseTrigger>
+                        <Button variant="secondary" size="small">
+                            Lukk
+                        </Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

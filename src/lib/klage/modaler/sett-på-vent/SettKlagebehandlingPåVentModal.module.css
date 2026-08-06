@@ -1,17 +1,13 @@
-.modalHeader {
-    padding-bottom: 0;
+.dialog {
+    text-align: start;
 }
 
-.modalBody {
+.dialogBody {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.textarea {
+.felt {
     padding: 12px 35px;
-}
-
-.modal {
-    text-align: start;
 }

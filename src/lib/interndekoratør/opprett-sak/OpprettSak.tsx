@@ -2,20 +2,32 @@ import { BodyLong, Button, Dialog, TextField, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import router from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useHentEllerOpprettSak } from '~/lib/interndekoratør/opprett-sak/useHentEllerOpprettSak';
 import { personoversiktUrl } from '~/utils/urls';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 import styles from './OpprettSak.module.css';
 
 const FNR_LENGDE = 11;
+
+type HentEllerOpprettSakRequest = {
+    fnr: string;
+};
+
+type HentEllerOpprettSakResponse = {
+    saksnummer: string;
+    opprettet: boolean;
+};
 
 export const OpprettSak = () => {
     const [åpen, settÅpen] = useState<boolean>(false);
     const [fnr, settFnr] = useState<string>('');
     const [valideringsfeil, settValideringsfeil] = useState<string>('');
 
-    const { hentEllerOpprettSak, isHentEllerOpprettSakMutating, hentEllerOpprettSakError } =
-        useHentEllerOpprettSak();
+    const {
+        trigger: hentEllerOpprettSak,
+        isMutating: isHentEllerOpprettSakMutating,
+        error: hentEllerOpprettSakError,
+    } = useFetchJsonFraApi<HentEllerOpprettSakResponse, HentEllerOpprettSakRequest>(`/sak`, 'PUT');
 
     const lukk = () => {
         settÅpen(false);

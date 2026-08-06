@@ -1,13 +1,3 @@
-.modalHeader {
-    padding-bottom: 0;
-}
-
-.modalBody {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.modal {
+.dialog {
     text-align: start;
 }

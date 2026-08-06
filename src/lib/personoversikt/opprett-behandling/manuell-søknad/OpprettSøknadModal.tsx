@@ -1,6 +1,5 @@
-import { Button } from '@navikt/ds-react';
+import { Button, Dialog } from '@navikt/ds-react';
 import router from 'next/router';
-import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { registrerSoknadUrl } from '~/utils/urls';
 
 type Props = {
@@ -10,17 +9,14 @@ type Props = {
 };
 
 export const OpprettSøknadModal = ({ saksnummer, åpen, setÅpen }: Props) => {
-    const lukkModal = () => {
-        setÅpen(false);
-    };
-
     return (
-        <>
-            <BekreftelsesModal
-                åpen={åpen}
-                lukkModal={lukkModal}
-                tittel={'Registrer søknad manuelt?'}
-                bekreftKnapp={
+        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && setÅpen(false)}>
+            <Dialog.Popup>
+                <Dialog.Header>
+                    <Dialog.Title>{'Registrer søknad manuelt?'}</Dialog.Title>
+                </Dialog.Header>
+
+                <Dialog.Footer>
                     <Button
                         variant={'primary'}
                         type={'button'}
@@ -28,10 +24,16 @@ export const OpprettSøknadModal = ({ saksnummer, åpen, setÅpen }: Props) => {
                             router.push(registrerSoknadUrl(saksnummer));
                         }}
                     >
-                        {`Registrer søknad manuelt`}
+                        {'Registrer søknad manuelt'}
                     </Button>
-                }
-            />
-        </>
+
+                    <Dialog.CloseTrigger>
+                        <Button variant={'secondary'} type={'button'}>
+                            {'Avbryt'}
+                        </Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

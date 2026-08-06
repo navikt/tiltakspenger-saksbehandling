@@ -1,4 +1,4 @@
-import { BodyShort, Button, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useSak } from '~/lib/sak/SakContext';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
@@ -6,10 +6,10 @@ import { erSaksbehandler } from '~/lib/saksbehandler/tilganger';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
 import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/tekster';
-import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { formaterMeldeperiode } from '~/utils/date';
-import { ComponentProps, useRef } from 'react';
+import { ComponentProps, useState } from 'react';
 
 import style from './OpprettForUbehandledeMeldekort.module.css';
 
@@ -22,7 +22,7 @@ export const OpprettForUbehandledeMeldekort = ({ size }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const router = useRouter();
 
-    const modalRef = useRef<HTMLDialogElement>(null);
+    const [åpen, settÅpen] = useState<boolean>(false);
 
     const {
         opprettMeldekortbehandling,
@@ -42,60 +42,80 @@ export const OpprettForUbehandledeMeldekort = ({ size }: Props) => {
         a.periode.fraOgMed < b.periode.fraOgMed ? -1 : 1,
     );
 
-    const lukkModal = () => modalRef.current?.close();
-
     return (
         <VStack align={'start'}>
-            <Button size={size} variant={'secondary'} onClick={() => modalRef.current?.showModal()}>
-                {'Opprett behandling'}
-            </Button>
-
-            <BekreftelsesModal
-                modalRef={modalRef}
-                tittel={'Opprett behandling av meldekort'}
-                feil={opprettMeldekortbehandlingError}
-                lukkModal={lukkModal}
-                bekreftKnapp={
-                    <Button
-                        icon={opprettMeldekortbehandlingLaster && <Loader />}
-                        disabled={opprettMeldekortbehandlingLaster}
-                        onClick={() => {
-                            opprettMeldekortbehandling({
-                                kjedeIder: sortertMeldekort.map((kjede) => kjede.id),
-                            }).then((meldekortbehandling) => {
-                                if (meldekortbehandling) {
-                                    lukkModal();
-                                    router.push(
-                                        meldekortbehandlingUrl(saksnummer, meldekortbehandling.id),
-                                    );
-                                }
-                            });
-                        }}
-                    >
+            <Dialog open={åpen} onOpenChange={settÅpen}>
+                <Dialog.Trigger>
+                    <Button size={size} variant={'secondary'}>
                         {'Opprett behandling'}
                     </Button>
-                }
-            >
-                <VStack gap={'space-8'}>
-                    <BodyShort>
-                        {`Meldeperiodene til følgende ${antall > 1 ? `${antall} ` : ''}meldekort blir inkludert i behandlingen:`}
-                    </BodyShort>
+                </Dialog.Trigger>
 
-                    <VStack as={'ul'} gap={'space-4'} className={style.liste}>
-                        {sortertMeldekort.map((kjede) => (
-                            <BodyShort as={'li'} key={kjede.id}>
-                                {`${formaterMeldeperiode(kjede.periode)} - ${brukersMeldekortInnsendingstypeTekst(kjede.brukersMeldekortStatus)}`}
+                <Dialog.Popup>
+                    <Dialog.Header>
+                        <Dialog.Title>{'Opprett behandling av meldekort'}</Dialog.Title>
+                    </Dialog.Header>
+
+                    <Dialog.Body>
+                        <VStack gap={'space-8'}>
+                            <BodyShort>
+                                {`Meldeperiodene til følgende ${antall > 1 ? `${antall} ` : ''}meldekort blir inkludert i behandlingen:`}
                             </BodyShort>
-                        ))}
-                    </VStack>
 
-                    <BodyShort>
-                        {
-                            'Du kan legge til eller fjerne meldeperioder fra behandlingen etter at den er opprettet.'
-                        }
-                    </BodyShort>
-                </VStack>
-            </BekreftelsesModal>
+                            <VStack as={'ul'} gap={'space-4'} className={style.liste}>
+                                {sortertMeldekort.map((kjede) => (
+                                    <BodyShort as={'li'} key={kjede.id}>
+                                        {`${formaterMeldeperiode(kjede.periode)} - ${brukersMeldekortInnsendingstypeTekst(kjede.brukersMeldekortStatus)}`}
+                                    </BodyShort>
+                                ))}
+                            </VStack>
+
+                            <BodyShort>
+                                {
+                                    'Du kan legge til eller fjerne meldeperioder fra behandlingen etter at den er opprettet.'
+                                }
+                            </BodyShort>
+
+                            {opprettMeldekortbehandlingError && (
+                                <Infokort variant={'feil'} size={'small'}>
+                                    {opprettMeldekortbehandlingError.message}
+                                </Infokort>
+                            )}
+                        </VStack>
+                    </Dialog.Body>
+
+                    <Dialog.Footer>
+                        <Button
+                            type={'button'}
+                            icon={opprettMeldekortbehandlingLaster && <Loader />}
+                            disabled={opprettMeldekortbehandlingLaster}
+                            onClick={() => {
+                                opprettMeldekortbehandling({
+                                    kjedeIder: sortertMeldekort.map((kjede) => kjede.id),
+                                }).then((meldekortbehandling) => {
+                                    if (meldekortbehandling) {
+                                        settÅpen(false);
+                                        router.push(
+                                            meldekortbehandlingUrl(
+                                                saksnummer,
+                                                meldekortbehandling.id,
+                                            ),
+                                        );
+                                    }
+                                });
+                            }}
+                        >
+                            {'Opprett behandling'}
+                        </Button>
+
+                        <Dialog.CloseTrigger>
+                            <Button variant={'secondary'} type={'button'}>
+                                {'Avbryt'}
+                            </Button>
+                        </Dialog.CloseTrigger>
+                    </Dialog.Footer>
+                </Dialog.Popup>
+            </Dialog>
         </VStack>
     );
 };

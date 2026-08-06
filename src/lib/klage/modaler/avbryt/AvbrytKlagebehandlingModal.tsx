@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import router from 'next/router';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyLong, Button, Heading, HStack, LocalAlert, Modal, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { personoversiktUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { SakId } from '~/lib/sak/SakTyper';
@@ -57,93 +57,86 @@ const AvbrytKlagebehandlingModal = (props: {
     });
 
     return (
-        <Modal
-            className={styles.modal}
-            width={700}
-            aria-label={TITTEL}
-            open={props.åpen}
-            onClose={props.onClose}
-            size="small"
-            portal
-        >
-            <form
-                onSubmit={(event) => {
-                    if (terminal) {
-                        event.preventDefault();
-                        return;
-                    }
-                    onSubmit(event);
-                }}
-            >
-                <Modal.Header className={styles.modalHeader}>
-                    <HStack>
-                        <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
-                        <Heading level="4" size="small">
-                            {TITTEL}
-                        </Heading>
-                    </HStack>
-                </Modal.Header>
-                <Modal.Body className={styles.modalBody}>
-                    <VStack gap="space-16">
-                        <BodyLong>
-                            {'Er du sikker på at du vil avslutte klagebehandlingen?'}
-                        </BodyLong>
+        <Dialog open={props.åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup width={'700px'} className={styles.dialog} aria-label={TITTEL}>
+                <form
+                    onSubmit={(event) => {
+                        if (terminal) {
+                            event.preventDefault();
+                            return;
+                        }
+                        onSubmit(event);
+                    }}
+                >
+                    <Dialog.Header>
+                        <HStack gap="space-8" align="center">
+                            <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
+                            <Dialog.Title>{TITTEL}</Dialog.Title>
+                        </HStack>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <VStack gap="space-16">
+                            <BodyLong>
+                                {'Er du sikker på at du vil avslutte klagebehandlingen?'}
+                            </BodyLong>
 
-                        <AvbrytKlagebehandlingForm control={form.control} />
+                            <AvbrytKlagebehandlingForm control={form.control} />
 
-                        <Infokort variant={'info'} size="small">
-                            Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
-                            tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia
-                            om hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
-                        </Infokort>
+                            <Infokort variant={'info'} size="small">
+                                Bruker får ikke innsyn eller informasjon når behandlingen avsluttes
+                                i tiltakspenger-saksbehandling. Du må vurdere å informere bruker i
+                                Modia om hvorfor behandlingen er avsluttet, og hva det vil bety for
+                                bruker.
+                            </Infokort>
 
-                        {feil && (
-                            <LocalAlert status="error" size="small">
-                                <LocalAlert.Header>
-                                    <LocalAlert.Title>Det oppstod en feil</LocalAlert.Title>
-                                </LocalAlert.Header>
-                                <LocalAlert.Content>
-                                    <VStack gap="space-8">
-                                        <span>{feil.message}</span>
-                                        {!terminal && <span>Prøv igjen om litt.</span>}
-                                    </VStack>
-                                </LocalAlert.Content>
-                            </LocalAlert>
-                        )}
-                    </VStack>
-                </Modal.Body>
-                <Modal.Footer>
-                    <HStack gap="space-16" align="center">
-                        <Button
-                            variant="secondary"
-                            type="button"
-                            size="small"
-                            onClick={props.onClose}
-                        >
-                            {terminal ? 'Lukk' : 'Ikke avslutt behandling'}
-                        </Button>
-                        {terminal ? (
-                            <InternLenke
-                                href={personoversiktUrl(props.saksnummer)}
+                            {feil && (
+                                <LocalAlert status="error" size="small">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>Det oppstod en feil</LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                    <LocalAlert.Content>
+                                        <VStack gap="space-8">
+                                            <span>{feil.message}</span>
+                                            {!terminal && <span>Prøv igjen om litt.</span>}
+                                        </VStack>
+                                    </LocalAlert.Content>
+                                </LocalAlert>
+                            )}
+                        </VStack>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <HStack gap="space-16" align="center">
+                            <Button
+                                variant="secondary"
+                                type="button"
+                                size="small"
                                 onClick={props.onClose}
                             >
-                                Gå til personoversikten
-                            </InternLenke>
-                        ) : (
-                            <Button
-                                data-color="danger"
-                                variant="primary"
-                                type="submit"
-                                size="small"
-                                loading={avbrytKlagebehandling.isMutating}
-                            >
-                                Avslutt behandling
+                                {terminal ? 'Lukk' : 'Ikke avslutt behandling'}
                             </Button>
-                        )}
-                    </HStack>
-                </Modal.Footer>
-            </form>
-        </Modal>
+                            {terminal ? (
+                                <InternLenke
+                                    href={personoversiktUrl(props.saksnummer)}
+                                    onClick={props.onClose}
+                                >
+                                    Gå til personoversikten
+                                </InternLenke>
+                            ) : (
+                                <Button
+                                    data-color="danger"
+                                    variant="primary"
+                                    type="submit"
+                                    size="small"
+                                    loading={avbrytKlagebehandling.isMutating}
+                                >
+                                    Avslutt behandling
+                                </Button>
+                            )}
+                        </HStack>
+                    </Dialog.Footer>
+                </form>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
 

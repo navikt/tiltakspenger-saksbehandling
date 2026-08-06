@@ -8,7 +8,7 @@ import AvbrytKlagebehandlingModal from './AvbrytKlagebehandlingModal';
 import { SakId } from '~/lib/sak/SakTyper';
 import { KlageId } from '~/lib/klage/typer/Klage';
 
-// jsdom implementerer ikke <dialog>, som Aksel sin Modal baserer seg på.
+// jsdom implementerer ikke <dialog>, som Aksel sine dialoger baserer seg på.
 // Vi setter open-attributtet slik at innholdet regnes som synlig/tilgjengelig.
 beforeAll(() => {
     HTMLDialogElement.prototype.showModal = jest.fn(function (this: HTMLDialogElement) {
@@ -170,7 +170,7 @@ describe('AvbrytKlagebehandlingModal', () => {
         const lukkKnapp = screen.getByRole('button', { name: 'Ikke avslutt behandling' });
 
         // Feilen skal dele container (body) med info-boksen ...
-        const body = feil.closest('.aksel-modal__body');
+        const body = feil.closest('.aksel-dialog__body');
         expect(body).not.toBeNull();
         expect(body).toContainElement(infoboks);
         // ... og ikke ligge i footeren sammen med handlingsknappene (der den sprengte ut).

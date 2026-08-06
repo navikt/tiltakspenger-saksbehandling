@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, LocalAlert, Modal, Textarea, VStack } from '@navikt/ds-react';
+import { Button, Dialog, LocalAlert, Textarea, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useState } from 'react';
 import { useFerdigstillKlage } from '~/lib/klage/api/KlageApi';
@@ -45,52 +45,56 @@ export const FerdigstillKlageModal = (props: {
     });
 
     return (
-        <Modal width={480} aria-label="Overta behandling" open={props.åpen} onClose={props.onClose}>
-            <Modal.Header>
-                <Heading size="medium" level="3">
-                    Ferdigstilling av klage
-                </Heading>
-            </Modal.Header>
-            <Modal.Body>
-                <Textarea
-                    label="Begrunnelse for ferdigstilling av klage"
-                    description="Valgfri"
-                    value={begrunnelse}
-                    onChange={(e) => setBegrunnelse(e.target.value)}
-                />
-            </Modal.Body>
-            <Modal.Footer>
-                <VStack gap="space-16">
-                    {ferdigstillKlage.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved ferdigstilling av klage
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                {ferdigstillKlage.error.message}
-                            </LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-                    <HStack gap="space-8">
-                        <Button type="button" variant="secondary" onClick={props.onClose}>
+        <Dialog open={props.åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup width={'480px'}>
+                <Dialog.Header>
+                    <Dialog.Title>Ferdigstilling av klage</Dialog.Title>
+                </Dialog.Header>
+
+                <Dialog.Body>
+                    <VStack gap="space-16">
+                        <Textarea
+                            label="Begrunnelse for ferdigstilling av klage"
+                            description="Valgfri"
+                            value={begrunnelse}
+                            onChange={(e) => setBegrunnelse(e.target.value)}
+                        />
+
+                        {ferdigstillKlage.error && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>
+                                        Feil ved ferdigstilling av klage
+                                    </LocalAlert.Title>
+                                </LocalAlert.Header>
+                                <LocalAlert.Content>
+                                    {ferdigstillKlage.error.message}
+                                </LocalAlert.Content>
+                            </LocalAlert>
+                        )}
+                    </VStack>
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    <Button
+                        type="button"
+                        onClick={() =>
+                            ferdigstillKlage.trigger({
+                                begrunnelse: begrunnelse.trim() || null,
+                            })
+                        }
+                        loading={ferdigstillKlage.isMutating}
+                    >
+                        Ferdigstill klagen
+                    </Button>
+
+                    <Dialog.CloseTrigger>
+                        <Button type="button" variant="secondary">
                             Avbryt
                         </Button>
-                        <Button
-                            type="button"
-                            onClick={() =>
-                                ferdigstillKlage.trigger({
-                                    begrunnelse: begrunnelse.trim() || null,
-                                })
-                            }
-                            loading={ferdigstillKlage.isMutating}
-                        >
-                            Ferdigstill klagen
-                        </Button>
-                    </HStack>
-                </VStack>
-            </Modal.Footer>
-        </Modal>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

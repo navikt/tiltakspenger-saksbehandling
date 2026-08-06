@@ -3,11 +3,10 @@ import {
     Button,
     DatePicker,
     Detail,
-    Heading,
+    Dialog,
     HStack,
     Label,
     LocalAlert,
-    Modal,
     Radio,
     RadioGroup,
     Select,
@@ -154,125 +153,129 @@ const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Modal aria-label="Lag ny klagehendelse" open={props.open} onClose={props.onClose}>
-                <Modal.Header>
-                    <Heading size="medium">Lag ny klagehendelse</Heading>
-                </Modal.Header>
-                <Modal.Body>
-                    <VStack gap="space-20">
-                        <Controller
-                            control={form.control}
-                            name={'klagebehandlingId'}
-                            render={({ field, fieldState }) => (
-                                <TextField
-                                    {...field}
-                                    error={fieldState.error?.message}
-                                    label="Klagebehandling ID"
-                                    description="IDen til klagebehandlingen hendelsen skal knyttes til"
-                                    size="small"
-                                />
-                            )}
-                        />
-                        <Controller
-                            control={form.control}
-                            name={'type'}
-                            render={({ field, fieldState }) => (
-                                <Select
-                                    {...field}
-                                    label="Type"
-                                    size="small"
-                                    error={fieldState.error?.message}
-                                    onChange={(e) => {
-                                        field.onChange(e);
-                                        form.setValue('utfall', '');
-                                    }}
-                                >
-                                    <option value="">Velg type</option>
-                                    <option value={LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET}>
-                                        Klagebehandling avsluttet
-                                    </option>
-                                    <option
-                                        value={
-                                            LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET
-                                        }
-                                    >
-                                        Omgjøringskravbehandling avsluttet
-                                    </option>
-                                    <option value={LokalHendelseType.BEHANDLING_FEILREGISTRERT}>
-                                        Behandling feilregistrert
-                                    </option>
-                                </Select>
-                            )}
-                        />
-                        {type && (
+        <Dialog open={props.open} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup aria-label="Lag ny klagehendelse">
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <Dialog.Header>
+                        <Dialog.Title>Lag ny klagehendelse</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <VStack gap="space-20">
                             <Controller
                                 control={form.control}
-                                name={'utfall'}
+                                name={'klagebehandlingId'}
+                                render={({ field, fieldState }) => (
+                                    <TextField
+                                        {...field}
+                                        error={fieldState.error?.message}
+                                        label="Klagebehandling ID"
+                                        description="IDen til klagebehandlingen hendelsen skal knyttes til"
+                                        size="small"
+                                    />
+                                )}
+                            />
+                            <Controller
+                                control={form.control}
+                                name={'type'}
                                 render={({ field, fieldState }) => (
                                     <Select
                                         {...field}
-                                        label="Utfall"
+                                        label="Type"
                                         size="small"
                                         error={fieldState.error?.message}
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            form.setValue('utfall', '');
+                                        }}
                                     >
-                                        <option value="">Velg utfall</option>
-                                        {type === LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET &&
-                                            Object.values(
-                                                KlageHendelseKlagebehandlingAvsluttetUtfall,
-                                            ).map((utfall) => (
-                                                <option key={utfall} value={utfall}>
-                                                    {utfall}
-                                                </option>
-                                            ))}
-                                        {type ===
-                                            LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET &&
-                                            Object.values(
-                                                OmgjøringskravbehandlingAvsluttetUtfall,
-                                            ).map((utfall) => (
-                                                <option key={utfall} value={utfall}>
-                                                    {utfall}
-                                                </option>
-                                            ))}
-                                        {type === LokalHendelseType.BEHANDLING_FEILREGISTRERT &&
-                                            Object.values(KlageHendelseFeilregistrertType).map(
-                                                (utfall) => (
-                                                    <option key={utfall} value={utfall}>
-                                                        {utfall}
-                                                    </option>
-                                                ),
-                                            )}
+                                        <option value="">Velg type</option>
+                                        <option value={LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET}>
+                                            Klagebehandling avsluttet
+                                        </option>
+                                        <option
+                                            value={
+                                                LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET
+                                            }
+                                        >
+                                            Omgjøringskravbehandling avsluttet
+                                        </option>
+                                        <option value={LokalHendelseType.BEHANDLING_FEILREGISTRERT}>
+                                            Behandling feilregistrert
+                                        </option>
                                     </Select>
                                 )}
                             />
+                            {type && (
+                                <Controller
+                                    control={form.control}
+                                    name={'utfall'}
+                                    render={({ field, fieldState }) => (
+                                        <Select
+                                            {...field}
+                                            label="Utfall"
+                                            size="small"
+                                            error={fieldState.error?.message}
+                                        >
+                                            <option value="">Velg utfall</option>
+                                            {type === LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET &&
+                                                Object.values(
+                                                    KlageHendelseKlagebehandlingAvsluttetUtfall,
+                                                ).map((utfall) => (
+                                                    <option key={utfall} value={utfall}>
+                                                        {utfall}
+                                                    </option>
+                                                ))}
+                                            {type ===
+                                                LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET &&
+                                                Object.values(
+                                                    OmgjøringskravbehandlingAvsluttetUtfall,
+                                                ).map((utfall) => (
+                                                    <option key={utfall} value={utfall}>
+                                                        {utfall}
+                                                    </option>
+                                                ))}
+                                            {type === LokalHendelseType.BEHANDLING_FEILREGISTRERT &&
+                                                Object.values(KlageHendelseFeilregistrertType).map(
+                                                    (utfall) => (
+                                                        <option key={utfall} value={utfall}>
+                                                            {utfall}
+                                                        </option>
+                                                    ),
+                                                )}
+                                        </Select>
+                                    )}
+                                />
+                            )}
+                        </VStack>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        {nyKlageHendelse.error && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>En feil skjedde</LocalAlert.Title>
+                                </LocalAlert.Header>
+                                <LocalAlert.Content>
+                                    {nyKlageHendelse.error.message}
+                                </LocalAlert.Content>
+                            </LocalAlert>
                         )}
-                    </VStack>
-                </Modal.Body>
-                <Modal.Footer>
-                    {nyKlageHendelse.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>En feil skjedde</LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>{nyKlageHendelse.error.message}</LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-                    <HStack gap="space-16">
-                        <Button
-                            variant="secondary"
-                            type="button"
-                            onClick={props.onClose}
-                            size="small"
-                        >
-                            Avbryt
-                        </Button>
-                        <Button variant="primary" type="submit" size="small">
-                            Lag klagehendelse
-                        </Button>
-                    </HStack>
-                </Modal.Footer>
-            </Modal>
-        </form>
+                        <HStack gap="space-16">
+                            <Button
+                                variant="secondary"
+                                type="button"
+                                onClick={props.onClose}
+                                size="small"
+                            >
+                                Avbryt
+                            </Button>
+                            <Button variant="primary" type="submit" size="small">
+                                Lag klagehendelse
+                            </Button>
+                        </HStack>
+                    </Dialog.Footer>
+                </form>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
 
@@ -367,195 +370,197 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Modal aria-label="Lag ny søknad" open={props.open} onClose={props.onClose}>
-                <Modal.Header>
-                    <Heading size="medium">Lag ny søknad</Heading>
-                </Modal.Header>
-                <Modal.Body>
-                    <VStack gap="space-20">
-                        <Controller
-                            render={({ field }) => (
-                                <TextField
-                                    label="Fødselsnummer"
-                                    description="Hvis du ikke setter in fnr, vil det bli generert et tilfeldig (mest sannsynlig ugyldig) fnr"
-                                    size="small"
-                                    {...field}
-                                />
-                            )}
-                            name={'fnr'}
-                            control={form.control}
-                        />
-
-                        <Controller
-                            render={({ field }) => (
-                                <RangePickerDate
-                                    size="small"
-                                    value={{
-                                        fraOgMed: field.value.fraOgMed,
-                                        tilOgMed: field.value.tilOgMed,
-                                    }}
-                                    onChange={(periode) => {
-                                        field.onChange(periode);
-                                    }}
-                                />
-                            )}
-                            name={'periode'}
-                            control={form.control}
-                        />
-
-                        <VStack gap="space-8">
+        <Dialog open={props.open} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup aria-label="Lag ny søknad">
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <Dialog.Header>
+                        <Dialog.Title>Lag ny søknad</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <VStack gap="space-20">
                             <Controller
                                 render={({ field }) => (
-                                    <RadioGroup
-                                        legend={'Vil du ha barnetillegg?'}
-                                        {...field}
+                                    <TextField
+                                        label="Fødselsnummer"
+                                        description="Hvis du ikke setter in fnr, vil det bli generert et tilfeldig (mest sannsynlig ugyldig) fnr"
                                         size="small"
-                                    >
-                                        <Radio value={true}>Ja</Radio>
-                                        <Radio value={false}>Nei</Radio>
-                                    </RadioGroup>
+                                        {...field}
+                                    />
                                 )}
-                                name="vilHaBarn"
+                                name={'fnr'}
                                 control={form.control}
                             />
-                            {/* eslint-disable-next-line */}
-                            {form.watch('vilHaBarn') && (
-                                <VStack gap="space-16">
-                                    {fields.map((item, index) => {
-                                        return (
-                                            <Box
-                                                key={item.id}
-                                                background="neutral-soft"
-                                                style={{ padding: '16px' }}
-                                            >
-                                                <VStack gap="space-16">
-                                                    <Controller
-                                                        render={({ field }) => (
-                                                            <TextField
-                                                                size="small"
-                                                                label="Fødselsnummer"
-                                                                description="11 siffer - Tilfeldig (mest sannsynlig ugyldig) hvis ikke oppgitt"
-                                                                {...field}
-                                                            />
-                                                        )}
-                                                        name={`barnetillegg.${index}.fnr`}
-                                                        control={form.control}
-                                                    />
-                                                    <Controller
-                                                        render={({ field }) => (
-                                                            <TextField
-                                                                size="small"
-                                                                label="Fødselsdato"
-                                                                description="YYYY-MM-DD - Tilfeldig hvis ikke oppgitt"
-                                                                {...field}
-                                                            />
-                                                        )}
-                                                        name={`barnetillegg.${index}.fødselsdato`}
-                                                        control={form.control}
-                                                    />
-                                                    <HStack gap="space-8">
-                                                        <Controller
-                                                            render={({ field }) => (
-                                                                <TextField
-                                                                    size="small"
-                                                                    label="Fornavn"
-                                                                    description="Tilfeldig hvis ikke oppgitt"
-                                                                    {...field}
-                                                                />
-                                                            )}
-                                                            name={`barnetillegg.${index}.fornavn`}
-                                                            control={form.control}
-                                                        />
-                                                        <Controller
-                                                            render={({ field }) => (
-                                                                <TextField
-                                                                    size="small"
-                                                                    label="Etternavn"
-                                                                    description="Tilfeldig hvis ikke oppgitt"
-                                                                    {...field}
-                                                                />
-                                                            )}
-                                                            name={`barnetillegg.${index}.etternavn`}
-                                                            control={form.control}
-                                                        />
-                                                    </HStack>
-                                                    <Controller
-                                                        render={({ field }) => (
-                                                            <RadioGroup
-                                                                size="small"
-                                                                legend={'Oppholder seg i EØS?'}
-                                                                {...field}
-                                                                value={field.value}
-                                                            >
-                                                                <Radio value={'Ja'}>Ja</Radio>
-                                                                <Radio value={'Nei'}>Nei</Radio>
-                                                            </RadioGroup>
-                                                        )}
-                                                        name={`barnetillegg.${index}.oppholderSegIEØS.svar`}
-                                                        control={form.control}
-                                                    />
-                                                    <Button
-                                                        type="button"
-                                                        size="small"
-                                                        variant="secondary"
-                                                        style={{ alignSelf: 'end' }}
-                                                        onClick={() => remove(index)}
-                                                    >
-                                                        Fjern
-                                                    </Button>
-                                                </VStack>
-                                            </Box>
-                                        );
-                                    })}
-                                    <Button
-                                        type="button"
-                                        variant="secondary"
+
+                            <Controller
+                                render={({ field }) => (
+                                    <RangePickerDate
                                         size="small"
-                                        style={{ alignSelf: 'start' }}
-                                        onClick={() =>
-                                            append({
-                                                fnr: '',
-                                                fødselsdato: '',
-                                                fornavn: '',
-                                                etternavn: '',
-                                                oppholderSegIEØS: { svar: 'Ja' },
-                                            })
-                                        }
-                                    >
-                                        Legg til
-                                    </Button>
-                                </VStack>
-                            )}
+                                        value={{
+                                            fraOgMed: field.value.fraOgMed,
+                                            tilOgMed: field.value.tilOgMed,
+                                        }}
+                                        onChange={(periode) => {
+                                            field.onChange(periode);
+                                        }}
+                                    />
+                                )}
+                                name={'periode'}
+                                control={form.control}
+                            />
+
+                            <VStack gap="space-8">
+                                <Controller
+                                    render={({ field }) => (
+                                        <RadioGroup
+                                            legend={'Vil du ha barnetillegg?'}
+                                            {...field}
+                                            size="small"
+                                        >
+                                            <Radio value={true}>Ja</Radio>
+                                            <Radio value={false}>Nei</Radio>
+                                        </RadioGroup>
+                                    )}
+                                    name="vilHaBarn"
+                                    control={form.control}
+                                />
+                                {/* eslint-disable-next-line */}
+                                {form.watch('vilHaBarn') && (
+                                    <VStack gap="space-16">
+                                        {fields.map((item, index) => {
+                                            return (
+                                                <Box
+                                                    key={item.id}
+                                                    background="neutral-soft"
+                                                    style={{ padding: '16px' }}
+                                                >
+                                                    <VStack gap="space-16">
+                                                        <Controller
+                                                            render={({ field }) => (
+                                                                <TextField
+                                                                    size="small"
+                                                                    label="Fødselsnummer"
+                                                                    description="11 siffer - Tilfeldig (mest sannsynlig ugyldig) hvis ikke oppgitt"
+                                                                    {...field}
+                                                                />
+                                                            )}
+                                                            name={`barnetillegg.${index}.fnr`}
+                                                            control={form.control}
+                                                        />
+                                                        <Controller
+                                                            render={({ field }) => (
+                                                                <TextField
+                                                                    size="small"
+                                                                    label="Fødselsdato"
+                                                                    description="YYYY-MM-DD - Tilfeldig hvis ikke oppgitt"
+                                                                    {...field}
+                                                                />
+                                                            )}
+                                                            name={`barnetillegg.${index}.fødselsdato`}
+                                                            control={form.control}
+                                                        />
+                                                        <HStack gap="space-8">
+                                                            <Controller
+                                                                render={({ field }) => (
+                                                                    <TextField
+                                                                        size="small"
+                                                                        label="Fornavn"
+                                                                        description="Tilfeldig hvis ikke oppgitt"
+                                                                        {...field}
+                                                                    />
+                                                                )}
+                                                                name={`barnetillegg.${index}.fornavn`}
+                                                                control={form.control}
+                                                            />
+                                                            <Controller
+                                                                render={({ field }) => (
+                                                                    <TextField
+                                                                        size="small"
+                                                                        label="Etternavn"
+                                                                        description="Tilfeldig hvis ikke oppgitt"
+                                                                        {...field}
+                                                                    />
+                                                                )}
+                                                                name={`barnetillegg.${index}.etternavn`}
+                                                                control={form.control}
+                                                            />
+                                                        </HStack>
+                                                        <Controller
+                                                            render={({ field }) => (
+                                                                <RadioGroup
+                                                                    size="small"
+                                                                    legend={'Oppholder seg i EØS?'}
+                                                                    {...field}
+                                                                    value={field.value}
+                                                                >
+                                                                    <Radio value={'Ja'}>Ja</Radio>
+                                                                    <Radio value={'Nei'}>Nei</Radio>
+                                                                </RadioGroup>
+                                                            )}
+                                                            name={`barnetillegg.${index}.oppholderSegIEØS.svar`}
+                                                            control={form.control}
+                                                        />
+                                                        <Button
+                                                            type="button"
+                                                            size="small"
+                                                            variant="secondary"
+                                                            style={{ alignSelf: 'end' }}
+                                                            onClick={() => remove(index)}
+                                                        >
+                                                            Fjern
+                                                        </Button>
+                                                    </VStack>
+                                                </Box>
+                                            );
+                                        })}
+                                        <Button
+                                            type="button"
+                                            variant="secondary"
+                                            size="small"
+                                            style={{ alignSelf: 'start' }}
+                                            onClick={() =>
+                                                append({
+                                                    fnr: '',
+                                                    fødselsdato: '',
+                                                    fornavn: '',
+                                                    etternavn: '',
+                                                    oppholderSegIEØS: { svar: 'Ja' },
+                                                })
+                                            }
+                                        >
+                                            Legg til
+                                        </Button>
+                                    </VStack>
+                                )}
+                            </VStack>
                         </VStack>
-                    </VStack>
-                </Modal.Body>
-                <Modal.Footer>
-                    <VStack gap="space-16">
-                        {fetchNysøknad.error && (
-                            <Infokort variant={'feil'}>{fetchNysøknad.error.message}</Infokort>
-                        )}
-                        <HStack gap="space-16">
-                            <Button
-                                variant="secondary"
-                                type="button"
-                                onClick={props.onClose}
-                                size="small"
-                            >
-                                Avbryt
-                            </Button>
-                            <Button
-                                variant="primary"
-                                loading={fetchNysøknad.isMutating}
-                                size="small"
-                            >
-                                Lag søknad
-                            </Button>
-                        </HStack>
-                    </VStack>
-                </Modal.Footer>
-            </Modal>
-        </form>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <VStack gap="space-16">
+                            {fetchNysøknad.error && (
+                                <Infokort variant={'feil'}>{fetchNysøknad.error.message}</Infokort>
+                            )}
+                            <HStack gap="space-16">
+                                <Button
+                                    variant="secondary"
+                                    type="button"
+                                    onClick={props.onClose}
+                                    size="small"
+                                >
+                                    Avbryt
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    loading={fetchNysøknad.isMutating}
+                                    size="small"
+                                >
+                                    Lag søknad
+                                </Button>
+                            </HStack>
+                        </VStack>
+                    </Dialog.Footer>
+                </form>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
 

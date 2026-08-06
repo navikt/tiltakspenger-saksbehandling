@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, LocalAlert, Modal, Select, VStack } from '@navikt/ds-react';
+import { Button, Dialog, LocalAlert, Select, VStack } from '@navikt/ds-react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Søknad } from '~/types/Søknad';
@@ -72,50 +72,57 @@ export const VelgOmgjøringsbehandlingModal = (props: {
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Modal
-                width={550}
-                aria-label="Velg omgjøringsbehandling"
-                open={props.åpen}
-                onClose={props.onClose}
-            >
-                <Modal.Header>
-                    <Heading size="medium">Velg omgjøringsbehandling</Heading>
-                </Modal.Header>
-                <Modal.Body>
-                    <VelgOmgjøringsbehandlingForm
-                        control={form.control}
-                        rammevedtak={props.rammevedtak}
-                        søknader={props.søknader}
-                        klagebehandling={props.klagebehandling}
-                        meldekortvedtak={props.meldekortvedtak}
-                        meldeperiodekjeder={props.meldeperiodekjeder}
-                    />
-                </Modal.Body>
-                <Modal.Footer>
-                    {opprettRammebehandling.error && (
-                        <LocalAlert status="error" size="small">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved opprettelse av omgjøringsbehandling
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                {opprettRammebehandling.error.message}
-                            </LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-                    <HStack gap="space-16">
-                        <Button variant="secondary" onClick={props.onClose}>
-                            Lukk
-                        </Button>
-                        <Button variant="primary" loading={opprettRammebehandling.isMutating}>
+        <Dialog open={props.åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup width={'550px'} aria-label="Velg omgjøringsbehandling">
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <Dialog.Header>
+                        <Dialog.Title>Velg omgjøringsbehandling</Dialog.Title>
+                    </Dialog.Header>
+
+                    <Dialog.Body>
+                        <VStack gap="space-16">
+                            <VelgOmgjøringsbehandlingForm
+                                control={form.control}
+                                rammevedtak={props.rammevedtak}
+                                søknader={props.søknader}
+                                klagebehandling={props.klagebehandling}
+                                meldekortvedtak={props.meldekortvedtak}
+                                meldeperiodekjeder={props.meldeperiodekjeder}
+                            />
+
+                            {opprettRammebehandling.error && (
+                                <LocalAlert status="error" size="small">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>
+                                            Feil ved opprettelse av omgjøringsbehandling
+                                        </LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                    <LocalAlert.Content>
+                                        {opprettRammebehandling.error.message}
+                                    </LocalAlert.Content>
+                                </LocalAlert>
+                            )}
+                        </VStack>
+                    </Dialog.Body>
+
+                    <Dialog.Footer>
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            loading={opprettRammebehandling.isMutating}
+                        >
                             Opprett omgjøringsbehandling
                         </Button>
-                    </HStack>
-                </Modal.Footer>
-            </Modal>
-        </form>
+
+                        <Dialog.CloseTrigger>
+                            <Button variant="secondary" type="button">
+                                Lukk
+                            </Button>
+                        </Dialog.CloseTrigger>
+                    </Dialog.Footer>
+                </form>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
 

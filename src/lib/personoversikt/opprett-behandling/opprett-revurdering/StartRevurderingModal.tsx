@@ -1,9 +1,9 @@
-import { Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { Button, Dialog, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { SakId } from '~/lib/sak/SakTyper';
 import router from 'next/router';
 import { useStartRevurdering } from './useStartRevurdering';
-import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { behandlingUrl } from '~/utils/urls';
 import { rammebehandlingResultatTekst } from '~/utils/tekstformateringUtils';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -26,13 +26,34 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
     };
 
     return (
-        <>
-            <BekreftelsesModal
-                åpen={åpen}
-                lukkModal={lukkModal}
-                feil={startRevurderingError}
-                tittel={'Start revurdering'}
-                bekreftKnapp={
+        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && lukkModal()}>
+            <Dialog.Popup>
+                <Dialog.Header>
+                    <Dialog.Title>{'Start revurdering'}</Dialog.Title>
+                </Dialog.Header>
+
+                <Dialog.Body>
+                    <VStack gap={'space-16'}>
+                        <RadioGroup
+                            legend={'Velg type revurdering'}
+                            value={valgtType}
+                            onChange={(type: RevurderingResultat) => {
+                                setValgtType(type);
+                            }}
+                        >
+                            <Radio value={RevurderingResultat.INNVILGELSE}>{'Innvilgelse'}</Radio>
+                            <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>
+                        </RadioGroup>
+
+                        {startRevurderingError && (
+                            <Infokort variant={'feil'} size={'small'}>
+                                {startRevurderingError.message}
+                            </Infokort>
+                        )}
+                    </VStack>
+                </Dialog.Body>
+
+                <Dialog.Footer>
                     <Button
                         variant={'primary'}
                         type={'button'}
@@ -56,19 +77,14 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
                     >
                         {`Opprett revurdering${valgtType ? ` (${rammebehandlingResultatTekst[valgtType]})` : ''}`}
                     </Button>
-                }
-            >
-                <RadioGroup
-                    legend={'Velg type revurdering'}
-                    value={valgtType}
-                    onChange={(type: RevurderingResultat) => {
-                        setValgtType(type);
-                    }}
-                >
-                    <Radio value={RevurderingResultat.INNVILGELSE}>{'Innvilgelse'}</Radio>
-                    <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>
-                </RadioGroup>
-            </BekreftelsesModal>
-        </>
+
+                    <Dialog.CloseTrigger>
+                        <Button variant={'secondary'} type={'button'}>
+                            {'Avbryt'}
+                        </Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

@@ -1,4 +1,4 @@
-import { BodyShort, Button, Heading, HStack, LocalAlert, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, LocalAlert, VStack } from '@navikt/ds-react';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { Nullable } from '~/types/UtilTypes';
 
@@ -15,50 +15,48 @@ const OvertaKlagebehandlingModal = (props: {
     };
 }) => {
     return (
-        <Modal
-            width={480}
-            aria-label="Overta behandling"
-            open={props.åpen}
-            onClose={props.onClose}
-            className={styles.modal}
-        >
-            <Modal.Header>
-                <Heading size="medium" level="3">
-                    Overta behandling
-                </Heading>
-            </Modal.Header>
-            <Modal.Body>
-                <BodyShort>
-                    Er du sikker på at du vil ta over behandlingen fra {props.overtarFra}?
-                </BodyShort>
-            </Modal.Body>
-            <Modal.Footer>
-                <VStack gap="space-16">
-                    {props.api?.error && (
-                        <LocalAlert status="error" size="small">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved overtakelse av behandling
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>{props.api.error.message}</LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-                    <HStack gap="space-8">
-                        <Button type="button" variant="secondary" onClick={props.onClose}>
+        <Dialog open={props.åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+            <Dialog.Popup width={'480px'} className={styles.dialog}>
+                <Dialog.Header>
+                    <Dialog.Title>Overta behandling</Dialog.Title>
+                </Dialog.Header>
+
+                <Dialog.Body>
+                    <VStack gap="space-16">
+                        <BodyShort>
+                            Er du sikker på at du vil ta over behandlingen fra {props.overtarFra}?
+                        </BodyShort>
+
+                        {props.api?.error && (
+                            <LocalAlert status="error" size="small">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>
+                                        Feil ved overtakelse av behandling
+                                    </LocalAlert.Title>
+                                </LocalAlert.Header>
+                                <LocalAlert.Content>{props.api.error.message}</LocalAlert.Content>
+                            </LocalAlert>
+                        )}
+                    </VStack>
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    <Button
+                        type="button"
+                        onClick={() => props.api.trigger({ overtarFra: props.overtarFra })}
+                        loading={props.api.isMutating}
+                    >
+                        Overta behandling
+                    </Button>
+
+                    <Dialog.CloseTrigger>
+                        <Button type="button" variant="secondary">
                             Avbryt
                         </Button>
-                        <Button
-                            type="button"
-                            onClick={() => props.api.trigger({ overtarFra: props.overtarFra })}
-                            loading={props.api.isMutating}
-                        >
-                            Overta behandling
-                        </Button>
-                    </HStack>
-                </VStack>
-            </Modal.Footer>
-        </Modal>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
 

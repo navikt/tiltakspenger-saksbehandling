@@ -1,5 +1,5 @@
 import { SakProps } from '../sak/SakTyper';
-import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useHentSakForFNR = () => {
     const {
