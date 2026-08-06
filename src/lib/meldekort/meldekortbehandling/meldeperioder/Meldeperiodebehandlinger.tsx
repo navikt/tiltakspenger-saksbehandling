@@ -11,10 +11,10 @@ import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { formaterPeriodeKort, ukenummerFraPeriode } from '~/utils/date';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { useState } from 'react';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { validerMeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './Meldeperiodebehandlinger.module.css';
 

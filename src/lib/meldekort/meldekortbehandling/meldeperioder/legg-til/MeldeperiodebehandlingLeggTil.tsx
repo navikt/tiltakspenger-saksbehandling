@@ -1,7 +1,6 @@
 import { Button, Dialog, Select, VStack } from '@navikt/ds-react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
@@ -13,6 +12,7 @@ import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldek
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;

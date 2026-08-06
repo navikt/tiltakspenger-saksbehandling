@@ -7,7 +7,6 @@ import {
     MeldekortbehandlingId,
     MeldekortDagBeregnetProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { useSak } from '~/lib/sak/SakContext';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
@@ -27,6 +26,7 @@ import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { BeregningForMeldeperiodeKjede } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/BeregningForMeldeperiodeKjede';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldekortbehandlingForKjedeKompakt.module.css';
 

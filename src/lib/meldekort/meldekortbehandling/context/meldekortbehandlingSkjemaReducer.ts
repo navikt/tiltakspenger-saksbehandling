@@ -9,7 +9,10 @@ import {
     MeldekortbehandlingDagStatus,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import {
+    MeldeperiodeKjedeId,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingProps,

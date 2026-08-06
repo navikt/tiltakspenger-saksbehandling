@@ -1,5 +1,4 @@
 import { HStack, VStack } from '@navikt/ds-react';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/tekster';
@@ -8,6 +7,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useSak } from '~/lib/sak/SakContext';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { formaterMeldeperiode } from '~/utils/date';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './UbehandledeMeldekortVarsel.module.css';
 

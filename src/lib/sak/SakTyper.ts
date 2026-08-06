@@ -13,7 +13,8 @@ import {
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export type SakId = `sak_${string}`;
 

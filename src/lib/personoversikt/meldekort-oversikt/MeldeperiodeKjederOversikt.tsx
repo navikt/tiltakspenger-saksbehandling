@@ -5,8 +5,11 @@ import { formatterBeløp } from '~/utils/beløp';
 import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { MeldeperiodekjedeProps, KanIkkeBehandlesGrunn } from '~/lib/meldekort/typer/Meldeperiode';
 import { TilBehandlingKnapp } from '~/lib/personoversikt/TilBehandlingKnapp';
+import {
+    KanIkkeBehandlesGrunn,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldeperiodeKjederOversikt.module.css';
 

@@ -1,9 +1,9 @@
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { MeldekortDagBeregnetProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { RammebehandlingId } from '../../rammebehandling/typer/Rammebehandling';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export type BeløpProps = {
     totalt: number;

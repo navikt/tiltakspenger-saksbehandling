@@ -1,11 +1,11 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { periodeTilMeldeperiodeKjedeId } from '~/utils/periode';
 import { MeldeperiodekjedeSide } from '~/lib/meldekort/meldeperiodekjede/MeldeperiodekjedeSide';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;

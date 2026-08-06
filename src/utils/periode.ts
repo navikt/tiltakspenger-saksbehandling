@@ -1,6 +1,7 @@
 import { MedPeriode, Periode } from '~/types/Periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Periode => {
     const [fraOgMed, tilOgMed] = kjedeId.split('/');

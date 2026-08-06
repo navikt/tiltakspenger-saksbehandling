@@ -27,7 +27,8 @@ import {
 } from '../meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '../meldekort/typer/Meldekortvedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 const Omgjøringsresultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };

@@ -6,9 +6,12 @@ import { erBeslutter, kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
-import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { formaterMeldeperiode, formaterPeriode, ukenummerFraPeriode } from '~/utils/date';
+import {
+    MeldeperiodeKjedeId,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const kanBehandleMeldeperiodekjede = ({
     kanIkkeBehandlesGrunn,

@@ -40,7 +40,7 @@
         "use-debounce": "10.1.1",
         "uuid": "13.0.2"
     },
-    "devDependenciesComments":{
+    "devDependenciesComments": {
         "@playwright/test": "Husk å oppdatere .test-and-build.yml workflow når denne versjonen oppdateres"
     },
     "devDependencies": {

@@ -3,8 +3,8 @@ import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodekjedeVenstreSeksjon } from '~/lib/meldekort/meldeperiodekjede/venstre-seksjon/MeldeperiodekjedeVenstreSeksjon';
 import { MeldeperiodekjedeHøyreSeksjon } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { MeldeperiodekjedeProvider } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldeperiodekjedeSide.module.css';
 

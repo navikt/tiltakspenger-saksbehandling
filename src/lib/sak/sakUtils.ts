@@ -12,7 +12,6 @@ import {
     TilbakekrevingBehandling,
     TilbakekrevingId,
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
@@ -24,6 +23,10 @@ import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Søknad, SøknadId } from '~/types/Søknad';
 import { ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
+import {
+    MeldeperiodeKjedeId,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, rammebehandlinger } = sak;

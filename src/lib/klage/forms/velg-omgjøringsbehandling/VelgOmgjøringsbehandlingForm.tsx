@@ -25,7 +25,8 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;

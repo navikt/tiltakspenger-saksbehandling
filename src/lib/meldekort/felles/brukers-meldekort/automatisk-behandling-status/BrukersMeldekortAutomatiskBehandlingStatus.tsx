@@ -113,7 +113,7 @@ const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
         'Feil relatert til beregning av utbetalingen',
     [MeldekortBehandletAutomatiskStatus.UKJENT_FEIL]: 'Ukjent feil',
     [MeldekortBehandletAutomatiskStatus.HAR_ÅPEN_BEHANDLING]:
-        'Det fantes allerede en åpen meldekortbehandling - vi tillater kun en samtidig åpen behandling',
+        'Det fantes allerede en åpen behandling for meldeperioden',
     [MeldekortBehandletAutomatiskStatus.MÅ_BEHANDLE_FØRSTE_KJEDE]:
         'Første meldeperiode må alltid behandles først',
     [MeldekortBehandletAutomatiskStatus.MÅ_BEHANDLE_NESTE_KJEDE]:

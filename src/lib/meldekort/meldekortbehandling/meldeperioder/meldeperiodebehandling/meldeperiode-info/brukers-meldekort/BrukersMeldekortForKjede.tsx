@@ -10,7 +10,8 @@ import {
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
 import { useState } from 'react';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodekjedeProps;

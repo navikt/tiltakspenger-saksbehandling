@@ -45,25 +45,23 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
                 <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
             </VStack>
 
-            <HStack gap={'space-16'} justify={'space-between'}>
-                <HStack gap={'space-16'} justify={'end'}>
-                    <BehandlingLagreKnapp
-                        behandling={behandling}
-                        hentVedtakDTO={validerOgHentDTO}
-                        onSuccess={() => {
-                            setLagringResultat('ok');
-                        }}
-                        onError={(error) => {
-                            setLagringResultat(error);
-                        }}
-                    />
-                    <RammebehandlingSendTilBeslutning
-                        behandling={behandling}
-                        valider={validerTilBeslutning}
-                        valideringResultat={valideringResultat}
-                        disabled={valideringResultat.errors.length > 0 || isDirty}
-                    />
-                </HStack>
+            <HStack gap={'space-16'} justify={'end'}>
+                <BehandlingLagreKnapp
+                    behandling={behandling}
+                    hentVedtakDTO={validerOgHentDTO}
+                    onSuccess={() => {
+                        setLagringResultat('ok');
+                    }}
+                    onError={(error) => {
+                        setLagringResultat(error);
+                    }}
+                />
+                <RammebehandlingSendTilBeslutning
+                    behandling={behandling}
+                    valider={validerTilBeslutning}
+                    valideringResultat={valideringResultat}
+                    disabled={valideringResultat.errors.length > 0 || isDirty}
+                />
             </HStack>
         </VStack>
     );

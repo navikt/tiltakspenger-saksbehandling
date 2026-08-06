@@ -57,7 +57,8 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     sak: SakProps;

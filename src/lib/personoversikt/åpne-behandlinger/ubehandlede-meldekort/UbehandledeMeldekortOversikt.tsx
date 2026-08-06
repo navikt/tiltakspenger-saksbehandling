@@ -1,5 +1,4 @@
 import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
@@ -7,6 +6,7 @@ import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import NextLink from 'next/link';
 import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     saksnummer: string;

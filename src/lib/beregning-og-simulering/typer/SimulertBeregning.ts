@@ -3,9 +3,9 @@ import {
     MeldekortbehandlingId,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { BeregningerSummert } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { RammebehandlingId } from '../../rammebehandling/typer/Rammebehandling';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export enum SimulerertBehandlingstype {
     RAMME = 'RAMME',

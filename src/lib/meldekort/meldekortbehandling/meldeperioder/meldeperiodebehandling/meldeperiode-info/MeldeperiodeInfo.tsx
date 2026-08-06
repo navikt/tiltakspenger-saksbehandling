@@ -12,9 +12,11 @@ import { meldeperiodebehandlingTypeIkoner } from '~/lib/meldekort/utils/ikoner';
 import { BrukersMeldekortForKjede } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/BrukersMeldekortForKjede';
 import { MeldekortbehandlingerForKjede } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingerForKjede';
 
-import style from './MeldeperiodeInfo.module.css';
 import { formaterMeldeperiode } from '~/utils/date';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
+
+import style from './MeldeperiodeInfo.module.css';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodekjedeProps;

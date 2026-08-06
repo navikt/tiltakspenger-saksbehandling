@@ -51,8 +51,8 @@ import {
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     sak: SakProps;

@@ -1,7 +1,10 @@
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { TextAreaInput } from '~/utils/textarea';
 import { ReducerAction } from '~/types/ReducerAction';
+import {
+    MeldeperiodeKjedeId,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export type MeldekortDagSkjema = {
     dato: string;

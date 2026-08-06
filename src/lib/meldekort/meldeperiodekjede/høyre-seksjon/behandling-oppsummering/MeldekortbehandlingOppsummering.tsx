@@ -4,7 +4,6 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { Alert, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortUker } from '~/lib/meldekort/felles/uker/MeldekortUker';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { formaterTidspunktKort } from '~/utils/date';
@@ -18,6 +17,7 @@ import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingO
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { hentKlagebehandling, hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/utils/tekster';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldekortBehandlingOppsummering.module.css';
 

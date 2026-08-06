@@ -7,7 +7,8 @@ import { MeldekortbehandlingForKjedeKompakt } from '~/lib/meldekort/meldekortbeh
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodekjedeProps;

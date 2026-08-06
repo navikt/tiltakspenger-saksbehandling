@@ -16,7 +16,6 @@ import {
 import { formaterDatotekst, ukedagFraDatoKort, ukenummerFraDatotekst } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
@@ -36,6 +35,7 @@ import {
 } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/useMeldekortHurtigutfylling';
 import { MeldekortHurtigutfyllingStatusVelger } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/status-velger/MeldekortHurtigutfyllingStatusVelger';
 import { MeldekortHurtigutfyllingStart } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/utfylling-start/MeldekortHurtigutfyllingStart';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './Meldeperiodebehandling.module.css';
 

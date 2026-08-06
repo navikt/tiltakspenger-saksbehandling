@@ -1,4 +1,4 @@
-import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
+import { MeldeperiodeId } from './Meldeperiode';
 import { Nullable } from '~/types/UtilTypes';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Periode } from '~/types/Periode';
@@ -16,6 +16,7 @@ import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { KlageId } from '~/lib/klage/typer/Klage';
 import { VentestatusHendelse } from '~/types/Ventestatus';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const MeldekortbehandlingPrefix = 'meldekort_' as const;
 

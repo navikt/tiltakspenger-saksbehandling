@@ -3,7 +3,8 @@ import {
     MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
-import { KanIkkeBehandlesGrunn } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { KanIkkeBehandlesGrunn } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export const kanIkkeBehandlesGrunnTekst: Record<KanIkkeBehandlesGrunn, string> = {
     [KanIkkeBehandlesGrunn.HAR_ÅPEN_BEHANDLING]:

@@ -1,8 +1,8 @@
 import { Heading, VStack } from '@navikt/ds-react';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;
