@@ -1,5 +1,5 @@
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { SøknadId } from '~/types/Søknad';
+import { SøknadId } from '~/lib/søknad/søknadTyper';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { KlageId } from '~/lib/klage/typer/Klage';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';

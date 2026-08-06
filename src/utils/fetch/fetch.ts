@@ -1,4 +1,4 @@
-import { finnFetchFeilmelding } from '../feilmeldinger';
+import { finnFetchFeilmelding } from './feilmeldinger';
 import { stripLeadingSlash } from '../string';
 
 type ErrorContructorProps<Data = unknown> = {

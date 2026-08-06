@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Infokort, InfokortVariant } from '~/lib/_felles/infokort/Infokort';
 import { classNames } from '~/utils/classNames';
 
-import styles from './Varsel.module.css';
+import styles from './LukkbartVarsel.module.css';
 
 type Props = {
     melding: string;

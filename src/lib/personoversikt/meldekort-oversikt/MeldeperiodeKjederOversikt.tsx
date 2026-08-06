@@ -1,8 +1,8 @@
 import { Checkbox, Table, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { formaterMeldeperiode } from '~/utils/date';
-import { formatterBeløp } from '~/utils/beløp';
-import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
+import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { behandlingsstatusTekst } from '~/lib/behandling-felles/status/behandlingsstatus';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';

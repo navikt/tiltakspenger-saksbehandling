@@ -1,9 +1,9 @@
 import { BodyShort, HStack } from '@navikt/ds-react';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { classNames } from '~/utils/classNames';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 import style from './BehandlingSaksopplysning.module.css';
+import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     navn: string;

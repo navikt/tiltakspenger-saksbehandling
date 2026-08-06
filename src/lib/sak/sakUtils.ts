@@ -21,7 +21,7 @@ import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortved
 import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { Søknad, SøknadId } from '~/types/Søknad';
+import { Søknad, SøknadId } from '~/lib/søknad/søknadTyper';
 import { ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
 import {
     MeldeperiodeKjedeId,

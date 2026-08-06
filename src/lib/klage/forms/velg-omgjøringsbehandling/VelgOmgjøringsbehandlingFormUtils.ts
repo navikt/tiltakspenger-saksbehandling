@@ -1,7 +1,7 @@
 import { FieldErrors } from 'react-hook-form';
 import { OpprettOmgjøringsbehandlingForKlageRequest } from '~/lib/klage/typer/Klage';
 import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { SøknadId } from '~/types/Søknad';
+import { SøknadId } from '~/lib/søknad/søknadTyper';
 
 export interface VelgOmgjøringsbehandlingFormData {
     behandlingstype: VelgOmgjøringsbehandlingTyper | '';

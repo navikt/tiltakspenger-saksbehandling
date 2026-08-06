@@ -17,7 +17,7 @@ import {
     queryUtenBenkFilter,
     setBenkFilterCookie,
 } from '~/lib/benk/filter/benkFilterUtils';
-import { useResettableState } from '~/hooks/useResettableState';
+import { useResettableState } from '~/utils/useResettableState';
 
 type Props = {
     benkOversikt: BenkOversiktProps;

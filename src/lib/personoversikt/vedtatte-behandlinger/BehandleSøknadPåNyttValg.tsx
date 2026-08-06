@@ -3,7 +3,7 @@ import { FileResetIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 import { SakId } from '~/lib/sak/SakTyper';
 import { behandlingUrl } from '~/utils/urls';
-import { SøknadId } from '~/types/Søknad';
+import { SøknadId } from '~/lib/søknad/søknadTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 

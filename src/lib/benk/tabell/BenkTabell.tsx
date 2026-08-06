@@ -18,13 +18,13 @@ import {
     BenkSorteringRetning,
 } from '~/lib/benk/typer/Benk';
 import { BenkVentestatus } from '~/lib/benk/tabell/BenkVentestatus';
-import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
 import { personoversiktUrl } from '~/utils/urls';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 
 import styles from './BenkTabell.module.css';
+import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 
 type Props = {
     behandlinger: BenkBehandling[];
@@ -169,7 +169,7 @@ export const BenkTabell = ({ behandlinger, valgtType }: Props) => {
                                         {tilbakekrevingKilde &&
                                             ` (fra ${benkTilbakekrevingKildeTekst[tilbakekrevingKilde]})`}
                                     </BodyShort>
-                                    {resultat && behandlingResultatTilTag(resultat)}
+                                    {resultat && <RammebehandlingResultatTag resultat={resultat} />}
                                 </HStack>
                             </Table.DataCell>
                             {valgtType === BenkBehandlingstype.TILBAKEKREVING && (

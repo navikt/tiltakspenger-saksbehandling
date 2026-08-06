@@ -12,15 +12,13 @@ import {
     hentSisteKlagehendelseUtfallFraKlagebehandling,
     kanFortsetteKlagebehandling,
 } from '~/lib/klage/utils/klageUtils';
-import {
-    klagebehandlingStatusTilTag,
-    klagebehandlingResultatTilTag,
-} from '~/utils/tekstformateringUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentKlagevedtakMedBehandlinger } from '~/lib/sak/sakUtils';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
+import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 
 type KlagebehandlingerMedOmgjøringsbehandling = {
     klagebehandling: Klagebehandling;
@@ -66,12 +64,12 @@ export const Klageoversikt = () => {
     const klagevedtakMedBehandlingOversikt = klagevedtakMedBehandling.map(
         (klagevedtakMedBehandling) => {
             return {
-                status: klagebehandlingStatusTilTag({
-                    status: klagevedtakMedBehandling.behandling.status,
-                }),
-                resultat: klagebehandlingResultatTilTag({
-                    resultat: klagevedtakMedBehandling.resultat,
-                }),
+                status: (
+                    <KlagebehandlingStatusTag status={klagevedtakMedBehandling.behandling.status} />
+                ),
+                resultat: (
+                    <KlagebehandlingResultatTag resultat={klagevedtakMedBehandling.resultat} />
+                ),
                 utfallKlageinstans: '-',
                 opprettet: formaterTidspunkt(klagevedtakMedBehandling.behandling.opprettet),
                 ferdigstilt: formaterTidspunkt(klagevedtakMedBehandling.opprettet),
@@ -100,11 +98,13 @@ export const Klageoversikt = () => {
                 status: erBehandlingSattPåVent(klagebehandling) ? (
                     <Tag data-color="warning">Satt på vent</Tag>
                 ) : (
-                    klagebehandlingStatusTilTag({ status: klagebehandling.status })
+                    <KlagebehandlingStatusTag status={klagebehandling.status} />
                 ),
-                resultat: klagebehandling.resultat
-                    ? klagebehandlingResultatTilTag({ resultat: klagebehandling.resultat.type })
-                    : '-',
+                resultat: klagebehandling.resultat ? (
+                    <KlagebehandlingResultatTag resultat={klagebehandling.resultat.type} />
+                ) : (
+                    '-'
+                ),
                 utfallKlageinstans: utfall ? klagehendelseUtfallTilTag({ utfall: utfall }) : '-',
                 opprettet: formaterTidspunkt(klagebehandling.opprettet),
                 ferdigstilt: erKlageFerdigstilt(klagebehandling)

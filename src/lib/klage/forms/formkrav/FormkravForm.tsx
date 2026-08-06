@@ -15,10 +15,10 @@ import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay, ukenummerFraDatotekst } from '~/utils/date';
 import { benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
-import { rammebehandlingResultatTekst } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
+import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;

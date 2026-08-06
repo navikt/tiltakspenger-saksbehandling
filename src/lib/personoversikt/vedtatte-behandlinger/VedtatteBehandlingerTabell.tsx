@@ -1,9 +1,4 @@
 import { ActionMenu, Button, HStack, Table } from '@navikt/ds-react';
-import {
-    behandlingResultatTilTag,
-    rammebehandlingstypeTekst,
-    klagebehandlingResultatTilText,
-} from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { BehandleSøknadPåNyttValg } from '~/lib/personoversikt/vedtatte-behandlinger/BehandleSøknadPåNyttValg';
@@ -26,6 +21,9 @@ import {
 } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 import style from './OmgjortGradBakgrunn.module.css';
+import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
+import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
+import { rammebehandlingstypeTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 
 type Props = {
     sakId: SakId;
@@ -97,10 +95,10 @@ const RammevedtakMedBehandlingRad = ({
         >
             <Table.DataCell>{rammebehandlingstypeTekst[behandling.type]}</Table.DataCell>
             <Table.DataCell>
-                {behandlingResultatTilTag(
-                    resultat,
-                    behandling.klagebehandlingId ? 'Klage - ' : undefined,
-                )}
+                <RammebehandlingResultatTag
+                    resultat={resultat}
+                    prefiks={behandling.klagebehandlingId ? 'Klage - ' : undefined}
+                />
             </Table.DataCell>
             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
             <Table.DataCell>
@@ -158,7 +156,7 @@ const KlagevedtakMedBehandlingRad = ({
     return (
         <Table.Row shadeOnHover={false}>
             <Table.DataCell>{'Klage'}</Table.DataCell>
-            <Table.DataCell>{klagebehandlingResultatTilText[resultat]}</Table.DataCell>
+            <Table.DataCell>{klagebehandlingResultatTekst[resultat]}</Table.DataCell>
             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
             <Table.DataCell>{'-'}</Table.DataCell>
             <Table.DataCell>{'-'}</Table.DataCell>

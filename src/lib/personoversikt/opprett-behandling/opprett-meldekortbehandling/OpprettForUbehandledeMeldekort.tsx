@@ -5,7 +5,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { erSaksbehandler } from '~/lib/saksbehandler/tilganger';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
-import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/tekster';
+import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { formaterMeldeperiode } from '~/utils/date';

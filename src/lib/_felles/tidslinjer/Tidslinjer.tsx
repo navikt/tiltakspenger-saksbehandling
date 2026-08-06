@@ -11,7 +11,7 @@ import { BodyShort, Button, Heading, Timeline, VStack } from '@navikt/ds-react';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/lib/_felles/tidslinjer/useTidslinjeDateRange';
 import {

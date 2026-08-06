@@ -1,5 +1,5 @@
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { TextAreaInput } from '~/utils/textarea';
+import { TextAreaInput } from '~/lib/_felles/fritekst/fritekstUtils';
 import { ReducerAction } from '~/types/ReducerAction';
 import {
     MeldeperiodeKjedeId,

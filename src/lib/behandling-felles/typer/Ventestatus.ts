@@ -1,4 +1,4 @@
-import { Nullable } from './UtilTypes';
+import { Nullable } from '~/types/UtilTypes';
 
 export type VentestatusHendelse = {
     sattPåVentAv: string;

@@ -1,11 +1,11 @@
 import { ÅpenBehandling } from '../personoversikt/typer/ÅpenBehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { UtbetalingstidslinjePeriode } from '~/types/Utbetaling';
+import { UtbetalingstidslinjePeriode } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Rammebehandling } from '../rammebehandling/typer/Rammebehandling';
-import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
+import { TidslinjeRammevedtak } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { Klagebehandling } from '../klage/typer/Klage';
 import { Klagevedtak } from '../klage/typer/Klagevedtak';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import {

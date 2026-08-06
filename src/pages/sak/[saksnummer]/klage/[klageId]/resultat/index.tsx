@@ -26,7 +26,7 @@ import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';

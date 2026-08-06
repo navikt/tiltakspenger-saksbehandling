@@ -2,7 +2,7 @@ import { BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { classNames } from '~/utils/classNames';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 import { formaterPeriode, ukenummerFraDatotekst } from '~/utils/date';
 import { Periode } from '~/types/Periode';

@@ -9,12 +9,12 @@ import {
     KanIkkeIverksetteUtbetalingGrunn,
     Utbetalingskontroll,
     Utbetalingsstatus,
-} from '~/types/Utbetaling';
+} from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { KlageId } from '~/lib/klage/typer/Klage';
-import { VentestatusHendelse } from '~/types/Ventestatus';
+import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 

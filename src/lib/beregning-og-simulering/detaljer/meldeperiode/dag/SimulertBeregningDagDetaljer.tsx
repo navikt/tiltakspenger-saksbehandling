@@ -7,13 +7,13 @@ import {
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erHelg, formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
-import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 import { tilKompakteMerker } from './simuleringsmerker';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/meldekortIkoner';
+import { PartialRecord } from '~/types/UtilTypes';
+import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 import style from './SimulertBeregningDagDetaljer.module.css';
-import { PartialRecord } from '~/types/UtilTypes';
 
 type Props = {
     dag: SimulertBeregningDag;

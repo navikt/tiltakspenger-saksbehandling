@@ -1,7 +1,7 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
-import { Utbetalingsstatus } from '~/types/Utbetaling';
+import { Utbetalingsstatus } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Nullable } from '~/types/UtilTypes';
+import { utbetalingsstatusTekst } from '~/lib/beregning-og-simulering/utils/utbetalingTekster';
 
 import style from '~/lib/_felles/utbetaling/UtbetalingFelles.module.css';
 

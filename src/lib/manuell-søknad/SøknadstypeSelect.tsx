@@ -4,14 +4,14 @@ import type {
     ManueltRegistrertSøknad,
     SøknadstypeManueltRegistrertSøknad,
 } from './ManueltRegistrertSøknad';
-import { formaterSøknadstype } from '~/utils/tekstformateringUtils';
+import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 
 const søknadstypeValg: { value: SøknadstypeManueltRegistrertSøknad; label: string }[] = [
-    { value: 'DIGITAL', label: formaterSøknadstype('DIGITAL') },
-    { value: 'PAPIR_SKJEMA', label: formaterSøknadstype('PAPIR_SKJEMA') },
-    { value: 'PAPIR_FRIHAND', label: formaterSøknadstype('PAPIR_FRIHAND') },
-    { value: 'MODIA', label: formaterSøknadstype('MODIA') },
-    { value: 'ANNET', label: formaterSøknadstype('ANNET') },
+    { value: 'DIGITAL', label: søknadstypeTekst.DIGITAL },
+    { value: 'PAPIR_SKJEMA', label: søknadstypeTekst.PAPIR_SKJEMA },
+    { value: 'PAPIR_FRIHAND', label: søknadstypeTekst.PAPIR_FRIHAND },
+    { value: 'MODIA', label: søknadstypeTekst.MODIA },
+    { value: 'ANNET', label: søknadstypeTekst.ANNET },
 ];
 
 export const SøknadstypeSelect = () => {

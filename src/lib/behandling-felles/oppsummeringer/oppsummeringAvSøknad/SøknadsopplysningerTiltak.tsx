@@ -1,8 +1,8 @@
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterPeriode } from '~/utils/date';
 import { VStack } from '@navikt/ds-react';
-import { Søknad } from '~/types/Søknad';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
+import { Søknad } from '~/lib/søknad/søknadTyper';
+import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
 
 interface Props {
     søknad: Søknad;

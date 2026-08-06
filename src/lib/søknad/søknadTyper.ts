@@ -1,7 +1,6 @@
-import { Avbrutt } from '../lib/behandling-felles/typer/Avbrutt';
-import { Periode } from './Periode';
-
-import { Nullable } from './UtilTypes';
+import { Avbrutt } from '../behandling-felles/typer/Avbrutt';
+import { Periode } from '~/types/Periode';
+import { Nullable } from '~/types/UtilTypes';
 
 export type SøknadId = `soknad_${string}`;
 

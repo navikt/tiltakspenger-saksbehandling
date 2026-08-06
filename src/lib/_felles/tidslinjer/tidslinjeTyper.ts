@@ -1,4 +1,4 @@
-import { Periode } from './Periode';
+import { Periode } from '~/types/Periode';
 import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 
 export type TidslinjeRammevedtak = {

@@ -1,15 +1,15 @@
 import { Periode } from '~/types/Periode';
-import { useConfig } from '~/context/ConfigContext';
+import { useConfig } from '~/lib/_felles/context/ConfigContext';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { SøknadOpplysningerSvar } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
 import { SøknadOpplysningerBarn } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
 import { InlineMessage, Link, VStack } from '@navikt/ds-react';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { SøknadsopplysningerTiltak } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/SøknadsopplysningerTiltak';
-import { formaterSøknadBehandlingsårsak, formaterSøknadstype } from '~/utils/tekstformateringUtils';
 import { BehandlingSaksopplysningMedPeriodeSpm } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningPeriodeSpm';
+import { søknadBehandlingsårsakTekst, søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
@@ -44,15 +44,12 @@ export const OppsummeringAvSøknad = ({
                 spacing={true}
             />
 
-            <BehandlingSaksopplysning
-                navn={'Søknadstype'}
-                verdi={formaterSøknadstype(søknadstype)}
-            />
+            <BehandlingSaksopplysning navn={'Søknadstype'} verdi={søknadstypeTekst[søknadstype]} />
 
             {behandlingsarsak && (
                 <BehandlingSaksopplysning
                     navn={'Behandlingsårsak'}
-                    verdi={formaterSøknadBehandlingsårsak(behandlingsarsak)}
+                    verdi={søknadBehandlingsårsakTekst[behandlingsarsak]}
                 />
             )}
 

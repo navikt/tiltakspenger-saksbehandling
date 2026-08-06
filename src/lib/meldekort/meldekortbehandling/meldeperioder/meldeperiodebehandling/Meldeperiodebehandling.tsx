@@ -14,8 +14,7 @@ import {
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { formaterDatotekst, ukedagFraDatoKort, ukenummerFraDatotekst } from '~/utils/date';
-import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
@@ -28,7 +27,7 @@ import {
 import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/validering/MeldeperiodebehandlingValideringsfeil';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { classNames } from '~/utils/classNames';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/meldekortIkoner';
 import {
     MeldekortHurtigutfylling,
     useMeldekortHurtigutfylling,
@@ -38,6 +37,7 @@ import { MeldekortHurtigutfyllingStart } from '~/lib/meldekort/meldekortbehandli
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './Meldeperiodebehandling.module.css';
+import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;

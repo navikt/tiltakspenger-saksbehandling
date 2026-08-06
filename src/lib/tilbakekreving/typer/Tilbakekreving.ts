@@ -1,7 +1,7 @@
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { SakId } from '~/lib/sak/SakTyper';
-import { UtbetalingId } from '~/types/Utbetaling';
+import { UtbetalingId } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { BeregningKilde } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 

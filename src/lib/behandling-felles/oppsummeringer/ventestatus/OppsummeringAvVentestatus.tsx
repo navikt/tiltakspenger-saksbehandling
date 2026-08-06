@@ -2,7 +2,7 @@ import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
-import { VentestatusHendelse } from '~/types/Ventestatus';
+import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 import styles from './OppsummeringAvVentestatus.module.css';

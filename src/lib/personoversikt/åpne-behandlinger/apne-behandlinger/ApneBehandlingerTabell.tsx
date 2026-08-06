@@ -1,10 +1,5 @@
 import { ÅpenBehandling, ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
 import { Button, Heading, HStack, InlineMessage, Table, Tag, VStack } from '@navikt/ds-react';
-import {
-    behandlingResultatTilTag,
-    klagebehandlingResultatTilTag,
-    klagebehandlingStatusTilTag,
-} from '~/utils/tekstformateringUtils';
 import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
@@ -35,10 +30,13 @@ import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingS
 
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
+import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
+import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
+import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 
 type Props = {
     sak: SakProps;
@@ -171,7 +169,7 @@ const propsForRad = (
             return {
                 typeTekst,
                 opprettet,
-                resultatTag: behandlingResultatTilTag(resultat),
+                resultatTag: <RammebehandlingResultatTag resultat={resultat} />,
                 statusTag: <BehandlingStatusTags behandling={rammebehandling} kompakt={true} />,
                 saksbehandler,
                 beslutter,
@@ -250,11 +248,11 @@ const propsForRad = (
                 statusTag: erBehandlingSattPåVent(klagebehandling) ? (
                     <Tag data-color="warning">{'Satt på vent'}</Tag>
                 ) : (
-                    klagebehandlingStatusTilTag({ status })
+                    <KlagebehandlingStatusTag status={status} />
                 ),
                 resultatTag: resultat ? (
                     <HStack gap="space-4">
-                        {klagebehandlingResultatTilTag({ resultat: resultat.type })}
+                        <KlagebehandlingResultatTag resultat={resultat.type} />
                         {utfall && klagehendelseUtfallTilTag({ utfall })}
                     </HStack>
                 ) : undefined,

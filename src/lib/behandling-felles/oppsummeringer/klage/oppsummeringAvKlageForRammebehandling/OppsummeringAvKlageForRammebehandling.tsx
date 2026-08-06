@@ -6,11 +6,11 @@ import {
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
 } from '~/lib/klage/typer/Klage';
-import { omgjøringsårsakTilText } from '~/utils/tekstformateringUtils';
 import { OppsummeringsPar } from '../../oppsummeringspar/OppsummeringsPar';
 import { erKlageOmgjøring, erKlageOpprettholdelse } from '~/lib/klage/utils/klageUtils';
 import OppsummeringAvKlageinstanshendelser from '../oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
 import { useVisInnstillingsbrevKlagebehandling } from '~/lib/klage/api/KlageApi';
+import { omgjøringsårsakTekst } from '~/lib/klage/utils/klageTekster';
 
 const OppsummeringAvKlageForRammebehandling = (props: { klagebehandling: Klagebehandling }) => {
     if (props.klagebehandling?.resultat?.type === KlagebehandlingResultat.AVVIST) {
@@ -52,7 +52,7 @@ const OppsummeringAvOmgjøring = (props: {
             <OppsummeringsPar
                 retning="vertikal"
                 label="Årsak"
-                verdi={omgjøringsårsakTilText[props.klagebehandling.resultat.årsak]}
+                verdi={omgjøringsårsakTekst[props.klagebehandling.resultat.årsak]}
             />
             <OppsummeringsPar
                 retning="vertikal"

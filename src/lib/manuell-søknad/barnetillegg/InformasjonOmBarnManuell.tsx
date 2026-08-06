@@ -1,10 +1,10 @@
 import { Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { getNavnMedFødselsdato } from '~/lib/manuell-søknad/barnetillegg/barnetilleggUtils';
 import { Barn } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from '~/utils/periode';
 import { finn16årsdag } from '~/utils/date';
+import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     barn: Barn;

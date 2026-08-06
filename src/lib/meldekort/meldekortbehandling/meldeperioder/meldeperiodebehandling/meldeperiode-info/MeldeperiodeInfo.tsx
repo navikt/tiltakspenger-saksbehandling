@@ -3,12 +3,12 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
-import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/utils/tekster';
+import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import {
     MeldeperiodebehandlingProps,
     MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { meldeperiodebehandlingTypeIkoner } from '~/lib/meldekort/utils/ikoner';
+import { meldeperiodebehandlingTypeIkoner } from '~/lib/meldekort/utils/meldekortIkoner';
 import { BrukersMeldekortForKjede } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/BrukersMeldekortForKjede';
 import { MeldekortbehandlingerForKjede } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingerForKjede';
 

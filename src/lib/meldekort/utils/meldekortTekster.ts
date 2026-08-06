@@ -2,7 +2,10 @@ import {
     MeldekortbehandlingDagStatus,
     MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
+import {
+    BrukersMeldekortDagStatus,
+    BrukersMeldekortKjedeStatus,
+} from '~/lib/meldekort/typer/BrukersMeldekort';
 
 import { KanIkkeBehandlesGrunn } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
@@ -53,6 +56,21 @@ export const meldeperiodebehandlingTypeTekst: Record<MeldeperiodebehandlingType,
     [MeldeperiodebehandlingType.KORRIGERING]: 'Korrigering',
 } as const;
 
+export const meldekortbehandlingDagStatusTekst: Record<MeldekortbehandlingDagStatus, string> = {
+    // OBS! Endring av disse tekstene krever tilsvarende endringer tekstene som utledes for brevene!
+    [MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger]: 'Ikke rett til tiltakspenger',
+    [MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket]: 'Deltatt med lønn',
+    [MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt',
+    [MeldekortbehandlingDagStatus.FraværSyk]: 'Syk',
+    [MeldekortbehandlingDagStatus.FraværSyktBarn]: 'Sykt barn eller syk barnepasser',
+    [MeldekortbehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]:
+        'Sterke velferdsgrunner eller jobbintervju',
+    [MeldekortbehandlingDagStatus.FraværGodkjentAvNav]: 'Fravær godkjent av Nav (utfaset)',
+    [MeldekortbehandlingDagStatus.FraværAnnet]: 'Annet fravær',
+    [MeldekortbehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
+    [MeldekortbehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
+} as const;
+
 export const meldekortbehandlingDagStatusTekstKort: Record<MeldekortbehandlingDagStatus, string> = {
     [MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger]: 'Ikke rett',
     [MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket]: 'Deltatt m/lønn',
@@ -64,4 +82,18 @@ export const meldekortbehandlingDagStatusTekstKort: Record<MeldekortbehandlingDa
     [MeldekortbehandlingDagStatus.FraværAnnet]: 'Annet fravær',
     [MeldekortbehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
     [MeldekortbehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
+} as const;
+
+export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
+    [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]: 'Deltatt',
+    [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: 'Deltatt med lønn',
+    [BrukersMeldekortDagStatus.FRAVÆR_SYK]: 'Syk',
+    [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: 'Sykt barn eller syk barnepasser',
+    [BrukersMeldekortDagStatus.FRAVÆR_STERKE_VELFERDSGRUNNER_ELLER_JOBBINTERVJU]:
+        'Sterke velferdsgrunner eller jobbintervju',
+    [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]: 'Fravær godkjent av Nav',
+    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Annet fravær',
+    [BrukersMeldekortDagStatus.IKKE_BESVART]: 'Ikke besvart',
+    [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
+    [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: 'Ikke tiltaksdag',
 } as const;

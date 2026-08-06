@@ -45,9 +45,9 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
+import { Vedtak } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 type Props = {
     sak: SakProps;

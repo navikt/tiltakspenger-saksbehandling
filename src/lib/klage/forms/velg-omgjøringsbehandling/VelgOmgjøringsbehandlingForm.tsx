@@ -1,7 +1,7 @@
 import { Button, Dialog, LocalAlert, Select, VStack } from '@navikt/ds-react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
 import {
     VelgOmgjøringsbehandlingFormData,

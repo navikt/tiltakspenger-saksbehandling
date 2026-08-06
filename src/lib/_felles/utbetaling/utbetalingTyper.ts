@@ -1,5 +1,5 @@
-import { BeløpProps } from '../lib/beregning-og-simulering/typer/Beregning';
-import { Periode } from './Periode';
+import { BeløpProps } from '../../beregning-og-simulering/typer/Beregning';
+import { Periode } from '~/types/Periode';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';

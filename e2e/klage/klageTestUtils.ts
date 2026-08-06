@@ -22,7 +22,7 @@ import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknads
 import type { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import type { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import type { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
-import type { Søknad, SøknadId } from '~/types/Søknad';
+import type { Søknad, SøknadId } from '~/lib/søknad/søknadTyper';
 import {
     KlageHendelseKlagebehandlingAvsluttetUtfall,
     KlageHendelsestype,

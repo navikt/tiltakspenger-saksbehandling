@@ -6,7 +6,7 @@ import {
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { SøknadBarn } from '~/types/Søknad';
+import { SøknadBarn } from '~/lib/søknad/søknadTyper';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 
 export const periodiserBarnetilleggFraSøknad = (

@@ -20,7 +20,7 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
+import { getTextAreaRefValue, TextAreaInput } from '~/lib/_felles/fritekst/fritekstUtils';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';

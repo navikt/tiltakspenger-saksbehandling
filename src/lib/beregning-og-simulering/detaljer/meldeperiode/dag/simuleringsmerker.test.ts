@@ -4,7 +4,7 @@ import {
     Simuleringsmerke,
     Simuleringspostering,
 } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { tilKompakteMerker, tilVisbarePosteringer } from './simuleringsmerker';
 
 const merke = (overstyringer: Partial<Simuleringsmerke>): Simuleringsmerke => ({

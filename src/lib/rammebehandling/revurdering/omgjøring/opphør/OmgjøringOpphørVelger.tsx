@@ -1,6 +1,6 @@
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Link } from '@navikt/ds-react';
-import { useConfig } from '~/context/ConfigContext';
+import { useConfig } from '~/lib/_felles/context/ConfigContext';
 import { StansOgOpphørHjemmelVelger } from '~/lib/rammebehandling/revurdering/felles/hjemmel-velger/StansOgOpphørHjemmelVelger';
 import {
     useOmgjøringOpphørSkjema,

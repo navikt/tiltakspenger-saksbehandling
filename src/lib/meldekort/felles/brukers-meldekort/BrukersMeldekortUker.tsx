@@ -5,14 +5,14 @@ import {
     ukedagFraDatoKort,
     ukenummerFraDatotekst,
 } from '~/utils/date';
-import { ikonForBrukersMeldekortDagStatus } from '~/lib/meldekort/utils/ikoner';
-import { brukersMeldekortDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { ikonForBrukersMeldekortDagStatus } from '~/lib/meldekort/utils/meldekortIkoner';
 import {
     BrukersMeldekortDagProps,
     BrukersMeldekortProps,
 } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 import style from './BrukersMeldekortUker.module.css';
+import { brukersMeldekortDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 type Props = {
     brukersMeldekort: BrukersMeldekortProps;

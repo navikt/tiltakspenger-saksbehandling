@@ -3,7 +3,7 @@ import { validerBarnetillegg } from '~/lib/rammebehandling/felles/validering/val
 import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import {
     finnPeriodiseringHull,
     perioderOverlapper,

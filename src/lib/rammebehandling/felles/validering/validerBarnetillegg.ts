@@ -11,7 +11,7 @@ import {
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { formaterPeriode } from '~/utils/date';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 export const validerBarnetillegg = (

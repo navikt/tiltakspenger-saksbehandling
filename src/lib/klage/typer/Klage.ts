@@ -2,7 +2,7 @@ import { Klageinstanshendelse } from './Klageinstanshendelse';
 import { VedtakId } from '../../rammebehandling/typer/Rammevedtak';
 import { SakId } from '../../sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
-import { VentestatusHendelse } from '~/types/Ventestatus';
+import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type KlageId = `klage_${string}`;

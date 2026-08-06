@@ -18,7 +18,7 @@ import {
     BehandlingUtbetalingProps,
     UtbetalingskontrollMedEndring,
     UtbetalingskontrollStatus,
-} from '~/types/Utbetaling';
+} from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { AlertMedTidspunkt } from '~/lib/beregning-og-simulering/utbetalingskontroll/AlertMedTidspunkt';
 import { KontrollsimuleringUtførtAlert } from '~/lib/beregning-og-simulering/utbetalingskontroll/KontrollsimuleringUtførtAlert';
 import { PartialRecord } from '~/types/UtilTypes';

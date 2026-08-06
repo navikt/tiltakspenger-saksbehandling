@@ -22,7 +22,7 @@ import {
 } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaReducer';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
-import { getTextAreaRefValue } from '~/utils/textarea';
+import { getTextAreaRefValue } from '~/lib/_felles/fritekst/fritekstUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';

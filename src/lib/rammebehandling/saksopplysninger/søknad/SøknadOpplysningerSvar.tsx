@@ -1,9 +1,9 @@
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { BodyShort } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';
-import { SpørsmålsbesvarelserPengestøtter } from '~/types/Søknad';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
+import { SpørsmålsbesvarelserPengestøtter } from '~/lib/søknad/søknadTyper';
 import { BehandlingSaksopplysningMedPeriodeSpm } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningPeriodeSpm';
+import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     className?: string;

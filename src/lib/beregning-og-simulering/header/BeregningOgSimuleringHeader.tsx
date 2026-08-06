@@ -5,7 +5,10 @@ import { formaterPeriode } from '~/utils/date';
 import { UtbetalingStatus } from '~/lib/beregning-og-simulering/header/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
+import {
+    KanIkkeIverksetteUtbetalingGrunn,
+    Utbetalingsstatus,
+} from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Nullable } from '~/types/UtilTypes';
 
 import style from './BeregningOgSimuleringHeader.module.css';

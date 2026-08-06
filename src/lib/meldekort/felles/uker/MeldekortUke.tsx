@@ -1,11 +1,11 @@
 import { Box, Table } from '@navikt/ds-react';
 import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { MeldekortDagBeregnetProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
-import { ikonForMeldekortbehandlingDagStatus } from '../../utils/ikoner';
-import { formatterBeløp } from '~/utils/beløp';
+import { ikonForMeldekortbehandlingDagStatus } from '../../utils/meldekortIkoner';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 
 import styles from './MeldekortUke.module.css';
+import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 type Props = {
     dager: MeldekortDagBeregnetProps[];

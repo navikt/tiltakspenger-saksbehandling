@@ -5,9 +5,9 @@ import {
     KlagebehandlingsresultatAvvist,
     KlagebehandlingsresultatOpprettholdt,
 } from '~/lib/klage/typer/Klage';
-import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterDatotekst } from '~/utils/date';
+import { Vedtak } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export interface BrevFormData {
     tekstfelter: Avsnitt[];

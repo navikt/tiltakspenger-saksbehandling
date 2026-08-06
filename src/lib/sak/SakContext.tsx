@@ -1,6 +1,6 @@
 import { SakProps } from '~/lib/sak/SakTyper';
 import React, { createContext, useContext } from 'react';
-import { useResettableState } from '~/hooks/useResettableState';
+import { useResettableState } from '~/utils/useResettableState';
 
 type ContextState = {
     sak: SakProps;

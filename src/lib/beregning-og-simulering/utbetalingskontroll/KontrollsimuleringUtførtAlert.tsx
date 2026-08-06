@@ -1,4 +1,7 @@
-import { Utbetalingskontroll, UtbetalingskontrollStatus } from '~/types/Utbetaling';
+import {
+    Utbetalingskontroll,
+    UtbetalingskontrollStatus,
+} from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { AlertMedTidspunkt } from './AlertMedTidspunkt';
 
 type Props = {

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
-import { fetchFraApiServerSide } from '../../utils/fetch/fetch-server';
+import { withAuthenticatedApi } from '~/auth/pageWithAuthentication';
+import { fetchFraApiServerSide } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 
 async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApiResponse) {

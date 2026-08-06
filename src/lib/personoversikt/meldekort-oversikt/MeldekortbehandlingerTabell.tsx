@@ -1,13 +1,13 @@
 import { HStack, Table } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
-import { formatterBeløp } from '~/utils/beløp';
-import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
+import { utbetalingsstatusTekst } from '~/lib/beregning-og-simulering/utils/utbetalingTekster';
 
 type Props = {
     saksnummer: string;

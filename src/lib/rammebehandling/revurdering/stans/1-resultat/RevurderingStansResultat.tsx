@@ -3,7 +3,7 @@ import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/Vedta
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
-import { useConfig } from '~/context/ConfigContext';
+import { useConfig } from '~/lib/_felles/context/ConfigContext';
 import {
     useRevurderingStansSkjema,
     useRevurderingStansSkjemaDispatch,

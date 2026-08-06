@@ -1,7 +1,7 @@
 import { HStack, VStack } from '@navikt/ds-react';
 import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/tekster';
+import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useSak } from '~/lib/sak/SakContext';

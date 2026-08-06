@@ -14,7 +14,10 @@ import {
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
 import { Tiltaksdeltakelse } from './Tiltaksdeltakelse';
-import { BehandlingUtbetalingProps, Utbetalingskontroll } from '~/types/Utbetaling';
+import {
+    BehandlingUtbetalingProps,
+    Utbetalingskontroll,
+} from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from './Ytelse';
 import { SakId } from '~/lib/sak/SakTyper';
@@ -22,7 +25,7 @@ import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
 import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
 import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { KlageId } from '../../klage/typer/Klage';
-import { VentestatusHendelse } from '~/types/Ventestatus';
+import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 

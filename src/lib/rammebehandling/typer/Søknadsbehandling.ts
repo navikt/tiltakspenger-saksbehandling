@@ -4,7 +4,7 @@ import {
     OppdaterBehandlingBaseDTO,
     RammebehandlingBase,
 } from './Rammebehandling';
-import { InnvilgbarSøknad, Søknad } from '~/types/Søknad';
+import { InnvilgbarSøknad, Søknad } from '~/lib/søknad/søknadTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 type SøknadsbehandlingBase = RammebehandlingBase & {

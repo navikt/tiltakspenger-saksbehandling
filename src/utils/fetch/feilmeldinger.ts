@@ -1,4 +1,4 @@
-import { JsonError } from './fetch/fetch';
+import { JsonError } from './fetch';
 
 const feilmeldinger: Record<string, string> = {
     fant_ikke_fnr: 'Fant ikke fødselsnummeret',

@@ -1,5 +1,5 @@
 import { BodyShort, HStack } from '@navikt/ds-react';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { classNames } from '~/utils/classNames';
 import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 

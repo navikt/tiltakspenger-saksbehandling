@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
-import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
+import { TidslinjeRammevedtak } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 
 const MAX_RANGE_MONTHS = 6;
 const MONTHS_PER_STEP = 4;

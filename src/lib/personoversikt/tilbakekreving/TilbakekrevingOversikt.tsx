@@ -4,7 +4,7 @@ import {
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { BodyLong, Button, Heading, HStack, InlineMessage, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunktKort, formaterPeriode } from '~/utils/date';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';

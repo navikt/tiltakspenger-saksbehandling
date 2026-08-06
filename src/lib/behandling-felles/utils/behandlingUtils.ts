@@ -7,7 +7,7 @@ import {
     RammebehandlingId,
     RammebehandlingPrefix,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { VentestatusHendelse } from '~/types/Ventestatus';
+import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { Attestering, Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
 
 export const erBehandlingIdRammebehandling = (id: BehandlingId): id is RammebehandlingId =>

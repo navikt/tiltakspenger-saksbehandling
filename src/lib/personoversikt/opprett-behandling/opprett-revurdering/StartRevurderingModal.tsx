@@ -5,8 +5,8 @@ import router from 'next/router';
 import { useStartRevurdering } from './useStartRevurdering';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { behandlingUrl } from '~/utils/urls';
-import { rammebehandlingResultatTekst } from '~/utils/tekstformateringUtils';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 
 type Props = {
     sakId: SakId;

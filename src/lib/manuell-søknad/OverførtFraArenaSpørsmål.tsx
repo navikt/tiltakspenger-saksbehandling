@@ -5,8 +5,8 @@ import type {
     ManueltRegistrertSøknad,
     SøknadBehandlingsårsakManueltRegistrertSøknad,
 } from './ManueltRegistrertSøknad';
-import { formaterSøknadBehandlingsårsak } from '~/utils/tekstformateringUtils';
 import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
+import { søknadBehandlingsårsakTekst } from '~/lib/søknad/søknadTekster';
 
 const behandlingsårsaker: ReadonlyArray<{
     value: SøknadBehandlingsårsakManueltRegistrertSøknad;
@@ -14,17 +14,17 @@ const behandlingsårsaker: ReadonlyArray<{
 }> = [
     {
         value: 'FORLENGELSE_FRA_ARENA',
-        label: formaterSøknadBehandlingsårsak('FORLENGELSE_FRA_ARENA'),
+        label: søknadBehandlingsårsakTekst.FORLENGELSE_FRA_ARENA,
     },
     {
         value: 'SOKNADSBEHANDLING_FRA_ARENA',
-        label: formaterSøknadBehandlingsårsak('SOKNADSBEHANDLING_FRA_ARENA'),
+        label: søknadBehandlingsårsakTekst.SOKNADSBEHANDLING_FRA_ARENA,
     },
     {
         value: 'OVERLAPPENDE_TILTAK_I_ARENA',
-        label: formaterSøknadBehandlingsårsak('OVERLAPPENDE_TILTAK_I_ARENA'),
+        label: søknadBehandlingsårsakTekst.OVERLAPPENDE_TILTAK_I_ARENA,
     },
-    { value: 'ANNET', label: formaterSøknadBehandlingsårsak('ANNET') },
+    { value: 'ANNET', label: søknadBehandlingsårsakTekst.ANNET },
 ] as const;
 
 export const OverførtFraArenaSpørsmål = () => {

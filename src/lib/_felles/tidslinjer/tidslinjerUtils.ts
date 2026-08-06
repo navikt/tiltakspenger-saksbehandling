@@ -1,4 +1,4 @@
-import { TidslinjeResultat } from '~/types/TidslinjeRammevedtak';
+import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { TimelinePeriodProps } from '@navikt/ds-react';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { minOgMax, NumberRange } from '~/utils/tall';

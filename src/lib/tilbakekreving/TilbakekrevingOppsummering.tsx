@@ -3,7 +3,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { formaterDatotekst, formaterTidspunktKort, formaterPeriode } from '~/utils/date';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentTilbakekreving } from '~/lib/sak/sakUtils';

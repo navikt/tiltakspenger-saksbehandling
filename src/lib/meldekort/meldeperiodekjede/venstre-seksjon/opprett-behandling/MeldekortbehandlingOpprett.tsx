@@ -7,7 +7,7 @@ import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/
 import { useRouter } from 'next/router';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
-import { kanIkkeBehandlesGrunnTekst } from '~/lib/meldekort/utils/tekster';
+import { kanIkkeBehandlesGrunnTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 import style from './MeldekortbehandlingOpprett.module.css';

@@ -36,7 +36,7 @@ import {
 } from '~/lib/klage/utils/klageUtils';
 import styles from './index.module.css';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';

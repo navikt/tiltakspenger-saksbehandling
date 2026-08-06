@@ -5,9 +5,9 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
 import { InternDekoratør } from '~/lib/interndekoratør/InternDekoratør';
-import { FeatureTogglesProvider } from '~/context/FeatureTogglesContext';
+import { FeatureTogglesProvider } from '~/lib/_felles/context/FeatureTogglesContext';
 import { SaksbehandlerProvider } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { ConfigProvider } from '~/context/ConfigContext';
+import { ConfigProvider } from '~/lib/_felles/context/ConfigContext';
 import { NotificationProvider } from '~/lib/_felles/notifications/NotificationContext';
 import { NextPage } from 'next';
 

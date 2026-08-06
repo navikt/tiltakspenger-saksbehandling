@@ -17,7 +17,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { hentKlagebehandling, hentMeldekortbehandling } from '~/lib/sak/sakUtils';
-import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/utils/tekster';
+import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldekortBehandlingOppsummering.module.css';

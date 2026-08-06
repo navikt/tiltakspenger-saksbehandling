@@ -1,13 +1,13 @@
 import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { ArrowRightIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
-import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/meldekortIkoner';
 import { meldekortDagStatusHurtigtaster } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/meldekortDagStatusHurtigtaster';
 import { formaterDatotekst, ukedagFraDato } from '~/utils/date';
 import { MeldekortHurtigutfylling } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/useMeldekortHurtigutfylling';
 
 import style from './MeldekortHurtigutfyllingStatusVelger.module.css';
+import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 type Props = {
     hurtigutfylling: MeldekortHurtigutfylling;

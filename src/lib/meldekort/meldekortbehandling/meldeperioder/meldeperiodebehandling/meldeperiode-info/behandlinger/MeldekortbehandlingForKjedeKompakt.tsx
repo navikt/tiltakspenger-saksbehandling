@@ -17,12 +17,12 @@ import {
     formaterDatotekst,
     ukedagFraDato,
 } from '~/utils/date';
-import { formatterBeløp } from '~/utils/beløp';
+import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import {
     meldekortbehandlingDagStatusTekstKort,
     meldeperiodebehandlingTypeTekst,
-} from '~/lib/meldekort/utils/tekster';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
+} from '~/lib/meldekort/utils/meldekortTekster';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/meldekortIkoner';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';

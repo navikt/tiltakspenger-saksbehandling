@@ -10,7 +10,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 

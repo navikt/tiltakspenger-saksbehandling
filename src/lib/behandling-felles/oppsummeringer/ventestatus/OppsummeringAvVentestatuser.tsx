@@ -1,4 +1,4 @@
-import { VentestatusHendelse } from '~/types/Ventestatus';
+import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import OppsummeringAvVentestatus from './OppsummeringAvVentestatus';
 import { Button, Dialog, Heading } from '@navikt/ds-react';
 import { useState } from 'react';

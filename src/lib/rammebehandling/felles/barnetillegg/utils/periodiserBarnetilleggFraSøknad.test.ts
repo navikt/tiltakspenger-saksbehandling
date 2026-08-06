@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
-import { SøknadBarn, SøknadBarnKilde } from '~/types/Søknad';
+import { SøknadBarn, SøknadBarnKilde } from '~/lib/søknad/søknadTyper';
 
 const vedtaksperiode = {
     fraOgMed: '2024-07-01',

@@ -5,7 +5,7 @@ import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/ty
 import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { Søknad } from '~/types/Søknad';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import {
     erKlageVedtatt,
     erKlageFerdigstilt,

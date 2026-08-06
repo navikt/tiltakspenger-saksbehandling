@@ -1,7 +1,7 @@
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 import { formaterPeriode } from '~/utils/date';
-import { PeriodeSpm } from '~/types/Søknad';
+import { PeriodeSpm } from '~/lib/søknad/søknadTyper';
+import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     navn: string;

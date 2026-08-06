@@ -3,10 +3,6 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunktKort } from '~/utils/date';
-import {
-    rammebehandlingstypeTekst,
-    rammebehandlingResultatTekst,
-} from '~/utils/tekstformateringUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import {
     MeldekortbehandlingId,
@@ -14,6 +10,10 @@ import {
 } from '../meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
 import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/behandlingUtils';
+import {
+    rammebehandlingResultatTekst,
+    rammebehandlingstypeTekst,
+} from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 
 const KlageTilknyttedeBehandlingerInfoCard = (props: {
     klage: Klagebehandling;

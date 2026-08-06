@@ -18,7 +18,10 @@ import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import { UtbetalingskontrollMedEndring, UtbetalingskontrollStatus } from '~/types/Utbetaling';
+import {
+    UtbetalingskontrollMedEndring,
+    UtbetalingskontrollStatus,
+} from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { AlertMedTidspunkt } from '~/lib/beregning-og-simulering/utbetalingskontroll/AlertMedTidspunkt';
 import { KontrollsimuleringUtførtAlert } from '~/lib/beregning-og-simulering/utbetalingskontroll/KontrollsimuleringUtførtAlert';
 import { PartialRecord } from '~/types/UtilTypes';

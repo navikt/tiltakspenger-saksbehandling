@@ -11,21 +11,19 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import router from 'next/router';
 import { kanNavigereTilKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
-import {
-    klagebehandlingResultatTilTag,
-    klagebehandlingStatusTilTag,
-} from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
-import { useResettableState } from '~/hooks/useResettableState';
+import { useResettableState } from '~/utils/useResettableState';
 import { personoversiktUrl } from '~/utils/urls';
 import OppsummeringAvAvbruttKlagebehandling from '~/lib/klage/oppsummering/avbrutt/OppsummeringAvAvbruttKlagebehandling';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
+import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
+import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 
 type Props = {
     children: ReactElement;
@@ -153,13 +151,11 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                 <HStack align="end" gap="space-24">
                     <BodyShort>
                         {props.klage?.status ? (
-                            klagebehandlingStatusTilTag({
-                                status: props.klage.status,
-                                size: 'small',
-                                extraContent: {
-                                    before: 'Behandlingsstatus: ',
-                                },
-                            })
+                            <KlagebehandlingStatusTag
+                                status={props.klage.status}
+                                size={'small'}
+                                prefiks={'Behandlingsstatus: '}
+                            />
                         ) : (
                             <Tag data-color="info" size="small" variant="outline">
                                 Behandlingsstatus utredes
@@ -168,13 +164,11 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                     </BodyShort>
                     <BodyShort>
                         {props.klage?.resultat ? (
-                            klagebehandlingResultatTilTag({
-                                resultat: props.klage.resultat!.type,
-                                size: 'small',
-                                extraContent: {
-                                    before: 'Underinstans: ',
-                                },
-                            })
+                            <KlagebehandlingResultatTag
+                                resultat={props.klage.resultat!.type}
+                                size={'small'}
+                                prefiks={'Underinstans: '}
+                            />
                         ) : (
                             <Tag data-color="warning" size="small" variant="outline">
                                 Behandlingsresultat ikke satt

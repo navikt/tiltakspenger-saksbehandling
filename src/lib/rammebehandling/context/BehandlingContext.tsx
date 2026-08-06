@@ -11,7 +11,7 @@ import { Revurdering, Omgjøring } from '~/lib/rammebehandling/typer/Revurdering
 import { erOmgjøringResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
-import { useResettableState } from '~/hooks/useResettableState';
+import { useResettableState } from '~/utils/useResettableState';
 import { hentRammebehandling } from '~/lib/sak/sakUtils';
 import { useSak } from '~/lib/sak/SakContext';
 
