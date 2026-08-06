@@ -1,4 +1,4 @@
-import { Box, VStack, Heading, HStack } from '@navikt/ds-react';
+import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
 import { formaterTidspunkt } from '~/utils/date';

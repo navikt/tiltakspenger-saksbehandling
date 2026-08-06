@@ -1,4 +1,5 @@
-import { Alert, BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Tag } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { classNames } from '~/utils/classNames';
 import { formatterBeløp } from '~/utils/beløp';
@@ -51,14 +52,14 @@ export const SimuleringDetaljerMeldeperiodeHeader = ({
                 <SimuleringsflaggTags flagg={flagg} />
                 <div className={style.headerBeregning}>
                     {beregningOgSimuleringAvviker ? (
-                        <Alert variant={flagg.harJustering ? 'info' : 'warning'} size={'small'}>
+                        <Infokort variant={flagg.harJustering ? 'info' : 'advarsel'} size={'small'}>
                             {'Simulert utbetaling '}
                             <strong>{formatterBeløp(simulertDiff)}</strong>
                             {' avviker fra vår beregning '}
                             <strong>{formatterBeløp(beregnetDiff)}</strong>
                             {flagg.harJustering &&
                                 ' fordi oppdragssystemet har justert mot andre meldeperioder'}
-                        </Alert>
+                        </Infokort>
                     ) : (
                         <>
                             <BodyShort>{`Beregnet endring: `}</BodyShort>

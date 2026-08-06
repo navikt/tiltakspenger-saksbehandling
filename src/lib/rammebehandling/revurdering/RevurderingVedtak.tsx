@@ -1,7 +1,8 @@
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { RevurderingStansVedtak } from '~/lib/rammebehandling/revurdering/stans/RevurderingStansVedtak';
 import { RevurderingInnvilgelseVedtak } from '~/lib/rammebehandling/revurdering/innvilgelse/RevurderingInnvilgelseVedtak';
-import { Alert } from '@navikt/ds-react';
+
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
@@ -20,6 +21,8 @@ export const RevurderingVedtak = () => {
     }
 
     return (
-        <Alert variant={'error'}>{`Ugyldig revurderingstype: ${resultat satisfies never}`}</Alert>
+        <Infokort
+            variant={'feil'}
+        >{`Ugyldig revurderingstype: ${resultat satisfies never}`}</Infokort>
     );
 };

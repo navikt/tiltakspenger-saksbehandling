@@ -1,4 +1,5 @@
-import { Alert, BodyShort, VStack } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortUker } from '~/lib/meldekort/felles/uker/MeldekortUker';
 import {
     BeregningKildeType,
@@ -20,9 +21,9 @@ export const MeldeperiodekjedeGjeldendeBeregning = ({ beregning, className }: Pr
             {beregning ? (
                 <GjeldendeBeregning {...beregning} />
             ) : (
-                <Alert variant={'info'}>
+                <Infokort variant={'info'}>
                     {'Det finnes ingen beregninger for denne meldeperioden ennå'}
-                </Alert>
+                </Infokort>
             )}
         </VStack>
     );

@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react';
-import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { BodyShort, Heading, InlineMessage, VStack } from '@navikt/ds-react';
 import NotificationBanner, {
     NotificationBannerRef,
 } from '~/lib/_felles/notifications/NotificationBanner';
@@ -52,25 +53,29 @@ export const BenkSide = ({ benkOversikt }: Props) => {
             />
 
             {antallOverLimit > 0 && (
-                <Alert variant={'warning'} size={'small'} className={styles.høytAntallBehandlinger}>
+                <Infokort
+                    variant={'advarsel'}
+                    size={'small'}
+                    className={styles.høytAntallBehandlinger}
+                >
                     {`Det finnes et høyt antall behandlinger på benken, vi viser maks ${limit}. `}
                     {`Totalt antall behandlinger: ${totalAntall}.`}
-                </Alert>
+                </Infokort>
             )}
 
             <VStack gap={'space-4'}>
                 <BodyShort>{`Viser ${antallBehandlinger} av ${totalAntallUfiltrert} behandlinger`}</BodyShort>
 
                 {antallFiltrertAvFiltervalg > 0 && (
-                    <Alert variant={'info'} size={'small'} inline={true}>
+                    <InlineMessage status={'info'} size={'small'}>
                         {`${antallFiltrertAvFiltervalg} filtrert vekk av valgte filtre`}
-                    </Alert>
+                    </InlineMessage>
                 )}
 
                 {antallFiltrertPgaTilgang > 0 && (
-                    <Alert variant={'warning'} size={'small'} inline={true}>
+                    <InlineMessage status={'warning'} size={'small'}>
                         {`${antallFiltrertPgaTilgang} filtrert vekk pga manglende tilgang`}
-                    </Alert>
+                    </InlineMessage>
                 )}
             </VStack>
 

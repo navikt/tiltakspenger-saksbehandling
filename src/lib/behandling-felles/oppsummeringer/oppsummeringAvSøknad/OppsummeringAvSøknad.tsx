@@ -4,7 +4,7 @@ import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { SøknadOpplysningerSvar } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
 import { SøknadOpplysningerBarn } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
-import { Alert, Link, VStack } from '@navikt/ds-react';
+import { InlineMessage, Link, VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
 import { SøknadsopplysningerTiltak } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/SøknadsopplysningerTiltak';
@@ -108,10 +108,10 @@ export const OppsummeringAvSøknad = ({
 
             <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
             {antallVedlegg > 0 && (
-                <Alert variant={'warning'} inline={true} size={'small'}>
+                <InlineMessage status={'warning'} size={'small'}>
                     {'Sjekk vedlegg i '}
                     <Link href={gosysUrl}>{'gosys'}</Link>
-                </Alert>
+                </InlineMessage>
             )}
         </VStack>
     );

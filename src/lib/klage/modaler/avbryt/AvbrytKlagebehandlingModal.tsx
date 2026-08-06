@@ -1,16 +1,8 @@
 import { useForm } from 'react-hook-form';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import router from 'next/router';
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    Alert,
-    BodyLong,
-    Button,
-    Heading,
-    HStack,
-    LocalAlert,
-    Modal,
-    VStack,
-} from '@navikt/ds-react';
+import { BodyLong, Button, Heading, HStack, LocalAlert, Modal, VStack } from '@navikt/ds-react';
 import { personoversiktUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { SakId } from '~/lib/sak/SakTyper';
@@ -99,11 +91,11 @@ const AvbrytKlagebehandlingModal = (props: {
 
                         <AvbrytKlagebehandlingForm control={form.control} />
 
-                        <Alert variant={'info'} size="small">
+                        <Infokort variant={'info'} size="small">
                             Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
                             tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia
                             om hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
-                        </Alert>
+                        </Infokort>
 
                         {feil && (
                             <LocalAlert status="error" size="small">

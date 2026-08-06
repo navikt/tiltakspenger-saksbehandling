@@ -1,8 +1,7 @@
 'use client';
 
-import { Alert } from '@navikt/ds-react';
-
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import styles from './NotificationBanner.module.css';
 import { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
 
@@ -30,9 +29,9 @@ const NotificationBanner = forwardRef<NotificationBannerRef>((_, ref) => {
     if (!message) return null;
 
     return (
-        <Alert className={styles.alert} variant="success">
+        <Infokort variant={'suksess'} className={styles.alert}>
             {message}
-        </Alert>
+        </Infokort>
     );
 });
 

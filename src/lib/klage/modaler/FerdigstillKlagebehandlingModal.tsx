@@ -1,4 +1,4 @@
-import { Button, Modal, Heading, Textarea, VStack, LocalAlert, HStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, LocalAlert, Modal, Textarea, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useState } from 'react';
 import { useFerdigstillKlage } from '~/lib/klage/api/KlageApi';

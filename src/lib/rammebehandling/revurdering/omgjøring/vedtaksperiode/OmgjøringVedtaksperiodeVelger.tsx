@@ -125,7 +125,7 @@ export const OmgjøringVedtaksperiodeVelger = () => {
             </HStack>
 
             {gjeldendeVedtakHarHull && (
-                <VedtakHjelpetekst variant={'warning'}>
+                <VedtakHjelpetekst variant={'advarsel'}>
                     {
                         'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
                     }
@@ -133,13 +133,13 @@ export const OmgjøringVedtaksperiodeVelger = () => {
             )}
 
             {harValgtMedOverlappOverHull && (
-                <VedtakHjelpetekst variant={'error'}>
+                <VedtakHjelpetekst variant={'feil'}>
                     {'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'}
                 </VedtakHjelpetekst>
             )}
 
             {overlappendeVedtak.length > 1 && (
-                <VedtakHjelpetekst variant={'error'}>
+                <VedtakHjelpetekst variant={'feil'}>
                     {`Den valgte perioden overlapper med ${overlappendeVedtak.length} vedtak. Du må velge en periode som kun overlapper med vedtaket som skal omgjøres.`}
                 </VedtakHjelpetekst>
             )}

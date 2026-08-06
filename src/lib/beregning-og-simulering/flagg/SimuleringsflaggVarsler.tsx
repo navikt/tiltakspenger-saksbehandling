@@ -1,4 +1,5 @@
-import { Alert, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Simuleringsflagg } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 
 type Props = {
@@ -22,18 +23,18 @@ export const SimuleringsflaggVarsler = ({ flagg }: Props) => {
     return (
         <VStack gap={'space-8'}>
             {harUbalansertJustering && (
-                <Alert variant={'warning'} size={'small'}>
+                <Infokort variant={'advarsel'} size={'small'}>
                     {
                         'Simuleringen har en justering som ikke går opp innenfor meldeperioden — beløp er motregnet mot andre meldeperioder eller måneder. Kontroller at utbetalingen blir riktig.'
                     }
-                </Alert>
+                </Infokort>
             )}
             {harBalansertJustering && (
-                <Alert variant={'info'} size={'small'}>
+                <Infokort variant={'info'} size={'small'}>
                     {
                         'Simuleringen har en justering som går opp innenfor meldeperioden og kalendermåneden. Oppdragssystemet beregner per kalendermåned og har bare omfordelt beløp mellom dager. Dagene er merket med posteringene som treffer dem.'
                     }
-                </Alert>
+                </Infokort>
             )}
         </VStack>
     );

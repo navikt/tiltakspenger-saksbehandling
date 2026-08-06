@@ -2,8 +2,7 @@ import {
     BrukersMeldekortProps,
     MeldekortBehandletAutomatiskStatus,
 } from '~/lib/meldekort/typer/BrukersMeldekort';
-import { Alert, BodyShort } from '@navikt/ds-react';
-import { ComponentProps } from 'react';
+import { BodyShort, InlineMessage, InlineMessageProps } from '@navikt/ds-react';
 import { PartialRecord } from '~/types/UtilTypes';
 import { formaterTidspunktKort } from '~/utils/date';
 
@@ -30,7 +29,7 @@ export const BrukersMeldekortAutomatiskBehandlingStatus = ({ meldekort }: Props)
     const statusTekst = tilStatusTekst[behandletAutomatiskStatus];
 
     return (
-        <Alert variant={alertVariant[metaStatus]} size={'small'} inline={true}>
+        <InlineMessage status={alertStatus[metaStatus]} size={'small'}>
             {metaTekst && <BodyShort size={'small'}>{`${metaTekst}: `}</BodyShort>}
             <BodyShort size={'small'} spacing={true} weight={'semibold'}>
                 {statusTekst}
@@ -41,11 +40,11 @@ export const BrukersMeldekortAutomatiskBehandlingStatus = ({ meldekort }: Props)
                     spacing={true}
                 >{`Neste forsøk for automatisk behandling: ${formaterTidspunktKort(behandlesAutomatiskNesteForsøk)}`}</BodyShort>
             )}
-        </Alert>
+        </InlineMessage>
     );
 };
 
-const alertVariant: Record<MetaStatus, ComponentProps<typeof Alert>['variant']> = {
+const alertStatus: Record<MetaStatus, InlineMessageProps['status']> = {
     [MetaStatus.Behandlet]: 'success',
     [MetaStatus.Venter]: 'info',
     [MetaStatus.SkalIkkeBehandles]: 'info',

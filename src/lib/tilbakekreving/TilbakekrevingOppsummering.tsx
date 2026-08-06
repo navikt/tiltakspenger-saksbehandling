@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, VStack } from '@navikt/ds-react';
+import { Button, Heading, InlineMessage, VStack } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
@@ -32,12 +32,12 @@ export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
 
     return (
         <VStack gap={'space-24'} className={style.tilbakekreving}>
-            <Alert variant={'warning'} inline={true}>
+            <InlineMessage status={'warning'}>
                 <Heading size={'small'} level={'3'}>
                     {'Tilbakekreving'}
                 </Heading>
                 {'Det ble opprettet en tilbakekrevingssak for dette vedtaket.'}
-            </Alert>
+            </InlineMessage>
             <div className={style.grid}>
                 <OppsummeringsPar
                     label={'Status'}

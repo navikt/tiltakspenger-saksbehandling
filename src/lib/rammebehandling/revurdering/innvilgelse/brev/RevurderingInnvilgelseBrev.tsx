@@ -10,7 +10,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
-import { HStack, Heading, Checkbox } from '@navikt/ds-react';
+import { Checkbox, Heading, HStack } from '@navikt/ds-react';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling } = useRevurderingBehandling();

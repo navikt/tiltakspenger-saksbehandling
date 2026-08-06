@@ -1,4 +1,5 @@
-import { Alert, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
@@ -68,13 +69,13 @@ export const SøknadsbehandlingResultatVelger = () => {
                 </RadioGroup>
 
                 {!kanInnvilges && (
-                    <Alert
-                        variant={'warning'}
+                    <Infokort
+                        variant={'advarsel'}
                         size={'small'}
                         className={style.ikkeInnvilgbarVarsel}
                     >
                         {'Søknaden kan ikke innvilges'}
-                    </Alert>
+                    </Infokort>
                 )}
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>

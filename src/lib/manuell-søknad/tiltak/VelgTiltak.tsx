@@ -1,8 +1,9 @@
 import React from 'react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
 import { ManueltRegistrertSøknad, Tiltak } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
-import { Alert, Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
+import { Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
@@ -60,9 +61,9 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
             {spørsmål.field.value === 'JA' && (
                 <div className={styles.blokk}>
                     {(!fraOgMed || !tilOgMed) && (
-                        <Alert variant="warning">
+                        <Infokort variant={'advarsel'}>
                             Vi kan ikke hente tiltaksdeltakelser før søknadsperioden er satt.
-                        </Alert>
+                        </Infokort>
                     )}
                     <Button
                         type="button"
@@ -89,25 +90,25 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                     )}
 
                     {error && skalHenteTiltak && (
-                        <Alert variant="error">
+                        <Infokort variant={'feil'}>
                             Noe gikk galt ved uthenting av søkers tiltaksdeltakelser.
-                        </Alert>
+                        </Infokort>
                     )}
 
                     {skalHenteTiltak && (
                         <>
                             {muligeTiltak.length === 0 && (
-                                <Alert variant="warning">
+                                <Infokort variant={'advarsel'}>
                                     Fant ingen tiltaksdeltakelser for den angitte perioden. Du kan
                                     skrive inn tiltaket manuelt under.
-                                </Alert>
+                                </Infokort>
                             )}
                             {muligeTiltak.length > 0 && (
                                 <VStack gap="space-8">
-                                    <Alert variant="info">
+                                    <Infokort variant={'info'}>
                                         Dersom ingen av tiltakene under passer kan du skrive inn
                                         tiltaket manuelt under.
-                                    </Alert>
+                                    </Infokort>
                                     <RadioGroup
                                         legend="Velg tiltak"
                                         onChange={(value) => setValue('svar.tiltak', value)}

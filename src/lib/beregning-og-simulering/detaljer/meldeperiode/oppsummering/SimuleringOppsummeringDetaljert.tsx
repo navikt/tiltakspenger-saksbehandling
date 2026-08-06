@@ -1,5 +1,6 @@
 import { SimulerteBeløp } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { Heading } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import { classNames } from '~/utils/classNames';
 import { Nullable } from '~/types/UtilTypes';
@@ -14,9 +15,9 @@ type Props = {
 export const SimuleringOppsummeringDetaljert = ({ headerTekst, simulerteBeløp }: Props) => {
     if (!simulerteBeløp) {
         return (
-            <Alert variant={'info'} size={'small'}>
+            <Infokort variant={'info'} size={'small'}>
                 {'Simuleringen viser ingen endringer for denne perioden'}
-            </Alert>
+            </Infokort>
         );
     }
 

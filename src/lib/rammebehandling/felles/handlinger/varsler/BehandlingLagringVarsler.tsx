@@ -1,5 +1,6 @@
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Alert, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { VStack } from '@navikt/ds-react';
 
 export type BehandlingLagringResultat = 'ok' | FetcherError;
 
@@ -12,21 +13,21 @@ export const BehandlingLagringVarsler = ({ isDirty, resultat }: Props) => {
     return (
         <VStack gap={'space-8'}>
             {isDirty ? (
-                <Alert variant={'info'} size={'small'}>
+                <Infokort variant={'info'} size={'small'}>
                     {'Endringer må lagres før behandlingen kan sendes til beslutter'}
-                </Alert>
+                </Infokort>
             ) : (
                 resultat === 'ok' && (
-                    <Alert variant={'success'} size={'small'}>
+                    <Infokort variant={'suksess'} size={'small'}>
                         {'Behandlingen er lagret'}
-                    </Alert>
+                    </Infokort>
                 )
             )}
             {resultat !== 'ok' && (
-                <Alert
-                    variant={'error'}
+                <Infokort
+                    variant={'feil'}
                     size={'small'}
-                >{`Feil ved lagring: ${resultat.message} (kode ${resultat.status})`}</Alert>
+                >{`Feil ved lagring: ${resultat.message} (kode ${resultat.status})`}</Infokort>
             )}
         </VStack>
     );

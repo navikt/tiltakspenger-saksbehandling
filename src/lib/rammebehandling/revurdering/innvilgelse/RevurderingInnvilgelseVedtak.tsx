@@ -1,4 +1,5 @@
-import { Alert, Heading } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/lib/rammebehandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { RevurderingInnvilgelseHandlinger } from '~/lib/rammebehandling/revurdering/innvilgelse/handlinger/RevurderingInnvilgelseHandlinger';
@@ -52,9 +53,9 @@ export const RevurderingInnvilgelseVedtak = () => {
                     <RevurderingInnvilgelseHandlinger />
                 </>
             ) : (
-                <Alert variant={'error'}>
+                <Infokort variant={'feil'}>
                     {'Fant ingen tiltaksdeltakelser i saksopplysningene det kan innvilges for.'}
-                </Alert>
+                </Infokort>
             )}
         </>
     );

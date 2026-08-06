@@ -1,4 +1,4 @@
-import { Alert, Checkbox, HStack, Link } from '@navikt/ds-react';
+import { Checkbox, HStack, InlineMessage, Link } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
@@ -32,10 +32,10 @@ export const RevurderingStansResultat = () => {
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                <Alert className={style.alert} variant={'warning'} inline>
+                <InlineMessage status={'warning'} className={style.alert}>
                     Husk å vurdere om du må forhåndsvarsle bruker før du foretar en stans. Dette må
                     gjøres via {gosysLinkComponent} eller {modiaPersonoversiktLinkComponent}.
-                </Alert>
+                </InlineMessage>
 
                 <StansOgOpphørHjemmelVelger
                     label={'Hjemmel for stans'}

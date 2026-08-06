@@ -1,4 +1,5 @@
-import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
@@ -22,9 +23,9 @@ export const RevurderingOmgjøringHeader = () => {
 
     if (!vedtakSomBlirOmgjort) {
         return (
-            <Alert variant={'error'}>
+            <Infokort variant={'feil'}>
                 {`Teknisk feil: Fant ikke vedtak som skal omgjøres for behandling-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtak}`}
-            </Alert>
+            </Infokort>
         );
     }
 

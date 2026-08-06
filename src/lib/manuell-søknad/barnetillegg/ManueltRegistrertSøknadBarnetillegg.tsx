@@ -1,7 +1,8 @@
 import React from 'react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import styles from './ManueltRegistrertSøknadBarnetillegg.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import type { Barn, ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
 import { LeggTilBarnManuelt } from '~/lib/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
@@ -84,10 +85,10 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
             {harSøktOmBarnetillegg.field.value === 'JA' && (
                 <div className={styles.blokk}>
                     {søknadsperiodeErTom && (
-                        <Alert variant="warning">
+                        <Infokort variant={'advarsel'}>
                             Vi kan ikke hente informasjon om barn fra folkeregisteret uten at
                             søknadsperioden er satt.
-                        </Alert>
+                        </Infokort>
                     )}
                     <Button
                         className={styles.finnTiltakButton}
@@ -117,7 +118,9 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
                     )}
 
                     {error && skalHenteBarn && (
-                        <Alert variant="error">Kunne ikke hente barn fra folkeregisteret</Alert>
+                        <Infokort variant={'feil'}>
+                            Kunne ikke hente barn fra folkeregisteret
+                        </Infokort>
                     )}
 
                     {(barnFraAPI?.length ?? 0) > 0 && (

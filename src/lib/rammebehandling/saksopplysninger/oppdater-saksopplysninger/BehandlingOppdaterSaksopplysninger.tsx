@@ -4,7 +4,7 @@ import { useOppdaterSaksopplysninger } from './useOppdaterSaksopplysninger';
 import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
-import Varsel from '~/lib/_felles/varsel/Varsel';
+import LukkbartVarsel from '~/lib/_felles/varsel/LukkbartVarsel';
 import { formaterTidspunktMedSekunder, formaterPeriode } from '~/utils/date';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
@@ -57,8 +57,8 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                 </Button>
             )}
             {error && (
-                <Varsel
-                    variant={'error'}
+                <LukkbartVarsel
+                    variant={'feil'}
                     size={'small'}
                     className={style.varsel}
                     key={`error-${uuidv4()}`}

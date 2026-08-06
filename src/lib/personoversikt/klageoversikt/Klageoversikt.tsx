@@ -1,4 +1,4 @@
-import { HStack, Tag, Table } from '@navikt/ds-react';
+import { HStack, Table, Tag } from '@navikt/ds-react';
 import KlageMeny from '~/lib/klage/meny/KlageMeny';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';

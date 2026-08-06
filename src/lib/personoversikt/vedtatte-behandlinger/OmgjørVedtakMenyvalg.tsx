@@ -1,6 +1,7 @@
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { ArrowsCirclepathIcon, CircleSlashIcon } from '@navikt/aksel-icons';
-import { ActionMenu, Alert, Loader } from '@navikt/ds-react';
+import { ActionMenu, Loader } from '@navikt/ds-react';
 import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { useStartRevurdering } from '~/lib/personoversikt/opprett-behandling/opprett-revurdering/useStartRevurdering';
 import { SakId } from '~/lib/sak/SakTyper';
@@ -48,9 +49,9 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
                 {kanOmgjøre ? 'Omgjør' : 'Kan ikke omgjøres'}
             </ActionMenu.Item>
             {startRevurderingError && (
-                <Alert variant={'error'} size={'small'}>
+                <Infokort variant={'feil'} size={'small'}>
                     {`Kunne ikke opprette omgjøring: ${startRevurderingError.message}`}
-                </Alert>
+                </Infokort>
             )}
         </>
     );

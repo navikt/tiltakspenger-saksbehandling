@@ -1,4 +1,5 @@
-import { Alert, Box, Button, Heading, LocalAlert, VStack } from '@navikt/ds-react';
+import { Box, Button, Heading, LocalAlert, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import {
     Klagebehandling,
     KlagebehandlingResultat,
@@ -14,11 +15,11 @@ import { useVisInnstillingsbrevKlagebehandling } from '~/lib/klage/api/KlageApi'
 const OppsummeringAvKlageForRammebehandling = (props: { klagebehandling: Klagebehandling }) => {
     if (props.klagebehandling?.resultat?.type === KlagebehandlingResultat.AVVIST) {
         return (
-            <Alert variant={'error'}>
+            <Infokort variant={'feil'}>
                 Forventet at behandlingen har en tilknyttet klagebehandling med resultat
                 &apos;OMGJØR&apos; eller &apos;OPPRETTHOLD&apos;. men fikk resultat:{' '}
                 {props.klagebehandling?.resultat?.type}
-            </Alert>
+            </Infokort>
         );
     }
 

@@ -1,5 +1,4 @@
 import {
-    Alert,
     Box,
     Button,
     DatePicker,
@@ -16,6 +15,7 @@ import {
     useRangeDatepicker,
     VStack,
 } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import React from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
@@ -533,7 +533,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                 <Modal.Footer>
                     <VStack gap="space-16">
                         {fetchNysøknad.error && (
-                            <Alert variant="error">{fetchNysøknad.error.message}</Alert>
+                            <Infokort variant={'feil'}>{fetchNysøknad.error.message}</Infokort>
                         )}
                         <HStack gap="space-16">
                             <Button

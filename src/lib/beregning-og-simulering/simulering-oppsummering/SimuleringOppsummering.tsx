@@ -1,4 +1,5 @@
-import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import {
     SimuleringResultat,
@@ -29,28 +30,28 @@ export const SimuleringOppsummering = ({
 
     if (simuleringResultat === SimuleringResultat.IKKE_SIMULERT) {
         return (
-            <Alert variant={'warning'} className={style.varsel}>
+            <Infokort variant={'advarsel'} className={style.varsel}>
                 <BodyShort>{'Simulering mangler!'}</BodyShort>
                 {oppdaterKnapp}
-            </Alert>
+            </Infokort>
         );
     }
 
     if (simuleringResultat === SimuleringResultat.INGEN_ENDRING) {
         return (
-            <Alert variant={'info'} className={style.varsel}>
+            <Infokort variant={'info'} className={style.varsel}>
                 <BodyShort>{'Simulering viser ingen endring i utbetalingen'}</BodyShort>
                 {oppdaterKnapp}
-            </Alert>
+            </Infokort>
         );
     }
 
     if (!simulerteBeløp) {
         return (
-            <Alert variant={'warning'} className={style.varsel}>
+            <Infokort variant={'advarsel'} className={style.varsel}>
                 <BodyShort>{'Simuleringen har ingen simulerte beløp'}</BodyShort>
                 {oppdaterKnapp}
-            </Alert>
+            </Infokort>
         );
     }
 

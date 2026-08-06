@@ -1,4 +1,5 @@
 import { SøknadsbehandlingVedtak } from '~/lib/rammebehandling/søknadsbehandling/SøknadsbehandlingVedtak';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { RammebehandlingSaksopplysninger } from '~/lib/rammebehandling/saksopplysninger/RammebehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
@@ -7,7 +8,7 @@ import {
     Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Alert, Box, VStack } from '@navikt/ds-react';
+import { Box, VStack } from '@navikt/ds-react';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useSak } from '~/lib/sak/SakContext';
@@ -71,9 +72,9 @@ export const RammebehandlingPage = () => {
                             ) : type === Rammebehandlingstype.REVURDERING ? (
                                 <RevurderingVedtak />
                             ) : (
-                                <Alert
-                                    variant={'error'}
-                                >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
+                                <Infokort
+                                    variant={'feil'}
+                                >{`Behandlingstypen er ikke implementert: ${type}`}</Infokort>
                             )}
                         </div>
                     </VStack>

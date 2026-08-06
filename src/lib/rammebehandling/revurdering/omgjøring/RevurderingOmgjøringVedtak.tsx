@@ -1,5 +1,5 @@
-import { Alert } from '@navikt/ds-react';
 import { Separator } from '~/lib/_felles/separator/Separator';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
@@ -56,9 +56,9 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
     if (!kanInnvilges) {
         return (
             <>
-                <Alert variant={'warning'}>
+                <Infokort variant={'advarsel'}>
                     {'Fant ingen tiltaksdeltakelser det kan innvilges for.'}
-                </Alert>
+                </Infokort>
                 <Separator />
             </>
         );

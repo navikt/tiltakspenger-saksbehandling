@@ -1,4 +1,5 @@
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Heading, InlineMessage, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
@@ -151,9 +152,9 @@ const UtenBeregnetUtbetaling = () => {
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre gap={'space-16'}>
-                <Alert variant={'info'} inline={true}>
+                <InlineMessage status={'info'}>
                     {'Ingen beregning/simulering av utbetaling tilgjengelig'}
-                </Alert>
+                </InlineMessage>
                 <OppdaterSimuleringKnapp behandlingId={behandling.id} />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
@@ -180,10 +181,10 @@ const UtbetalingskontrollSeksjon = ({
                     {'Kontroll-simulering'}
                 </Heading>
 
-                <Alert variant={'error'} size={'small'}>
+                <Infokort variant={'feil'} size={'small'}>
                     {'Kontroll-simuleringen viser endring i beregnet utbetaling for behandlingen. '}
                     {behandlingsstatusTekst[behandlingsstatus]}
-                </Alert>
+                </Infokort>
 
                 <BeregningOppsummering beregninger={simulertBeregning.beregning} />
 

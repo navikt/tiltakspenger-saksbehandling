@@ -2,7 +2,7 @@ import {
     TilbakekrevingBehandling,
     TilbakekrevingBehandlingsstatus,
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { Alert, BodyLong, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, HStack, InlineMessage, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
@@ -20,9 +20,9 @@ export const TilbakekrevingOversikt = () => {
 
     if (tilbakekrevinger.length === 0) {
         return (
-            <Alert variant={'info'} inline={true}>
+            <InlineMessage status={'info'}>
                 {'Fant ingen tilbakekrevingsbehandlinger for denne brukeren'}
-            </Alert>
+            </InlineMessage>
         );
     }
 
@@ -42,7 +42,7 @@ export const TilbakekrevingOversikt = () => {
                 <TilbakekrevingerTabell tilbakekrevinger={aktive} />
             </VStack>
 
-            <Alert variant={'info'} inline={true}>
+            <InlineMessage status={'info'}>
                 <BodyLong spacing={true}>
                     {'Tilbakekrevingssaker behandles i en separat saksbehandlingsløsning.'}
                 </BodyLong>
@@ -54,7 +54,7 @@ export const TilbakekrevingOversikt = () => {
                         'Denne funksjonaliteten er kun ment for hjelp til oppgavefordeling, og påvirker ikke behandlingen av tilbakekrevingen.'
                     }
                 </BodyLong>
-            </Alert>
+            </InlineMessage>
 
             <VStack className={style.seksjon}>
                 <Heading size={'small'} level={'3'} className={style.header} spacing={true}>
@@ -76,9 +76,9 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
 
     if (tilbakekrevinger.length === 0) {
         return (
-            <Alert variant={'info'} inline={true} size={'small'}>
+            <InlineMessage status={'info'} size={'small'}>
                 {'Ingen behandlinger'}
-            </Alert>
+            </InlineMessage>
         );
     }
 

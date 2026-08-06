@@ -37,10 +37,8 @@ export const Infokort = ({
             <InfoCard.Content>{children}</InfoCard.Content>
         </InfoCard>
     ) : (
-        <InfoCard className={className}>
-            <InfoCard.Message {...rest} data-color={resolvedDataColor} icon={resolvedIcon}>
-                {children}
-            </InfoCard.Message>
+        <InfoCard className={className} data-color={resolvedDataColor} {...rest}>
+            <InfoCard.Message icon={resolvedIcon}>{children}</InfoCard.Message>
         </InfoCard>
     );
 };

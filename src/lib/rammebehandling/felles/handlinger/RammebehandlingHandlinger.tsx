@@ -1,4 +1,4 @@
-import { Alert, HStack, InlineMessage } from '@navikt/ds-react';
+import { HStack, InlineMessage } from '@navikt/ds-react';
 import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
@@ -43,10 +43,9 @@ export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) =
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Høyre>
-                <Alert
-                    variant={'info'}
-                    inline={true}
-                >{`Sist lagret: ${formaterTidspunkt(behandling.sistEndret)}`}</Alert>
+                <InlineMessage
+                    status={'info'}
+                >{`Sist lagret: ${formaterTidspunkt(behandling.sistEndret)}`}</InlineMessage>
             </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
     );

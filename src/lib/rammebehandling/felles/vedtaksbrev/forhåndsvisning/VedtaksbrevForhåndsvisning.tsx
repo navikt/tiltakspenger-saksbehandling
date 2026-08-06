@@ -1,4 +1,4 @@
-import { Alert, Button } from '@navikt/ds-react';
+import { Button, InlineMessage } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { BrevForhåndsvisningDTO } from './useHentVedtaksbrevForhåndsvisning';
 
@@ -68,16 +68,15 @@ export const VedtaksbrevForhåndsvisning = ({
             </Button>
             {showValidationError &&
                 validering.errors.map((error, index) => (
-                    <Alert key={index} variant={'error'} size={'small'} inline={true}>
+                    <InlineMessage status={'error'} key={index} size={'small'}>
                         {error}
-                    </Alert>
+                    </InlineMessage>
                 ))}
             {error && (
-                <Alert
-                    variant={'error'}
+                <InlineMessage
+                    status={'error'}
                     size={'small'}
-                    inline={true}
-                >{`Feil ved forhåndsvisning av brev: [${error.status}] ${error.message}`}</Alert>
+                >{`Feil ved forhåndsvisning av brev: [${error.status}] ${error.message}`}</InlineMessage>
             )}
         </>
     );

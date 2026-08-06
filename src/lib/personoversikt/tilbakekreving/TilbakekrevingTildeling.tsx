@@ -1,7 +1,7 @@
 import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { Alert, Button } from '@navikt/ds-react';
+import { Button, InlineMessage } from '@navikt/ds-react';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { useSak } from '~/lib/sak/SakContext';
 
@@ -41,11 +41,10 @@ const KnappMedHandling = ({ tilbakekreving, handling }: KnappMedHandlingProps) =
     return (
         <>
             {error && (
-                <Alert
-                    variant={'error'}
+                <InlineMessage
+                    status={'error'}
                     size={'small'}
-                    inline={true}
-                >{`Feil ved tildeling: ${error.message}`}</Alert>
+                >{`Feil ved tildeling: ${error.message}`}</InlineMessage>
             )}
             <Button
                 variant={'secondary'}

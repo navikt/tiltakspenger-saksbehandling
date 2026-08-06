@@ -1,5 +1,6 @@
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
-import { Alert, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BarnetilleggTidslinje } from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
@@ -57,9 +58,9 @@ export const BehandlingBarnetillegg = () => {
                     </RadioGroup>
                     {!harBarnetillegg &&
                         harSøktBarnetillegg(innvilgelseTotalPeriode, behandling, sak) && (
-                            <Alert className={style.infoboks} variant={'info'} size={'small'}>
+                            <Infokort variant={'info'} className={style.infoboks} size={'small'}>
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
-                            </Alert>
+                            </Infokort>
                         )}
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>

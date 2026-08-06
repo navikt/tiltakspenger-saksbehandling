@@ -1,5 +1,6 @@
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import { Alert, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { VStack } from '@navikt/ds-react';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { deltarPaFlereTiltakMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
@@ -28,17 +29,17 @@ export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder, behandling }
     return (
         <VStack gap={'space-4'}>
             {antallDagerSettesIkkeAutomatiskIBrev && (
-                <Alert variant={'info'} size={'small'}>
+                <Infokort variant={'info'} size={'small'}>
                     {
                         'Husk å oppgi antall dager per uke det innvilges tiltakspenger for i vedtaksbrevet.'
                     }
-                </Alert>
+                </Infokort>
             )}
             {harFlereTiltak && (
-                <Alert variant={'info'} size={'small'}>
+                <Infokort variant={'info'} size={'small'}>
                     {`Flere tiltak registrert på bruker. Det du velger brukes
                      for regnskapsføring og statistikk, og påvirker ikke vedtaket.`}
-                </Alert>
+                </Infokort>
             )}
         </VStack>
     );

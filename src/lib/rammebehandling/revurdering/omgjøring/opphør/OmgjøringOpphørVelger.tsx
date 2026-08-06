@@ -44,7 +44,7 @@ export const OmgjøringOpphørVelger = () => {
                     {' Opphørsperioden må starte og slutte innenfor innvilgelsesperiodene.'}
                 </VedtakHjelpetekst>
 
-                <VedtakHjelpetekst variant={'warning'}>
+                <VedtakHjelpetekst variant={'advarsel'}>
                     {'Husk å vurdere om du må forhåndsvarsle bruker før du foretar et opphør.'}
                     {' Dette må gjøres via '}
                     <Link href={gosysUrl}>{'Gosys'}</Link> {' eller '}
@@ -52,7 +52,7 @@ export const OmgjøringOpphørVelger = () => {
                 </VedtakHjelpetekst>
 
                 {måHaFritekst && (
-                    <VedtakHjelpetekst variant={'warning'}>
+                    <VedtakHjelpetekst variant={'advarsel'}>
                         {'Valgt hjemmel for må begrunnes med fritekst'}
                     </VedtakHjelpetekst>
                 )}

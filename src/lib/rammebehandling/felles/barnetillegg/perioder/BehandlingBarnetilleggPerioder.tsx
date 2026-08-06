@@ -1,4 +1,4 @@
-import { Alert, Button, HStack, Select } from '@navikt/ds-react';
+import { Button, HStack, InlineMessage, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -242,9 +242,9 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                 </Button>
             )}
             {erIkkeInnvilgetPeriode && (
-                <Alert variant={'error'} size={'small'} inline={true}>
+                <InlineMessage status={'error'} size={'small'}>
                     {'Perioden inneholder dager som ikke er innvilget'}
-                </Alert>
+                </InlineMessage>
             )}
         </HStack>
     );

@@ -2,8 +2,9 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useSak } from '~/lib/sak/SakContext';
-import { Alert, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
+import { Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { MeldekortUker } from '~/lib/meldekort/felles/uker/MeldekortUker';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { formaterTidspunktKort } from '~/utils/date';
@@ -51,9 +52,9 @@ export const MeldekortbehandlingOppsummering = ({
 
     if (!meldeperiodebehandlingForKjede) {
         return (
-            <Alert variant={'error'}>
+            <Infokort variant={'feil'}>
                 {`Teknisk feil: Fant ingen behandling av denne meldeperioden på ${meldekortbehandlingId}`}
-            </Alert>
+            </Infokort>
         );
     }
 

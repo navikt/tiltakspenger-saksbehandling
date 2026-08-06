@@ -3,10 +3,11 @@ import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
-import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
@@ -45,9 +46,9 @@ export const InnvilgelsesperioderVelger = () => {
 
     if (tiltaksdeltakelser.length === 0) {
         return (
-            <Alert variant={'error'} size={'small'}>
+            <Infokort variant={'feil'} size={'small'}>
                 {'Ingen tiltaksdeltakelser i saksopplysningene kan innvilges'}
-            </Alert>
+            </Infokort>
         );
     }
 
@@ -253,21 +254,21 @@ const InnvilgelsesperiodeVelgerFull = ({
                 https://nav-it.slack.com/archives/C02CPSB47JL/p1770989740471839
             */}
             {innvilgelsesperiodeStarterIHelgen && (
-                <Alert variant={'warning'} size={'small'}>
+                <Infokort variant={'advarsel'} size={'small'}>
                     {`Innvilgelsesperioden starter i en helg. Husk å "skru på meldekort helg" i personoversikten hvis bruker skal kunne melde helg i meldekortet.`}
-                </Alert>
+                </Infokort>
             )}
 
             {!harValgtGyldigTiltak && (
-                <Alert variant={'error'} size={'small'} inline={true}>
+                <InlineMessage status={'error'} size={'small'}>
                     {'Kan ikke innvilge for dette tiltaket'}
-                </Alert>
+                </InlineMessage>
             )}
 
             {harValgtUgyldigPeriodeForOmgjøring && (
-                <Alert variant={'error'} size={'small'} inline={true}>
+                <InlineMessage status={'error'} size={'small'}>
                     {'Innvilgelsesperioden må være innenfor valgt vedtaksperiode'}
-                </Alert>
+                </InlineMessage>
             )}
         </VStack>
     );

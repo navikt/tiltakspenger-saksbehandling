@@ -1,6 +1,7 @@
 import { ReactNode, RefObject } from 'react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import styles from './BekreftelsesModal.module.css';
-import { Alert, Button, HStack, Modal } from '@navikt/ds-react';
+import { Button, HStack, Modal } from '@navikt/ds-react';
 import { FetcherError } from '~/utils/fetch/fetch';
 
 type Props = {
@@ -37,9 +38,9 @@ export const BekreftelsesModal = ({
             <Modal.Footer>
                 <HStack gap="space-16">
                     {feil && (
-                        <Alert variant={'error'} size={'small'}>
+                        <Infokort variant={'feil'} size={'small'}>
                             {feil.message}
-                        </Alert>
+                        </Infokort>
                     )}
                     <div className={styles.knapper}>
                         {bekreftKnapp}

@@ -1,4 +1,4 @@
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { BodyShort, InlineMessage } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 
 type Props = {
@@ -8,9 +8,9 @@ type Props = {
 
 export const AlertMedTidspunkt = ({ tekst, tidspunkt }: Props) => {
     return (
-        <Alert variant={'info'} inline={true}>
+        <InlineMessage status={'info'}>
             <BodyShort>{tekst}</BodyShort>
             <BodyShort weight={'semibold'}>{formaterTidspunkt(tidspunkt)}</BodyShort>
-        </Alert>
+        </InlineMessage>
     );
 };

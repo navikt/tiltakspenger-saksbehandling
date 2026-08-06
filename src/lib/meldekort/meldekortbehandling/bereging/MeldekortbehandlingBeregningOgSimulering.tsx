@@ -14,7 +14,7 @@ import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-o
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { SimulertBeregningDetaljerTabell } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { Alert, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
@@ -157,10 +157,10 @@ const UtbetalingskontrollSeksjon = ({
             </MeldekortbehandlingSeksjon.FullBredde>
 
             <MeldekortbehandlingSeksjon.Venstre gap={'space-32'}>
-                <Alert variant={'error'} size={'small'}>
+                <Infokort variant={'feil'} size={'small'}>
                     {'Kontroll-simuleringen viser endring i beregnet utbetaling for behandlingen. '}
                     {behandlingsstatusTekst[behandlingsstatus]}
-                </Alert>
+                </Infokort>
 
                 <BeregningOppsummering beregninger={simulertBeregning.beregning} />
 

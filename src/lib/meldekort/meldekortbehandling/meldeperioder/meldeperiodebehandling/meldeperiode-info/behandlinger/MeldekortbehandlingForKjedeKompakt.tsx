@@ -1,4 +1,5 @@
-import { Alert, BodyShort, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import {
     behandlingsstatusFarge,
     behandlingsstatusTekst,
@@ -47,9 +48,9 @@ export const MeldekortbehandlingForKjedeKompakt = ({ meldekortbehandlingId, kjed
 
     if (!meldeperiodebehandling) {
         return (
-            <Alert variant={'error'}>
+            <Infokort variant={'feil'}>
                 {`Teknisk feil: Fant ingen behandling av denne meldeperioden på ${id}`}
-            </Alert>
+            </Infokort>
         );
     }
 

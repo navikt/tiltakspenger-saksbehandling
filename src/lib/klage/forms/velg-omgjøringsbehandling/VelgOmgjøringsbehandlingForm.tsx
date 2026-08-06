@@ -1,4 +1,4 @@
-import { Modal, Select, Button, VStack, Heading, HStack, LocalAlert } from '@navikt/ds-react';
+import { Button, Heading, HStack, LocalAlert, Modal, Select, VStack } from '@navikt/ds-react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Søknad } from '~/types/Søknad';

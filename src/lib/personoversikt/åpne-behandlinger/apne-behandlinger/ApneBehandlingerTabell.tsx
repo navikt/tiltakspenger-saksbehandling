@@ -1,5 +1,5 @@
 import { ÅpenBehandling, ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
-import { Alert, Button, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, InlineMessage, Table, Tag, VStack } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
     klagebehandlingResultatTilTag,
@@ -155,9 +155,9 @@ const propsForRad = (
                 ),
                 kravtidspunkt: formaterTidspunkt(tidsstempelHosOss),
                 meny: (
-                    <Alert variant={'info'} size={'small'} inline={true}>
+                    <InlineMessage status={'info'} size={'small'}>
                         {'Søknadsbehandling opprettes automatisk'}
-                    </Alert>
+                    </InlineMessage>
                 ),
             };
         }

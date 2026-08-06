@@ -1,4 +1,5 @@
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Heading, InlineMessage, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Periode } from '~/types/Periode';
 import { formaterPeriode } from '~/utils/date';
 import { UtbetalingStatus } from '~/lib/beregning-og-simulering/header/status/UtbetalingStatus';
@@ -53,22 +54,21 @@ export const BeregningOgSimuleringHeader = ({
             </Heading>
 
             {erOmberegning && periode && (
-                <Alert
-                    variant={'info'}
-                    inline={true}
+                <InlineMessage
+                    status={'info'}
                     size={'small'}
-                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${formaterPeriode(periode)}`}</Alert>
+                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${formaterPeriode(periode)}`}</InlineMessage>
             )}
 
             {kanIkkeIverksetteUtbetaling && (
-                <Alert variant={'error'}>
+                <Infokort variant={'feil'}>
                     {kanIkkeIverksetteUtbetalingMelding ??
                         `Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[kanIkkeIverksetteUtbetaling]}`}
-                </Alert>
+                </Infokort>
             )}
 
             {harNegativBeregningUtenFeilutbetaling && (
-                <Alert variant={'warning'}>
+                <Infokort variant={'advarsel'}>
                     {
                         'Beregningen viser negativt endret beløp, men simulering viser ingen feilutbetaling.'
                     }
@@ -76,7 +76,7 @@ export const BeregningOgSimuleringHeader = ({
                     {
                         ' Dersom denne behandlingen iverksettes før forrige utbetaling kjøres, vil dette ikke føre til feilutbetaling.'
                     }
-                </Alert>
+                </Infokort>
             )}
 
             <UtbetalingBeløp

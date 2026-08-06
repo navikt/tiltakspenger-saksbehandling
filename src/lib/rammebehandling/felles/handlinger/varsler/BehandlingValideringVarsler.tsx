@@ -1,5 +1,6 @@
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { Heading, VStack } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 
 type Props = {
@@ -20,20 +21,20 @@ export const BehandlingValideringVarsler = ({ resultat, className }: Props) => {
     return (
         <VStack className={className} gap={'space-8'}>
             {harWarnings && (
-                <Alert variant={'warning'} size={'small'}>
+                <Infokort variant={'advarsel'} size={'small'}>
                     <Heading size={'small'} level={'2'}>
                         {'Advarsel'}
                     </Heading>
                     <TekstListe tekster={warnings} />
-                </Alert>
+                </Infokort>
             )}
             {harErrors && (
-                <Alert variant={'error'} size={'small'}>
+                <Infokort variant={'feil'} size={'small'}>
                     <Heading size={'small'} level={'2'}>
                         {'Feil i behandlingen'}
                     </Heading>
                     <TekstListe tekster={errors} />
-                </Alert>
+                </Infokort>
             )}
         </VStack>
     );

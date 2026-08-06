@@ -1,4 +1,4 @@
-import { VStack, InfoCard, Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, InfoCard, VStack } from '@navikt/ds-react';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { useState } from 'react';
 import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/typer/Klage';

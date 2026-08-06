@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Timeline } from '@navikt/ds-react';
+import { BodyShort, InlineMessage, Timeline } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { barnetilleggKrympetTilPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
@@ -20,9 +20,9 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
 
     if (barnetillegg.length === 0) {
         return (
-            <Alert variant={'info'} size={'small'} inline={true} className={style.info}>
+            <InlineMessage status={'info'} size={'small'} className={style.info}>
                 {'Ingen tidligere vedtak om barnetillegg innenfor valgt innvilgelsesperiode'}
-            </Alert>
+            </InlineMessage>
         );
     }
 
@@ -31,9 +31,9 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
 
     return (
         <div>
-            <Alert variant={'info'} inline={true} size={'small'} className={style.info}>
+            <InlineMessage status={'info'} size={'small'} className={style.info}>
                 {`Gjeldende barnetillegg innenfor valgt innvilgelsesperiode (${formaterPeriode(innvilgelsesperiode)}):`}
-            </Alert>
+            </InlineMessage>
             <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={''}>
                     {barnetillegg.map((bt) => {

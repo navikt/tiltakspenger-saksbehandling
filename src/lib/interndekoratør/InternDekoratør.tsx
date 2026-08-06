@@ -12,7 +12,7 @@ import {
 } from '@navikt/ds-react';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from './useHentSakForFNR';
-import Varsel from '~/lib/_felles/varsel/Varsel';
+import LukkbartVarsel from '~/lib/_felles/varsel/LukkbartVarsel';
 import Link from 'next/link';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
@@ -119,9 +119,9 @@ export const InternDekoratør = () => {
                 </HStack>
             </InternalHeader>
             {error && (
-                <Varsel
+                <LukkbartVarsel
                     melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}
-                    variant="error"
+                    variant="feil"
                     marginX
                     key={`error-${uuidv4()}`}
                 />

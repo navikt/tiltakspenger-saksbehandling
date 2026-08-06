@@ -1,4 +1,5 @@
-import { Alert, Table, VStack } from '@navikt/ds-react';
+import { Table, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SimulertBeregningPerMeldeperiode } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { useState } from 'react';
 import { SimuleringOppsummeringDetaljert } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
@@ -127,9 +128,9 @@ export const SimulertBeregningMeldeperiodeDetaljer = ({ meldeperiode, harSimuler
                                 />
                             </VStack>
                         ) : (
-                            <Alert variant={'error'} size={'small'}>
+                            <Infokort variant={'feil'} size={'small'}>
                                 {'Simulering mangler'}
-                            </Alert>
+                            </Infokort>
                         )}
                     </div>
                 </>

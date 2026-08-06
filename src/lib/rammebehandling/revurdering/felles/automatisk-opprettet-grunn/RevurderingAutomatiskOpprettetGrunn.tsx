@@ -3,8 +3,9 @@ import {
     TiltaksdeltakerEndring,
     TiltaksdeltakerEndringType,
 } from '~/lib/rammebehandling/typer/Revurdering';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
-import { Alert, Heading, List } from '@navikt/ds-react';
+import { Heading, List } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';
 
 type Props = {
@@ -18,11 +19,11 @@ export const RevurderingAutomatiskOpprettetGrunn = ({ automatiskOpprettetGrunn }
                 <Heading size={'small'} level={'3'}>
                     {'Automatisk opprettet revurdering'}
                 </Heading>
-                <Alert variant={'info'} size={'small'}>
+                <Infokort variant={'info'} size={'small'}>
                     {
                         'Revurderingen ble automatisk opprettet på grunn av endringer i tiltaksdeltakelsen'
                     }
-                </Alert>
+                </Infokort>
                 <List>
                     {automatiskOpprettetGrunn.endringer.map((endring) => (
                         <List.Item key={endring.type}>{endringTekst(endring)}</List.Item>

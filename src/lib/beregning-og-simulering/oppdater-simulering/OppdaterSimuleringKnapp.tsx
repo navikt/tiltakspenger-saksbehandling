@@ -1,4 +1,4 @@
-import { Alert, Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, InlineMessage } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -20,9 +20,9 @@ export const OppdaterSimuleringKnapp = ({ behandlingId }: Props) => {
     return (
         <HStack gap={'space-20'} align={'center'}>
             {error && (
-                <Alert variant={'error'} size={'small'} inline={true}>
+                <InlineMessage status={'error'} size={'small'}>
                     {error.message}
-                </Alert>
+                </InlineMessage>
             )}
             <Button
                 onClick={() =>

@@ -1,5 +1,6 @@
 import styles from './RegistrerSøknadManueltPage.module.css';
-import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/lib/sak/SakContext';
@@ -158,10 +159,10 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                             />
 
                             {opprettSøknadError && (
-                                <Alert variant="error">
+                                <Infokort variant={'feil'}>
                                     Noe gikk galt ved registrering av papirsøknad. Vennligst prøv
                                     igjen litt senere.
-                                </Alert>
+                                </Infokort>
                             )}
 
                             <HStack gap="space-16">

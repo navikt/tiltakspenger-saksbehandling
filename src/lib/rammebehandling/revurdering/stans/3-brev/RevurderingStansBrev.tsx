@@ -8,7 +8,7 @@ import {
     useRevurderingStansSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
-import { HStack, Heading, Checkbox } from '@navikt/ds-react';
+import { Checkbox, Heading, HStack } from '@navikt/ds-react';
 
 export const RevurderingStansBrev = () => {
     const skjema = useRevurderingStansSkjema();

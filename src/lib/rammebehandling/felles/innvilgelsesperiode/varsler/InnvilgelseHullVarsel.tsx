@@ -1,4 +1,4 @@
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { BodyShort, InlineMessage } from '@navikt/ds-react';
 import { forrigeDag, nesteDag, formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
@@ -80,7 +80,7 @@ const PeriodeUtenInnvilgelseVarsel = ({ periode }: { periode: Periode }) => {
     const kanOpphøre = resultat === RevurderingResultat.OMGJØRING;
 
     return (
-        <Alert variant={erOpphør && !kanOpphøre ? 'error' : 'warning'} size={'small'} inline={true}>
+        <InlineMessage status={erOpphør && !kanOpphøre ? 'error' : 'warning'} size={'small'}>
             <BodyShort
                 size={'small'}
                 spacing={erOpphør}
@@ -92,6 +92,6 @@ const PeriodeUtenInnvilgelseVarsel = ({ periode }: { periode: Periode }) => {
                         .join(', ')}`}
                 </BodyShort>
             )}
-        </Alert>
+        </InlineMessage>
     );
 };

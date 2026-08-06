@@ -1,5 +1,6 @@
 import { useSøknadsbehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import { Alert } from '@navikt/ds-react';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+
 import style from './SøknadsbehandlingAutomatiskBehandling.module.css';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { ManueltBehandlesGrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
@@ -13,16 +14,16 @@ export const SøknadsbehandlingAutomatiskBehandling = () => {
     return (
         <>
             {behandling.automatiskSaksbehandlet && (
-                <Alert variant="info" size="small" className={style.infoboks}>
+                <Infokort variant={'info'} size="small" className={style.infoboks}>
                     Saksbehandlingen er gjort automatisk.
-                </Alert>
+                </Infokort>
             )}
             {manueltBehandlesGrunnerTekst.length > 0 && (
-                <Alert variant="warning" size="small" className={style.infoboks}>
+                <Infokort variant={'advarsel'} size="small" className={style.infoboks}>
                     Kunne ikke behandle saken automatisk:
                     <br />
                     <TekstListe tekster={manueltBehandlesGrunnerTekst} />
-                </Alert>
+                </Infokort>
             )}
         </>
     );

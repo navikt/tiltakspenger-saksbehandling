@@ -1,6 +1,6 @@
 import { Control, Controller, useFieldArray } from 'react-hook-form';
 import { BrevFormData } from './BrevFormUtils';
-import { Button, TextField, Label, HStack, VStack, BodyShort, Textarea } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Label, Textarea, TextField, VStack } from '@navikt/ds-react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import styles from './BrevForm.module.css';

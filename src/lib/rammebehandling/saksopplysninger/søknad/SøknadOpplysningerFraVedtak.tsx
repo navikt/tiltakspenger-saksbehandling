@@ -1,6 +1,6 @@
 import { useSak } from '~/lib/sak/SakContext';
 import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
-import { Alert, BodyShort, Select, VStack } from '@navikt/ds-react';
+import { BodyShort, InlineMessage, Select, VStack } from '@navikt/ds-react';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
 import { useState } from 'react';
@@ -23,9 +23,9 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
 
     if (vedtatteSøknadsbehandlinger.length === 0) {
         return (
-            <Alert variant={'info'} inline={true} size={'small'}>
+            <InlineMessage status={'info'} size={'small'}>
                 {'Fant ingen tidligere innvilgede søknader'}
-            </Alert>
+            </InlineMessage>
         );
     }
 
