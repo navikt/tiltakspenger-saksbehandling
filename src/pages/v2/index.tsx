@@ -1,23 +1,18 @@
 import { ParsedUrlQuery } from 'node:querystring';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BenkSideV2, BenkSideV2Props, BenkV2TabData } from '~/lib/benk/v2/BenkSideV2';
+import { BenkSideV2, BenkSideV2Props } from '~/lib/benk/v2/BenkSideV2';
 import { BENK_V2_TAB_DEFAULT, BenkV2Tab, erBenkV2Tab } from '~/lib/benk/v2/typer/tabs';
-import { BenkSøknaderKolonne } from '~/lib/benk/v2/typer/søknader';
-import { BenkRevurderingerKolonne } from '~/lib/benk/v2/typer/revurderinger';
-import { BenkMeldekortKolonne } from '~/lib/benk/v2/typer/meldekort';
-import { BenkKlageKolonne } from '~/lib/benk/v2/typer/klage';
-import { BenkTilbakekrevingKolonne } from '~/lib/benk/v2/typer/tilbakekreving';
-import {
-    hentAntallPerTab,
-    hentKlageOversikt,
-    hentMeldekortOversikt,
-    hentRevurderingerOversikt,
-    hentSøknaderOversikt,
-    hentTilbakekrevingOversikt,
-} from '~/lib/benk/v2/mock/mockBenkService';
+import { BenkSøknaderKolonne, BenkSøknadsbehandling } from '~/lib/benk/v2/typer/søknader';
+import { BenkRevurderingerKolonne, BenkRevurdering } from '~/lib/benk/v2/typer/revurderinger';
+import { BenkMeldekortKolonne, BenkMeldekort } from '~/lib/benk/v2/typer/meldekort';
+import { BenkKlageKolonne, BenkKlagebehandling } from '~/lib/benk/v2/typer/klage';
+import { BenkTilbakekrevingKolonne, BenkTilbakekreving } from '~/lib/benk/v2/typer/tilbakekreving';
+import { BenkV2Filter } from '~/lib/benk/v2/typer/felles';
+import { fetchBenkV2, NextRequest } from '~/utils/fetch/fetch-server';
 import { parseSortering } from '~/lib/benk/v2/benkV2Utils';
 import {
     harFilterVerdier,
+    parseFilterForTab,
     parseKlageFilter,
     parseMeldekortFilter,
     parseRevurderingerFilter,
@@ -43,13 +38,15 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     const tab = tabFraQuery ?? BENK_V2_TAB_DEFAULT;
 
     const lagredeValg = parseBenkV2Cookie(req.cookies[BENK_V2_COOKIE_NAME]);
-    const tabData = hentTabData(tab, query);
+    const aktivtFilter = parseFilterForTab(tab, query);
 
-    const redirect = hentRedirect(tabFraQuery, tabData, lagredeValg, query);
+    const redirect = hentRedirect(tabFraQuery, aktivtFilter, lagredeValg, query);
 
     if (redirect) {
         return redirect;
     }
+
+    const { antallPerTab, tabData } = await hentTabData(req, tab, query);
 
     res.setHeader(
         'Set-Cookie',
@@ -58,7 +55,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
     return {
         props: {
-            antallPerTab: hentAntallPerTab(),
+            antallPerTab,
             tabData,
         } satisfies BenkSideV2Props,
     };
@@ -72,11 +69,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
  */
 const hentRedirect = (
     tabFraQuery: BenkV2Tab | null,
-    tabData: BenkV2TabData,
+    aktivtFilter: BenkV2Filter,
     lagredeValg: BenkV2LagredeValg | null,
     query: ParsedUrlQuery,
 ) => {
-    if (harFilterVerdier(tabData.data.aktivtFilter) || lagredeValg === null) {
+    if (harFilterVerdier(aktivtFilter) || lagredeValg === null) {
         return null;
     }
 
@@ -109,10 +106,14 @@ const hentRedirect = (
 };
 
 /**
- * Henter data for én fane. Når backend er klar byttes kallene til mock-servicen
- * ut med ekte API-kall - request-typene er ment å speile det fremtidige API-et.
+ * Henter data for én fane fra backend. Svaret inneholder både fanens
+ * oversikt og antallet i alle fanene, slik at ett kall dekker hele siden.
  */
-const hentTabData = (tab: BenkV2Tab, query: ParsedUrlQuery): BenkV2TabData => {
+const hentTabData = async (
+    req: NextRequest,
+    tab: BenkV2Tab,
+    query: ParsedUrlQuery,
+): Promise<Pick<BenkSideV2Props, 'antallPerTab' | 'tabData'>> => {
     const sorteringFraQuery = strengVerdi(query.sortering);
 
     switch (tab) {
@@ -123,12 +124,20 @@ const hentTabData = (tab: BenkV2Tab, query: ParsedUrlQuery): BenkV2TabData => {
                 BenkSøknaderKolonne,
                 BenkSøknaderKolonne.kravtidspunkt,
             );
-            return {
+            const respons = await fetchBenkV2<BenkSøknadsbehandling>(req, {
                 tab,
-                data: {
-                    oversikt: hentSøknaderOversikt({ sortering, filters }),
-                    aktivtFilter: filters,
-                    aktivSortering: sortering,
+                sortering,
+                filters,
+            });
+            return {
+                antallPerTab: respons.antallPerTab,
+                tabData: {
+                    tab,
+                    data: {
+                        oversikt: respons.oversikt,
+                        aktivtFilter: filters,
+                        aktivSortering: sortering,
+                    },
                 },
             };
         }
@@ -139,12 +148,16 @@ const hentTabData = (tab: BenkV2Tab, query: ParsedUrlQuery): BenkV2TabData => {
                 BenkRevurderingerKolonne,
                 BenkRevurderingerKolonne.startet,
             );
+            const respons = await fetchBenkV2<BenkRevurdering>(req, { tab, sortering, filters });
             return {
-                tab,
-                data: {
-                    oversikt: hentRevurderingerOversikt({ sortering, filters }),
-                    aktivtFilter: filters,
-                    aktivSortering: sortering,
+                antallPerTab: respons.antallPerTab,
+                tabData: {
+                    tab,
+                    data: {
+                        oversikt: respons.oversikt,
+                        aktivtFilter: filters,
+                        aktivSortering: sortering,
+                    },
                 },
             };
         }
@@ -155,12 +168,16 @@ const hentTabData = (tab: BenkV2Tab, query: ParsedUrlQuery): BenkV2TabData => {
                 BenkMeldekortKolonne,
                 BenkMeldekortKolonne.periode,
             );
+            const respons = await fetchBenkV2<BenkMeldekort>(req, { tab, sortering, filters });
             return {
-                tab,
-                data: {
-                    oversikt: hentMeldekortOversikt({ sortering, filters }),
-                    aktivtFilter: filters,
-                    aktivSortering: sortering,
+                antallPerTab: respons.antallPerTab,
+                tabData: {
+                    tab,
+                    data: {
+                        oversikt: respons.oversikt,
+                        aktivtFilter: filters,
+                        aktivSortering: sortering,
+                    },
                 },
             };
         }
@@ -171,12 +188,20 @@ const hentTabData = (tab: BenkV2Tab, query: ParsedUrlQuery): BenkV2TabData => {
                 BenkKlageKolonne,
                 BenkKlageKolonne.kravtidspunkt,
             );
-            return {
+            const respons = await fetchBenkV2<BenkKlagebehandling>(req, {
                 tab,
-                data: {
-                    oversikt: hentKlageOversikt({ sortering, filters }),
-                    aktivtFilter: filters,
-                    aktivSortering: sortering,
+                sortering,
+                filters,
+            });
+            return {
+                antallPerTab: respons.antallPerTab,
+                tabData: {
+                    tab,
+                    data: {
+                        oversikt: respons.oversikt,
+                        aktivtFilter: filters,
+                        aktivSortering: sortering,
+                    },
                 },
             };
         }
@@ -187,12 +212,16 @@ const hentTabData = (tab: BenkV2Tab, query: ParsedUrlQuery): BenkV2TabData => {
                 BenkTilbakekrevingKolonne,
                 BenkTilbakekrevingKolonne.startet,
             );
+            const respons = await fetchBenkV2<BenkTilbakekreving>(req, { tab, sortering, filters });
             return {
-                tab,
-                data: {
-                    oversikt: hentTilbakekrevingOversikt({ sortering, filters }),
-                    aktivtFilter: filters,
-                    aktivSortering: sortering,
+                antallPerTab: respons.antallPerTab,
+                tabData: {
+                    tab,
+                    data: {
+                        oversikt: respons.oversikt,
+                        aktivtFilter: filters,
+                        aktivSortering: sortering,
+                    },
                 },
             };
         }

@@ -1,4 +1,5 @@
 import { Nullable } from '~/types/UtilTypes';
+import { BenkV2Tab } from './tabs';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -52,11 +53,33 @@ export type BenkV2Request<F extends BenkV2Filter, Kolonne extends string> = {
 };
 
 /**
+ * Body-en som postes til /benk. `filters` er unionen av filtrene fanene
+ * tilbyr - hver fane sender sine, og backend ignorerer resten.
+ */
+export type BenkV2RequestBody = BenkV2Request<BenkV2Filter, string> & {
+    tab: BenkV2Tab;
+};
+
+/**
  * Respons for én fane i benken.
+ *
+ * [limit] er maksgrensen backend returnerer - er antallet treff større,
+ * er `behandlinger` kuttet og resten vises ikke.
  */
 export type BenkV2Oversikt<Behandling> = {
     behandlinger: Behandling[];
     totalAntall: number;
     totalAntallUfiltrert: number;
     antallFiltrertPgaTilgang: number;
+    limit: number;
+};
+
+/**
+ * Hele svaret fra /benk: fanen det ble spurt om, og antallet i alle
+ * fanene (til fanetitlene).
+ */
+export type BenkV2Respons<Behandling> = {
+    tab: BenkV2Tab;
+    antallPerTab: Record<BenkV2Tab, number>;
+    oversikt: BenkV2Oversikt<Behandling>;
 };
