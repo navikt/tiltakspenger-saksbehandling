@@ -11,7 +11,6 @@ import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
-import { SkjulPåVentCheckbox } from '../felles/SkjulPåVentCheckbox';
 
 type Props = {
     behandlinger: BenkTilbakekreving[];
@@ -35,6 +34,8 @@ export const TilbakekrevingFilter = ({ behandlinger, aktivtFilter }: Props) => {
                     skjulPåVent: false,
                 })
             }
+            skjulPåVent={valgtFilter.skjulPåVent}
+            onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
             <Select
                 label={'Status'}
@@ -80,25 +81,24 @@ export const TilbakekrevingFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
 
-            <HStack gap={'space-4'} align={'center'}>
-                <Checkbox
-                    size={'small'}
-                    checked={valgtFilter.kunOverMinstebeløp}
-                    onChange={(e) =>
-                        setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
-                    }
-                >
-                    {'Vis kun tilbakekrevinger over minstebeløp'}
-                </Checkbox>
-                <HelpText>
-                    {'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'}
-                </HelpText>
+            <HStack align={'end'}>
+                <HStack gap={'space-4'} align={'center'}>
+                    <Checkbox
+                        size={'small'}
+                        checked={valgtFilter.kunOverMinstebeløp}
+                        onChange={(e) =>
+                            setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
+                        }
+                    >
+                        {'Vis kun tilbakekrevinger over minstebeløp'}
+                    </Checkbox>
+                    <HelpText>
+                        {
+                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
+                        }
+                    </HelpText>
+                </HStack>
             </HStack>
-
-            <SkjulPåVentCheckbox
-                checked={valgtFilter.skjulPåVent}
-                onChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
-            />
         </BenkFilterSkjema>
     );
 };

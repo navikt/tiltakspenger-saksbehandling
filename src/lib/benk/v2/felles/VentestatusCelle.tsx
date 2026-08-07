@@ -1,4 +1,4 @@
-import { HelpText, HStack, Tag } from '@navikt/ds-react';
+import { HelpText, HStack, Table, Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { BenkV2Ventestatus } from '../typer/felles';
 import { antallKalenderDagerUnnaDagensDato, formaterDatotekst } from '~/utils/date';
@@ -15,17 +15,21 @@ type Props = {
 export const VentestatusCelle = ({ ventestatus, erTilbakekreving = false }: Props) => {
     const { erSattPåVent, begrunnelse, frist } = ventestatus;
 
-    if (!erSattPåVent) {
-        return '-';
-    }
-
     return (
-        <HStack gap={'space-4'} align={'center'} wrap={false}>
-            <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
-                {frist ? `Venter til ${formaterDatotekst(frist)}` : 'Venter'}
-            </Tag>
-            {begrunnelse && <HelpText>{begrunnelseTekst(begrunnelse, erTilbakekreving)}</HelpText>}
-        </HStack>
+        <Table.DataCell>
+            {erSattPåVent ? (
+                <HStack gap={'space-4'} align={'center'} wrap={false}>
+                    <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
+                        {frist ? `Venter til ${formaterDatotekst(frist)}` : 'Venter'}
+                    </Tag>
+                    {begrunnelse && (
+                        <HelpText>{begrunnelseTekst(begrunnelse, erTilbakekreving)}</HelpText>
+                    )}
+                </HStack>
+            ) : (
+                '-'
+            )}
+        </Table.DataCell>
     );
 };
 

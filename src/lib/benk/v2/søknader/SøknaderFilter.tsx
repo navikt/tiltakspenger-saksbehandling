@@ -9,7 +9,6 @@ import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
-import { SkjulPåVentCheckbox } from '../felles/SkjulPåVentCheckbox';
 
 type Props = {
     behandlinger: BenkSøknadsbehandling[];
@@ -33,6 +32,8 @@ export const SøknaderFilter = ({ behandlinger, aktivtFilter }: Props) => {
                     skjulPåVent: false,
                 })
             }
+            skjulPåVent={valgtFilter.skjulPåVent}
+            onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
             <Select
                 label={'Status'}
@@ -76,11 +77,6 @@ export const SøknaderFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
-            />
-
-            <SkjulPåVentCheckbox
-                checked={valgtFilter.skjulPåVent}
-                onChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
             />
         </BenkFilterSkjema>
     );

@@ -1,7 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkV2BehandlingBase, BenkV2Request } from './felles';
+import { BenkV2BehandlingBase, BenkV2Behandlingstype, BenkV2Request } from './felles';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 /**
@@ -24,6 +24,7 @@ export enum BenkTilbakekrevingKilde {
 }
 
 export type BenkTilbakekreving = BenkV2BehandlingBase & {
+    type: BenkV2Behandlingstype.TILBAKEKREVING;
     id: TilbakekrevingId;
     status: BenkTilbakekrevingStatus;
     beløp: number;

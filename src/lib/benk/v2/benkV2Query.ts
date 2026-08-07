@@ -4,7 +4,7 @@ import { BenkV2Behandlingsstatus } from './typer/felles';
 import { BenkV2Tab } from './typer/tabs';
 import { BenkSøknaderFilter } from './typer/søknader';
 import { BenkRevurderingerFilter } from './typer/revurderinger';
-import { BenkMeldekortFilter, BenkMeldekortType } from './typer/meldekort';
+import { BenkMeldekortFilter, benkMeldekortTyper } from './typer/meldekort';
 import { BenkKlageFilter } from './typer/klage';
 import {
     BenkTilbakekrevingFilter,
@@ -41,7 +41,7 @@ export const enumVerdi = <T extends Record<string, string>>(
     return streng !== null && isValueInRecord(streng, gyldigeVerdier) ? streng : null;
 };
 
-const boolskVerdi = (verdi: unknown): boolean =>
+export const boolskVerdi = (verdi: unknown): boolean =>
     typeof verdi === 'boolean' ? verdi : verdi === 'true';
 
 // Søknadstype er en string-union, ikke en enum, så vi trenger en record for validering
@@ -69,7 +69,7 @@ export const parseRevurderingerFilter = (kilde: FilterKilde): BenkRevurderingerF
 
 export const parseMeldekortFilter = (kilde: FilterKilde): BenkMeldekortFilter => ({
     status: enumVerdi(kilde.status, BenkV2Behandlingsstatus),
-    type: enumVerdi(kilde.type, BenkMeldekortType),
+    type: enumVerdi(kilde.type, benkMeldekortTyper),
     saksbehandler: strengVerdi(kilde.saksbehandler),
     skjulPåVent: boolskVerdi(kilde.skjulPåVent),
 });

@@ -1,6 +1,6 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { BenkV2Behandlingsstatus, BenkV2SorteringRetning, BenkV2Ventestatus } from './typer/felles';
-import { BenkMeldekortType } from './typer/meldekort';
+import { BenkMeldekortType, benkMeldekortTyper } from './typer/meldekort';
 import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from './typer/tilbakekreving';
 import { isValueInRecord } from '~/utils/object';
 import { Nullable } from '~/types/UtilTypes';
@@ -44,9 +44,9 @@ export const benkTilbakekrevingStatusColor: Record<BenkTilbakekrevingStatus, Aks
 } as const;
 
 export const benkMeldekortTypeTekst: Record<BenkMeldekortType, string> = {
-    [BenkMeldekortType.MELDEKORTBEHANDLING]: 'Meldekortbehandling',
-    [BenkMeldekortType.INNSENDT_MELDEKORT]: 'Innsendt meldekort',
-    [BenkMeldekortType.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
+    [benkMeldekortTyper.MELDEKORTBEHANDLING]: 'Meldekortbehandling',
+    [benkMeldekortTyper.INNSENDT_MELDEKORT]: 'Innsendt meldekort',
+    [benkMeldekortTyper.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
 } as const;
 
 export const benkTilbakekrevingKildeTekst: Record<BenkTilbakekrevingKilde, string> = {

@@ -1,5 +1,10 @@
 import { Select } from '@navikt/ds-react';
-import { BenkMeldekort, BenkMeldekortFilter, BenkMeldekortType } from '../typer/meldekort';
+import {
+    BenkMeldekort,
+    BenkMeldekortFilter,
+    BenkMeldekortType,
+    benkMeldekortTyper,
+} from '../typer/meldekort';
 import { BenkV2Behandlingsstatus } from '../typer/felles';
 import { BenkV2Tab } from '../typer/tabs';
 import { benkMeldekortTypeTekst, benkV2BehandlingsstatusTekst } from '../benkV2Utils';
@@ -7,7 +12,6 @@ import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
-import { SkjulPåVentCheckbox } from '../felles/SkjulPåVentCheckbox';
 
 type Props = {
     behandlinger: BenkMeldekort[];
@@ -29,6 +33,8 @@ export const MeldekortFilter = ({ behandlinger, aktivtFilter }: Props) => {
                     skjulPåVent: false,
                 })
             }
+            skjulPåVent={valgtFilter.skjulPåVent}
+            onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
             <Select
                 label={'Type'}
@@ -42,7 +48,7 @@ export const MeldekortFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 }
             >
                 <option value={''}>{'Alle'}</option>
-                {Object.values(BenkMeldekortType).map((type) => (
+                {Object.values(benkMeldekortTyper).map((type) => (
                     <option key={type} value={type}>
                         {benkMeldekortTypeTekst[type]}
                     </option>
@@ -72,11 +78,6 @@ export const MeldekortFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
-            />
-
-            <SkjulPåVentCheckbox
-                checked={valgtFilter.skjulPåVent}
-                onChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
             />
         </BenkFilterSkjema>
     );

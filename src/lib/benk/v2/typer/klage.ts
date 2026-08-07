@@ -1,8 +1,14 @@
 import { Nullable } from '~/types/UtilTypes';
 import { KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
-import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
+import {
+    BenkV2BehandlingBase,
+    BenkV2Behandlingsstatus,
+    BenkV2Behandlingstype,
+    BenkV2Request,
+} from './felles';
 
 export type BenkKlagebehandling = BenkV2BehandlingBase & {
+    type: BenkV2Behandlingstype.KLAGEBEHANDLING;
     id: KlageId;
     status: BenkV2Behandlingsstatus;
     kravtidspunkt: string;

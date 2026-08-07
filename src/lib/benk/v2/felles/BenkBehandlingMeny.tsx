@@ -19,23 +19,14 @@ import { MeldekortbehandlingOverta } from '~/lib/meldekort/felles/meny/handlinge
 import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAvslutt';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
-import { BenkV2Behandlingsstatus } from '../typer/felles';
+import { BenkV2Behandlingsstatus, BenkV2Behandlingstype } from '../typer/felles';
 import { BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkMeldekort } from '../typer/meldekort';
-import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 
-type RammeProps = {
-    behandling: BenkSøknadsbehandling | BenkRevurdering;
-    behandlingstype: Rammebehandlingstype;
+type Props = {
+    behandling: BenkSøknadsbehandling | BenkRevurdering | BenkMeldekort;
 };
-
-type MeldekortProps = {
-    behandling: BenkMeldekort;
-    behandlingstype: 'MELDEKORTBEHANDLING';
-};
-
-type Props = RammeProps | MeldekortProps;
 
 /**
  * Menyen for en rad i benken - samme valg som menyene i personoversikten,
@@ -44,9 +35,7 @@ type Props = RammeProps | MeldekortProps;
  * Handlinger som tar saksbehandler til behandlingen (tildel, overta, gjenoppta)
  * navigerer dit. Resten laster benken på nytt med en bekreftelse.
  */
-export const BenkBehandlingMeny = (props: Props) => {
-    const { behandling } = props;
-
+export const BenkBehandlingMeny = ({ behandling }: Props) => {
     const router = useRouter();
     const { navigateWithNotification } = useNotification();
 
@@ -55,19 +44,6 @@ export const BenkBehandlingMeny = (props: Props) => {
     const kapabiliteter = behandlingsmenyKapabiliteter(behandling.gyldigeKommandoer);
 
     const onClose = () => setAktivDialog(null);
-
-    const behandlingLenke =
-        props.behandlingstype === 'MELDEKORTBEHANDLING'
-            ? meldekortbehandlingUrl(props.behandling.saksnummer, props.behandling.id)
-            : behandlingUrl({
-                  saksnummer: props.behandling.saksnummer,
-                  id: props.behandling.id,
-              });
-
-    const onSuccessTilBehandling = () => {
-        onClose();
-        router.push(behandlingLenke);
-    };
 
     const onSuccessTilBenk = (melding: string) => () => {
         onClose();
@@ -79,40 +55,67 @@ export const BenkBehandlingMeny = (props: Props) => {
             ? (behandling.beslutter ?? 'Ukjent beslutter')
             : (behandling.saksbehandler ?? 'Ukjent saksbehandler');
 
-    const erRevurdering = props.behandlingstype === Rammebehandlingstype.REVURDERING;
-
-    return (
-        <>
-            <BehandlingsmenyValg
-                gyldigeKommandoer={behandling.gyldigeKommandoer}
-                onVelg={(dialog) => setAktivDialog(dialog)}
-                size={'small'}
-            />
-
-            {props.behandlingstype === 'MELDEKORTBEHANDLING' ? (
-                <MeldekortDialoger
-                    props={props}
-                    kapabiliteter={kapabiliteter}
-                    aktivDialog={aktivDialog}
-                    overtarFra={overtarFra}
-                    onClose={onClose}
-                    onSuccessTilBehandling={onSuccessTilBehandling}
-                    onSuccessTilBenk={onSuccessTilBenk}
-                />
-            ) : (
-                <RammeDialoger
-                    props={props}
-                    kapabiliteter={kapabiliteter}
-                    aktivDialog={aktivDialog}
-                    overtarFra={overtarFra}
-                    erRevurdering={erRevurdering}
-                    onClose={onClose}
-                    onSuccessTilBehandling={onSuccessTilBehandling}
-                    onSuccessTilBenk={onSuccessTilBenk}
-                />
-            )}
-        </>
+    const meny = (
+        <BehandlingsmenyValg
+            gyldigeKommandoer={behandling.gyldigeKommandoer}
+            onVelg={(dialog) => setAktivDialog(dialog)}
+            size={'small'}
+        />
     );
+
+    switch (behandling.type) {
+        case BenkV2Behandlingstype.SØKNADSBEHANDLING:
+        case BenkV2Behandlingstype.REVURDERING: {
+            const erRevurdering = behandling.type === BenkV2Behandlingstype.REVURDERING;
+
+            const onSuccessTilBehandling = () => {
+                onClose();
+                router.push(
+                    behandlingUrl({ saksnummer: behandling.saksnummer, id: behandling.id }),
+                );
+            };
+
+            return (
+                <>
+                    {meny}
+                    <RammeDialoger
+                        behandling={behandling}
+                        kapabiliteter={kapabiliteter}
+                        aktivDialog={aktivDialog}
+                        overtarFra={overtarFra}
+                        erRevurdering={erRevurdering}
+                        onClose={onClose}
+                        onSuccessTilBehandling={onSuccessTilBehandling}
+                        onSuccessTilBenk={onSuccessTilBenk}
+                    />
+                </>
+            );
+        }
+        case BenkV2Behandlingstype.MELDEKORTBEHANDLING: {
+            const onSuccessTilBehandling = () => {
+                onClose();
+                router.push(meldekortbehandlingUrl(behandling.saksnummer, behandling.id));
+            };
+
+            return (
+                <>
+                    {meny}
+                    <MeldekortDialoger
+                        behandling={behandling}
+                        kapabiliteter={kapabiliteter}
+                        aktivDialog={aktivDialog}
+                        overtarFra={overtarFra}
+                        onClose={onClose}
+                        onSuccessTilBehandling={onSuccessTilBehandling}
+                        onSuccessTilBenk={onSuccessTilBenk}
+                    />
+                </>
+            );
+        }
+        default:
+            // Innsendte og korrigerte meldekort er ikke behandlinger, og har ingen kommandoer
+            return null;
+    }
 };
 
 type DialogerProps = {
@@ -125,7 +128,7 @@ type DialogerProps = {
 };
 
 const RammeDialoger = ({
-    props,
+    behandling,
     kapabiliteter,
     aktivDialog,
     overtarFra,
@@ -133,8 +136,11 @@ const RammeDialoger = ({
     onClose,
     onSuccessTilBehandling,
     onSuccessTilBenk,
-}: DialogerProps & { props: RammeProps; erRevurdering: boolean }) => {
-    const { id, sakId, saksnummer } = props.behandling;
+}: DialogerProps & {
+    behandling: BenkSøknadsbehandling | BenkRevurdering;
+    erRevurdering: boolean;
+}) => {
+    const { id, sakId, saksnummer } = behandling;
 
     return (
         <>
@@ -206,15 +212,15 @@ const RammeDialoger = ({
 };
 
 const MeldekortDialoger = ({
-    props,
+    behandling,
     kapabiliteter,
     aktivDialog,
     overtarFra,
     onClose,
     onSuccessTilBehandling,
     onSuccessTilBenk,
-}: DialogerProps & { props: MeldekortProps }) => {
-    const { id, sakId } = props.behandling;
+}: DialogerProps & { behandling: BenkMeldekort }) => {
+    const { id, sakId } = behandling;
 
     return (
         <>

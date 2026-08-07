@@ -1,6 +1,11 @@
 import { Nullable } from '~/types/UtilTypes';
 import { BenkV2Tab } from './tabs';
 import { SakId } from '~/lib/sak/SakTyper';
+import { BenkRevurdering } from '~/lib/benk/v2/typer/revurderinger';
+import { BenkSøknadsbehandling } from '~/lib/benk/v2/typer/søknader';
+import { BenkMeldekort } from '~/lib/benk/v2/typer/meldekort';
+import { BenkKlagebehandling } from '~/lib/benk/v2/typer/klage';
+import { BenkTilbakekreving } from '~/lib/benk/v2/typer/tilbakekreving';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -15,6 +20,21 @@ export enum BenkV2Behandlingsstatus {
     KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
 }
 
+/**
+ * Diskriminatoren backend setter på hver rad, slik at frontend kan mappe en rad
+ * til riktig type uten å gjette på hvilke felter som finnes.
+ * Meldekortfanens tre radtyper er egne verdier, så `type` alene sier nøyaktig hva raden er.
+ */
+export enum BenkV2Behandlingstype {
+    SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
+    REVURDERING = 'REVURDERING',
+    MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
+    INNSENDT_MELDEKORT = 'INNSENDT_MELDEKORT',
+    KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
+    KLAGEBEHANDLING = 'KLAGEBEHANDLING',
+    TILBAKEKREVING = 'TILBAKEKREVING',
+}
+
 export type BenkV2Ventestatus = {
     erSattPåVent: boolean;
     begrunnelse: Nullable<string>;
@@ -25,6 +45,7 @@ export type BenkV2Ventestatus = {
  * Fellesfelt for alle rader i benken, uavhengig av behandlingstype.
  */
 export type BenkV2BehandlingBase = {
+    type: BenkV2Behandlingstype;
     id: string;
     sakId: SakId;
     fnr: string;
@@ -36,6 +57,13 @@ export type BenkV2BehandlingBase = {
     erUnderkjent: boolean;
     ventestatus: BenkV2Ventestatus;
 };
+
+export type BenkV2Behandling =
+    | BenkRevurdering
+    | BenkSøknadsbehandling
+    | BenkMeldekort
+    | BenkKlagebehandling
+    | BenkTilbakekreving;
 
 export enum BenkV2SorteringRetning {
     ASC = 'ASC',
