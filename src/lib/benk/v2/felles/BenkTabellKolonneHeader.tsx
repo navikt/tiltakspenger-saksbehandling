@@ -31,19 +31,19 @@ const Status = () => (
 const Ventestatus = () => <Table.ColumnHeader>{'Ventestatus'}</Table.ColumnHeader>;
 
 const Kravtidspunkt = () => (
-    <Table.ColumnHeader sortable={true} sortKey={'kravtidspunkt'}>
+    <Table.ColumnHeader sortable={true} sortKey={'kravtidspunkt'} align={'right'}>
         {'Kravtidspunkt'}
     </Table.ColumnHeader>
 );
 
 const Startet = () => (
-    <Table.ColumnHeader sortable={true} sortKey={'startet'}>
+    <Table.ColumnHeader sortable={true} sortKey={'startet'} align={'right'}>
         {'Startet'}
     </Table.ColumnHeader>
 );
 
 const SistEndret = () => (
-    <Table.ColumnHeader sortable={true} sortKey={'sist_endret'}>
+    <Table.ColumnHeader sortable={true} sortKey={'sist_endret'} align={'right'}>
         {'Sist endret'}
     </Table.ColumnHeader>
 );
@@ -61,7 +61,7 @@ const Beslutter = () => (
 );
 
 const Beløp = () => (
-    <Table.ColumnHeader sortable={true} sortKey={'beløp'}>
+    <Table.ColumnHeader sortable={true} sortKey={'beløp'} align={'right'}>
         {'Beløp'}
     </Table.ColumnHeader>
 );

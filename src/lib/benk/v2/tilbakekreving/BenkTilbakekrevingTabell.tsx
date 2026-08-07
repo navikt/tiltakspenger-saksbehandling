@@ -26,7 +26,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                     </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Status />
                     <BenkTabellKolonneHeader.Ventestatus />
-                    <Table.ColumnHeader>{'Kravgrunnlagperiode'}</Table.ColumnHeader>
+                    <Table.ColumnHeader align={'right'}>{'Kravgrunnlagperiode'}</Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Beløp />
                     <BenkTabellKolonneHeader.Startet />
                     <BenkTabellKolonneHeader.SistEndret />

@@ -29,11 +29,19 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                     </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Status />
                     <BenkTabellKolonneHeader.Ventestatus />
-                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.periode}>
+                    <Table.ColumnHeader
+                        sortable={true}
+                        sortKey={BenkMeldekortKolonne.periode}
+                        align={'right'}
+                    >
                         {'Meldeperiode'}
                     </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Beløp />
-                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.mottatt}>
+                    <Table.ColumnHeader
+                        sortable={true}
+                        sortKey={BenkMeldekortKolonne.mottatt}
+                        align={'right'}
+                    >
                         {'Mottatt'}
                     </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Saksbehandler />

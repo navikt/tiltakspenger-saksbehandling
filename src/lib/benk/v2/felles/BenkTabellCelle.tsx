@@ -60,7 +60,11 @@ const resultatTag = ({ type, resultat }: ResultatProps['behandling']): ReactNode
                 '-'
             );
         case BenkV2Behandlingstype.KLAGEBEHANDLING:
-            return resultat ? <KlagebehandlingResultatTag resultat={resultat} /> : '-';
+            return resultat ? (
+                <KlagebehandlingResultatTag resultat={resultat} size={'small'} />
+            ) : (
+                '-'
+            );
     }
 };
 
@@ -122,7 +126,7 @@ const Tidspunkt = ({
     tidspunkt: Nullable<string>;
     kort?: boolean;
 }) => (
-    <Table.DataCell>
+    <Table.DataCell align={'right'}>
         {tidspunkt ? (kort ? formaterTidspunktKort(tidspunkt) : formaterTidspunkt(tidspunkt)) : '-'}
     </Table.DataCell>
 );
@@ -133,7 +137,7 @@ const Tildelt = ({ ident }: { ident: Nullable<string> }) => (
 );
 
 const PeriodeCelle = ({ periode }: { periode: Periode }) => (
-    <Table.DataCell>{formaterPeriode(periode)}</Table.DataCell>
+    <Table.DataCell align={'right'}>{formaterPeriode(periode)}</Table.DataCell>
 );
 
 /** Meldeperioder vises kort og med ukenumre */
