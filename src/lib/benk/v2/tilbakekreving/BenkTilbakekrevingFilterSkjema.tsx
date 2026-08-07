@@ -53,19 +53,23 @@ export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: P
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
 
-            <HStack gap={'space-4'} align={'center'}>
-                <Checkbox
-                    size={'small'}
-                    checked={valgtFilter.kunOverMinstebeløp}
-                    onChange={(e) =>
-                        setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
-                    }
-                >
-                    {'Vis kun tilbakekrevinger over minstebeløp'}
-                </Checkbox>
-                <HelpText>
-                    {'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'}
-                </HelpText>
+            <HStack align={'end'}>
+                <HStack align={'center'} gap={'space-4'}>
+                    <Checkbox
+                        size={'small'}
+                        checked={valgtFilter.kunOverMinstebeløp}
+                        onChange={(e) =>
+                            setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
+                        }
+                    >
+                        {'Vis kun tilbakekrevinger over minstebeløp'}
+                    </Checkbox>
+                    <HelpText>
+                        {
+                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
+                        }
+                    </HelpText>
+                </HStack>
             </HStack>
         </BenkFilterSkjema>
     );

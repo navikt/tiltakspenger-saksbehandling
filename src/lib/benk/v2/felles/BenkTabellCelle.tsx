@@ -7,8 +7,7 @@ import {
     antallKalenderDagerUnnaDagensDato,
     formaterDatotekst,
     formaterMeldeperiodeKort,
-    formaterPeriode,
-    formaterTidspunkt,
+    formaterPeriodeKort,
     formaterTidspunktKort,
 } from '~/utils/date';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
@@ -119,15 +118,9 @@ const finnTagColor = (fristDato: Nullable<string>): AkselColor => {
     }
 };
 
-const Tidspunkt = ({
-    tidspunkt,
-    kort = false,
-}: {
-    tidspunkt: Nullable<string>;
-    kort?: boolean;
-}) => (
+const Tidspunkt = ({ tidspunkt }: { tidspunkt: Nullable<string> }) => (
     <Table.DataCell align={'right'}>
-        {tidspunkt ? (kort ? formaterTidspunktKort(tidspunkt) : formaterTidspunkt(tidspunkt)) : '-'}
+        {tidspunkt ? formaterTidspunktKort(tidspunkt) : '-'}
     </Table.DataCell>
 );
 
@@ -137,7 +130,7 @@ const Tildelt = ({ ident }: { ident: Nullable<string> }) => (
 );
 
 const PeriodeCelle = ({ periode }: { periode: Periode }) => (
-    <Table.DataCell align={'right'}>{formaterPeriode(periode)}</Table.DataCell>
+    <Table.DataCell align={'right'}>{formaterPeriodeKort(periode)}</Table.DataCell>
 );
 
 /** Meldeperioder vises kort og med ukenumre */

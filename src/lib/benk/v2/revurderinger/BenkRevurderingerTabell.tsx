@@ -44,8 +44,8 @@ export const BenkRevurderingerTabell = ({ behandlinger, aktivSortering }: Props)
                             />
                         </Table.DataCell>
                         <BenkTabellCelle.Ventestatus ventestatus={behandling.ventestatus} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.startet} kort={true} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} kort={true} />
+                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.startet} />
+                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
                         <BenkTabellCelle.Tildelt ident={behandling.beslutter} />
                         <BenkTabellCelle.RammebehandlingHandlinger behandling={behandling} />
