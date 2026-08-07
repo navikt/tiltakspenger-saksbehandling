@@ -9,7 +9,7 @@ type Props = {
     onChange: (saksbehandler: Nullable<string | 'IKKE_TILDELT'>) => void;
 };
 
-export const SaksbehandlerSelect = ({ behandlinger, value, onChange }: Props) => {
+export const BenkSaksbehandlerSelect = ({ behandlinger, value, onChange }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const identer = useMemo(() => {

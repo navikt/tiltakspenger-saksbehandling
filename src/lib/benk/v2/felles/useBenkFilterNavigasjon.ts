@@ -1,7 +1,12 @@
 import { useRouter } from 'next/router';
 import { BenkV2Tab } from '../typer/tabs';
-import { BenkV2FilterMap, filterTilQuery, strengVerdi } from '../benkV2Query';
-import { nullstillLagretFilter } from '../benkV2Cookie';
+import {
+    BenkV2FilterMap,
+    benkFilterTilQuery,
+    harBenkFilterVerdier,
+    benkStrengVerdi,
+} from '../benkV2Query';
+import { nullstillBenkLagretFilter } from '../benkV2Cookie';
 
 /**
  * Filtrering skjer server-side: valgte filtre legges i URL-en, som igjen
@@ -13,13 +18,19 @@ export const useBenkFilterNavigasjon = <T extends BenkV2Tab>(tab: T) => {
     const router = useRouter();
 
     const naviger = (filter: BenkV2FilterMap[T]) => {
-        const sortering = strengVerdi(router.query.sortering);
+        const sortering = benkStrengVerdi(router.query.sortering);
+
+        // Tomme verdier faller ut av URL-en - uten noen parametere igjen må cookien
+        // tømmes før navigering, ellers gjenoppretter serveren de gamle filtrene
+        if (!harBenkFilterVerdier(filter)) {
+            nullstillBenkLagretFilter(tab);
+        }
 
         return router.push({
             query: {
                 tab,
                 ...(sortering ? { sortering } : {}),
-                ...filterTilQuery(filter),
+                ...benkFilterTilQuery(filter),
             },
         });
     };
@@ -27,7 +38,7 @@ export const useBenkFilterNavigasjon = <T extends BenkV2Tab>(tab: T) => {
     return {
         oppdaterFilter: naviger,
         nullstillFilter: (tomtFilter: BenkV2FilterMap[T]) => {
-            nullstillLagretFilter(tab);
+            nullstillBenkLagretFilter(tab);
             return naviger(tomtFilter);
         },
     };

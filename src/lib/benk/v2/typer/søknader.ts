@@ -2,10 +2,11 @@ import { Nullable } from '~/types/UtilTypes';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
+import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Behandlingstype } from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export type BenkSøknadsbehandling = BenkV2BehandlingBase & {
+    type: BenkV2Behandlingstype.SØKNADSBEHANDLING;
     id: RammebehandlingId;
     status: BenkV2Behandlingsstatus;
     søknadstype: Søknadstype;
@@ -30,5 +31,3 @@ export type BenkSøknaderFilter = {
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
 };
-
-export type BenkSøknaderRequest = BenkV2Request<BenkSøknaderFilter, BenkSøknaderKolonne>;

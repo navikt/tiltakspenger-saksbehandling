@@ -1,13 +1,23 @@
 import { ReactNode, useState } from 'react';
 import { Button, HStack, VStack } from '@navikt/ds-react';
+import { BenkSkjulPåVentCheckbox } from '~/lib/benk/v2/felles/BenkSkjulPåVentCheckbox';
 
 type Props = {
     onSubmit: () => Promise<unknown>;
     onNullstill: () => Promise<unknown>;
+    /** «Skjul på vent» er likt for alle faner, og ligger derfor i det delte skjemaet */
+    skjulPåVent: boolean;
+    onSkjulPåVentChange: (skjulPåVent: boolean) => void;
     children: ReactNode;
 };
 
-export const BenkFilterSkjema = ({ onSubmit, onNullstill, children }: Props) => {
+export const BenkFilterSkjema = ({
+    onSubmit,
+    onNullstill,
+    skjulPåVent,
+    onSkjulPåVentChange,
+    children,
+}: Props) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const kjør = (action: () => Promise<unknown>) => {
@@ -20,6 +30,9 @@ export const BenkFilterSkjema = ({ onSubmit, onNullstill, children }: Props) => 
             <HStack gap={'space-16'} wrap={true}>
                 {children}
             </HStack>
+
+            <BenkSkjulPåVentCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange} />
+
             <HStack gap={'space-16'}>
                 <Button
                     type={'button'}

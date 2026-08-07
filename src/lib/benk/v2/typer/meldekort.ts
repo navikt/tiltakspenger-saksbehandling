@@ -1,23 +1,26 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
+import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Behandlingstype } from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 /**
  * Meldekort-fanen samler både meldekortbehandlinger startet av saksbehandler
  * og meldekort (innsendte/korrigerte) som venter på behandling.
+ * Radtypene er subsettet av BenkV2Behandlingstype som gjelder meldekort.
  */
-export enum BenkMeldekortType {
-    MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
-    INNSENDT_MELDEKORT = 'INNSENDT_MELDEKORT',
-    KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
-}
+export const benkMeldekortTyper = {
+    MELDEKORTBEHANDLING: BenkV2Behandlingstype.MELDEKORTBEHANDLING,
+    INNSENDT_MELDEKORT: BenkV2Behandlingstype.INNSENDT_MELDEKORT,
+    KORRIGERT_MELDEKORT: BenkV2Behandlingstype.KORRIGERT_MELDEKORT,
+} as const;
+
+export type BenkMeldekortType = (typeof benkMeldekortTyper)[keyof typeof benkMeldekortTyper];
 
 export type BenkMeldekort = BenkV2BehandlingBase & {
+    type: BenkMeldekortType;
     id: MeldekortbehandlingId;
     status: BenkV2Behandlingsstatus;
-    type: BenkMeldekortType;
     periode: Periode;
     /** Beregnet beløp for meldekortbehandlinger som er beregnet, ellers null */
     beløp: Nullable<number>;
@@ -43,5 +46,3 @@ export type BenkMeldekortFilter = {
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
 };
-
-export type BenkMeldekortRequest = BenkV2Request<BenkMeldekortFilter, BenkMeldekortKolonne>;
