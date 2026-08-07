@@ -15,6 +15,21 @@ export enum BenkV2Behandlingsstatus {
     KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
 }
 
+/**
+ * Diskriminatoren backend setter på hver rad, slik at frontend kan mappe en rad
+ * til riktig type uten å gjette på hvilke felter som finnes.
+ * Meldekortfanens tre radtyper er egne verdier, så `type` alene sier nøyaktig hva raden er.
+ */
+export enum BenkV2Behandlingstype {
+    SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
+    REVURDERING = 'REVURDERING',
+    MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
+    INNSENDT_MELDEKORT = 'INNSENDT_MELDEKORT',
+    KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
+    KLAGEBEHANDLING = 'KLAGEBEHANDLING',
+    TILBAKEKREVING = 'TILBAKEKREVING',
+}
+
 export type BenkV2Ventestatus = {
     erSattPåVent: boolean;
     begrunnelse: Nullable<string>;
@@ -25,6 +40,7 @@ export type BenkV2Ventestatus = {
  * Fellesfelt for alle rader i benken, uavhengig av behandlingstype.
  */
 export type BenkV2BehandlingBase = {
+    type: BenkV2Behandlingstype;
     id: string;
     sakId: SakId;
     fnr: string;
@@ -49,17 +65,14 @@ export type BenkV2Sortering<Kolonne extends string> = `${Kolonne},${BenkV2Sorter
  */
 export type BenkV2Filter = Record<string, string | boolean | null>;
 
-export type BenkV2Request<F extends BenkV2Filter, Kolonne extends string> = {
-    sortering: BenkV2Sortering<Kolonne>;
-    filters: F;
-};
-
 /**
  * Body-en som postes til /benk. `filters` er unionen av filtrene fanene
  * tilbyr - hver fane sender sine, og backend ignorerer resten.
  */
-export type BenkV2RequestBody = BenkV2Request<BenkV2Filter, string> & {
+export type BenkV2RequestBody = {
     tab: BenkV2Tab;
+    sortering: BenkV2Sortering<string>;
+    filters: BenkV2Filter;
 };
 
 /**

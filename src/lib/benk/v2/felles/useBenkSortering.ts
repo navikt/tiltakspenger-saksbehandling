@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { BenkV2Sortering, BenkV2SorteringRetning } from '../typer/felles';
 
 /**
- * Sortering skjer "server-side" (simulert) - klikk på en kolonne oppdaterer
+ * Sortering skjer server-side - klikk på en kolonne oppdaterer
  * query-parametere og trigger en ny henting av fanens data.
  */
 export const useBenkSortering = <Kolonne extends string>(

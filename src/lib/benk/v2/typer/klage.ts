@@ -1,8 +1,9 @@
 import { Nullable } from '~/types/UtilTypes';
 import { KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
-import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
+import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Behandlingstype } from './felles';
 
 export type BenkKlagebehandling = BenkV2BehandlingBase & {
+    type: BenkV2Behandlingstype.KLAGEBEHANDLING;
     id: KlageId;
     status: BenkV2Behandlingsstatus;
     kravtidspunkt: string;
@@ -25,5 +26,3 @@ export type BenkKlageFilter = {
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
 };
-
-export type BenkKlageRequest = BenkV2Request<BenkKlageFilter, BenkKlageKolonne>;
