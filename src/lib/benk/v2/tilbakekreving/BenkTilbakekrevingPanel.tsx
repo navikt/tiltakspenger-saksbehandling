@@ -5,8 +5,8 @@ import {
     BenkTilbakekrevingFilter,
     BenkTilbakekrevingKolonne,
 } from '../typer/tilbakekreving';
-import { TilbakekrevingFilter } from './TilbakekrevingFilter';
-import { TilbakekrevingTabell } from './TilbakekrevingTabell';
+import { BenkTilbakekrevingFilterSkjema } from './BenkTilbakekrevingFilterSkjema';
+import { BenkTilbakekrevingTabell } from './BenkTilbakekrevingTabell';
 import { BenkOversiktInfo } from '../felles/BenkOversiktInfo';
 
 type Props = {
@@ -15,11 +15,14 @@ type Props = {
     aktivSortering: BenkV2Sortering<BenkTilbakekrevingKolonne>;
 };
 
-export const TilbakekrevingPanel = ({ oversikt, aktivtFilter, aktivSortering }: Props) => (
+export const BenkTilbakekrevingPanel = ({ oversikt, aktivtFilter, aktivSortering }: Props) => (
     <VStack gap={'space-16'}>
-        <TilbakekrevingFilter behandlinger={oversikt.behandlinger} aktivtFilter={aktivtFilter} />
+        <BenkTilbakekrevingFilterSkjema
+            behandlinger={oversikt.behandlinger}
+            aktivtFilter={aktivtFilter}
+        />
         <BenkOversiktInfo oversikt={oversikt} />
-        <TilbakekrevingTabell
+        <BenkTilbakekrevingTabell
             behandlinger={oversikt.behandlinger}
             aktivSortering={aktivSortering}
         />

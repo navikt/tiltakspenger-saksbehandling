@@ -54,7 +54,7 @@ export const benkTilbakekrevingKildeTekst: Record<BenkTilbakekrevingKilde, strin
     [BenkTilbakekrevingKilde.RAMMEVEDTAK]: 'Rammevedtak',
 } as const;
 
-export const parseSortering = <Kolonne extends string>(
+export const parseBenkSortering = <Kolonne extends string>(
     sortering: string | null,
     kolonner: Record<string, Kolonne>,
     fallbackKolonne: Kolonne,

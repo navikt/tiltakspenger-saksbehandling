@@ -27,7 +27,7 @@ export const BenkStatusTag = ({
     </HStack>
 );
 
-export const TilbakekrevingStatusTag = ({ status }: { status: BenkTilbakekrevingStatus }) => (
+export const BenkTilbakekrevingStatusTag = ({ status }: { status: BenkTilbakekrevingStatus }) => (
     <Tag data-color={benkTilbakekrevingStatusColor[status]} variant={'outline'} size={'small'}>
         {benkTilbakekrevingStatusTekst[status]}
     </Tag>

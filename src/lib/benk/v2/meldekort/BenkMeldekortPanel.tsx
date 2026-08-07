@@ -1,8 +1,8 @@
 import { VStack } from '@navikt/ds-react';
 import { BenkV2Oversikt, BenkV2Sortering } from '../typer/felles';
 import { BenkMeldekort, BenkMeldekortFilter, BenkMeldekortKolonne } from '../typer/meldekort';
-import { MeldekortFilter } from './MeldekortFilter';
-import { MeldekortTabell } from './MeldekortTabell';
+import { BenkMeldekortFilterSkjema } from './BenkMeldekortFilterSkjema';
+import { BenkMeldekortTabell } from './BenkMeldekortTabell';
 import { BenkOversiktInfo } from '../felles/BenkOversiktInfo';
 
 type Props = {
@@ -11,10 +11,13 @@ type Props = {
     aktivSortering: BenkV2Sortering<BenkMeldekortKolonne>;
 };
 
-export const MeldekortPanel = ({ oversikt, aktivtFilter, aktivSortering }: Props) => (
+export const BenkMeldekortPanel = ({ oversikt, aktivtFilter, aktivSortering }: Props) => (
     <VStack gap={'space-16'}>
-        <MeldekortFilter behandlinger={oversikt.behandlinger} aktivtFilter={aktivtFilter} />
+        <BenkMeldekortFilterSkjema
+            behandlinger={oversikt.behandlinger}
+            aktivtFilter={aktivtFilter}
+        />
         <BenkOversiktInfo oversikt={oversikt} />
-        <MeldekortTabell behandlinger={oversikt.behandlinger} aktivSortering={aktivSortering} />
+        <BenkMeldekortTabell behandlinger={oversikt.behandlinger} aktivSortering={aktivSortering} />
     </VStack>
 );

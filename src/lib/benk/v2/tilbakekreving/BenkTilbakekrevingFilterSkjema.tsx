@@ -10,14 +10,14 @@ import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
-import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
+import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 
 type Props = {
     behandlinger: BenkTilbakekreving[];
     aktivtFilter: BenkTilbakekrevingFilter;
 };
 
-export const TilbakekrevingFilter = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkV2Tab.TILBAKEKREVING);
     const [valgtFilter, setValgtFilter] =
         useResettableState<BenkTilbakekrevingFilter>(aktivtFilter);
@@ -75,7 +75,7 @@ export const TilbakekrevingFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 ))}
             </Select>
 
-            <SaksbehandlerSelect
+            <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}

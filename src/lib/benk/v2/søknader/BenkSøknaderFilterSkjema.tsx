@@ -8,7 +8,7 @@ import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
-import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
+import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 
 type Props = {
     behandlinger: BenkSøknadsbehandling[];
@@ -17,7 +17,7 @@ type Props = {
 
 const SØKNADSTYPER: Søknadstype[] = ['DIGITAL', 'PAPIR_SKJEMA', 'PAPIR_FRIHAND', 'MODIA', 'ANNET'];
 
-export const SøknaderFilter = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkSøknaderFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkV2Tab.SØKNADER);
     const [valgtFilter, setValgtFilter] = useResettableState<BenkSøknaderFilter>(aktivtFilter);
 
@@ -73,7 +73,7 @@ export const SøknaderFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 ))}
             </Select>
 
-            <SaksbehandlerSelect
+            <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}

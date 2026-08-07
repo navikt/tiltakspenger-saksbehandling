@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Button, HStack, VStack } from '@navikt/ds-react';
-import { SkjulPåVentCheckbox } from '~/lib/benk/v2/felles/SkjulPåVentCheckbox';
+import { BenkSkjulPåVentCheckbox } from '~/lib/benk/v2/felles/BenkSkjulPåVentCheckbox';
 
 type Props = {
     onSubmit: () => Promise<unknown>;
@@ -31,7 +31,7 @@ export const BenkFilterSkjema = ({
                 {children}
             </HStack>
 
-            <SkjulPåVentCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange} />
+            <BenkSkjulPåVentCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange} />
 
             <HStack gap={'space-16'}>
                 <Button

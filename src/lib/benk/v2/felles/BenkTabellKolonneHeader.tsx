@@ -6,14 +6,14 @@ import { Table } from '@navikt/ds-react';
  * sortKey-verdiene er en del av kontrakten med backend - se BenkV2SorteringKolonne der.
  */
 
-export const FnrKolonne = () => (
+const Fnr = () => (
     <Table.ColumnHeader sortable={true} sortKey={'fnr'}>
         {'Fødselsnr'}
     </Table.ColumnHeader>
 );
 
 /** Søknadsfanen kan ikke sorteres på resultat, de andre kan */
-export const ResultatKolonne = ({ sortable = false }: { sortable?: boolean }) =>
+const Resultat = ({ sortable = false }: { sortable?: boolean }) =>
     sortable ? (
         <Table.ColumnHeader sortable={true} sortKey={'resultat'}>
             {'Resultat'}
@@ -22,49 +22,63 @@ export const ResultatKolonne = ({ sortable = false }: { sortable?: boolean }) =>
         <Table.ColumnHeader>{'Resultat'}</Table.ColumnHeader>
     );
 
-export const StatusKolonne = () => (
+const Status = () => (
     <Table.ColumnHeader sortable={true} sortKey={'status'}>
         {'Status'}
     </Table.ColumnHeader>
 );
 
-export const VentestatusKolonne = () => <Table.ColumnHeader>{'Ventestatus'}</Table.ColumnHeader>;
+const Ventestatus = () => <Table.ColumnHeader>{'Ventestatus'}</Table.ColumnHeader>;
 
-export const KravtidspunktKolonne = () => (
+const Kravtidspunkt = () => (
     <Table.ColumnHeader sortable={true} sortKey={'kravtidspunkt'}>
         {'Kravtidspunkt'}
     </Table.ColumnHeader>
 );
 
-export const StartetKolonne = () => (
+const Startet = () => (
     <Table.ColumnHeader sortable={true} sortKey={'startet'}>
         {'Startet'}
     </Table.ColumnHeader>
 );
 
-export const SistEndretKolonne = () => (
+const SistEndret = () => (
     <Table.ColumnHeader sortable={true} sortKey={'sist_endret'}>
         {'Sist endret'}
     </Table.ColumnHeader>
 );
 
-export const SaksbehandlerKolonne = () => (
+const Saksbehandler = () => (
     <Table.ColumnHeader sortable={true} sortKey={'saksbehandler'}>
         {'Saksbehandler'}
     </Table.ColumnHeader>
 );
 
-export const BeslutterKolonne = () => (
+const Beslutter = () => (
     <Table.ColumnHeader sortable={true} sortKey={'beslutter'}>
         {'Beslutter'}
     </Table.ColumnHeader>
 );
 
-export const BeløpKolonne = () => (
+const Beløp = () => (
     <Table.ColumnHeader sortable={true} sortKey={'beløp'}>
         {'Beløp'}
     </Table.ColumnHeader>
 );
 
 /** Den tomme kolonnen til høyre med lenker og meny */
-export const HandlingerKolonne = () => <Table.ColumnHeader />;
+const Handlinger = () => <Table.ColumnHeader />;
+
+export const BenkTabellKolonneHeader = {
+    Fnr,
+    Resultat,
+    Status,
+    Ventestatus,
+    Kravtidspunkt,
+    Startet,
+    SistEndret,
+    Saksbehandler,
+    Beslutter,
+    Beløp,
+    Handlinger,
+};

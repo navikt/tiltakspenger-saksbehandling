@@ -5,8 +5,8 @@ import {
     BenkRevurderingerKolonne,
     BenkRevurdering,
 } from '../typer/revurderinger';
-import { RevurderingerFilter } from './RevurderingerFilter';
-import { RevurderingerTabell } from './RevurderingerTabell';
+import { BenkRevurderingerFilterSkjema } from './BenkRevurderingerFilterSkjema';
+import { BenkRevurderingerTabell } from './BenkRevurderingerTabell';
 import { BenkOversiktInfo } from '../felles/BenkOversiktInfo';
 
 type Props = {
@@ -15,10 +15,16 @@ type Props = {
     aktivSortering: BenkV2Sortering<BenkRevurderingerKolonne>;
 };
 
-export const RevurderingerPanel = ({ oversikt, aktivtFilter, aktivSortering }: Props) => (
+export const BenkRevurderingerPanel = ({ oversikt, aktivtFilter, aktivSortering }: Props) => (
     <VStack gap={'space-16'}>
-        <RevurderingerFilter behandlinger={oversikt.behandlinger} aktivtFilter={aktivtFilter} />
+        <BenkRevurderingerFilterSkjema
+            behandlinger={oversikt.behandlinger}
+            aktivtFilter={aktivtFilter}
+        />
         <BenkOversiktInfo oversikt={oversikt} />
-        <RevurderingerTabell behandlinger={oversikt.behandlinger} aktivSortering={aktivSortering} />
+        <BenkRevurderingerTabell
+            behandlinger={oversikt.behandlinger}
+            aktivSortering={aktivSortering}
+        />
     </VStack>
 );

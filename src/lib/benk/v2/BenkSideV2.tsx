@@ -16,11 +16,11 @@ import {
     BenkTilbakekrevingFilter,
     BenkTilbakekrevingKolonne,
 } from './typer/tilbakekreving';
-import { SøknaderPanel } from './søknader/SøknaderPanel';
-import { RevurderingerPanel } from './revurderinger/RevurderingerPanel';
-import { MeldekortPanel } from './meldekort/MeldekortPanel';
-import { KlagePanel } from './klage/KlagePanel';
-import { TilbakekrevingPanel } from './tilbakekreving/TilbakekrevingPanel';
+import { BenkSøknaderPanel } from './søknader/BenkSøknaderPanel';
+import { BenkRevurderingerPanel } from './revurderinger/BenkRevurderingerPanel';
+import { BenkMeldekortPanel } from './meldekort/BenkMeldekortPanel';
+import { BenkKlagePanel } from './klage/BenkKlagePanel';
+import { BenkTilbakekrevingPanel } from './tilbakekreving/BenkTilbakekrevingPanel';
 
 type SøknaderData = {
     oversikt: BenkV2Oversikt<BenkSøknadsbehandling>;
@@ -96,35 +96,35 @@ export const BenkSideV2 = ({ antallPerTab, tabData }: BenkSideV2Props) => {
             </Tabs>
 
             {tabData.tab === BenkV2Tab.SØKNADER && (
-                <SøknaderPanel
+                <BenkSøknaderPanel
                     oversikt={tabData.data.oversikt}
                     aktivtFilter={tabData.data.aktivtFilter}
                     aktivSortering={tabData.data.aktivSortering}
                 />
             )}
             {tabData.tab === BenkV2Tab.REVURDERINGER && (
-                <RevurderingerPanel
+                <BenkRevurderingerPanel
                     oversikt={tabData.data.oversikt}
                     aktivtFilter={tabData.data.aktivtFilter}
                     aktivSortering={tabData.data.aktivSortering}
                 />
             )}
             {tabData.tab === BenkV2Tab.MELDEKORT && (
-                <MeldekortPanel
+                <BenkMeldekortPanel
                     oversikt={tabData.data.oversikt}
                     aktivtFilter={tabData.data.aktivtFilter}
                     aktivSortering={tabData.data.aktivSortering}
                 />
             )}
             {tabData.tab === BenkV2Tab.KLAGE && (
-                <KlagePanel
+                <BenkKlagePanel
                     oversikt={tabData.data.oversikt}
                     aktivtFilter={tabData.data.aktivtFilter}
                     aktivSortering={tabData.data.aktivSortering}
                 />
             )}
             {tabData.tab === BenkV2Tab.TILBAKEKREVING && (
-                <TilbakekrevingPanel
+                <BenkTilbakekrevingPanel
                     oversikt={tabData.data.oversikt}
                     aktivtFilter={tabData.data.aktivtFilter}
                     aktivSortering={tabData.data.aktivSortering}

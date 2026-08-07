@@ -8,14 +8,14 @@ import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
-import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
+import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 
 type Props = {
     behandlinger: BenkKlagebehandling[];
     aktivtFilter: BenkKlageFilter;
 };
 
-export const KlageFilter = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkKlageFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkV2Tab.KLAGE);
     const [valgtFilter, setValgtFilter] = useResettableState<BenkKlageFilter>(aktivtFilter);
 
@@ -71,7 +71,7 @@ export const KlageFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 ))}
             </Select>
 
-            <SaksbehandlerSelect
+            <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}

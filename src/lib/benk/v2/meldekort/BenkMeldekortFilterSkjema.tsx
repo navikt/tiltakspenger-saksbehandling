@@ -11,14 +11,14 @@ import { benkMeldekortTypeTekst, benkV2BehandlingsstatusTekst } from '../benkV2U
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
-import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
+import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 
 type Props = {
     behandlinger: BenkMeldekort[];
     aktivtFilter: BenkMeldekortFilter;
 };
 
-export const MeldekortFilter = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkMeldekortFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkV2Tab.MELDEKORT);
     const [valgtFilter, setValgtFilter] = useResettableState<BenkMeldekortFilter>(aktivtFilter);
 
@@ -74,7 +74,7 @@ export const MeldekortFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 ))}
             </Select>
 
-            <SaksbehandlerSelect
+            <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}

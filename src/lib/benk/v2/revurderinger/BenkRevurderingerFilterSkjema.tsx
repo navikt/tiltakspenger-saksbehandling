@@ -8,14 +8,14 @@ import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammeb
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
-import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
+import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 
 type Props = {
     behandlinger: BenkRevurdering[];
     aktivtFilter: BenkRevurderingerFilter;
 };
 
-export const RevurderingerFilter = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkRevurderingerFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkV2Tab.REVURDERINGER);
     const [valgtFilter, setValgtFilter] = useResettableState<BenkRevurderingerFilter>(aktivtFilter);
 
@@ -71,7 +71,7 @@ export const RevurderingerFilter = ({ behandlinger, aktivtFilter }: Props) => {
                 ))}
             </Select>
 
-            <SaksbehandlerSelect
+            <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}
                 value={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
