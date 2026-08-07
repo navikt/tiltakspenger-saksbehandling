@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { BenkV2BehandlingBase, BenkV2Request } from './felles';
+import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 /**
  * Tilbakekreving har en egen saksbehandlingsflyt, og derfor egne statuser
@@ -22,6 +23,7 @@ export enum BenkTilbakekrevingKilde {
 }
 
 export type BenkTilbakekreving = BenkV2BehandlingBase & {
+    id: TilbakekrevingId;
     status: BenkTilbakekrevingStatus;
     beløp: number;
     kilde: BenkTilbakekrevingKilde;
@@ -43,6 +45,7 @@ export type BenkTilbakekrevingFilter = {
     kilde: Nullable<BenkTilbakekrevingKilde>;
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     kunOverMinstebeløp: boolean;
+    skjulPåVent: boolean;
 };
 
 export type BenkTilbakekrevingRequest = BenkV2Request<

@@ -1,5 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { BenkV2Tab } from './tabs';
+import { SakId } from '~/lib/sak/SakTyper';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -24,7 +25,8 @@ export type BenkV2Ventestatus = {
  * Fellesfelt for alle rader i benken, uavhengig av behandlingstype.
  */
 export type BenkV2BehandlingBase = {
-    sakId: string;
+    id: string;
+    sakId: SakId;
     fnr: string;
     saksnummer: string;
     startet: string;

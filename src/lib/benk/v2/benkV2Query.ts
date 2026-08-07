@@ -57,24 +57,28 @@ export const parseSøknaderFilter = (kilde: FilterKilde): BenkSøknaderFilter =>
     status: enumVerdi(kilde.status, BenkV2Behandlingsstatus),
     søknadstype: enumVerdi(kilde.søknadstype, søknadstyper),
     saksbehandler: strengVerdi(kilde.saksbehandler),
+    skjulPåVent: boolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseRevurderingerFilter = (kilde: FilterKilde): BenkRevurderingerFilter => ({
     status: enumVerdi(kilde.status, BenkV2Behandlingsstatus),
     resultat: enumVerdi(kilde.resultat, RevurderingResultat),
     saksbehandler: strengVerdi(kilde.saksbehandler),
+    skjulPåVent: boolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseMeldekortFilter = (kilde: FilterKilde): BenkMeldekortFilter => ({
     status: enumVerdi(kilde.status, BenkV2Behandlingsstatus),
     type: enumVerdi(kilde.type, BenkMeldekortType),
     saksbehandler: strengVerdi(kilde.saksbehandler),
+    skjulPåVent: boolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseKlageFilter = (kilde: FilterKilde): BenkKlageFilter => ({
     status: enumVerdi(kilde.status, BenkV2Behandlingsstatus),
     resultat: enumVerdi(kilde.resultat, KlagebehandlingResultat),
     saksbehandler: strengVerdi(kilde.saksbehandler),
+    skjulPåVent: boolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseTilbakekrevingFilter = (kilde: FilterKilde): BenkTilbakekrevingFilter => ({
@@ -82,6 +86,7 @@ export const parseTilbakekrevingFilter = (kilde: FilterKilde): BenkTilbakekrevin
     kilde: enumVerdi(kilde.kilde, BenkTilbakekrevingKilde),
     saksbehandler: strengVerdi(kilde.saksbehandler),
     kunOverMinstebeløp: boolskVerdi(kilde.kunOverMinstebeløp),
+    skjulPåVent: boolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseFilterForTab = <T extends BenkV2Tab>(

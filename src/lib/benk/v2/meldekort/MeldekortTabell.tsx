@@ -29,19 +29,19 @@ export const MeldekortTabell = ({ behandlinger, aktivSortering }: Props) => {
                     <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.type}>
                         {'Type'}
                     </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.periode}>
-                        {'Meldeperiode'}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.mottatt}>
-                        {'Mottatt'}
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.beløp}>
-                        {'Beløp'}
-                    </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.status}>
                         {'Status'}
                     </Table.ColumnHeader>
                     <Table.ColumnHeader>{'Ventestatus'}</Table.ColumnHeader>
+                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.periode}>
+                        {'Meldeperiode'}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.beløp}>
+                        {'Beløp'}
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.mottatt}>
+                        {'Mottatt'}
+                    </Table.ColumnHeader>
                     <Table.ColumnHeader
                         sortable={true}
                         sortKey={BenkMeldekortKolonne.saksbehandler}
@@ -53,23 +53,11 @@ export const MeldekortTabell = ({ behandlinger, aktivSortering }: Props) => {
             </Table.Header>
             <Table.Body>
                 {behandlinger.map((behandling) => (
-                    <Table.Row
-                        shadeOnHover={false}
-                        key={`${behandling.sakId}-${behandling.periode.fraOgMed}`}
-                    >
+                    <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.HeaderCell scope={'row'}>
                             <FnrCelle fnr={behandling.fnr} />
                         </Table.HeaderCell>
                         <Table.DataCell>{benkMeldekortTypeTekst[behandling.type]}</Table.DataCell>
-                        <Table.DataCell>{formaterPeriode(behandling.periode)}</Table.DataCell>
-                        <Table.DataCell>
-                            {behandling.mottattTidspunkt
-                                ? formaterTidspunkt(behandling.mottattTidspunkt)
-                                : '-'}
-                        </Table.DataCell>
-                        <Table.DataCell align={'right'}>
-                            {behandling.beløp !== null ? formatterBeløp(behandling.beløp) : '-'}
-                        </Table.DataCell>
                         <Table.DataCell>
                             <BenkStatusTag
                                 status={behandling.status}
@@ -78,6 +66,15 @@ export const MeldekortTabell = ({ behandlinger, aktivSortering }: Props) => {
                         </Table.DataCell>
                         <Table.DataCell>
                             <VentestatusCelle ventestatus={behandling.ventestatus} />
+                        </Table.DataCell>
+                        <Table.DataCell>{formaterPeriode(behandling.periode)}</Table.DataCell>
+                        <Table.DataCell align={'right'}>
+                            {behandling.beløp !== null ? formatterBeløp(behandling.beløp) : '-'}
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            {behandling.mottattTidspunkt
+                                ? formaterTidspunkt(behandling.mottattTidspunkt)
+                                : '-'}
                         </Table.DataCell>
                         <Table.DataCell>
                             {behandling.saksbehandler ?? 'Ikke tildelt'}

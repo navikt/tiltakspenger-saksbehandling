@@ -4,8 +4,8 @@ import { BenkV2FilterMap, filterTilQuery, strengVerdi } from '../benkV2Query';
 import { nullstillLagretFilter } from '../benkV2Cookie';
 
 /**
- * Filtrering skjer "server-side" (simulert): valgte filtre legges i URL-en, som
- * igjen trigger en ny henting. Serveren lagrer valgene i en cookie, mens
+ * Filtrering skjer server-side: valgte filtre legges i URL-en, som igjen
+ * trigger en ny henting mot backend. Serveren lagrer valgene i en cookie, mens
  * nullstilling må tømme cookien klientsiden før navigering - ellers ville
  * serveren gjenopprettet filtrene brukeren nettopp fjernet.
  */

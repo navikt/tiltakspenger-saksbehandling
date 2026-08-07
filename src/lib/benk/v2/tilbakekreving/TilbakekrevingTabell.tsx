@@ -26,17 +26,17 @@ export const TilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props) =>
                     <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.fnr}>
                         {'Fødselsnummer'}
                     </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.beløp}>
-                        {'Beløp'}
-                    </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.kilde}>
                         {'Kilde'}
                     </Table.ColumnHeader>
-                    <Table.ColumnHeader>{'Kravgrunnlagperiode'}</Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.status}>
                         {'Status'}
                     </Table.ColumnHeader>
                     <Table.ColumnHeader>{'Ventestatus'}</Table.ColumnHeader>
+                    <Table.ColumnHeader>{'Kravgrunnlagperiode'}</Table.ColumnHeader>
+                    <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.beløp}>
+                        {'Beløp'}
+                    </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.startet}>
                         {'Startet'}
                     </Table.ColumnHeader>
@@ -57,24 +57,27 @@ export const TilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props) =>
             </Table.Header>
             <Table.Body>
                 {behandlinger.map((behandling) => (
-                    <Table.Row shadeOnHover={false} key={behandling.sakId}>
+                    <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.HeaderCell scope={'row'}>
                             <FnrCelle fnr={behandling.fnr} />
                         </Table.HeaderCell>
-                        <Table.DataCell align={'right'}>
-                            {formatterBeløp(behandling.beløp)}
-                        </Table.DataCell>
                         <Table.DataCell>
                             {benkTilbakekrevingKildeTekst[behandling.kilde]}
-                        </Table.DataCell>
-                        <Table.DataCell>
-                            {formaterPeriode(behandling.kravgrunnlagPeriode)}
                         </Table.DataCell>
                         <Table.DataCell>
                             <TilbakekrevingStatusTag status={behandling.status} />
                         </Table.DataCell>
                         <Table.DataCell>
-                            <VentestatusCelle ventestatus={behandling.ventestatus} />
+                            <VentestatusCelle
+                                ventestatus={behandling.ventestatus}
+                                erTilbakekreving={true}
+                            />
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            {formaterPeriode(behandling.kravgrunnlagPeriode)}
+                        </Table.DataCell>
+                        <Table.DataCell align={'right'}>
+                            {formatterBeløp(behandling.beløp)}
                         </Table.DataCell>
                         <Table.DataCell>{formaterTidspunkt(behandling.startet)}</Table.DataCell>
                         <Table.DataCell>{formaterTidspunkt(behandling.sistEndret)}</Table.DataCell>

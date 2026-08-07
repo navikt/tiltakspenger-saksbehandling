@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 /**
  * Meldekort-fanen samler både meldekortbehandlinger startet av saksbehandler
@@ -13,6 +14,7 @@ export enum BenkMeldekortType {
 }
 
 export type BenkMeldekort = BenkV2BehandlingBase & {
+    id: MeldekortbehandlingId;
     status: BenkV2Behandlingsstatus;
     type: BenkMeldekortType;
     periode: Periode;
@@ -36,6 +38,7 @@ export type BenkMeldekortFilter = {
     status: Nullable<BenkV2Behandlingsstatus>;
     type: Nullable<BenkMeldekortType>;
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    skjulPåVent: boolean;
 };
 
 export type BenkMeldekortRequest = BenkV2Request<BenkMeldekortFilter, BenkMeldekortKolonne>;

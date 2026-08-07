@@ -51,7 +51,7 @@ export const SøknaderTabell = ({ behandlinger, aktivSortering }: Props) => {
             </Table.Header>
             <Table.Body>
                 {behandlinger.map((behandling) => (
-                    <Table.Row shadeOnHover={false} key={behandling.sakId}>
+                    <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.HeaderCell scope={'row'}>
                             <FnrCelle fnr={behandling.fnr} />
                         </Table.HeaderCell>

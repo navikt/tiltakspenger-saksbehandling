@@ -1,8 +1,10 @@
 import { Nullable } from '~/types/UtilTypes';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export type BenkRevurdering = BenkV2BehandlingBase & {
+    id: RammebehandlingId;
     status: BenkV2Behandlingsstatus;
     resultat: Nullable<RevurderingResultat>;
 };
@@ -21,6 +23,7 @@ export type BenkRevurderingerFilter = {
     status: Nullable<BenkV2Behandlingsstatus>;
     resultat: Nullable<RevurderingResultat>;
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    skjulPåVent: boolean;
 };
 
 export type BenkRevurderingerRequest = BenkV2Request<

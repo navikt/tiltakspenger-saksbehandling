@@ -11,6 +11,7 @@ import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { SaksbehandlerSelect } from '../felles/SaksbehandlerSelect';
+import { SkjulPåVentCheckbox } from '../felles/SkjulPåVentCheckbox';
 
 type Props = {
     behandlinger: BenkTilbakekreving[];
@@ -31,6 +32,7 @@ export const TilbakekrevingFilter = ({ behandlinger, aktivtFilter }: Props) => {
                     kilde: null,
                     saksbehandler: null,
                     kunOverMinstebeløp: false,
+                    skjulPåVent: false,
                 })
             }
         >
@@ -92,6 +94,11 @@ export const TilbakekrevingFilter = ({ behandlinger, aktivtFilter }: Props) => {
                     {'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'}
                 </HelpText>
             </HStack>
+
+            <SkjulPåVentCheckbox
+                checked={valgtFilter.skjulPåVent}
+                onChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
+            />
         </BenkFilterSkjema>
     );
 };
