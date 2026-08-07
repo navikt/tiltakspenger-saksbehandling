@@ -2,25 +2,28 @@ import { Button, Dialog, Textarea, VStack } from '@navikt/ds-react';
 import { PauseIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/lib/sak/SakContext';
-import { SakProps } from '~/lib/sak/SakTyper';
-import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
+import { Nullable } from '~/types/UtilTypes';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst } from '~/utils/date';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
-    behandling: Rammebehandling;
+    behandlingId: RammebehandlingId;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingSettPåVent = ({ behandling, åpen, onClose, onSuccess }: Props) => {
-    const { sak } = useSak();
-    const { id } = behandling;
-
+export const RammebehandlingSettPåVent = ({
+    behandlingId,
+    sakId,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
@@ -28,7 +31,7 @@ export const RammebehandlingSettPåVent = ({ behandling, åpen, onClose, onSucce
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
         { begrunnelse: string; frist: Nullable<string> }
-    >(`/sak/${sak.sakId}/behandling/${id}/pause`, 'POST');
+    >(`/sak/${sakId}/behandling/${behandlingId}/pause`, 'POST');
 
     const settPåVent = () => {
         const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();

@@ -1,33 +1,32 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { SakProps } from '~/lib/sak/SakTyper';
-import {
-    Rammebehandling,
-    Rammebehandlingsstatus,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
-    behandling: Rammebehandling;
+    behandlingId: RammebehandlingId;
+    /** NavIdenten til saksbehandleren/beslutteren som overtas fra */
+    overtarFra: string;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingOverta = ({ behandling, åpen, onClose, onSuccess }: Props) => {
-    const { sak } = useSak();
-
+export const RammebehandlingOverta = ({
+    behandlingId,
+    overtarFra,
+    sakId,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
-        `/sak/${sak.sakId}/behandling/${behandling.id}/overta`,
+        `/sak/${sakId}/behandling/${behandlingId}/overta`,
         'PATCH',
     );
-
-    const overtarFra =
-        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING
-            ? (behandling.beslutter ?? 'Ukjent beslutter')
-            : (behandling.saksbehandler ?? 'Ukjent saksbehandler');
 
     const overta = () => {
         trigger({ overtarFra }).then((oppdatertSak) => {

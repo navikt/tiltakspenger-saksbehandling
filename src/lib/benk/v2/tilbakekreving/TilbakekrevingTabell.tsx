@@ -4,12 +4,12 @@ import { BenkV2Sortering } from '../typer/felles';
 import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { benkTilbakekrevingKildeTekst } from '../benkV2Utils';
-import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
-import { personoversiktUrl } from '~/utils/urls';
 import { FnrCelle } from '../felles/FnrCelle';
 import { TilbakekrevingStatusTag } from '../felles/BenkStatusTag';
 import { VentestatusCelle } from '../felles/VentestatusCelle';
 import { useBenkSortering } from '../felles/useBenkSortering';
+import { Button } from '@navikt/ds-react';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 type Props = {
     behandlinger: BenkTilbakekreving[];
@@ -59,7 +59,7 @@ export const TilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props) =>
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.HeaderCell scope={'row'}>
-                            <FnrCelle fnr={behandling.fnr} />
+                            <FnrCelle fnr={behandling.fnr} saksnummer={behandling.saksnummer} />
                         </Table.HeaderCell>
                         <Table.DataCell>
                             {benkTilbakekrevingKildeTekst[behandling.kilde]}
@@ -84,10 +84,18 @@ export const TilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props) =>
                         <Table.DataCell>
                             {behandling.saksbehandler ?? 'Ikke tildelt'}
                         </Table.DataCell>
-                        <Table.DataCell>
-                            <InternLenkeKnapp href={personoversiktUrl(behandling.saksnummer)}>
-                                {'Se sak'}
-                            </InternLenkeKnapp>
+                        <Table.DataCell align={'right'}>
+                            <Button
+                                as={'a'}
+                                href={behandling.url}
+                                variant={'secondary'}
+                                size={'small'}
+                                icon={<ExternalLinkIcon aria-hidden />}
+                                iconPosition={'right'}
+                                target={'_blank'}
+                            >
+                                {'Åpne tilbakekreving'}
+                            </Button>
                         </Table.DataCell>
                     </Table.Row>
                 ))}

@@ -2,35 +2,35 @@ import { Button, Dialog, Textarea } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import {
-    Rammebehandling,
-    RammebehandlingId,
-    Rammebehandlingstype,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
-    behandling: Rammebehandling;
+    behandlingId: RammebehandlingId;
+    /** Styrer tekstvalg - revurderinger avsluttes uten å avslutte søknaden */
+    erRevurdering: boolean;
+    saksnummer: string;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingAvslutt = ({ behandling, åpen, onClose, onSuccess }: Props) => {
-    const { sak } = useSak();
-    const { id, type } = behandling;
-
+export const RammebehandlingAvslutt = ({
+    behandlingId,
+    erRevurdering,
+    saksnummer,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
         { begrunnelse: string; behandlingId: RammebehandlingId }
-    >(`/sak/${sak.saksnummer}/avbryt-aktiv-behandling`, 'POST');
-
-    const erRevurdering = type === Rammebehandlingstype.REVURDERING;
+    >(`/sak/${saksnummer}/avbryt-aktiv-behandling`, 'POST');
 
     const avslutt = () => {
         const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();
@@ -39,7 +39,7 @@ export const RammebehandlingAvslutt = ({ behandling, åpen, onClose, onSuccess }
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, behandlingId: id }).then((oppdatertSak) => {
+        trigger({ begrunnelse: begrunnelseTrimmet, behandlingId }).then((oppdatertSak) => {
             if (oppdatertSak) {
                 onSuccess(oppdatertSak);
             }

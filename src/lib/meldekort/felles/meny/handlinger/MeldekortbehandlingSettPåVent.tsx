@@ -2,31 +2,29 @@ import { Button, Dialog, Textarea, VStack } from '@navikt/ds-react';
 import { PauseIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakProps } from '~/lib/sak/SakTyper';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
-import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst } from '~/utils/date';
 
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingProps;
+    meldekortId: MeldekortbehandlingId;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
 export const MeldekortbehandlingSettPåVent = ({
-    meldekortbehandling,
+    meldekortId,
+    sakId,
     åpen,
     onClose,
     onSuccess,
 }: Props) => {
-    const { sak } = useSak();
-    const { id } = meldekortbehandling;
-
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
@@ -34,7 +32,7 @@ export const MeldekortbehandlingSettPåVent = ({
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
         { begrunnelse: string; frist: Nullable<string> }
-    >(`/sak/${sak.sakId}/meldekort/${id}/vent`, 'PATCH');
+    >(`/sak/${sakId}/meldekort/${meldekortId}/vent`, 'PATCH');
 
     const settPåVent = () => {
         const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();

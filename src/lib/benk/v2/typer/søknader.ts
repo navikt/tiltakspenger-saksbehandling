@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
@@ -10,6 +11,7 @@ export type BenkSøknadsbehandling = BenkV2BehandlingBase & {
     søknadstype: Søknadstype;
     kravtidspunkt: string;
     resultat: Nullable<SøknadsbehandlingResultat>;
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 
 export enum BenkSøknaderKolonne {

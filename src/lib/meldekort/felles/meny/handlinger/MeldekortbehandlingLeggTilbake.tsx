@@ -1,30 +1,28 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakProps } from '~/lib/sak/SakTyper';
-import { useSak } from '~/lib/sak/SakContext';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingProps;
+    meldekortId: MeldekortbehandlingId;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
 export const MeldekortbehandlingLeggTilbake = ({
-    meldekortbehandling,
+    meldekortId,
+    sakId,
     åpen,
     onClose,
     onSuccess,
 }: Props) => {
-    const { sak } = useSak();
-    const { id } = meldekortbehandling;
-
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
-        `/sak/${sak.sakId}/meldekort/${id}/legg-tilbake`,
+        `/sak/${sakId}/meldekort/${meldekortId}/legg-tilbake`,
         'POST',
     );
 

@@ -4,11 +4,16 @@ import { BenkV2Sortering } from '../typer/felles';
 import { formaterTidspunkt } from '~/utils/date';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
-import { personoversiktUrl } from '~/utils/urls';
+import { behandlingUrl } from '~/utils/urls';
 import { FnrCelle } from '../felles/FnrCelle';
 import { BenkStatusTag } from '../felles/BenkStatusTag';
 import { VentestatusCelle } from '../felles/VentestatusCelle';
 import { useBenkSortering } from '../felles/useBenkSortering';
+import { BenkBehandlingMeny } from '../felles/BenkBehandlingMeny';
+import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { kanFortsetteBenkRad } from '../benkV2Utils';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { HStack } from '@navikt/ds-react';
 
 type Props = {
     behandlinger: BenkRevurdering[];
@@ -17,6 +22,7 @@ type Props = {
 
 export const RevurderingerTabell = ({ behandlinger, aktivSortering }: Props) => {
     const { sort, onSortChange } = useBenkSortering(aktivSortering);
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
         <Table zebraStripes={true} sort={sort} onSortChange={onSortChange}>
@@ -60,7 +66,7 @@ export const RevurderingerTabell = ({ behandlinger, aktivSortering }: Props) => 
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.HeaderCell scope={'row'}>
-                            <FnrCelle fnr={behandling.fnr} />
+                            <FnrCelle fnr={behandling.fnr} saksnummer={behandling.saksnummer} />
                         </Table.HeaderCell>
                         <Table.DataCell>
                             {behandling.resultat ? (
@@ -84,10 +90,26 @@ export const RevurderingerTabell = ({ behandlinger, aktivSortering }: Props) => 
                             {behandling.saksbehandler ?? 'Ikke tildelt'}
                         </Table.DataCell>
                         <Table.DataCell>{behandling.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
-                        <Table.DataCell>
-                            <InternLenkeKnapp href={personoversiktUrl(behandling.saksnummer)}>
-                                {'Se sak'}
-                            </InternLenkeKnapp>
+                        <Table.DataCell align={'right'}>
+                            <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                                <InternLenkeKnapp
+                                    href={behandlingUrl({
+                                        saksnummer: behandling.saksnummer,
+                                        id: behandling.id,
+                                    })}
+                                >
+                                    {kanFortsetteBenkRad(
+                                        behandling,
+                                        innloggetSaksbehandler.navIdent,
+                                    )
+                                        ? 'Fortsett'
+                                        : 'Se behandling'}
+                                </InternLenkeKnapp>
+                                <BenkBehandlingMeny
+                                    behandling={behandling}
+                                    behandlingstype={Rammebehandlingstype.REVURDERING}
+                                />
+                            </HStack>
                         </Table.DataCell>
                     </Table.Row>
                 ))}

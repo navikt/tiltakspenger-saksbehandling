@@ -1,24 +1,20 @@
 import { ActionMenu, Button } from '@navikt/ds-react';
-import {
-    ArrowUndoIcon,
-    ArrowsSquarepathIcon,
-    BulletListIcon,
-    HourglassTopFilledIcon,
-    MenuElipsisVerticalIcon,
-    PauseIcon,
-    PersonIcon,
-    PlayIcon,
-    TrashIcon,
-} from '@navikt/aksel-icons';
+import { BulletListIcon, HourglassTopFilledIcon } from '@navikt/aksel-icons';
 import { ComponentProps, useState } from 'react';
 import { useRouter } from 'next/router';
+import { BehandlingsmenyKallesFra } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import {
-    BehandlingsmenyKallesFra,
-    SaksbehandlerBehandlingKommando as Kommando,
-} from '~/lib/behandling-felles/typer/BehandlingFelles';
+    BehandlingsmenyDialog,
+    behandlingsmenyKapabiliteter,
+    BehandlingsmenyValg,
+} from '~/lib/behandling-felles/meny/BehandlingsmenyValg';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attestering/OppsummeringAvAttesteringerModal';
-import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+    Rammebehandlingstype,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { RammebehandlingTildelMeg } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingTildelMeg';
 import { RammebehandlingGjenoppta } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingGjenoppta';
 import { RammebehandlingLeggTilbake } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingLeggTilbake';
@@ -30,8 +26,6 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
-
-import style from './RammebehandlingMeny.module.css';
 
 type Props = {
     behandling: Rammebehandling;
@@ -52,22 +46,7 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
     const harVentestatuser = ventestatus.length > 0;
     const harAttesteringer = attesteringer.length > 0;
 
-    if (gyldigeKommandoer.length === 0 && !harVentestatuser && !harAttesteringer) {
-        return null;
-    }
-
-    const harKommando = (...kommandoer: Kommando[]) =>
-        kommandoer.some((kommando) => gyldigeKommandoer.includes(kommando));
-
-    const kanTa = harKommando(Kommando.TildelSaksbehandler, Kommando.TildelBeslutter);
-    const kanGjenoppta = harKommando(Kommando.Gjenoppta);
-    const kanLeggeTilbake = harKommando(
-        Kommando.LeggTilbakeSaksbehandler,
-        Kommando.LeggTilbakeBeslutter,
-    );
-    const kanSettePåVent = harKommando(Kommando.SettPåVent);
-    const kanOverta = harKommando(Kommando.OvertaSaksbehandler, Kommando.OvertaBeslutter);
-    const kanAvslutte = harKommando(Kommando.Avbryt);
+    const kapabiliteter = behandlingsmenyKapabiliteter(gyldigeKommandoer);
 
     const onClose = () => setAktivDialog(null);
 
@@ -103,123 +82,65 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
 
     const erRevurdering = behandling.type === Rammebehandlingstype.REVURDERING;
 
+    const overtarFra =
+        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING
+            ? (behandling.beslutter ?? 'Ukjent beslutter')
+            : (behandling.saksbehandler ?? 'Ukjent saksbehandler');
+
     return (
         <>
-            <ActionMenu>
-                <ActionMenu.Trigger>
-                    <Button
-                        variant={'secondary'}
-                        icon={<MenuElipsisVerticalIcon aria-hidden />}
-                        iconPosition={'right'}
-                        size={size}
-                    >
-                        {'Meny'}
-                    </Button>
-                </ActionMenu.Trigger>
-                <ActionMenu.Content>
-                    {kanTa && (
-                        <ActionMenu.Item
-                            icon={<PersonIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('tildelMeg')}
-                        >
-                            {'Tildel meg'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {kanGjenoppta && (
-                        <ActionMenu.Item
-                            icon={<PlayIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('gjenoppta')}
-                        >
-                            {'Gjenoppta'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {kanLeggeTilbake && (
-                        <ActionMenu.Item
-                            icon={<ArrowUndoIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('leggTilbake')}
-                        >
-                            {'Legg tilbake'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {kanSettePåVent && (
-                        <ActionMenu.Item
-                            icon={<PauseIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('settPåVent')}
-                        >
-                            {'Sett på vent'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {kanOverta && (
-                        <ActionMenu.Item
-                            icon={<ArrowsSquarepathIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('overta')}
-                        >
-                            {'Overta behandling'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {(harVentestatuser || harAttesteringer) && (
-                        <ActionMenu.Divider className={style.divider} />
-                    )}
-
-                    {harVentestatuser && (
-                        <ActionMenu.Item
-                            icon={<HourglassTopFilledIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('ventehistorikk')}
-                        >
-                            {'Se ventestatus-historikk'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {harAttesteringer && (
-                        <ActionMenu.Item
-                            icon={<BulletListIcon aria-hidden />}
-                            onSelect={() => setAktivDialog('attesteringer')}
-                        >
-                            {'Se attesteringer'}
-                        </ActionMenu.Item>
-                    )}
-
-                    {kanAvslutte && (
+            <BehandlingsmenyValg
+                gyldigeKommandoer={gyldigeKommandoer}
+                onVelg={(dialog) => setAktivDialog(dialog)}
+                size={size}
+                ekstraValg={
+                    harVentestatuser || harAttesteringer ? (
                         <>
-                            <ActionMenu.Divider className={style.divider} />
-                            <ActionMenu.Item
-                                variant={'danger'}
-                                icon={<TrashIcon aria-hidden />}
-                                onSelect={() => setAktivDialog('avslutt')}
-                            >
-                                {'Avslutt behandling'}
-                            </ActionMenu.Item>
+                            {harVentestatuser && (
+                                <ActionMenu.Item
+                                    icon={<HourglassTopFilledIcon aria-hidden />}
+                                    onSelect={() => setAktivDialog('ventehistorikk')}
+                                >
+                                    {'Se ventestatus-historikk'}
+                                </ActionMenu.Item>
+                            )}
+                            {harAttesteringer && (
+                                <ActionMenu.Item
+                                    icon={<BulletListIcon aria-hidden />}
+                                    onSelect={() => setAktivDialog('attesteringer')}
+                                >
+                                    {'Se attesteringer'}
+                                </ActionMenu.Item>
+                            )}
                         </>
-                    )}
-                </ActionMenu.Content>
-            </ActionMenu>
+                    ) : undefined
+                }
+            />
 
-            {kanTa && (
+            {kapabiliteter.tildelMeg && (
                 <RammebehandlingTildelMeg
-                    behandling={behandling}
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
                     åpen={aktivDialog === 'tildelMeg'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
             )}
 
-            {kanGjenoppta && (
+            {kapabiliteter.gjenoppta && (
                 <RammebehandlingGjenoppta
-                    behandling={behandling}
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
                     åpen={aktivDialog === 'gjenoppta'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
             )}
 
-            {kanLeggeTilbake && (
+            {kapabiliteter.leggTilbake && (
                 <RammebehandlingLeggTilbake
-                    behandling={behandling}
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
                     åpen={aktivDialog === 'leggTilbake'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt(
@@ -229,9 +150,10 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                 />
             )}
 
-            {kanSettePåVent && (
+            {kapabiliteter.settPåVent && (
                 <RammebehandlingSettPåVent
-                    behandling={behandling}
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt(
@@ -241,18 +163,22 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                 />
             )}
 
-            {kanOverta && (
+            {kapabiliteter.overta && (
                 <RammebehandlingOverta
-                    behandling={behandling}
+                    behandlingId={behandling.id}
+                    overtarFra={overtarFra}
+                    sakId={sak.sakId}
                     åpen={aktivDialog === 'overta'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
             )}
 
-            {kanAvslutte && (
+            {kapabiliteter.avslutt && (
                 <RammebehandlingAvslutt
-                    behandling={behandling}
+                    behandlingId={behandling.id}
+                    erRevurdering={erRevurdering}
+                    saksnummer={sak.saksnummer}
                     åpen={aktivDialog === 'avslutt'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt(
@@ -281,12 +207,4 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
     );
 };
 
-type AktivDialog =
-    | 'tildelMeg'
-    | 'gjenoppta'
-    | 'leggTilbake'
-    | 'settPåVent'
-    | 'overta'
-    | 'avslutt'
-    | 'ventehistorikk'
-    | 'attesteringer';
+type AktivDialog = BehandlingsmenyDialog | 'ventehistorikk' | 'attesteringer';

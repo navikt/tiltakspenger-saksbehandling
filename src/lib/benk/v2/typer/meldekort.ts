@@ -1,5 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Request } from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
@@ -22,6 +23,8 @@ export type BenkMeldekort = BenkV2BehandlingBase & {
     beløp: Nullable<number>;
     /** Tidspunkt bruker sendte inn meldekortet, kun for innsendte/korrigerte */
     mottattTidspunkt: Nullable<string>;
+    /** Kun meldekortbehandlinger har kommandoer - innsendte/korrigerte meldekort er ikke behandlinger */
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 
 export enum BenkMeldekortKolonne {

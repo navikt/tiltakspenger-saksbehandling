@@ -1,40 +1,33 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { SakProps } from '~/lib/sak/SakTyper';
-import {
-    MeldekortbehandlingProps,
-    MeldekortbehandlingStatus,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
+
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingProps;
+    meldekortId: MeldekortbehandlingId;
+    /** NavIdenten til saksbehandleren/beslutteren som overtas fra */
+    overtarFra: string;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
 export const MeldekortbehandlingOverta = ({
-    meldekortbehandling,
+    meldekortId,
+    overtarFra,
+    sakId,
     åpen,
     onClose,
     onSuccess,
 }: Props) => {
-    const { sak } = useSak();
-
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
-        `/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/overta`,
+        `/sak/${sakId}/meldekort/${meldekortId}/overta`,
         'PATCH',
     );
-
-    const overtarFra =
-        meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING
-            ? (meldekortbehandling.saksbehandler ?? 'Ukjent saksbehandler')
-            : meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BESLUTNING
-              ? (meldekortbehandling.beslutter ?? 'Ukjent beslutter')
-              : 'Ukjent saksbehandler/beslutter';
 
     const overta = () => {
         trigger({ overtarFra }).then((oppdatertSak) => {

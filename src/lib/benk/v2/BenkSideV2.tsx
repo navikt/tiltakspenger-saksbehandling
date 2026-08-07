@@ -1,5 +1,6 @@
 import { Heading, Tabs, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
+import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
 import { BenkV2Oversikt, BenkV2Sortering } from './typer/felles';
 import { BenkV2Tab, benkV2TabTekst } from './typer/tabs';
 import { BenkSøknaderFilter, BenkSøknaderKolonne, BenkSøknadsbehandling } from './typer/søknader';
@@ -73,6 +74,8 @@ export const BenkSideV2 = ({ antallPerTab, tabData }: BenkSideV2Props) => {
 
     return (
         <VStack gap={'space-20'} padding={'space-16'}>
+            <NotificationBanner />
+
             <Heading size={'medium'} level={'2'}>
                 {'Oversikt over åpne behandlinger'}
             </Heading>

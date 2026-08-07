@@ -4,11 +4,13 @@ import { BenkV2Sortering } from '../typer/felles';
 import { formaterTidspunkt } from '~/utils/date';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
-import { personoversiktUrl } from '~/utils/urls';
+import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { FnrCelle } from '../felles/FnrCelle';
 import { BenkStatusTag } from '../felles/BenkStatusTag';
 import { VentestatusCelle } from '../felles/VentestatusCelle';
 import { useBenkSortering } from '../felles/useBenkSortering';
+import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
+import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
     behandlinger: BenkKlagebehandling[];
@@ -51,7 +53,7 @@ export const KlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.HeaderCell scope={'row'}>
-                            <FnrCelle fnr={behandling.fnr} />
+                            <FnrCelle fnr={behandling.fnr} saksnummer={behandling.saksnummer} />
                         </Table.HeaderCell>
                         <Table.DataCell>
                             {behandling.resultat ? (
@@ -77,9 +79,15 @@ export const KlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                             {behandling.saksbehandler ?? 'Ikke tildelt'}
                         </Table.DataCell>
                         <Table.DataCell>{behandling.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
-                        <Table.DataCell>
-                            <InternLenkeKnapp href={personoversiktUrl(behandling.saksnummer)}>
-                                {'Se sak'}
+                        <Table.DataCell align={'right'}>
+                            <InternLenkeKnapp
+                                href={klagebehandlingUrl(
+                                    behandling.saksnummer,
+                                    behandling.id,
+                                    klageStegForBenkRad(behandling.resultat),
+                                )}
+                            >
+                                {'Se behandling'}
                             </InternLenkeKnapp>
                         </Table.DataCell>
                     </Table.Row>
@@ -87,4 +95,21 @@ export const KlageTabell = ({ behandlinger, aktivSortering }: Props) => {
             </Table.Body>
         </Table>
     );
+};
+
+/**
+ * Speiler `finnSisteGyldigeStegForKlage` med feltene en benk-rad har.
+ * Uten resultat vet vi ikke om formkravene er fylt ut, så da lander vi på første steg.
+ */
+const klageStegForBenkRad = (resultat: Nullable<KlagebehandlingResultat>): KlageStegUrlSegment => {
+    switch (resultat) {
+        case KlagebehandlingResultat.AVVIST:
+            return KlageStegUrlSegment.Brev;
+        case KlagebehandlingResultat.OMGJØR:
+            return KlageStegUrlSegment.Resultat;
+        case KlagebehandlingResultat.OPPRETTHOLDT:
+            return KlageStegUrlSegment.Brev;
+        case null:
+            return KlageStegUrlSegment.Formkrav;
+    }
 };

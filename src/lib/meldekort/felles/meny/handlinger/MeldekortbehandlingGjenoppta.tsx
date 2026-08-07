@@ -1,30 +1,28 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { SakProps } from '~/lib/sak/SakTyper';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingProps;
+    meldekortId: MeldekortbehandlingId;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
 export const MeldekortbehandlingGjenoppta = ({
-    meldekortbehandling,
+    meldekortId,
+    sakId,
     åpen,
     onClose,
     onSuccess,
 }: Props) => {
-    const { sak } = useSak();
-    const { id } = meldekortbehandling;
-
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
-        `/sak/${sak.sakId}/meldekort/${id}/gjenoppta`,
+        `/sak/${sakId}/meldekort/${meldekortId}/gjenoppta`,
         'PATCH',
     );
 

@@ -1,5 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { BenkV2BehandlingBase, BenkV2Request } from './felles';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
@@ -28,6 +29,9 @@ export type BenkTilbakekreving = BenkV2BehandlingBase & {
     beløp: number;
     kilde: BenkTilbakekrevingKilde;
     kravgrunnlagPeriode: Periode;
+    /** Lenke til behandlingen i tilbakekrevingsløsningen */
+    url: string;
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 
 export enum BenkTilbakekrevingKolonne {

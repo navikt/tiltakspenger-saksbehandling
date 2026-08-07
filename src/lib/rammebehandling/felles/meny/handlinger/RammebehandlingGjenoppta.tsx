@@ -1,24 +1,27 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { SakProps } from '~/lib/sak/SakTyper';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
-    behandling: Rammebehandling;
+    behandlingId: RammebehandlingId;
+    sakId: SakId;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
-export const RammebehandlingGjenoppta = ({ behandling, åpen, onClose, onSuccess }: Props) => {
-    const { sak } = useSak();
-    const { id } = behandling;
-
+export const RammebehandlingGjenoppta = ({
+    behandlingId,
+    sakId,
+    åpen,
+    onClose,
+    onSuccess,
+}: Props) => {
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
-        `/sak/${sak.sakId}/behandling/${id}/gjenoppta`,
+        `/sak/${sakId}/behandling/${behandlingId}/gjenoppta`,
         'POST',
     );
 

@@ -1,8 +1,9 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
-import { BenkV2Behandlingsstatus, BenkV2SorteringRetning } from './typer/felles';
+import { BenkV2Behandlingsstatus, BenkV2SorteringRetning, BenkV2Ventestatus } from './typer/felles';
 import { BenkMeldekortType } from './typer/meldekort';
 import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from './typer/tilbakekreving';
 import { isValueInRecord } from '~/utils/object';
+import { Nullable } from '~/types/UtilTypes';
 
 export const benkV2BehandlingsstatusTekst: Record<BenkV2Behandlingsstatus, string> = {
     [BenkV2Behandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'Under automatisk behandling',
@@ -67,4 +68,32 @@ export const parseSortering = <Kolonne extends string>(
             : BenkV2SorteringRetning.ASC;
 
     return `${gyldigKolonne},${gyldigRetning}`;
+};
+
+/**
+ * Speiler `kanFortsetteBehandling` for rammebehandlinger med feltene en benk-rad har:
+ * saksbehandler eier behandlingen, og den er ikke satt på vent.
+ */
+export const kanFortsetteBenkRad = (
+    rad: {
+        status: BenkV2Behandlingsstatus;
+        saksbehandler: Nullable<string>;
+        beslutter: Nullable<string>;
+        ventestatus: BenkV2Ventestatus;
+    },
+    navIdent: string,
+): boolean => {
+    if (rad.ventestatus.erSattPåVent) {
+        return false;
+    }
+
+    switch (rad.status) {
+        case BenkV2Behandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
+        case BenkV2Behandlingsstatus.UNDER_BEHANDLING:
+            return rad.saksbehandler === navIdent;
+        case BenkV2Behandlingsstatus.UNDER_BESLUTNING:
+            return rad.beslutter === navIdent;
+        default:
+            return false;
+    }
 };
