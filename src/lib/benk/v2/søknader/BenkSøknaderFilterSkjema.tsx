@@ -1,6 +1,4 @@
-import { Select } from '@navikt/ds-react';
 import { BenkSøknaderFilter, BenkSøknadsbehandling } from '../typer/søknader';
-import { BenkV2Behandlingsstatus } from '../typer/felles';
 import { BenkV2Tab } from '../typer/tabs';
 import { benkV2BehandlingsstatusTekst } from '../benkV2Utils';
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
@@ -9,13 +7,12 @@ import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
+import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
     behandlinger: BenkSøknadsbehandling[];
     aktivtFilter: BenkSøknaderFilter;
 };
-
-const SØKNADSTYPER: Søknadstype[] = ['DIGITAL', 'PAPIR_SKJEMA', 'PAPIR_FRIHAND', 'MODIA', 'ANNET'];
 
 export const BenkSøknaderFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkV2Tab.SØKNADER);
@@ -35,43 +32,19 @@ export const BenkSøknaderFilterSkjema = ({ behandlinger, aktivtFilter }: Props)
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
-            <Select
+            <BenkFilterSelect
                 label={'Status'}
-                size={'small'}
-                value={valgtFilter.status ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        status: (e.target.value as BenkV2Behandlingsstatus) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(BenkV2Behandlingsstatus).map((status) => (
-                    <option key={status} value={status}>
-                        {benkV2BehandlingsstatusTekst[status]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.status}
+                onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
+                alternativer={benkV2BehandlingsstatusTekst}
+            />
 
-            <Select
+            <BenkFilterSelect<Søknadstype>
                 label={'Søknadstype'}
-                size={'small'}
-                value={valgtFilter.søknadstype ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        søknadstype: (e.target.value as Søknadstype) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {SØKNADSTYPER.map((søknadstype) => (
-                    <option key={søknadstype} value={søknadstype}>
-                        {søknadstypeTekst[søknadstype]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.søknadstype}
+                onChange={(søknadstype) => setValgtFilter({ ...valgtFilter, søknadstype })}
+                alternativer={søknadstypeTekst}
+            />
 
             <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}

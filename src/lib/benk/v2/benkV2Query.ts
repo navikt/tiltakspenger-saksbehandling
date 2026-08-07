@@ -28,12 +28,12 @@ export type BenkV2FilterMap = {
 };
 
 /** Ukjent kilde: enten ParsedUrlQuery eller JSON fra cookie */
-export type BenkFilterKilde = Record<string, unknown>;
+type BenkFilterKilde = Record<string, unknown>;
 
 export const benkStrengVerdi = (verdi: unknown): Nullable<string> =>
     typeof verdi === 'string' && verdi.length > 0 ? verdi : null;
 
-export const benkEnumVerdi = <T extends Record<string, string>>(
+const benkEnumVerdi = <T extends Record<string, string>>(
     verdi: unknown,
     gyldigeVerdier: T,
 ): Nullable<T[keyof T]> => {

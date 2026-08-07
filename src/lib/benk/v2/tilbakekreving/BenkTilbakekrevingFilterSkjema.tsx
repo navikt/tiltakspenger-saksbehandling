@@ -1,16 +1,12 @@
-import { Checkbox, HelpText, HStack, Select } from '@navikt/ds-react';
-import {
-    BenkTilbakekreving,
-    BenkTilbakekrevingFilter,
-    BenkTilbakekrevingKilde,
-    BenkTilbakekrevingStatus,
-} from '../typer/tilbakekreving';
+import { Checkbox, HelpText, HStack } from '@navikt/ds-react';
+import { BenkTilbakekreving, BenkTilbakekrevingFilter } from '../typer/tilbakekreving';
 import { BenkV2Tab } from '../typer/tabs';
 import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../benkV2Utils';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
+import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
     behandlinger: BenkTilbakekreving[];
@@ -37,43 +33,19 @@ export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: P
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
-            <Select
+            <BenkFilterSelect
                 label={'Status'}
-                size={'small'}
-                value={valgtFilter.status ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        status: (e.target.value as BenkTilbakekrevingStatus) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(BenkTilbakekrevingStatus).map((status) => (
-                    <option key={status} value={status}>
-                        {benkTilbakekrevingStatusTekst[status]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.status}
+                onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
+                alternativer={benkTilbakekrevingStatusTekst}
+            />
 
-            <Select
+            <BenkFilterSelect
                 label={'Kilde'}
-                size={'small'}
-                value={valgtFilter.kilde ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        kilde: (e.target.value as BenkTilbakekrevingKilde) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(BenkTilbakekrevingKilde).map((kilde) => (
-                    <option key={kilde} value={kilde}>
-                        {benkTilbakekrevingKildeTekst[kilde]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.kilde}
+                onChange={(kilde) => setValgtFilter({ ...valgtFilter, kilde })}
+                alternativer={benkTilbakekrevingKildeTekst}
+            />
 
             <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}
@@ -81,23 +53,19 @@ export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: P
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
 
-            <HStack align={'end'}>
-                <HStack gap={'space-4'} align={'center'}>
-                    <Checkbox
-                        size={'small'}
-                        checked={valgtFilter.kunOverMinstebeløp}
-                        onChange={(e) =>
-                            setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
-                        }
-                    >
-                        {'Vis kun tilbakekrevinger over minstebeløp'}
-                    </Checkbox>
-                    <HelpText>
-                        {
-                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
-                        }
-                    </HelpText>
-                </HStack>
+            <HStack gap={'space-4'} align={'center'}>
+                <Checkbox
+                    size={'small'}
+                    checked={valgtFilter.kunOverMinstebeløp}
+                    onChange={(e) =>
+                        setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
+                    }
+                >
+                    {'Vis kun tilbakekrevinger over minstebeløp'}
+                </Checkbox>
+                <HelpText>
+                    {'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'}
+                </HelpText>
             </HStack>
         </BenkFilterSkjema>
     );

@@ -1,14 +1,12 @@
-import { Select } from '@navikt/ds-react';
 import { BenkRevurderingerFilter, BenkRevurdering } from '../typer/revurderinger';
-import { BenkV2Behandlingsstatus } from '../typer/felles';
 import { BenkV2Tab } from '../typer/tabs';
 import { benkV2BehandlingsstatusTekst } from '../benkV2Utils';
-import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
+import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
     behandlinger: BenkRevurdering[];
@@ -33,43 +31,19 @@ export const BenkRevurderingerFilterSkjema = ({ behandlinger, aktivtFilter }: Pr
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
-            <Select
+            <BenkFilterSelect
                 label={'Status'}
-                size={'small'}
-                value={valgtFilter.status ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        status: (e.target.value as BenkV2Behandlingsstatus) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(BenkV2Behandlingsstatus).map((status) => (
-                    <option key={status} value={status}>
-                        {benkV2BehandlingsstatusTekst[status]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.status}
+                onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
+                alternativer={benkV2BehandlingsstatusTekst}
+            />
 
-            <Select
+            <BenkFilterSelect
                 label={'Resultat'}
-                size={'small'}
-                value={valgtFilter.resultat ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        resultat: (e.target.value as RevurderingResultat) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(RevurderingResultat).map((resultat) => (
-                    <option key={resultat} value={resultat}>
-                        {rammebehandlingResultatTekst[resultat]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.resultat}
+                onChange={(resultat) => setValgtFilter({ ...valgtFilter, resultat })}
+                alternativer={rammebehandlingResultatTekst}
+            />
 
             <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}

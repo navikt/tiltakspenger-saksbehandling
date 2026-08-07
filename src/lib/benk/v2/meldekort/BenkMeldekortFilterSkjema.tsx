@@ -1,17 +1,11 @@
-import { Select } from '@navikt/ds-react';
-import {
-    BenkMeldekort,
-    BenkMeldekortFilter,
-    BenkMeldekortType,
-    benkMeldekortTyper,
-} from '../typer/meldekort';
-import { BenkV2Behandlingsstatus } from '../typer/felles';
+import { BenkMeldekort, BenkMeldekortFilter } from '../typer/meldekort';
 import { BenkV2Tab } from '../typer/tabs';
 import { benkMeldekortTypeTekst, benkV2BehandlingsstatusTekst } from '../benkV2Utils';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
 import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
+import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
     behandlinger: BenkMeldekort[];
@@ -36,43 +30,19 @@ export const BenkMeldekortFilterSkjema = ({ behandlinger, aktivtFilter }: Props)
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
-            <Select
+            <BenkFilterSelect
                 label={'Type'}
-                size={'small'}
-                value={valgtFilter.type ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        type: (e.target.value as BenkMeldekortType) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(benkMeldekortTyper).map((type) => (
-                    <option key={type} value={type}>
-                        {benkMeldekortTypeTekst[type]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.type}
+                onChange={(type) => setValgtFilter({ ...valgtFilter, type })}
+                alternativer={benkMeldekortTypeTekst}
+            />
 
-            <Select
+            <BenkFilterSelect
                 label={'Status'}
-                size={'small'}
-                value={valgtFilter.status ?? ''}
-                onChange={(e) =>
-                    setValgtFilter({
-                        ...valgtFilter,
-                        status: (e.target.value as BenkV2Behandlingsstatus) || null,
-                    })
-                }
-            >
-                <option value={''}>{'Alle'}</option>
-                {Object.values(BenkV2Behandlingsstatus).map((status) => (
-                    <option key={status} value={status}>
-                        {benkV2BehandlingsstatusTekst[status]}
-                    </option>
-                ))}
-            </Select>
+                value={valgtFilter.status}
+                onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
+                alternativer={benkV2BehandlingsstatusTekst}
+            />
 
             <BenkSaksbehandlerSelect
                 behandlinger={behandlinger}

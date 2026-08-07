@@ -1,11 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { BenkV2Tab } from './tabs';
 import { SakId } from '~/lib/sak/SakTyper';
-import { BenkRevurdering } from '~/lib/benk/v2/typer/revurderinger';
-import { BenkSøknadsbehandling } from '~/lib/benk/v2/typer/søknader';
-import { BenkMeldekort } from '~/lib/benk/v2/typer/meldekort';
-import { BenkKlagebehandling } from '~/lib/benk/v2/typer/klage';
-import { BenkTilbakekreving } from '~/lib/benk/v2/typer/tilbakekreving';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -58,13 +53,6 @@ export type BenkV2BehandlingBase = {
     ventestatus: BenkV2Ventestatus;
 };
 
-export type BenkV2Behandling =
-    | BenkRevurdering
-    | BenkSøknadsbehandling
-    | BenkMeldekort
-    | BenkKlagebehandling
-    | BenkTilbakekreving;
-
 export enum BenkV2SorteringRetning {
     ASC = 'ASC',
     DESC = 'DESC',
@@ -77,17 +65,14 @@ export type BenkV2Sortering<Kolonne extends string> = `${Kolonne},${BenkV2Sorter
  */
 export type BenkV2Filter = Record<string, string | boolean | null>;
 
-export type BenkV2Request<F extends BenkV2Filter, Kolonne extends string> = {
-    sortering: BenkV2Sortering<Kolonne>;
-    filters: F;
-};
-
 /**
  * Body-en som postes til /benk. `filters` er unionen av filtrene fanene
  * tilbyr - hver fane sender sine, og backend ignorerer resten.
  */
-export type BenkV2RequestBody = BenkV2Request<BenkV2Filter, string> & {
+export type BenkV2RequestBody = {
     tab: BenkV2Tab;
+    sortering: BenkV2Sortering<string>;
+    filters: BenkV2Filter;
 };
 
 /**

@@ -1,12 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import {
-    BenkV2BehandlingBase,
-    BenkV2Behandlingsstatus,
-    BenkV2Behandlingstype,
-    BenkV2Request,
-} from './felles';
+import { BenkV2BehandlingBase, BenkV2Behandlingsstatus, BenkV2Behandlingstype } from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 /**
@@ -51,5 +46,3 @@ export type BenkMeldekortFilter = {
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
 };
-
-export type BenkMeldekortRequest = BenkV2Request<BenkMeldekortFilter, BenkMeldekortKolonne>;
