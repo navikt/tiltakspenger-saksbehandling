@@ -12,6 +12,7 @@ import {
     BenkTilbakekrevingStatus,
 } from '../typer/tilbakekreving';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 
@@ -55,6 +56,7 @@ const søknadstyper: Record<Søknadstype, Søknadstype> = {
 
 export const parseBenkSøknaderFilter = (kilde: BenkFilterKilde): BenkSøknaderFilter => ({
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
+    resultat: benkEnumVerdi(kilde.resultat, SøknadsbehandlingResultat),
     søknadstype: benkEnumVerdi(kilde.søknadstype, søknadstyper),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),

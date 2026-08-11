@@ -1,6 +1,7 @@
 import { BenkSøknaderFilter, BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkTab } from '../typer/tabs';
 import { benkBehandlingsstatusTekst } from '../utils/benkUtils';
+import { søknadsbehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { useResettableState } from '~/utils/useResettableState';
@@ -24,6 +25,7 @@ export const BenkSøknaderFilterSkjema = ({ behandlinger, aktivtFilter }: Props)
             onNullstill={() =>
                 nullstillFilter({
                     status: null,
+                    resultat: null,
                     søknadstype: null,
                     saksbehandler: null,
                     skjulPåVent: false,
@@ -37,6 +39,13 @@ export const BenkSøknaderFilterSkjema = ({ behandlinger, aktivtFilter }: Props)
                 value={valgtFilter.status}
                 onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
                 alternativer={benkBehandlingsstatusTekst}
+            />
+
+            <BenkFilterSelect
+                label={'Resultat'}
+                value={valgtFilter.resultat}
+                onChange={(resultat) => setValgtFilter({ ...valgtFilter, resultat })}
+                alternativer={søknadsbehandlingResultatTekst}
             />
 
             <BenkFilterSelect<Søknadstype>

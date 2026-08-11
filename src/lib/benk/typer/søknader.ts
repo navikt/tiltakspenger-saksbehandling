@@ -29,6 +29,7 @@ export enum BenkSøknaderKolonne {
 
 export type BenkSøknaderFilter = {
     status: Nullable<BenkBehandlingsstatus>;
+    resultat: Nullable<SøknadsbehandlingResultat>;
     søknadstype: Nullable<Søknadstype>;
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
