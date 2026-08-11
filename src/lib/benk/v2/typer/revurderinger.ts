@@ -20,6 +20,7 @@ export enum BenkRevurderingerKolonne {
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
     beslutter = 'beslutter',
+    ventestatusFrist = 'ventestatus_frist',
 }
 
 export type BenkRevurderingerFilter = {

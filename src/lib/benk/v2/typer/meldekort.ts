@@ -38,6 +38,7 @@ export enum BenkMeldekortKolonne {
     status = 'status',
     mottatt = 'mottatt',
     saksbehandler = 'saksbehandler',
+    ventestatusFrist = 'ventestatus_frist',
 }
 
 export type BenkMeldekortFilter = {

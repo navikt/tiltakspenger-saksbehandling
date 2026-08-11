@@ -19,7 +19,7 @@ export const BenkRevurderingerTabell = ({ behandlinger, aktivSortering }: Props)
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Resultat sortable={true} />
+                    <BenkTabellKolonneHeader.Resultat />
                     <BenkTabellKolonneHeader.Status />
                     <BenkTabellKolonneHeader.Ventestatus />
                     <BenkTabellKolonneHeader.Startet />

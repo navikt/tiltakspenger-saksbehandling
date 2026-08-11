@@ -12,15 +12,11 @@ const Fnr = () => (
     </Table.ColumnHeader>
 );
 
-/** Søknadsfanen kan ikke sorteres på resultat, de andre kan */
-const Resultat = ({ sortable = false }: { sortable?: boolean }) =>
-    sortable ? (
-        <Table.ColumnHeader sortable={true} sortKey={'resultat'}>
-            {'Resultat'}
-        </Table.ColumnHeader>
-    ) : (
-        <Table.ColumnHeader>{'Resultat'}</Table.ColumnHeader>
-    );
+const Resultat = () => (
+    <Table.ColumnHeader sortable={true} sortKey={'resultat'}>
+        {'Resultat'}
+    </Table.ColumnHeader>
+);
 
 const Status = () => (
     <Table.ColumnHeader sortable={true} sortKey={'status'}>
@@ -28,7 +24,11 @@ const Status = () => (
     </Table.ColumnHeader>
 );
 
-const Ventestatus = () => <Table.ColumnHeader>{'Ventestatus'}</Table.ColumnHeader>;
+const Ventestatus = () => (
+    <Table.ColumnHeader sortable={true} sortKey={'ventestatus_frist'}>
+        {'Ventestatus'}
+    </Table.ColumnHeader>
+);
 
 const Kravtidspunkt = () => (
     <Table.ColumnHeader sortable={true} sortKey={'kravtidspunkt'} align={'right'}>

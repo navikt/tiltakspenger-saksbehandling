@@ -43,6 +43,7 @@ export enum BenkTilbakekrevingKolonne {
     startet = 'startet',
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
+    ventestatusFrist = 'ventestatus_frist',
 }
 
 export type BenkTilbakekrevingFilter = {

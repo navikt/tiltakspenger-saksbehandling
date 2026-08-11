@@ -20,9 +20,11 @@ export enum BenkSøknaderKolonne {
     søknadstype = 'søknadstype',
     status = 'status',
     kravtidspunkt = 'kravtidspunkt',
+    resultat = 'resultat',
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
     beslutter = 'beslutter',
+    ventestatusFrist = 'ventestatus_frist',
 }
 
 export type BenkSøknaderFilter = {

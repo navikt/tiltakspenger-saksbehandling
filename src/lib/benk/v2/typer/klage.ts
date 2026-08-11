@@ -18,6 +18,7 @@ export enum BenkKlageKolonne {
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
     beslutter = 'beslutter',
+    ventestatusFrist = 'ventestatus_frist',
 }
 
 export type BenkKlageFilter = {
