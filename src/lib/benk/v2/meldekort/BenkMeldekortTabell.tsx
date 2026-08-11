@@ -31,10 +31,10 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                     <BenkTabellKolonneHeader.Ventestatus />
                     <Table.ColumnHeader
                         sortable={true}
-                        sortKey={BenkMeldekortKolonne.periode}
+                        sortKey={BenkMeldekortKolonne.meldeperioder}
                         align={'right'}
                     >
-                        {'Meldeperiode'}
+                        {'Periode'}
                     </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Beløp />
                     <Table.ColumnHeader
@@ -63,7 +63,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                             />
                         </Table.DataCell>
                         <BenkTabellCelle.Ventestatus ventestatus={behandling.ventestatus} />
-                        <BenkTabellCelle.Meldeperiode periode={behandling.periode} />
+                        <BenkTabellCelle.Meldeperiode meldeperioder={behandling.meldeperioder} />
                         <BenkTabellCelle.Beløp beløp={behandling.beløp} />
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.mottattTidspunkt} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
@@ -89,7 +89,8 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                                 <InternLenkeKnapp
                                     href={meldeperiodeUrl(
                                         behandling.saksnummer,
-                                        behandling.periode,
+                                        // Innsendte/korrigerte meldekort dekker nøyaktig én meldeperiode
+                                        behandling.meldeperioder[0],
                                         MeldeperiodekjedeTab.BrukersMeldekort,
                                     )}
                                 >

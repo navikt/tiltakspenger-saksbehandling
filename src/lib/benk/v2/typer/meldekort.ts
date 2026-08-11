@@ -21,7 +21,7 @@ export type BenkMeldekort = BenkV2BehandlingBase & {
     type: BenkMeldekortType;
     id: MeldekortbehandlingId;
     status: BenkV2Behandlingsstatus;
-    periode: Periode;
+    meldeperioder: Periode[];
     /** Beregnet beløp for meldekortbehandlinger som er beregnet, ellers null */
     beløp: Nullable<number>;
     /** Tidspunkt bruker sendte inn meldekortet, kun for innsendte/korrigerte */
@@ -33,7 +33,8 @@ export type BenkMeldekort = BenkV2BehandlingBase & {
 export enum BenkMeldekortKolonne {
     fnr = 'fnr',
     type = 'type',
-    periode = 'periode',
+    /** Backend sorterer på tidligste meldeperiode - sortKey-en er fortsatt 'periode' der */
+    meldeperioder = 'periode',
     beløp = 'beløp',
     status = 'status',
     mottatt = 'mottatt',

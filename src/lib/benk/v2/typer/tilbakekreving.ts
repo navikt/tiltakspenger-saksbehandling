@@ -44,6 +44,7 @@ export enum BenkTilbakekrevingKolonne {
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
     ventestatusFrist = 'ventestatus_frist',
+    kravgrunnlagPeriode = 'kravgrunnlag_periode',
 }
 
 export type BenkTilbakekrevingFilter = {

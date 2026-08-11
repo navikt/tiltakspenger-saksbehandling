@@ -167,7 +167,7 @@ const hentTabData = async (
             const sortering = parseBenkSortering(
                 sorteringFraQuery,
                 BenkMeldekortKolonne,
-                BenkMeldekortKolonne.periode,
+                BenkMeldekortKolonne.meldeperioder,
             );
             const { antallPerTab, oversikt, error } = await hentFane<BenkMeldekort>(
                 req,

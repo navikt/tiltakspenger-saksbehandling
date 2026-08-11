@@ -26,7 +26,13 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                     </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Status />
                     <BenkTabellKolonneHeader.Ventestatus />
-                    <Table.ColumnHeader align={'right'}>{'Kravgrunnlagperiode'}</Table.ColumnHeader>
+                    <Table.ColumnHeader
+                        sortable={true}
+                        sortKey={BenkTilbakekrevingKolonne.kravgrunnlagPeriode}
+                        align={'right'}
+                    >
+                        {'Kravgrunnlagperiode'}
+                    </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Beløp />
                     <BenkTabellKolonneHeader.Startet />
                     <BenkTabellKolonneHeader.SistEndret />
