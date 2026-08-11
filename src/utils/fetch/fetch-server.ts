@@ -5,9 +5,8 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
-import { BenkOversiktRequestBody, BenkOversiktProps } from '~/lib/benk/typer/Benk';
-import { BenkV2RequestBody, BenkV2Respons } from '~/lib/benk/v2/typer/felles';
-import { BenkV2Tab, benkV2TabPath } from '~/lib/benk/v2/typer/tabs';
+import { BenkRequestBody, BenkRespons } from '~/lib/benk/typer/felles';
+import { BenkTab, benkTabPath } from '~/lib/benk/typer/tabs';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
@@ -62,18 +61,12 @@ export const fetchJsonFraApiServerSide = async <JsonResponse>(
 export const fetchSak = async (req: NextRequest, saksnummer: string) =>
     fetchJsonFraApiServerSide<SakProps>(req, `/sak/${saksnummer}`);
 
-export const fetchBenkOversikt = async (req: NextRequest, body: BenkOversiktRequestBody) =>
-    fetchJsonFraApiServerSide<BenkOversiktProps>(req, '/behandlinger', {
-        body: JSON.stringify(body),
-        method: 'POST',
-    });
-
-export const fetchBenkV2 = async <Behandling>(
+export const fetchBenk = async <Behandling>(
     req: NextRequest,
-    tab: BenkV2Tab,
-    body: BenkV2RequestBody,
+    tab: BenkTab,
+    body: BenkRequestBody,
 ) =>
-    fetchJsonFraApiServerSide<BenkV2Respons<Behandling>>(req, `/benk/${benkV2TabPath[tab]}`, {
+    fetchJsonFraApiServerSide<BenkRespons<Behandling>>(req, `/benk/${benkTabPath[tab]}`, {
         body: JSON.stringify(body),
         method: 'POST',
     });

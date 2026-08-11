@@ -14,11 +14,13 @@ import JournalpostId from '~/lib/_felles/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay, ukenummerFraDatotekst } from '~/utils/date';
-import { benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
-import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+import {
+    rammebehandlingResultatTekst,
+    rammebehandlingstypeTekst,
+} from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
@@ -106,7 +108,7 @@ const FormkravForm = (props: {
                                             key={`${vedtak.id}-${behandling.id}`}
                                             value={vedtak.id}
                                         >
-                                            {benkBehandlingstypeTekst[behandling.type]} -{' '}
+                                            {rammebehandlingstypeTekst[behandling.type]} -{' '}
                                             {rammebehandlingResultatTekst[vedtak.resultat]} -{' '}
                                             {formaterTidspunktKort(vedtak.opprettet)}
                                         </option>
