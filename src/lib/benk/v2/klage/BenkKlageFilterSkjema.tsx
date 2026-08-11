@@ -1,6 +1,6 @@
 import { BenkKlagebehandling, BenkKlageFilter } from '../typer/klage';
 import { BenkV2Tab } from '../typer/tabs';
-import { benkV2BehandlingsstatusTekst } from '../benkV2Utils';
+import { benkV2BehandlingsstatusTekst } from '../utils/benkV2Utils';
 import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';

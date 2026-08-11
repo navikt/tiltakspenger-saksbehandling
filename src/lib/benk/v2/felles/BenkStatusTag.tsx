@@ -6,7 +6,7 @@ import {
     benkTilbakekrevingStatusTekst,
     benkV2BehandlingsstatusColor,
     benkV2BehandlingsstatusTekst,
-} from '../benkV2Utils';
+} from '../utils/benkV2Utils';
 
 export const BenkStatusTag = ({
     status,

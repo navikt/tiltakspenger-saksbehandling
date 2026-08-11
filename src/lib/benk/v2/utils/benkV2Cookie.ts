@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { Nullable } from '~/types/UtilTypes';
-import { BenkV2Tab, erBenkV2Tab } from './typer/tabs';
+import { BenkV2Tab, erBenkV2Tab } from '../typer/tabs';
 import {
     BenkV2FilterMap,
     benkBoolskVerdi,

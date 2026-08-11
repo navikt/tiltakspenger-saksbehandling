@@ -1,6 +1,6 @@
 import { BenkSøknaderFilter, BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkV2Tab } from '../typer/tabs';
-import { benkV2BehandlingsstatusTekst } from '../benkV2Utils';
+import { benkV2BehandlingsstatusTekst } from '../utils/benkV2Utils';
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { useResettableState } from '~/utils/useResettableState';

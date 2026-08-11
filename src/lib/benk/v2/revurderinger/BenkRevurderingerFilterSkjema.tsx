@@ -1,6 +1,6 @@
 import { BenkRevurderingerFilter, BenkRevurdering } from '../typer/revurderinger';
 import { BenkV2Tab } from '../typer/tabs';
-import { benkV2BehandlingsstatusTekst } from '../benkV2Utils';
+import { benkV2BehandlingsstatusTekst } from '../utils/benkV2Utils';
 import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';

@@ -2,7 +2,7 @@ import { Button, Table } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { BenkTilbakekreving, BenkTilbakekrevingKolonne } from '../typer/tilbakekreving';
 import { BenkV2Sortering } from '../typer/felles';
-import { benkTilbakekrevingKildeTekst } from '../benkV2Utils';
+import { benkTilbakekrevingKildeTekst } from '../utils/benkV2Utils';
 import { BenkTilbakekrevingStatusTag } from '../felles/BenkStatusTag';
 import { useBenkSortering } from '../felles/useBenkSortering';
 import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';

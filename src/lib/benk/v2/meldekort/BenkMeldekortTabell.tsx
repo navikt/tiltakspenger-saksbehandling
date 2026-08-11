@@ -1,7 +1,7 @@
 import { HStack, Table } from '@navikt/ds-react';
 import { BenkMeldekort, BenkMeldekortKolonne } from '../typer/meldekort';
 import { BenkV2Behandlingstype, BenkV2Sortering } from '../typer/felles';
-import { benkMeldekortTypeTekst } from '../benkV2Utils';
+import { benkMeldekortTypeTekst } from '../utils/benkV2Utils';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { BenkStatusTag } from '../felles/BenkStatusTag';

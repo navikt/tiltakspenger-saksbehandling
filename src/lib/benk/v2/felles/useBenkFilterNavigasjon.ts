@@ -5,8 +5,8 @@ import {
     benkFilterTilQuery,
     harBenkFilterVerdier,
     benkStrengVerdi,
-} from '../benkV2Query';
-import { nullstillBenkLagretFilter } from '../benkV2Cookie';
+} from '../utils/benkV2Query';
+import { nullstillBenkLagretFilter } from '../utils/benkV2Cookie';
 
 /**
  * Filtrering skjer server-side: valgte filtre legges i URL-en, som igjen

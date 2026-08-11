@@ -1,7 +1,7 @@
 import { Checkbox, HelpText, HStack } from '@navikt/ds-react';
 import { BenkTilbakekreving, BenkTilbakekrevingFilter } from '../typer/tilbakekreving';
 import { BenkV2Tab } from '../typer/tabs';
-import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../benkV2Utils';
+import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../utils/benkV2Utils';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';

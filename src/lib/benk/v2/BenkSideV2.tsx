@@ -30,6 +30,8 @@ import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTab
 import { BenkPanel } from './felles/BenkPanel';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
+import style from './BenkSideV2.module.css';
+
 type SøknaderData = {
     oversikt: BenkV2Oversikt<BenkSøknadsbehandling>;
     aktivtFilter: BenkSøknaderFilter;
@@ -90,8 +92,15 @@ export const BenkSideV2 = ({ antallPerTab, tabData, error }: BenkSideV2Props) =>
                 {'Oversikt over åpne behandlinger'}
             </Heading>
 
+            {/* Fjern denne etter en viss tid */}
+            <Infokort variant={'info'} size={'small'} className={style.varsel}>
+                {'Benken er nå delt inn i faner med tabeller tilpasset behandlingstypene. ' +
+                    'Du kan gå direkte til behandlingen eller utføre handlinger med knappene til høyre i tabellene. ' +
+                    'Klikk på fødselsnummeret for å gå til personoversikten.'}
+            </Infokort>
+
             {error && (
-                <Infokort variant={'feil'} header={'Feil i filtreringen'}>
+                <Infokort variant={'feil'} header={'Feil i filtreringen'} className={style.varsel}>
                     {error}
                 </Infokort>
             )}

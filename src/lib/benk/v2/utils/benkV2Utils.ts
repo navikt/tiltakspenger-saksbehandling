@@ -1,7 +1,11 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
-import { BenkV2Behandlingsstatus, BenkV2SorteringRetning, BenkV2Ventestatus } from './typer/felles';
-import { BenkMeldekortType, benkMeldekortTyper } from './typer/meldekort';
-import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from './typer/tilbakekreving';
+import {
+    BenkV2Behandlingsstatus,
+    BenkV2SorteringRetning,
+    BenkV2Ventestatus,
+} from '../typer/felles';
+import { BenkMeldekortType, benkMeldekortTyper } from '../typer/meldekort';
+import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
 import { isValueInRecord } from '~/utils/object';
 import { Nullable } from '~/types/UtilTypes';
 

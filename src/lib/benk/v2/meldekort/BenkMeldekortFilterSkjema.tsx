@@ -1,6 +1,6 @@
 import { BenkMeldekort, BenkMeldekortFilter } from '../typer/meldekort';
 import { BenkV2Tab } from '../typer/tabs';
-import { benkMeldekortTypeTekst, benkV2BehandlingsstatusTekst } from '../benkV2Utils';
+import { benkMeldekortTypeTekst, benkV2BehandlingsstatusTekst } from '../utils/benkV2Utils';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';

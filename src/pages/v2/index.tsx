@@ -9,7 +9,7 @@ import { BenkKlageKolonne, BenkKlagebehandling } from '~/lib/benk/v2/typer/klage
 import { BenkTilbakekrevingKolonne, BenkTilbakekreving } from '~/lib/benk/v2/typer/tilbakekreving';
 import { BenkV2Filter, BenkV2Sortering } from '~/lib/benk/v2/typer/felles';
 import { fetchBenkV2, NextRequest } from '~/utils/fetch/fetch-server';
-import { parseBenkSortering } from '~/lib/benk/v2/benkV2Utils';
+import { parseBenkSortering } from '~/lib/benk/v2/utils/benkV2Utils';
 import {
     harBenkFilterVerdier,
     parseBenkFilterForTab,
@@ -19,7 +19,7 @@ import {
     parseBenkSøknaderFilter,
     parseBenkTilbakekrevingFilter,
     benkStrengVerdi,
-} from '~/lib/benk/v2/benkV2Query';
+} from '~/lib/benk/v2/utils/benkV2Query';
 import {
     BENK_V2_COOKIE_NAME,
     BenkV2LagredeValg,
@@ -29,7 +29,7 @@ import {
     benkLagredeValgTilQuery,
     parseBenkV2Cookie,
     serialiserBenkV2Cookie,
-} from '~/lib/benk/v2/benkV2Cookie';
+} from '~/lib/benk/v2/utils/benkV2Cookie';
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const { query, req, res } = context;

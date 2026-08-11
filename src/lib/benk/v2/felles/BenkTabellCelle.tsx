@@ -24,7 +24,7 @@ import { BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkKlagebehandling } from '../typer/klage';
 import { BenkBehandlingMeny } from './BenkBehandlingMeny';
-import { kanFortsetteBenkRad } from '../benkV2Utils';
+import { kanFortsetteBenkRad } from '../utils/benkV2Utils';
 
 /**
  * Datacellene som går igjen på tvers av fanene i benken.

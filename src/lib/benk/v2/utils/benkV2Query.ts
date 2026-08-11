@@ -1,16 +1,16 @@
 import { Nullable } from '~/types/UtilTypes';
 import { isValueInRecord } from '~/utils/object';
-import { BenkV2Behandlingsstatus } from './typer/felles';
-import { BenkV2Tab } from './typer/tabs';
-import { BenkSøknaderFilter } from './typer/søknader';
-import { BenkRevurderingerFilter } from './typer/revurderinger';
-import { BenkMeldekortFilter, benkMeldekortTyper } from './typer/meldekort';
-import { BenkKlageFilter } from './typer/klage';
+import { BenkV2Behandlingsstatus } from '../typer/felles';
+import { BenkV2Tab } from '../typer/tabs';
+import { BenkSøknaderFilter } from '../typer/søknader';
+import { BenkRevurderingerFilter } from '../typer/revurderinger';
+import { BenkMeldekortFilter, benkMeldekortTyper } from '../typer/meldekort';
+import { BenkKlageFilter } from '../typer/klage';
 import {
     BenkTilbakekrevingFilter,
     BenkTilbakekrevingKilde,
     BenkTilbakekrevingStatus,
-} from './typer/tilbakekreving';
+} from '../typer/tilbakekreving';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
