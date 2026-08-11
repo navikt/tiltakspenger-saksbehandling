@@ -29,6 +29,7 @@ const behandlingsårsaker: ReadonlyArray<{
 
 export const OverførtFraArenaSpørsmål = () => {
     const { control } = useFormContext<ManueltRegistrertSøknad>();
+    const methods = useFormContext();
 
     const overførtFraArenaSvar = useWatch({ control, name: 'overfortFraArena' }) as
         | JaNeiSvar
@@ -69,6 +70,19 @@ export const OverførtFraArenaSpørsmål = () => {
                                 ? (value as SøknadBehandlingsårsakManueltRegistrertSøknad)
                                 : undefined,
                         );
+
+                        if (
+                            !behandlingsårsakField.value &&
+                            (value as SøknadBehandlingsårsakManueltRegistrertSøknad) ===
+                                'FORLENGELSE_FRA_ARENA'
+                        ) {
+                            methods.setValue('svar.kvp.svar', 'NEI');
+                            methods.setValue('svar.intro.svar', 'NEI');
+                            methods.setValue('svar.etterlønn.svar', 'NEI');
+                            methods.setValue('svar.sykepenger.svar', 'NEI');
+                            methods.setValue('svar.mottarAndreUtbetalinger', 'NEI');
+                            methods.setValue('svar.institusjon.svar', 'NEI');
+                        }
                     }}
                     onBlur={behandlingsårsakField.onBlur}
                     error={behandlingsårsakFieldState.error?.message}
