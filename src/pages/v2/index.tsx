@@ -46,7 +46,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         return redirect;
     }
 
-    const { antallPerTab, tabData } = await hentTabData(req, tab, query);
+    const { antallPerTab, tabData, error } = await hentTabData(req, tab, query);
 
     res.setHeader(
         'Set-Cookie',
@@ -57,6 +57,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         props: {
             antallPerTab,
             tabData,
+            error,
         } satisfies BenkSideV2Props,
     };
 });
@@ -113,7 +114,7 @@ const hentTabData = async (
     req: NextRequest,
     tab: BenkV2Tab,
     query: ParsedUrlQuery,
-): Promise<Pick<BenkSideV2Props, 'antallPerTab' | 'tabData'>> => {
+): Promise<Pick<BenkSideV2Props, 'antallPerTab' | 'tabData' | 'error'>> => {
     const sorteringFraQuery = benkStrengVerdi(query.sortering);
 
     switch (tab) {
@@ -124,7 +125,7 @@ const hentTabData = async (
                 BenkSøknaderKolonne,
                 BenkSøknaderKolonne.kravtidspunkt,
             );
-            const { antallPerTab, oversikt } = await hentFane<BenkSøknadsbehandling>(
+            const { antallPerTab, oversikt, error } = await hentFane<BenkSøknadsbehandling>(
                 req,
                 tab,
                 filters,
@@ -132,6 +133,7 @@ const hentTabData = async (
             );
             return {
                 antallPerTab,
+                error,
                 tabData: {
                     tab,
                     data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
@@ -145,7 +147,7 @@ const hentTabData = async (
                 BenkRevurderingerKolonne,
                 BenkRevurderingerKolonne.startet,
             );
-            const { antallPerTab, oversikt } = await hentFane<BenkRevurdering>(
+            const { antallPerTab, oversikt, error } = await hentFane<BenkRevurdering>(
                 req,
                 tab,
                 filters,
@@ -153,6 +155,7 @@ const hentTabData = async (
             );
             return {
                 antallPerTab,
+                error,
                 tabData: {
                     tab,
                     data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
@@ -166,7 +169,7 @@ const hentTabData = async (
                 BenkMeldekortKolonne,
                 BenkMeldekortKolonne.periode,
             );
-            const { antallPerTab, oversikt } = await hentFane<BenkMeldekort>(
+            const { antallPerTab, oversikt, error } = await hentFane<BenkMeldekort>(
                 req,
                 tab,
                 filters,
@@ -174,6 +177,7 @@ const hentTabData = async (
             );
             return {
                 antallPerTab,
+                error,
                 tabData: {
                     tab,
                     data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
@@ -187,7 +191,7 @@ const hentTabData = async (
                 BenkKlageKolonne,
                 BenkKlageKolonne.kravtidspunkt,
             );
-            const { antallPerTab, oversikt } = await hentFane<BenkKlagebehandling>(
+            const { antallPerTab, oversikt, error } = await hentFane<BenkKlagebehandling>(
                 req,
                 tab,
                 filters,
@@ -195,6 +199,7 @@ const hentTabData = async (
             );
             return {
                 antallPerTab,
+                error,
                 tabData: {
                     tab,
                     data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
@@ -208,7 +213,7 @@ const hentTabData = async (
                 BenkTilbakekrevingKolonne,
                 BenkTilbakekrevingKolonne.startet,
             );
-            const { antallPerTab, oversikt } = await hentFane<BenkTilbakekreving>(
+            const { antallPerTab, oversikt, error } = await hentFane<BenkTilbakekreving>(
                 req,
                 tab,
                 filters,
@@ -216,6 +221,7 @@ const hentTabData = async (
             );
             return {
                 antallPerTab,
+                error,
                 tabData: {
                     tab,
                     data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
@@ -230,6 +236,6 @@ const hentFane = <Behandling,>(
     tab: BenkV2Tab,
     filters: BenkV2Filter,
     sortering: BenkV2Sortering<string>,
-) => fetchBenkV2<Behandling>(req, { tab, sortering, filters });
+) => fetchBenkV2<Behandling>(req, tab, { sortering, filters });
 
 export default BenkSideV2;

@@ -66,11 +66,10 @@ export type BenkV2Sortering<Kolonne extends string> = `${Kolonne},${BenkV2Sorter
 export type BenkV2Filter = Record<string, string | boolean | null>;
 
 /**
- * Body-en som postes til /benk. `filters` er unionen av filtrene fanene
- * tilbyr - hver fane sender sine, og backend ignorerer resten.
+ * Body-en som postes til fanens rute under /benk. Fanen ligger i url-en,
+ * så body-en inneholder kun sortering og fanens filtre.
  */
 export type BenkV2RequestBody = {
-    tab: BenkV2Tab;
     sortering: BenkV2Sortering<string>;
     filters: BenkV2Filter;
 };
@@ -92,9 +91,13 @@ export type BenkV2Oversikt<Behandling> = {
 /**
  * Hele svaret fra /benk: fanen det ble spurt om, og antallet i alle
  * fanene (til fanetitlene).
+ *
+ * [error] er satt når requesten ikke lot seg tolke (ukjent fane i url-en
+ * eller ugyldige filterverdier) og backend derfor svarte med en standardvisning.
  */
 export type BenkV2Respons<Behandling> = {
     tab: BenkV2Tab;
     antallPerTab: Record<BenkV2Tab, number>;
     oversikt: BenkV2Oversikt<Behandling>;
+    error: Nullable<string>;
 };

@@ -1,5 +1,6 @@
 import { Heading, Tabs, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
+import { Nullable } from '~/types/UtilTypes';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
 import { BenkV2Oversikt, BenkV2Sortering } from './typer/felles';
 import { BenkV2Tab, benkV2TabTekst } from './typer/tabs';
@@ -27,6 +28,7 @@ import { BenkKlageTabell } from './klage/BenkKlageTabell';
 import { BenkTilbakekrevingFilterSkjema } from './tilbakekreving/BenkTilbakekrevingFilterSkjema';
 import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTabell';
 import { BenkPanel } from './felles/BenkPanel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 type SøknaderData = {
     oversikt: BenkV2Oversikt<BenkSøknadsbehandling>;
@@ -72,9 +74,11 @@ type BenkV2TabData =
 export type BenkSideV2Props = {
     antallPerTab: Record<BenkV2Tab, number>;
     tabData: BenkV2TabData;
+    /** Satt når backend ikke kunne tolke requesten og svarte med en standardvisning */
+    error: Nullable<string>;
 };
 
-export const BenkSideV2 = ({ antallPerTab, tabData }: BenkSideV2Props) => {
+export const BenkSideV2 = ({ antallPerTab, tabData, error }: BenkSideV2Props) => {
     const router = useRouter();
     const { tab } = tabData;
 
@@ -85,6 +89,12 @@ export const BenkSideV2 = ({ antallPerTab, tabData }: BenkSideV2Props) => {
             <Heading size={'medium'} level={'2'}>
                 {'Oversikt over åpne behandlinger'}
             </Heading>
+
+            {error && (
+                <Infokort variant={'feil'} header={'Feil i filtreringen'}>
+                    {error}
+                </Infokort>
+            )}
 
             <Tabs
                 value={tab}

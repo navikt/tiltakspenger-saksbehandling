@@ -50,6 +50,19 @@ const eslintConfig = [
             'no-restricted-imports': [
                 'error',
                 {
+                    paths: [
+                        {
+                            name: '@navikt/ds-react',
+                            importNames: ['Alert'],
+                            message:
+                                'Alert er deprecated. Bruk Infokort (~/lib/_felles/infokort/Infokort) for varselbokser, eller InlineMessage for inline-varsler.',
+                        },
+                        {
+                            name: '@navikt/ds-react',
+                            importNames: ['Modal'],
+                            message: 'Modal er deprecated. Bruk Dialog fra @navikt/ds-react.',
+                        },
+                    ],
                     patterns: [
                         {
                             group: ['**/e2e/**'],

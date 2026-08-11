@@ -7,6 +7,7 @@ import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
 import { BenkOversiktRequestBody, BenkOversiktProps } from '~/lib/benk/typer/Benk';
 import { BenkV2RequestBody, BenkV2Respons } from '~/lib/benk/v2/typer/felles';
+import { BenkV2Tab, benkV2TabPath } from '~/lib/benk/v2/typer/tabs';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
@@ -67,8 +68,12 @@ export const fetchBenkOversikt = async (req: NextRequest, body: BenkOversiktRequ
         method: 'POST',
     });
 
-export const fetchBenkV2 = async <Behandling>(req: NextRequest, body: BenkV2RequestBody) =>
-    fetchJsonFraApiServerSide<BenkV2Respons<Behandling>>(req, '/benk', {
+export const fetchBenkV2 = async <Behandling>(
+    req: NextRequest,
+    tab: BenkV2Tab,
+    body: BenkV2RequestBody,
+) =>
+    fetchJsonFraApiServerSide<BenkV2Respons<Behandling>>(req, `/benk/${benkV2TabPath[tab]}`, {
         body: JSON.stringify(body),
         method: 'POST',
     });
