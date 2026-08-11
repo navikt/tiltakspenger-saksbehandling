@@ -8,6 +8,7 @@ export type BenkKlagebehandling = BenkV2BehandlingBase & {
     status: BenkV2Behandlingsstatus;
     kravtidspunkt: string;
     resultat: Nullable<KlagebehandlingResultat>;
+    beslutter: null;
 };
 
 export enum BenkKlageKolonne {
@@ -17,7 +18,6 @@ export enum BenkKlageKolonne {
     kravtidspunkt = 'kravtidspunkt',
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
-    beslutter = 'beslutter',
     ventestatusFrist = 'ventestatus_frist',
 }
 

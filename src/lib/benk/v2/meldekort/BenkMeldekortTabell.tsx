@@ -36,70 +36,79 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                     >
                         {'Periode'}
                     </Table.ColumnHeader>
+                    <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Beløp />
-                    <Table.ColumnHeader
-                        sortable={true}
-                        sortKey={BenkMeldekortKolonne.mottatt}
-                        align={'right'}
-                    >
-                        {'Mottatt'}
-                    </Table.ColumnHeader>
                     <BenkTabellKolonneHeader.Saksbehandler />
+                    <BenkTabellKolonneHeader.Beslutter />
                     <BenkTabellKolonneHeader.Handlinger />
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {behandlinger.map((behandling) => (
-                    <Table.Row shadeOnHover={false} key={behandling.id}>
-                        <BenkTabellCelle.Fnr
-                            fnr={behandling.fnr}
-                            saksnummer={behandling.saksnummer}
-                        />
-                        <Table.DataCell>{benkMeldekortTypeTekst[behandling.type]}</Table.DataCell>
-                        <Table.DataCell>
-                            <BenkStatusTag
-                                status={behandling.status}
-                                erUnderkjent={behandling.erUnderkjent}
+                {behandlinger.map((behandling) => {
+                    const erMeldekortbehandling =
+                        behandling.type === BenkV2Behandlingstype.MELDEKORTBEHANDLING;
+
+                    return (
+                        <Table.Row shadeOnHover={false} key={behandling.id}>
+                            <BenkTabellCelle.Fnr
+                                fnr={behandling.fnr}
+                                saksnummer={behandling.saksnummer}
                             />
-                        </Table.DataCell>
-                        <BenkTabellCelle.Ventestatus ventestatus={behandling.ventestatus} />
-                        <BenkTabellCelle.Meldeperiode meldeperioder={behandling.meldeperioder} />
-                        <BenkTabellCelle.Beløp beløp={behandling.beløp} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.mottattTidspunkt} />
-                        <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
-                        <Table.DataCell align={'right'}>
-                            {behandling.type === BenkV2Behandlingstype.MELDEKORTBEHANDLING ? (
-                                <HStack
-                                    gap={'space-8'}
-                                    justify={'end'}
-                                    align={'center'}
-                                    wrap={false}
-                                >
+                            <Table.DataCell>
+                                {benkMeldekortTypeTekst[behandling.type]}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <BenkStatusTag
+                                    status={behandling.status}
+                                    erUnderkjent={behandling.erUnderkjent}
+                                />
+                            </Table.DataCell>
+                            <BenkTabellCelle.Ventestatus ventestatus={behandling.ventestatus} />
+                            <BenkTabellCelle.Meldeperiode
+                                meldeperioder={behandling.meldeperioder}
+                            />
+                            <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
+                            <BenkTabellCelle.Beløp beløp={behandling.beløp} />
+                            <BenkTabellCelle.Tildelt
+                                ident={erMeldekortbehandling ? behandling.saksbehandler : '-'}
+                            />
+                            <BenkTabellCelle.Tildelt
+                                ident={erMeldekortbehandling ? behandling.beslutter : '-'}
+                            />
+                            <Table.DataCell align={'right'}>
+                                {behandling.type === BenkV2Behandlingstype.MELDEKORTBEHANDLING ? (
+                                    <HStack
+                                        gap={'space-8'}
+                                        justify={'end'}
+                                        align={'center'}
+                                        wrap={false}
+                                    >
+                                        <InternLenkeKnapp
+                                            href={meldekortbehandlingUrl(
+                                                behandling.saksnummer,
+                                                behandling.id,
+                                            )}
+                                        >
+                                            {'Åpne'}
+                                        </InternLenkeKnapp>
+                                        <BenkBehandlingMeny behandling={behandling} />
+                                    </HStack>
+                                ) : (
                                     <InternLenkeKnapp
-                                        href={meldekortbehandlingUrl(
+                                        href={meldeperiodeUrl(
                                             behandling.saksnummer,
-                                            behandling.id,
+                                            // Innsendte/korrigerte meldekort dekker nøyaktig én meldeperiode
+                                            behandling.meldeperioder[0],
+                                            MeldeperiodekjedeTab.BrukersMeldekort,
                                         )}
                                     >
-                                        {'Se behandling'}
+                                        {'Åpne'}
                                     </InternLenkeKnapp>
-                                    <BenkBehandlingMeny behandling={behandling} />
-                                </HStack>
-                            ) : (
-                                <InternLenkeKnapp
-                                    href={meldeperiodeUrl(
-                                        behandling.saksnummer,
-                                        // Innsendte/korrigerte meldekort dekker nøyaktig én meldeperiode
-                                        behandling.meldeperioder[0],
-                                        MeldeperiodekjedeTab.BrukersMeldekort,
-                                    )}
-                                >
-                                    {'Se meldekort'}
-                                </InternLenkeKnapp>
-                            )}
-                        </Table.DataCell>
-                    </Table.Row>
-                ))}
+                                )}
+                            </Table.DataCell>
+                        </Table.Row>
+                    );
+                })}
             </Table.Body>
         </Table>
     );

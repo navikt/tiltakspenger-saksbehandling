@@ -43,6 +43,7 @@ export enum BenkTilbakekrevingKolonne {
     startet = 'startet',
     sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
+    beslutter = 'beslutter',
     ventestatusFrist = 'ventestatus_frist',
     kravgrunnlagPeriode = 'kravgrunnlag_periode',
 }

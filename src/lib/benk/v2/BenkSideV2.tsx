@@ -28,6 +28,7 @@ import { BenkKlageTabell } from './klage/BenkKlageTabell';
 import { BenkTilbakekrevingFilterSkjema } from './tilbakekreving/BenkTilbakekrevingFilterSkjema';
 import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTabell';
 import { BenkPanel } from './felles/BenkPanel';
+import { BenkVisningProvider } from './felles/BenkVisningContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './BenkSideV2.module.css';
@@ -95,7 +96,7 @@ export const BenkSideV2 = ({ antallPerTab, tabData, error }: BenkSideV2Props) =>
             {/* Fjern denne etter en viss tid */}
             <Infokort variant={'info'} size={'small'} className={style.varsel}>
                 {'Benken er nå delt inn i faner med tabeller tilpasset behandlingstypene. ' +
-                    'Du kan gå direkte til behandlingen eller utføre handlinger med knappene til høyre i tabellene. ' +
+                    'Du kan åpne behandlingene eller utføre handlinger direkte fra benken med knappene til høyre i tabellene. ' +
                     'Klikk på fødselsnummeret for å gå til personoversikten.'}
             </Infokort>
 
@@ -120,91 +121,93 @@ export const BenkSideV2 = ({ antallPerTab, tabData, error }: BenkSideV2Props) =>
                 </Tabs.List>
             </Tabs>
 
-            {tabData.tab === BenkV2Tab.SØKNADER && (
-                <BenkPanel
-                    oversikt={tabData.data.oversikt}
-                    filter={
-                        <BenkSøknaderFilterSkjema
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivtFilter={tabData.data.aktivtFilter}
-                        />
-                    }
-                    tabell={
-                        <BenkSøknaderTabell
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivSortering={tabData.data.aktivSortering}
-                        />
-                    }
-                />
-            )}
-            {tabData.tab === BenkV2Tab.REVURDERINGER && (
-                <BenkPanel
-                    oversikt={tabData.data.oversikt}
-                    filter={
-                        <BenkRevurderingerFilterSkjema
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivtFilter={tabData.data.aktivtFilter}
-                        />
-                    }
-                    tabell={
-                        <BenkRevurderingerTabell
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivSortering={tabData.data.aktivSortering}
-                        />
-                    }
-                />
-            )}
-            {tabData.tab === BenkV2Tab.MELDEKORT && (
-                <BenkPanel
-                    oversikt={tabData.data.oversikt}
-                    filter={
-                        <BenkMeldekortFilterSkjema
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivtFilter={tabData.data.aktivtFilter}
-                        />
-                    }
-                    tabell={
-                        <BenkMeldekortTabell
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivSortering={tabData.data.aktivSortering}
-                        />
-                    }
-                />
-            )}
-            {tabData.tab === BenkV2Tab.KLAGE && (
-                <BenkPanel
-                    oversikt={tabData.data.oversikt}
-                    filter={
-                        <BenkKlageFilterSkjema
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivtFilter={tabData.data.aktivtFilter}
-                        />
-                    }
-                    tabell={
-                        <BenkKlageTabell
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivSortering={tabData.data.aktivSortering}
-                        />
-                    }
-                />
-            )}
-            {tabData.tab === BenkV2Tab.TILBAKEKREVING && (
-                <BenkPanel
-                    oversikt={tabData.data.oversikt}
-                    filter={
-                        <BenkTilbakekrevingFilterSkjema
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivtFilter={tabData.data.aktivtFilter}
-                        />
-                    }
-                    tabell={
-                        <BenkTilbakekrevingTabell
-                            behandlinger={tabData.data.oversikt.behandlinger}
-                            aktivSortering={tabData.data.aktivSortering}
-                        />
-                    }
-                />
-            )}
+            <BenkVisningProvider skjulVentestatus={tabData.data.aktivtFilter.skjulPåVent}>
+                {tabData.tab === BenkV2Tab.SØKNADER && (
+                    <BenkPanel
+                        oversikt={tabData.data.oversikt}
+                        filter={
+                            <BenkSøknaderFilterSkjema
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivtFilter={tabData.data.aktivtFilter}
+                            />
+                        }
+                        tabell={
+                            <BenkSøknaderTabell
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivSortering={tabData.data.aktivSortering}
+                            />
+                        }
+                    />
+                )}
+                {tabData.tab === BenkV2Tab.REVURDERINGER && (
+                    <BenkPanel
+                        oversikt={tabData.data.oversikt}
+                        filter={
+                            <BenkRevurderingerFilterSkjema
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivtFilter={tabData.data.aktivtFilter}
+                            />
+                        }
+                        tabell={
+                            <BenkRevurderingerTabell
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivSortering={tabData.data.aktivSortering}
+                            />
+                        }
+                    />
+                )}
+                {tabData.tab === BenkV2Tab.MELDEKORT && (
+                    <BenkPanel
+                        oversikt={tabData.data.oversikt}
+                        filter={
+                            <BenkMeldekortFilterSkjema
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivtFilter={tabData.data.aktivtFilter}
+                            />
+                        }
+                        tabell={
+                            <BenkMeldekortTabell
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivSortering={tabData.data.aktivSortering}
+                            />
+                        }
+                    />
+                )}
+                {tabData.tab === BenkV2Tab.KLAGE && (
+                    <BenkPanel
+                        oversikt={tabData.data.oversikt}
+                        filter={
+                            <BenkKlageFilterSkjema
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivtFilter={tabData.data.aktivtFilter}
+                            />
+                        }
+                        tabell={
+                            <BenkKlageTabell
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivSortering={tabData.data.aktivSortering}
+                            />
+                        }
+                    />
+                )}
+                {tabData.tab === BenkV2Tab.TILBAKEKREVING && (
+                    <BenkPanel
+                        oversikt={tabData.data.oversikt}
+                        filter={
+                            <BenkTilbakekrevingFilterSkjema
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivtFilter={tabData.data.aktivtFilter}
+                            />
+                        }
+                        tabell={
+                            <BenkTilbakekrevingTabell
+                                behandlinger={tabData.data.oversikt.behandlinger}
+                                aktivSortering={tabData.data.aktivSortering}
+                            />
+                        }
+                    />
+                )}
+            </BenkVisningProvider>
         </VStack>
     );
 };

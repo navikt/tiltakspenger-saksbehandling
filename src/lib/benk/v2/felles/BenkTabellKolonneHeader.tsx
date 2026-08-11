@@ -1,4 +1,5 @@
 import { Table } from '@navikt/ds-react';
+import { useBenkVisning } from './BenkVisningContext';
 
 /**
  * Kolonneoverskriftene som går igjen på tvers av fanene i benken.
@@ -24,11 +25,16 @@ const Status = () => (
     </Table.ColumnHeader>
 );
 
-const Ventestatus = () => (
-    <Table.ColumnHeader sortable={true} sortKey={'ventestatus_frist'}>
-        {'Ventestatus'}
-    </Table.ColumnHeader>
-);
+/** Skjult når filteret skjuler behandlinger på vent - da har alle radene uansett samme verdi */
+const Ventestatus = () => {
+    const { skjulVentestatus } = useBenkVisning();
+
+    return skjulVentestatus ? null : (
+        <Table.ColumnHeader sortable={true} sortKey={'ventestatus_frist'}>
+            {'Ventestatus'}
+        </Table.ColumnHeader>
+    );
+};
 
 const Kravtidspunkt = () => (
     <Table.ColumnHeader sortable={true} sortKey={'kravtidspunkt'} align={'right'}>

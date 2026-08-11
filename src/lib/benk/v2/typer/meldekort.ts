@@ -24,8 +24,6 @@ export type BenkMeldekort = BenkV2BehandlingBase & {
     meldeperioder: Periode[];
     /** Beregnet beløp for meldekortbehandlinger som er beregnet, ellers null */
     beløp: Nullable<number>;
-    /** Tidspunkt bruker sendte inn meldekortet, kun for innsendte/korrigerte */
-    mottattTidspunkt: Nullable<string>;
     /** Kun meldekortbehandlinger har kommandoer - innsendte/korrigerte meldekort er ikke behandlinger */
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
@@ -37,8 +35,9 @@ export enum BenkMeldekortKolonne {
     meldeperioder = 'periode',
     beløp = 'beløp',
     status = 'status',
-    mottatt = 'mottatt',
+    sistEndret = 'sist_endret',
     saksbehandler = 'saksbehandler',
+    beslutter = 'beslutter',
     ventestatusFrist = 'ventestatus_frist',
 }
 

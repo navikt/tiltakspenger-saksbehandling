@@ -23,6 +23,7 @@ import { BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkKlagebehandling } from '../typer/klage';
 import { BenkBehandlingMeny } from './BenkBehandlingMeny';
+import { useBenkVisning } from './BenkVisningContext';
 import { kanFortsetteBenkRad } from '../utils/benkV2Utils';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 
@@ -67,6 +68,7 @@ const resultatTag = ({ type, resultat }: ResultatProps['behandling']): ReactNode
     }
 };
 
+/** Skjult når filteret skjuler behandlinger på vent - da har alle radene uansett samme verdi */
 const Ventestatus = ({
     ventestatus,
     erTilbakekreving = false,
@@ -75,7 +77,12 @@ const Ventestatus = ({
     /** Tilbakekreving lagrer ventegrunnen som en enumnøkkel, ikke som fritekst */
     erTilbakekreving?: boolean;
 }) => {
+    const { skjulVentestatus } = useBenkVisning();
     const { erSattPåVent, begrunnelse, frist } = ventestatus;
+
+    if (skjulVentestatus) {
+        return null;
+    }
 
     return (
         <Table.DataCell>
@@ -162,7 +169,7 @@ const RammebehandlingHandlinger = ({
                 >
                     {kanFortsetteBenkRad(behandling, innloggetSaksbehandler.navIdent)
                         ? 'Fortsett'
-                        : 'Se behandling'}
+                        : 'Åpne'}
                 </InternLenkeKnapp>
                 <BenkBehandlingMeny behandling={behandling} />
             </HStack>

@@ -37,6 +37,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                     <BenkTabellKolonneHeader.Startet />
                     <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Saksbehandler />
+                    <BenkTabellKolonneHeader.Beslutter />
                     <BenkTabellKolonneHeader.Handlinger />
                 </Table.Row>
             </Table.Header>
@@ -62,6 +63,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.startet} />
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
+                        <BenkTabellCelle.Tildelt ident={behandling.beslutter} />
                         <Table.DataCell align={'right'}>
                             <Button
                                 as={'a'}

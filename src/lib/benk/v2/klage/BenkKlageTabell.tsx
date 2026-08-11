@@ -29,7 +29,6 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                     <BenkTabellKolonneHeader.Kravtidspunkt />
                     <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Saksbehandler />
-                    <BenkTabellKolonneHeader.Beslutter />
                     <BenkTabellKolonneHeader.Handlinger />
                 </Table.Row>
             </Table.Header>
@@ -51,7 +50,6 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.kravtidspunkt} />
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
-                        <BenkTabellCelle.Tildelt ident={behandling.beslutter} />
                         <Table.DataCell align={'right'}>
                             <InternLenkeKnapp
                                 href={klagebehandlingUrl(
@@ -60,7 +58,7 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                                     klageStegForBenkRad(behandling.resultat),
                                 )}
                             >
-                                {'Se behandling'}
+                                {'Åpne'}
                             </InternLenkeKnapp>
                         </Table.DataCell>
                     </Table.Row>
