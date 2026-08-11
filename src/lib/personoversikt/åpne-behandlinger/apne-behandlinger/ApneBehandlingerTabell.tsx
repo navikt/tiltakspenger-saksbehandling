@@ -10,7 +10,6 @@ import {
     kanFortsetteKlagebehandling,
 } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
-import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
@@ -27,7 +26,6 @@ import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
-
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
@@ -37,6 +35,7 @@ import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/Rammebeha
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
+import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 
 type Props = {
     sak: SakProps;
@@ -124,7 +123,7 @@ type ÅpenBehandlingOversiktRadProps = {
     statusTag: React.ReactNode;
     opprettet: string;
     kravtidspunkt?: string;
-    periodeTekst?: string;
+    periodeTekst?: React.ReactNode;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
     meny: React.ReactNode;
@@ -200,7 +199,9 @@ const propsForRad = (
         case ÅpenBehandlingType.MELDEKORT: {
             const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
 
-            const { id, opprettet, saksbehandler, beslutter } = meldekortbehandling;
+            const { id, opprettet, saksbehandler, beslutter, meldeperioder } = meldekortbehandling;
+
+            const perioder = meldeperioder.map((meldeperiode) => meldeperiode.periode);
 
             return {
                 typeTekst,
@@ -208,7 +209,9 @@ const propsForRad = (
                 statusTag: <BehandlingStatusTags behandling={meldekortbehandling} kompakt={true} />,
                 saksbehandler,
                 beslutter,
-                periodeTekst: formaterMeldeperioder(meldekortbehandling),
+                periodeTekst: (
+                    <MeldeperioderTabellVisning meldeperioder={perioder} align={'start'} />
+                ),
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
                         <InternLenkeKnapp href={meldekortbehandlingUrl(saksnummer, id)}>

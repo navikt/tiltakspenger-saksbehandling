@@ -3,7 +3,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
@@ -43,10 +43,15 @@ export const MeldekortbehandlingerTabell = ({
 
                         const beregnetBeløp = beregnetBeløpForBehandling(meldekortbehandling);
 
+                        const perioder = meldekortbehandling.meldeperioder.map((it) => it.periode);
+
                         return (
                             <Table.Row shadeOnHover={false} key={id}>
                                 <Table.DataCell>
-                                    {formaterMeldeperioder(meldekortbehandling)}
+                                    <MeldeperioderTabellVisning
+                                        meldeperioder={perioder}
+                                        align={'start'}
+                                    />
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     <BehandlingStatusTags

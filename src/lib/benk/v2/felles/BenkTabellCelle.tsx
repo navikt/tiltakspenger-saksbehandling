@@ -1,4 +1,4 @@
-import { BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { CopyButton, HelpText, HStack, Table, Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
@@ -6,7 +6,6 @@ import { Periode } from '~/types/Periode';
 import {
     antallKalenderDagerUnnaDagensDato,
     formaterDatotekst,
-    formaterMeldeperiodeKort,
     formaterPeriodeKort,
     formaterTidspunktKort,
 } from '~/utils/date';
@@ -25,7 +24,7 @@ import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkKlagebehandling } from '../typer/klage';
 import { BenkBehandlingMeny } from './BenkBehandlingMeny';
 import { kanFortsetteBenkRad } from '../utils/benkV2Utils';
-import { totalPeriode } from '~/utils/periode';
+import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 
 /**
  * Datacellene som går igjen på tvers av fanene i benken.
@@ -134,41 +133,11 @@ const PeriodeCelle = ({ periode }: { periode: Periode }) => (
     <Table.DataCell align={'right'}>{formaterPeriodeKort(periode)}</Table.DataCell>
 );
 
-/**
- * Én meldeperiode vises direkte. Flere vises som totalperioden (første fraOgMed til
- * siste tilOgMed - listen er kronologisk) med antall, og en hjelpetekst lister alle.
- */
-const Meldeperiode = ({ meldeperioder }: { meldeperioder: Periode[] }) => {
-    if (meldeperioder.length === 0) {
-        return <Table.DataCell align={'right'}>{'-'}</Table.DataCell>;
-    }
-
-    if (meldeperioder.length === 1) {
-        return (
-            <Table.DataCell align={'right'}>
-                {formaterMeldeperiodeKort(meldeperioder[0])}
-            </Table.DataCell>
-        );
-    }
-
-    const periode = totalPeriode(meldeperioder);
-
-    return (
-        <Table.DataCell align={'right'}>
-            <HStack gap={'space-4'} align={'center'} justify={'end'} wrap={false}>
-                <span>{`${formaterPeriodeKort(periode)} (${meldeperioder.length} meldeperioder)`}</span>
-                <HelpText>
-                    <VStack gap={'space-4'} align={'start'}>
-                        <BodyShort weight={'semibold'}>{'Meldeperioder:'}</BodyShort>
-                        {meldeperioder.map((periode) => (
-                            <span key={periode.fraOgMed}>{formaterMeldeperiodeKort(periode)}</span>
-                        ))}
-                    </VStack>
-                </HelpText>
-            </HStack>
-        </Table.DataCell>
-    );
-};
+const Meldeperiode = ({ meldeperioder }: { meldeperioder: Periode[] }) => (
+    <Table.DataCell align={'right'}>
+        <MeldeperioderTabellVisning meldeperioder={meldeperioder} align={'end'} />
+    </Table.DataCell>
+);
 
 const Beløp = ({ beløp }: { beløp: Nullable<number> }) => (
     <Table.DataCell align={'right'}>{beløp !== null ? formatterBeløp(beløp) : '-'}</Table.DataCell>
