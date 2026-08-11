@@ -1,5 +1,6 @@
-import { Heading, Tabs, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { Nullable } from '~/types/UtilTypes';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
 import { BenkOversikt, BenkSortering } from './typer/felles';
@@ -84,6 +85,18 @@ export type BenkSideProps = {
 export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
     const router = useRouter();
     const { tab } = tabData;
+    const [laster, setLaster] = useState(false);
+
+    // Loaderen nullstilles når navigasjonen er ferdig (eller feiler)
+    useEffect(() => {
+        const nullstillLaster = () => setLaster(false);
+        router.events.on('routeChangeComplete', nullstillLaster);
+        router.events.on('routeChangeError', nullstillLaster);
+        return () => {
+            router.events.off('routeChangeComplete', nullstillLaster);
+            router.events.off('routeChangeError', nullstillLaster);
+        };
+    }, [router.events]);
 
     return (
         <VStack gap={'space-20'} padding={'space-16'}>
@@ -106,20 +119,34 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 </Infokort>
             )}
 
-            <Tabs
-                value={tab}
-                onChange={(nyTab) => router.push({ query: { tab: nyTab as BenkTab } })}
-            >
-                <Tabs.List>
-                    {Object.values(BenkTab).map((t) => (
-                        <Tabs.Tab
-                            key={t}
-                            value={t}
-                            label={`${benkTabTekst[t]} (${antallPerTab[t]})`}
-                        />
-                    ))}
-                </Tabs.List>
-            </Tabs>
+            <HStack justify={'start'} align={'center'} wrap={false} gap={'space-24'}>
+                <Tabs
+                    value={tab}
+                    onChange={(nyTab) => {
+                        if (nyTab !== tab) {
+                            setLaster(true);
+                        }
+                        router.push({ query: { tab: nyTab as BenkTab } });
+                    }}
+                >
+                    <Tabs.List>
+                        {Object.values(BenkTab).map((t) => (
+                            <Tabs.Tab
+                                key={t}
+                                value={t}
+                                label={`${benkTabTekst[t]} (${antallPerTab[t]})`}
+                            />
+                        ))}
+                    </Tabs.List>
+                </Tabs>
+
+                {laster && (
+                    <HStack gap={'space-8'} align={'center'} wrap={false}>
+                        <Loader size={'medium'} title={'Laster...'} variant={'interaction'} />
+                        <BodyShort>{'Laster...'}</BodyShort>
+                    </HStack>
+                )}
+            </HStack>
 
             <BenkVisningProvider skjulVentestatus={tabData.data.aktivtFilter.skjulPåVent}>
                 {tabData.tab === BenkTab.SØKNADER && (
