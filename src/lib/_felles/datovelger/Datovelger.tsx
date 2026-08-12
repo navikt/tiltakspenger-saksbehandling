@@ -44,7 +44,7 @@ export const Datovelger = ({
         if (newSelectedDay && newSelectedDay.getTime() !== selectedDay?.getTime()) {
             setSelected(newSelectedDay);
         }
-    }, [selected]);
+    }, [selected, selectedDay, setSelected]);
 
     return (
         <DatePicker

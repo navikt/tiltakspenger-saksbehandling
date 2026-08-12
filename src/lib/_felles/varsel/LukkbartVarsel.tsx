@@ -10,15 +10,14 @@ type Props = {
     melding: string;
     variant?: InfokortVariant;
     size?: 'medium' | 'small';
-    marginX?: boolean;
     className?: string;
 };
 
-const LukkbartVarsel = ({ melding, variant, size, marginX = false, className }: Props) => {
+export const LukkbartVarsel = ({ melding, variant, size, className }: Props) => {
     const [vis, settVis] = useState<boolean>(true);
 
     return vis ? (
-        <div className={classNames(styles.varsel, marginX && styles.marginX, className)}>
+        <div className={classNames(styles.varsel, className)}>
             <Infokort variant={variant} size={size} role={'status'}>
                 <HStack align={'center'} justify={'space-between'} gap={'space-8'} wrap={false}>
                     {melding}
@@ -34,5 +33,3 @@ const LukkbartVarsel = ({ melding, variant, size, marginX = false, className }: 
         </div>
     ) : null;
 };
-
-export default LukkbartVarsel;

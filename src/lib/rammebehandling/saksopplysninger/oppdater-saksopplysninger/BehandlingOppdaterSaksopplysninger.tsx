@@ -4,12 +4,12 @@ import { useOppdaterSaksopplysninger } from './useOppdaterSaksopplysninger';
 import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
-import LukkbartVarsel from '~/lib/_felles/varsel/LukkbartVarsel';
+import { LukkbartVarsel } from '~/lib/_felles/varsel/LukkbartVarsel';
 import { formaterTidspunktMedSekunder, formaterPeriode } from '~/utils/date';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { v4 as uuidv4 } from 'uuid';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
-import { v4 as uuidv4 } from 'uuid';
 
 export const BehandlingOppdaterSaksopplysninger = () => {
     const [harOppdatert, setHarOppdatert] = useState(false);

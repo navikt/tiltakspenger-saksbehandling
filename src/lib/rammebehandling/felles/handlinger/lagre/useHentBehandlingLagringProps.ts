@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { isEqualJson } from '~/utils/is-equal-json';
 import {
@@ -35,9 +35,9 @@ export const useHentBehandlingLagringProps = ({
     const [sisteLagring, setSisteLagring] = useState<OppdaterBehandlingDTO | null>(hentDTO());
     const [isDirty, setIsDirty] = useState(false);
 
-    const updateDirtyState = () => {
+    const updateDirtyState = useCallback(() => {
         setIsDirty(!isEqualJson(hentDTO(), sisteLagring));
-    };
+    }, [hentDTO, sisteLagring]);
 
     const validerOgHentLagringDTO = (type: ValideringType) => {
         const valideringResultat = validerSkjema(type);
@@ -68,13 +68,12 @@ export const useHentBehandlingLagringProps = ({
                 element.removeEventListener('input', updateDirtyState);
             });
         };
-    }, [skjema.textAreas]);
+    }, [skjema.textAreas, updateDirtyState]);
 
     useEffect(() => {
-        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
         /* eslint-disable-next-line react-hooks/set-state-in-effect */
         updateDirtyState();
-    }, [skjema]);
+    }, [skjema, updateDirtyState]);
 
     return { validerOgHentLagringDTO, validerVedtak: validerSkjema, isDirty };
 };
