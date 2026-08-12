@@ -104,3 +104,11 @@ export type BenkRespons<Behandling> = {
     oversikt: BenkOversikt<Behandling>;
     error: Nullable<string>;
 };
+
+export enum BenkIkkeTildelt {
+    IKKE_TILDELT = 'IKKE_TILDELT',
+    IKKE_TILDELT_SAKSBEHANDLER = 'IKKE_TILDELT_SAKSBEHANDLER',
+    IKKE_TILDELT_BESLUTTER = 'IKKE_TILDELT_BESLUTTER',
+}
+
+export type BenkSaksbehandlerFilter = Nullable<string | BenkIkkeTildelt>;

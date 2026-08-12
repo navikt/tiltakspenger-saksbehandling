@@ -3,8 +3,8 @@ import { Select } from '@navikt/ds-react';
 import { Nullable } from '~/types/UtilTypes';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { removeDuplicatesFilter } from '~/utils/array';
-
-const IKKE_TILDELT = 'IKKE_TILDELT';
+import { isValueInRecord } from '~/utils/object';
+import { BenkIkkeTildelt } from '~/lib/benk/typer/felles';
 
 type Props = {
     saksbehandlere: string[];
@@ -43,8 +43,15 @@ export const BenkSaksbehandlerSelect = ({
             onChange={(e) => onChange(e.target.value || null)}
         >
             <option value={''}>{'Alle'}</option>
-            <option value={innloggetIdent}>{'Meg'}</option>
-            <option value={IKKE_TILDELT}>{'Ikke tildelt'}</option>
+            <option value={BenkIkkeTildelt.IKKE_TILDELT}>{'Ikke tildelt'}</option>
+            <option value={BenkIkkeTildelt.IKKE_TILDELT_SAKSBEHANDLER}>
+                {'Ikke tildelt saksbehandler'}
+            </option>
+            <option value={BenkIkkeTildelt.IKKE_TILDELT_BESLUTTER}>
+                {'Ikke tildelt beslutter'}
+            </option>
+            <option value={innloggetIdent}>{`Meg (${innloggetIdent})`}</option>
+            <option disabled={true}>{'──────────'}</option>
             {identer.map((ident) => (
                 <option key={ident} value={ident}>
                     {ident}
@@ -54,4 +61,5 @@ export const BenkSaksbehandlerSelect = ({
     );
 };
 
-const erIdent = (ident: string | null): ident is string => !!ident && ident !== IKKE_TILDELT;
+const erIdent = (ident: string | null): ident is string =>
+    !!ident && !isValueInRecord(ident, BenkIkkeTildelt);
