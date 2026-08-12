@@ -27,8 +27,13 @@ export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: P
                     kilde: null,
                     saksbehandler: null,
                     kunOverMinstebeløp: false,
+                    skjulEgneTilBeslutning: false,
                     skjulPåVent: false,
                 })
+            }
+            skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
+            onSkjulEgneTilBeslutningChange={(skjulEgneTilBeslutning) =>
+                setValgtFilter({ ...valgtFilter, skjulEgneTilBeslutning })
             }
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}

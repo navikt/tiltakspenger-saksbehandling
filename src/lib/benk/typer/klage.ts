@@ -26,4 +26,5 @@ export type BenkKlageFilter = {
     resultat: Nullable<KlagebehandlingResultat>;
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
+    skjulEgneTilBeslutning: boolean;
 };

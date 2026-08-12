@@ -1,12 +1,14 @@
 import { Checkbox } from '@navikt/ds-react';
+import { ReactNode } from 'react';
 
 type Props = {
     checked: boolean;
     onChange: (checked: boolean) => void;
+    children: ReactNode;
 };
 
-export const BenkSkjulPåVentCheckbox = ({ checked, onChange }: Props) => (
+export const BenkFilterCheckbox = ({ checked, onChange, children }: Props) => (
     <Checkbox size={'small'} checked={checked} onChange={(e) => onChange(e.target.checked)}>
-        {'Skjul behandlinger satt på vent'}
+        {children}
     </Checkbox>
 );

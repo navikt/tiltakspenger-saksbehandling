@@ -59,6 +59,7 @@ export const parseBenkSøknaderFilter = (kilde: BenkFilterKilde): BenkSøknaderF
     resultat: benkEnumVerdi(kilde.resultat, SøknadsbehandlingResultat),
     søknadstype: benkEnumVerdi(kilde.søknadstype, søknadstyper),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
     skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
@@ -66,6 +67,7 @@ export const parseBenkRevurderingerFilter = (kilde: BenkFilterKilde): BenkRevurd
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     resultat: benkEnumVerdi(kilde.resultat, RevurderingResultat),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
     skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
@@ -73,6 +75,7 @@ export const parseBenkMeldekortFilter = (kilde: BenkFilterKilde): BenkMeldekortF
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     type: benkEnumVerdi(kilde.type, benkMeldekortTyper),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
     skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
@@ -80,6 +83,7 @@ export const parseBenkKlageFilter = (kilde: BenkFilterKilde): BenkKlageFilter =>
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     resultat: benkEnumVerdi(kilde.resultat, KlagebehandlingResultat),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
     skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
@@ -90,6 +94,7 @@ export const parseBenkTilbakekrevingFilter = (
     kilde: benkEnumVerdi(kilde.kilde, BenkTilbakekrevingKilde),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     kunOverMinstebeløp: benkBoolskVerdi(kilde.kunOverMinstebeløp),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
     skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 

@@ -25,8 +25,13 @@ export const BenkKlageFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => 
                     status: null,
                     resultat: null,
                     saksbehandler: null,
+                    skjulEgneTilBeslutning: false,
                     skjulPåVent: false,
                 })
+            }
+            skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
+            onSkjulEgneTilBeslutningChange={(skjulEgneTilBeslutning) =>
+                setValgtFilter({ ...valgtFilter, skjulEgneTilBeslutning })
             }
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}

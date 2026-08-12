@@ -13,8 +13,9 @@ import {
 export const BENK_COOKIE_NAME = 'benkFiltersV2';
 
 /**
- * Filter for én fane, uten de felles valgene (saksbehandler og skjulPåVent).
- * Lagres løst typet; verdiene valideres med fanens egen parser ved innlesing.
+ * Filter for én fane, uten de felles valgene (saksbehandler, skjulPåVent og
+ * skjulEgneTilBeslutning). Lagres løst typet; verdiene valideres med fanens
+ * egen parser ved innlesing.
  */
 type LagretFilter = Record<string, string | boolean | null>;
 
@@ -24,6 +25,8 @@ export type BenkLagredeValg = {
     saksbehandler: Nullable<string>;
     /** «Skjul på vent» er felles på tvers av fanene */
     skjulPåVent: boolean;
+    /** «Skjul egne til beslutning» er felles på tvers av fanene */
+    skjulEgneTilBeslutning: boolean;
     filtre: Partial<Record<BenkTab, LagretFilter>>;
 };
 
@@ -31,6 +34,7 @@ const tomtValg = (tab: BenkTab): BenkLagredeValg => ({
     tab,
     saksbehandler: null,
     skjulPåVent: false,
+    skjulEgneTilBeslutning: false,
     filtre: {},
 });
 
@@ -38,7 +42,10 @@ const tomtValg = (tab: BenkTab): BenkLagredeValg => ({
 const utenFellesValg = (filter: Record<string, unknown>): LagretFilter => {
     return Object.fromEntries(
         Object.entries(filter).filter(
-            ([nøkkel]) => nøkkel !== 'saksbehandler' && nøkkel !== 'skjulPåVent',
+            ([nøkkel]) =>
+                nøkkel !== 'saksbehandler' &&
+                nøkkel !== 'skjulPåVent' &&
+                nøkkel !== 'skjulEgneTilBeslutning',
         ),
     ) as LagretFilter;
 };
@@ -86,6 +93,7 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
             tab: parsed.tab,
             saksbehandler: benkStrengVerdi(parsed.saksbehandler),
             skjulPåVent: benkBoolskVerdi(parsed.skjulPåVent),
+            skjulEgneTilBeslutning: benkBoolskVerdi(parsed.skjulEgneTilBeslutning),
             filtre,
         };
     } catch {
@@ -107,6 +115,7 @@ export const byggBenkLagredeValg = <T extends BenkTab>(
         tab,
         saksbehandler: filter.saksbehandler ?? null,
         skjulPåVent: filter.skjulPåVent,
+        skjulEgneTilBeslutning: filter.skjulEgneTilBeslutning,
         filtre: harBenkFilterVerdier(fanensFilter)
             ? { ...øvrigeFiltre, [tab]: fanensFilter }
             : øvrigeFiltre,
@@ -123,6 +132,7 @@ export const benkLagredeValgTilQuery = (
         ...valg.filtre[tab],
         saksbehandler: valg.saksbehandler,
         skjulPåVent: valg.skjulPåVent,
+        skjulEgneTilBeslutning: valg.skjulEgneTilBeslutning,
     }),
 });
 
@@ -131,6 +141,7 @@ export const harBenkLagredeFiltre = (valg: BenkLagredeValg | null, tab: BenkTab)
     valg !== null &&
     (valg.saksbehandler !== null ||
         valg.skjulPåVent ||
+        valg.skjulEgneTilBeslutning ||
         harBenkFilterVerdier({ ...valg.filtre[tab] }));
 
 /**
@@ -159,7 +170,13 @@ export const nullstillBenkLagretFilter = (tab: BenkTab) => {
 
     Cookies.set(
         BENK_COOKIE_NAME,
-        JSON.stringify({ tab, saksbehandler: null, skjulPåVent: false, filtre: øvrigeFiltre }),
+        JSON.stringify({
+            tab,
+            saksbehandler: null,
+            skjulPåVent: false,
+            skjulEgneTilBeslutning: false,
+            filtre: øvrigeFiltre,
+        }),
         { expires: 365 },
     );
 };

@@ -24,8 +24,13 @@ export const BenkMeldekortFilterSkjema = ({ behandlinger, aktivtFilter }: Props)
                     status: null,
                     type: null,
                     saksbehandler: null,
+                    skjulEgneTilBeslutning: false,
                     skjulPåVent: false,
                 })
+            }
+            skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
+            onSkjulEgneTilBeslutningChange={(skjulEgneTilBeslutning) =>
+                setValgtFilter({ ...valgtFilter, skjulEgneTilBeslutning })
             }
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}

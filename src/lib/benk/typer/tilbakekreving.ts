@@ -54,4 +54,5 @@ export type BenkTilbakekrevingFilter = {
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     kunOverMinstebeløp: boolean;
     skjulPåVent: boolean;
+    skjulEgneTilBeslutning: boolean;
 };

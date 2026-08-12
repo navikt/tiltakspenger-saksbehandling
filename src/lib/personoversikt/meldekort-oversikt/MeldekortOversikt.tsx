@@ -5,7 +5,7 @@ import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortH
 import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 import { ApneMeldekortbehandlingerOversikt } from './ApneMeldekortbehandlingerOversikt';
-import { nonNullishPredicate } from '~/utils/array';
+import { isNonNullish } from '~/utils/array';
 import { hentÅpneMeldekortbehandlinger } from '~/lib/sak/sakUtils';
 import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
 import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
@@ -25,7 +25,7 @@ export const MeldekortOversikt = () => {
     const åpneIder = new Set(åpneMeldekortbehandlinger.map((behandling) => behandling.id));
 
     const øvrigeMeldekortbehandlinger = Object.values(sak.meldekortbehandlinger)
-        .filter(nonNullishPredicate)
+        .filter(isNonNullish)
         .filter((behandling) => !åpneIder.has(behandling.id));
 
     const [visning, setVisning] = useState<OversiktVisning>(OversiktVisning.Meldeperiodekjeder);

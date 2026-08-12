@@ -28,4 +28,5 @@ export type BenkRevurderingerFilter = {
     resultat: Nullable<RevurderingResultat>;
     saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
     skjulPåVent: boolean;
+    skjulEgneTilBeslutning: boolean;
 };

@@ -7,7 +7,7 @@ import {
     MeldekortbehandlingDagStatus,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { nonNullishPredicate } from '~/utils/array';
+import { isNonNullish } from '~/utils/array';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
@@ -57,7 +57,7 @@ export const validerMeldeperiodeSkjema = (
 
     const dagerFeil = dager
         .map((dag) => validerMeldekortDagSkjema(dag, behandling))
-        .filter(nonNullishPredicate);
+        .filter(isNonNullish);
 
     const antallDager = dager.filter((dag) => deltattEllerFraværStatus.has(dag.status)).length;
 
@@ -96,7 +96,7 @@ export const validerMeldekortbehandlingSkjema = (
 
     const meldeperioderFeil = skjema.meldeperioder
         .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, behandling, sak))
-        .filter(nonNullishPredicate);
+        .filter(isNonNullish);
 
     if (meldeperioderFeil.length === 0 && overordnedeFeil.length === 0) {
         return null;

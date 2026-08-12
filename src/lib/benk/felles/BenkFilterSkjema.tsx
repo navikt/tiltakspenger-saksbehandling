@@ -1,11 +1,13 @@
 import { ReactNode, useState } from 'react';
 import { Button, HStack, VStack } from '@navikt/ds-react';
-import { BenkSkjulPåVentCheckbox } from '~/lib/benk/felles/BenkSkjulPåVentCheckbox';
+import { BenkFilterCheckbox } from '~/lib/benk/felles/BenkFilterCheckbox';
 
 type Props = {
     onSubmit: () => Promise<unknown>;
     onNullstill: () => Promise<unknown>;
-    /** «Skjul på vent» er likt for alle faner, og ligger derfor i det delte skjemaet */
+    /** Checkbox-filtrene er like for alle faner, og ligger derfor i det delte skjemaet */
+    skjulEgneTilBeslutning: boolean;
+    onSkjulEgneTilBeslutningChange: (skjulEgneTilBeslutning: boolean) => void;
     skjulPåVent: boolean;
     onSkjulPåVentChange: (skjulPåVent: boolean) => void;
     children: ReactNode;
@@ -14,6 +16,8 @@ type Props = {
 export const BenkFilterSkjema = ({
     onSubmit,
     onNullstill,
+    skjulEgneTilBeslutning,
+    onSkjulEgneTilBeslutningChange,
     skjulPåVent,
     onSkjulPåVentChange,
     children,
@@ -31,7 +35,17 @@ export const BenkFilterSkjema = ({
                 {children}
             </HStack>
 
-            <BenkSkjulPåVentCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange} />
+            <VStack gap={'space-4'}>
+                <BenkFilterCheckbox
+                    checked={skjulEgneTilBeslutning}
+                    onChange={onSkjulEgneTilBeslutningChange}
+                >
+                    {'Skjul behandlinger jeg har sendt til beslutning'}
+                </BenkFilterCheckbox>
+                <BenkFilterCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange}>
+                    {'Skjul behandlinger satt på vent'}
+                </BenkFilterCheckbox>
+            </VStack>
 
             <HStack gap={'space-16'}>
                 <Button

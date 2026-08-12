@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Select } from '@navikt/ds-react';
 import { Nullable } from '~/types/UtilTypes';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { isNonNullish, removeDuplicatesFilter } from '~/utils/array';
 
 type Props = {
     behandlinger: { saksbehandler: Nullable<string>; beslutter: Nullable<string> }[];
@@ -10,12 +11,20 @@ type Props = {
 };
 
 export const BenkSaksbehandlerSelect = ({ behandlinger, value, onChange }: Props) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
+    const innloggetIdent = useSaksbehandler().innloggetSaksbehandler.navIdent;
 
+    // Ekskluderer innlogget saksbehandler, ettersom vi alltid ønsker å vise denne som "Meg"
     const identer = useMemo(() => {
-        const alleIdenter = behandlinger.flatMap((b) => [b.saksbehandler, b.beslutter]);
-        return [...new Set(alleIdenter.filter((ident) => ident !== null))].toSorted();
-    }, [behandlinger]);
+        return behandlinger
+            .flatMap((b) => [b.saksbehandler, b.beslutter])
+            .filter(
+                (ident, index, array): ident is string =>
+                    isNonNullish(ident) &&
+                    ident !== innloggetIdent &&
+                    removeDuplicatesFilter()(ident, index, array),
+            )
+            .toSorted();
+    }, [behandlinger, innloggetIdent]);
 
     return (
         <Select
@@ -25,10 +34,11 @@ export const BenkSaksbehandlerSelect = ({ behandlinger, value, onChange }: Props
             onChange={(e) => onChange(e.target.value || null)}
         >
             <option value={''}>{'Alle'}</option>
+            <option value={innloggetIdent}>{'Meg'}</option>
             <option value={'IKKE_TILDELT'}>{'Ikke tildelt'}</option>
             {identer.map((ident) => (
                 <option key={ident} value={ident}>
-                    {innloggetSaksbehandler?.navIdent === ident ? 'Meg' : ident}
+                    {ident}
                 </option>
             ))}
         </Select>

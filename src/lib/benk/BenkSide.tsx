@@ -119,34 +119,37 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 </Infokort>
             )}
 
-            <HStack justify={'start'} align={'center'} wrap={false} gap={'space-24'}>
-                <Tabs
-                    value={tab}
-                    onChange={(nyTab) => {
-                        if (nyTab !== tab) {
-                            setLaster(true);
-                        }
-                        router.push({ query: { tab: nyTab as BenkTab } });
-                    }}
-                >
-                    <Tabs.List>
-                        {Object.values(BenkTab).map((t) => (
-                            <Tabs.Tab
-                                key={t}
-                                value={t}
-                                label={`${benkTabTekst[t]} (${antallPerTab[t]})`}
-                            />
-                        ))}
-                    </Tabs.List>
-                </Tabs>
+            <Tabs
+                value={tab}
+                onChange={(nyTab) => {
+                    if (nyTab !== tab) {
+                        setLaster(true);
+                    }
+                    router.push({ query: { tab: nyTab as BenkTab } });
+                }}
+            >
+                <Tabs.List>
+                    {Object.values(BenkTab).map((t) => (
+                        <Tabs.Tab
+                            key={t}
+                            value={t}
+                            label={`${benkTabTekst[t]} (${antallPerTab[t]})`}
+                        />
+                    ))}
 
-                {laster && (
-                    <HStack gap={'space-8'} align={'center'} wrap={false}>
-                        <Loader size={'medium'} title={'Laster...'} variant={'interaction'} />
-                        <BodyShort>{'Laster...'}</BodyShort>
-                    </HStack>
-                )}
-            </HStack>
+                    {laster && (
+                        <HStack
+                            gap={'space-8'}
+                            align={'center'}
+                            wrap={false}
+                            className={style.loader}
+                        >
+                            <Loader size={'medium'} title={'Laster...'} variant={'interaction'} />
+                            <BodyShort>{'Laster...'}</BodyShort>
+                        </HStack>
+                    )}
+                </Tabs.List>
+            </Tabs>
 
             <BenkVisningProvider skjulVentestatus={tabData.data.aktivtFilter.skjulPåVent}>
                 {tabData.tab === BenkTab.SØKNADER && (
