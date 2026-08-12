@@ -157,7 +157,8 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkSøknaderFilterSkjema
-                                behandlinger={tabData.data.oversikt.behandlinger}
+                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
+                                besluttere={tabData.data.oversikt.besluttere}
                                 aktivtFilter={tabData.data.aktivtFilter}
                             />
                         }
@@ -174,7 +175,8 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkRevurderingerFilterSkjema
-                                behandlinger={tabData.data.oversikt.behandlinger}
+                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
+                                besluttere={tabData.data.oversikt.besluttere}
                                 aktivtFilter={tabData.data.aktivtFilter}
                             />
                         }
@@ -191,7 +193,8 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkMeldekortFilterSkjema
-                                behandlinger={tabData.data.oversikt.behandlinger}
+                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
+                                besluttere={tabData.data.oversikt.besluttere}
                                 aktivtFilter={tabData.data.aktivtFilter}
                             />
                         }
@@ -208,7 +211,8 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkKlageFilterSkjema
-                                behandlinger={tabData.data.oversikt.behandlinger}
+                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
+                                besluttere={tabData.data.oversikt.besluttere}
                                 aktivtFilter={tabData.data.aktivtFilter}
                             />
                         }
@@ -225,7 +229,8 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkTilbakekrevingFilterSkjema
-                                behandlinger={tabData.data.oversikt.behandlinger}
+                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
+                                besluttere={tabData.data.oversikt.besluttere}
                                 aktivtFilter={tabData.data.aktivtFilter}
                             />
                         }

@@ -1,5 +1,5 @@
 import { Checkbox, HelpText, HStack } from '@navikt/ds-react';
-import { BenkTilbakekreving, BenkTilbakekrevingFilter } from '../typer/tilbakekreving';
+import { BenkTilbakekrevingFilter } from '../typer/tilbakekreving';
 import { BenkTab } from '../typer/tabs';
 import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../utils/benkUtils';
 import { useResettableState } from '~/utils/useResettableState';
@@ -9,11 +9,16 @@ import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
-    behandlinger: BenkTilbakekreving[];
+    saksbehandlere: string[];
+    besluttere: string[];
     aktivtFilter: BenkTilbakekrevingFilter;
 };
 
-export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkTilbakekrevingFilterSkjema = ({
+    saksbehandlere,
+    besluttere,
+    aktivtFilter,
+}: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkTab.TILBAKEKREVING);
     const [valgtFilter, setValgtFilter] =
         useResettableState<BenkTilbakekrevingFilter>(aktivtFilter);
@@ -53,8 +58,9 @@ export const BenkTilbakekrevingFilterSkjema = ({ behandlinger, aktivtFilter }: P
             />
 
             <BenkSaksbehandlerSelect
-                behandlinger={behandlinger}
-                value={valgtFilter.saksbehandler}
+                saksbehandlere={saksbehandlere}
+                besluttere={besluttere}
+                valgtSaksbehandler={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
 

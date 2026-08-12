@@ -26,7 +26,7 @@ export enum BenkRevurderingerKolonne {
 export type BenkRevurderingerFilter = {
     status: Nullable<BenkBehandlingsstatus>;
     resultat: Nullable<RevurderingResultat>;
-    saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
 };

@@ -86,6 +86,9 @@ export type BenkOversikt<Behandling> = {
     totalAntallUfiltrert: number;
     antallFiltrertPgaTilgang: number;
     limit: number;
+    /** Identene tildelt en rad i fanen, ufiltrert - valg i nedtrekkslisten for saksbehandler/beslutter */
+    saksbehandlere: string[];
+    besluttere: string[];
 };
 
 /**

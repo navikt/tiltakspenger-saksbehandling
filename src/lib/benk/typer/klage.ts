@@ -24,7 +24,7 @@ export enum BenkKlageKolonne {
 export type BenkKlageFilter = {
     status: Nullable<BenkBehandlingsstatus>;
     resultat: Nullable<KlagebehandlingResultat>;
-    saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
 };

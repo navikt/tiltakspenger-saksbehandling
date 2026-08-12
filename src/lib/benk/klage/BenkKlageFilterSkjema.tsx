@@ -1,4 +1,4 @@
-import { BenkKlagebehandling, BenkKlageFilter } from '../typer/klage';
+import { BenkKlageFilter } from '../typer/klage';
 import { BenkTab } from '../typer/tabs';
 import { benkBehandlingsstatusTekst } from '../utils/benkUtils';
 import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
@@ -9,11 +9,12 @@ import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
-    behandlinger: BenkKlagebehandling[];
+    saksbehandlere: string[];
+    besluttere: string[];
     aktivtFilter: BenkKlageFilter;
 };
 
-export const BenkKlageFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkKlageFilterSkjema = ({ saksbehandlere, besluttere, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkTab.KLAGE);
     const [valgtFilter, setValgtFilter] = useResettableState<BenkKlageFilter>(aktivtFilter);
 
@@ -51,8 +52,9 @@ export const BenkKlageFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => 
             />
 
             <BenkSaksbehandlerSelect
-                behandlinger={behandlinger}
-                value={valgtFilter.saksbehandler}
+                saksbehandlere={saksbehandlere}
+                besluttere={besluttere}
+                valgtSaksbehandler={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
         </BenkFilterSkjema>

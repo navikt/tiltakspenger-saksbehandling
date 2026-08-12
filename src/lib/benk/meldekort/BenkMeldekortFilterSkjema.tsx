@@ -1,4 +1,4 @@
-import { BenkMeldekort, BenkMeldekortFilter } from '../typer/meldekort';
+import { BenkMeldekortFilter } from '../typer/meldekort';
 import { BenkTab } from '../typer/tabs';
 import { benkMeldekortTypeTekst, benkBehandlingsstatusTekst } from '../utils/benkUtils';
 import { useResettableState } from '~/utils/useResettableState';
@@ -8,11 +8,12 @@ import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
 import { BenkFilterSelect } from '../felles/BenkFilterSelect';
 
 type Props = {
-    behandlinger: BenkMeldekort[];
+    saksbehandlere: string[];
+    besluttere: string[];
     aktivtFilter: BenkMeldekortFilter;
 };
 
-export const BenkMeldekortFilterSkjema = ({ behandlinger, aktivtFilter }: Props) => {
+export const BenkMeldekortFilterSkjema = ({ saksbehandlere, besluttere, aktivtFilter }: Props) => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkTab.MELDEKORT);
     const [valgtFilter, setValgtFilter] = useResettableState<BenkMeldekortFilter>(aktivtFilter);
 
@@ -50,8 +51,9 @@ export const BenkMeldekortFilterSkjema = ({ behandlinger, aktivtFilter }: Props)
             />
 
             <BenkSaksbehandlerSelect
-                behandlinger={behandlinger}
-                value={valgtFilter.saksbehandler}
+                saksbehandlere={saksbehandlere}
+                besluttere={besluttere}
+                valgtSaksbehandler={valgtFilter.saksbehandler}
                 onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
         </BenkFilterSkjema>

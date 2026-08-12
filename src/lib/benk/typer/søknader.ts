@@ -31,7 +31,7 @@ export type BenkSøknaderFilter = {
     status: Nullable<BenkBehandlingsstatus>;
     resultat: Nullable<SøknadsbehandlingResultat>;
     søknadstype: Nullable<Søknadstype>;
-    saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
 };

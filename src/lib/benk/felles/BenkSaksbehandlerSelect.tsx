@@ -2,40 +2,49 @@ import { useMemo } from 'react';
 import { Select } from '@navikt/ds-react';
 import { Nullable } from '~/types/UtilTypes';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { isNonNullish, removeDuplicatesFilter } from '~/utils/array';
+import { removeDuplicatesFilter } from '~/utils/array';
+
+const IKKE_TILDELT = 'IKKE_TILDELT';
 
 type Props = {
-    behandlinger: { saksbehandler: Nullable<string>; beslutter: Nullable<string> }[];
-    value: Nullable<string | 'IKKE_TILDELT'>;
-    onChange: (saksbehandler: Nullable<string | 'IKKE_TILDELT'>) => void;
+    saksbehandlere: string[];
+    besluttere: string[];
+    valgtSaksbehandler: Nullable<string>;
+    onChange: (saksbehandler: Nullable<string>) => void;
 };
 
-export const BenkSaksbehandlerSelect = ({ behandlinger, value, onChange }: Props) => {
+export const BenkSaksbehandlerSelect = ({
+    saksbehandlere,
+    besluttere,
+    valgtSaksbehandler,
+    onChange,
+}: Props) => {
     const innloggetIdent = useSaksbehandler().innloggetSaksbehandler.navIdent;
 
     // Ekskluderer innlogget saksbehandler, ettersom vi alltid ønsker å vise denne som "Meg"
     const identer = useMemo(() => {
-        return behandlinger
-            .flatMap((b) => [b.saksbehandler, b.beslutter])
+        return [
+            ...saksbehandlere,
+            ...besluttere,
+            ...(erIdent(valgtSaksbehandler) ? [valgtSaksbehandler] : []),
+        ]
             .filter(
-                (ident, index, array): ident is string =>
-                    isNonNullish(ident) &&
-                    ident !== innloggetIdent &&
-                    removeDuplicatesFilter()(ident, index, array),
+                (ident, index, array) =>
+                    ident !== innloggetIdent && removeDuplicatesFilter()(ident, index, array),
             )
             .toSorted();
-    }, [behandlinger, innloggetIdent]);
+    }, [saksbehandlere, besluttere, innloggetIdent, valgtSaksbehandler]);
 
     return (
         <Select
             label={'Saksbehandler/Beslutter'}
             size={'small'}
-            value={value ?? ''}
+            value={valgtSaksbehandler ?? ''}
             onChange={(e) => onChange(e.target.value || null)}
         >
             <option value={''}>{'Alle'}</option>
             <option value={innloggetIdent}>{'Meg'}</option>
-            <option value={'IKKE_TILDELT'}>{'Ikke tildelt'}</option>
+            <option value={IKKE_TILDELT}>{'Ikke tildelt'}</option>
             {identer.map((ident) => (
                 <option key={ident} value={ident}>
                     {ident}
@@ -44,3 +53,5 @@ export const BenkSaksbehandlerSelect = ({ behandlinger, value, onChange }: Props
         </Select>
     );
 };
+
+const erIdent = (ident: string | null): ident is string => !!ident && ident !== IKKE_TILDELT;

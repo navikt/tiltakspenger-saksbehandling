@@ -44,7 +44,7 @@ export enum BenkMeldekortKolonne {
 export type BenkMeldekortFilter = {
     status: Nullable<BenkBehandlingsstatus>;
     type: Nullable<BenkMeldekortType>;
-    saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
 };

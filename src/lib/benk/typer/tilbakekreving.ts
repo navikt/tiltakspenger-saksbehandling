@@ -51,7 +51,7 @@ export enum BenkTilbakekrevingKolonne {
 export type BenkTilbakekrevingFilter = {
     status: Nullable<BenkTilbakekrevingStatus>;
     kilde: Nullable<BenkTilbakekrevingKilde>;
-    saksbehandler: Nullable<string | 'IKKE_TILDELT'>;
+    saksbehandler: Nullable<string>;
     kunOverMinstebeløp: boolean;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
