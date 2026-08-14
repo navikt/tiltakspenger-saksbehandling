@@ -6,7 +6,7 @@ import { useStartRevurdering } from './useStartRevurdering';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { behandlingUrl } from '~/utils/urls';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+import { revurderingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 
 type Props = {
     sakId: SakId;
@@ -75,7 +75,7 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
                             });
                         }}
                     >
-                        {`Opprett revurdering${valgtType ? ` (${rammebehandlingResultatTekst[valgtType]})` : ''}`}
+                        {`Opprett revurdering${valgtType ? ` (${revurderingResultatTekst[valgtType]})` : ''}`}
                     </Button>
 
                     <Dialog.CloseTrigger>

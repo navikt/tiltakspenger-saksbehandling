@@ -1,7 +1,7 @@
 import { BenkRevurderingerFilter } from '../typer/revurderinger';
 import { BenkTab } from '../typer/tabs';
 import { benkBehandlingsstatusTekst } from '../utils/benkUtils';
-import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+import { revurderingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
 import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
@@ -52,7 +52,7 @@ export const BenkRevurderingerFilterSkjema = ({
                 label={'Resultat'}
                 value={valgtFilter.resultat}
                 onChange={(resultat) => setValgtFilter({ ...valgtFilter, resultat })}
-                alternativer={rammebehandlingResultatTekst}
+                alternativer={revurderingResultatTekst}
             />
 
             <BenkSaksbehandlerSelect
