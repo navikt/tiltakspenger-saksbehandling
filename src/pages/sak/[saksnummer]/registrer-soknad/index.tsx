@@ -8,7 +8,8 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SpørsmålMedPeriodevelger } from '~/lib/søknad/manuell-søknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
-import defaultManuellSøknadFormValues, {
+import {
+    defaultRegistrerSøknadManueltFormValues,
     ManueltRegistrertSøknad,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
@@ -24,21 +25,23 @@ import { JournalpostId } from '~/lib/_felles/journalpostId/JournalpostId';
 import { SøknadstypeSelect } from '~/lib/søknad/manuell-søknad/SøknadstypeSelect';
 import { OverførtFraArenaSpørsmål } from '~/lib/søknad/manuell-søknad/OverførtFraArenaSpørsmål';
 
-interface Props {
+type Props = {
     sak: SakProps;
-}
+};
 
-const RegistrerSøknadManueltPage = (props: Props) => {
-    const { personopplysninger } = useHentPersonopplysninger(props.sak.sakId);
+const RegistrerSøknadManueltPage = ({ sak }: Props) => {
+    const { sakId, saksnummer } = sak;
+
+    const { personopplysninger } = useHentPersonopplysninger(sakId);
     const formContext = useForm<ManueltRegistrertSøknad>({
-        defaultValues: defaultManuellSøknadFormValues,
+        defaultValues: defaultRegistrerSøknadManueltFormValues,
         mode: 'onSubmit',
     });
 
     const { handleSubmit } = formContext;
 
     const { opprettSøknad, opprettSøknadLaster, opprettSøknadError } = useOpprettSøknad(
-        props.sak.saksnummer,
+        sak.saksnummer,
     );
 
     const onSubmit = (data: ManueltRegistrertSøknad) => {
@@ -71,13 +74,9 @@ const RegistrerSøknadManueltPage = (props: Props) => {
     };
 
     return (
-        <SakProvider sak={props.sak}>
+        <SakProvider sak={sak}>
             <FormProvider {...formContext}>
-                <PersonaliaHeader
-                    sakId={props.sak.sakId}
-                    saksnummer={props.sak.saksnummer}
-                    visTilbakeKnapp={true}
-                />
+                <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.main}>
                         <VStack gap="space-16">
@@ -110,7 +109,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                             />
 
                             <VelgTiltak
-                                sakId={props.sak.sakId}
+                                sakId={sakId}
                                 spørsmålName="svar.harSøktPåTiltak.svar"
                                 legend="Har søkt på tiltak?"
                             />
@@ -150,7 +149,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                             />
 
                             <ManueltRegistrertSøknadBarnetillegg
-                                sakId={props.sak.sakId}
+                                sakId={sakId}
                                 name="svar.harSøktOmBarnetillegg.svar"
                                 legend="Har bruker søkt barnetillegg?"
                             />

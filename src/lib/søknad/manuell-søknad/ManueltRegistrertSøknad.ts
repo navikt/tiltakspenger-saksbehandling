@@ -4,8 +4,8 @@ export interface ManueltRegistrertSøknad {
     journalpostId: string;
     manueltSattSøknadsperiode: Periode;
     manueltSattTiltak?: string;
-    søknadstype: SøknadstypeManueltRegistrertSøknad;
-    overfortFraArena: JaNeiSpm | undefined;
+    søknadstype?: SøknadstypeManueltRegistrertSøknad;
+    overfortFraArena?: JaNeiSpm;
     behandlingsarsak?: SøknadBehandlingsårsakManueltRegistrertSøknad;
     svar: Spørsmålsbesvarelser;
     antallVedlegg: number;
@@ -36,31 +36,31 @@ export interface Tiltak {
 export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
 
 export interface JaNeiSpm {
-    svar: JaNeiSvar;
+    svar?: JaNeiSvar;
 }
 
 export interface FraOgMedDatoSpm {
-    svar: JaNeiSvar;
-    fraOgMed: string;
+    svar?: JaNeiSvar;
+    fraOgMed?: string;
 }
 
 export interface PeriodeSpm {
-    svar: JaNeiSvar;
+    svar?: JaNeiSvar;
     fraOgMed?: string;
     tilOgMed?: string;
 }
 
 export interface Spørsmålsbesvarelser {
-    tiltak: Tiltak;
-    harSøktPåTiltak: JaNeiSpm | undefined;
+    tiltak?: Tiltak;
+    harSøktPåTiltak?: JaNeiSpm;
     barnetilleggPdl: Barn[];
     barnetilleggManuelle: Barn[];
-    barnetilleggKladd: Barn;
-    harSøktOmBarnetillegg: JaNeiSpm | undefined;
+    barnetilleggKladd?: Barn;
+    harSøktOmBarnetillegg?: JaNeiSpm;
     kvp: PeriodeSpm;
     intro: PeriodeSpm;
     institusjon: PeriodeSpm;
-    mottarAndreUtbetalinger: JaNeiSvar | undefined;
+    mottarAndreUtbetalinger?: JaNeiSvar;
     sykepenger: PeriodeSpm;
     gjenlevendepensjon: PeriodeSpm;
     alderspensjon: FraOgMedDatoSpm;
@@ -80,11 +80,11 @@ export interface Barn {
     fødselsdato: string;
     fnr?: string;
     oppholdInnenforEøs?: JaNeiSpm;
-    erSøktBarnetilleggFor: JaNeiSpm | undefined;
+    erSøktBarnetilleggFor?: JaNeiSpm;
     manueltRegistrertBarnAntallVedlegg?: number;
 }
 
-const defaultRegistrerSøknadManueltFormValues = {
+export const defaultRegistrerSøknadManueltFormValues: ManueltRegistrertSøknad = {
     journalpostId: '',
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     antallVedlegg: 0,
@@ -95,20 +95,19 @@ const defaultRegistrerSøknadManueltFormValues = {
         tiltak: undefined,
         barnetilleggPdl: [],
         barnetilleggManuelle: [],
-        institusjonsopphold: {},
-        introduksjonsprogram: {},
-        kvalifiseringsprogram: {},
+        institusjon: {},
+        intro: {},
+        kvp: {},
         sykepenger: {},
         gjenlevendepensjon: {},
         alderspensjon: {},
-        supplerendestønadover67: {},
-        supplerendestønadflyktninger: {},
-        pensjonsordning: {},
+        supplerendeStønadAlder: {},
+        supplerendeStønadFlyktning: {},
+        trygdOgPensjon: {},
         etterlønn: {},
         jobbsjansen: {},
         harSøktOmBarnetillegg: undefined,
-        mottarAndreUtbetalinger: {},
+        mottarAndreUtbetalinger: undefined,
+        barnetilleggKladd: undefined,
     },
 };
-
-export default defaultRegistrerSøknadManueltFormValues;
