@@ -1,8 +1,6 @@
 import { useController, useFormContext, UseFormReturn } from 'react-hook-form';
-import type {
-    JaNeiSvar,
-    ManueltRegistrertSøknad,
-} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import type { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import type { JaNeiSvar } from '~/lib/søknad/søknadTyper';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 import { SpørsmålMedPeriodevelger } from '~/lib/søknad/manuell-søknad/SpørsmålMedPeriodevelger';
 import { Box, List } from '@navikt/ds-react';
@@ -22,17 +20,12 @@ export const MottarPengestøtterSpørsmål = () => {
     });
 
     const nullstillPeriodeFelter = (): void => {
-        resetField('svar.gjenlevendepensjon.fraOgMed');
-        resetField('svar.gjenlevendepensjon.tilOgMed');
         resetField('svar.alderspensjon.fraOgMed');
-        resetField('svar.supplerendeStønadAlder.fraOgMed');
-        resetField('svar.supplerendeStønadAlder.tilOgMed');
-        resetField('svar.supplerendeStønadFlyktning.fraOgMed');
-        resetField('svar.supplerendeStønadFlyktning.tilOgMed');
-        resetField('svar.trygdOgPensjon.fraOgMed');
-        resetField('svar.trygdOgPensjon.tilOgMed');
-        resetField('svar.jobbsjansen.fraOgMed');
-        resetField('svar.jobbsjansen.tilOgMed');
+        resetField('svar.gjenlevendepensjon.periode');
+        resetField('svar.supplerendeStønadAlder.periode');
+        resetField('svar.supplerendeStønadFlyktning.periode');
+        resetField('svar.trygdOgPensjon.periode');
+        resetField('svar.jobbsjansen.periode');
     };
 
     return (
@@ -69,8 +62,7 @@ export const MottarPengestøtterSpørsmål = () => {
                 <>
                     <SpørsmålMedPeriodevelger
                         spørsmålFelt="svar.gjenlevendepensjon.svar"
-                        fraOgMedFelt="svar.gjenlevendepensjon.fraOgMed"
-                        tilOgMedFelt="svar.gjenlevendepensjon.tilOgMed"
+                        periodeFelt="svar.gjenlevendepensjon.periode"
                         spørsmål="Mottar pengestøtte til gjenlevende ektefelle"
                         periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte til gjenlevende ektefelle?"
                     />
@@ -84,32 +76,28 @@ export const MottarPengestøtterSpørsmål = () => {
 
                     <SpørsmålMedPeriodevelger
                         spørsmålFelt="svar.supplerendeStønadAlder.svar"
-                        fraOgMedFelt="svar.supplerendeStønadAlder.fraOgMed"
-                        tilOgMedFelt="svar.supplerendeStønadAlder.tilOgMed"
+                        periodeFelt="svar.supplerendeStønadAlder.periode"
                         spørsmål="Mottar supplerende stønad for personer over 67 år med kort botid i Norge i perioden"
                         periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for personer over 67 år med kort botid i Norge?"
                     />
 
                     <SpørsmålMedPeriodevelger
                         spørsmålFelt="svar.supplerendeStønadFlyktning.svar"
-                        fraOgMedFelt="svar.supplerendeStønadFlyktning.fraOgMed"
-                        tilOgMedFelt="svar.supplerendeStønadFlyktning.tilOgMed"
+                        periodeFelt="svar.supplerendeStønadFlyktning.periode"
                         spørsmål="Mottar supplerende stønad for uføre flyktninger i perioden"
                         periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for uføre flyktninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
                         spørsmålFelt="svar.trygdOgPensjon.svar"
-                        fraOgMedFelt="svar.trygdOgPensjon.fraOgMed"
-                        tilOgMedFelt="svar.trygdOgPensjon.tilOgMed"
+                        periodeFelt="svar.trygdOgPensjon.periode"
                         spørsmål="Mottar pengestøtte fra andre trygde- eller pensjonsordninger"
                         periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte fra andre trygde- eller pensjonsordninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
                         spørsmålFelt="svar.jobbsjansen.svar"
-                        fraOgMedFelt="svar.jobbsjansen.fraOgMed"
-                        tilOgMedFelt="svar.jobbsjansen.tilOgMed"
+                        periodeFelt="svar.jobbsjansen.periode"
                         spørsmål="Mottar stønad gjennom Jobbsjansen"
                         periodeSpørsmål="I hvilken del av perioden svar bruker stønad gjennom Jobbsjansen?"
                     />

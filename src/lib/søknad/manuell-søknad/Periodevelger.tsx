@@ -1,102 +1,122 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
-import { FieldPath, RegisterOptions, useController, useFormContext } from 'react-hook-form';
+import { FieldPathByValue, useController, useFormContext } from 'react-hook-form';
 import { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import styles from './Periodevelger.module.css';
 import { dateTilISOTekst } from '~/utils/date';
+import { Periode } from '~/types/Periode';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { useMemo } from 'react';
 
-type Props = {
-    fraOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
-    tilOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
-    tittel?: string;
-    rules?: {
-        fraOgMed?: RegisterOptions<ManueltRegistrertSøknad, FieldPath<ManueltRegistrertSøknad>>;
-        tilOgMed?: RegisterOptions<ManueltRegistrertSøknad, FieldPath<ManueltRegistrertSøknad>>;
-        validateRange?: (
-            fraOgMed: string | undefined,
-            tilOgMed: string | undefined,
-        ) => string | true;
-    };
+export type ManuellSøknadPeriodeFelt = FieldPathByValue<
+    ManueltRegistrertSøknad,
+    Periode | undefined
+>;
+
+export type ManuellSøknadPeriodeValidationErrors = {
+    fraOgMed?: string;
+    tilOgMed?: string;
+    periode?: string;
 };
 
-export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Props) => {
-    const { control, watch, setError, clearErrors } = useFormContext<ManueltRegistrertSøknad>();
-    const fraOgMedDatoWatch = watch(fraOgMedFelt) as string | undefined;
-    const tilOgMedDatoWatch = watch(tilOgMedFelt) as string | undefined;
+type Props = {
+    periodeFelt: ManuellSøknadPeriodeFelt;
+    tittel?: string;
+    validate?: (periode: Partial<Periode>) => ManuellSøknadPeriodeValidationErrors;
+};
 
-    const fraOgMedDatoController = useController({
-        name: fraOgMedFelt,
+export const Periodevelger = ({ periodeFelt, tittel, validate }: Props) => {
+    const { control, watch, setError } = useFormContext<ManueltRegistrertSøknad>();
+
+    const periodeWatch = watch(periodeFelt);
+
+    const validationErrors = useMemo(
+        () => validate?.(periodeWatch ?? {}) ?? {},
+        [periodeWatch, validate],
+    );
+
+    const periodeController = useController({
+        name: periodeFelt,
         control,
         rules: {
-            ...rules?.fraOgMed,
             validate: () => {
-                if (!rules?.validateRange) return true;
-                const result = rules.validateRange(fraOgMedDatoWatch, tilOgMedDatoWatch);
-
-                if (result !== true) {
-                    setError(tilOgMedFelt, { type: 'validate', message: result as string });
-                    return result;
-                } else {
-                    clearErrors(tilOgMedFelt);
-                    clearErrors(fraOgMedFelt);
-                    return true;
+                if (validationErrors.periode) {
+                    setError(periodeFelt, {
+                        type: 'validate',
+                        message: validationErrors.periode,
+                    });
+                    return validationErrors.periode;
                 }
+
+                return true;
             },
         },
     });
 
-    const tilOgMedDatoController = useController({
-        name: tilOgMedFelt,
+    const fraOgMedController = useController({
+        name: `${periodeFelt}.fraOgMed`,
         control,
         rules: {
-            ...rules?.tilOgMed,
             validate: () => {
-                if (!rules?.validateRange) return true;
-                const result = rules.validateRange(fraOgMedDatoWatch, tilOgMedDatoWatch);
-
-                if (result !== true) {
-                    setError(fraOgMedFelt, { type: 'validate', message: result as string });
-                    return result;
-                } else {
-                    clearErrors(tilOgMedFelt);
-                    clearErrors(fraOgMedFelt);
-                    return true;
+                if (validationErrors.fraOgMed) {
+                    setError(`${periodeFelt}.fraOgMed`, {
+                        type: 'validate',
+                        message: validationErrors.fraOgMed,
+                    });
+                    return validationErrors.fraOgMed;
                 }
+
+                return true;
+            },
+        },
+    });
+
+    const tilOgMedController = useController({
+        name: `${periodeFelt}.tilOgMed`,
+        control,
+        rules: {
+            validate: () => {
+                if (validationErrors.tilOgMed) {
+                    setError(`${periodeFelt}.tilOgMed`, {
+                        type: 'validate',
+                        message: validationErrors.tilOgMed,
+                    });
+                    return validationErrors.tilOgMed;
+                }
+
+                return true;
             },
         },
     });
 
     return (
-        <div className={styles.blokk}>
-            <VStack gap="space-16">
-                {tittel && (
-                    <Heading size="xsmall" level="3">
-                        {tittel}
-                    </Heading>
-                )}
-                <HStack gap="space-32">
-                    <Datovelger
-                        label="Fra og med"
-                        selected={fraOgMedDatoController.field.value as string | undefined}
-                        onDateChange={(dato) =>
-                            fraOgMedDatoController.field.onChange(dato ? dateTilISOTekst(dato) : '')
-                        }
-                        error={
-                            fraOgMedDatoController.fieldState.error?.message as string | undefined
-                        }
-                    />
-                    <Datovelger
-                        label="Til og med"
-                        selected={tilOgMedDatoController.field.value as string | undefined}
-                        onDateChange={(dato) =>
-                            tilOgMedDatoController.field.onChange(dato ? dateTilISOTekst(dato) : '')
-                        }
-                        error={
-                            tilOgMedDatoController.fieldState.error?.message as string | undefined
-                        }
-                    />
-                </HStack>
-            </VStack>
-        </div>
+        <VStack gap="space-16" className={styles.blokk}>
+            {tittel && (
+                <Heading size="xsmall" level="3">
+                    {tittel}
+                </Heading>
+            )}
+            {periodeController.fieldState.error?.message && (
+                <Infokort variant={'feil'}>{periodeController.fieldState.error.message}</Infokort>
+            )}
+            <HStack gap="space-32">
+                <Datovelger
+                    label="Fra og med"
+                    selected={fraOgMedController.field.value}
+                    onDateChange={(dato) =>
+                        fraOgMedController.field.onChange(dato ? dateTilISOTekst(dato) : undefined)
+                    }
+                    error={fraOgMedController.fieldState.error?.message}
+                />
+                <Datovelger
+                    label="Til og med"
+                    selected={tilOgMedController.field.value}
+                    onDateChange={(dato) =>
+                        tilOgMedController.field.onChange(dato ? dateTilISOTekst(dato) : undefined)
+                    }
+                    error={tilOgMedController.fieldState.error?.message}
+                />
+            </HStack>
+        </VStack>
     );
 };

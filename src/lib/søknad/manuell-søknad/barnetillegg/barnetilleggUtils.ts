@@ -1,9 +1,9 @@
-import { Barn } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import { ManuellSøknadBarn } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { formaterDatotekst } from '~/utils/date';
 
 export const getNavnMedFødselsdato = (
-    barn: Barn | Personopplysninger,
+    barn: ManuellSøknadBarn | Personopplysninger,
     adressebeskyttet: boolean,
 ) => {
     if (!adressebeskyttet) {

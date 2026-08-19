@@ -3,19 +3,20 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';
-import styles from './JournalpostId.module.css';
+import styles from './JournalpostIdForm.module.css';
 import { formaterDatotekst } from '~/utils/date';
 import { Nullable } from '~/types/UtilTypes';
 
 const DEBOUNCE_MS = 500;
 const MIN_LENGDE_FØR_VALIDERING = 5;
 
-export const JournalpostId = (props: {
+type Props = {
     className?: string;
-    fnrFraPersonopplysninger: Nullable<string>;
+    fnrFraPersonopplysninger?: Nullable<string>;
     readonly?: boolean;
-    size?: 'small' | 'medium';
-}) => {
+};
+
+export const JournalpostIdForm = (props: Props) => {
     const { control, watch, trigger } = useFormContext();
     const journalpostIdFelt = 'journalpostId';
     const journalpostIdWatch = watch(journalpostIdFelt);
@@ -124,7 +125,6 @@ export const JournalpostId = (props: {
                             error={fieldState.error?.message}
                             inputMode="numeric"
                             readOnly={props.readonly}
-                            size={props.size}
                         />
                         {valideringsInfo && (!fieldState.error || fnrMatcherIkke) && (
                             <div className={styles.valideringsInfo}>{valideringsInfo}</div>
@@ -137,11 +137,8 @@ export const JournalpostId = (props: {
                     label="Opprettet (fra journalpost)"
                     value={formaterDatotekst(datoOpprettet)}
                     readOnly
-                    size={props.size}
                 />
             </div>
         </div>
     );
 };
-
-export default JournalpostId;

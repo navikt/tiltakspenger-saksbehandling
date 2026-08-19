@@ -1,20 +1,10 @@
 import { Select } from '@navikt/ds-react';
 import { Controller, useFormContext } from 'react-hook-form';
-import type {
-    ManueltRegistrertSøknad,
-    SøknadstypeManueltRegistrertSøknad,
-} from './ManueltRegistrertSøknad';
+import type { ManueltRegistrertSøknad } from './ManueltRegistrertSøknad';
+import { SøknadstypeManueltRegistrertSøknad } from './ManueltRegistrertSøknad';
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 
-const søknadstypeValg: { value: SøknadstypeManueltRegistrertSøknad; label: string }[] = [
-    { value: 'DIGITAL', label: søknadstypeTekst.DIGITAL },
-    { value: 'PAPIR_SKJEMA', label: søknadstypeTekst.PAPIR_SKJEMA },
-    { value: 'PAPIR_FRIHAND', label: søknadstypeTekst.PAPIR_FRIHAND },
-    { value: 'MODIA', label: søknadstypeTekst.MODIA },
-    { value: 'ANNET', label: søknadstypeTekst.ANNET },
-];
-
-export const SøknadstypeSelect = () => {
+export const ManuellSøknadTypeSelect = () => {
     const { control } = useFormContext<ManueltRegistrertSøknad>();
 
     return (
@@ -35,9 +25,9 @@ export const SøknadstypeSelect = () => {
                     <option value="" disabled>
                         Velg søknadstype
                     </option>
-                    {søknadstypeValg.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
+                    {Object.values(SøknadstypeManueltRegistrertSøknad).map((option) => (
+                        <option key={option} value={option}>
+                            {søknadstypeTekst[option]}
                         </option>
                     ))}
                 </Select>

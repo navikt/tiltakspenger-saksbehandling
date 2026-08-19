@@ -1,6 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
-import { Tiltak } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import { ManuellSøknadTiltak } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { SakId } from '~/lib/sak/SakTyper';
 
 export const useHentTiltaksdeltakelser = (
@@ -10,7 +10,7 @@ export const useHentTiltaksdeltakelser = (
     enabled: boolean = true,
 ) => {
     const harPeriode = !!fraOgMed && !!tilOgMed;
-    const { data, isLoading, error } = useSWR<Tiltak[]>(
+    const { data, isLoading, error } = useSWR<ManuellSøknadTiltak[]>(
         enabled && harPeriode ? ['tiltaksdeltakelser', sakId, fraOgMed, tilOgMed] : null,
         () => fetcher(sakId, fraOgMed!, tilOgMed!),
     );
@@ -18,6 +18,6 @@ export const useHentTiltaksdeltakelser = (
 };
 
 const fetcher = async (sakId: SakId, fraOgMed: string, tilOgMed: string) =>
-    fetchJsonFraApiClientSide<Tiltak[]>(
+    fetchJsonFraApiClientSide<ManuellSøknadTiltak[]>(
         `/sak/${sakId}/tiltaksdeltakelser?fraOgMed=${encodeURIComponent(fraOgMed)}&tilOgMed=${encodeURIComponent(tilOgMed)}`,
     );

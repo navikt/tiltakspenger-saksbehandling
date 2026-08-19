@@ -5,7 +5,7 @@ import { FieldPath, useController, useFieldArray, useFormContext, useWatch } fro
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import type {
-    Barn,
+    ManuellSøknadBarn,
     ManueltRegistrertSøknad,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { LeggTilBarnManuelt } from '~/lib/søknad/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
@@ -63,8 +63,8 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
 
     React.useEffect(() => {
         if (skalHenteBarn && barnFraAPI) {
-            const barn: Barn[] = barnFraAPI.map(
-                (p, index): Barn => ({
+            const barn: ManuellSøknadBarn[] = barnFraAPI.map(
+                (p, index): ManuellSøknadBarn => ({
                     fornavn: p.fornavn,
                     mellomnavn: p.mellomnavn || undefined,
                     etternavn: p.etternavn,
@@ -79,8 +79,7 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
         }
     }, [skalHenteBarn, barnFraAPI, setValue]);
 
-    const { fraOgMed, tilOgMed } = periode.field.value as Periode;
-    const søknadsperiodeErTom = fraOgMed.length === 0 && tilOgMed.length === 0;
+    const søknadsperiodeErTom = !periode.field.value;
 
     return (
         <div className={harSøktOmBarnetillegg.field.value === 'JA' ? styles.blokkUtvidet : ''}>
@@ -162,22 +161,28 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
                                 Barn lagt til manuelt
                             </Heading>
                             <VStack gap="space-16">
-                                {manuelleBarn.fields.map((barn: Barn, index: number) => (
-                                    <HStack key={barn.uuid} gap="space-16" justify="space-between">
-                                        <InformasjonOmBarnManuell
-                                            barn={barn}
-                                            søknadsperiode={periode.field.value as Periode}
-                                        />
-                                        <Button
-                                            type="button"
-                                            icon={<TrashIcon />}
-                                            variant="tertiary"
-                                            onClick={() => manuelleBarn.remove(index)}
+                                {manuelleBarn.fields.map(
+                                    (barn: ManuellSøknadBarn, index: number) => (
+                                        <HStack
+                                            key={barn.uuid}
+                                            gap="space-16"
+                                            justify="space-between"
                                         >
-                                            Slett
-                                        </Button>
-                                    </HStack>
-                                ))}
+                                            <InformasjonOmBarnManuell
+                                                barn={barn}
+                                                søknadsperiode={periode.field.value as Periode}
+                                            />
+                                            <Button
+                                                type="button"
+                                                icon={<TrashIcon />}
+                                                variant="tertiary"
+                                                onClick={() => manuelleBarn.remove(index)}
+                                            >
+                                                Slett
+                                            </Button>
+                                        </HStack>
+                                    ),
+                                )}
                             </VStack>
                         </div>
                     )}

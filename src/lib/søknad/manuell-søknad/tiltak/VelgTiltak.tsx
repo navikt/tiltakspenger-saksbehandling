@@ -4,7 +4,7 @@ import { Controller, FieldPath, useController, useFormContext, useWatch } from '
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import {
     ManueltRegistrertSøknad,
-    Tiltak,
+    ManuellSøknadTiltak,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from './VelgTiltak.module.css';
@@ -31,7 +31,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
 
     const [skalHenteTiltak, setSkalHenteTiltak] = React.useState(false);
 
-    const formatLabelForTiltakValg = (tiltak: Tiltak) => {
+    const formatLabelForTiltakValg = (tiltak: ManuellSøknadTiltak) => {
         const periodeTekst =
             tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
                 ? ` (${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)})`
@@ -48,7 +48,8 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
         error,
     } = useHentTiltaksdeltakelser(sakId, fraOgMed, tilOgMed, skalHenteTiltak);
 
-    const muligeTiltak: Tiltak[] = skalHenteTiltak && tiltaksdeltakelser ? tiltaksdeltakelser : [];
+    const muligeTiltak: ManuellSøknadTiltak[] =
+        skalHenteTiltak && tiltaksdeltakelser ? tiltaksdeltakelser : [];
 
     return (
         <div className={classNames(styles.informasjonsInnhentingBlokk, styles.blokk)}>

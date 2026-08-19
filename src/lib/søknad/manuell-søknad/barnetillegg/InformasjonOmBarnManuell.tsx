@@ -1,13 +1,13 @@
 import { Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { getNavnMedFødselsdato } from '~/lib/søknad/manuell-søknad/barnetillegg/barnetilleggUtils';
-import { Barn } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import { ManuellSøknadBarn } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from '~/utils/periode';
 import { finn16årsdag } from '~/utils/date';
 import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
 
 type Props = {
-    barn: Barn;
+    barn: ManuellSøknadBarn;
     søknadsperiode: Periode | undefined;
 };
 

@@ -1,10 +1,8 @@
 import { Select } from '@navikt/ds-react';
 import { useController, useFormContext, useWatch } from 'react-hook-form';
-import type {
-    JaNeiSvar,
-    ManueltRegistrertSøknad,
-    SøknadBehandlingsårsakManueltRegistrertSøknad,
-} from './ManueltRegistrertSøknad';
+import type { ManueltRegistrertSøknad } from './ManueltRegistrertSøknad';
+import { SøknadBehandlingsårsakManueltRegistrertSøknad } from './ManueltRegistrertSøknad';
+import type { JaNeiSvar } from '~/lib/søknad/søknadTyper';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import { søknadBehandlingsårsakTekst } from '~/lib/søknad/søknadTekster';
 import { manuellSøknadHåndterPengestøtterSvar } from '~/lib/søknad/manuell-søknad/MottarPengestøtterSpørsmål';
@@ -14,18 +12,21 @@ const behandlingsårsaker: ReadonlyArray<{
     label: string;
 }> = [
     {
-        value: 'FORLENGELSE_FRA_ARENA',
+        value: SøknadBehandlingsårsakManueltRegistrertSøknad.FORLENGELSE_FRA_ARENA,
         label: søknadBehandlingsårsakTekst.FORLENGELSE_FRA_ARENA,
     },
     {
-        value: 'SOKNADSBEHANDLING_FRA_ARENA',
+        value: SøknadBehandlingsårsakManueltRegistrertSøknad.SOKNADSBEHANDLING_FRA_ARENA,
         label: søknadBehandlingsårsakTekst.SOKNADSBEHANDLING_FRA_ARENA,
     },
     {
-        value: 'OVERLAPPENDE_TILTAK_I_ARENA',
+        value: SøknadBehandlingsårsakManueltRegistrertSøknad.OVERLAPPENDE_TILTAK_I_ARENA,
         label: søknadBehandlingsårsakTekst.OVERLAPPENDE_TILTAK_I_ARENA,
     },
-    { value: 'ANNET', label: søknadBehandlingsårsakTekst.ANNET },
+    {
+        value: SøknadBehandlingsårsakManueltRegistrertSøknad.ANNET,
+        label: søknadBehandlingsårsakTekst.ANNET,
+    },
 ] as const;
 
 export const OverførtFraArenaSpørsmål = () => {
@@ -74,8 +75,8 @@ export const OverførtFraArenaSpørsmål = () => {
 
                         if (
                             !behandlingsårsakField.value &&
-                            (value as SøknadBehandlingsårsakManueltRegistrertSøknad) ===
-                                'FORLENGELSE_FRA_ARENA'
+                            value ===
+                                SøknadBehandlingsårsakManueltRegistrertSøknad.FORLENGELSE_FRA_ARENA
                         ) {
                             formContext.setValue('svar.kvp.svar', 'NEI');
                             formContext.setValue('svar.intro.svar', 'NEI');

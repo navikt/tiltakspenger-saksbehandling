@@ -1,22 +1,20 @@
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import type { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
-import { Periodevelger } from './Periodevelger';
+import { Periodevelger, ManuellSøknadPeriodeFelt } from './Periodevelger';
 
 import styles from './SpørsmålMedPeriodeVelger.module.css';
 
 type Props = {
     spørsmålFelt: FieldPath<ManueltRegistrertSøknad>;
-    fraOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
-    tilOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
+    periodeFelt: ManuellSøknadPeriodeFelt;
     spørsmål: string;
     periodeSpørsmål?: string;
 };
 
 export const SpørsmålMedPeriodevelger = ({
     spørsmålFelt,
-    fraOgMedFelt,
-    tilOgMedFelt,
+    periodeFelt,
     spørsmål,
     periodeSpørsmål,
 }: Props) => {
@@ -35,17 +33,12 @@ export const SpørsmålMedPeriodevelger = ({
                 legend={spørsmål}
                 onChange={(newValue) => {
                     if (newValue !== 'JA') {
-                        resetField(fraOgMedFelt);
-                        resetField(tilOgMedFelt);
+                        resetField(periodeFelt);
                     }
                 }}
             />
             {jaNeiSpørsmål.field.value === 'JA' && (
-                <Periodevelger
-                    fraOgMedFelt={fraOgMedFelt}
-                    tilOgMedFelt={tilOgMedFelt}
-                    tittel={periodeSpørsmål}
-                />
+                <Periodevelger periodeFelt={periodeFelt} tittel={periodeSpørsmål} />
             )}
         </div>
     );

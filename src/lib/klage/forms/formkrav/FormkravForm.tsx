@@ -10,7 +10,7 @@ import {
 } from './FormkravFormUtils';
 import { HStack, LocalAlert, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
-import JournalpostId from '~/lib/_felles/journalpostId/JournalpostId';
+import { JournalpostIdForm } from '~/lib/_felles/journalpostId/JournalpostIdForm';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay, ukenummerFraDatotekst } from '~/utils/date';
@@ -63,7 +63,7 @@ const FormkravForm = (props: {
 
     return (
         <VStack gap="space-32" align="start">
-            <JournalpostId
+            <JournalpostIdForm
                 fnrFraPersonopplysninger={props.fnrFraPersonopplysninger}
                 readonly={props.readonly}
                 className={styles.journalpostIdInputContainer}

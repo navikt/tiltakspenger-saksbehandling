@@ -1,29 +1,11 @@
-import styles from './RegistrerSøknadManueltPage.module.css';
-import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { SpørsmålMedPeriodevelger } from '~/lib/søknad/manuell-søknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
-import {
-    defaultRegistrerSøknadManueltFormValues,
-    ManueltRegistrertSøknad,
-} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
-import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
-import { MottarPengestøtterSpørsmål } from '~/lib/søknad/manuell-søknad/MottarPengestøtterSpørsmål';
-import { Periodevelger } from '~/lib/søknad/manuell-søknad/Periodevelger';
-import { VelgTiltak } from '~/lib/søknad/manuell-søknad/tiltak/VelgTiltak';
-import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/søknad/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
-import { useOpprettSøknad } from '~/lib/personoversikt/opprett-behandling/manuell-søknad/useOpprettSøknad';
-import router from 'next/router';
-import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
-import { JournalpostId } from '~/lib/_felles/journalpostId/JournalpostId';
-import { SøknadstypeSelect } from '~/lib/søknad/manuell-søknad/SøknadstypeSelect';
-import { OverførtFraArenaSpørsmål } from '~/lib/søknad/manuell-søknad/OverførtFraArenaSpørsmål';
+import { ManuellSøknadFormProvider } from '~/lib/søknad/manuell-søknad/ManuellSøknadFormProvider';
+import { ManuellSøknadSide } from '~/lib/søknad/manuell-søknad/ManuellSøknadSide';
 
 type Props = {
     sak: SakProps;
@@ -33,146 +15,16 @@ const RegistrerSøknadManueltPage = ({ sak }: Props) => {
     const { sakId, saksnummer } = sak;
 
     const { personopplysninger } = useHentPersonopplysninger(sakId);
-    const formContext = useForm<ManueltRegistrertSøknad>({
-        defaultValues: defaultRegistrerSøknadManueltFormValues,
-        mode: 'onSubmit',
-    });
-
-    const { handleSubmit } = formContext;
-
-    const { opprettSøknad, opprettSøknadLaster, opprettSøknadError } = useOpprettSøknad(
-        sak.saksnummer,
-    );
-
-    const onSubmit = (data: ManueltRegistrertSøknad) => {
-        if (!personopplysninger) return;
-
-        // Sender ikke inn barn fra PDL som man har svart nei for.
-        const pdlBarnDetErSøktBarnetilleggFor = data.svar.barnetilleggPdl.filter(
-            (barn) => barn.erSøktBarnetilleggFor?.svar === 'JA',
-        );
-
-        const antallVedlegg = (data.svar.barnetilleggManuelle || []).reduce(
-            (sum, b) => sum + (b.manueltRegistrertBarnAntallVedlegg ?? 0),
-            0,
-        );
-
-        const payload = {
-            ...data,
-            svar: {
-                ...data.svar,
-                barnetilleggPdl: pdlBarnDetErSøktBarnetilleggFor,
-            },
-            antallVedlegg,
-        };
-
-        opprettSøknad(payload).then((behandling) => {
-            if (behandling) {
-                router.push(behandlingUrl(behandling));
-            }
-        });
-    };
 
     return (
         <SakProvider sak={sak}>
-            <FormProvider {...formContext}>
+            <ManuellSøknadFormProvider
+                saksnummer={saksnummer}
+                personopplysninger={personopplysninger}
+            >
                 <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className={styles.main}>
-                        <VStack gap="space-16">
-                            <Heading size="medium" level="2" spacing>
-                                Manuell registrering av søknad
-                            </Heading>
-
-                            <JournalpostId
-                                fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
-                            />
-
-                            <SøknadstypeSelect />
-                            <OverførtFraArenaSpørsmål />
-
-                            <Periodevelger
-                                fraOgMedFelt="manueltSattSøknadsperiode.fraOgMed"
-                                tilOgMedFelt="manueltSattSøknadsperiode.tilOgMed"
-                                tittel="Hvilken periode er det søkt for?"
-                                rules={{
-                                    fraOgMed: { required: 'Fra og med er påkrevd' },
-                                    tilOgMed: { required: 'Til og med er påkrevd' },
-                                    validateRange: (fraOgMed, tilOgMed) => {
-                                        if (!fraOgMed || !tilOgMed) return true;
-                                        return (
-                                            new Date(tilOgMed) >= new Date(fraOgMed) ||
-                                            'Ugyldig periode.'
-                                        );
-                                    },
-                                }}
-                            />
-
-                            <VelgTiltak
-                                sakId={sakId}
-                                spørsmålName="svar.harSøktPåTiltak.svar"
-                                legend="Har søkt på tiltak?"
-                            />
-
-                            <SpørsmålMedPeriodevelger
-                                spørsmålFelt="svar.kvp.svar"
-                                fraOgMedFelt="svar.kvp.fraOgMed"
-                                tilOgMedFelt="svar.kvp.tilOgMed"
-                                spørsmål="Mottar kvalifiseringsstønad"
-                            />
-
-                            <SpørsmålMedPeriodevelger
-                                spørsmålFelt="svar.intro.svar"
-                                fraOgMedFelt="svar.intro.fraOgMed"
-                                tilOgMedFelt="svar.intro.tilOgMed"
-                                spørsmål="Mottar introduksjonsstønad"
-                            />
-
-                            <JaNeiSpørsmål name="svar.etterlønn.svar" legend="Mottar etterlønn" />
-
-                            <SpørsmålMedPeriodevelger
-                                spørsmålFelt="svar.sykepenger.svar"
-                                fraOgMedFelt="svar.sykepenger.fraOgMed"
-                                tilOgMedFelt="svar.sykepenger.tilOgMed"
-                                periodeSpørsmål="I hvilken del av perioden var bruker sykemeldt?"
-                                spørsmål="Har nylig mottatt sykepenger og er fortsatt sykemeldt"
-                            />
-
-                            <MottarPengestøtterSpørsmål />
-
-                            <SpørsmålMedPeriodevelger
-                                spørsmålFelt="svar.institusjon.svar"
-                                fraOgMedFelt="svar.institusjon.fraOgMed"
-                                tilOgMedFelt="svar.institusjon.tilOgMed"
-                                spørsmål="Bor bruker i en institusjon med gratis opphold, mat og drikke i perioden "
-                                periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
-                            />
-
-                            <ManueltRegistrertSøknadBarnetillegg
-                                sakId={sakId}
-                                name="svar.harSøktOmBarnetillegg.svar"
-                                legend="Har bruker søkt barnetillegg?"
-                            />
-
-                            {opprettSøknadError && (
-                                <Infokort variant={'feil'}>
-                                    Noe gikk galt ved registrering av papirsøknad. Vennligst prøv
-                                    igjen litt senere.
-                                </Infokort>
-                            )}
-
-                            <HStack gap="space-16">
-                                <Button variant="secondary" type="reset">
-                                    Avbryt
-                                </Button>
-                                <Button type="submit" loading={opprettSøknadLaster}>
-                                    Start behandling
-                                </Button>
-                            </HStack>
-                        </VStack>
-                    </div>
-                </form>
-            </FormProvider>
+                <ManuellSøknadSide fnrFraPersonopplysninger={personopplysninger?.fnr} />
+            </ManuellSøknadFormProvider>
         </SakProvider>
     );
 };

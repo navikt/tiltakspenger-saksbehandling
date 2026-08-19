@@ -7,13 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import type {
-    Barn,
+    ManuellSøknadBarn,
     ManueltRegistrertSøknad,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { dateTilISOTekst } from '~/utils/date';
 import dayjs from 'dayjs';
 
-const TOM_BARN_KLADD: Barn = {
+const TOM_BARN_KLADD: ManuellSøknadBarn = {
     uuid: '',
     fornavn: '',
     etternavn: '',
@@ -24,7 +24,7 @@ const TOM_BARN_KLADD: Barn = {
 };
 
 type Props = {
-    onAppend: (barn: Barn) => void;
+    onAppend: (barn: ManuellSøknadBarn) => void;
 };
 
 export const LeggTilBarnManuelt = ({ onAppend }: Props) => {

@@ -1,77 +1,69 @@
 import { Periode } from '~/types/Periode';
+import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, PeriodeSpm } from '../søknadTyper';
 
-export interface ManueltRegistrertSøknad {
+export type ManueltRegistrertSøknad = {
     journalpostId: string;
-    manueltSattSøknadsperiode: Periode;
+    manueltSattSøknadsperiode?: Periode;
     manueltSattTiltak?: string;
     søknadstype?: SøknadstypeManueltRegistrertSøknad;
-    overfortFraArena?: JaNeiSpm;
+    overfortFraArena?: ManuellSøknadJaNeiSpm;
     behandlingsarsak?: SøknadBehandlingsårsakManueltRegistrertSøknad;
-    svar: Spørsmålsbesvarelser;
+    svar: ManuellSøknadSvar;
     antallVedlegg: number;
+};
+
+export enum SøknadstypeManueltRegistrertSøknad {
+    DIGITAL = 'DIGITAL',
+    PAPIR_SKJEMA = 'PAPIR_SKJEMA',
+    PAPIR_FRIHAND = 'PAPIR_FRIHAND',
+    MODIA = 'MODIA',
+    ANNET = 'ANNET',
 }
 
-export type SøknadstypeManueltRegistrertSøknad =
-    | 'DIGITAL'
-    | 'PAPIR_SKJEMA'
-    | 'PAPIR_FRIHAND'
-    | 'MODIA'
-    | 'ANNET';
+export enum SøknadBehandlingsårsakManueltRegistrertSøknad {
+    FORLENGELSE_FRA_ARENA = 'FORLENGELSE_FRA_ARENA',
+    SOKNADSBEHANDLING_FRA_ARENA = 'SOKNADSBEHANDLING_FRA_ARENA',
+    OVERLAPPENDE_TILTAK_I_ARENA = 'OVERLAPPENDE_TILTAK_I_ARENA',
+    ANNET = 'ANNET',
+}
 
-export type SøknadBehandlingsårsakManueltRegistrertSøknad =
-    | 'FORLENGELSE_FRA_ARENA'
-    | 'SOKNADSBEHANDLING_FRA_ARENA'
-    | 'OVERLAPPENDE_TILTAK_I_ARENA'
-    | 'ANNET';
-
-export interface Tiltak {
+export type ManuellSøknadTiltak = {
     eksternDeltakelseId: string;
     typeKode: string;
     typeNavn: string;
     deltakelseFraOgMed?: string;
     deltakelseTilOgMed?: string;
     visningsnavn: string;
-}
+};
 
-export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
+export type ManuellSøknadJaNeiSpm = Partial<JaNeiSpm>;
 
-export interface JaNeiSpm {
-    svar?: JaNeiSvar;
-}
+export type ManuellSøknadFraOgMedDatoSpm = Partial<FraOgMedDatoSpm>;
 
-export interface FraOgMedDatoSpm {
-    svar?: JaNeiSvar;
-    fraOgMed?: string;
-}
+export type ManuellSøknadPeriodeSpm = Partial<PeriodeSpm>;
 
-export interface PeriodeSpm {
-    svar?: JaNeiSvar;
-    fraOgMed?: string;
-    tilOgMed?: string;
-}
-
-export interface Spørsmålsbesvarelser {
-    tiltak?: Tiltak;
-    harSøktPåTiltak?: JaNeiSpm;
-    barnetilleggPdl: Barn[];
-    barnetilleggManuelle: Barn[];
-    barnetilleggKladd?: Barn;
-    harSøktOmBarnetillegg?: JaNeiSpm;
-    kvp: PeriodeSpm;
-    intro: PeriodeSpm;
-    institusjon: PeriodeSpm;
+export type ManuellSøknadSvar = {
+    tiltak?: ManuellSøknadTiltak;
+    harSøktPåTiltak?: ManuellSøknadJaNeiSpm;
+    barnetilleggPdl: ManuellSøknadBarn[];
+    barnetilleggManuelle: ManuellSøknadBarn[];
+    barnetilleggKladd?: ManuellSøknadBarn;
+    harSøktOmBarnetillegg?: ManuellSøknadJaNeiSpm;
+    kvp: ManuellSøknadPeriodeSpm;
+    intro: ManuellSøknadPeriodeSpm;
+    institusjon: ManuellSøknadPeriodeSpm;
     mottarAndreUtbetalinger?: JaNeiSvar;
-    sykepenger: PeriodeSpm;
-    gjenlevendepensjon: PeriodeSpm;
-    alderspensjon: FraOgMedDatoSpm;
-    supplerendeStønadAlder: PeriodeSpm;
-    supplerendeStønadFlyktning: PeriodeSpm;
-    trygdOgPensjon: PeriodeSpm;
-    etterlønn: JaNeiSpm;
-    jobbsjansen: PeriodeSpm;
-}
+    sykepenger: ManuellSøknadPeriodeSpm;
+    gjenlevendepensjon: ManuellSøknadPeriodeSpm;
+    alderspensjon: ManuellSøknadFraOgMedDatoSpm;
+    supplerendeStønadAlder: ManuellSøknadPeriodeSpm;
+    supplerendeStønadFlyktning: ManuellSøknadPeriodeSpm;
+    trygdOgPensjon: ManuellSøknadPeriodeSpm;
+    etterlønn: ManuellSøknadJaNeiSpm;
+    jobbsjansen: ManuellSøknadPeriodeSpm;
+};
 
-export interface Barn {
+export type ManuellSøknadBarn = {
     index?: number;
     uuid: string;
     fornavn?: string;
@@ -79,35 +71,7 @@ export interface Barn {
     etternavn?: string;
     fødselsdato: string;
     fnr?: string;
-    oppholdInnenforEøs?: JaNeiSpm;
-    erSøktBarnetilleggFor?: JaNeiSpm;
+    oppholdInnenforEøs?: ManuellSøknadJaNeiSpm;
+    erSøktBarnetilleggFor?: ManuellSøknadJaNeiSpm;
     manueltRegistrertBarnAntallVedlegg?: number;
-}
-
-export const defaultRegistrerSøknadManueltFormValues: ManueltRegistrertSøknad = {
-    journalpostId: '',
-    manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
-    antallVedlegg: 0,
-    søknadstype: undefined,
-    overfortFraArena: undefined,
-    svar: {
-        harSøktPåTiltak: undefined,
-        tiltak: undefined,
-        barnetilleggPdl: [],
-        barnetilleggManuelle: [],
-        institusjon: {},
-        intro: {},
-        kvp: {},
-        sykepenger: {},
-        gjenlevendepensjon: {},
-        alderspensjon: {},
-        supplerendeStønadAlder: {},
-        supplerendeStønadFlyktning: {},
-        trygdOgPensjon: {},
-        etterlønn: {},
-        jobbsjansen: {},
-        harSøktOmBarnetillegg: undefined,
-        mottarAndreUtbetalinger: undefined,
-        barnetilleggKladd: undefined,
-    },
 };

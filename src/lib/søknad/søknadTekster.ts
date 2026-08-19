@@ -1,6 +1,5 @@
-import { Behandlingsårsak, Søknadstype } from '~/lib/søknad/søknadTyper';
+import { Behandlingsårsak, JaNeiSvar, Søknadstype } from '~/lib/søknad/søknadTyper';
 import {
-    JaNeiSvar,
     SøknadBehandlingsårsakManueltRegistrertSøknad,
     SøknadstypeManueltRegistrertSøknad,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
