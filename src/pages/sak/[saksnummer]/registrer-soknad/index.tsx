@@ -6,23 +6,23 @@ import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { SpørsmålMedPeriodevelger } from '~/lib/manuell-søknad/SpørsmålMedPeriodevelger';
+import { SpørsmålMedPeriodevelger } from '~/lib/søknad/manuell-søknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import defaultManuellSøknadFormValues, {
     ManueltRegistrertSøknad,
-} from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
-import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
-import { MottarPengestøtterSpørsmål } from '~/lib/manuell-søknad/MottarPengestøtterSpørsmål';
-import { Periodevelger } from '~/lib/manuell-søknad/Periodevelger';
-import { VelgTiltak } from '~/lib/manuell-søknad/tiltak/VelgTiltak';
-import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
+} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
+import { MottarPengestøtterSpørsmål } from '~/lib/søknad/manuell-søknad/MottarPengestøtterSpørsmål';
+import { Periodevelger } from '~/lib/søknad/manuell-søknad/Periodevelger';
+import { VelgTiltak } from '~/lib/søknad/manuell-søknad/tiltak/VelgTiltak';
+import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/søknad/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
 import { useOpprettSøknad } from '~/lib/personoversikt/opprett-behandling/manuell-søknad/useOpprettSøknad';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { JournalpostId } from '~/lib/_felles/journalpostId/JournalpostId';
-import { SøknadstypeSelect } from '~/lib/manuell-søknad/SøknadstypeSelect';
-import { OverførtFraArenaSpørsmål } from '~/lib/manuell-søknad/OverførtFraArenaSpørsmål';
+import { SøknadstypeSelect } from '~/lib/søknad/manuell-søknad/SøknadstypeSelect';
+import { OverførtFraArenaSpørsmål } from '~/lib/søknad/manuell-søknad/OverførtFraArenaSpørsmål';
 
 interface Props {
     sak: SakProps;
@@ -139,10 +139,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                                 spørsmål="Har nylig mottatt sykepenger og er fortsatt sykemeldt"
                             />
 
-                            <MottarPengestøtterSpørsmål
-                                name="svar.mottarAndreUtbetalinger"
-                                legend="Mottar noen av pengestøttene"
-                            />
+                            <MottarPengestøtterSpørsmål />
 
                             <SpørsmålMedPeriodevelger
                                 spørsmålFelt="svar.institusjon.svar"

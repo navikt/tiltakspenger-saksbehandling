@@ -4,14 +4,17 @@ import styles from './ManueltRegistrertSøknadBarnetillegg.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
-import type { Barn, ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
-import { LeggTilBarnManuelt } from '~/lib/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
-import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
-import { useHentPersonopplysningerBarn } from '~/lib/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
+import type {
+    Barn,
+    ManueltRegistrertSøknad,
+} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import { LeggTilBarnManuelt } from '~/lib/søknad/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
+import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
+import { useHentPersonopplysningerBarn } from '~/lib/søknad/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { v4 as uuidv4 } from 'uuid';
 import { SakId } from '~/lib/sak/SakTyper';
-import { InformasjonOmBarnPDL } from '~/lib/manuell-søknad/barnetillegg/InformasjonOmBarnPDL';
-import { InformasjonOmBarnManuell } from '~/lib/manuell-søknad/barnetillegg/InformasjonOmBarnManuell';
+import { InformasjonOmBarnPDL } from '~/lib/søknad/manuell-søknad/barnetillegg/InformasjonOmBarnPDL';
+import { InformasjonOmBarnManuell } from '~/lib/søknad/manuell-søknad/barnetillegg/InformasjonOmBarnManuell';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Periode } from '~/types/Periode';
 

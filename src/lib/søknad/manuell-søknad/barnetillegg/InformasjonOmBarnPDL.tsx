@@ -1,7 +1,7 @@
 import { Heading, HStack, Tag } from '@navikt/ds-react';
 import { finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
-import { getNavnMedFødselsdato } from '~/lib/manuell-søknad/barnetillegg/barnetilleggUtils';
+import { getNavnMedFødselsdato } from '~/lib/søknad/manuell-søknad/barnetillegg/barnetilleggUtils';
 import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 

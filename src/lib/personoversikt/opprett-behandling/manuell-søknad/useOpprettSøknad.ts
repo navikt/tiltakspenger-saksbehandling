@@ -1,5 +1,5 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 
 export const useOpprettSøknad = (saksnummer: string) => {

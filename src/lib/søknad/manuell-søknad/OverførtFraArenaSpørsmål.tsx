@@ -5,8 +5,9 @@ import type {
     ManueltRegistrertSøknad,
     SøknadBehandlingsårsakManueltRegistrertSøknad,
 } from './ManueltRegistrertSøknad';
-import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
+import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import { søknadBehandlingsårsakTekst } from '~/lib/søknad/søknadTekster';
+import { manuellSøknadHåndterPengestøtterSvar } from '~/lib/søknad/manuell-søknad/MottarPengestøtterSpørsmål';
 
 const behandlingsårsaker: ReadonlyArray<{
     value: SøknadBehandlingsårsakManueltRegistrertSøknad;
@@ -28,8 +29,8 @@ const behandlingsårsaker: ReadonlyArray<{
 ] as const;
 
 export const OverførtFraArenaSpørsmål = () => {
-    const { control } = useFormContext<ManueltRegistrertSøknad>();
-    const methods = useFormContext();
+    const formContext = useFormContext<ManueltRegistrertSøknad>();
+    const { control } = formContext;
 
     const overførtFraArenaSvar = useWatch({ control, name: 'overfortFraArena' }) as
         | JaNeiSvar
@@ -76,12 +77,13 @@ export const OverførtFraArenaSpørsmål = () => {
                             (value as SøknadBehandlingsårsakManueltRegistrertSøknad) ===
                                 'FORLENGELSE_FRA_ARENA'
                         ) {
-                            methods.setValue('svar.kvp.svar', 'NEI');
-                            methods.setValue('svar.intro.svar', 'NEI');
-                            methods.setValue('svar.etterlønn.svar', 'NEI');
-                            methods.setValue('svar.sykepenger.svar', 'NEI');
-                            methods.setValue('svar.mottarAndreUtbetalinger', 'NEI');
-                            methods.setValue('svar.institusjon.svar', 'NEI');
+                            formContext.setValue('svar.kvp.svar', 'NEI');
+                            formContext.setValue('svar.intro.svar', 'NEI');
+                            formContext.setValue('svar.etterlønn.svar', 'NEI');
+                            formContext.setValue('svar.sykepenger.svar', 'NEI');
+                            formContext.setValue('svar.institusjon.svar', 'NEI');
+                            formContext.setValue('svar.mottarAndreUtbetalinger', 'NEI');
+                            manuellSøknadHåndterPengestøtterSvar(formContext, 'NEI');
                         }
                     }}
                     onBlur={behandlingsårsakField.onBlur}

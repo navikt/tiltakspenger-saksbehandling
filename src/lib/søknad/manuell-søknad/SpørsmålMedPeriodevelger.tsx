@@ -1,5 +1,5 @@
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import type { ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import type { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 import { Periodevelger } from './Periodevelger';
 

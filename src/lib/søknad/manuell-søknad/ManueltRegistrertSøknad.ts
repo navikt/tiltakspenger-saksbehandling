@@ -60,7 +60,7 @@ export interface Spørsmålsbesvarelser {
     kvp: PeriodeSpm;
     intro: PeriodeSpm;
     institusjon: PeriodeSpm;
-    mottarAndreUtbetalinger: boolean | undefined;
+    mottarAndreUtbetalinger: JaNeiSvar | undefined;
     sykepenger: PeriodeSpm;
     gjenlevendepensjon: PeriodeSpm;
     alderspensjon: FraOgMedDatoSpm;
@@ -107,7 +107,7 @@ const defaultRegistrerSøknadManueltFormValues = {
         etterlønn: {},
         jobbsjansen: {},
         harSøktOmBarnetillegg: undefined,
-        mottarAndreUtbetalinger: undefined,
+        mottarAndreUtbetalinger: {},
     },
 };
 

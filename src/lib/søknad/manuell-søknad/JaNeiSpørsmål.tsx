@@ -1,7 +1,10 @@
 import React from 'react';
 import { Radio, RadioGroup, Stack } from '@navikt/ds-react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { JaNeiSvar, ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import {
+    JaNeiSvar,
+    ManueltRegistrertSøknad,
+} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import styles from './JaNeiSpørsmål.module.css';
 
 type Props = {

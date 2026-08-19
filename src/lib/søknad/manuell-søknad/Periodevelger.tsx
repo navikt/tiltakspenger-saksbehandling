@@ -1,7 +1,7 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { FieldPath, RegisterOptions, useController, useFormContext } from 'react-hook-form';
-import { ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import styles from './Periodevelger.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 

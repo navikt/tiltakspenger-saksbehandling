@@ -1,26 +1,22 @@
-import { FieldPath, useController, useFormContext } from 'react-hook-form';
+import { useController, useFormContext, UseFormReturn } from 'react-hook-form';
 import type {
     JaNeiSvar,
     ManueltRegistrertSøknad,
-} from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
+import { SpørsmålMedPeriodevelger } from '~/lib/søknad/manuell-søknad/SpørsmålMedPeriodevelger';
+import { Box, List } from '@navikt/ds-react';
+import { SpørsmålMedDatovelger } from '~/lib/søknad/manuell-søknad/SpørsmålMedDatovelger';
+import { classNames } from '~/utils/classNames';
 
 import styles from './MottarPengestøtterSpørsmål.module.css';
-import { SpørsmålMedPeriodevelger } from '~/lib/manuell-søknad/SpørsmålMedPeriodevelger';
-import { Box, List } from '@navikt/ds-react';
-import { SpørsmålMedDatovelger } from '~/lib/manuell-søknad/SpørsmålMedDatovelger';
 
-type Props = {
-    name: FieldPath<ManueltRegistrertSøknad>;
-    legend: string;
-    tittel?: string;
-};
+export const MottarPengestøtterSpørsmål = () => {
+    const formContext = useFormContext<ManueltRegistrertSøknad>();
+    const { control, resetField } = formContext;
 
-export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
-    const { control, setValue, resetField } = useFormContext<ManueltRegistrertSøknad>();
-
-    const spørsmål = useController({
-        name: name,
+    const spørsmål = useController<ManueltRegistrertSøknad>({
+        name: 'svar.mottarAndreUtbetalinger',
         control,
         defaultValue: undefined,
     });
@@ -39,37 +35,19 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         resetField('svar.jobbsjansen.tilOgMed');
     };
 
-    // Svarer man JA på hovedspørsmålet, så nullstilles alle underspørsmålene i tilfelle man allerede har svart noe annet
-    // om man svarer NEI eller IKKE_BESVART skal alle underliggende spørsmål få samme svar fordi de har implisitt blitt svart på
-    const settFelter = (svar: JaNeiSvar | undefined): void => {
-        if (svar === undefined) {
-            resetField('svar.gjenlevendepensjon.svar');
-            resetField('svar.alderspensjon.svar');
-            resetField('svar.supplerendeStønadAlder.svar');
-            resetField('svar.supplerendeStønadFlyktning.svar');
-            resetField('svar.trygdOgPensjon.svar');
-            resetField('svar.jobbsjansen.svar');
-        } else {
-            setValue('svar.gjenlevendepensjon.svar', svar);
-            setValue('svar.alderspensjon.svar', svar);
-            setValue('svar.supplerendeStønadAlder.svar', svar);
-            setValue('svar.supplerendeStønadFlyktning.svar', svar);
-            setValue('svar.trygdOgPensjon.svar', svar);
-            setValue('svar.jobbsjansen.svar', svar);
-        }
-    };
-
     return (
-        <div className={spørsmål.field.value === 'JA' ? styles.blokkUtvidet : ''}>
+        <div className={classNames(spørsmål.field.value === 'JA' && styles.blokkUtvidet)}>
             <JaNeiSpørsmål
-                name={name}
-                legend={legend}
+                name={'svar.mottarAndreUtbetalinger'}
+                legend={'Mottar noen av pengestøttene'}
                 onChange={(newValue: JaNeiSvar | undefined) => {
+                    // Svarer man JA på hovedspørsmålet, så nullstilles alle underspørsmålene i tilfelle man allerede har svart noe annet
+                    // om man svarer NEI eller IKKE_BESVART skal alle underliggende spørsmål få samme svar fordi de har implisitt blitt svart på
                     if (newValue !== undefined && newValue !== 'JA') {
                         nullstillPeriodeFelter();
-                        settFelter(newValue);
+                        manuellSøknadHåndterPengestøtterSvar(formContext, newValue);
                     } else {
-                        settFelter(undefined);
+                        manuellSøknadHåndterPengestøtterSvar(formContext);
                     }
                 }}
                 details={
@@ -139,4 +117,26 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
             )}
         </div>
     );
+};
+
+// Oppdaterer alle underspørsmålene til å ha samme svar som hovedspørsmålet, eller nullstiller dem hvis det ikke er noe svar
+export const manuellSøknadHåndterPengestøtterSvar = (
+    { resetField, setValue }: UseFormReturn<ManueltRegistrertSøknad>,
+    svar?: JaNeiSvar,
+): void => {
+    if (!svar) {
+        resetField('svar.gjenlevendepensjon.svar');
+        resetField('svar.alderspensjon.svar');
+        resetField('svar.supplerendeStønadAlder.svar');
+        resetField('svar.supplerendeStønadFlyktning.svar');
+        resetField('svar.trygdOgPensjon.svar');
+        resetField('svar.jobbsjansen.svar');
+    } else {
+        setValue('svar.gjenlevendepensjon.svar', svar);
+        setValue('svar.alderspensjon.svar', svar);
+        setValue('svar.supplerendeStønadAlder.svar', svar);
+        setValue('svar.supplerendeStønadFlyktning.svar', svar);
+        setValue('svar.trygdOgPensjon.svar', svar);
+        setValue('svar.jobbsjansen.svar', svar);
+    }
 };

@@ -1,4 +1,4 @@
-import { Barn } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import { Barn } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { formaterDatotekst } from '~/utils/date';
 

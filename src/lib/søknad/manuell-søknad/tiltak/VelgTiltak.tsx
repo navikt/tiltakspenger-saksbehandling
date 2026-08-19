@@ -1,13 +1,16 @@
 import React from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
-import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
-import { ManueltRegistrertSøknad, Tiltak } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
+import {
+    ManueltRegistrertSøknad,
+    Tiltak,
+} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
-import { useHentTiltaksdeltakelser } from '~/lib/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
+import { useHentTiltaksdeltakelser } from '~/lib/søknad/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 

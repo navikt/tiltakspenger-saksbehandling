@@ -1,7 +1,7 @@
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
+import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
-import type { ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import type { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Heading, VStack } from '@navikt/ds-react';
 import styles from './SpørsmålMedDatoVelger.module.css';
 import { dateTilISOTekst } from '~/utils/date';

@@ -3,7 +3,7 @@ import {
     JaNeiSvar,
     SøknadBehandlingsårsakManueltRegistrertSøknad,
     SøknadstypeManueltRegistrertSøknad,
-} from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 
 export const søknadstypeTekst: Record<Søknadstype | SøknadstypeManueltRegistrertSøknad, string> = {
     DIGITAL: 'Digital',
