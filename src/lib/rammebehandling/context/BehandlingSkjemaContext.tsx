@@ -25,6 +25,7 @@ import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/ra
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 export type BehandlingSkjemaContextBase<T> = T & {
     erReadonly: boolean;
@@ -61,7 +62,8 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
 
     const erReadonly =
         rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER ||
-        behandling.status !== Rammebehandlingsstatus.UNDER_BEHANDLING;
+        behandling.status !== Rammebehandlingsstatus.UNDER_BEHANDLING ||
+        erBehandlingSattPåVent(behandling);
 
     const [skjema, dispatch] = useReducer(
         behandlingSkjemaReducer,

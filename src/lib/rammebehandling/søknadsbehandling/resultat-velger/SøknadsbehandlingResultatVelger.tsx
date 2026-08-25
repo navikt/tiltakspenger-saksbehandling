@@ -1,6 +1,5 @@
 import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
@@ -8,21 +7,15 @@ import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
 
 export const SøknadsbehandlingResultatVelger = () => {
-    const { rolleForBehandling, behandling } = useSøknadsbehandling();
-    const { kanInnvilges, status } = behandling;
+    const { behandling } = useSøknadsbehandling();
+    const { kanInnvilges } = behandling;
 
-    const { resultat } = useSøknadsbehandlingSkjema();
+    const { resultat, erReadonly } = useSøknadsbehandlingSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
-
-    const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-    const erUnderBehandling = status === Rammebehandlingsstatus.UNDER_BEHANDLING;
-
-    const erReadonly = erIkkeSaksbehandler || !erUnderBehandling;
 
     return (
         <VedtakSeksjon>

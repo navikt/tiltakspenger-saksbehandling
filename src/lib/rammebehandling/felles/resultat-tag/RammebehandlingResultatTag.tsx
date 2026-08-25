@@ -2,7 +2,7 @@ import { Tag, TagProps } from '@navikt/ds-react';
 import { RammebehandlingResultat } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { rammebehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+import { rammebehandlingResultatTekst } from '../../rammebehandlingTekster';
 
 type Props = {
     resultat: RammebehandlingResultat;

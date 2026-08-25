@@ -13,7 +13,7 @@ import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/be
 import {
     rammebehandlingResultatTekst,
     rammebehandlingstypeTekst,
-} from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+} from '../rammebehandling/rammebehandlingTekster';
 
 const KlageTilknyttedeBehandlingerInfoCard = (props: {
     klage: Klagebehandling;

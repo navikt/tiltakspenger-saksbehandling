@@ -1,7 +1,7 @@
 import { BenkSøknaderFilter } from '../typer/søknader';
 import { BenkTab } from '../typer/tabs';
 import { benkBehandlingsstatusTekst } from '../utils/benkUtils';
-import { søknadsbehandlingResultatTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+import { søknadsbehandlingResultatTekst } from '../../rammebehandling/rammebehandlingTekster';
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { useResettableState } from '~/utils/useResettableState';

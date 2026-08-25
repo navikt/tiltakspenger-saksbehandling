@@ -23,7 +23,7 @@ import {
 import style from './OmgjortGradBakgrunn.module.css';
 import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
-import { rammebehandlingstypeTekst } from '~/lib/rammebehandling/utils/rammebehandlingTekster';
+import { rammebehandlingstypeTekst } from '../../rammebehandling/rammebehandlingTekster';
 
 type Props = {
     sakId: SakId;

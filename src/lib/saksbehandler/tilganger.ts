@@ -21,7 +21,8 @@ export const kanBeslutteForBehandling = (
         erBeslutter(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent === beslutter &&
         innloggetSaksbehandler.navIdent !== saksbehandler &&
-        status === Rammebehandlingsstatus.UNDER_BESLUTNING
+        status === Rammebehandlingsstatus.UNDER_BESLUTNING &&
+        !erBehandlingSattPåVent(behandling)
     );
 };
 
@@ -38,7 +39,8 @@ export const kanSaksbehandleForBehandling = (
 ) => {
     return (
         kanBehandle(innloggetSaksbehandler, behandling.saksbehandler) &&
-        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING
+        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING &&
+        !erBehandlingSattPåVent(behandling)
     );
 };
 
