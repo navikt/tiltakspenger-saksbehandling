@@ -18,6 +18,12 @@ export const kanIkkeBehandlesGrunnTekst: Record<KanIkkeBehandlesGrunn, string> =
         'Ingen dager i meldeperioden gir rett til tiltakspenger.',
 } as const;
 
+export const kanIkkeBehandlesGrunnTekstKort: Record<KanIkkeBehandlesGrunn, string> = {
+    [KanIkkeBehandlesGrunn.HAR_ÅPEN_BEHANDLING]: 'Allerede under behandling',
+    [KanIkkeBehandlesGrunn.MELDEPERIODEN_HAR_IKKE_STARTET]: 'Ikke startet',
+    [KanIkkeBehandlesGrunn.INGEN_DAGER_GIR_RETT]: 'Ikke rett i perioden',
+} as const;
+
 export const brukersMeldekortKjedeStatusTekst: Record<BrukersMeldekortKjedeStatus, string> = {
     [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',
     [BrukersMeldekortKjedeStatus.VENTER_BEHANDLING]: 'Mottatt, ikke behandlet',

@@ -124,3 +124,7 @@ export const formaterMeldeperiodeKort = (periode: Periode) => {
 export const ukenummerFraPeriode = (periode: Periode) => {
     return `${ukenummerFraDatotekst(periode.fraOgMed)} - ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 };
+
+export const årstallFraDato = (dato: DateOrString): number => {
+    return dayjs(dato).year();
+};

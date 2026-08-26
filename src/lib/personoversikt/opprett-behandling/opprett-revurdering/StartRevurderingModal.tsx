@@ -6,7 +6,7 @@ import { useStartRevurdering } from './useStartRevurdering';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { behandlingUrl } from '~/utils/urls';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { revurderingResultatTekst } from '../../../rammebehandling/rammebehandlingTekster';
+import { revurderingResultatTekst } from '~/lib/rammebehandling/rammebehandlingTekster';
 
 type Props = {
     sakId: SakId;

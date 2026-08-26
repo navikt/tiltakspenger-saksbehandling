@@ -1,5 +1,5 @@
 import { Button, Dialog, Select, VStack } from '@navikt/ds-react';
-import { formaterMeldeperiode } from '~/utils/date';
+import { formaterMeldeperiode, årstallFraDato } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import {
     useMeldekortbehandlingSkjema,
@@ -10,9 +10,16 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
-import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import {
+    brukersMeldekortKjedeStatusTekst,
+    kanIkkeBehandlesGrunnTekstKort,
+} from '~/lib/meldekort/utils/meldekortTekster';
+import {
+    KanIkkeBehandlesGrunn,
+    MeldeperiodeKjedeId,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { sorterPeriodisering } from '~/utils/periode';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
@@ -28,9 +35,18 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
 
     const valgteKjedeIder = new Set<MeldeperiodeKjedeId>(meldeperioder.map((m) => m.kjedeId));
 
-    const tilgjengeligeKjeder = sak.meldeperiodeKjeder.filter(
-        (kjede) => kanBehandleMeldeperiodekjede(kjede) && !valgteKjedeIder.has(kjede.id),
-    );
+    const tilgjengeligeKjeder = sak.meldeperiodeKjeder
+        .filter(
+            (kjede) =>
+                kjede.kanIkkeBehandlesGrunn !==
+                    KanIkkeBehandlesGrunn.MELDEPERIODEN_HAR_IKKE_STARTET &&
+                !valgteKjedeIder.has(kjede.id),
+        )
+        .toSorted(sorterPeriodisering('desc'));
+
+    const kjederPerÅr = Object.groupBy(tilgjengeligeKjeder, (kjede) =>
+        årstallFraDato(kjede.periode.fraOgMed).toString(),
+    ) as Record<string, MeldeperiodekjedeProps[]>;
 
     const harTilgjengeligeKjeder = tilgjengeligeKjeder.length > 0;
 
@@ -96,15 +112,39 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                             disabled={!harTilgjengeligeKjeder}
                         >
                             {harTilgjengeligeKjeder ? (
-                                tilgjengeligeKjeder.toReversed().map((kjede) => {
-                                    const { id, brukersMeldekortStatus, periode } = kjede;
+                                Object.keys(kjederPerÅr)
+                                    .toSorted()
+                                    .toReversed()
+                                    .map((år) => (
+                                        <optgroup label={år} key={år}>
+                                            {kjederPerÅr[år].map((kjede) => {
+                                                const {
+                                                    id,
+                                                    brukersMeldekortStatus,
+                                                    periode,
+                                                    kanIkkeBehandlesGrunn,
+                                                } = kjede;
 
-                                    return (
-                                        <option key={id} value={id}>
-                                            {`${formaterMeldeperiode(periode)} - ${brukersMeldekortKjedeStatusTekst[brukersMeldekortStatus]}`}
-                                        </option>
-                                    );
-                                })
+                                                return (
+                                                    <option
+                                                        key={id}
+                                                        value={id}
+                                                        disabled={!!kanIkkeBehandlesGrunn}
+                                                    >
+                                                        {`${formaterMeldeperiode(periode)} - ${
+                                                            kanIkkeBehandlesGrunn
+                                                                ? kanIkkeBehandlesGrunnTekstKort[
+                                                                      kanIkkeBehandlesGrunn
+                                                                  ]
+                                                                : brukersMeldekortKjedeStatusTekst[
+                                                                      brukersMeldekortStatus
+                                                                  ]
+                                                        }`}
+                                                    </option>
+                                                );
+                                            })}
+                                        </optgroup>
+                                    ))
                             ) : (
                                 <option>{'Ingen tilgjengelige meldeperioder'}</option>
                             )}

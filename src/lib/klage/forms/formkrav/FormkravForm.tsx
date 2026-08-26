@@ -20,7 +20,7 @@ import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortved
 import {
     rammebehandlingResultatTekst,
     rammebehandlingstypeTekst,
-} from '../../../rammebehandling/rammebehandlingTekster';
+} from '~/lib/rammebehandling/rammebehandlingTekster';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
