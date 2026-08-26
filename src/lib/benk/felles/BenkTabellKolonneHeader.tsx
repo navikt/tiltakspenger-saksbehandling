@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import { useBenkVisning } from './BenkVisningContext';
+import { useBenkVisning } from './filter/BenkVisningContext';
 
 /**
  * Kolonneoverskriftene som går igjen på tvers av fanene i benken.

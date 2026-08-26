@@ -23,7 +23,7 @@ import { BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkKlagebehandling } from '../typer/klage';
 import { BenkBehandlingMeny } from './BenkBehandlingMeny';
-import { useBenkVisning } from './BenkVisningContext';
+import { useBenkVisning } from './filter/BenkVisningContext';
 import { kanFortsetteBenkRad } from '../utils/benkUtils';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 

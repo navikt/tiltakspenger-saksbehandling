@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
-import { BenkTab } from '../typer/tabs';
+import { BenkTab } from '../../typer/tabs';
 import {
     BenkFilterMap,
     benkFilterTilQuery,
     harBenkFilterVerdier,
     benkStrengVerdi,
-} from '../utils/benkQuery';
-import { nullstillBenkLagretFilter } from '../utils/benkCookie';
+} from '../../utils/benkQuery';
+import { nullstillBenkLagretFilter } from '../../utils/benkCookie';
 
 /**
  * Filtrering skjer server-side: valgte filtre legges i URL-en, som igjen

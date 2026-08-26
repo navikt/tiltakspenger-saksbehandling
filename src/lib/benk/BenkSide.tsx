@@ -29,7 +29,7 @@ import { BenkKlageTabell } from './klage/BenkKlageTabell';
 import { BenkTilbakekrevingFilterSkjema } from './tilbakekreving/BenkTilbakekrevingFilterSkjema';
 import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTabell';
 import { BenkPanel } from './felles/BenkPanel';
-import { BenkVisningProvider } from './felles/BenkVisningContext';
+import { BenkVisningProvider } from './felles/filter/BenkVisningContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './BenkSide.module.css';

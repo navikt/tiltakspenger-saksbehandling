@@ -3,10 +3,10 @@ import { BenkTab } from '../typer/tabs';
 import { benkBehandlingsstatusTekst } from '../utils/benkUtils';
 import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
 import { useResettableState } from '~/utils/useResettableState';
-import { useBenkFilterNavigasjon } from '../felles/useBenkFilterNavigasjon';
-import { BenkFilterSkjema } from '../felles/BenkFilterSkjema';
-import { BenkSaksbehandlerSelect } from '../felles/BenkSaksbehandlerSelect';
-import { BenkFilterSelect } from '../felles/BenkFilterSelect';
+import { useBenkFilterNavigasjon } from '../felles/filter/useBenkFilterNavigasjon';
+import { BenkFilterSkjema } from '../felles/filter/BenkFilterSkjema';
+import { BenkSaksbehandlerSelect } from '../felles/filter/BenkSaksbehandlerSelect';
+import { BenkFilterSelect } from '../felles/filter/BenkFilterSelect';
 
 type Props = {
     saksbehandlere: string[];

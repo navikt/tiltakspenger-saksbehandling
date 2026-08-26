@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
-import { Button, HStack, VStack } from '@navikt/ds-react';
-import { BenkFilterCheckbox } from '~/lib/benk/felles/BenkFilterCheckbox';
+import { Button, HelpText, HStack, VStack } from '@navikt/ds-react';
+import { BenkFilterCheckbox } from '~/lib/benk/felles/filter/BenkFilterCheckbox';
 
 type Props = {
     onSubmit: () => Promise<unknown>;
@@ -36,12 +36,20 @@ export const BenkFilterSkjema = ({
             </HStack>
 
             <VStack gap={'space-4'}>
-                <BenkFilterCheckbox
-                    checked={skjulEgneTilBeslutning}
-                    onChange={onSkjulEgneTilBeslutningChange}
-                >
-                    {'Skjul behandlinger jeg har sendt til beslutning'}
-                </BenkFilterCheckbox>
+                <HStack align={'center'} gap={'space-4'}>
+                    <BenkFilterCheckbox
+                        checked={skjulEgneTilBeslutning}
+                        onChange={onSkjulEgneTilBeslutningChange}
+                    >
+                        {'Skjul behandlinger jeg har sendt videre'}
+                    </BenkFilterCheckbox>
+                    <HelpText>
+                        {
+                            'Skjuler behandlinger som du har sendt til beslutning, eller som du har underkjent.'
+                        }
+                    </HelpText>
+                </HStack>
+
                 <BenkFilterCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange}>
                     {'Skjul behandlinger satt på vent'}
                 </BenkFilterCheckbox>
