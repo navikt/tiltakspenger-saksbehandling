@@ -23,6 +23,7 @@ export type BehandlingsmenyDialog =
     | 'leggTilbake'
     | 'settPåVent'
     | 'overta'
+    | 'angreSendTilBeslutning'
     | 'avslutt';
 
 export type BehandlingsmenyKapabiliteter = Record<BehandlingsmenyDialog, boolean>;
@@ -40,6 +41,7 @@ export const behandlingsmenyKapabiliteter = (
 
     return {
         tildelMeg: harKommando(Kommando.TildelSaksbehandler, Kommando.TildelBeslutter),
+        angreSendTilBeslutning: harKommando(Kommando.AngreSendTilBeslutning),
         gjenoppta: harKommando(Kommando.Gjenoppta),
         leggTilbake: harKommando(Kommando.LeggTilbakeSaksbehandler, Kommando.LeggTilbakeBeslutter),
         settPåVent: harKommando(Kommando.SettPåVent),
@@ -67,6 +69,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
 
     const kapabiliteter = behandlingsmenyKapabiliteter(gyldigeKommandoer);
     const kanTa = kapabiliteter.tildelMeg;
+    const kanAngreSendTilBeslutning = kapabiliteter.angreSendTilBeslutning;
     const kanGjenoppta = kapabiliteter.gjenoppta;
     const kanLeggeTilbake = kapabiliteter.leggTilbake;
     const kanSettePåVent = kapabiliteter.settPåVent;
@@ -92,6 +95,15 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         onSelect={() => onVelg('tildelMeg')}
                     >
                         {'Tildel meg'}
+                    </ActionMenu.Item>
+                )}
+
+                {kanAngreSendTilBeslutning && (
+                    <ActionMenu.Item
+                        icon={<ArrowUndoIcon aria-hidden />}
+                        onSelect={() => onVelg('angreSendTilBeslutning')}
+                    >
+                        {'Angre'}
                     </ActionMenu.Item>
                 )}
 

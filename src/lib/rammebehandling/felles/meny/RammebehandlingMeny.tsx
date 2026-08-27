@@ -26,6 +26,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
+import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
 
 type Props = {
     behandling: Rammebehandling;
@@ -122,6 +123,16 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                     behandlingId={behandling.id}
                     sakId={sak.sakId}
                     åpen={aktivDialog === 'tildelMeg'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
+                />
+            )}
+
+            {kapabiliteter.angreSendTilBeslutning && (
+                <RammebehandlingAngre
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
+                    åpen={aktivDialog === 'angreSendTilBeslutning'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />

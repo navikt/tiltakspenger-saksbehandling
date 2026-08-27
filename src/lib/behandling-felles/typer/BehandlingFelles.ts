@@ -39,6 +39,7 @@ export type BehandlingsmenyKallesFra = 'personoversikt' | 'behandling';
 export enum SaksbehandlerBehandlingKommando {
     TildelSaksbehandler = 'TildelSaksbehandler',
     TildelBeslutter = 'TildelBeslutter',
+    AngreSendTilBeslutning = 'AngreSendTilBeslutning',
     OvertaSaksbehandler = 'OvertaSaksbehandler',
     OvertaBeslutter = 'OvertaBeslutter',
     LeggTilbakeSaksbehandler = 'LeggTilbakeSaksbehandler',

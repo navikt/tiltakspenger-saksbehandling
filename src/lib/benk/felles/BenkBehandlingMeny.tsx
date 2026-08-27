@@ -23,6 +23,7 @@ import { BenkBehandlingsstatus, BenkBehandlingstype } from '../typer/felles';
 import { BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkMeldekort } from '../typer/meldekort';
+import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
 
 type Props = {
     behandling: BenkSøknadsbehandling | BenkRevurdering | BenkMeldekort;
@@ -149,6 +150,16 @@ const RammeDialoger = ({
                     behandlingId={id}
                     sakId={sakId}
                     åpen={aktivDialog === 'tildelMeg'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
+                />
+            )}
+
+            {kapabiliteter.angreSendTilBeslutning && (
+                <RammebehandlingAngre
+                    behandlingId={id}
+                    sakId={sakId}
+                    åpen={aktivDialog === 'angreSendTilBeslutning'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
