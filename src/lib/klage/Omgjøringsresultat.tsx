@@ -2,7 +2,7 @@ import { Button, HStack, InfoCard, VStack } from '@navikt/ds-react';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { useState } from 'react';
 import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/typer/Klage';
-import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Søknad } from '~/lib/søknad/søknadTyper';
@@ -13,7 +13,7 @@ import {
     erKlagebehandlingSattPåVent,
     erKlageÅpen,
 } from '~/lib/klage/utils/klageUtils';
-import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
+import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import FerdigstillKlageModalWrapper from './modaler/FerdigstillKlagebehandlingModal';
 import KlageTilknyttedeBehandlingerInfoCard from './KlageTilknyttedeBehandlingerInfoCard';
@@ -137,13 +137,15 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     meldeperiodekjeder: MeldeperiodekjedeProps[];
     omgjøringsbehandling: Nullable<MeldekortbehandlingProps | Rammebehandling>;
 }) => {
+    const { åpenBehandlingId } = props.klage;
+
     const erReadonlyForSaksbehandler =
         props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
-    const harÅpenBehandling = !!props.klage.åpenBehandlingId;
+    const harÅpenBehandling = !!åpenBehandlingId;
     const klagerPåRammebehandling =
-        harÅpenBehandling && erBehandlingIdRammebehandling(props.klage.åpenBehandlingId!);
+        harÅpenBehandling && erBehandlingIdRammebehandling(åpenBehandlingId);
     const klagerPåMeldekortbehandling =
-        harÅpenBehandling && erBehandlingIdMeldekortbehandling(props.klage.åpenBehandlingId!);
+        harÅpenBehandling && erBehandlingIdMeldekortbehandling(åpenBehandlingId);
 
     const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
         useState(false);
@@ -157,7 +159,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                             size={'medium'}
                             href={behandlingUrl({
                                 saksnummer: props.klage.saksnummer,
-                                id: props.klage.åpenBehandlingId as RammebehandlingId,
+                                id: åpenBehandlingId,
                             })}
                         >
                             Gå til omgjøringsbehandling
@@ -166,10 +168,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                     {klagerPåMeldekortbehandling && (
                         <InternLenkeKnapp
                             size={'medium'}
-                            href={meldeperiodeUrl(
-                                props.klage.saksnummer,
-                                (props.omgjøringsbehandling as MeldekortbehandlingProps).periode,
-                            )}
+                            href={meldekortbehandlingUrl(props.klage.saksnummer, åpenBehandlingId)}
                         >
                             Gå til omgjøringsbehandling
                         </InternLenkeKnapp>

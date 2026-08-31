@@ -1,4 +1,7 @@
-import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import {
+    SøknadsbehandlingInnvilgelse,
+    SøknadsbehandlingResultat,
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import {
     Rammevedtak,
@@ -27,25 +30,23 @@ import {
     MeldeperiodeKjedeId,
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { nonNullish } from '~/utils/object';
 
-export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
-    const { alleRammevedtak, rammebehandlinger } = sak;
+export const hentVedtatteSøknadsbehandlinger = (sak: SakProps): SøknadsbehandlingInnvilgelse[] => {
+    const { alleRammevedtak } = sak;
 
     return alleRammevedtak
-        .map((vedtak) => rammebehandlinger.find((beh) => beh.id === vedtak.behandlingId)!)
+        .map((vedtak) => hentRammebehandling(sak, vedtak.behandlingId))
         .filter((beh) => beh.resultat === SøknadsbehandlingResultat.INNVILGELSE)
         .toSorted((a, b) => (a.iverksattTidspunkt! > b.iverksattTidspunkt! ? -1 : 1));
 };
 
 // Henter rammevedtaket for id, eller kaster dersom det ikke finnes
 export const hentRammevedtak = (sak: SakProps, vedtakId: VedtakId): Rammevedtak => {
-    const vedtak = sak.alleRammevedtak.find((it) => it.id === vedtakId);
-
-    if (!vedtak) {
-        throw Error(`Fant ikke rammevedtak med id ${vedtakId}`);
-    }
-
-    return vedtak;
+    return nonNullish(
+        sak.alleRammevedtak.find((it) => it.id === vedtakId),
+        `Fant ikke rammevedtak med id ${vedtakId}`,
+    );
 };
 
 export const hentGjeldendeRammevedtak = (
@@ -69,13 +70,10 @@ export const hentGjeldendeRammevedtakIPeriode = (
 
 // Henter søknaden for id, eller kaster dersom den ikke finnes
 export const hentSøknad = (sak: SakProps, søknadId: SøknadId): Søknad => {
-    const søknad = sak.søknader.find((it) => it.id === søknadId);
-
-    if (!søknad) {
-        throw Error(`Fant ikke søknad med id ${søknadId}`);
-    }
-
-    return søknad;
+    return nonNullish(
+        sak.søknader.find((it) => it.id === søknadId),
+        `Fant ikke søknad med id ${søknadId}`,
+    );
 };
 
 // Henter tilbakekrevingen for id, eller kaster dersom den ikke finnes
@@ -83,13 +81,10 @@ export const hentTilbakekreving = (
     sak: SakProps,
     tilbakekrevingId: TilbakekrevingId,
 ): TilbakekrevingBehandling => {
-    const tilbakekreving = sak.tilbakekrevinger.find((it) => it.id === tilbakekrevingId);
-
-    if (!tilbakekreving) {
-        throw Error(`Fant ikke tilbakekreving med id ${tilbakekrevingId}`);
-    }
-
-    return tilbakekreving;
+    return nonNullish(
+        sak.tilbakekrevinger.find((it) => it.id === tilbakekrevingId),
+        `Fant ikke tilbakekreving med id ${tilbakekrevingId}`,
+    );
 };
 
 // Henter meldeperiodekjeden for kjedeId, eller kaster dersom den ikke finnes
@@ -97,13 +92,10 @@ export const hentMeldeperiodekjede = (
     sak: SakProps,
     kjedeId: MeldeperiodeKjedeId,
 ): MeldeperiodekjedeProps => {
-    const kjede = sak.meldeperiodeKjeder.find((it) => it.id === kjedeId);
-
-    if (!kjede) {
-        throw Error(`Fant ikke meldeperiodekjede med id ${kjedeId}`);
-    }
-
-    return kjede;
+    return nonNullish(
+        sak.meldeperiodeKjeder.find((it) => it.id === kjedeId),
+        `Fant ikke meldeperiodekjede med id ${kjedeId}`,
+    );
 };
 
 // Henter meldekortbehandlingen for id, eller kaster dersom den ikke finnes
@@ -111,24 +103,15 @@ export const hentMeldekortbehandling = (
     sak: SakProps,
     id: MeldekortbehandlingId,
 ): MeldekortbehandlingProps => {
-    const meldekortbehandling = sak.meldekortbehandlinger[id];
-
-    if (!meldekortbehandling) {
-        throw Error(`Fant ikke meldekortbehandling med id ${id}`);
-    }
-
-    return meldekortbehandling;
+    return nonNullish(sak.meldekortbehandlinger[id], `Fant ikke meldekortbehandling med id ${id}`);
 };
 
 // Henter rammebehandlingen for id, eller kaster dersom den ikke finnes
 export const hentRammebehandling = (sak: SakProps, id: RammebehandlingId): Rammebehandling => {
-    const rammebehandling = sak.rammebehandlinger.find((beh) => beh.id === id);
-
-    if (!rammebehandling) {
-        throw Error(`Fant ikke rammebehandling med id ${id}`);
-    }
-
-    return rammebehandling;
+    return nonNullish(
+        sak.rammebehandlinger.find((beh) => beh.id === id),
+        `Fant ikke rammebehandling med id ${id}`,
+    );
 };
 
 export const hentRammevedtakMedBehandlinger = (sak: SakProps): RammevedtakMedBehandling[] => {
@@ -153,20 +136,16 @@ export const hentMeldekortvedtakMedBehandlinger = (
     });
 };
 
-// Henter de åpne meldekortbehandlingene på saken
 export const hentÅpneMeldekortbehandlinger = (sak: SakProps): MeldekortbehandlingProps[] =>
     sak.åpneBehandlinger
         .filter((åpenBehandling) => åpenBehandling.type === ÅpenBehandlingType.MELDEKORT)
         .map((åpenBehandling) => hentMeldekortbehandling(sak, åpenBehandling.id));
 
 export const hentKlagebehandling = (sak: SakProps, klageId: KlageId): Klagebehandling => {
-    const klagebehandling = sak.klagebehandlinger.find((klage) => klage.id === klageId);
-
-    if (!klagebehandling) {
-        throw Error(`Fant ikke klagebehandling med id ${klageId}`);
-    }
-
-    return klagebehandling;
+    return nonNullish(
+        sak.klagebehandlinger.find((klage) => klage.id === klageId),
+        `Fant ikke klagebehandling med id ${klageId}`,
+    );
 };
 
 export const hentKlagevedtakMedBehandlinger = (sak: SakProps): KlagevedtakMedBehandling[] => {

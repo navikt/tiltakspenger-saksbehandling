@@ -91,15 +91,15 @@ export const nesteDag = (dato: string) => leggTilDager(dato, 1);
 
 export const forrigeDag = (dato: string) => leggTilDager(dato, -1);
 
-export const datoTilDatoInputText = (dato: string | Date): string => {
+export const datoTilDatoInputText = (dato: DateOrString): string => {
     return dayjs(dato).format('DD.MM.YYYY');
 };
 
-export const datoMin = (...datoer: Array<string | Date>): string => {
+export const datoMin = (...datoer: Array<DateOrString>): string => {
     return dayjs.min(datoer.map(dayjs))!.format(DATO_FORMAT);
 };
 
-export const datoMax = (...datoer: Array<string | Date>): string => {
+export const datoMax = (...datoer: Array<DateOrString>): string => {
     return dayjs.max(datoer.map(dayjs))!.format(DATO_FORMAT);
 };
 

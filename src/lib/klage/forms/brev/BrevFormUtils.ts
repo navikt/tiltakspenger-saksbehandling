@@ -8,6 +8,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { formaterDatotekst } from '~/utils/date';
 import { Vedtak } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { nonNullish } from '~/utils/object';
 
 export interface BrevFormData {
     tekstfelter: Avsnitt[];
@@ -75,7 +76,7 @@ export const klageTilBrevFormData = (
                   ? [
                         {
                             tittel: 'Hva klagesaken gjelder',
-                            tekst: `Vi viser til klage av ${formaterDatotekst(klage.formkrav.innsendingsdato)} på vedtak av ${formaterDatotekst(påKlagetVedtak!.opprettet)} der <kort om resultatet i vedtaket>`,
+                            tekst: `Vi viser til klage av ${formaterDatotekst(klage.formkrav.innsendingsdato)} på vedtak av ${formaterDatotekst(nonNullish(påKlagetVedtak).opprettet)} der <kort om resultatet i vedtaket>`,
                         },
                         { tittel: 'Klagers anførsler', tekst: '' },
                         { tittel: 'Vurdering av klagen', tekst: '' },

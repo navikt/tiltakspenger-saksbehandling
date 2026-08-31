@@ -13,6 +13,7 @@ import {
     MeldeperiodeKjedeId,
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { nonNullish } from '~/utils/object';
 
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingProps,
@@ -37,8 +38,8 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
 
             const meldeperiodeIndex = finnMeldeperiodeIndex(state.meldeperioder, kjedeId);
 
-            const meldeperiode = state.meldeperioder.at(meldeperiodeIndex)!;
-            const dag = meldeperiode.dager.at(dagIndex)!;
+            const meldeperiode = nonNullish(state.meldeperioder.at(meldeperiodeIndex));
+            const dag = nonNullish(meldeperiode.dager.at(dagIndex));
 
             return {
                 ...state,
@@ -104,13 +105,10 @@ const finnMeldeperiodeIndex = (
     meldeperioder: MeldeperiodeSkjema[],
     kjedeId: MeldeperiodeKjedeId,
 ): number => {
-    const meldeperiodeIndex = meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId);
-
-    if (meldeperiodeIndex === -1) {
-        throw Error(`Fant ingen meldeperiode for kjede ${kjedeId}`);
-    }
-
-    return meldeperiodeIndex;
+    return nonNullish(
+        meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId),
+        `Fant ingen meldeperiode for kjede ${kjedeId}`,
+    );
 };
 
 const meldeperiodeKjedeTilContext = (

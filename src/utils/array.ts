@@ -1,8 +1,3 @@
-import { ArrayOrSingle } from '~/types/UtilTypes';
-
-export const forceArray = <T>(arrayOrSingle: ArrayOrSingle<T>): T[] =>
-    Array.isArray(arrayOrSingle) ? arrayOrSingle : [arrayOrSingle];
-
 // Hvis isEqualPredicate ikke er definert, sjekkes duplikater av primitive verdier eller referanser
 export const removeDuplicatesFilter = <Type>(isEqualPredicate?: (a: Type, b: Type) => boolean) =>
     isEqualPredicate
@@ -12,6 +7,3 @@ export const removeDuplicatesFilter = <Type>(isEqualPredicate?: (a: Type, b: Typ
           }
         : (item: Type, index: number, array: Type[] | ReadonlyArray<Type>) =>
               array.indexOf(item) === index;
-
-export const isNonNullish = <T>(value: T): value is Exclude<T, null | undefined> =>
-    value !== null && value !== undefined;

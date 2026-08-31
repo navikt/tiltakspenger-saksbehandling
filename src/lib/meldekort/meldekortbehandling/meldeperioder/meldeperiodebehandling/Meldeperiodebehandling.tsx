@@ -35,9 +35,10 @@ import {
 import { MeldekortHurtigutfyllingStatusVelger } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/status-velger/MeldekortHurtigutfyllingStatusVelger';
 import { MeldekortHurtigutfyllingStart } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/utfylling-start/MeldekortHurtigutfyllingStart';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
+import { nonNullish } from '~/utils/object';
 
 import style from './Meldeperiodebehandling.module.css';
-import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
@@ -178,7 +179,7 @@ const MeldeperiodeUke = ({
     return (
         <VStack gap={'space-8'}>
             <Heading size={'xsmall'} level={'4'}>
-                {`Uke ${ukenummerFraDatotekst(dager.at(0)!.dato)}`}
+                {`Uke ${ukenummerFraDatotekst(nonNullish(dager.at(0)).dato)}`}
             </Heading>
 
             <Table size={'small'}>

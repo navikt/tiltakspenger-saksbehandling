@@ -20,6 +20,7 @@ import {
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
 import { sorterPeriodisering } from '~/utils/periode';
+import { nonNullish } from '~/utils/object';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
@@ -58,7 +59,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
     );
 
     const leggTil = () => {
-        const valgtKjedeId = selectRef.current!.value as MeldeperiodeKjedeId;
+        const valgtKjedeId = nonNullish(selectRef.current).value as MeldeperiodeKjedeId;
 
         dispatch({
             type: 'leggTilMeldeperioder',
@@ -78,7 +79,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
             payload: { meldeperiodeKjeder: ubehandledeKjeder },
         });
 
-        onLeggTil(ubehandledeKjeder.at(0)!.id);
+        onLeggTil(nonNullish(ubehandledeKjeder.at(0)).id);
     };
 
     return (

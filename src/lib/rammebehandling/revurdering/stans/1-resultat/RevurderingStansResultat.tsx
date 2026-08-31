@@ -10,6 +10,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { StansOgOpphørHjemmelVelger } from '~/lib/rammebehandling/revurdering/felles/hjemmel-velger/StansOgOpphørHjemmelVelger';
 import { HjemmelForStans } from '~/lib/rammebehandling/typer/Revurdering';
+import { nonNullish } from '~/utils/object';
 
 import style from './RevurderingStansResultat.module.css';
 
@@ -85,7 +86,7 @@ export const RevurderingStansResultat = () => {
                                 dispatch({
                                     type: 'setStansFraDato',
                                     payload: {
-                                        fraDato: førsteDagSomGirRett!,
+                                        fraDato: nonNullish(førsteDagSomGirRett),
                                     },
                                 });
                             }

@@ -2,6 +2,7 @@ import { MedPeriode, Periode } from '~/types/Periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { nonNullish } from '~/utils/object';
 
 export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Periode => {
     const [fraOgMed, tilOgMed] = kjedeId.split('/');
@@ -287,12 +288,12 @@ export const slåSammenPeriodisering = <T>(
 
 // Slår sammen perioder dersom de tilstøter hverandre eller overlapper
 export const slåSammenPerioder = (perioder: Periode[]): Periode[] => {
-    return perioder.toSorted(sorterPerioder()).reduce<Periode[]>((acc, periode) => {
-        if (acc.length === 0) {
+    return perioder.toSorted(sorterPerioder()).reduce<Periode[]>((acc, periode, index) => {
+        if (index === 0) {
             return [periode];
         }
 
-        const forrige = acc.at(-1)!;
+        const forrige = nonNullish(acc.at(-1));
 
         if (perioderErSammenhengende(forrige, periode) || perioderOverlapper(forrige, periode)) {
             return acc.toSpliced(-1, 1, {

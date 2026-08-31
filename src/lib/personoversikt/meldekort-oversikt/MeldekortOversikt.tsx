@@ -5,7 +5,7 @@ import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortH
 import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 import { ApneMeldekortbehandlingerOversikt } from './ApneMeldekortbehandlingerOversikt';
-import { isNonNullish } from '~/utils/array';
+import { isNonNullish } from '~/utils/object';
 import { hentÅpneMeldekortbehandlinger } from '~/lib/sak/sakUtils';
 import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
 import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';

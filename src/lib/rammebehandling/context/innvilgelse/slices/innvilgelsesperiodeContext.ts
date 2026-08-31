@@ -21,6 +21,7 @@ import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
 import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { nonNullish } from '~/utils/object';
 
 export type InnvilgelsesperioderActions =
     | {
@@ -83,7 +84,10 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
             );
         }
 
-        const innvilgelsesperiode = state.innvilgelsesperioder.at(0)!;
+        const innvilgelsesperiode = nonNullish(
+            state.innvilgelsesperioder.at(0),
+            'Innvilgelsesperiode mangler',
+        );
 
         const { periodeOppdatering, behandling, sak } = payload;
 
@@ -108,7 +112,10 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         case 'oppdaterInnvilgelsesperiode': {
             const { periodeOppdatering, index, behandling, sak } = payload;
 
-            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
+            const innvilgelsesperiode = nonNullish(
+                state.innvilgelsesperioder.at(index),
+                `Fant ikke innvilgelsesperiode med index ${index}`,
+            );
 
             const nyInnvilgelsesperiode = {
                 ...innvilgelsesperiode,
@@ -137,16 +144,18 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         }
 
         case 'leggTilInnvilgelsesperiode': {
-            const sisteInnvilgelsesperiode = state.innvilgelsesperioder.at(-1);
-            if (!sisteInnvilgelsesperiode) {
-                throw Error('Skal alltid finnes minst en innvilgelsesperiode');
-            }
+            const sisteInnvilgelsesperiode = nonNullish(
+                state.innvilgelsesperioder.at(-1),
+                'Skal alltid finnes minst en innvilgelsesperiode',
+            );
 
             const { behandling, sak } = payload;
 
             const sistePeriode = sisteInnvilgelsesperiode.periode;
 
-            const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling)!;
+            const tiltaksdeltakelsesperiode = nonNullish(
+                hentHeleTiltaksdeltakelsesperioden(behandling),
+            );
 
             const nyTilOgMed = tiltaksdeltakelsesperiode.tilOgMed;
 

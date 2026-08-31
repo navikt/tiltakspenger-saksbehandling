@@ -39,7 +39,8 @@ const eslintConfig = [
             ...js.configs.recommended.rules,
             ...tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {}),
             'no-undef': 'off',
-            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-explicit-any': 'error',
+            //"@typescript-eslint/no-non-null-assertion": "error",
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 { argsIgnorePattern: '^(_|req|res|next)$' },
