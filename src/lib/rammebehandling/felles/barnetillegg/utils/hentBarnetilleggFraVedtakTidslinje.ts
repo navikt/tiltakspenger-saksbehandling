@@ -1,4 +1,4 @@
-import { krympPeriodisering } from '~/utils/periode';
+import { krympPeriodisering, sorterPeriodisering } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     kunPerioderMedBarn,
@@ -8,18 +8,21 @@ import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { Periode } from '~/types/Periode';
+import { removeDuplicatesFilter } from '~/utils/array';
 
 type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: RammebehandlingId };
 
 const hentBarnetilleggFraVedtak = (sak: SakProps): BarnetilleggMedBehandlingId[] => {
-    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = sak.tidslinje.elementer
+    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = sak.innvilgetTidslinje.elementer
+        .filter(removeDuplicatesFilter((a, b) => a.rammevedtakId === b.rammevedtakId))
         .map((el) => hentRammevedtak(sak, el.rammevedtakId))
         .flatMap((vedtak) =>
             vedtak.gjeldendeBarnetilleggPerioder.map((bt) => ({
                 ...bt,
                 behandlingId: vedtak.behandlingId,
             })),
-        );
+        )
+        .toSorted(sorterPeriodisering('asc'));
 
     return slåSammenBarnetillegg(relevanteBarnetillegg);
 };

@@ -121,16 +121,18 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                 index,
             );
 
+            const barnetilleggPerioder = periodiserBarnetillegg(
+                nyePerioder,
+                state.innvilgelsesperioder,
+                state.barnetilleggPerioder,
+                behandling,
+                sak,
+            );
+
             return {
                 ...state,
                 innvilgelsesperioder: nyePerioder,
-                barnetilleggPerioder: periodiserBarnetillegg(
-                    nyePerioder,
-                    state.innvilgelsesperioder,
-                    state.barnetilleggPerioder,
-                    behandling,
-                    sak,
-                ),
+                barnetilleggPerioder,
             };
         }
 
