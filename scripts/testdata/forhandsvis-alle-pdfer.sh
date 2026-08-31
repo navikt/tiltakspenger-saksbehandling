@@ -10,7 +10,7 @@ usage() {
     echo "  Oppretter en innvilget sak (digital) og forhåndsviser alle PDF-brevene" >&2
     echo "  som kan hentes via routes. PDF-ene lagres i \$PDF_UT_DIR" >&2
     echo "  (default /tmp/tiltakspenger-pdfer)." >&2
-    echo "  Krever at pdfgen (8081) og pdfgenrs (8084) kjører i docker." >&2
+    echo "  Krever at pdfgenrs (8084) kjører i docker." >&2
     exit 1
 }
 
@@ -88,5 +88,5 @@ if [[ ${#feilede_brev[@]} -gt 0 ]]; then
     printf '  - %s\n' "${feilede_brev[@]}"
 fi
 echo "========================================================="
-echo "Hint: åpne katalogen (open ${PDF_UT_DIR}) og sammenlign *-pdfgen.pdf mot *-pdfgenrs.pdf."
+echo "Hint: åpne katalogen med (open ${PDF_UT_DIR})."
 [[ ${#feilede_brev[@]} -eq 0 ]]

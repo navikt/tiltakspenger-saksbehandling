@@ -287,15 +287,12 @@ dekkes **ikke** her — de har ingen route å teste mot.
 
 ### Forutsetninger
 
-- `LokalMain` bruker **ekte pdfgen-klient** (ikke fake), så **pdfgen** (port `8081`)
-  og **pdfgenrs** (port `8084`) må kjøre i docker (`docker compose up -d` i
-  metarepoet). Docker-imagene bygges fra lokal kildekode — har malene endret seg
-  siden sist, må de bygges på nytt:
-  `docker compose up -d --build pdfgen-service pdfgenrs-service`.
-- Lokalt gjøres skygge-kall mot pdfgenrs i parallell med pdfgen (som i dev), så
-  forhåndsvisnings-routene svarer med **multipart/mixed med to PDF-er**: pdfgen
-  først, pdfgenrs som nummer to. Scriptene splitter og lagrer begge, med suffiks
-  `-pdfgen.pdf` og `-pdfgenrs.pdf` — sammenlign dem side om side.
+- `LokalMain` bruker **ekte pdfgenrs-klient** (ikke fake), så **pdfgenrs** (port
+  `8084`) må kjøre i docker (`docker compose up -d` i metarepoet). Docker-imaget
+  bygges fra lokal kildekode — har malene endret seg siden sist, må det bygges på
+  nytt: `docker compose up -d --build pdfgenrs-service`.
+- Forhåndsvisnings-routene svarer med **én PDF** (`application/pdf`). Scriptene
+  lagrer den som `<navn>.pdf`.
 - PDF-ene lagres i `$PDF_UT_DIR` (default `/tmp/tiltakspenger-pdfer`).
 
 ### Raskeste vei: alle PDF-er på én gang
@@ -360,19 +357,19 @@ curl -sf -X POST "$B/sak/$SAK_ID/behandling/$BEH_ID/forhandsvis" -H "$T1" -H "$C
   "harValgtStansFraFørsteDagSomGirRett":true,
   "stansFraOgMed":null,
   "valgteHjemler":["DeltarIkkePåArbeidsmarkedstiltak"]
-}' -o stansvedtak.multipart
+}' -o stansvedtak.pdf
 ```
 
-Responsen er multipart — bruk scriptene over for automatisk splitting, eller se
-`post_og_lagre_pdfer` i [`scripts/testdata/_lib.sh`](../scripts/testdata/_lib.sh)
-for hvordan den parses. Requestbodyene for de andre resultatene finner du i
+Responsen er én PDF — se `post_og_lagre_pdfer` i
+[`scripts/testdata/_lib.sh`](../scripts/testdata/_lib.sh) for hvordan scriptene
+lagrer den. Requestbodyene for de andre resultatene finner du i
 `ForhåndsvisVedtaksbrevRequestBody.kt` i `tiltakspenger-saksbehandling-api`.
 
 ### GUI
 
 Alle brevene kan også forhåndsvises fra frontend («Forhåndsvis brev»-knappen i
-behandlingen/klagen/meldekortbehandlingen). Lokalt og i dev åpnes **to**
-PDF-vinduer (pdfgen + pdfgenrs) — husk å **tillate popups** i nettleseren.
+behandlingen/klagen/meldekortbehandlingen). Brevet åpnes i et eget PDF-vindu —
+husk å **tillate popups** i nettleseren.
 
 ---
 
