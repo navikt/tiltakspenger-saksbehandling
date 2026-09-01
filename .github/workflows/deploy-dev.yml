@@ -7,7 +7,7 @@ on:
 permissions: {}
 
 # Testgaten og deployen er delte; image-bygget er lokalt (.build-for-deploy.yml) - se
-# https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
+# https://github.com/navikt/tiltakspenger-workflows/blob/main/.github/workflows/README.md
 jobs:
   test:
     name: Run tests
@@ -30,7 +30,7 @@ jobs:
   deploy-dev:
     name: Deploy to NAIS (dev)
     needs: [ test, build ]
-    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
+    uses: navikt/tiltakspenger-workflows/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
