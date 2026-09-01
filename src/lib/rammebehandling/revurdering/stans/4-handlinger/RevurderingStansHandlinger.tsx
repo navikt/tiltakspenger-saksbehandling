@@ -25,12 +25,16 @@ export const RevurderingStansHandlinger = () => {
     return <RammebehandlingHandlinger behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO => {
+const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO | null => {
+    if (revurderingStansValidering(skjema).errors.length > 0) {
+        return null;
+    }
+
     return {
         resultat: RevurderingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        valgteHjemler: nonNullish(skjema.hjemlerForStans),
+        valgteHjemler: skjema.hjemlerForStans,
         ...(skjema.harValgtStansFraFørsteDagSomGirRett
             ? {
                   stansFraOgMed: null,
