@@ -1,4 +1,5 @@
 import { HStack, Table, Tag } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import KlageMeny from '~/lib/klage/meny/KlageMeny';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -73,7 +74,7 @@ export const Klageoversikt = () => {
                 utfallKlageinstans: '-',
                 opprettet: formaterTidspunkt(klagevedtakMedBehandling.behandling.opprettet),
                 ferdigstilt: formaterTidspunkt(klagevedtakMedBehandling.opprettet),
-                saksbehandler: klagevedtakMedBehandling.behandling.saksbehandler!,
+                saksbehandler: nonNullish(klagevedtakMedBehandling.behandling.saksbehandler),
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
                         <InternLenkeKnapp
@@ -108,9 +109,9 @@ export const Klageoversikt = () => {
                 utfallKlageinstans: utfall ? klagehendelseUtfallTilTag({ utfall: utfall }) : '-',
                 opprettet: formaterTidspunkt(klagebehandling.opprettet),
                 ferdigstilt: erKlageFerdigstilt(klagebehandling)
-                    ? formaterTidspunkt(klagebehandling.resultat.ferdigstiltTidspunkt!)
+                    ? formaterTidspunkt(nonNullish(klagebehandling.resultat.ferdigstiltTidspunkt))
                     : erKlageFerdigbehandlet(klagebehandling)
-                      ? formaterTidspunkt(klagebehandling.iverksattTidspunkt!)
+                      ? formaterTidspunkt(nonNullish(klagebehandling.iverksattTidspunkt))
                       : '-',
                 saksbehandler: klagebehandling.saksbehandler ?? 'Ikke tildelt',
                 meny: (

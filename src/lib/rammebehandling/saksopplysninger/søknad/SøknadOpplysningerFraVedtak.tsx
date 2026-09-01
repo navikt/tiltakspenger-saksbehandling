@@ -1,4 +1,5 @@
 import { useSak } from '~/lib/sak/SakContext';
+import { nonNullish } from '~/utils/object';
 import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BodyShort, InlineMessage, Select, VStack } from '@navikt/ds-react';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
@@ -42,7 +43,7 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
                     <option
                         value={index}
                         key={index}
-                    >{`Innvilget tidspunkt: ${formaterTidspunkt(behandling.iverksattTidspunkt!)}`}</option>
+                    >{`Innvilget tidspunkt: ${formaterTidspunkt(nonNullish(behandling.iverksattTidspunkt))}`}</option>
                 ))}
             </Select>
             {valgtBehandling && (

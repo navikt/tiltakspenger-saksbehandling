@@ -1,4 +1,5 @@
 import { BodyShort, InlineMessage } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import { forrigeDag, nesteDag, formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
@@ -44,8 +45,8 @@ export const VedtaksperioderUtenInnvilgelseVarsel = ({ children }: PropsWithChil
         return children;
     }
 
-    const førsteInnvilgelsesperiode = innvilgelse.innvilgelsesperioder.at(0)!;
-    const sisteInnvilgelsesperiode = innvilgelse.innvilgelsesperioder.at(-1)!;
+    const førsteInnvilgelsesperiode = innvilgelse.innvilgelsesperioder.atNonNull(0);
+    const sisteInnvilgelsesperiode = innvilgelse.innvilgelsesperioder.atNonNull(-1);
 
     return (
         <>
@@ -88,7 +89,7 @@ const PeriodeUtenInnvilgelseVarsel = ({ periode }: { periode: Periode }) => {
             {erOpphør && (
                 <BodyShort size={'small'}>
                     {`Dette fører til et opphør av innvilgelse i perioden${gjeldendeInnvilgelserIHullet.length > 1 ? 'e' : ''} ${gjeldendeInnvilgelserIHullet
-                        .map((p) => formaterPeriode(overlappendePeriode(p, periode)!))
+                        .map((p) => formaterPeriode(nonNullish(overlappendePeriode(p, periode))))
                         .join(', ')}`}
                 </BodyShort>
             )}

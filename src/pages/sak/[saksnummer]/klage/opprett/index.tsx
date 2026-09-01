@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { nonNullish } from '~/utils/object';
 import KlageLayout from '../layout';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
@@ -29,12 +30,16 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = context.params!.saksnummer as string;
+    const saksnummer = nonNullish(context.params).saksnummer as string;
 
-    const sak = await fetchSak(context.req, context.params!.saksnummer as string).catch((e) => {
-        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
-        throw e;
-    });
+    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
+        (e) => {
+            logger.error(
+                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
+            );
+            throw e;
+        },
+    );
 
     return { props: { sak } };
 });
@@ -63,7 +68,7 @@ const OprettKlagePage = ({ sak }: Props) => {
             router.push(
                 klagebehandlingUrl(
                     sak.saksnummer,
-                    klagebehandling!.id,
+                    nonNullish(klagebehandling).id,
                     KlageStegUrlSegment.Formkrav,
                 ),
             );

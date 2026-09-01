@@ -40,7 +40,14 @@ const eslintConfig = [
             ...tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {}),
             'no-undef': 'off',
             '@typescript-eslint/no-explicit-any': 'error',
-            //"@typescript-eslint/no-non-null-assertion": "error",
+            'no-restricted-syntax': [
+                'error',
+                {
+                    selector: 'TSNonNullExpression',
+                    message:
+                        'Non-null assertions skal gjøres runtime. Bruk nonNullish() fra ~/utils/object, eller atNonNull() for array-oppslag.',
+                },
+            ],
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 { argsIgnorePattern: '^(_|req|res|next)$' },

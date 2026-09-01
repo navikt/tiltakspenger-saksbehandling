@@ -1,4 +1,5 @@
 import React from 'react';
+import { nonNullish } from '~/utils/object';
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
@@ -210,7 +211,7 @@ const KlageMeny = (props: {
                     åpen={visVilOvertaModal}
                     onClose={() => setVisVilOvertaModal(false)}
                     //knappen for å overta rendres kun dersom saksbehandler finnes
-                    overtarFra={props.klage.saksbehandler!}
+                    overtarFra={nonNullish(props.klage.saksbehandler)}
                     api={{
                         trigger: overtaKlagebehandling.trigger,
                         isMutating: overtaKlagebehandling.isMutating,
@@ -233,7 +234,7 @@ const KlageMeny = (props: {
                 <KlageApiErrorFeilModal
                     åpen={apiError.visFeilModal}
                     onClose={() => setApiError({ visFeilModal: false, feil: null })}
-                    error={apiError.feil!}
+                    error={nonNullish(apiError.feil)}
                 />
             )}
         </>

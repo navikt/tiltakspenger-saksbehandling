@@ -1,4 +1,6 @@
+// Disse må importeres så tidlig som mulig for å sikre at de alltid er i scope
 import '../global.css';
+import '../prototypes';
 
 import { ReactElement, ReactNode } from 'react';
 import { AppProps } from 'next/app';

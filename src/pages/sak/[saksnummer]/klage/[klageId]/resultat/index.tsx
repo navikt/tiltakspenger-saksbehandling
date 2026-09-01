@@ -1,4 +1,5 @@
 import { logger } from '@navikt/next-logger';
+import { nonNullish } from '~/utils/object';
 import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import {
@@ -73,13 +74,17 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = context.params!.saksnummer as string;
-    const klageId = context.params!.klageId as KlageId;
+    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const klageId = nonNullish(context.params).klageId as KlageId;
 
-    const sak = await fetchSak(context.req, context.params!.saksnummer as string).catch((e) => {
-        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
-        throw e;
-    });
+    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
+        (e) => {
+            logger.error(
+                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
+            );
+            throw e;
+        },
+    );
 
     const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 
@@ -230,7 +235,7 @@ const OpprettholdResultat = (props: {
                     status="completed"
                     title="Iverksettelse av opprettholdelse"
                     timestamp={formaterTidspunkt(
-                        props.klage.resultat.iverksattOpprettholdelseTidspunkt!,
+                        nonNullish(props.klage.resultat.iverksattOpprettholdelseTidspunkt),
                     )}
                     bullet={
                         <PaperplaneIcon
@@ -255,7 +260,9 @@ const OpprettholdResultat = (props: {
                     timestamp={
                         journalført
                             ? formaterTidspunkt(
-                                  props.klage.resultat.journalføringstidspunktInnstillingsbrev!,
+                                  nonNullish(
+                                      props.klage.resultat.journalføringstidspunktInnstillingsbrev,
+                                  ),
                               )
                             : undefined
                     }
@@ -276,7 +283,9 @@ const OpprettholdResultat = (props: {
                     timestamp={
                         distribuert
                             ? formaterTidspunkt(
-                                  props.klage.resultat.distribusjonstidspunktInnstillingsbrev!,
+                                  nonNullish(
+                                      props.klage.resultat.distribusjonstidspunktInnstillingsbrev,
+                                  ),
                               )
                             : undefined
                     }
@@ -300,7 +309,7 @@ const OpprettholdResultat = (props: {
                     timestamp={
                         oversendtEllerEtter
                             ? formaterTidspunkt(
-                                  props.klage.resultat.oversendtKlageinstansenTidspunkt!,
+                                  nonNullish(props.klage.resultat.oversendtKlageinstansenTidspunkt),
                               )
                             : undefined
                     }

@@ -207,7 +207,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         case 'settAntallDager': {
             const { index, antallDager } = payload;
 
-            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
+            const innvilgelsesperiode = state.innvilgelsesperioder.atNonNull(index);
 
             return {
                 ...state,
@@ -221,7 +221,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         case 'settTiltaksdeltakelse': {
             const { index, internDeltakelseId } = payload;
 
-            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
+            const innvilgelsesperiode = state.innvilgelsesperioder.atNonNull(index);
 
             return {
                 ...state,
@@ -257,7 +257,7 @@ const periodiserBarnetillegg = (
     const mestRelevanteSøknad =
         behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
             ? behandling.søknad
-            : hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
+            : hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
 
     const barnetilleggFraSøknadForForrigePeriode = periodiserBarnetilleggFraSøknad(
         mestRelevanteSøknad.barnetillegg,
@@ -294,11 +294,11 @@ const periodiserBarnetillegg = (
         return utvidPeriodisering(forrigeBarnetillegg, nyTotalperiode);
     }
 
-    const forrigeFraOgMed = forrigeBarnetillegg.at(0)!.periode.fraOgMed;
-    const fraOgMedFraSøknad = barnetilleggFraSøknad.at(0)!.periode.fraOgMed;
+    const forrigeFraOgMed = forrigeBarnetillegg.atNonNull(0).periode.fraOgMed;
+    const fraOgMedFraSøknad = barnetilleggFraSøknad.atNonNull(0).periode.fraOgMed;
 
-    const forrigeTilOgMed = forrigeBarnetillegg.at(-1)!.periode.tilOgMed;
-    const tilOgMedFraSøknad = barnetilleggFraSøknad.at(-1)!.periode.tilOgMed;
+    const forrigeTilOgMed = forrigeBarnetillegg.atNonNull(-1).periode.tilOgMed;
+    const tilOgMedFraSøknad = barnetilleggFraSøknad.atNonNull(-1).periode.tilOgMed;
 
     // I alle andre tilfeller må saksbehandler ha gjort endringer ift den automatiske periodiseringen.
     // Vi oppdaterer den forrige periodiseringen med ny innvilgelsesperiode, men utvider ikke utenfor periodene vi får

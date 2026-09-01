@@ -90,7 +90,7 @@ export const MeldekortbehandlingHeader = () => {
 
                 {erBehandlingSattPåVent(meldekortbehandling) && (
                     <OppsummeringAvVentestatus
-                        ventestatus={ventestatus.at(0)!}
+                        ventestatus={ventestatus.atNonNull(0)}
                         historikk={ventestatus}
                     />
                 )}

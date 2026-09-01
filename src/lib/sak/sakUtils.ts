@@ -38,7 +38,9 @@ export const hentVedtatteSøknadsbehandlinger = (sak: SakProps): Søknadsbehandl
     return alleRammevedtak
         .map((vedtak) => hentRammebehandling(sak, vedtak.behandlingId))
         .filter((beh) => beh.resultat === SøknadsbehandlingResultat.INNVILGELSE)
-        .toSorted((a, b) => (a.iverksattTidspunkt! > b.iverksattTidspunkt! ? -1 : 1));
+        .toSorted((a, b) =>
+            nonNullish(a.iverksattTidspunkt) > nonNullish(b.iverksattTidspunkt) ? -1 : 1,
+        );
 };
 
 // Henter rammevedtaket for id, eller kaster dersom det ikke finnes

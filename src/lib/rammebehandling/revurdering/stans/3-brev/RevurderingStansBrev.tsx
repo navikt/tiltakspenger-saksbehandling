@@ -1,4 +1,5 @@
 import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
+import { nonNullish } from '~/utils/object';
 import { revurderingStansValidering } from '~/lib/rammebehandling/revurdering/stans/revurderingStansValidering';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -58,7 +59,7 @@ const tilForhåndsvisningDTO = (
               }
             : {
                   harValgtStansFraFørsteDagSomGirRett,
-                  stansFraOgMed: fraDato!,
+                  stansFraOgMed: nonNullish(fraDato),
               }),
         fritekst: textAreas.brevtekst.getValue(),
         valgteHjemler: hjemlerForStans,

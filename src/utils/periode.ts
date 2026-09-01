@@ -1,8 +1,8 @@
 import { MedPeriode, Periode } from '~/types/Periode';
+import { nonNullish } from '~/utils/object';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
-import { nonNullish } from '~/utils/object';
 
 export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Periode => {
     const [fraOgMed, tilOgMed] = kjedeId.split('/');
@@ -40,11 +40,11 @@ export const totalPeriode = (perioder: Periode[]): Periode => {
     const førsteFraOgMed = perioder
         .map((periode) => periode.fraOgMed)
         .toSorted()
-        .at(0)!;
+        .atNonNull(0);
     const sisteTilOgMed = perioder
         .map((periode) => periode.tilOgMed)
         .toSorted()
-        .at(-1)!;
+        .atNonNull(-1);
 
     return { fraOgMed: førsteFraOgMed, tilOgMed: sisteTilOgMed };
 };
@@ -97,7 +97,7 @@ export const perioderErSammenhengende = (...perioder: Periode[]) => {
             return true;
         }
 
-        const forrigePeriode = array.at(index - 1)!;
+        const forrigePeriode = array.atNonNull(index - 1);
 
         return nesteDag(forrigePeriode.tilOgMed) === periode.fraOgMed;
     });
@@ -111,7 +111,7 @@ export const periodiseringerErLike = <T>(
     return (
         perioder1.length === perioder2.length &&
         perioder1.every((periode1, index) => {
-            const periode2 = perioder2.at(index)!;
+            const periode2 = perioder2.atNonNull(index);
 
             return (
                 perioderErLike(periode1.periode, periode2.periode) &&
@@ -139,18 +139,18 @@ export const krympPeriodisering = <T>(
         return [];
     }
 
-    const førsteElement = overlappendePerioder.at(0)!;
+    const førsteElement = overlappendePerioder.atNonNull(0);
 
     if (overlappendePerioder.length === 1) {
         return [
             {
                 ...førsteElement,
-                periode: overlappendePeriode(førsteElement.periode, krympTil)!,
+                periode: nonNullish(overlappendePeriode(førsteElement.periode, krympTil)),
             },
         ];
     }
 
-    const sisteElement = overlappendePerioder.at(-1)!;
+    const sisteElement = overlappendePerioder.atNonNull(-1);
 
     return overlappendePerioder
         .with(0, {
@@ -192,13 +192,13 @@ export const utvidPeriodisering = <T>(
             : [];
     }
 
-    const førsteElement = overlappendePerioder.at(0)!;
+    const førsteElement = overlappendePerioder.atNonNull(0);
 
     if (overlappendePerioder.length === 1) {
         return [{ ...førsteElement, periode: utvidTil }];
     }
 
-    const sisteElement = overlappendePerioder.at(-1)!;
+    const sisteElement = overlappendePerioder.atNonNull(-1);
 
     return overlappendePerioder
         .with(0, {
@@ -225,13 +225,13 @@ const finnNærmestePeriodeIPeriodisering = <T>(
         throw Error('Må ha minst en periode i periodiseringen');
     }
 
-    const førstePeriode = periodisering.at(0)!;
+    const førstePeriode = periodisering.atNonNull(0);
 
     if (periode.tilOgMed < førstePeriode.periode.fraOgMed) {
         return førstePeriode;
     }
 
-    const sistePeriode = periodisering.at(-1)!;
+    const sistePeriode = periodisering.atNonNull(-1);
 
     if (periode.fraOgMed > sistePeriode.periode.tilOgMed) {
         return sistePeriode;
@@ -270,7 +270,7 @@ export const slåSammenPeriodisering = <T>(
             return [it];
         }
 
-        const forrige = acc.at(-1)!;
+        const forrige = acc.atNonNull(-1);
 
         if (perioderErSammenhengende(forrige.periode, it.periode) && sammenlignVerdi(forrige, it)) {
             return acc.toSpliced(-1, 1, {
@@ -293,7 +293,7 @@ export const slåSammenPerioder = (perioder: Periode[]): Periode[] => {
             return [periode];
         }
 
-        const forrige = nonNullish(acc.at(-1));
+        const forrige = acc.atNonNull(-1);
 
         if (perioderErSammenhengende(forrige, periode) || perioderOverlapper(forrige, periode)) {
             return acc.toSpliced(-1, 1, {

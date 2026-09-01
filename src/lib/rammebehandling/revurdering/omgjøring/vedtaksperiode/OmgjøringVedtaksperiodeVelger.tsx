@@ -10,6 +10,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useSak } from '~/lib/sak/SakContext';
+import { nonNullish } from '~/utils/object';
 import { finnPerioderHull, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/lib/sak/sakUtils';
@@ -33,7 +34,7 @@ export const OmgjøringVedtaksperiodeVelger = () => {
 
     const erOpphør = resultat === RevurderingResultat.OMGJØRING_OPPHØR;
 
-    const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
+    const vedtak = nonNullish(hentRammevedtak(sak, behandling.omgjørVedtak));
 
     const perioderSomKanOmgjøres = erOpphør
         ? vedtak.gjeldendeInnvilgetPerioder
@@ -151,7 +152,7 @@ export const OmgjøringVedtaksperiodeVelger = () => {
 // Ved innvilgelse kan vi gå utenfor denne perioden, men minst en dag må være innenfor
 const gyldigTotalOmgjøringsperiode = (behandling: Omgjøring, vedtak: Rammevedtak): Periode => {
     if (!vedtak.erGjeldende || behandling.status === 'VEDTATT') {
-        return behandling.vedtaksperiode!;
+        return nonNullish(behandling.vedtaksperiode);
     }
 
     return behandling.resultat === RevurderingResultat.OMGJØRING_OPPHØR

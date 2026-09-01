@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useRef } from 'react';
+import { nonNullish } from '~/utils/object';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Button, Heading, HStack, Label, LocalAlert, VStack } from '@navikt/ds-react';
@@ -58,13 +59,17 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = context.params!.saksnummer as string;
-    const klageId = context.params!.klageId as KlageId;
+    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const klageId = nonNullish(context.params).klageId as KlageId;
 
-    const sak = await fetchSak(context.req, context.params!.saksnummer as string).catch((e) => {
-        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
-        throw e;
-    });
+    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
+        (e) => {
+            logger.error(
+                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
+            );
+            throw e;
+        },
+    );
 
     const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 
@@ -119,8 +124,8 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         sakId: sak.sakId,
         klageId: klage.id,
         onSuccess: (klage) => {
-            form.reset(klageTilBrevFormData(klage!, påklagetVedtak));
-            setKlage(klage!);
+            form.reset(klageTilBrevFormData(nonNullish(klage), påklagetVedtak));
+            setKlage(nonNullish(klage));
         },
     });
 
@@ -128,7 +133,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         sakId: sak.sakId,
         klageId: klage.id,
         onSuccess: (oppdatertKlage) => {
-            setKlage(oppdatertKlage!);
+            setKlage(nonNullish(oppdatertKlage));
             router.push(personoversiktUrl(sak.saksnummer));
         },
     });
@@ -137,7 +142,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         sakId: sak.sakId,
         klageId: klage.id,
         onSuccess: (oppdatertKlage) => {
-            setKlage(oppdatertKlage!);
+            setKlage(nonNullish(oppdatertKlage));
             router.push(klagebehandlingUrl(sak.saksnummer, klage.id, KlageStegUrlSegment.Resultat));
         },
     });

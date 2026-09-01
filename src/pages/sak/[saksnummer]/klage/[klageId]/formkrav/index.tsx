@@ -1,4 +1,5 @@
 import { ReactElement, useState } from 'react';
+import { nonNullish } from '~/utils/object';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
@@ -51,13 +52,17 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = context.params!.saksnummer as string;
-    const klageId = context.params!.klageId as KlageId;
+    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const klageId = nonNullish(context.params).klageId as KlageId;
 
-    const sak = await fetchSak(context.req, context.params!.saksnummer as string).catch((e) => {
-        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
-        throw e;
-    });
+    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
+        (e) => {
+            logger.error(
+                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
+            );
+            throw e;
+        },
+    );
 
     const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 

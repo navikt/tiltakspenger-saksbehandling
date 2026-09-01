@@ -1,4 +1,5 @@
 import { createContext, ReactElement, useContext } from 'react';
+import { nonNullish } from '~/utils/object';
 import { SakProps } from '~/lib/sak/SakTyper';
 import useSWR from 'swr';
 import NextError from 'next/error';
@@ -108,18 +109,20 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
         return <NextError statusCode={500} />;
     }
 
+    const sakData = nonNullish(data);
+
     return (
         <div>
-            <PersonaliaHeader sakId={data!.sakId!} saksnummer={data!.saksnummer} />
-            <KlageHeader saksnummer={data!.saksnummer} klage={klage} />
+            <PersonaliaHeader sakId={nonNullish(sakData.sakId)} saksnummer={sakData.saksnummer} />
+            <KlageHeader saksnummer={sakData.saksnummer} klage={klage} />
             <KlageStedIndikator activeTab={activeTab} klage={klage} />
             <VStack className={styles.klageInfoContainer}>
                 {klage?.status === KlagebehandlingStatus.AVBRUTT && (
-                    <OppsummeringAvAvbruttKlagebehandling avbrutt={klage.avbrutt!} />
+                    <OppsummeringAvAvbruttKlagebehandling avbrutt={nonNullish(klage.avbrutt)} />
                 )}
                 {klage && erBehandlingSattPåVent(klage) && (
                     <OppsummeringAvVentestatus
-                        ventestatus={klage.ventestatus.at(0)!}
+                        ventestatus={klage.ventestatus.atNonNull(0)}
                         historikk={klage.ventestatus}
                     />
                 )}
@@ -165,7 +168,7 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                     <BodyShort>
                         {props.klage?.resultat ? (
                             <KlagebehandlingResultatTag
-                                resultat={props.klage.resultat!.type}
+                                resultat={nonNullish(props.klage.resultat).type}
                                 size={'small'}
                                 prefiks={'Underinstans: '}
                             />

@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { nonNullish } from '~/utils/object';
 import {
     KlagefristUnntakSvarord,
     Klagebehandling,
@@ -176,17 +177,17 @@ export const formkravFormDataTilOpprettKlageRequest = (
         journalpostId: formData.journalpostId,
         vedtakDetKlagesPå:
             formData.vedtakstype === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
-        erKlagerPartISaken: formData.erKlagerPartISaken!,
-        klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
-        erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
+        erKlagerPartISaken: nonNullish(formData.erKlagerPartISaken),
+        klagesDetPåKonkreteElementerIVedtaket: nonNullish(formData.klagesDetPåKonkreteElementer),
+        erKlagefristenOverholdt: nonNullish(formData.erKlagefristOverholdt),
         erUnntakForKlagefrist:
             formData.erKlagefristOverholdt === false
                 ? klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSvarord(
-                      formData.erUnntakForKlagefrist!,
+                      nonNullish(formData.erUnntakForKlagefrist),
                   )
                 : null,
-        erKlagenSignert: formData.erKlagenSignert!,
-        innsendingsdato: dateTilISOTekst(formData.innsendingsdato!),
+        erKlagenSignert: nonNullish(formData.erKlagenSignert),
+        innsendingsdato: dateTilISOTekst(nonNullish(formData.innsendingsdato)),
         innsendingskilde: klageInnsendingskildeFormDataToKlageInnsendingskilde(
             formData.innsendingskilde as KlageInnsendingskildeFormData,
         ),
@@ -200,17 +201,17 @@ export const formkravFormDataTilOppdaterKlageFormkravRequest = (
         journalpostId: formData.journalpostId,
         vedtakDetKlagesPå:
             formData.vedtakstype === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
-        erKlagerPartISaken: formData.erKlagerPartISaken!,
-        klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
-        erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
+        erKlagerPartISaken: nonNullish(formData.erKlagerPartISaken),
+        klagesDetPåKonkreteElementerIVedtaket: nonNullish(formData.klagesDetPåKonkreteElementer),
+        erKlagefristenOverholdt: nonNullish(formData.erKlagefristOverholdt),
         erUnntakForKlagefrist:
             formData.erKlagefristOverholdt === false
                 ? klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSvarord(
-                      formData.erUnntakForKlagefrist!,
+                      nonNullish(formData.erUnntakForKlagefrist),
                   )
                 : null,
-        erKlagenSignert: formData.erKlagenSignert!,
-        innsendingsdato: dateTilISOTekst(formData.innsendingsdato!),
+        erKlagenSignert: nonNullish(formData.erKlagenSignert),
+        innsendingsdato: dateTilISOTekst(nonNullish(formData.innsendingsdato)),
         innsendingskilde: klageInnsendingskildeFormDataToKlageInnsendingskilde(
             formData.innsendingskilde as KlageInnsendingskildeFormData,
         ),

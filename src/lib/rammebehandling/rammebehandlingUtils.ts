@@ -1,4 +1,5 @@
 import { Periode } from '~/types/Periode';
+import { nonNullish } from '~/utils/object';
 import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseMedPeriode,
@@ -100,7 +101,9 @@ export const finnForsteStartdatoForTiltaksdeltakelse = (
 ): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.deltagelseFraOgMed != null)
-        .sort((a, b) => (b.deltagelseFraOgMed! > a.deltagelseFraOgMed! ? -1 : 1));
+        .sort((a, b) =>
+            nonNullish(b.deltagelseFraOgMed) > nonNullish(a.deltagelseFraOgMed) ? -1 : 1,
+        );
     return sorterteDeltakelser[0]?.deltagelseFraOgMed;
 };
 
@@ -109,7 +112,9 @@ export const finnSisteSluttdatoForTiltaksdeltakelse = (
 ): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.deltagelseTilOgMed != null)
-        .sort((a, b) => (a.deltagelseTilOgMed! > b.deltagelseTilOgMed! ? -1 : 1));
+        .sort((a, b) =>
+            nonNullish(a.deltagelseTilOgMed) > nonNullish(b.deltagelseTilOgMed) ? -1 : 1,
+        );
     return sorterteDeltakelser[0]?.deltagelseTilOgMed;
 };
 

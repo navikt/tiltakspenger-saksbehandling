@@ -59,7 +59,7 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
                 };
             }
 
-            const sisteInnvilgelsesperiode = state.innvilgelsesperioder.at(-1)!.periode;
+            const sisteInnvilgelsesperiode = state.innvilgelsesperioder.atNonNull(-1).periode;
 
             const nyBarnetilleggperiode: BarnetilleggPeriode = {
                 antallBarn,
@@ -96,7 +96,7 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
         case 'oppdaterBarnetilleggAntall': {
             const { index, antall } = payload;
 
-            const barnetilleggPeriode = state.barnetilleggPerioder.at(index)!;
+            const barnetilleggPeriode = state.barnetilleggPerioder.atNonNull(index);
 
             return {
                 ...state,
@@ -110,7 +110,7 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
         case 'oppdaterBarnetilleggPeriode': {
             const { index, periodeOppdatering } = payload;
 
-            const barnetilleggPeriode = state.barnetilleggPerioder.at(index)!;
+            const barnetilleggPeriode = state.barnetilleggPerioder.atNonNull(index);
 
             const oppdatertPeriode = {
                 ...barnetilleggPeriode,

@@ -11,7 +11,6 @@ import {
     BrukersMeldekortProps,
 } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { brukersMeldekortDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
-import { nonNullish } from '~/utils/object';
 
 import style from './BrukersMeldekortUker.module.css';
 
@@ -52,7 +51,7 @@ const Uke = ({ dager, kompakt }: UkeProps) => {
             <Table.Row>
                 <Table.HeaderCell
                     colSpan={numCols}
-                >{`Uke ${ukenummerFraDatotekst(nonNullish(dager.at(0)).dato)}`}</Table.HeaderCell>
+                >{`Uke ${ukenummerFraDatotekst(dager.atNonNull(0).dato)}`}</Table.HeaderCell>
             </Table.Row>
 
             {dager.map(({ dato, status }) => (

@@ -8,7 +8,6 @@ import { SimulertBeregningDagDetaljer } from '~/lib/beregning-og-simulering/deta
 import { SimuleringDetaljerMeldeperiodeHeader } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
 import { SimuleringsflaggVarsler } from '~/lib/beregning-og-simulering/flagg/SimuleringsflaggVarsler';
 import { SimuleringPosteringliste } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/posteringer/SimuleringPosteringliste';
-import { nonNullish } from '~/utils/object';
 
 import style from './SimulertBeregningMeldeperiodeDetaljer.module.css';
 
@@ -38,8 +37,8 @@ export const SimulertBeregningMeldeperiodeDetaljer = ({ meldeperiode, harSimuler
     // Dagene i simuleringen kan være et kortere utsnitt (f.eks. bare dagene med posteringer), så de kan ikke brukes som periode.
     const [kjedeFraOgMed, kjedeTilOgMed] = meldeperiode.kjedeId.split('/');
     const periode = {
-        fraOgMed: kjedeFraOgMed ?? nonNullish(dager.at(0)).dato,
-        tilOgMed: kjedeTilOgMed ?? nonNullish(dager.at(-1)).dato,
+        fraOgMed: kjedeFraOgMed ?? dager.atNonNull(0).dato,
+        tilOgMed: kjedeTilOgMed ?? dager.atNonNull(-1).dato,
     };
 
     return (

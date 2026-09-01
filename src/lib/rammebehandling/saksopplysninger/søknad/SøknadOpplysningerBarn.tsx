@@ -1,4 +1,5 @@
 import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { alderFraDato, finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { erDatoIPeriode } from '~/utils/periode';
@@ -164,7 +165,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
             {dødeITiltaksperioden && (
                 <BehandlingSaksopplysning
                     navn={'Barnet døde  i tiltaksperioden'}
-                    verdi={formaterDatotekst(dødsdato!)}
+                    verdi={formaterDatotekst(nonNullish(dødsdato))}
                     visVarsel
                 />
             )}

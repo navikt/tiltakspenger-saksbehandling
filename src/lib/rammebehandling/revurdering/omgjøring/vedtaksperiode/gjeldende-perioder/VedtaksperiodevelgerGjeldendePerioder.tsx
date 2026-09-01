@@ -35,7 +35,7 @@ export const VedtaksperiodevelgerGjeldendePerioder = ({
         return (
             <HStack gap={'space-4'} align={'center'} className={className}>
                 <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}: `}</BodyShort>
-                <PeriodeMedVelgKnapp periode={perioderSomKanOmgjøres.at(0)!} />
+                <PeriodeMedVelgKnapp periode={perioderSomKanOmgjøres.atNonNull(0)} />
             </HStack>
         );
     }

@@ -1,4 +1,5 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
+import { nonNullish } from '~/utils/object';
 import { RammebehandlingPage } from '~/lib/rammebehandling/RammebehandlingPage';
 import { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
@@ -28,13 +29,17 @@ const Behandling = ({ behandlingId, sak, klage }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = context.params!.saksnummer as string;
-    const behandlingId = context.params!.behandlingId as RammebehandlingId;
+    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const behandlingId = nonNullish(context.params).behandlingId as RammebehandlingId;
 
-    const sak = await fetchSak(context.req, context.params!.saksnummer as string).catch((e) => {
-        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
-        throw e;
-    });
+    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
+        (e) => {
+            logger.error(
+                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
+            );
+            throw e;
+        },
+    );
 
     const behandling = sak.rammebehandlinger.find((behandling) => behandling.id === behandlingId);
 

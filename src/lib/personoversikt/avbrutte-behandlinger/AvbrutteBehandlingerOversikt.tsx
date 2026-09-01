@@ -6,6 +6,7 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
 import { Table } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { behandlingUrl, klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { Periode } from '~/types/Periode';
@@ -105,7 +106,7 @@ const avbruttBehandlingToDataCellInfo = (
         behandlingsperiode: behandling.vedtaksperiode,
         resultat: behandling.resultat,
         behandlingstype: behandling.type,
-        avbruttTidspunkt: behandling.avbrutt!.avbruttTidspunkt,
+        avbruttTidspunkt: nonNullish(behandling.avbrutt).avbruttTidspunkt,
         saksbehandler: behandling.saksbehandler,
         beslutter: behandling.beslutter,
     };
@@ -117,7 +118,7 @@ const avbruttKlageToDataCellInfo = (klage: Klagebehandling): AvbruttKlagebehandl
         behandlingsperiode: null,
         resultat: klage.resultat?.type ?? KlagebehandlingResultat.AVVIST,
         behandlingstype: 'KLAGEBEHANDLING',
-        avbruttTidspunkt: klage.avbrutt!.avbruttTidspunkt,
+        avbruttTidspunkt: nonNullish(klage.avbrutt).avbruttTidspunkt,
         saksbehandler: klage.saksbehandler,
         beslutter: null,
     };

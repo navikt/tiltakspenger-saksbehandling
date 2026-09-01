@@ -10,7 +10,6 @@ import {
     Utbetalingsstatus,
 } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Nullable } from '~/types/UtilTypes';
-import { nonNullish } from '~/utils/object';
 
 import style from './BeregningOgSimuleringHeader.module.css';
 
@@ -41,8 +40,8 @@ export const BeregningOgSimuleringHeader = ({
     const periode: Periode | undefined =
         meldeperioder.length > 0
             ? {
-                  fraOgMed: nonNullish(meldeperioder.at(0)?.dager.at(0)).dato,
-                  tilOgMed: nonNullish(meldeperioder.at(-1)?.dager.at(-1)).dato,
+                  fraOgMed: meldeperioder.atNonNull(0).dager.atNonNull(0).dato,
+                  tilOgMed: meldeperioder.atNonNull(-1).dager.atNonNull(-1).dato,
               }
             : undefined;
 

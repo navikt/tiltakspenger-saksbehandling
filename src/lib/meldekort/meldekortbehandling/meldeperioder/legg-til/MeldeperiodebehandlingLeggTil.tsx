@@ -79,7 +79,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
             payload: { meldeperiodeKjeder: ubehandledeKjeder },
         });
 
-        onLeggTil(nonNullish(ubehandledeKjeder.at(0)).id);
+        onLeggTil(ubehandledeKjeder.atNonNull(0).id);
     };
 
     return (

@@ -1,4 +1,5 @@
 import { HStack, Table } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import { formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { meldekortbehandlingUrl } from '~/utils/urls';
@@ -108,7 +109,7 @@ const beregnetBeløpForBehandling = (meldekortbehandling: MeldekortbehandlingPro
     }
 
     return meldeperioderMedBeregning.reduce(
-        (sum, meldeperiode) => sum + meldeperiode.beregning!.beløp.totalt,
+        (sum, meldeperiode) => sum + nonNullish(meldeperiode.beregning).beløp.totalt,
         0,
     );
 };

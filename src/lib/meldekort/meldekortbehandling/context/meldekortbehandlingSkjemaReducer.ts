@@ -38,8 +38,8 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
 
             const meldeperiodeIndex = finnMeldeperiodeIndex(state.meldeperioder, kjedeId);
 
-            const meldeperiode = nonNullish(state.meldeperioder.at(meldeperiodeIndex));
-            const dag = nonNullish(meldeperiode.dager.at(dagIndex));
+            const meldeperiode = state.meldeperioder.atNonNull(meldeperiodeIndex);
+            const dag = meldeperiode.dager.atNonNull(dagIndex);
 
             return {
                 ...state,

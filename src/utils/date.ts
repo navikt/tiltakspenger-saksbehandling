@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
+import { nonNullish } from '~/utils/object';
 import { Periode } from '~/types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
@@ -96,11 +97,11 @@ export const datoTilDatoInputText = (dato: DateOrString): string => {
 };
 
 export const datoMin = (...datoer: Array<DateOrString>): string => {
-    return dayjs.min(datoer.map(dayjs))!.format(DATO_FORMAT);
+    return nonNullish(dayjs.min(datoer.map(dayjs))).format(DATO_FORMAT);
 };
 
 export const datoMax = (...datoer: Array<DateOrString>): string => {
-    return dayjs.max(datoer.map(dayjs))!.format(DATO_FORMAT);
+    return nonNullish(dayjs.max(datoer.map(dayjs))).format(DATO_FORMAT);
 };
 
 export const tilDate = (date?: DateOrString): Date | undefined =>

@@ -110,7 +110,7 @@ export const InnvilgelsesperioderVelger = () => {
                 ) : (
                     <HStack gap={'space-12'}>
                         <InnvilgelsesperiodeDatovelgere
-                            periode={innvilgelsesperioder.at(0)!.periode}
+                            periode={innvilgelsesperioder.atNonNull(0).periode}
                             tiltaksdeltakelser={tiltaksdeltakelser}
                             index={0}
                             readOnly={erReadonly}
@@ -142,7 +142,7 @@ const InnvilgelsesperiodeVelgerFull = ({
     const skjemaContext = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
-    const innvilgelsesperiode = innvilgelsesperioder.at(index)!;
+    const innvilgelsesperiode = innvilgelsesperioder.atNonNull(index);
 
     const { periode, antallDagerPerMeldeperiode, internDeltakelseId } = innvilgelsesperiode;
 

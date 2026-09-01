@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom/jest-globals';
+import { nonNullish } from '~/utils/object';
 import { afterEach, beforeAll, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import AvbrytKlagebehandlingModal from './AvbrytKlagebehandlingModal';
@@ -58,7 +59,7 @@ const renderModal = () => {
 
     const avbrytBehandling = () => {
         fireEvent.change(screen.getByLabelText('Status'), { target: { value: 'KLAGE_TRUKKET' } });
-        fireEvent.submit(document.querySelector('form')!);
+        fireEvent.submit(nonNullish(document.querySelector('form')));
     };
 
     return { onClose, avbrytBehandling };
@@ -93,7 +94,7 @@ describe('AvbrytKlagebehandlingModal', () => {
 
         renderModal();
 
-        fireEvent.submit(document.querySelector('form')!);
+        fireEvent.submit(nonNullish(document.querySelector('form')));
 
         expect(await screen.findByText('Status er påkrevd')).toBeInTheDocument();
         expect(fetchMock).not.toHaveBeenCalled();
@@ -118,7 +119,7 @@ describe('AvbrytKlagebehandlingModal', () => {
             // Nytt forsøk hjelper ikke på terminale feil, så vi oppfordrer ikke til det.
             expect(screen.queryByText(/prøv igjen om litt/i)).not.toBeInTheDocument();
 
-            fireEvent.submit(document.querySelector('form')!);
+            fireEvent.submit(nonNullish(document.querySelector('form')));
 
             expect(fetchMock).toHaveBeenCalledTimes(1);
         },

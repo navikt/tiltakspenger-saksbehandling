@@ -15,7 +15,7 @@ export const revurderingInnvilgelseValidering = (
         warnings: [],
     };
 
-    const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
+    const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
 
     const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema, sisteSøknad);
 

@@ -1,4 +1,5 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
+import { nonNullish } from '~/utils/object';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Personoversikt } from '~/lib/personoversikt/Personoversikt';
 import { fetchSak } from '~/utils/fetch/fetch-server';
@@ -17,7 +18,7 @@ const Saksside = ({ sak }: Props) => {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const sak = await fetchSak(context.req, context.params!.saksnummer as string);
+    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string);
 
     if (!sak) {
         return {

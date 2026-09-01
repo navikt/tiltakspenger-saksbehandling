@@ -1,4 +1,5 @@
 import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import {
     useOmgjøringSkjema,
@@ -19,7 +20,7 @@ export const OmgjøringResultatVelger = () => {
     const { resultat, erReadonly } = useOmgjøringSkjema();
     const dispatch = useOmgjøringSkjemaDispatch();
 
-    const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
+    const vedtak = nonNullish(hentRammevedtak(sak, behandling.omgjørVedtak));
 
     const kanInnvilge =
         !!vedtak.gyldigeKommandoer.OMGJØR && vedtak.gjeldendeVedtaksperioder.length > 0;

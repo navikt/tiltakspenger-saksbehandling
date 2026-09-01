@@ -1,4 +1,5 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
+import { nonNullish } from '~/utils/object';
 import { revurderingStansValidering } from '../revurderingStansValidering';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
@@ -29,14 +30,14 @@ const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO =>
         resultat: RevurderingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        valgteHjemler: skjema.hjemlerForStans!,
+        valgteHjemler: nonNullish(skjema.hjemlerForStans),
         ...(skjema.harValgtStansFraFørsteDagSomGirRett
             ? {
                   stansFraOgMed: null,
                   harValgtStansFraFørsteDagSomGirRett: true,
               }
             : {
-                  stansFraOgMed: skjema.fraDato!,
+                  stansFraOgMed: nonNullish(skjema.fraDato),
                   harValgtStansFraFørsteDagSomGirRett: false,
               }),
         skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,

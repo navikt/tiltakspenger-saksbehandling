@@ -53,7 +53,7 @@ export const RammebehandlingPage = () => {
                     <VStack className={style.main} gap={'space-16'}>
                         {erSattPåVent && (
                             <OppsummeringAvVentestatus
-                                ventestatus={ventestatus.at(0)!}
+                                ventestatus={ventestatus.atNonNull(0)}
                                 historikk={ventestatus}
                             />
                         )}

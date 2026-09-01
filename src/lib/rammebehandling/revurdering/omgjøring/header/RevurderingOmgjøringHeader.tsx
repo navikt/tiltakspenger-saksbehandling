@@ -1,4 +1,5 @@
 import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { nonNullish } from '~/utils/object';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
@@ -38,7 +39,7 @@ export const RevurderingOmgjøringHeader = () => {
             {erVedtatt ? (
                 <OppsummeringsPar
                     label={'Vedtaksperiode'}
-                    verdi={formaterPeriode(behandling.vedtaksperiode!)}
+                    verdi={formaterPeriode(nonNullish(behandling.vedtaksperiode))}
                     variant={'inlineColon'}
                 />
             ) : (

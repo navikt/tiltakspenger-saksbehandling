@@ -38,7 +38,7 @@ export const revurderingOmgjøringValidering = (
     }
 
     if (skjema.resultat === RevurderingResultat.OMGJØRING) {
-        const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
+        const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
 
         const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema, sisteSøknad);
 
@@ -111,7 +111,7 @@ export const revurderingOmgjøringValidering = (
         );
     } else if (vedtakSomOmgjøres.length === 0) {
         validering.errors.push('Valgt vedtaksperiode omgjør ingen tidligere vedtak');
-    } else if (vedtakSomOmgjøres.at(0)!.id !== behandling.omgjørVedtak) {
+    } else if (vedtakSomOmgjøres.atNonNull(0).id !== behandling.omgjørVedtak) {
         validering.errors.push(
             'Valgt vedtaksperiode omgjør perioden til et annet vedtak enn det valgte vedtaket',
         );
