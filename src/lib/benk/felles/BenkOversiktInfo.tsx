@@ -13,7 +13,7 @@ export const BenkOversiktInfo = ({ oversikt }: { oversikt: BenkOversikt<unknown>
             <BodyShort>{`Viser ${behandlinger.length} av ${totalAntallUfiltrert} behandlinger`}</BodyShort>
             {antallFiltrertAvFiltervalg > 0 && (
                 <InlineMessage status={'info'} size={'small'}>
-                    {`${antallFiltrertAvFiltervalg} filtrert vekk av valgte filtre`}
+                    {`${totalAntall} treff med valgte filtre - ${antallFiltrertAvFiltervalg} filtrert vekk`}
                 </InlineMessage>
             )}
             {antallFiltrertPgaTilgang > 0 && (
@@ -23,7 +23,7 @@ export const BenkOversiktInfo = ({ oversikt }: { oversikt: BenkOversikt<unknown>
             )}
             {erKuttetAvLimit && (
                 <InlineMessage status={'warning'} size={'small'}>
-                    {`Viser kun de ${limit} første behandlingene - snevr inn med filtre for å se resten`}
+                    {`Vi viser maksimalt ${limit} behandlinger om gangen - bruk filtre for å snevr inn listen`}
                 </InlineMessage>
             )}
         </VStack>

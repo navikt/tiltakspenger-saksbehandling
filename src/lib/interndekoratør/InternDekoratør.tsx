@@ -1,27 +1,17 @@
 import { useEffect, useState } from 'react';
-import {
-    BodyShort,
-    Dropdown,
-    HStack,
-    InternalHeader,
-    Loader,
-    Search,
-    Spacer,
-} from '@navikt/ds-react';
-import { LeaveIcon } from '@navikt/aksel-icons';
+import { HStack, InternalHeader, Search, Spacer } from '@navikt/ds-react';
 import { useHentSakForFNR } from './useHentSakForFNR';
 import { LukkbartVarsel } from '~/lib/_felles/varsel/LukkbartVarsel';
 import Link from 'next/link';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useRouter } from 'next/router';
 import { OpprettSak } from '~/lib/interndekoratør/opprett-sak/OpprettSak';
+import { InnloggetSaksbehandlerStatus } from '~/lib/interndekoratør/innlogget-status/InnloggetSaksbehandlerStatus';
 import { personoversiktUrl } from '~/utils/urls';
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './InternDekoratør.module.css';
 
 export const InternDekoratør = () => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
     const { søk, error, reset } = useHentSakForFNR();
     const [søketekst, setSøketekst] = useState<string>('');
 
@@ -78,31 +68,7 @@ export const InternDekoratør = () => {
                 <Spacer />
                 <HStack gap="space-16">
                     <OpprettSak />
-                    {innloggetSaksbehandler ? (
-                        <Dropdown>
-                            <InternalHeader.UserButton
-                                as={Dropdown.Toggle}
-                                name={innloggetSaksbehandler.navIdent}
-                            />
-                            <Dropdown.Menu>
-                                <dl>
-                                    <BodyShort as="dt" size="small">
-                                        {innloggetSaksbehandler.navIdent}
-                                    </BodyShort>
-                                </dl>
-                                <Dropdown.Menu.Divider />
-                                <Dropdown.Menu.List>
-                                    <Dropdown.Menu.List.Item as="a" href={'/oauth2/logout'}>
-                                        Logg ut
-                                        <Spacer />
-                                        <LeaveIcon aria-hidden fontSize="1.5rem" />
-                                    </Dropdown.Menu.List.Item>
-                                </Dropdown.Menu.List>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    ) : (
-                        <Loader />
-                    )}
+                    <InnloggetSaksbehandlerStatus />
                 </HStack>
             </InternalHeader>
             {error && (
