@@ -126,7 +126,7 @@ const VurderingKlagePage = ({
     meldeperiodekjeder,
 }: Props) => {
     const { klage, setKlage } = useKlage();
-    const { innloggetSaksbehandler } = useSaksbehandler();
+    const { innloggetSaksbehandler, erSaksbehandler } = useSaksbehandler();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>(
         !kanBehandleKlage(klage, omgjøringsbehandling) ||
@@ -136,7 +136,8 @@ const VurderingKlagePage = ({
             : 'REDIGERER',
     );
 
-    const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
+    const erReadonlyForSaksbehandler =
+        !erSaksbehandler || innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<VurderingFormData>({
         defaultValues: klagebehandlingTilVurderingFormData(klage),

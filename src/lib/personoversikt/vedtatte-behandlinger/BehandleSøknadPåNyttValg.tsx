@@ -5,6 +5,7 @@ import { SakId } from '~/lib/sak/SakTyper';
 import { behandlingUrl } from '~/utils/urls';
 import { SøknadId } from '~/lib/søknad/søknadTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export const BehandleSøknadPåNyttValg = ({ sakId, søknadId }: Props) => {
+    const { erSaksbehandler } = useSaksbehandler();
     const { trigger } = useFetchJsonFraApi<Søknadsbehandling>(
         `/sak/${sakId}/soknad/${søknadId}/behandling/ny-behandling`,
         'POST',
@@ -25,6 +27,10 @@ export const BehandleSøknadPåNyttValg = ({ sakId, søknadId }: Props) => {
             }
         });
     };
+
+    if (!erSaksbehandler) {
+        return null;
+    }
 
     return (
         <ActionMenu.Item icon={<FileResetIcon aria-hidden />} onClick={opprettSøknadPåNytt}>

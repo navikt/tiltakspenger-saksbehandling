@@ -27,6 +27,7 @@ import {
 } from '../meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '../meldekort/typer/Meldekortvedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
@@ -139,8 +140,9 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
 }) => {
     const { åpenBehandlingId } = props.klage;
 
+    const { erSaksbehandler } = useSaksbehandler();
     const erReadonlyForSaksbehandler =
-        props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
+        !erSaksbehandler || props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
     const harÅpenBehandling = !!åpenBehandlingId;
     const klagerPåRammebehandling =
         harÅpenBehandling && erBehandlingIdRammebehandling(åpenBehandlingId);
@@ -177,6 +179,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
             ) : (
                 <HStack gap="space-16">
                     {!erKlageVedtatt(props.klage) &&
+                        !erReadonlyForSaksbehandler &&
                         !erKlagebehandlingSattPåVent(props.klage) &&
                         erKlageÅpen(props.klage) && (
                             <Button

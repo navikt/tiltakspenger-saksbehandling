@@ -41,7 +41,7 @@ const KlageMeny = (props: {
     omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>;
 }) => {
     const { setSak } = useSak();
-    const { innloggetSaksbehandler } = useSaksbehandler();
+    const { innloggetSaksbehandler, erSaksbehandler } = useSaksbehandler();
     const [visVilOvertaModal, setVisVilOvertaModal] = React.useState(false);
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = React.useState(false);
@@ -106,7 +106,7 @@ const KlageMeny = (props: {
         onError: (error) => setApiError({ visFeilModal: true, feil: error }),
     });
 
-    if (!kanBehandles) {
+    if (!erSaksbehandler || !kanBehandles) {
         return null;
     }
 

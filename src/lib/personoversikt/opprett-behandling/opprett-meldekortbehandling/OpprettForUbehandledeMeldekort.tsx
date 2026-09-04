@@ -2,7 +2,6 @@ import { BodyShort, Button, Dialog, Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useSak } from '~/lib/sak/SakContext';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { erSaksbehandler } from '~/lib/saksbehandler/tilganger';
 import { finnUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
 import { brukersMeldekortInnsendingstypeTekst } from '~/lib/meldekort/utils/meldekortTekster';
@@ -19,7 +18,7 @@ type Props = {
 
 export const OpprettForUbehandledeMeldekort = ({ size }: Props) => {
     const { sakId, saksnummer, meldeperiodeKjeder } = useSak().sak;
-    const { innloggetSaksbehandler } = useSaksbehandler();
+    const { erSaksbehandler } = useSaksbehandler();
     const router = useRouter();
 
     const [åpen, settÅpen] = useState<boolean>(false);
@@ -32,7 +31,7 @@ export const OpprettForUbehandledeMeldekort = ({ size }: Props) => {
 
     const ubehandledeMeldekort = finnUbehandledeMeldekort(meldeperiodeKjeder);
 
-    if (ubehandledeMeldekort.length === 0 || !erSaksbehandler(innloggetSaksbehandler)) {
+    if (ubehandledeMeldekort.length === 0 || !erSaksbehandler) {
         return null;
     }
 

@@ -181,8 +181,9 @@ const OpprettholdResultat = (props: {
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
+    const { erSaksbehandler } = useSaksbehandler();
     const erReadonlyForSaksbehandler =
-        props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
+        !erSaksbehandler || props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
 
     const journalført = !!props.klage.resultat.journalføringstidspunktInnstillingsbrev;
     const distribuert = !!props.klage.resultat.distribusjonstidspunktInnstillingsbrev;

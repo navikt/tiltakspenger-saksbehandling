@@ -95,12 +95,13 @@ const FormkravKlagePage = ({
     meldekortvedtakOgBehandling,
 }: Props) => {
     const { klage, setKlage } = useKlage();
-    const { innloggetSaksbehandler } = useSaksbehandler();
+    const { innloggetSaksbehandler, erSaksbehandler } = useSaksbehandler();
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
 
-    const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
+    const erReadonlyForSaksbehandler =
+        !erSaksbehandler || innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<FormkravFormData>({
         defaultValues: klageTilFormkravFormData(

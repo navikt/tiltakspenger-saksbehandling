@@ -1,10 +1,12 @@
 import { createContext, ReactNode, useContext } from 'react';
-import { Saksbehandler } from './SaksbehandlerTyper';
+import { Saksbehandler, SaksbehandlerRolle } from './SaksbehandlerTyper';
 import { hentRolleForBehandling } from '~/lib/saksbehandler/tilganger';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;
+    erSaksbehandler: boolean;
+    erBeslutter: boolean;
 };
 
 const Context = createContext<SaksbehandlerState>({} as SaksbehandlerState);
@@ -16,7 +18,13 @@ type Props = {
 
 export const SaksbehandlerProvider = ({ saksbehandler, children }: Props) => {
     return (
-        <Context.Provider value={{ innloggetSaksbehandler: saksbehandler }}>
+        <Context.Provider
+            value={{
+                innloggetSaksbehandler: saksbehandler,
+                erSaksbehandler: saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER),
+                erBeslutter: saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER),
+            }}
+        >
             {children}
         </Context.Provider>
     );

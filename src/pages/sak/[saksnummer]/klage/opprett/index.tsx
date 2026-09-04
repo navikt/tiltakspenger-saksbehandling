@@ -18,6 +18,7 @@ import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { useOpprettKlage } from '~/lib/klage/api/KlageApi';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
 import {
     hentMeldekortvedtakMedBehandlinger,
@@ -45,6 +46,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const OprettKlagePage = ({ sak }: Props) => {
+    const { erSaksbehandler } = useSaksbehandler();
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
 
     const form = useForm<FormkravFormData>({
@@ -108,7 +110,7 @@ const OprettKlagePage = ({ sak }: Props) => {
                             <LocalAlert.Content>{opprettKlage.error.message}</LocalAlert.Content>
                         </LocalAlert>
                     )}
-                    <Button loading={opprettKlage.isMutating}>Lagre</Button>
+                    {erSaksbehandler && <Button loading={opprettKlage.isMutating}>Lagre</Button>}
                 </VStack>
             </form>
         </FormProvider>

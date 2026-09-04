@@ -105,8 +105,9 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
     };
 
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
+    const { innloggetSaksbehandler, erSaksbehandler } = useSaksbehandler();
+    const erReadonlyForSaksbehandler =
+        !erSaksbehandler || innloggetSaksbehandler.navIdent !== klage.saksbehandler;
     const form = useForm<BrevFormData>({
         defaultValues: klageTilBrevFormData(klage, påklagetVedtak),
         resolver: brevFormValidation,

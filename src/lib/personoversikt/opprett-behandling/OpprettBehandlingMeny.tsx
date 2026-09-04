@@ -15,6 +15,7 @@ import {
 import { SakId } from '~/lib/sak/SakTyper';
 import { OpprettSøknadModal } from '~/lib/personoversikt/opprett-behandling/manuell-søknad/OpprettSøknadModal';
 import { StartRevurderingModal } from '~/lib/personoversikt/opprett-behandling/opprett-revurdering/StartRevurderingModal';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { opprettKlageUrl } from '~/utils/urls';
 
 type Props = {
@@ -26,9 +27,14 @@ type Props = {
 
 export const OpprettBehandlingMeny = ({ sakId, saksnummer, behandlinger, className }: Props) => {
     const router = useRouter();
+    const { erSaksbehandler } = useSaksbehandler();
 
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
+
+    if (!erSaksbehandler) {
+        return null;
+    }
 
     return (
         <>
