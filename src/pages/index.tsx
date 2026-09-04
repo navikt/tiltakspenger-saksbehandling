@@ -19,6 +19,7 @@ import {
     parseBenkSøknaderFilter,
     parseBenkTilbakekrevingFilter,
     benkStrengVerdi,
+    parseBenkSide,
 } from '~/lib/benk/utils/benkQuery';
 import {
     BENK_COOKIE_NAME,
@@ -116,6 +117,7 @@ const hentTabData = async (
     query: ParsedUrlQuery,
 ): Promise<Pick<BenkSideProps, 'antallPerTab' | 'tabData' | 'error'>> => {
     const sorteringFraQuery = benkStrengVerdi(query.sortering);
+    const side = parseBenkSide(query.side);
 
     switch (tab) {
         case BenkTab.SØKNADER: {
@@ -130,6 +132,7 @@ const hentTabData = async (
                 tab,
                 filters,
                 sortering,
+                side,
             );
             return {
                 antallPerTab,
@@ -152,6 +155,7 @@ const hentTabData = async (
                 tab,
                 filters,
                 sortering,
+                side,
             );
             return {
                 antallPerTab,
@@ -174,6 +178,7 @@ const hentTabData = async (
                 tab,
                 filters,
                 sortering,
+                side,
             );
             return {
                 antallPerTab,
@@ -196,6 +201,7 @@ const hentTabData = async (
                 tab,
                 filters,
                 sortering,
+                side,
             );
             return {
                 antallPerTab,
@@ -218,6 +224,7 @@ const hentTabData = async (
                 tab,
                 filters,
                 sortering,
+                side,
             );
             return {
                 antallPerTab,
@@ -236,6 +243,7 @@ const hentFane = <Behandling,>(
     tab: BenkTab,
     filters: BenkFilter,
     sortering: BenkSortering<string>,
-) => fetchBenk<Behandling>(req, tab, { sortering, filters });
+    side: number,
+) => fetchBenk<Behandling>(req, tab, { sortering, filters, side });
 
 export default BenkSide;

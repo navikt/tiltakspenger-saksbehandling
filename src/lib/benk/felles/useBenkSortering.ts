@@ -1,3 +1,4 @@
+import { ParsedUrlQuery } from 'node:querystring';
 import { useRouter } from 'next/router';
 import { BenkSortering, BenkSorteringRetning } from '../typer/felles';
 
@@ -22,9 +23,11 @@ export const useBenkSortering = <Kolonne extends string>(
                 ? BenkSorteringRetning.DESC
                 : BenkSorteringRetning.ASC;
 
-        router.push({
-            query: { ...router.query, sortering: `${sortKey},${nyRetning}` },
-        });
+        // Ny sortering endrer rekkefølgen på radene - start på første side igjen
+        const query: ParsedUrlQuery = { ...router.query, sortering: `${sortKey},${nyRetning}` };
+        delete query.side;
+
+        router.push({ query });
     };
 
     return {
