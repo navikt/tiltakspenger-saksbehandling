@@ -36,7 +36,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 modiaPersonoversiktUrl={pageProps.modiaPersonoversiktUrl}
             >
                 <FeatureTogglesProvider deployEnv={pageProps.deployEnv}>
-                    <SaksbehandlerProvider saksbehandler={pageProps.saksbehandler}>
+                    <SaksbehandlerProvider initialSaksbehandler={pageProps.saksbehandler}>
                         <NotificationProvider>
                             <SWRConfig
                                 value={{
