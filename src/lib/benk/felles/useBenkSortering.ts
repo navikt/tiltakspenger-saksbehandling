@@ -1,4 +1,4 @@
-import { ParsedUrlQuery } from 'node:querystring';
+import type { ParsedUrlQuery } from 'querystring';
 import { useRouter } from 'next/router';
 import { BenkSortering, BenkSorteringRetning } from '../typer/felles';
 
