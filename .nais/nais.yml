@@ -57,12 +57,6 @@ spec:
         {{/each}}
         extra:
           - "NAVident"
-      {{#if replyUrls}}
-        replyURLs:
-        {{#each replyUrls}}
-          - {{ this }}
-        {{/each}}
-      {{/if}}
   observability:
     autoInstrumentation:
       enabled: true
