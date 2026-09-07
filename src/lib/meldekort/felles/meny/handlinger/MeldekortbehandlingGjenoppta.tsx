@@ -1,5 +1,6 @@
-import { Button, Dialog } from '@navikt/ds-react';
+import { Button, Dialog, Loader } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
+import { useEffect } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
@@ -14,6 +15,10 @@ type Props = {
     onSuccess: (oppdatertSak: SakProps) => void;
 };
 
+/**
+ * Utfører handlingen umiddelbart når åpen settes - dialogen viser en lasteanimasjon
+ * mens kallet pågår, og feilen med mulighet for å prøve på nytt dersom det feiler.
+ */
 export const MeldekortbehandlingGjenoppta = ({
     meldekortId,
     sakId,
@@ -24,48 +29,54 @@ export const MeldekortbehandlingGjenoppta = ({
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sakId}/meldekort/${meldekortId}/gjenoppta`,
         'PATCH',
+        { onSuccess },
     );
 
-    const gjenoppta = () => {
-        trigger().then((oppdatertSak) => {
-            if (oppdatertSak) {
-                onSuccess(oppdatertSak);
-            }
-        });
-    };
+    useEffect(() => {
+        if (åpen) {
+            trigger();
+        }
+    }, [åpen, trigger]);
+
+    const harFeilet = error && !isMutating;
 
     return (
-        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
+        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && !isMutating && onClose()}>
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Gjenoppta meldekortbehandlingen?'}</strong>
+                    <strong>
+                        {harFeilet
+                            ? 'Kunne ikke gjenoppta meldekortbehandlingen'
+                            : 'Gjenopptar meldekortbehandlingen'}
+                    </strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
-                    {'Er du sikker på at du vil gjenoppta meldekortbehandlingen?'}
-
-                    {error && (
+                    {harFeilet ? (
                         <Infokort
                             variant={'feil'}
                             header={'Feil ved gjenopptak'}
                         >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
+                    ) : (
+                        <Loader size={'xlarge'} title={'Gjenopptar meldekortbehandlingen'} />
                     )}
                 </Dialog.Body>
 
-                <Dialog.Footer>
-                    <Button
-                        variant={'primary'}
-                        icon={<PlayIcon aria-hidden />}
-                        loading={isMutating}
-                        onClick={gjenoppta}
-                    >
-                        {'Gjenoppta'}
-                    </Button>
+                {harFeilet && (
+                    <Dialog.Footer>
+                        <Button
+                            variant={'primary'}
+                            icon={<PlayIcon aria-hidden />}
+                            onClick={() => trigger()}
+                        >
+                            {'Prøv igjen'}
+                        </Button>
 
-                    <Dialog.CloseTrigger>
-                        <Button variant={'secondary'}>{'Avbryt'}</Button>
-                    </Dialog.CloseTrigger>
-                </Dialog.Footer>
+                        <Dialog.CloseTrigger>
+                            <Button variant={'secondary'}>{'Avbryt'}</Button>
+                        </Dialog.CloseTrigger>
+                    </Dialog.Footer>
+                )}
             </Dialog.Popup>
         </Dialog>
     );

@@ -14,8 +14,10 @@ import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-fe
 import style from './BehandlingsmenyValg.module.css';
 
 /**
- * Dialogene menyen kan åpne. Hvilken komponent som hører til hvilken dialog
- * avgjør den som bruker menyen (rammebehandling og meldekortbehandling har hvert sitt sett).
+ * Valgene menyen kan utløse. Noen valg utfører handlingen umiddelbart
+ * (tildelMeg, angreSendTilBeslutning, gjenoppta, leggTilbake), mens resten åpner en dialog.
+ * Hvilken komponent som hører til hvilket valg avgjør den som bruker menyen
+ * (rammebehandling og meldekortbehandling har hvert sitt sett).
  */
 export type BehandlingsmenyDialog =
     | 'tildelMeg'
