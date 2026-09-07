@@ -67,25 +67,32 @@ export type BenkFilter = Record<string, string | boolean | null>;
 
 /**
  * Body-en som postes til fanens rute under /benk. Fanen ligger i url-en,
- * så body-en inneholder kun sortering og fanens filtre.
+ * så body-en inneholder kun sortering, fanens filtre og paginering.
+ *
+ * [side] er det 0-baserte sidetallet som skal hentes - sidestørrelsen er
+ * fast i backend og returneres som `sideantall`.
  */
 export type BenkRequestBody = {
     sortering: BenkSortering<string>;
     filters: BenkFilter;
+    side: number;
 };
 
 /**
  * Respons for én fane i benken.
  *
- * [limit] er maksgrensen backend returnerer - er antallet treff større,
- * er `behandlinger` kuttet og resten vises ikke.
+ * [side] er siden som ble spurt om (0-basert) og [sideantall] den faste
+ * sidestørrelsen - antall sider er `totalAntall / sideantall`, rundet opp.
+ * Tilgangsfiltrering skjer etter pagineringen, så en side kan vise færre
+ * enn `sideantall` rader.
  */
 export type BenkOversikt<Behandling> = {
     behandlinger: Behandling[];
     totalAntall: number;
     totalAntallUfiltrert: number;
     antallFiltrertPgaTilgang: number;
-    limit: number;
+    side: number;
+    sideantall: number;
     /** Identene tildelt en rad i fanen, ufiltrert - valg i nedtrekkslisten for saksbehandler/beslutter */
     saksbehandlere: string[];
     besluttere: string[];

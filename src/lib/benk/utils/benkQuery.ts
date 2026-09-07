@@ -45,6 +45,21 @@ const benkEnumVerdi = <T extends Record<string, string>>(
 export const benkBoolskVerdi = (verdi: unknown): boolean =>
     typeof verdi === 'boolean' ? verdi : verdi === 'true';
 
+/**
+ * Sidetallet i pagineringen (0-basert). Ugyldige verdier tolkes som
+ * første side (0).
+ */
+export const parseBenkSide = (verdi: unknown): number => {
+    const streng = benkStrengVerdi(verdi);
+
+    if (streng === null) {
+        return 0;
+    }
+
+    const tall = Number(streng);
+    return Number.isInteger(tall) && tall > 0 ? tall : 0;
+};
+
 // Søknadstype er en string-union, ikke en enum, så vi trenger en record for validering
 const søknadstyper: Record<Søknadstype, Søknadstype> = {
     DIGITAL: 'DIGITAL',

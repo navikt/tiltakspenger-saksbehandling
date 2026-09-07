@@ -106,13 +106,6 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 {'Oversikt over åpne behandlinger'}
             </Heading>
 
-            {/* Fjern denne etter en viss tid */}
-            <Infokort variant={'info'} size={'small'} className={style.varsel}>
-                {'Benken er nå delt inn i faner med tabeller tilpasset behandlingstypene. ' +
-                    'Du kan åpne behandlingene eller utføre handlinger direkte fra benken med knappene til høyre i tabellene. ' +
-                    'Klikk på fødselsnummeret for å gå til personoversikten.'}
-            </Infokort>
-
             {error && (
                 <Infokort variant={'feil'} header={'Feil i filtreringen'} className={style.varsel}>
                     {error}
