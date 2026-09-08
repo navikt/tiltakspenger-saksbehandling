@@ -9,6 +9,9 @@ allowBuilds:
 
 # en uke
 minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - "@navikt/*"
+  - "@nais/*"
 
 # Sikkerhetsfiks i transitiv pakke: sharp kommer via next.
 overrides:
