@@ -46,6 +46,21 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - name: Build app
         run: pnpm run build
+        env:
+          # Statiske assets serveres fra cdn.nav.no (se assetPrefix i next.config.js)
+          CDN_ASSET_PREFIX: https://cdn.nav.no/tpts/tiltakspenger-saksbehandling
+      # Må kjøre før imaget deployes, slik at assettene er tilgjengelige når ny HTML refererer dem.
+      # Sourcemaps (.map) lastes opp sammen med bundlene, slik at nais sin telemetri-collector
+      # kan dekode stack-traces fra klientfeil.
+      - name: Upload static assets to CDN
+        # Versjonsoversikt: https://github.com/nais/deploy/commits/master/actions/cdn-upload
+        uses: nais/deploy/actions/cdn-upload/v2@9ce59af14f70c3a7093ba1e20d6679af2b1c7be9 # master 2026-09-08
+        with:
+          team: tpts
+          source: .next/static
+          # upload-cloud-storage beholder mappenavnet (static), så filene havner på
+          # cdn.nav.no/tpts/tiltakspenger-saksbehandling/_next/static/...
+          destination: tiltakspenger-saksbehandling/_next
       - name: Build and push docker image
         # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
         uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
