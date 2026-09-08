@@ -9,3 +9,7 @@ allowBuilds:
 
 # en uke
 minimumReleaseAge: 10080
+
+# Sikkerhetsfiks i transitiv pakke: sharp kommer via next.
+overrides:
+  sharp: 0.35.0
