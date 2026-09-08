@@ -25,7 +25,6 @@ export default {
           style-src 'self' 'unsafe-inline' cdn.nav.no;
           font-src 'self' cdn.nav.no;
           connect-src 'self' cdn.nav.no https://telemetry.nav.no https://telemetry.ekstern.dev.nav.no;
-          prefetch-src 'self' cdn.nav.no;
         `;
 
         const securityHeaders = [
