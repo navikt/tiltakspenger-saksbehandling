@@ -1,6 +1,6 @@
 import { Button, Dialog, Loader } from '@navikt/ds-react';
 import { PersonIcon } from '@navikt/aksel-icons';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
@@ -25,17 +25,21 @@ export const RammebehandlingTildelMeg = ({
     onClose,
     onSuccess,
 }: Props) => {
-    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
-        `/sak/${sakId}/behandling/${behandlingId}/ta`,
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, RequestBody>(
+        `behandlinger/ta`,
         'POST',
         { onSuccess },
     );
 
+    const tildel = useCallback(() => {
+        trigger({ behandlinger: [{ behandlingId, sakId }] });
+    }, [behandlingId, sakId, trigger]);
+
     useEffect(() => {
         if (åpen) {
-            trigger();
+            tildel();
         }
-    }, [åpen, trigger]);
+    }, [åpen, tildel]);
 
     const harFeilet = error && !isMutating;
 
@@ -66,7 +70,7 @@ export const RammebehandlingTildelMeg = ({
                         <Button
                             variant={'primary'}
                             icon={<PersonIcon aria-hidden />}
-                            onClick={() => trigger()}
+                            onClick={tildel}
                         >
                             {'Prøv igjen'}
                         </Button>
@@ -79,4 +83,13 @@ export const RammebehandlingTildelMeg = ({
             </Dialog.Popup>
         </Dialog>
     );
+};
+
+type RequestBody = {
+    behandlinger: BehandlingIdOgSakId[];
+};
+
+type BehandlingIdOgSakId = {
+    behandlingId: RammebehandlingId;
+    sakId: SakId;
 };
