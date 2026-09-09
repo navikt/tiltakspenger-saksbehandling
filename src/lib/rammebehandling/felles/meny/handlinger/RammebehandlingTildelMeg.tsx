@@ -26,7 +26,7 @@ export const RammebehandlingTildelMeg = ({
     onSuccess,
 }: Props) => {
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, RequestBody>(
-        `behandlinger/ta`,
+        '/behandlinger/ta',
         'POST',
         { onSuccess },
     );
