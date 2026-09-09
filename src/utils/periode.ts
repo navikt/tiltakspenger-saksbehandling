@@ -171,7 +171,8 @@ export const krympPeriodisering = <T>(
 
 /**
  *  Returnerer elementer med perioder som overlapper den angitte perioden, og setter første fraOgMed og siste tilOgMed lik angitt periode
- *  [finnNærmesteHvisIngenOverlapp] - Hvis true, hentes første eller siste element i periodiseringen dersom det ikke er noe overlapp med angitt periode
+ *  [finnNærmesteHvisIngenOverlapp] - Hvis true, hentes det første eller det siste elementet i periodiseringen dersom den angitte
+ *  perioden ligger helt før eller helt etter periodiseringen. Ligger perioden i et hull mellom to elementer, returneres en tom liste.
  * */
 export const utvidPeriodisering = <T>(
     periodisering: MedPeriode<T>[],
@@ -187,9 +188,13 @@ export const utvidPeriodisering = <T>(
     );
 
     if (overlappendePerioder.length === 0) {
-        return finnNærmesteHvisIngenOverlapp
-            ? [{ ...finnNærmestePeriodeIPeriodisering(periodisering, utvidTil), periode: utvidTil }]
-            : [];
+        if (!finnNærmesteHvisIngenOverlapp) {
+            return [];
+        }
+
+        const nærmesteElement = finnNærmestePeriodeIPeriodisering(periodisering, utvidTil);
+
+        return nærmesteElement ? [{ ...nærmesteElement, periode: utvidTil }] : [];
     }
 
     const førsteElement = overlappendePerioder.atNonNull(0);
@@ -217,10 +222,13 @@ export const utvidPeriodisering = <T>(
         });
 };
 
+// Returnerer det første elementet dersom perioden ligger helt før periodiseringen, og det siste dersom
+// den ligger helt etter. Ligger perioden i et hull mellom to elementer, finnes det ikke ett entydig nærmeste
+// element, og vi returnerer undefined.
 const finnNærmestePeriodeIPeriodisering = <T>(
     periodisering: MedPeriode<T>[],
     periode: Periode,
-): MedPeriode<T> => {
+): MedPeriode<T> | undefined => {
     if (periodisering.length === 0) {
         throw Error('Må ha minst en periode i periodiseringen');
     }
@@ -237,7 +245,7 @@ const finnNærmestePeriodeIPeriodisering = <T>(
         return sistePeriode;
     }
 
-    throw Error('Perioden overlapper allerede med periodiseringen');
+    return undefined;
 };
 
 export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] => {
