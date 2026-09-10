@@ -54,7 +54,7 @@ jobs:
       # kan dekode stack-traces fra klientfeil.
       - name: Upload static assets to CDN
         # Versjonsoversikt: https://github.com/nais/deploy/commits/master/actions/cdn-upload
-        uses: nais/deploy/actions/cdn-upload/v2@9ce59af14f70c3a7093ba1e20d6679af2b1c7be9 # master 2026-09-08
+        uses: nais/deploy/actions/cdn-upload/v2@027a91857992525139798892f2804b0ca21f4af6 # master 2026-09-08
         with:
           team: tpts
           source: .next/static
