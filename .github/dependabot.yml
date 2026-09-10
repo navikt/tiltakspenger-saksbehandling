@@ -9,6 +9,10 @@ updates:
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
+      # Navs egne pakker tas med én gang; cooldownen gjelder tredjepart.
+      exclude:
+        - "@navikt/*"
+        - "@nais/*"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -16,3 +20,7 @@ updates:
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
+      # Navs egne pakker tas med én gang; cooldownen gjelder tredjepart.
+      exclude:
+        - "nais/*"
+        - "navikt/*"

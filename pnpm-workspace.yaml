@@ -12,7 +12,3 @@ minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - "@navikt/*"
   - "@nais/*"
-
-# Sikkerhetsfiks i transitiv pakke: sharp kommer via next.
-overrides:
-  sharp: 0.35.0
