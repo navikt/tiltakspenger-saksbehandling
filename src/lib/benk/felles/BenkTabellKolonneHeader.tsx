@@ -1,5 +1,7 @@
 import { Table } from '@navikt/ds-react';
 import { useBenkVisning } from './filter/BenkVisningContext';
+import { BenkTildelFlereMeny } from '~/lib/benk/felles/tildel-flere/BenkTildelFlereMeny';
+import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
 
 /**
  * Kolonneoverskriftene som går igjen på tvers av fanene i benken.
@@ -75,7 +77,11 @@ const Beløp = () => (
 );
 
 /** Den tomme kolonnen til høyre med lenker og meny */
-const Handlinger = () => <Table.ColumnHeader />;
+const Handlinger = ({ behandlinger }: { behandlinger?: BenkSøknadsbehandling[] }) => (
+    <Table.ColumnHeader align={'right'}>
+        {behandlinger && <BenkTildelFlereMeny behandlinger={behandlinger} />}
+    </Table.ColumnHeader>
+);
 
 export const BenkTabellKolonneHeader = {
     Fnr,

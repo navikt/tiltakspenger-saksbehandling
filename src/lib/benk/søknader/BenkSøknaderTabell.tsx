@@ -31,7 +31,7 @@ export const BenkSøknaderTabell = ({ behandlinger, aktivSortering }: Props) => 
                     <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Saksbehandler />
                     <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger />
+                    <BenkTabellKolonneHeader.Handlinger behandlinger={behandlinger} />
                 </Table.Row>
             </Table.Header>
             <Table.Body>

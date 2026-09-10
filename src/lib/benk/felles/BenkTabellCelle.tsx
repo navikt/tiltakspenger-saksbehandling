@@ -1,4 +1,4 @@
-import { BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { Checkbox, BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
@@ -249,6 +249,7 @@ const RammebehandlingHandlinger = ({
     behandling: BenkSøknadsbehandling | BenkRevurdering;
 }) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
+    const { valgtTildeling } = useBenkVisning();
 
     return (
         <Handlinger behandling={behandling}>
@@ -264,6 +265,7 @@ const RammebehandlingHandlinger = ({
                         : 'Åpne'}
                 </InternLenkeKnapp>
                 <BenkBehandlingMeny behandling={behandling} />
+                {valgtTildeling && <Checkbox size={'small'}>Tildel</Checkbox>}
             </HStack>
         </Handlinger>
     );
