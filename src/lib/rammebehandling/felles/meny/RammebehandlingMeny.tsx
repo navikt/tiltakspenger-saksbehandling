@@ -123,6 +123,7 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                     behandlingId={behandling.id}
                     sakId={sak.sakId}
                     åpen={aktivDialog === 'tildelMeg'}
+                    kallesFra={kallesFra}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />

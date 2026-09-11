@@ -5,11 +5,13 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { BehandlingsmenyKallesFra } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 type Props = {
     behandlingId: RammebehandlingId;
     sakId: SakId;
     åpen: boolean;
+    kallesFra: BehandlingsmenyKallesFra;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
 };
@@ -25,14 +27,21 @@ export const RammebehandlingTildelMeg = ({
     onClose,
     onSuccess,
 }: Props) => {
-    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, RequestBody>(
+    const { trigger, error, isMutating } = useFetchJsonFraApi<ResponseBody, RequestBody>(
         '/behandlinger/ta',
         'POST',
-        { onSuccess },
+        {
+            onSuccess: (response) => {
+                onSuccess(response.saker.atNonNull(0));
+            },
+        },
     );
 
     const tildel = useCallback(() => {
-        trigger({ behandlinger: [{ behandlingId, sakId }] });
+        trigger({
+            behandlinger: [{ behandlingId, sakId }],
+            returnerSaker: true,
+        });
     }, [behandlingId, sakId, trigger]);
 
     useEffect(() => {
@@ -86,10 +95,17 @@ export const RammebehandlingTildelMeg = ({
 };
 
 type RequestBody = {
-    behandlinger: BehandlingIdOgSakId[];
+    behandlinger: Array<{
+        behandlingId: RammebehandlingId;
+        sakId: SakId;
+    }>;
+    returnerSaker: boolean;
 };
 
-type BehandlingIdOgSakId = {
-    behandlingId: RammebehandlingId;
-    sakId: SakId;
+type ResponseBody = {
+    behandlinger: Array<{
+        behandlingId: RammebehandlingId;
+        sakId: SakId;
+    }>;
+    saker: SakProps[];
 };

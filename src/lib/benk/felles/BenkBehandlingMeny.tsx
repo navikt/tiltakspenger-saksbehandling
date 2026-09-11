@@ -150,6 +150,7 @@ const RammeDialoger = ({
                     behandlingId={id}
                     sakId={sakId}
                     åpen={aktivDialog === 'tildelMeg'}
+                    kallesFra={'benk'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
