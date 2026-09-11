@@ -25,7 +25,7 @@ export const BenkTildelFlereMeny = ({ behandlinger }: Props) => {
 
     const kanBeslutte = behandlingerSomKanBesluttes.length > 0;
 
-    const { setValgtTildeling } = useBenkVisning();
+    const { setValgtTildelingType } = useBenkVisning();
 
     if (!kanSaksbehandle && !kanBeslutte) return null;
 
@@ -33,7 +33,7 @@ export const BenkTildelFlereMeny = ({ behandlinger }: Props) => {
         <ActionMenu>
             <ActionMenu.Trigger>
                 <Button
-                    data-color="neutral"
+                    size={'small'}
                     variant="secondary"
                     icon={<ChevronDownIcon aria-hidden />}
                     iconPosition="right"
@@ -43,12 +43,12 @@ export const BenkTildelFlereMeny = ({ behandlinger }: Props) => {
             </ActionMenu.Trigger>
             <ActionMenu.Content>
                 {kanSaksbehandle && (
-                    <ActionMenu.Item onSelect={() => setValgtTildeling('saksbehandler')}>
+                    <ActionMenu.Item onSelect={() => setValgtTildelingType('saksbehandler')}>
                         Ta som saksbehandler
                     </ActionMenu.Item>
                 )}
                 {kanBeslutte && (
-                    <ActionMenu.Item onSelect={() => setValgtTildeling('beslutter')}>
+                    <ActionMenu.Item onSelect={() => setValgtTildelingType('beslutter')}>
                         Ta som beslutter
                     </ActionMenu.Item>
                 )}

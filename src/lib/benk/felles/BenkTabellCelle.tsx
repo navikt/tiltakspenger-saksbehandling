@@ -1,4 +1,4 @@
-import { Checkbox, BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import {BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
@@ -33,6 +33,7 @@ import { BenkBehandlingMeny } from './BenkBehandlingMeny';
 import { useBenkVisning } from './filter/BenkVisningContext';
 import { kanFortsetteBenkRad } from '../utils/benkUtils';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
+import { BenkTildelCheckbox } from '~/lib/benk/felles/tildel-flere/BenkTildelCheckbox';
 import style from './BenkTabellCelle.module.css';
 
 /**
@@ -249,7 +250,6 @@ const RammebehandlingHandlinger = ({
     behandling: BenkSøknadsbehandling | BenkRevurdering;
 }) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { valgtTildeling } = useBenkVisning();
 
     return (
         <Handlinger behandling={behandling}>
@@ -265,7 +265,7 @@ const RammebehandlingHandlinger = ({
                         : 'Åpne'}
                 </InternLenkeKnapp>
                 <BenkBehandlingMeny behandling={behandling} />
-                {valgtTildeling && <Checkbox size={'small'}>Tildel</Checkbox>}
+                <BenkTildelCheckbox behandling={behandling} />
             </HStack>
         </Handlinger>
     );

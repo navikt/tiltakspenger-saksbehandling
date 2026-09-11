@@ -1,17 +1,22 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type BenkVisning = {
     skjulVentestatus: boolean;
-    valgtTildeling: TildelingType | null;
-    setValgtTildeling: (tildelingType: TildelingType) => void;
+    valgtTildelingType: TildelingType | null;
+    setValgtTildelingType: (tildelingType: TildelingType | null) => void;
+    valgtTildeling: ReadonlySet<RammebehandlingId>;
+    toggleValgtTildeling: (rammebehandlingId: RammebehandlingId, erValgt: boolean) => void;
 };
 
 type TildelingType = 'saksbehandler' | 'beslutter';
 
 const BenkVisningContext = createContext<BenkVisning>({
-    setValgtTildeling: () => {},
-    valgtTildeling: null,
+    setValgtTildelingType: () => {},
+    valgtTildelingType: null,
     skjulVentestatus: false,
+    valgtTildeling: new Set<RammebehandlingId>(),
+    toggleValgtTildeling: () => {},
 });
 
 type Props = PropsWithChildren<{
@@ -24,10 +29,29 @@ type Props = PropsWithChildren<{
  * og sørger for at kolonneoverskrift og celler alltid er i sync.
  */
 export const BenkVisningProvider = ({ skjulVentestatus, children }: Props) => {
-    const [valgtTildeling, setValgtTildeling] = useState<TildelingType | null>(null);
+    const [valgtTildelingType, setValgtTildelingType] = useState<TildelingType | null>(null);
+    const [valgtTildeling, setValgtTildeling] = useState<ReadonlySet<RammebehandlingId>>(new Set());
+
+    const toggleValgtTildeling = (rammebehandlingId: RammebehandlingId, erValgt: boolean) => {
+        //TODO - Ta inn sakID
+        if (!erValgt) {
+            setValgtTildeling(
+                new Set([...valgtTildeling].filter((id) => id !== rammebehandlingId)),
+            );
+        } else {
+            setValgtTildeling(new Set([...valgtTildeling, rammebehandlingId]));
+        }
+    };
+
     return (
         <BenkVisningContext.Provider
-            value={{ skjulVentestatus, valgtTildeling, setValgtTildeling }}
+            value={{
+                skjulVentestatus,
+                valgtTildelingType: valgtTildelingType,
+                setValgtTildelingType: setValgtTildelingType,
+                valgtTildeling: valgtTildeling,
+                toggleValgtTildeling: toggleValgtTildeling,
+            }}
         >
             {children}
         </BenkVisningContext.Provider>
