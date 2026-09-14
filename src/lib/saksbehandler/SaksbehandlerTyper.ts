@@ -3,6 +3,7 @@ export enum SaksbehandlerRolle {
     BESLUTTER = 'BESLUTTER',
     UTVIKLER = 'UTVIKLER',
     VEILEDER = 'VEILEDER',
+    TILBAKEKREVING = 'TILBAKEKREVING',
 }
 
 export type Saksbehandler = {
@@ -10,4 +11,5 @@ export type Saksbehandler = {
     epost: string;
     navIdent: string;
     roller: SaksbehandlerRolle[];
+    sladdes: boolean;
 };

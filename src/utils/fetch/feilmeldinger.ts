@@ -28,6 +28,7 @@ const feilmeldinger: Record<string, string> = {
     meldeperioden_er_utdatert: 'Meldeperioden er utdatert',
     ugyldig_status_for_legg_tilbake:
         'Behandlingen har endret status etter at siden ble lastet. Last siden på nytt og prøv igjen.',
+    pdf_krever_fagrolle: 'Brev i PDF kan ikke sladdes og krever fagrolle',
 } as const;
 
 export const finnFetchFeilmelding = (error?: JsonError): string => {

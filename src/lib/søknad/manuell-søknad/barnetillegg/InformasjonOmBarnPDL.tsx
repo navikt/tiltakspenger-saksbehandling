@@ -1,5 +1,5 @@
 import { Heading, HStack, Tag } from '@navikt/ds-react';
-import { finn16årsdag, formaterDatotekst } from '~/utils/date';
+import { erGyldigDatotekst, finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { getNavnMedFødselsdato } from '~/lib/søknad/manuell-søknad/barnetillegg/barnetilleggUtils';
 import { erDatoIPeriode } from '~/utils/periode';
@@ -11,12 +11,15 @@ type Props = {
 };
 
 export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
-    const bleFødtITiltaksperioden = søknadsperiode
-        ? erDatoIPeriode(barn.fødselsdato, søknadsperiode)
-        : false;
-    const fyller16ITiltaksperioden = søknadsperiode
-        ? erDatoIPeriode(finn16årsdag(barn.fødselsdato), søknadsperiode)
-        : false;
+    const harGyldigFødselsdato = erGyldigDatotekst(barn.fødselsdato);
+    const bleFødtITiltaksperioden =
+        harGyldigFødselsdato && søknadsperiode
+            ? erDatoIPeriode(barn.fødselsdato, søknadsperiode)
+            : false;
+    const fyller16ITiltaksperioden =
+        harGyldigFødselsdato && søknadsperiode
+            ? erDatoIPeriode(finn16årsdag(barn.fødselsdato), søknadsperiode)
+            : false;
     return (
         <>
             <HStack gap="space-8">

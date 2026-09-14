@@ -9,6 +9,7 @@ const rolleTekst: Record<SaksbehandlerRolle, string> = {
     [SaksbehandlerRolle.BESLUTTER]: 'Beslutter',
     [SaksbehandlerRolle.UTVIKLER]: 'Utvikler',
     [SaksbehandlerRolle.VEILEDER]: 'Veileder',
+    [SaksbehandlerRolle.TILBAKEKREVING]: 'Tilbakekreving',
 };
 
 const rolleFarge: Record<SaksbehandlerRolle, AkselColor> = {
@@ -16,6 +17,7 @@ const rolleFarge: Record<SaksbehandlerRolle, AkselColor> = {
     [SaksbehandlerRolle.BESLUTTER]: 'success',
     [SaksbehandlerRolle.UTVIKLER]: 'meta-purple',
     [SaksbehandlerRolle.VEILEDER]: 'info',
+    [SaksbehandlerRolle.TILBAKEKREVING]: 'warning',
 };
 
 export const InnloggetSaksbehandlerStatus = () => {

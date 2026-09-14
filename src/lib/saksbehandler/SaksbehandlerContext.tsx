@@ -7,6 +7,7 @@ type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;
     erSaksbehandler: boolean;
     erBeslutter: boolean;
+    sladdes: boolean;
 };
 
 // Skal normalt kun brukes ved pre-render av statiske sider, ie feilsider.
@@ -16,12 +17,14 @@ const defaultSaksbehandler: Saksbehandler = {
     epost: 'ukjent',
     navIdent: 'ukjent',
     roller: [],
+    sladdes: false,
 } as const;
 
 const Context = createContext<SaksbehandlerState>({
     innloggetSaksbehandler: defaultSaksbehandler,
     erSaksbehandler: false,
     erBeslutter: false,
+    sladdes: false,
 });
 
 type Props = {
@@ -38,6 +41,8 @@ export const SaksbehandlerProvider = ({ initialSaksbehandler, children }: Props)
                 innloggetSaksbehandler: saksbehandler,
                 erSaksbehandler: saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER),
                 erBeslutter: saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER),
+                // Flagget kan mangle i svaret fra backenden til feltet er ute overalt, og da vises ikke banneret.
+                sladdes: saksbehandler.sladdes === true,
             }}
         >
             {children}

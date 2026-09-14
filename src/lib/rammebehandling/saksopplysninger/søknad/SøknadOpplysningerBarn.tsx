@@ -1,7 +1,8 @@
 import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
-import { alderFraDato, finn16årsdag, formaterDatotekst } from '~/utils/date';
+import { alderFraDato, erGyldigDatotekst, finn16årsdag, formaterDatotekst } from '~/utils/date';
+import { erFødselsnummer } from '~/utils/fødselsnummer';
 import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { Søknad, SøknadBarn } from '~/lib/søknad/søknadTyper';
@@ -94,9 +95,10 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                 .map((barn) => {
                     const { fnr, fødselsdato, fornavn } = barn;
 
-                    const personopplysninger = fnr
-                        ? personopplysningerBarn.data?.find((p) => p.fnr === fnr)
-                        : undefined;
+                    const personopplysninger =
+                        fnr && erFødselsnummer(fnr)
+                            ? personopplysningerBarn.data?.find((p) => p.fnr === fnr)
+                            : undefined;
 
                     return (
                         <Barn
@@ -126,26 +128,34 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 
     const navn = [fornavn, mellomnavn, etternavn].filter(Boolean).join(' ');
     const fødselsdatoFormattert = formaterDatotekst(fødselsdato);
+    const harGyldigFødselsdato = erGyldigDatotekst(fødselsdato);
 
-    const bleFødtITiltaksperioden = tiltaksperiode
-        ? erDatoIPeriode(fødselsdato, tiltaksperiode)
-        : false;
+    const bleFødtITiltaksperioden =
+        harGyldigFødselsdato && tiltaksperiode
+            ? erDatoIPeriode(fødselsdato, tiltaksperiode)
+            : false;
 
     const fyller16dato = finn16årsdag(fødselsdato);
-    const fyller16ITiltaksperioden = tiltaksperiode
-        ? erDatoIPeriode(fyller16dato, tiltaksperiode)
-        : false;
+    const fyller16ITiltaksperioden =
+        harGyldigFødselsdato && tiltaksperiode
+            ? erDatoIPeriode(fyller16dato, tiltaksperiode)
+            : false;
 
     const { fortrolig, strengtFortrolig, strengtFortroligUtland, dødsdato } =
         personopplysninger || {};
 
     const dødeITiltaksperioden =
-        dødsdato && tiltaksperiode ? erDatoIPeriode(dødsdato, tiltaksperiode) : false;
+        dødsdato && erGyldigDatotekst(dødsdato) && tiltaksperiode
+            ? erDatoIPeriode(dødsdato, tiltaksperiode)
+            : false;
 
     return (
         <div>
             <BehandlingSaksopplysning navn={'Navn'} verdi={navn} />
-            <BehandlingSaksopplysning navn={'Alder'} verdi={`${alderFraDato(fødselsdato)} år`} />
+            <BehandlingSaksopplysning
+                navn={'Alder'}
+                verdi={harGyldigFødselsdato ? `${alderFraDato(fødselsdato)} år` : fødselsdato}
+            />
             {fyller16ITiltaksperioden && (
                 <BehandlingSaksopplysning
                     navn={'Barnet fyller 16 år i tiltaksperioden'}

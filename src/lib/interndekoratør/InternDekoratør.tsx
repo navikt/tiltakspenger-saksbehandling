@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { OpprettSak } from '~/lib/interndekoratør/opprett-sak/OpprettSak';
 import { InnloggetSaksbehandlerStatus } from '~/lib/interndekoratør/innlogget-status/InnloggetSaksbehandlerStatus';
+import { Sladdebanner } from '~/lib/interndekoratør/sladdebanner/Sladdebanner';
 import { personoversiktUrl } from '~/utils/urls';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -71,6 +72,7 @@ export const InternDekoratør = () => {
                     <InnloggetSaksbehandlerStatus />
                 </HStack>
             </InternalHeader>
+            <Sladdebanner />
             {error && (
                 <LukkbartVarsel
                     melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}

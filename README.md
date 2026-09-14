@@ -49,7 +49,7 @@ Hvis du kjører ekte auth-tjenester lokalt, er appen tilgjengelig via wonderwall
 Ved bruk av fake tokens, gå rett på http://localhost:3000.
 
 Du kan bytte fake-token/fake-bruker ved å sette i .env.local `LOKAL_FAKE_TOKEN=<token>`
-Gyldige verdier for lokal backend er `TokenMcTokenface` (default) og `TokenMcTokenface2`
+Bruk `TokenMcTokenface` eller `TokenMcTokenface2` for vanlig saksbehandler og beslutter lokalt. `Veileder` gir veilederinnsyn, mens `Utvikler` gir utviklerrollen med sladdede personopplysninger.
 
 Dette kan være nyttig når du kjapt vil bytte mellom en saksbehandler og beslutter lokalt.
 

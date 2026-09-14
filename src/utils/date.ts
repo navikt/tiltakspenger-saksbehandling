@@ -36,8 +36,15 @@ export const formaterTidspunktKort = (dateString: string) => {
     return dayjs(dateString).format('DD.MM.YY HH:mm');
 };
 
+// Backenden kan sende sladdede verdier som [Sladdet] i datofelter, og de skal vises uendret.
+export const erGyldigDatotekst = (tekst: string): boolean => dayjs(tekst).isValid();
+
 export const formaterDatotekst = (dateString: string) => {
-    return dateString ? dayjs(dateString).format('DD.MM.YYYY') : 'ukjent';
+    if (!dateString) {
+        return 'ukjent';
+    }
+
+    return erGyldigDatotekst(dateString) ? dayjs(dateString).format('DD.MM.YYYY') : dateString;
 };
 
 export const formaterPeriode = ({ fraOgMed, tilOgMed }: Periode) => {

@@ -34,6 +34,13 @@ For e2e tester (`*.spec.ts`) bruker vi `playwright`.
 - 404 og 409 behandles som **terminale feil**: et nytt forsøk vil aldri lykkes. Da viser vi lenke til personoversikten og lar ikke saksbehandler sende inn på nytt. Andre feil (f.eks. 500) kan prøves på nytt.
 - `errorFraApiResponse` (`src/utils/fetch/fetch.ts`) beholder `res.status` også når responsen ikke kan tolkes som JSON, med en nøytral feilmelding — slik at terminal-logikken (404/409) fungerer uavhengig av body.
 
+## Sladdede verdier fra backenden
+
+Backenden sender strengen `[Sladdet]` i alle felter med personopplysninger for brukere uten fagrolle.
+Dette gjelder også datofelter som fødselsdato og dødsdato.
+Alle datohjelpere i flaten skal håndtere slike sladdede verdier uten å krasje eller vise NaN.
+Sladdebanneret øverst på siden styres direkte av feltet `sladdes` fra saksbehandler-endepunktet.
+
 ## Lokal testdata
 
 - For å teste mot ekte behandlinger lokalt kan du generere testdata med scriptene i [`scripts/testdata/`](scripts/testdata/). Kjør `./scripts/testdata/opprett-alt-digital.sh` (digital søknad) eller `./scripts/testdata/opprett-alt-papir.sh` (papirsøknad) for å opprette en sak med innvilget vedtak, en meldekortbehandling og en klagebehandling. Scriptene skriver ut et saksnummer du kan søke opp i frontend.

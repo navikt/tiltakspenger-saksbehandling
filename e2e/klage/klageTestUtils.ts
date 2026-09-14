@@ -237,6 +237,7 @@ const saksbehandler: Saksbehandler = {
     epost: 'test.testesen@nav.no',
     navIdent,
     roller: [SaksbehandlerRolle.SAKSBEHANDLER, SaksbehandlerRolle.BESLUTTER],
+    sladdes: false,
 };
 
 const personopplysninger: Personopplysninger = {
