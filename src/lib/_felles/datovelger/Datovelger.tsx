@@ -14,7 +14,7 @@ export type DatovelgerProps = {
     defaultMonth?: DateOrString;
     label?: React.ReactNode;
     dropdownCaption?: boolean;
-    disabledMatcher?: MatcherProps;
+    disabledPerioder?: Periode[];
 } & Omit<ComponentProps<typeof DatePicker.Input>, 'label'>;
 
 export const Datovelger = ({
@@ -26,7 +26,7 @@ export const Datovelger = ({
     defaultMonth,
     label,
     dropdownCaption,
-    disabledMatcher,
+    disabledPerioder,
     ...inputPropsCustom
 }: DatovelgerProps) => {
     const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
@@ -50,7 +50,7 @@ export const Datovelger = ({
         <DatePicker
             {...datepickerProps}
             dropdownCaption={dropdownCaption}
-            disabled={disabledMatcher}
+            disabled={disabledPerioder ? generateMatcherProps(disabledPerioder) : undefined}
             fixedWeeks={true}
         >
             <DatePicker.Input {...inputProps} {...inputPropsCustom} label={label ?? 'Velg dato'} />

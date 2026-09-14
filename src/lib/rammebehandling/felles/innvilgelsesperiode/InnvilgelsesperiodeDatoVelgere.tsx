@@ -5,7 +5,7 @@ import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
 import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { periodiseringTotalPeriode } from '~/utils/periode';
+import { finnPeriodiseringHull, periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {
     periode: Partial<Periode>;
@@ -26,6 +26,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const tiltaksdeltakelsesperiode = periodiseringTotalPeriode(tiltaksdeltakelser);
+    const tiltaksdeltakelserHull = finnPeriodiseringHull(tiltaksdeltakelser);
 
     const defaultDato = datoMin(new Date(), tiltaksdeltakelsesperiode.tilOgMed);
 
@@ -36,6 +37,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
         readOnly,
         size: 'small',
         dropdownCaption: true,
+        disabledPerioder: tiltaksdeltakelserHull,
     };
 
     return (

@@ -16,11 +16,7 @@ import {
 } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import {
-    Datovelger,
-    DatovelgerProps,
-    generateMatcherProps,
-} from '~/lib/_felles/datovelger/Datovelger';
+import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 
@@ -138,8 +134,6 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
 
     const innvilgelseHull = finnPeriodiseringHull(innvilgelse.innvilgelsesperioder);
 
-    const disabledDager = generateMatcherProps(innvilgelseHull);
-
     const erIkkeInnvilgetPeriode = innvilgelseHull.some((p) => perioderOverlapper(p, periode));
 
     const commonProps: Partial<DatovelgerProps> = {
@@ -148,7 +142,7 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
         readOnly,
         size: 'small',
         dropdownCaption: true,
-        disabledMatcher: disabledDager,
+        disabledPerioder: innvilgelseHull,
     };
 
     return (

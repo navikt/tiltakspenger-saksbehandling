@@ -1,8 +1,4 @@
-import {
-    Datovelger,
-    DatovelgerProps,
-    generateMatcherProps,
-} from '~/lib/_felles/datovelger/Datovelger';
+import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import {
     useOmgjøringMedValgtResultatSkjema,
@@ -55,7 +51,7 @@ export const OmgjøringVedtaksperiodeVelger = () => {
         readOnly: erReadonly,
         size: 'small',
         dropdownCaption: true,
-        disabledMatcher: generateMatcherProps(hullMellomGjeldendePerioder),
+        disabledPerioder: hullMellomGjeldendePerioder,
     };
 
     return (
