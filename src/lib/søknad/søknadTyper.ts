@@ -1,9 +1,21 @@
-import { Avbrutt } from '../behandling-felles/typer/Avbrutt';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 export type SøknadId = `soknad_${string}`;
+
+export enum SøknadshendelseType {
+    AVBRUTT = 'AVBRUTT',
+    GJENOPPRETTET = 'GJENOPPRETTET',
+}
+
+/** Historikken over avbrytelser og gjenopprettinger av søknaden, i kronologisk rekkefølge. */
+export interface Søknadshendelse {
+    type: SøknadshendelseType;
+    tidspunkt: string;
+    utførtAv: string;
+    begrunnelse: Nullable<string>;
+}
 
 interface SøknadBase {
     id: SøknadId;
@@ -17,7 +29,7 @@ interface SøknadBase {
     opprettet: string;
     tidsstempelHosOss: string;
     antallVedlegg: number;
-    avbrutt: Nullable<Avbrutt>;
+    avbrutt: Søknadshendelse[];
     kanInnvilges: boolean;
     svar: Spørsmålsbesvarelser;
 }

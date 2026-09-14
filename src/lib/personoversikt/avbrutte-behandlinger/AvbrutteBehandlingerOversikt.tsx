@@ -5,7 +5,7 @@ import {
     Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
-import { Table } from '@navikt/ds-react';
+import { HStack, Table } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { behandlingUrl, klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
@@ -13,6 +13,7 @@ import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
+import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 
 type Props = {
     saksnummer: string;
@@ -58,7 +59,6 @@ export const AvbrutteBehandlingerOversikt = ({
                         beslutter,
                         id,
                     } = behandling;
-
                     return (
                         <Table.Row shadeOnHover={false} key={`${avbruttTidspunkt}-${idx}`}>
                             <Table.DataCell>
@@ -73,22 +73,36 @@ export const AvbrutteBehandlingerOversikt = ({
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell align={'right'}>
-                                <InternLenkeKnapp
-                                    href={
-                                        behandlingstype === 'KLAGEBEHANDLING'
-                                            ? klagebehandlingUrl(
-                                                  saksnummer,
-                                                  id,
-                                                  KlageStegUrlSegment.Formkrav,
-                                              )
-                                            : behandlingUrl({
-                                                  saksnummer,
-                                                  id,
-                                              })
-                                    }
+                                <HStack
+                                    gap={'space-8'}
+                                    justify={'end'}
+                                    align={'center'}
+                                    wrap={false}
                                 >
-                                    {'Se behandling'}
-                                </InternLenkeKnapp>
+                                    <InternLenkeKnapp
+                                        href={
+                                            behandlingstype === 'KLAGEBEHANDLING'
+                                                ? klagebehandlingUrl(
+                                                      saksnummer,
+                                                      id,
+                                                      KlageStegUrlSegment.Formkrav,
+                                                  )
+                                                : behandlingUrl({
+                                                      saksnummer,
+                                                      id,
+                                                  })
+                                        }
+                                    >
+                                        {'Se behandling'}
+                                    </InternLenkeKnapp>
+                                    {behandling.behandlingstype !== 'KLAGEBEHANDLING' && (
+                                        <RammebehandlingMeny
+                                            behandling={behandling.rammebehandling}
+                                            kallesFra={'personoversikt'}
+                                            size={'small'}
+                                        />
+                                    )}
+                                </HStack>
                             </Table.DataCell>
                         </Table.Row>
                     );
@@ -109,6 +123,7 @@ const avbruttBehandlingToDataCellInfo = (
         avbruttTidspunkt: nonNullish(behandling.avbrutt).avbruttTidspunkt,
         saksbehandler: behandling.saksbehandler,
         beslutter: behandling.beslutter,
+        rammebehandling: behandling,
     };
 };
 
@@ -150,6 +165,7 @@ type AvbruttRammebehandlingInfo = AvbruttBehandlingInfoBase & {
     id: RammebehandlingId;
     behandlingstype: Rammebehandlingstype;
     resultat: RammebehandlingResultat;
+    rammebehandling: Rammebehandling;
 };
 
 type AvbruttBehandlingstype = Rammebehandlingstype | 'KLAGEBEHANDLING';

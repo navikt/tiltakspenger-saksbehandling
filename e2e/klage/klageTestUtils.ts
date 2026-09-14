@@ -154,7 +154,7 @@ const lagSøknad = (): Søknad => {
         opprettet: '2025-03-01T10:00:00',
         tidsstempelHosOss: '2025-03-01T10:00:00',
         antallVedlegg: 0,
-        avbrutt: null,
+        avbrutt: [],
         kanInnvilges: false,
         svar: {
             harSøktPåTiltak: undefined,
