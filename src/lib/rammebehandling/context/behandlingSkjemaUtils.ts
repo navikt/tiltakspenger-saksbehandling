@@ -117,7 +117,10 @@ export const lagForhåndsutfyltInnvilgelse = (
                 behandling,
                 førsteInnvilgelsesperiode,
             ),
-            internDeltakelseId: tiltak.atNonNull(0).internDeltakelseId,
+            internDeltakelseId: tiltak.atNonNull(
+                0,
+                'Fant ingen tiltaksdeltakelse som det kan innvilges for i valgt periode',
+            ).internDeltakelseId,
         },
     ];
 

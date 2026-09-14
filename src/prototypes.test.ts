@@ -10,7 +10,7 @@ test('atNonNull støtter negative indekser', () => {
 
 test('atNonNull kaster feil når index er utenfor arrayet', () => {
     expect(() => ['a'].atNonNull(5)).toThrow(
-        'Verdien kan ikke være null eller undefined (5 out of bounds, length: 1)',
+        'Verdien kan ikke være null eller undefined (index 5 out of bounds, length: 1)',
     );
 });
 

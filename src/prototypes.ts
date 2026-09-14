@@ -18,6 +18,6 @@ Array.prototype.atNonNull = function <T>(
 ): NonNullable<T> {
     return nonNullish(
         this.at(index),
-        `${msg} (${index} out of bounds, length: ${this.length})`,
+        `${msg} (index ${index} out of bounds, length: ${this.length})`,
     ) as NonNullable<T>;
 };

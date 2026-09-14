@@ -2,7 +2,7 @@
 import '../global.css';
 import '../prototypes';
 
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
@@ -79,21 +79,57 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     );
 }
 
+// ApmErrorBoundary kaller fallback-render-propen som en vanlig funksjon (ikke som en komponent),
+// så hooks må ligge i en egen komponent
 const ErrorFallback: ApmErrorBoundaryFallbackRender = (error, resetError) => (
-    <Box padding={'space-32'}>
-        <Infokort variant={'feil'} header={`Noe gikk galt - ${error.message}`}>
-            <VStack gap={'space-8'} align={'start'}>
-                <BodyShort>{'Du kan forsøke å lukke feilmeldingen og prøve på nytt.'}</BodyShort>
-                <BodyShort>
-                    {
-                        'Hvis feilen vedvarer, kontakt utvikler-teamet med et skjermbilde av denne feilmeldingen.'
-                    }
-                </BodyShort>
-                <code>{error.stack}</code>
-                <Button onClick={resetError} size={'small'}>
-                    {'Lukk'}
-                </Button>
-            </VStack>
-        </Infokort>
-    </Box>
+    <ErrorFallbackInnhold error={error} resetError={resetError} />
 );
+
+const ErrorFallbackInnhold = ({ error, resetError }: { error: Error; resetError: () => void }) => {
+    const [stack, setStack] = useState(error.stack);
+
+    useEffect(() => {
+        const råStack = error.stack;
+        if (!råStack) {
+            return;
+        }
+
+        let aktiv = true;
+        import('~/utils/sourceMappedStack')
+            .then(({ mapStackTrace }) => mapStackTrace(råStack))
+            .then((mappet) => {
+                if (aktiv) {
+                    setStack(mappet);
+                }
+            })
+            .catch((e) => {
+                // Beholder rå stack-trace ved feil under mapping
+                console.error('sourcemap-mapping feilet', e);
+            });
+
+        return () => {
+            aktiv = false;
+        };
+    }, [error]);
+
+    return (
+        <Box padding={'space-32'}>
+            <Infokort variant={'feil'} header={`Noe gikk galt - ${error.message}`}>
+                <VStack gap={'space-8'} align={'start'}>
+                    <BodyShort>
+                        {'Du kan forsøke å lukke feilmeldingen og prøve på nytt.'}
+                    </BodyShort>
+                    <BodyShort>
+                        {
+                            'Hvis feilen vedvarer, kontakt utvikler-teamet med et skjermbilde av denne feilmeldingen.'
+                        }
+                    </BodyShort>
+                    <code style={{ whiteSpace: 'pre-wrap' }}>{stack}</code>
+                    <Button onClick={resetError} size={'small'}>
+                        {'Lukk'}
+                    </Button>
+                </VStack>
+            </Infokort>
+        </Box>
+    );
+};
