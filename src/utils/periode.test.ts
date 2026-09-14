@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import { utvidPeriodisering } from '~/utils/periode';
-import { MedPeriode } from '~/types/Periode';
+import { finnPerioderHull, utvidPeriodisering } from '~/utils/periode';
+import { MedPeriode, Periode } from '~/types/Periode';
 
 type MedAntall = MedPeriode<{ antall: number }>;
 
@@ -140,6 +140,26 @@ describe('utvidPeriodisering', () => {
         utvidPeriodisering(periodisering, { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }, true);
 
         expect(periodisering).toEqual(uendret);
+    });
+});
+
+describe('finnPerioderHull', () => {
+    test('overlappende perioder gir ingen hull', () => {
+        const perioder: Periode[] = [
+            { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+            { fraOgMed: '2025-03-15', tilOgMed: '2025-04-15' },
+        ];
+
+        expect(finnPerioderHull(perioder)).toEqual([]);
+    });
+
+    test('periode fullt inneholdt i en annen gir ingen hull', () => {
+        const perioder: Periode[] = [
+            { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+            { fraOgMed: '2025-03-10', tilOgMed: '2025-03-20' },
+        ];
+
+        expect(finnPerioderHull(perioder)).toEqual([]);
     });
 
     test('perioden slutter dagen før første element og regnes som før periodiseringen', () => {

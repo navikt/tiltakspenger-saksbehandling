@@ -253,7 +253,7 @@ export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] =>
 };
 
 export const finnPerioderHull = (perioder: Periode[]): Periode[] => {
-    return perioder.toSorted(sorterPerioder()).reduce<Periode[]>((acc, periode, index, array) => {
+    return slåSammenPerioder(perioder).reduce<Periode[]>((acc, periode, index, array) => {
         const nesteDagEtterPerioden = nesteDag(periode.tilOgMed);
         const nestePeriode = array.at(index + 1);
 
