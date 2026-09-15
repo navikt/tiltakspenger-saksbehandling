@@ -1,5 +1,6 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { alderFraDato, erGyldigDatotekst, formaterDatotekst } from '~/utils/date';
+import { alderFraDato, formaterSladdbarDatotekst } from '~/utils/date';
+import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '~/lib/_felles/separator/Separator';
@@ -81,13 +82,11 @@ export const RammebehandlingSaksopplysninger = () => {
 
             <OpplysningerSeksjon header={'Alder'}>
                 <BodyShort weight={'semibold'}>
-                    {erGyldigDatotekst(fødselsdato)
-                        ? `${alderFraDato(fødselsdato)} år`
-                        : fødselsdato}
+                    {formaterSladdbarVerdi(fødselsdato, (dato) => `${alderFraDato(dato)} år`)}
                 </BodyShort>
                 <BehandlingSaksopplysning
                     navn={'Fødselsdato'}
-                    verdi={formaterDatotekst(fødselsdato)}
+                    verdi={formaterSladdbarDatotekst(fødselsdato)}
                 />
                 {fyller18ÅrISøknadsperioden(behandling, sak) && (
                     <BehandlingSaksopplysning

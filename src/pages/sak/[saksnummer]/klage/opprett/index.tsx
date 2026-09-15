@@ -17,6 +17,7 @@ import {
 import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { useOpprettKlage } from '~/lib/klage/api/KlageApi';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
@@ -98,7 +99,7 @@ const OprettKlagePage = ({ sak }: Props) => {
                     </HStack>
                     <FormkravForm
                         control={form.control}
-                        fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
+                        fnrFraPersonopplysninger={hentVerdi(personopplysninger?.fnr)}
                         rammevedtakOgBehandlinger={hentRammevedtakMedBehandlinger(sak)}
                         meldekortvedtakOgBehandlinger={hentMeldekortvedtakMedBehandlinger(sak)}
                     />

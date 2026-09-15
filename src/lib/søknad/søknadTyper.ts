@@ -1,6 +1,7 @@
 import { Avbrutt } from '../behandling-felles/typer/Avbrutt';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 export type SøknadId = `soknad_${string}`;
 
@@ -62,12 +63,12 @@ export interface TiltaksdeltakelseFraSøknad {
 
 export interface SøknadBarn {
     oppholderSegIEØSSpm: JaNeiSpm;
-    fornavn: Nullable<string>;
-    mellomnavn: Nullable<string>;
-    etternavn: Nullable<string>;
-    fødselsdato: string;
+    fornavn: SladdbarVerdi<Nullable<string>>;
+    mellomnavn: SladdbarVerdi<Nullable<string>>;
+    etternavn: SladdbarVerdi<Nullable<string>>;
+    fødselsdato: SladdbarVerdi<string>;
     kilde: SøknadBarnKilde;
-    fnr: Nullable<string>;
+    fnr: SladdbarVerdi<Nullable<string>>;
 }
 
 export enum SøknadBarnKilde {

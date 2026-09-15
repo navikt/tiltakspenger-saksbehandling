@@ -1,4 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
+import { ikkeSladdet } from '~test/sladdetVerdi';
 import { hentBarnetilleggForhåndsutfyltForRevurdering } from './hentBarnetilleggFraBehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
@@ -32,7 +33,7 @@ const rammevedtak = (nummer: number, barnetilleggPerioder: BarnetilleggPeriode[]
         saksbehandler: 'Z123456',
         beslutter: 'Z654321',
         innvilgelsesperioder: null,
-        barnetillegg: { perioder: barnetilleggPerioder, begrunnelse: null },
+        barnetillegg: { perioder: barnetilleggPerioder, begrunnelse: ikkeSladdet(null) },
         gjeldendeBarnetilleggPerioder: barnetilleggPerioder,
         erGjeldende: true,
         gyldigeKommandoer: {},
@@ -43,7 +44,7 @@ const rammevedtak = (nummer: number, barnetilleggPerioder: BarnetilleggPeriode[]
 const sakMedVedtak = (vedtak: Rammevedtak[]): SakProps => ({
     sakId: 'sak_1',
     saksnummer: '202501011001',
-    fnr: '12345678911',
+    fnr: ikkeSladdet('12345678911'),
     kanSendeInnHelgForMeldekort: false,
     søknader: [],
     åpneBehandlinger: [],

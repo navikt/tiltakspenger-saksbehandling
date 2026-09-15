@@ -7,6 +7,7 @@ import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 
@@ -50,7 +51,11 @@ export const BegrunnelseVilkårsvurdering = () => {
             <VedtakSeksjon.Venstre>
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering'}
-                    defaultValue={begrunnelse.getValue() ?? begrunnelseVilkårsvurdering ?? ''}
+                    defaultValue={
+                        begrunnelse.getValue() ??
+                        sladdbarTekstEllerNull(begrunnelseVilkårsvurdering) ??
+                        ''
+                    }
                     readOnly={erReadonly}
                     ref={begrunnelse.ref}
                 />

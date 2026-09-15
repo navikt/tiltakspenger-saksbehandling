@@ -1,5 +1,6 @@
 import { MeldeperiodeId } from './Meldeperiode';
 import { Nullable } from '~/types/UtilTypes';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Periode } from '~/types/Periode';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
@@ -112,9 +113,9 @@ export type MeldekortbehandlingProps = {
     godkjentTidspunkt: Nullable<string>;
     status: MeldekortbehandlingStatus;
     erAvsluttet: boolean;
-    navkontor: string;
-    navkontorNavn: Nullable<string>;
-    begrunnelse: Nullable<string>;
+    navkontor: SladdbarVerdi<string>;
+    navkontorNavn: SladdbarVerdi<Nullable<string>>;
+    begrunnelse: SladdbarVerdi<Nullable<string>>;
     attesteringer: Attestering[];
     utbetalingsstatus: Utbetalingsstatus;
     /** Sammenhengende totalperiode på tvers av alle meldeperioder */
@@ -125,7 +126,7 @@ export type MeldekortbehandlingProps = {
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
-    tekstTilVedtaksbrev: Nullable<string>;
+    tekstTilVedtaksbrev: SladdbarVerdi<Nullable<string>>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     klagebehandlingId: Nullable<KlageId>;
     skalSendeVedtaksbrev: boolean;

@@ -1,4 +1,5 @@
 import { Periode } from '~/types/Periode';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, PeriodeSpm } from '../søknadTyper';
 
 export type ManueltRegistrertSøknad = {
@@ -33,7 +34,7 @@ export type ManuellSøknadTiltak = {
     typeNavn: string;
     deltakelseFraOgMed?: string;
     deltakelseTilOgMed?: string;
-    visningsnavn: string;
+    visningsnavn: SladdbarVerdi<string>;
 };
 
 export type ManuellSøknadJaNeiSpm = Partial<JaNeiSpm>;

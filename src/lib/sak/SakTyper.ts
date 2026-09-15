@@ -13,6 +13,7 @@ import {
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
@@ -21,7 +22,7 @@ export type SakId = `sak_${string}`;
 export type SakProps = {
     sakId: SakId;
     saksnummer: string;
-    fnr: string;
+    fnr: SladdbarVerdi<string>;
 
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;

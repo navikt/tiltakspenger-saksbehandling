@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
-import { erGyldigDatotekst, formaterDatotekst } from '~/utils/date';
-
-const SLADDET = '[Sladdet]';
+import { formaterDatotekst, formaterSladdbarDatotekst } from '~/utils/date';
+import { SLADDET_TEKST } from '~/utils/sladdetVerdi';
+import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 
 describe('formaterDatotekst', () => {
     test('formaterer en gyldig ISO-dato som DD.MM.YYYY', () => {
@@ -11,18 +11,14 @@ describe('formaterDatotekst', () => {
     test('gir ukjent for tom verdi', () => {
         expect(formaterDatotekst('')).toBe('ukjent');
     });
-
-    test('returnerer teksten uendret når den ikke er en gyldig dato', () => {
-        expect(formaterDatotekst(SLADDET)).toBe(SLADDET);
-    });
 });
 
-describe('erGyldigDatotekst', () => {
-    test('sann for en ISO-dato', () => {
-        expect(erGyldigDatotekst('2025-03-09')).toBe(true);
+describe('formaterSladdbarDatotekst', () => {
+    test('formaterer en verdi som ikke er sladdet', () => {
+        expect(formaterSladdbarDatotekst(ikkeSladdet('2025-03-09'))).toBe('09.03.2025');
     });
 
-    test('usann for en sladdet verdi', () => {
-        expect(erGyldigDatotekst(SLADDET)).toBe(false);
+    test('viser sladdet tekst for en sladdet verdi', () => {
+        expect(formaterSladdbarDatotekst(sladdet)).toBe(SLADDET_TEKST);
     });
 });

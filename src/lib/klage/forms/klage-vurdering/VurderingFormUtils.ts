@@ -6,6 +6,7 @@ import {
     OmgjøringÅrsak,
     VurderKlageRequest,
 } from '~/lib/klage/typer/Klage';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 export enum OmgjøringÅrsakFormData {
     FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',
@@ -50,7 +51,9 @@ export const klagebehandlingTilVurderingFormData = (k: Klagebehandling): Vurderi
                     ? omgjøringsårsakTilFormData(resultat.årsak)
                     : '',
             begrunnelse:
-                resultat?.type === KlagebehandlingResultat.OMGJØR ? resultat.begrunnelse : '',
+                resultat?.type === KlagebehandlingResultat.OMGJØR
+                    ? sladdbarTekst(resultat.begrunnelse)
+                    : '',
         },
         oppretthold: {
             hjemler:
@@ -191,7 +194,7 @@ export const harKlagevurderingsstegUtfylt = (k: Klagebehandling): boolean => {
     if (!k.resultat) return false;
     switch (k.resultat.type) {
         case KlagebehandlingResultat.OMGJØR:
-            return k.resultat.begrunnelse.trim() !== '';
+            return sladdbarTekst(k.resultat.begrunnelse).trim() !== '';
         case KlagebehandlingResultat.OPPRETTHOLDT:
             return k.resultat.hjemler.length > 0;
         case KlagebehandlingResultat.AVVIST:

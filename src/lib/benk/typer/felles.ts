@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { BenkTab } from './tabs';
 import { SakId } from '~/lib/sak/SakTyper';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -32,7 +33,7 @@ export enum BenkBehandlingstype {
 
 export type BenkVentestatus = {
     erSattPåVent: boolean;
-    begrunnelse: Nullable<string>;
+    begrunnelse: SladdbarVerdi<Nullable<string>>;
     frist: Nullable<string>;
 };
 
@@ -43,7 +44,7 @@ export type BenkBehandlingBase = {
     type: BenkBehandlingstype;
     id: string;
     sakId: SakId;
-    fnr: string;
+    fnr: SladdbarVerdi<string>;
     saksnummer: string;
     startet: string;
     sistEndret: string;

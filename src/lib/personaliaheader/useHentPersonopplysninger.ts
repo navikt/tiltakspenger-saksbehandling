@@ -1,18 +1,20 @@
 import useSWR, { mutate } from 'swr';
 import { SakId } from '../sak/SakTyper';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { Nullable } from '~/types/UtilTypes';
 
 export type Personopplysninger = {
-    fnr: string;
-    fødselsdato: string;
-    fornavn?: string;
-    mellomnavn?: string;
-    etternavn?: string;
+    fnr: SladdbarVerdi<string>;
+    fødselsdato: SladdbarVerdi<string>;
+    fornavn: SladdbarVerdi<Nullable<string>>;
+    mellomnavn: SladdbarVerdi<Nullable<string>>;
+    etternavn: SladdbarVerdi<Nullable<string>>;
     fortrolig: boolean;
     strengtFortrolig: boolean;
     strengtFortroligUtland: boolean;
     skjermet: boolean;
-    dødsdato?: string;
+    dødsdato: SladdbarVerdi<Nullable<string>>;
 };
 
 export const useHentPersonopplysninger = (sakId: SakId) => {

@@ -6,6 +6,7 @@ import {
     KlagebehandlingsresultatOpprettholdt,
 } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { formaterDatotekst } from '~/utils/date';
 import { Vedtak } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { nonNullish } from '~/utils/object';
@@ -71,7 +72,10 @@ export const klageTilBrevFormData = (
     return {
         tekstfelter:
             resultat.brevtekst.length > 0
-                ? resultat.brevtekst
+                ? resultat.brevtekst.map((avsnitt) => ({
+                      tittel: avsnitt.tittel,
+                      tekst: sladdbarTekst(avsnitt.tekst),
+                  }))
                 : resultat.type === 'OPPRETTHOLDT'
                   ? [
                         {

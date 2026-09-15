@@ -1,4 +1,4 @@
-import { Barnetillegg } from './Barnetillegg';
+import { Barnetillegg, BarnetilleggDTO } from './Barnetillegg';
 import {
     Rammebehandlingstype,
     OppdaterBehandlingBaseDTO,
@@ -111,14 +111,14 @@ export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
 export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: Barnetillegg;
+    barnetillegg: BarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: Barnetillegg;
+    barnetillegg: BarnetilleggDTO;
     vedtaksperiode: Periode;
     skalSendeVedtaksbrev: boolean;
 };

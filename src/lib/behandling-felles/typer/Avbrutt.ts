@@ -1,5 +1,7 @@
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
+
 export interface Avbrutt {
     avbruttAv: string;
     avbruttTidspunkt: string;
-    begrunnelse: string;
+    begrunnelse: SladdbarVerdi<string>;
 }

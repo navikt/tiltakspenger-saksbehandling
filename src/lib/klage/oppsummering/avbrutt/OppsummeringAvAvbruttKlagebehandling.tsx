@@ -5,6 +5,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import { KlagebehandlingAvbrutt } from '../../typer/Klage';
 import styles from './OppsummeringAvAvbruttKlagebehandling.module.css';
 import { avbrytKlagebehandlingStatusLabels } from '../../utils/klageUtils';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 const OppsummeringAvAvbruttKlagebehandling = (props: {
     avbrutt: KlagebehandlingAvbrutt;
@@ -37,10 +38,10 @@ const OppsummeringAvAvbruttKlagebehandling = (props: {
                     verdi={avbrytKlagebehandlingStatusLabels[props.avbrutt.status]}
                     retning="vertikal"
                 />
-                {props.avbrutt.begrunnelse && (
+                {sladdbarTekst(props.avbrutt.begrunnelse) && (
                     <OppsummeringsPar
                         label={'Begrunnelse'}
-                        verdi={props.avbrutt.begrunnelse}
+                        verdi={sladdbarTekst(props.avbrutt.begrunnelse)}
                         retning="vertikal"
                     />
                 )}

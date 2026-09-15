@@ -2,6 +2,10 @@ import { describe, expect, test } from '@jest/globals';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
 import { SøknadBarn, SøknadBarnKilde } from '~/lib/søknad/søknadTyper';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
+import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
+
+const fødselsdatoFor = (barn: SøknadBarn) => sladdbarTekst(barn.fødselsdato);
 
 const vedtaksperiode = {
     fraOgMed: '2024-07-01',
@@ -15,111 +19,111 @@ const innvilgelsesperioder = [
 ];
 
 const barnSomBlir16FørPerioden: SøknadBarn = {
-    fødselsdato: '2008-06-30',
-    fornavn: 'Ola',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2008-06-30'),
+    fornavn: ikkeSladdet('Ola'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
-    fødselsdato: '2008-06-30',
-    fornavn: 'Ole',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2008-06-30'),
+    fornavn: ikkeSladdet('Ole'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'NEI',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomBlir16TidligIPerioden: SøknadBarn = {
-    fødselsdato: '2008-07-15',
-    fornavn: 'Kari',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2008-07-15'),
+    fornavn: ikkeSladdet('Kari'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomBlir16MidtIPerioden: SøknadBarn = {
-    fødselsdato: '2008-12-31',
-    fornavn: 'Bob',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2008-12-31'),
+    fornavn: ikkeSladdet('Bob'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomBlir16SentIPerioden: SøknadBarn = {
-    fødselsdato: '2009-06-15',
-    fornavn: 'Alice',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2009-06-15'),
+    fornavn: ikkeSladdet('Alice'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomErUnder16HelePerioden: SøknadBarn = {
-    fødselsdato: '2010-01-01',
-    fornavn: 'Chuck',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2010-01-01'),
+    fornavn: ikkeSladdet('Chuck'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
-    fødselsdato: '2024-08-01',
-    fornavn: 'Sneed',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2024-08-01'),
+    fornavn: ikkeSladdet('Sneed'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
-    fødselsdato: '2025-01-01',
-    fornavn: 'Knoll',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2025-01-01'),
+    fornavn: ikkeSladdet('Knoll'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 const barnSomBlirFødtSentIPerioden: SøknadBarn = {
-    fødselsdato: '2025-06-15',
-    fornavn: 'Tott',
-    mellomnavn: null,
-    etternavn: null,
+    fødselsdato: ikkeSladdet('2025-06-15'),
+    fornavn: ikkeSladdet('Tott'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet(null),
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
-    fnr: null,
+    fnr: ikkeSladdet(null),
 };
 
 describe('Periodiserer barnetillegg fra søknaden', () => {
@@ -159,13 +163,13 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 2,
                 periode: {
                     fraOgMed: vedtaksperiode.fraOgMed,
-                    tilOgMed: forrigeDag(barnSomBlirFødtMidtIPerioden.fødselsdato),
+                    tilOgMed: forrigeDag(fødselsdatoFor(barnSomBlirFødtMidtIPerioden)),
                 },
             },
             {
                 antallBarn: 3,
                 periode: {
-                    fraOgMed: barnSomBlirFødtMidtIPerioden.fødselsdato,
+                    fraOgMed: fødselsdatoFor(barnSomBlirFødtMidtIPerioden),
                     tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
@@ -182,7 +186,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
             {
                 antallBarn: 1,
                 periode: {
-                    fraOgMed: barnSomBlirFødtMidtIPerioden.fødselsdato,
+                    fraOgMed: fødselsdatoFor(barnSomBlirFødtMidtIPerioden),
                     tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
@@ -200,7 +204,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 1,
                 periode: {
                     fraOgMed: vedtaksperiode.fraOgMed,
-                    tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16SentIPerioden.fødselsdato)),
+                    tilOgMed: forrigeDag(finn16årsdag(fødselsdatoFor(barnSomBlir16SentIPerioden))),
                 },
             },
         ]);
@@ -222,20 +226,20 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 3,
                 periode: {
                     fraOgMed: vedtaksperiode.fraOgMed,
-                    tilOgMed: forrigeDag(barnSomBlirFødtTidligIPerioden.fødselsdato),
+                    tilOgMed: forrigeDag(fødselsdatoFor(barnSomBlirFødtTidligIPerioden)),
                 },
             },
             {
                 antallBarn: 4,
                 periode: {
-                    fraOgMed: barnSomBlirFødtTidligIPerioden.fødselsdato,
-                    tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16SentIPerioden.fødselsdato)),
+                    fraOgMed: fødselsdatoFor(barnSomBlirFødtTidligIPerioden),
+                    tilOgMed: forrigeDag(finn16årsdag(fødselsdatoFor(barnSomBlir16SentIPerioden))),
                 },
             },
             {
                 antallBarn: 3,
                 periode: {
-                    fraOgMed: finn16årsdag(barnSomBlir16SentIPerioden.fødselsdato),
+                    fraOgMed: finn16årsdag(fødselsdatoFor(barnSomBlir16SentIPerioden)),
                     tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
@@ -253,13 +257,15 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 1,
                 periode: {
                     fraOgMed: vedtaksperiode.fraOgMed,
-                    tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16TidligIPerioden.fødselsdato)),
+                    tilOgMed: forrigeDag(
+                        finn16årsdag(fødselsdatoFor(barnSomBlir16TidligIPerioden)),
+                    ),
                 },
             },
             {
                 antallBarn: 1,
                 periode: {
-                    fraOgMed: barnSomBlirFødtSentIPerioden.fødselsdato,
+                    fraOgMed: fødselsdatoFor(barnSomBlirFødtSentIPerioden),
                     tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
@@ -283,20 +289,40 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 2,
                 periode: {
                     fraOgMed: vedtaksperiode.fraOgMed,
-                    tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16MidtIPerioden.fødselsdato)),
+                    tilOgMed: forrigeDag(finn16årsdag(fødselsdatoFor(barnSomBlir16MidtIPerioden))),
                 },
             },
             {
                 antallBarn: 1,
                 periode: {
-                    fraOgMed: finn16årsdag(barnSomBlir16MidtIPerioden.fødselsdato),
-                    tilOgMed: forrigeDag(barnSomBlirFødtSentIPerioden.fødselsdato),
+                    fraOgMed: finn16årsdag(fødselsdatoFor(barnSomBlir16MidtIPerioden)),
+                    tilOgMed: forrigeDag(fødselsdatoFor(barnSomBlirFødtSentIPerioden)),
                 },
             },
             {
                 antallBarn: 2,
                 periode: {
-                    fraOgMed: barnSomBlirFødtSentIPerioden.fødselsdato,
+                    fraOgMed: fødselsdatoFor(barnSomBlirFødtSentIPerioden),
+                    tilOgMed: vedtaksperiode.tilOgMed,
+                },
+            },
+        ]);
+    });
+
+    test('barn med sladdet fødselsdato utelates', () => {
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
+            [
+                barnSomErUnder16HelePerioden,
+                { ...barnSomErUnder16HelePerioden, fødselsdato: sladdet },
+            ],
+            innvilgelsesperioder,
+        );
+
+        expect(barnetillegg).toEqual([
+            {
+                antallBarn: 1,
+                periode: {
+                    fraOgMed: vedtaksperiode.fraOgMed,
                     tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },

@@ -7,6 +7,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { personoversiktUrl } from '~/utils/urls';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 import styles from './PersonaliaHeader.module.css';
 
@@ -87,13 +88,18 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
         fortrolig,
     } = personopplysninger || {};
 
+    const fnrTekst = sladdbarTekst(fnr);
+
+    const navn = [fornavn, mellomnavn, etternavn]
+        .map(sladdbarTekst)
+        .filter((navnedel) => navnedel !== '')
+        .join(' ');
+
     return (
         <>
-            <InternLenke href={personoversiktUrl(saksnummer)}>
-                {fornavn} {mellomnavn} {etternavn}
-            </InternLenke>
-            <BodyShort>{fnr}</BodyShort>
-            <CopyButton copyText={fnr} data-color={'accent'} size={'small'} />
+            <InternLenke href={personoversiktUrl(saksnummer)}>{navn}</InternLenke>
+            <BodyShort>{fnrTekst}</BodyShort>
+            <CopyButton copyText={fnrTekst} data-color={'accent'} size={'small'} />
             {(strengtFortrolig || strengtFortroligUtland) && (
                 <Tag data-color="danger" variant="outline">
                     Søker har strengt fortrolig adresse

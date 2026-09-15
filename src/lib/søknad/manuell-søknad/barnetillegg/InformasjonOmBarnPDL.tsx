@@ -1,5 +1,6 @@
 import { Heading, HStack, Tag } from '@navikt/ds-react';
-import { erGyldigDatotekst, finn16årsdag, formaterDatotekst } from '~/utils/date';
+import { finn16årsdag, formaterSladdbarDatotekst } from '~/utils/date';
+import { hentVerdi, sladdbarTekst, sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { getNavnMedFødselsdato } from '~/lib/søknad/manuell-søknad/barnetillegg/barnetilleggUtils';
 import { erDatoIPeriode } from '~/utils/periode';
@@ -11,21 +12,23 @@ type Props = {
 };
 
 export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
-    const harGyldigFødselsdato = erGyldigDatotekst(barn.fødselsdato);
+    const fødselsdato = hentVerdi(barn.fødselsdato);
     const bleFødtITiltaksperioden =
-        harGyldigFødselsdato && søknadsperiode
-            ? erDatoIPeriode(barn.fødselsdato, søknadsperiode)
-            : false;
+        fødselsdato && søknadsperiode ? erDatoIPeriode(fødselsdato, søknadsperiode) : false;
     const fyller16ITiltaksperioden =
-        harGyldigFødselsdato && søknadsperiode
-            ? erDatoIPeriode(finn16årsdag(barn.fødselsdato), søknadsperiode)
+        fødselsdato && søknadsperiode
+            ? erDatoIPeriode(finn16årsdag(fødselsdato), søknadsperiode)
             : false;
     return (
         <>
             <HStack gap="space-8">
                 <Heading size="small" level="4">
                     {getNavnMedFødselsdato(
-                        barn,
+                        {
+                            fornavn: sladdbarTekstEllerNull(barn.fornavn),
+                            etternavn: sladdbarTekstEllerNull(barn.etternavn),
+                            fødselsdato: sladdbarTekst(barn.fødselsdato),
+                        },
                         barn.fortrolig || barn.strengtFortrolig || barn.strengtFortroligUtland,
                     )}
                 </Heading>
@@ -44,9 +47,9 @@ export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
                         Skjermet
                     </Tag>
                 )}
-                {barn.dødsdato && (
+                {sladdbarTekstEllerNull(barn.dødsdato) && (
                     <Tag data-color="warning" variant="outline">
-                        Død {formaterDatotekst(barn.dødsdato)}
+                        Død {formaterSladdbarDatotekst(barn.dødsdato)}
                     </Tag>
                 )}
                 {bleFødtITiltaksperioden && (

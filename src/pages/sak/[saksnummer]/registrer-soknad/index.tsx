@@ -5,6 +5,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { ManuellSøknadFormProvider } from '~/lib/søknad/manuell-søknad/ManuellSøknadFormProvider';
 import { ManuellSøknadSide } from '~/lib/søknad/manuell-søknad/ManuellSøknadSide';
 
@@ -24,7 +25,9 @@ const RegistrerSøknadManueltPage = ({ sak }: Props) => {
                 personopplysninger={personopplysninger}
             >
                 <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
-                <ManuellSøknadSide fnrFraPersonopplysninger={personopplysninger?.fnr} />
+                <ManuellSøknadSide
+                    fnrFraPersonopplysninger={hentVerdi(personopplysninger?.fnr) ?? undefined}
+                />
             </ManuellSøknadFormProvider>
         </SakProvider>
     );
