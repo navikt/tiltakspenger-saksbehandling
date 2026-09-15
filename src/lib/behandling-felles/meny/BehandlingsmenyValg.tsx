@@ -28,7 +28,7 @@ export type BehandlingsmenyDialog =
     | 'overta'
     | 'angreSendTilBeslutning'
     | 'avslutt'
-    | 'gjenopprett';
+    | 'gjenåpne';
 
 export type BehandlingsmenyKapabiliteter = Record<BehandlingsmenyDialog, boolean>;
 
@@ -51,7 +51,7 @@ export const behandlingsmenyKapabiliteter = (
         settPåVent: harKommando(Kommando.SettPåVent),
         overta: harKommando(Kommando.OvertaSaksbehandler, Kommando.OvertaBeslutter),
         avslutt: harKommando(Kommando.Avbryt),
-        gjenopprett: harKommando(Kommando.Gjenopprett),
+        gjenåpne: harKommando(Kommando.Gjenåpne),
     };
 };
 
@@ -80,7 +80,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
     const kanSettePåVent = kapabiliteter.settPåVent;
     const kanOverta = kapabiliteter.overta;
     const kanAvslutte = kapabiliteter.avslutt;
-    const kanGjenopprette = kapabiliteter.gjenopprett;
+    const kanGjenåpne = kapabiliteter.gjenåpne;
 
     return (
         <ActionMenu>
@@ -149,12 +149,12 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                     </ActionMenu.Item>
                 )}
 
-                {kanGjenopprette && (
+                {kanGjenåpne && (
                     <ActionMenu.Item
                         icon={<ArrowCirclepathIcon aria-hidden />}
-                        onSelect={() => onVelg('gjenopprett')}
+                        onSelect={() => onVelg('gjenåpne')}
                     >
-                        {'Gjenopprett behandling'}
+                        {'Gjenåpne behandling'}
                     </ActionMenu.Item>
                 )}
 

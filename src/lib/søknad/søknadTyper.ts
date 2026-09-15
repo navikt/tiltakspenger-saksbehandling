@@ -6,10 +6,10 @@ export type SøknadId = `soknad_${string}`;
 
 export enum SøknadshendelseType {
     AVBRUTT = 'AVBRUTT',
-    GJENOPPRETTET = 'GJENOPPRETTET',
+    GJENÅPNET = 'GJENÅPNET',
 }
 
-/** Historikken over avbrytelser og gjenopprettinger av søknaden, i kronologisk rekkefølge. */
+/** Historikken over avbrytelser og gjenåpninger av søknaden, i kronologisk rekkefølge. */
 export interface Søknadshendelse {
     type: SøknadshendelseType;
     tidspunkt: string;

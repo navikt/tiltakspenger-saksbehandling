@@ -21,7 +21,7 @@ import { RammebehandlingLeggTilbake } from '~/lib/rammebehandling/felles/meny/ha
 import { RammebehandlingSettPåVent } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingSettPåVent';
 import { RammebehandlingOverta } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingOverta';
 import { RammebehandlingAvslutt } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAvslutt';
-import { RammebehandlingGjenopprett } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingGjenopprett';
+import { RammebehandlingGjenåpne } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingGjenåpne';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
@@ -201,17 +201,17 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                 />
             )}
 
-            {kapabiliteter.gjenopprett && (
-                <RammebehandlingGjenopprett
+            {kapabiliteter.gjenåpne && (
+                <RammebehandlingGjenåpne
                     behandlingId={behandling.id}
                     sakId={sak.sakId}
-                    åpen={aktivDialog === 'gjenopprett'}
+                    åpen={aktivDialog === 'gjenåpne'}
                     onClose={onClose}
                     onSuccess={(nyBehandling) => {
                         onClose();
                         navigateWithNotification(
                             behandlingUrl({ saksnummer: sak.saksnummer, id: nyBehandling.id }),
-                            'Søknaden er gjenopprettet, og en ny behandling er opprettet',
+                            'Søknaden er gjenåpnet, og en ny behandling er opprettet',
                         );
                     }}
                 />

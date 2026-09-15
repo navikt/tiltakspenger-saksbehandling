@@ -47,5 +47,5 @@ export enum SaksbehandlerBehandlingKommando {
     SettPåVent = 'SettPåVent',
     Gjenoppta = 'Gjenoppta',
     Avbryt = 'Avbryt',
-    Gjenopprett = 'Gjenopprett',
+    Gjenåpne = 'Gjenåpne',
 }

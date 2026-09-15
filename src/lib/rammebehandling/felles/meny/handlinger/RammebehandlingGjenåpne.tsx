@@ -16,7 +16,7 @@ type Props = {
     onSuccess: (nyBehandling: Søknadsbehandling) => void;
 };
 
-export const RammebehandlingGjenopprett = ({
+export const RammebehandlingGjenåpne = ({
     behandlingId,
     sakId,
     åpen,
@@ -28,9 +28,9 @@ export const RammebehandlingGjenopprett = ({
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         Søknadsbehandling,
         { begrunnelse: Nullable<string> }
-    >(`/sak/${sakId}/behandling/${behandlingId}/gjenopprett`, 'POST');
+    >(`/sak/${sakId}/behandling/${behandlingId}/gjenapne`, 'POST');
 
-    const gjenopprett = () => {
+    const gjenåpne = () => {
         const begrunnelse = begrunnelseRef.current?.value.trim();
 
         trigger({ begrunnelse: begrunnelse || null }).then((nyBehandling) => {
@@ -44,7 +44,7 @@ export const RammebehandlingGjenopprett = ({
         <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Gjenopprett behandlingen?'}</strong>
+                    <strong>{'Gjenåpne behandlingen?'}</strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
@@ -53,7 +53,7 @@ export const RammebehandlingGjenopprett = ({
                     }
 
                     <Textarea
-                        label={'Hvorfor gjenopprettes behandlingen? (valgfritt)'}
+                        label={'Hvorfor gjenåpnes behandlingen? (valgfritt)'}
                         maxLength={200}
                         ref={begrunnelseRef}
                     />
@@ -61,7 +61,7 @@ export const RammebehandlingGjenopprett = ({
                     {error && (
                         <Infokort
                             variant={'feil'}
-                            header={'Feil ved gjenoppretting'}
+                            header={'Feil ved gjenåpning'}
                         >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
                     )}
                 </Dialog.Body>
@@ -71,9 +71,9 @@ export const RammebehandlingGjenopprett = ({
                         variant={'primary'}
                         icon={<ArrowCirclepathIcon aria-hidden />}
                         loading={isMutating}
-                        onClick={gjenopprett}
+                        onClick={gjenåpne}
                     >
-                        {'Gjenopprett'}
+                        {'Gjenåpne'}
                     </Button>
 
                     <Dialog.CloseTrigger>
