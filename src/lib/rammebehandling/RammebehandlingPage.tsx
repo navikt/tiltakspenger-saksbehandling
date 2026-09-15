@@ -17,6 +17,7 @@ import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/Behandli
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { GjenåpnetSøknadInfokort } from '~/lib/rammebehandling/søknadsbehandling/gjenåpnet-søknad/GjenåpnetSøknadInfokort';
 import { hentKlagebehandling } from '~/lib/sak/sakUtils';
 
 import style from './RammebehandlingPage.module.css';
@@ -51,6 +52,7 @@ export const RammebehandlingPage = () => {
                     <RammebehandlingSaksopplysninger />
 
                     <VStack className={style.main} gap={'space-16'}>
+                        <GjenåpnetSøknadInfokort behandling={behandling} />
                         {erSattPåVent && (
                             <OppsummeringAvVentestatus
                                 ventestatus={ventestatus.atNonNull(0)}
