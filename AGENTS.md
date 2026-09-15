@@ -38,16 +38,18 @@ For e2e tester (`*.spec.ts`) bruker vi `playwright`.
 
 Backenden sladder personopplysninger og fritekster for brukere uten fagrolle, og sender slike felter som
 `{ verdi, erSladdet }` (`SladdbarVerdi<T>` i backenden). Frontend speiler dette med `SladdbarVerdi<T>`
-(`src/types/SladdetVerdi.ts`). Bruk `sladdbarTekst`/`formaterSladdbarVerdi` for visning (sladdede verdier vises
-som `SLADDET_TEKST`), `sladdbarTekstEllerNull` når tomt skal skilles fra utfylt, `hentVerdi` når verdien skal
-brukes i logikk, og `erSladdet` når flyten må hoppe over verdien.
+(`src/types/SladdetVerdi.ts`), med hjelpefunksjonene i `src/utils/sladdetVerdi.ts`. Bruk
+`sladdbarTekst`/`formaterSladdbarVerdi` for visning (sladdede verdier vises som `SLADDET_TEKST`),
+`sladdbarTekstEllerNull` når tomt skal skilles fra utfylt, `hentVerdi` når verdien skal brukes i logikk,
+og `erSladdet` når flyten må hoppe over verdien.
 
 Selve feltet er aldri `null`: en verdi som mangler er `{ verdi: null, erSladdet: false }`. Speil derfor backendens
 `SladdbarVerdi<String?>` som `SladdbarVerdi<Nullable<string>>`, ikke som `Nullable<SladdbarVerdi<string>>`.
 Vær obs på at slike felter alltid er truthy — sjekk `sladdbarTekst(...)`/`hentVerdi(...)` i stedet for feltet selv.
 
-Request-DTO-er skal aldri bruke `SladdbarVerdi` (se f.eks. `BarnetilleggDTO` og `BrevtekstDTO`), og testdata som
-etterligner API-responser må bruke `ikkeSladdet(...)`/`sladdet`.
+Request-DTO-er skal aldri bruke `SladdbarVerdi` (se f.eks. `BarnetilleggDTO` og `BrevtekstDTO`). Testdata som
+etterligner API-responser bygges med `ikkeSladdet(...)`/`sladdet` fra `~test/sladdetVerdi` (`test/`-katalogen er
+kun for testkode og importeres aldri fra appkoden).
 
 Sladdebanneret øverst på siden styres direkte av feltet `sladdes` fra saksbehandler-endepunktet.
 

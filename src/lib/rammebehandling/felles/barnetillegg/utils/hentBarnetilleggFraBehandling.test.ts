@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { ikkeSladdet } from '~/types/SladdetVerdi';
+import { ikkeSladdet } from '~test/sladdetVerdi';
 import { hentBarnetilleggForhåndsutfyltForRevurdering } from './hentBarnetilleggFraBehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';

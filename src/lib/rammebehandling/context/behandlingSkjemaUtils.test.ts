@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { ikkeSladdet } from '~/types/SladdetVerdi';
+import { ikkeSladdet } from '~test/sladdetVerdi';
 import { lagForhåndsutfyltInnvilgelse } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import {
     Rammebehandlingsstatus,

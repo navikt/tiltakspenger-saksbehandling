@@ -9,7 +9,7 @@ import type {
 } from '~/lib/klage/typer/Klage';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/Klageinstanshendelse';
 import type { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { ikkeSladdet } from '~/types/SladdetVerdi';
+import { ikkeSladdet } from '~test/sladdetVerdi';
 import { klageTestUtils } from './klageTestUtils';
 
 const {

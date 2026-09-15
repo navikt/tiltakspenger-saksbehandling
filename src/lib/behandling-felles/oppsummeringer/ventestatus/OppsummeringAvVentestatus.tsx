@@ -4,7 +4,7 @@ import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 import styles from './OppsummeringAvVentestatus.module.css';
 

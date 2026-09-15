@@ -5,7 +5,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import { KlagebehandlingAvbrutt } from '../../typer/Klage';
 import styles from './OppsummeringAvAvbruttKlagebehandling.module.css';
 import { avbrytKlagebehandlingStatusLabels } from '../../utils/klageUtils';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 const OppsummeringAvAvbruttKlagebehandling = (props: {
     avbrutt: KlagebehandlingAvbrutt;

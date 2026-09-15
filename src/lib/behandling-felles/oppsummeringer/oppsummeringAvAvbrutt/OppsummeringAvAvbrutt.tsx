@@ -6,7 +6,7 @@ import { formaterTidspunkt } from '../../../../utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { Avbrutt } from '../../typer/Avbrutt';
 import { classNames } from '../../../../utils/classNames';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 const AvbruttOppsummering = (props: {
     avbrutt: Avbrutt;

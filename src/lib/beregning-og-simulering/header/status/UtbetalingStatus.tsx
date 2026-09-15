@@ -1,7 +1,8 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { Utbetalingsstatus } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Nullable } from '~/types/UtilTypes';
-import { SladdbarVerdi, sladdbarTekst } from '~/types/SladdetVerdi';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { utbetalingsstatusTekst } from '~/lib/beregning-og-simulering/utils/utbetalingTekster';
 
 import style from '~/lib/_felles/utbetaling/UtbetalingFelles.module.css';

@@ -19,7 +19,7 @@ import {
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { finn18årsdag } from '~/utils/date';
-import { erSladdet } from '~/types/SladdetVerdi';
+import { erSladdet } from '~/utils/sladdetVerdi';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
 

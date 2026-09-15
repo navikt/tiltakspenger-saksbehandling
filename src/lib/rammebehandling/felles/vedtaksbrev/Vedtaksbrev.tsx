@@ -11,7 +11,7 @@ import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkj
 
 import style from './Vedtaksbrev.module.css';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 type Props = {
     header: ReactNode;

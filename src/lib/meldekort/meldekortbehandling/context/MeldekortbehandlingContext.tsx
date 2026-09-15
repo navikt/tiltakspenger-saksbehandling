@@ -26,7 +26,7 @@ import { getTextAreaRefValue } from '~/lib/_felles/fritekst/fritekstUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
-import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 

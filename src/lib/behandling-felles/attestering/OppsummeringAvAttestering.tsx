@@ -1,5 +1,5 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { formaterTidspunkt } from '~/utils/date';
 import { Attestering, Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';

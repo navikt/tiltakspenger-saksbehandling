@@ -10,7 +10,7 @@ import { OppsummeringsPar } from '../../oppsummeringspar/OppsummeringsPar';
 import { erKlageOmgjøring, erKlageOpprettholdelse } from '~/lib/klage/utils/klageUtils';
 import OppsummeringAvKlageinstanshendelser from '../oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
 import { useVisInnstillingsbrevKlagebehandling } from '~/lib/klage/api/KlageApi';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { omgjøringsårsakTekst } from '~/lib/klage/utils/klageTekster';
 
 const OppsummeringAvKlageForRammebehandling = (props: { klagebehandling: Klagebehandling }) => {

@@ -1,4 +1,4 @@
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import React from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';

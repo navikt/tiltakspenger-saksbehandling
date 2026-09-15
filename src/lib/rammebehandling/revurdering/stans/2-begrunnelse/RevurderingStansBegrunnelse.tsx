@@ -5,7 +5,7 @@ import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetek
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 import style from './RevurderingStansBegrunnelse.module.css';
 

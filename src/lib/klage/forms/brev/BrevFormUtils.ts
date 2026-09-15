@@ -6,7 +6,7 @@ import {
     KlagebehandlingsresultatOpprettholdt,
 } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { formaterDatotekst } from '~/utils/date';
 import { Vedtak } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { nonNullish } from '~/utils/object';

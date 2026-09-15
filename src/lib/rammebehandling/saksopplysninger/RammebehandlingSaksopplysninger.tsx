@@ -1,6 +1,6 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { alderFraDato, formaterSladdbarDatotekst } from '~/utils/date';
-import { formaterSladdbarVerdi } from '~/types/SladdetVerdi';
+import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '~/lib/_felles/separator/Separator';

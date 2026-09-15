@@ -5,7 +5,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
-import { hentVerdi } from '~/types/SladdetVerdi';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { ManuellSøknadFormProvider } from '~/lib/søknad/manuell-søknad/ManuellSøknadFormProvider';
 import { ManuellSøknadSide } from '~/lib/søknad/manuell-søknad/ManuellSøknadSide';
 

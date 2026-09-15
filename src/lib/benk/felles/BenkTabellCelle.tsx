@@ -2,7 +2,8 @@ import { CopyButton, HelpText, HStack, Table, Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
-import { erSladdet, SladdbarVerdi, sladdbarTekst } from '~/types/SladdetVerdi';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { erSladdet, sladdbarTekst } from '~/utils/sladdetVerdi';
 import { Periode } from '~/types/Periode';
 import {
     antallKalenderDagerUnnaDagensDato,

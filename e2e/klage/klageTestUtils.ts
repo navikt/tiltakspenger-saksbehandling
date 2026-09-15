@@ -9,7 +9,7 @@ import type {
     OppdaterKlageFormkravRequest,
 } from '~/lib/klage/typer/Klage';
 import type { SakId, SakProps } from '~/lib/sak/SakTyper';
-import { ikkeSladdet } from '~/types/SladdetVerdi';
+import { ikkeSladdet } from '~test/sladdetVerdi';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import type { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import type { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';

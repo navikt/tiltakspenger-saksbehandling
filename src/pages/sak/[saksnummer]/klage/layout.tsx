@@ -25,7 +25,7 @@ import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlin
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
-import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 type Props = {
     children: ReactElement;

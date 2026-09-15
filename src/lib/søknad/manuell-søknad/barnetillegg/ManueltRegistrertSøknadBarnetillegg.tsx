@@ -11,7 +11,7 @@ import type {
 import { LeggTilBarnManuelt } from '~/lib/søknad/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import { useHentPersonopplysningerBarn } from '~/lib/søknad/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
-import { hentVerdi } from '~/types/SladdetVerdi';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { v4 as uuidv4 } from 'uuid';
 import { SakId } from '~/lib/sak/SakTyper';
 import { InformasjonOmBarnPDL } from '~/lib/søknad/manuell-søknad/barnetillegg/InformasjonOmBarnPDL';

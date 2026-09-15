@@ -26,7 +26,7 @@ import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/s�
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 export type BehandlingSkjemaContextBase<T> = T & {
     erReadonly: boolean;

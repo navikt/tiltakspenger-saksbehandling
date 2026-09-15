@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { formaterDatotekst, formaterSladdbarDatotekst } from '~/utils/date';
-import { ikkeSladdet, sladdet, SLADDET_TEKST } from '~/types/SladdetVerdi';
+import { SLADDET_TEKST } from '~/utils/sladdetVerdi';
+import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 
 describe('formaterDatotekst', () => {
     test('formaterer en gyldig ISO-dato som DD.MM.YYYY', () => {

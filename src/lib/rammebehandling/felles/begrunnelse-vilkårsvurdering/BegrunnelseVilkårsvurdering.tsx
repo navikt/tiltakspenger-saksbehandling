@@ -7,7 +7,7 @@ import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
+import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 

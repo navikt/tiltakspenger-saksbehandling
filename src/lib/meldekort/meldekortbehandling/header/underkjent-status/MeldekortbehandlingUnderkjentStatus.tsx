@@ -2,7 +2,7 @@ import { Attestering, Attesteringsstatus } from '~/lib/behandling-felles/typer/A
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { formaterTidspunkt } from '~/utils/date';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 type Props = {
     attesteringer: Attestering[];

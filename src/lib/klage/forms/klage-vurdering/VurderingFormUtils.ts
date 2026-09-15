@@ -6,7 +6,7 @@ import {
     OmgjøringÅrsak,
     VurderKlageRequest,
 } from '~/lib/klage/typer/Klage';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 export enum OmgjøringÅrsakFormData {
     FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',

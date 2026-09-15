@@ -7,7 +7,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { personoversiktUrl } from '~/utils/urls';
-import { sladdbarTekst } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 import styles from './PersonaliaHeader.module.css';
 

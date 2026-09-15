@@ -8,7 +8,7 @@ import {
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/lib/søknad/søknadTyper';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { erSladdet } from '~/types/SladdetVerdi';
+import { erSladdet } from '~/utils/sladdetVerdi';
 
 export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],

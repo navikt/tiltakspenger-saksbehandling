@@ -7,7 +7,7 @@ import {
     formaterDatotekst,
     formaterSladdbarDatotekst,
 } from '~/utils/date';
-import { formaterSladdbarVerdi, hentVerdi, sladdbarTekst } from '~/types/SladdetVerdi';
+import { formaterSladdbarVerdi, hentVerdi, sladdbarTekst } from '~/utils/sladdetVerdi';
 import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { Søknad, SøknadBarn } from '~/lib/søknad/søknadTyper';

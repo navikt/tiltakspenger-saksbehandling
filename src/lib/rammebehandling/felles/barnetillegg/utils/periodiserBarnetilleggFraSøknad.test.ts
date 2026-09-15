@@ -2,7 +2,8 @@ import { describe, expect, test } from '@jest/globals';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
 import { SøknadBarn, SøknadBarnKilde } from '~/lib/søknad/søknadTyper';
-import { ikkeSladdet, sladdbarTekst, sladdet } from '~/types/SladdetVerdi';
+import { sladdbarTekst } from '~/utils/sladdetVerdi';
+import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 
 const fødselsdatoFor = (barn: SøknadBarn) => sladdbarTekst(barn.fødselsdato);
 
