@@ -25,6 +25,7 @@ import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlin
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
+import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
 
 type Props = {
     children: ReactElement;
@@ -111,6 +112,10 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
 
     const sakData = nonNullish(data);
 
+    const begrunnelseFerdigstilling = sladdbarTekstEllerNull(
+        klage?.resultat?.begrunnelseFerdigstilling,
+    );
+
     return (
         <div>
             <PersonaliaHeader sakId={nonNullish(sakData.sakId)} saksnummer={sakData.saksnummer} />
@@ -126,11 +131,11 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                         historikk={klage.ventestatus}
                     />
                 )}
-                {klage?.resultat?.begrunnelseFerdigstilling && (
+                {begrunnelseFerdigstilling && (
                     <Box className={classNames(styles.box)}>
                         <OppsummeringsPar
                             label={'Begrunnelse ferdigstilling'}
-                            verdi={klage.resultat.begrunnelseFerdigstilling}
+                            verdi={begrunnelseFerdigstilling}
                             retning="vertikal"
                         />
                     </Box>

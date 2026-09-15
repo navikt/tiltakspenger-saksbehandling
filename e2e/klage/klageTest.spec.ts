@@ -9,6 +9,7 @@ import type {
 } from '~/lib/klage/typer/Klage';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/Klageinstanshendelse';
 import type { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { ikkeSladdet } from '~/types/SladdetVerdi';
 import { klageTestUtils } from './klageTestUtils';
 
 const {
@@ -66,7 +67,7 @@ test.describe('Klage', () => {
                     nyKlage.resultat = {
                         type: KlagebehandlingResultat.AVVIST,
                         brevtekst: [],
-                        begrunnelseFerdigstilling: null,
+                        begrunnelseFerdigstilling: ikkeSladdet(null),
                     };
                     nyKlage.kanIverksetteVedtak = false;
                 }
@@ -82,8 +83,11 @@ test.describe('Klage', () => {
 
                 gjeldendeKlage.resultat = {
                     type: KlagebehandlingResultat.AVVIST,
-                    brevtekst: body.tekstTilVedtaksbrev,
-                    begrunnelseFerdigstilling: null,
+                    brevtekst: body.tekstTilVedtaksbrev.map((avsnitt) => ({
+                        tittel: avsnitt.tittel,
+                        tekst: ikkeSladdet(avsnitt.tekst),
+                    })),
+                    begrunnelseFerdigstilling: ikkeSladdet(null),
                 };
                 gjeldendeKlage.kanIverksetteVedtak = true;
                 gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';
@@ -239,7 +243,7 @@ test.describe('Klage', () => {
                     ferdigstiltTidspunkt: null,
                     journalpostIdInnstillingsbrev: null,
                     dokumentInfoIder: null,
-                    begrunnelseFerdigstilling: null,
+                    begrunnelseFerdigstilling: ikkeSladdet(null),
                 };
                 gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';
 
@@ -255,7 +259,10 @@ test.describe('Klage', () => {
 
                 gjeldendeKlage.resultat = {
                     ...gjeldendeKlage.resultat,
-                    brevtekst: body.tekstTilVedtaksbrev,
+                    brevtekst: body.tekstTilVedtaksbrev.map((avsnitt) => ({
+                        tittel: avsnitt.tittel,
+                        tekst: ikkeSladdet(avsnitt.tekst),
+                    })),
                 };
                 gjeldendeKlage.kanIverksetteOpprettholdelse = true;
                 gjeldendeKlage.sistEndret = '2025-04-03T11:00:00';
@@ -479,8 +486,8 @@ test.describe('Klage', () => {
                 gjeldendeKlage.resultat = {
                     type: KlagebehandlingResultat.OMGJØR,
                     årsak: body.årsak!,
-                    begrunnelse: body.begrunnelse ?? '',
-                    begrunnelseFerdigstilling: null,
+                    begrunnelse: ikkeSladdet(body.begrunnelse ?? ''),
+                    begrunnelseFerdigstilling: ikkeSladdet(null),
                     ferdigstiltTidspunkt: null,
                 };
                 gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';

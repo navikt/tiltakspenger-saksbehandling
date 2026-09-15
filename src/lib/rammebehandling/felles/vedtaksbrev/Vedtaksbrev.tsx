@@ -11,6 +11,7 @@ import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkj
 
 import style from './Vedtaksbrev.module.css';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
 
 type Props = {
     header: ReactNode;
@@ -36,7 +37,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly
                 <FritekstInput
                     label={'Tekst til vedtaksbrev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
-                    defaultValue={fritekstTilVedtaksbrev ?? ''}
+                    defaultValue={sladdbarTekstEllerNull(fritekstTilVedtaksbrev) ?? ''}
                     readOnly={readonly ?? erReadonly}
                     ref={textAreas.brevtekst.ref}
                 />

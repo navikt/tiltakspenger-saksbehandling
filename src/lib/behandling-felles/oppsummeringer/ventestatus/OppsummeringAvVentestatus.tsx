@@ -4,6 +4,7 @@ import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { sladdbarTekst } from '~/types/SladdetVerdi';
 
 import styles from './OppsummeringAvVentestatus.module.css';
 
@@ -43,10 +44,10 @@ export const OppsummeringAvVentestatus = ({ ventestatus, className, size, histor
                             />
                         )}
                     </HStack>
-                    {ventestatus.begrunnelse && (
+                    {sladdbarTekst(ventestatus.begrunnelse) && (
                         <OppsummeringsPar
                             label={'Begrunnelse'}
-                            verdi={ventestatus.begrunnelse}
+                            verdi={sladdbarTekst(ventestatus.begrunnelse)}
                             retning="vertikal"
                         />
                     )}

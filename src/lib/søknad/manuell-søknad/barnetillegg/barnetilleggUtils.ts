@@ -1,11 +1,13 @@
-import { ManuellSøknadBarn } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
-import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { formaterDatotekst } from '~/utils/date';
+import { Nullable } from '~/types/UtilTypes';
 
-export const getNavnMedFødselsdato = (
-    barn: ManuellSøknadBarn | Personopplysninger,
-    adressebeskyttet: boolean,
-) => {
+type BarnMedNavn = {
+    fornavn?: Nullable<string>;
+    etternavn?: Nullable<string>;
+    fødselsdato: string;
+};
+
+export const getNavnMedFødselsdato = (barn: BarnMedNavn, adressebeskyttet: boolean) => {
     if (!adressebeskyttet) {
         return `${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(barn.fødselsdato)}`;
     } else {

@@ -26,6 +26,7 @@ import { getTextAreaRefValue } from '~/lib/_felles/fritekst/fritekstUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
+import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 
@@ -57,11 +58,19 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
 
     const getBegrunnelse = useCallback(
-        () => getTextAreaRefValue(begrunnelseRef, meldekortbehandling.begrunnelse),
+        () =>
+            getTextAreaRefValue(
+                begrunnelseRef,
+                sladdbarTekstEllerNull(meldekortbehandling.begrunnelse),
+            ),
         [meldekortbehandling.begrunnelse],
     );
     const getBrevtekst = useCallback(
-        () => getTextAreaRefValue(brevtekstRef, meldekortbehandling.tekstTilVedtaksbrev),
+        () =>
+            getTextAreaRefValue(
+                brevtekstRef,
+                sladdbarTekstEllerNull(meldekortbehandling.tekstTilVedtaksbrev),
+            ),
         [meldekortbehandling.tekstTilVedtaksbrev],
     );
 

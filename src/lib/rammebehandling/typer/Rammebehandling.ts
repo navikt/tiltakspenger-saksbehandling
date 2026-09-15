@@ -19,6 +19,7 @@ import {
     Utbetalingskontroll,
 } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { Nullable } from '~/types/UtilTypes';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { Ytelse } from './Ytelse';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Attestering } from '~/lib/behandling-felles/typer/Attestering';
@@ -45,8 +46,8 @@ export interface RammebehandlingBase {
     saksopplysninger: Saksopplysninger;
     attesteringer: Attestering[];
     vedtaksperiode: Nullable<Periode>;
-    fritekstTilVedtaksbrev: Nullable<string>;
-    begrunnelseVilkårsvurdering: Nullable<string>;
+    fritekstTilVedtaksbrev: SladdbarVerdi<Nullable<string>>;
+    begrunnelseVilkårsvurdering: SladdbarVerdi<Nullable<string>>;
     avbrutt: Nullable<Avbrutt>;
     opprettet: string;
     sistEndret: string;
@@ -80,7 +81,7 @@ export enum Rammebehandlingsstatus {
 }
 
 export type Saksopplysninger = {
-    fødselsdato: string;
+    fødselsdato: SladdbarVerdi<string>;
     tiltaksdeltagelse: Tiltaksdeltakelse[];
     periode: Nullable<Periode>;
     ytelser: Ytelse[];
@@ -90,6 +91,7 @@ export type Saksopplysninger = {
 
 export type OppdaterBehandlingDTO = OppdaterSøknadsbehandlingDTO | OppdaterRevurderingDTO;
 
+/** Sendes til backenden, og har derfor aldri sladdede verdier. */
 export type OppdaterBehandlingBaseDTO = {
     resultat: RammebehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;

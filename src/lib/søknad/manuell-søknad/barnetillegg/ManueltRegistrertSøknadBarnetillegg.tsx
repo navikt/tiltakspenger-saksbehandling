@@ -11,6 +11,7 @@ import type {
 import { LeggTilBarnManuelt } from '~/lib/søknad/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import { useHentPersonopplysningerBarn } from '~/lib/søknad/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
+import { hentVerdi } from '~/types/SladdetVerdi';
 import { v4 as uuidv4 } from 'uuid';
 import { SakId } from '~/lib/sak/SakTyper';
 import { InformasjonOmBarnPDL } from '~/lib/søknad/manuell-søknad/barnetillegg/InformasjonOmBarnPDL';
@@ -65,12 +66,12 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
         if (skalHenteBarn && barnFraAPI) {
             const barn: ManuellSøknadBarn[] = barnFraAPI.map(
                 (p, index): ManuellSøknadBarn => ({
-                    fornavn: p.fornavn,
-                    mellomnavn: p.mellomnavn || undefined,
-                    etternavn: p.etternavn,
-                    fødselsdato: p.fødselsdato,
+                    fornavn: hentVerdi(p.fornavn) ?? undefined,
+                    mellomnavn: hentVerdi(p.mellomnavn) ?? undefined,
+                    etternavn: hentVerdi(p.etternavn) ?? undefined,
+                    fødselsdato: hentVerdi(p.fødselsdato) ?? '',
                     erSøktBarnetilleggFor: undefined,
-                    fnr: p.fnr,
+                    fnr: hentVerdi(p.fnr) ?? undefined,
                     uuid: uuidv4(),
                     index,
                 }),

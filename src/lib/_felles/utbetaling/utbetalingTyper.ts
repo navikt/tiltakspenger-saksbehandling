@@ -2,6 +2,7 @@ import { BeløpProps } from '../../beregning-og-simulering/typer/Beregning';
 import { Periode } from '~/types/Periode';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { Nullable } from '~/types/UtilTypes';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 export type UtbetalingId = `utbetaling_${string}`;
@@ -48,8 +49,8 @@ export type Utbetalingskontroll =
     | UtbetalingskontrollUtdatert;
 
 export type BehandlingUtbetalingProps = {
-    navkontor: string;
-    navkontorNavn?: string;
+    navkontor: SladdbarVerdi<string>;
+    navkontorNavn: SladdbarVerdi<Nullable<string>>;
     status: Utbetalingsstatus;
     simulertBeregning: SimulertBeregning;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;

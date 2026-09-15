@@ -1,4 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
+import { ikkeSladdet } from '~/types/SladdetVerdi';
 import { lagForhåndsutfyltInnvilgelse } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import {
     Rammebehandlingsstatus,
@@ -41,7 +42,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     saksbehandler: 'Z123456',
     beslutter: null,
     saksopplysninger: {
-        fødselsdato: '1990-01-01',
+        fødselsdato: ikkeSladdet('1990-01-01'),
         tiltaksdeltagelse,
         periode: null,
         ytelser: [],
@@ -50,8 +51,8 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     },
     attesteringer: [],
     vedtaksperiode: null,
-    fritekstTilVedtaksbrev: null,
-    begrunnelseVilkårsvurdering: null,
+    fritekstTilVedtaksbrev: ikkeSladdet(null),
+    begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
     opprettet: '2025-01-01T09:00:00',
     sistEndret: '2025-01-01T09:00:00',
@@ -71,7 +72,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
 const sakUtenVedtak: SakProps = {
     sakId: 'sak_1',
     saksnummer: '202501011001',
-    fnr: '12345678911',
+    fnr: ikkeSladdet('12345678911'),
     kanSendeInnHelgForMeldekort: false,
     søknader: [],
     åpneBehandlinger: [],

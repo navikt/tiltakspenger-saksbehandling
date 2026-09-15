@@ -6,6 +6,7 @@ import { formaterTidspunkt } from '../../../../utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { Avbrutt } from '../../typer/Avbrutt';
 import { classNames } from '../../../../utils/classNames';
+import { sladdbarTekst } from '~/types/SladdetVerdi';
 
 const AvbruttOppsummering = (props: {
     avbrutt: Avbrutt;
@@ -35,7 +36,7 @@ const AvbruttOppsummering = (props: {
                 </HStack>
                 <OppsummeringsPar
                     label={'Begrunnelse'}
-                    verdi={props.avbrutt.begrunnelse}
+                    verdi={sladdbarTekst(props.avbrutt.begrunnelse)}
                     retning="vertikal"
                 />
             </VStack>

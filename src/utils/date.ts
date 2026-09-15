@@ -1,6 +1,8 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { nonNullish } from '~/utils/object';
 import { Periode } from '~/types/Periode';
+import { Nullable } from '~/types/UtilTypes';
+import { formaterSladdbarVerdi, SladdbarVerdi } from '~/types/SladdetVerdi';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -36,16 +38,12 @@ export const formaterTidspunktKort = (dateString: string) => {
     return dayjs(dateString).format('DD.MM.YY HH:mm');
 };
 
-// Backenden kan sende sladdede verdier som [Sladdet] i datofelter, og de skal vises uendret.
-export const erGyldigDatotekst = (tekst: string): boolean => dayjs(tekst).isValid();
-
 export const formaterDatotekst = (dateString: string) => {
-    if (!dateString) {
-        return 'ukjent';
-    }
-
-    return erGyldigDatotekst(dateString) ? dayjs(dateString).format('DD.MM.YYYY') : dateString;
+    return dateString ? dayjs(dateString).format('DD.MM.YYYY') : 'ukjent';
 };
+
+export const formaterSladdbarDatotekst = (dato: SladdbarVerdi<Nullable<string>>) =>
+    formaterSladdbarVerdi(dato, formaterDatotekst);
 
 export const formaterPeriode = ({ fraOgMed, tilOgMed }: Periode) => {
     return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;

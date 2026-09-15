@@ -1,8 +1,13 @@
 import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
-import { alderFraDato, erGyldigDatotekst, finn16årsdag, formaterDatotekst } from '~/utils/date';
-import { erFødselsnummer } from '~/utils/fødselsnummer';
+import {
+    alderFraDato,
+    finn16årsdag,
+    formaterDatotekst,
+    formaterSladdbarDatotekst,
+} from '~/utils/date';
+import { formaterSladdbarVerdi, hentVerdi, sladdbarTekst } from '~/types/SladdetVerdi';
 import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { Søknad, SøknadBarn } from '~/lib/søknad/søknadTyper';
@@ -91,21 +96,27 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                 </HStack>
             )}
             {søknad.barnetillegg
-                .toSorted((a, b) => (a.fødselsdato > b.fødselsdato ? 1 : -1))
-                .map((barn) => {
+                .toSorted((a, b) =>
+                    (hentVerdi(a.fødselsdato) ?? '') > (hentVerdi(b.fødselsdato) ?? '') ? 1 : -1,
+                )
+                .map((barn, index) => {
                     const { fnr, fødselsdato, fornavn } = barn;
 
-                    const personopplysninger =
-                        fnr && erFødselsnummer(fnr)
-                            ? personopplysningerBarn.data?.find((p) => p.fnr === fnr)
-                            : undefined;
+                    const fnrVerdi = hentVerdi(fnr);
+
+                    const personopplysninger = fnrVerdi
+                        ? personopplysningerBarn.data?.find((p) => hentVerdi(p.fnr) === fnrVerdi)
+                        : undefined;
 
                     return (
                         <Barn
                             barn={barn}
                             tiltaksperiode={tiltaksperiode}
                             personopplysninger={personopplysninger}
-                            key={fnr ?? `${fødselsdato}-${fornavn}`}
+                            key={
+                                fnrVerdi ??
+                                `${hentVerdi(fødselsdato)}-${hentVerdi(fornavn)}-${index}`
+                            }
                         />
                     );
                 })}
@@ -126,40 +137,43 @@ type BarnProps = {
 const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
     const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØSSpm, kilde } = barn;
 
-    const navn = [fornavn, mellomnavn, etternavn].filter(Boolean).join(' ');
-    const fødselsdatoFormattert = formaterDatotekst(fødselsdato);
-    const harGyldigFødselsdato = erGyldigDatotekst(fødselsdato);
+    const navn = [fornavn, mellomnavn, etternavn]
+        .filter((navnedel) => navnedel !== null)
+        .map(sladdbarTekst)
+        .filter(Boolean)
+        .join(' ');
+
+    const fødselsdatoFormattert = formaterSladdbarDatotekst(fødselsdato);
+    const fødselsdatoVerdi = hentVerdi(fødselsdato);
 
     const bleFødtITiltaksperioden =
-        harGyldigFødselsdato && tiltaksperiode
-            ? erDatoIPeriode(fødselsdato, tiltaksperiode)
+        fødselsdatoVerdi && tiltaksperiode
+            ? erDatoIPeriode(fødselsdatoVerdi, tiltaksperiode)
             : false;
 
-    const fyller16dato = finn16årsdag(fødselsdato);
+    const fyller16dato = fødselsdatoVerdi ? finn16årsdag(fødselsdatoVerdi) : null;
     const fyller16ITiltaksperioden =
-        harGyldigFødselsdato && tiltaksperiode
-            ? erDatoIPeriode(fyller16dato, tiltaksperiode)
-            : false;
+        fyller16dato && tiltaksperiode ? erDatoIPeriode(fyller16dato, tiltaksperiode) : false;
 
     const { fortrolig, strengtFortrolig, strengtFortroligUtland, dødsdato } =
         personopplysninger || {};
 
+    const dødsdatoVerdi = hentVerdi(dødsdato);
+
     const dødeITiltaksperioden =
-        dødsdato && erGyldigDatotekst(dødsdato) && tiltaksperiode
-            ? erDatoIPeriode(dødsdato, tiltaksperiode)
-            : false;
+        dødsdatoVerdi && tiltaksperiode ? erDatoIPeriode(dødsdatoVerdi, tiltaksperiode) : false;
 
     return (
         <div>
             <BehandlingSaksopplysning navn={'Navn'} verdi={navn} />
             <BehandlingSaksopplysning
                 navn={'Alder'}
-                verdi={harGyldigFødselsdato ? `${alderFraDato(fødselsdato)} år` : fødselsdato}
+                verdi={formaterSladdbarVerdi(fødselsdato, (dato) => `${alderFraDato(dato)} år`)}
             />
             {fyller16ITiltaksperioden && (
                 <BehandlingSaksopplysning
                     navn={'Barnet fyller 16 år i tiltaksperioden'}
-                    verdi={formaterDatotekst(fyller16dato)}
+                    verdi={formaterDatotekst(nonNullish(fyller16dato))}
                     visVarsel
                 />
             )}
@@ -175,7 +189,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
             {dødeITiltaksperioden && (
                 <BehandlingSaksopplysning
                     navn={'Barnet døde  i tiltaksperioden'}
-                    verdi={formaterDatotekst(nonNullish(dødsdato))}
+                    verdi={formaterDatotekst(nonNullish(dødsdatoVerdi))}
                     visVarsel
                 />
             )}

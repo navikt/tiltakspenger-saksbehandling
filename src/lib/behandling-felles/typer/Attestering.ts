@@ -1,6 +1,9 @@
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { Nullable } from '~/types/UtilTypes';
+
 export type Attestering = {
     status: Attesteringsstatus;
-    begrunnelse: string;
+    begrunnelse: SladdbarVerdi<Nullable<string>>;
     endretAv: string;
     endretTidspunkt: string;
 };

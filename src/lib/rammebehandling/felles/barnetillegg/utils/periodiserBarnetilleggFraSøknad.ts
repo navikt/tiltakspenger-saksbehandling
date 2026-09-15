@@ -8,6 +8,7 @@ import {
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/lib/søknad/søknadTyper';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { erSladdet } from '~/types/SladdetVerdi';
 
 export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
@@ -28,21 +29,23 @@ const periodiserBarnetilleggForPeriode = (
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
         const { fødselsdato, oppholderSegIEØSSpm } = barn;
 
-        if (oppholderSegIEØSSpm.svar !== 'JA') {
+        // Uten fødselsdato kan vi ikke periodisere, og barnet må håndteres manuelt.
+        if (oppholderSegIEØSSpm.svar !== 'JA' || erSladdet(fødselsdato)) {
             return acc;
         }
 
-        const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdato));
+        const fødselsdatoVerdi = fødselsdato.verdi;
+        const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdatoVerdi));
 
         const erFødtOgUnder16 =
-            fødselsdato <= innvilgelsesperiode.tilOgMed &&
+            fødselsdatoVerdi <= innvilgelsesperiode.tilOgMed &&
             sisteDagFør16År >= innvilgelsesperiode.fraOgMed;
 
         if (erFødtOgUnder16) {
             acc.push({
                 fraOgMed:
-                    fødselsdato > innvilgelsesperiode.fraOgMed
-                        ? fødselsdato
+                    fødselsdatoVerdi > innvilgelsesperiode.fraOgMed
+                        ? fødselsdatoVerdi
                         : innvilgelsesperiode.fraOgMed,
                 tilOgMed:
                     sisteDagFør16År < innvilgelsesperiode.tilOgMed

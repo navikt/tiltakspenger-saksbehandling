@@ -22,6 +22,7 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { finnNesteKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { hentVerdi } from '~/types/SladdetVerdi';
 import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
@@ -168,7 +169,7 @@ const FormkravKlagePage = ({
                                 omgjøringsbehandling,
                             )
                         }
-                        fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
+                        fnrFraPersonopplysninger={hentVerdi(personopplysninger?.fnr)}
                         control={form.control}
                         rammevedtakOgBehandlinger={hentRammevedtakMedBehandlinger(sak)}
                         meldekortvedtakOgBehandlinger={hentMeldekortvedtakMedBehandlinger(sak)}

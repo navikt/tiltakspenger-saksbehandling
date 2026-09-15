@@ -5,6 +5,7 @@ import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetek
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
 
 import style from './RevurderingStansBegrunnelse.module.css';
 
@@ -24,7 +25,7 @@ export const RevurderingStansBegrunnelse = () => {
                     description={
                         'Ikke skriv personsensitiv informasjon som ikke er relevant for saken. Husk at bruker har rett til innsyn.'
                     }
-                    defaultValue={begrunnelseVilkårsvurdering ?? ''}
+                    defaultValue={sladdbarTekstEllerNull(begrunnelseVilkårsvurdering) ?? ''}
                     readOnly={erReadonly}
                     ref={begrunnelse.ref}
                 />

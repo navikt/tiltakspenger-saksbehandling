@@ -2,6 +2,7 @@ import { CopyButton, HelpText, HStack, Table, Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
+import { erSladdet, SladdbarVerdi, sladdbarTekst } from '~/types/SladdetVerdi';
 import { Periode } from '~/types/Periode';
 import {
     antallKalenderDagerUnnaDagensDato,
@@ -32,14 +33,18 @@ import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder
  * Cellenes innhold og oppførsel defineres én gang her, slik at fanene ikke kommer ut av sync.
  */
 
-const Fnr = ({ fnr, saksnummer }: { fnr: string; saksnummer: string }) => (
-    <Table.HeaderCell scope={'row'}>
-        <HStack align={'center'} gap={'space-4'} wrap={false}>
-            <InternLenke href={personoversiktUrl(saksnummer)}>{fnr}</InternLenke>
-            <CopyButton copyText={fnr} size={'small'} data-color={'accent'} />
-        </HStack>
-    </Table.HeaderCell>
-);
+const Fnr = ({ fnr, saksnummer }: { fnr: SladdbarVerdi<string>; saksnummer: string }) => {
+    const fnrTekst = sladdbarTekst(fnr);
+
+    return (
+        <Table.HeaderCell scope={'row'}>
+            <HStack align={'center'} gap={'space-4'} wrap={false}>
+                <InternLenke href={personoversiktUrl(saksnummer)}>{fnrTekst}</InternLenke>
+                <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
+            </HStack>
+        </Table.HeaderCell>
+    );
+};
 
 type ResultatProps = {
     behandling: BenkSøknadsbehandling | BenkRevurdering | BenkKlagebehandling;
@@ -91,7 +96,7 @@ const Ventestatus = ({
                     <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
                         {frist ? `Venter til ${formaterDatotekst(frist)}` : 'Venter'}
                     </Tag>
-                    {begrunnelse && (
+                    {begrunnelseTekst(begrunnelse, erTilbakekreving) && (
                         <HelpText>{begrunnelseTekst(begrunnelse, erTilbakekreving)}</HelpText>
                     )}
                 </HStack>
@@ -102,11 +107,21 @@ const Ventestatus = ({
     );
 };
 
-const begrunnelseTekst = (begrunnelse: string, erTilbakekreving: boolean): string => {
-    if (erTilbakekreving && begrunnelse in tilbakekrevingVenterStatusTekst) {
-        return tilbakekrevingVenterStatusTekst[begrunnelse as TilbakekrevingVentegrunn];
+const begrunnelseTekst = (
+    begrunnelse: SladdbarVerdi<Nullable<string>>,
+    erTilbakekreving: boolean,
+): string => {
+    if (erSladdet(begrunnelse)) {
+        return sladdbarTekst(begrunnelse);
     }
-    return begrunnelse;
+
+    const verdi = begrunnelse.verdi ?? '';
+
+    if (erTilbakekreving && verdi in tilbakekrevingVenterStatusTekst) {
+        return tilbakekrevingVenterStatusTekst[verdi as TilbakekrevingVentegrunn];
+    }
+
+    return verdi;
 };
 
 const finnTagColor = (fristDato: Nullable<string>): AkselColor => {

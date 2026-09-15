@@ -9,6 +9,7 @@ import type {
     OppdaterKlageFormkravRequest,
 } from '~/lib/klage/typer/Klage';
 import type { SakId, SakProps } from '~/lib/sak/SakTyper';
+import { ikkeSladdet } from '~/types/SladdetVerdi';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import type { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import type { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
@@ -35,7 +36,7 @@ import type {
 const saksnummer = '10001';
 const sakId: SakId = 'sak_01ABC';
 const klageId: KlageId = 'klage_01ABC';
-const fnr = '12345678911';
+const fnr = ikkeSladdet('12345678911');
 const navIdent = 'Z12345';
 const beslutterIdent = 'Z99999';
 const journalpostId = '453827';
@@ -109,7 +110,7 @@ const lagRammebehandling = (): RevurderingStans => ({
     saksbehandler: navIdent,
     beslutter: beslutterIdent,
     saksopplysninger: {
-        fødselsdato: '1990-01-01',
+        fødselsdato: ikkeSladdet('1990-01-01'),
         tiltaksdeltagelse: [],
         periode: vedtaksperiode,
         ytelser: [],
@@ -118,8 +119,8 @@ const lagRammebehandling = (): RevurderingStans => ({
     },
     attesteringer: [],
     vedtaksperiode: vedtaksperiode,
-    fritekstTilVedtaksbrev: null,
-    begrunnelseVilkårsvurdering: null,
+    fritekstTilVedtaksbrev: ikkeSladdet(null),
+    begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
     opprettet: '2025-03-20T10:00:00',
     sistEndret: '2025-03-25T10:00:00',
@@ -184,7 +185,7 @@ const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
     saksbehandler: navIdent,
     beslutter: null,
     saksopplysninger: {
-        fødselsdato: '1990-01-01',
+        fødselsdato: ikkeSladdet('1990-01-01'),
         tiltaksdeltagelse: [],
         periode: vedtaksperiode,
         ytelser: [],
@@ -193,8 +194,8 @@ const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
     },
     attesteringer: [],
     vedtaksperiode: null,
-    fritekstTilVedtaksbrev: null,
-    begrunnelseVilkårsvurdering: null,
+    fritekstTilVedtaksbrev: ikkeSladdet(null),
+    begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
     opprettet: '2025-04-03T10:00:00',
     sistEndret: '2025-04-03T10:00:00',
@@ -242,9 +243,11 @@ const saksbehandler: Saksbehandler = {
 
 const personopplysninger: Personopplysninger = {
     fnr,
-    fødselsdato: '1990-01-01',
-    fornavn: 'Ola',
-    etternavn: 'Nordmann',
+    fødselsdato: ikkeSladdet('1990-01-01'),
+    fornavn: ikkeSladdet('Ola'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet('Nordmann'),
+    dødsdato: ikkeSladdet(null),
     fortrolig: false,
     strengtFortrolig: false,
     strengtFortroligUtland: false,

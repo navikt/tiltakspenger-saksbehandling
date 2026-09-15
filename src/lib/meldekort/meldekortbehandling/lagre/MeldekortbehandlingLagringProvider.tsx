@@ -17,6 +17,7 @@ import {
 import { MeldekortbehandlingSkjemaContext } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { meldekortbehandlingSkjemaInitialState } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaReducer';
 import { isEqualJson } from '~/utils/is-equal-json';
+import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
 
 type LagringContextState = {
     dto: OppdaterMeldekortbehandlingDTO;
@@ -76,8 +77,8 @@ const genererDtoFraBehandling = (
 ): OppdaterMeldekortbehandlingDTO => {
     return {
         ...meldekortbehandlingSkjemaInitialState(behandling),
-        begrunnelse: behandling.begrunnelse,
-        tekstTilVedtaksbrev: behandling.tekstTilVedtaksbrev,
+        begrunnelse: sladdbarTekstEllerNull(behandling.begrunnelse),
+        tekstTilVedtaksbrev: sladdbarTekstEllerNull(behandling.tekstTilVedtaksbrev),
     };
 };
 

@@ -18,7 +18,8 @@ import {
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { erGyldigDatotekst, finn18årsdag } from '~/utils/date';
+import { finn18årsdag } from '~/utils/date';
+import { erSladdet } from '~/types/SladdetVerdi';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
 
@@ -177,11 +178,11 @@ export const fyller18ÅrISøknadsperioden = (behandling: Rammebehandling, sak: S
     const { saksopplysninger } = behandling;
     const { fødselsdato } = saksopplysninger;
 
-    if (!erGyldigDatotekst(fødselsdato)) {
+    if (erSladdet(fødselsdato)) {
         return false;
     }
 
-    const attendeBursdag = finn18årsdag(fødselsdato);
+    const attendeBursdag = finn18årsdag(fødselsdato.verdi);
 
     if (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING) {
         const søknadsperiode = behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;

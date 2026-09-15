@@ -4,6 +4,7 @@ import { SakId } from '../../sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 export type KlageId = `klage_${string}`;
 
@@ -29,7 +30,7 @@ export interface Klagebehandling {
     id: KlageId;
     sakId: SakId;
     saksnummer: string;
-    fnr: string;
+    fnr: SladdbarVerdi<string>;
     opprettet: string;
     sistEndret: string;
     iverksattTidspunkt: Nullable<string>;
@@ -51,7 +52,7 @@ export interface KlagebehandlingAvbrutt {
     avbruttAv: string;
     avbruttTidspunkt: string;
     status: AvbrytKlagebehandlingStatus;
-    begrunnelse: Nullable<string>;
+    begrunnelse: SladdbarVerdi<Nullable<string>>;
 }
 
 export interface KlageFormkrav {
@@ -73,14 +74,14 @@ export type KlagebehandlingsresultatDTO =
 export interface KlagebehandlingsresultatAvvist {
     type: KlagebehandlingResultat.AVVIST;
     brevtekst: Brevtekst[];
-    begrunnelseFerdigstilling: Nullable<string>;
+    begrunnelseFerdigstilling: SladdbarVerdi<Nullable<string>>;
 }
 
 export interface KlagebehandlingsresultatOmgjør {
     type: KlagebehandlingResultat.OMGJØR;
     årsak: OmgjøringÅrsak;
-    begrunnelse: string;
-    begrunnelseFerdigstilling: Nullable<string>;
+    begrunnelse: SladdbarVerdi<string>;
+    begrunnelseFerdigstilling: SladdbarVerdi<Nullable<string>>;
     ferdigstiltTidspunkt: Nullable<string>;
 }
 
@@ -96,10 +97,16 @@ export interface KlagebehandlingsresultatOpprettholdt {
     ferdigstiltTidspunkt: Nullable<string>;
     journalpostIdInnstillingsbrev: Nullable<string>;
     dokumentInfoIder: Nullable<string[]>;
-    begrunnelseFerdigstilling: Nullable<string>;
+    begrunnelseFerdigstilling: SladdbarVerdi<Nullable<string>>;
 }
 
 export interface Brevtekst {
+    tittel: string;
+    tekst: SladdbarVerdi<string>;
+}
+
+/** Sendes til backenden, og har derfor aldri sladdede verdier. */
+export interface BrevtekstDTO {
     tittel: string;
     tekst: string;
 }
@@ -158,11 +165,11 @@ export interface VurderKlageRequest {
 }
 
 export interface ForhåndsvisBrevKlageRequest {
-    tekstTilVedtaksbrev: Brevtekst[];
+    tekstTilVedtaksbrev: BrevtekstDTO[];
 }
 
 export interface LagreBrevtekstKlageRequest {
-    tekstTilVedtaksbrev: Brevtekst[];
+    tekstTilVedtaksbrev: BrevtekstDTO[];
 }
 
 export interface OpprettOmgjøringsbehandlingForKlageRequest {

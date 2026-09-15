@@ -1,3 +1,4 @@
+import { sladdbarTekst } from '~/types/SladdetVerdi';
 import React from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
@@ -36,7 +37,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
             tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
                 ? ` (${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)})`
                 : '';
-        return `${tiltak.visningsnavn}${periodeTekst}`;
+        return `${sladdbarTekst(tiltak.visningsnavn)}${periodeTekst}`;
     };
 
     const søknadsperiode = useWatch({ name: 'manueltSattSøknadsperiode' }) as Periode;

@@ -26,6 +26,7 @@ import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/s�
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { sladdbarTekstEllerNull } from '~/types/SladdetVerdi';
 
 export type BehandlingSkjemaContextBase<T> = T & {
     erReadonly: boolean;
@@ -76,18 +77,28 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
     const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
 
     const getBegrunnelse = useCallback(
-        () => getTextAreaRefValue(begrunnelseRef, behandling.begrunnelseVilkårsvurdering),
+        () =>
+            getTextAreaRefValue(
+                begrunnelseRef,
+                sladdbarTekstEllerNull(behandling.begrunnelseVilkårsvurdering),
+            ),
         [begrunnelseRef, behandling.begrunnelseVilkårsvurdering],
     );
     const getBrevtekst = useCallback(
-        () => getTextAreaRefValue(brevtekstRef, behandling.fritekstTilVedtaksbrev),
+        () =>
+            getTextAreaRefValue(
+                brevtekstRef,
+                sladdbarTekstEllerNull(behandling.fritekstTilVedtaksbrev),
+            ),
         [brevtekstRef, behandling.fritekstTilVedtaksbrev],
     );
     const getBarnetilleggBegrunnelse = useCallback(
         () =>
             getTextAreaRefValue(
                 barnetilleggBegrunnelseRef,
-                rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg?.begrunnelse,
+                sladdbarTekstEllerNull(
+                    rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg?.begrunnelse,
+                ),
             ),
         [barnetilleggBegrunnelseRef, behandling],
     );
