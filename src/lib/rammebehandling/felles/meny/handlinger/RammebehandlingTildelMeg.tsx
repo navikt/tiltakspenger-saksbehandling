@@ -1,11 +1,11 @@
 import { Button, Dialog, Loader } from '@navikt/ds-react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useCallback, useEffect } from 'react';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingsmenyKallesFra } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { useTildelRammebehandling } from '~/lib/rammebehandling/felles/tildel/useTildelRammebehandling';
 
 type Props = {
     behandlingId: RammebehandlingId;
@@ -27,22 +27,18 @@ export const RammebehandlingTildelMeg = ({
     onClose,
     onSuccess,
 }: Props) => {
-    const { trigger, error, isMutating } = useFetchJsonFraApi<ResponseBody, RequestBody>(
-        '/behandlinger/ta',
-        'POST',
-        {
-            onSuccess: (response) => {
-                onSuccess(response.saker.atNonNull(0));
-            },
-        },
-    );
+    const { trigger, error, isMutating } = useTildelRammebehandling();
 
     const tildel = useCallback(() => {
         trigger({
             behandlinger: [{ behandlingId, sakId }],
             returnerSaker: true,
+        }).then((response) => {
+            if (response) {
+                onSuccess(response.saker.atNonNull(0));
+            }
         });
-    }, [behandlingId, sakId, trigger]);
+    }, [behandlingId, onSuccess, sakId, trigger]);
 
     useEffect(() => {
         if (åpen) {
@@ -92,20 +88,4 @@ export const RammebehandlingTildelMeg = ({
             </Dialog.Popup>
         </Dialog>
     );
-};
-
-type RequestBody = {
-    behandlinger: Array<{
-        behandlingId: RammebehandlingId;
-        sakId: SakId;
-    }>;
-    returnerSaker: boolean;
-};
-
-type ResponseBody = {
-    behandlinger: Array<{
-        behandlingId: RammebehandlingId;
-        sakId: SakId;
-    }>;
-    saker: SakProps[];
 };

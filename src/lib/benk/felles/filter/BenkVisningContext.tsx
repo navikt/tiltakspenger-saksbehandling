@@ -1,12 +1,16 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
+import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
 
 type BenkVisning = {
     skjulVentestatus: boolean;
     valgtTildelingType: TildelingType | null;
     setValgtTildelingType: (tildelingType: TildelingType | null) => void;
-    valgtTildeling: ReadonlySet<RammebehandlingId>;
-    toggleValgtTildeling: (rammebehandlingId: RammebehandlingId, erValgt: boolean) => void;
+    valgtTildeling: Array<BehandlingSomKanBatchTildeles>;
+    toggleValgtTildeling: (
+        valgtBehandling: BehandlingSomKanBatchTildeles,
+        erValgt: boolean,
+    ) => void;
 };
 
 type TildelingType = 'saksbehandler' | 'beslutter';
@@ -15,13 +19,15 @@ const BenkVisningContext = createContext<BenkVisning>({
     setValgtTildelingType: () => {},
     valgtTildelingType: null,
     skjulVentestatus: false,
-    valgtTildeling: new Set<RammebehandlingId>(),
+    valgtTildeling: [],
     toggleValgtTildeling: () => {},
 });
 
 type Props = PropsWithChildren<{
     skjulVentestatus: boolean;
 }>;
+
+type BehandlingSomKanBatchTildeles = BenkSøknadsbehandling | BenkRevurdering;
 
 /**
  * Visningsvalg fra det aktive filteret som gjelder alle fanenes tabeller.
@@ -30,16 +36,20 @@ type Props = PropsWithChildren<{
  */
 export const BenkVisningProvider = ({ skjulVentestatus, children }: Props) => {
     const [valgtTildelingType, setValgtTildelingType] = useState<TildelingType | null>(null);
-    const [valgtTildeling, setValgtTildeling] = useState<ReadonlySet<RammebehandlingId>>(new Set());
+    const [valgtTildeling, setValgtTildeling] = useState<
+        ReadonlySet<BehandlingSomKanBatchTildeles>
+    >(new Set());
 
-    const toggleValgtTildeling = (rammebehandlingId: RammebehandlingId, erValgt: boolean) => {
-        //TODO - Ta inn sakID
+    const toggleValgtTildeling = (
+        valgtBehandling: BehandlingSomKanBatchTildeles,
+        erValgt: boolean,
+    ) => {
         if (!erValgt) {
             setValgtTildeling(
-                new Set([...valgtTildeling].filter((id) => id !== rammebehandlingId)),
+                new Set([...valgtTildeling].filter((b) => b.id !== valgtBehandling.id)),
             );
         } else {
-            setValgtTildeling(new Set([...valgtTildeling, rammebehandlingId]));
+            setValgtTildeling(new Set([...valgtTildeling, valgtBehandling]));
         }
     };
 
@@ -49,7 +59,7 @@ export const BenkVisningProvider = ({ skjulVentestatus, children }: Props) => {
                 skjulVentestatus,
                 valgtTildelingType: valgtTildelingType,
                 setValgtTildelingType: setValgtTildelingType,
-                valgtTildeling: valgtTildeling,
+                valgtTildeling: [...valgtTildeling],
                 toggleValgtTildeling: toggleValgtTildeling,
             }}
         >

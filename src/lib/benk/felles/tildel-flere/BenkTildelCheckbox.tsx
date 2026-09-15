@@ -21,7 +21,7 @@ export const BenkTildelCheckbox = ({ behandling }: Props) => {
     return (
         (kanTildeleSaksbehandler || kanTildeleBeslutter) && (
             <Checkbox
-                onChange={(event) => toggleValgtTildeling(behandling.id, event.target.checked)}
+                onChange={(event) => toggleValgtTildeling(behandling, event.target.checked)}
                 size={'small'}
             >
                 Tildel
