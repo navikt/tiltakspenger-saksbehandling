@@ -1,10 +1,5 @@
-import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-
-import styles from './Sladdebanner.module.css';
-
-export const SLADDEBANNER_TEKST =
-    'Personopplysninger og fritekster er sladdet for rollen din, og verdiene vises som [Sladdet]. Saken kan ellers leses som vanlig.';
+import { InlineMessage } from '@navikt/ds-react';
 
 export const Sladdebanner = () => {
     const { sladdes } = useSaksbehandler();
@@ -14,8 +9,11 @@ export const Sladdebanner = () => {
     }
 
     return (
-        <Infokort variant={'info'} size={'small'} role={'status'} className={styles.sladdebanner}>
-            {SLADDEBANNER_TEKST}
-        </Infokort>
+        <InlineMessage status={'warning'} size={'small'}>
+            {Sladdebanner.Tekst}
+        </InlineMessage>
     );
 };
+
+Sladdebanner.Tekst =
+    'Personopplysninger og fritekster er sladdet for rollen din. Saker kan ellers leses som vanlig.';

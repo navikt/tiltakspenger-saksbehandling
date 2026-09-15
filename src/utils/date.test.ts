@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { formaterDatotekst, formaterSladdbarDatotekst } from '~/utils/date';
-import { SLADDET_TEKST } from '~/utils/sladdetVerdi';
+import { SLADDET_TEKST_DEFAULT } from '~/utils/sladdetVerdi';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 
 describe('formaterDatotekst', () => {
@@ -19,6 +19,6 @@ describe('formaterSladdbarDatotekst', () => {
     });
 
     test('viser sladdet tekst for en sladdet verdi', () => {
-        expect(formaterSladdbarDatotekst(sladdet)).toBe(SLADDET_TEKST);
+        expect(formaterSladdbarDatotekst(sladdet)).toBe(SLADDET_TEKST_DEFAULT);
     });
 });

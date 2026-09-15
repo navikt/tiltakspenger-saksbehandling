@@ -41,7 +41,9 @@ const Fnr = ({ fnr, saksnummer }: { fnr: SladdbarVerdi<string>; saksnummer: stri
         <Table.HeaderCell scope={'row'}>
             <HStack align={'center'} gap={'space-4'} wrap={false}>
                 <InternLenke href={personoversiktUrl(saksnummer)}>{fnrTekst}</InternLenke>
-                <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
+                {!fnr.erSladdet && (
+                    <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
+                )}
             </HStack>
         </Table.HeaderCell>
     );

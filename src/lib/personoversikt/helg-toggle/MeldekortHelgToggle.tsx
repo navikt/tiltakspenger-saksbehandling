@@ -1,12 +1,15 @@
-import { BodyLong, Button, Dialog, Switch, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, InlineMessage, Switch, VStack } from '@navikt/ds-react';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 export const MeldekortHelgToggle = () => {
+    const { erSaksbehandler } = useSaksbehandler();
+
     const { sak, setSak } = useSak();
     const { kanSendeInnHelgForMeldekort } = sak;
 
@@ -16,6 +19,12 @@ export const MeldekortHelgToggle = () => {
         `/sak/${sak.sakId}/toggle-helg-meldekort`,
         'POST',
     );
+
+    const tekst = `Innstilling for meldekort helg: ${kanSendeInnHelgForMeldekort ? 'på' : 'av'}`;
+
+    if (!erSaksbehandler) {
+        return <InlineMessage status={'info'}>{tekst}</InlineMessage>;
+    }
 
     return (
         <>

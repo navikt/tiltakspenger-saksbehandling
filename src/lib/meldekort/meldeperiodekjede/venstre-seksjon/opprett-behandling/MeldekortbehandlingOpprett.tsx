@@ -9,10 +9,13 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useOpprettMeldekortbehandling } from '~/lib/meldekort/utils/useOpprettMeldekortbehandling';
 import { kanIkkeBehandlesGrunnTekst } from '~/lib/meldekort/utils/meldekortTekster';
 import { kanBehandleMeldeperiodekjede } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 import style from './MeldekortbehandlingOpprett.module.css';
 
 export const MeldekortbehandlingOpprett = () => {
+    const { erSaksbehandler } = useSaksbehandler();
+
     const { sakId, saksnummer } = useSak().sak;
     const { meldeperiodeKjede } = useMeldeperiodekjede();
     const { id: kjedeId, meldekortbehandlingIder, kanIkkeBehandlesGrunn } = meldeperiodeKjede;
@@ -33,6 +36,10 @@ export const MeldekortbehandlingOpprett = () => {
             : MeldeperiodebehandlingType.KORRIGERING;
 
     const tekster = teksterForType[type];
+
+    if (!erSaksbehandler) {
+        return null;
+    }
 
     return (
         <VStack gap={'space-16'}>

@@ -9,6 +9,7 @@ import { InnloggetSaksbehandlerStatus } from '~/lib/interndekoratør/innlogget-s
 import { Sladdebanner } from '~/lib/interndekoratør/sladdebanner/Sladdebanner';
 import { personoversiktUrl } from '~/utils/urls';
 import { v4 as uuidv4 } from 'uuid';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 import styles from './InternDekoratør.module.css';
 
@@ -17,6 +18,8 @@ export const InternDekoratør = () => {
     const [søketekst, setSøketekst] = useState<string>('');
 
     const router = useRouter();
+
+    const { erSaksbehandler } = useSaksbehandler();
 
     useEffect(() => {
         const resetSøkState = () => {
@@ -58,21 +61,27 @@ export const InternDekoratør = () => {
                             label="InternalHeader søk"
                             size="small"
                             variant="secondary"
-                            placeholder="Søk på fnr eller saksnummer"
+                            placeholder={
+                                erSaksbehandler
+                                    ? 'Søk på fnr eller saksnummer'
+                                    : 'Søk på saksnr eller sak-id'
+                            }
                             value={søketekst}
                             onChange={(e) => setSøketekst(e.trim())}
                         >
                             <Search.Button className={styles.søkKnapp} />
                         </Search>
                     </form>
+
+                    <Sladdebanner />
                 </HStack>
                 <Spacer />
                 <HStack gap="space-16">
-                    <OpprettSak />
+                    {erSaksbehandler && <OpprettSak />}
                     <InnloggetSaksbehandlerStatus />
                 </HStack>
             </InternalHeader>
-            <Sladdebanner />
+
             {error && (
                 <LukkbartVarsel
                     melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}

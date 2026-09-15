@@ -24,6 +24,7 @@ import style from './OmgjortGradBakgrunn.module.css';
 import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 import { rammebehandlingstypeTekst } from '../../rammebehandling/rammebehandlingTekster';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 type Props = {
     sakId: SakId;
@@ -77,6 +78,8 @@ const RammevedtakMedBehandlingRad = ({
 }: {
     rammevedtak: RammevedtakMedBehandling;
 }) => {
+    const { erSaksbehandler } = useSaksbehandler();
+
     const {
         omgjortGrad,
         resultat,
@@ -115,31 +118,33 @@ const RammevedtakMedBehandlingRad = ({
                         {'Se behandling'}
                     </InternLenkeKnapp>
 
-                    <ActionMenu>
-                        <ActionMenu.Trigger>
-                            <Button
-                                variant="secondary"
-                                iconPosition="right"
-                                icon={<MenuElipsisVerticalIcon aria-hidden />}
-                                size="small"
-                            >
-                                {'Meny'}
-                            </Button>
-                        </ActionMenu.Trigger>
-                        <ActionMenu.Content>
-                            {resultat === SøknadsbehandlingResultat.AVSLAG ? (
-                                <BehandleSøknadPåNyttValg
-                                    sakId={behandling.sakId}
-                                    søknadId={(behandling as Søknadsbehandling).søknad.id}
-                                />
-                            ) : (
-                                <OmgjørVedtakMenyvalg
-                                    vedtak={rammevedtak}
-                                    sakId={behandling.sakId}
-                                />
-                            )}
-                        </ActionMenu.Content>
-                    </ActionMenu>
+                    {erSaksbehandler && (
+                        <ActionMenu>
+                            <ActionMenu.Trigger>
+                                <Button
+                                    variant="secondary"
+                                    iconPosition="right"
+                                    icon={<MenuElipsisVerticalIcon aria-hidden />}
+                                    size="small"
+                                >
+                                    {'Meny'}
+                                </Button>
+                            </ActionMenu.Trigger>
+                            <ActionMenu.Content>
+                                {resultat === SøknadsbehandlingResultat.AVSLAG ? (
+                                    <BehandleSøknadPåNyttValg
+                                        sakId={behandling.sakId}
+                                        søknadId={(behandling as Søknadsbehandling).søknad.id}
+                                    />
+                                ) : (
+                                    <OmgjørVedtakMenyvalg
+                                        vedtak={rammevedtak}
+                                        sakId={behandling.sakId}
+                                    />
+                                )}
+                            </ActionMenu.Content>
+                        </ActionMenu>
+                    )}
                 </HStack>
             </Table.DataCell>
         </Table.Row>

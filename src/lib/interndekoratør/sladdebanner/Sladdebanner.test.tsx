@@ -4,7 +4,7 @@
 import '@testing-library/jest-dom/jest-globals';
 import { expect, test } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
-import { Sladdebanner, SLADDEBANNER_TEKST } from './Sladdebanner';
+import { Sladdebanner } from './Sladdebanner';
 import { SaksbehandlerProvider } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { Saksbehandler, SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
@@ -26,11 +26,11 @@ const rendreBanner = (saksbehandler: Saksbehandler) =>
 test('viser sladdebanner når saksbehandler har sladdede opplysninger', () => {
     rendreBanner(lagSaksbehandler(true, SaksbehandlerRolle.UTVIKLER));
 
-    expect(screen.getByText(SLADDEBANNER_TEKST)).toBeInTheDocument();
+    expect(screen.getByText(Sladdebanner.Tekst)).toBeInTheDocument();
 });
 
 test('viser ikke sladdebanner for saksbehandler med fullt innsyn', () => {
     rendreBanner(lagSaksbehandler(false, SaksbehandlerRolle.SAKSBEHANDLER));
 
-    expect(screen.queryByText(SLADDEBANNER_TEKST)).not.toBeInTheDocument();
+    expect(screen.queryByText(Sladdebanner.Tekst)).not.toBeInTheDocument();
 });

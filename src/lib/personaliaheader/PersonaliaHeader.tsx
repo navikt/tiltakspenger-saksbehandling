@@ -86,20 +86,28 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
         strengtFortrolig,
         strengtFortroligUtland,
         fortrolig,
-    } = personopplysninger || {};
+    } = personopplysninger;
+
+    const { erSladdet } = fnr;
 
     const fnrTekst = sladdbarTekst(fnr);
 
     const navn = [fornavn, mellomnavn, etternavn]
-        .map(sladdbarTekst)
+        .map((navnedel) => sladdbarTekst(navnedel))
         .filter((navnedel) => navnedel !== '')
         .join(' ');
 
     return (
         <>
-            <InternLenke href={personoversiktUrl(saksnummer)}>{navn}</InternLenke>
-            <BodyShort>{fnrTekst}</BodyShort>
-            <CopyButton copyText={fnrTekst} data-color={'accent'} size={'small'} />
+            <InternLenke href={personoversiktUrl(saksnummer)}>
+                {erSladdet ? '[Sladdet]' : navn}
+            </InternLenke>
+            {!erSladdet && (
+                <>
+                    <BodyShort>{fnrTekst}</BodyShort>
+                    <CopyButton copyText={fnrTekst} data-color={'accent'} size={'small'} />
+                </>
+            )}
             {(strengtFortrolig || strengtFortroligUtland) && (
                 <Tag data-color="danger" variant="outline">
                     Søker har strengt fortrolig adresse

@@ -41,8 +41,7 @@ export const SaksbehandlerProvider = ({ initialSaksbehandler, children }: Props)
                 innloggetSaksbehandler: saksbehandler,
                 erSaksbehandler: saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER),
                 erBeslutter: saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER),
-                // Flagget kan mangle i svaret fra backenden til feltet er ute overalt, og da vises ikke banneret.
-                sladdes: saksbehandler.sladdes === true,
+                sladdes: saksbehandler.sladdes,
             }}
         >
             {children}

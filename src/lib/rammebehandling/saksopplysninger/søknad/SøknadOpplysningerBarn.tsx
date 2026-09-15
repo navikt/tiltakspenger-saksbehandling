@@ -138,8 +138,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
     const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØSSpm, kilde } = barn;
 
     const navn = [fornavn, mellomnavn, etternavn]
-        .filter((navnedel) => navnedel !== null)
-        .map(sladdbarTekst)
+        .map((navn) => sladdbarTekst(navn))
         .filter(Boolean)
         .join(' ');
 
