@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { BodyShort, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { BenkOversikt } from '../typer/felles';
+import { benkOppsummeringTekst } from '../utils/benkUtils';
 import { BenkPaginering } from './BenkPaginering';
 
 type Props = {
@@ -11,7 +12,9 @@ type Props = {
 
 /** Oppbygningen alle fanene deler: filter øverst, så tellinger, så tabellen med paginering over og under */
 export const BenkPanel = ({ oversikt, filter, tabell }: Props) => {
-    const { behandlinger, totalAntall, totalAntallUfiltrert, antallFiltrertPgaTilgang } = oversikt;
+    const { behandlinger, totalAntall, totalAntallUfiltrert, oppsummering } = oversikt;
+
+    const oppsummeringstekst = benkOppsummeringTekst(oppsummering);
 
     return (
         <VStack gap={'space-16'}>
@@ -22,11 +25,7 @@ export const BenkPanel = ({ oversikt, filter, tabell }: Props) => {
                     {`Viser ${totalAntall} av totalt ${totalAntallUfiltrert} behandlinger med valgte filtre (${behandlinger.length} på denne siden)`}
                 </BodyShort>
 
-                {antallFiltrertPgaTilgang > 0 && (
-                    <InlineMessage status={'warning'} size={'small'}>
-                        {`${antallFiltrertPgaTilgang} filtrert vekk pga manglende tilgang`}
-                    </InlineMessage>
-                )}
+                {oppsummeringstekst && <BodyShort size={'small'}>{oppsummeringstekst}</BodyShort>}
             </VStack>
 
             <HStack justify={'center'}>

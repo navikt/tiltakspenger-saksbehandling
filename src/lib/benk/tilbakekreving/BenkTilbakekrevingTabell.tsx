@@ -21,6 +21,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
+                    <BenkTabellKolonneHeader.Tilgang />
                     <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.kilde}>
                         {'Kilde'}
                     </Table.ColumnHeader>
@@ -44,10 +45,8 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
             <Table.Body>
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
-                        <BenkTabellCelle.Fnr
-                            fnr={behandling.fnr}
-                            saksnummer={behandling.saksnummer}
-                        />
+                        <BenkTabellCelle.Fnr behandling={behandling} />
+                        <BenkTabellCelle.Tilgang behandling={behandling} />
                         <Table.DataCell>
                             {benkTilbakekrevingKildeTekst[behandling.kilde]}
                         </Table.DataCell>
@@ -55,7 +54,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                             <BenkTilbakekrevingStatusTag status={behandling.status} />
                         </Table.DataCell>
                         <BenkTabellCelle.Ventestatus
-                            ventestatus={behandling.ventestatus}
+                            behandling={behandling}
                             erTilbakekreving={true}
                         />
                         <BenkTabellCelle.Periode periode={behandling.kravgrunnlagPeriode} />
@@ -64,7 +63,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
                         <BenkTabellCelle.Tildelt ident={behandling.beslutter} />
-                        <Table.DataCell align={'right'}>
+                        <BenkTabellCelle.Handlinger behandling={behandling}>
                             <Button
                                 as={'a'}
                                 href={behandling.url}
@@ -76,7 +75,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                             >
                                 {'Åpne tilbakekreving'}
                             </Button>
-                        </Table.DataCell>
+                        </BenkTabellCelle.Handlinger>
                     </Table.Row>
                 ))}
             </Table.Body>

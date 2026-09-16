@@ -3,7 +3,7 @@ import { useBenkVisning } from './filter/BenkVisningContext';
 
 /**
  * Kolonneoverskriftene som går igjen på tvers av fanene i benken.
- * Label og sortKey defineres én gang her, slik at fanene ikke kommer ut av sync.
+ * Kolonnenavn og sortKey defineres én gang her, slik at fanene ikke kommer i utakt.
  * sortKey-verdiene er en del av kontrakten med backend - se BenkSorteringKolonne der.
  */
 
@@ -12,6 +12,8 @@ const Fnr = () => (
         {'Fødselsnr'}
     </Table.ColumnHeader>
 );
+
+const Tilgang = () => <Table.ColumnHeader>{'Tilgang og markeringer'}</Table.ColumnHeader>;
 
 const Resultat = () => (
     <Table.ColumnHeader sortable={true} sortKey={'resultat'}>
@@ -77,6 +79,7 @@ const Handlinger = () => <Table.ColumnHeader />;
 
 export const BenkTabellKolonneHeader = {
     Fnr,
+    Tilgang,
     Resultat,
     Status,
     Ventestatus,

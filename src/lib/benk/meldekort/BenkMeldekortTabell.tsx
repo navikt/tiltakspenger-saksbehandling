@@ -24,6 +24,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
+                    <BenkTabellKolonneHeader.Tilgang />
                     <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.type}>
                         {'Type'}
                     </Table.ColumnHeader>
@@ -50,10 +51,8 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
 
                     return (
                         <Table.Row shadeOnHover={false} key={behandling.id}>
-                            <BenkTabellCelle.Fnr
-                                fnr={behandling.fnr}
-                                saksnummer={behandling.saksnummer}
-                            />
+                            <BenkTabellCelle.Fnr behandling={behandling} />
+                            <BenkTabellCelle.Tilgang behandling={behandling} />
                             <Table.DataCell>
                                 {benkMeldekortTypeTekst[behandling.type]}
                             </Table.DataCell>
@@ -63,7 +62,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                                     erUnderkjent={behandling.erUnderkjent}
                                 />
                             </Table.DataCell>
-                            <BenkTabellCelle.Ventestatus ventestatus={behandling.ventestatus} />
+                            <BenkTabellCelle.Ventestatus behandling={behandling} />
                             <BenkTabellCelle.Meldeperiode
                                 meldeperioder={behandling.meldeperioder}
                             />
@@ -75,7 +74,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                             <BenkTabellCelle.Tildelt
                                 ident={erMeldekortbehandling ? behandling.beslutter : '-'}
                             />
-                            <Table.DataCell align={'right'}>
+                            <BenkTabellCelle.Handlinger behandling={behandling}>
                                 {behandling.type === BenkBehandlingstype.MELDEKORTBEHANDLING ? (
                                     <HStack
                                         gap={'space-8'}
@@ -105,7 +104,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                                         {'Åpne'}
                                     </InternLenkeKnapp>
                                 )}
-                            </Table.DataCell>
+                            </BenkTabellCelle.Handlinger>
                         </Table.Row>
                     );
                 })}

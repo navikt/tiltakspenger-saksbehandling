@@ -1,5 +1,10 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
-import { BenkBehandlingsstatus, BenkSorteringRetning, BenkVentestatus } from '../typer/felles';
+import {
+    BenkBehandlingsstatus,
+    BenkOppsummering,
+    BenkSorteringRetning,
+    BenkVentestatus,
+} from '../typer/felles';
 import { BenkMeldekortType, benkMeldekortTyper } from '../typer/meldekort';
 import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
 import { isValueInRecord } from '~/utils/object';
@@ -96,4 +101,21 @@ export const kanFortsetteBenkRad = (
         default:
             return false;
     }
+};
+
+/**
+ * Kort oppsummering av radene på siden, satt sammen av delene som er større enn null.
+ * Er alle null har oppsummeringen ingenting å fortelle, og linja skal ikke vises.
+ */
+export const benkOppsummeringTekst = (oppsummering: BenkOppsummering): Nullable<string> => {
+    const deler = [
+        { antall: oppsummering.antallUtenTilgang, tekst: 'uten tilgang' },
+        { antall: oppsummering.antallSkjermet, tekst: 'skjermet' },
+        { antall: oppsummering.antallKode6, tekst: 'med strengt fortrolig adresse' },
+        { antall: oppsummering.antallKode7, tekst: 'med fortrolig adresse' },
+    ]
+        .filter(({ antall }) => antall > 0)
+        .map(({ antall, tekst }) => `${antall} ${tekst}`);
+
+    return deler.length === 0 ? null : deler.join(' · ');
 };

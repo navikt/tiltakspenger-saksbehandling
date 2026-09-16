@@ -37,8 +37,66 @@ export type BenkVentestatus = {
     frist: Nullable<string>;
 };
 
+export enum BenkTilgangsvurdering {
+    HAR_TILGANG = 'HAR_TILGANG',
+    HAR_IKKE_TILGANG = 'HAR_IKKE_TILGANG',
+}
+
+/**
+ * Grunnene backend kan oppgi for en rad uten tilgang. Verdiene er benkens egen
+ * kontrakt (`BenkTilgangsårsakDTO`), ikke Tilgangsmaskinens avvisningskoder.
+ */
+export enum BenkTilgangsårsak {
+    STRENGT_FORTROLIG_ADRESSE = 'STRENGT_FORTROLIG_ADRESSE',
+    STRENGT_FORTROLIG_UTLAND = 'STRENGT_FORTROLIG_UTLAND',
+    FORTROLIG_ADRESSE = 'FORTROLIG_ADRESSE',
+    SKJERMET = 'SKJERMET',
+    HABILITET = 'HABILITET',
+    VERGEMÅL = 'VERGEMÅL',
+    GEOGRAFISK = 'GEOGRAFISK',
+    UKJENT_BOSTED = 'UKJENT_BOSTED',
+    PERSON_UTLAND = 'PERSON_UTLAND',
+    AVDØD = 'AVDØD',
+    /** Backend setter denne når Tilgangsmaskinen avviste med en kode vi ikke kjenner. */
+    UKJENT = 'UKJENT',
+}
+
+export type BenkTilgang =
+    | {
+          vurdering: BenkTilgangsvurdering.HAR_TILGANG;
+          grunn: null;
+      }
+    | {
+          vurdering: BenkTilgangsvurdering.HAR_IKKE_TILGANG;
+          grunn: {
+              årsak: BenkTilgangsårsak;
+              begrunnelse: string;
+          };
+      };
+
+/**
+ * Markørene utledes fra regelen Tilgangsmaskinen avviste tilgangen med, og er derfor bare satt
+ * på rader uten tilgang - benken slår ikke opp PDL eller skjermingsregisteret.
+ * Tilgangsmaskinen rapporterer den første regelen som avviser, så en person som både er skjermet
+ * og har strengt fortrolig adresse får bare kode6.
+ */
+export type BenkPersonmarkører = {
+    skjermet: boolean;
+    kode6: boolean;
+    kode7: boolean;
+};
+
+export type BenkOppsummering = {
+    antallMedTilgang: number;
+    antallUtenTilgang: number;
+    antallSkjermet: number;
+    antallKode6: number;
+    antallKode7: number;
+};
+
 /**
  * Fellesfelt for alle rader i benken, uavhengig av behandlingstype.
+ * Rader uten tilgang kommer med sladdet `fnr` og `ventestatus.begrunnelse` og tom `gyldigeKommandoer`.
  */
 export type BenkBehandlingBase = {
     type: BenkBehandlingstype;
@@ -52,7 +110,12 @@ export type BenkBehandlingBase = {
     beslutter: Nullable<string>;
     erUnderkjent: boolean;
     ventestatus: BenkVentestatus;
+    tilgang: BenkTilgang;
+    personmarkører: BenkPersonmarkører;
 };
+
+export const harTilgangTilBenkRad = (behandling: Pick<BenkBehandlingBase, 'tilgang'>): boolean =>
+    behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;
 
 export enum BenkSorteringRetning {
     ASC = 'ASC',
@@ -84,14 +147,14 @@ export type BenkRequestBody = {
  *
  * [side] er siden som ble spurt om (0-basert) og [sideantall] den faste
  * sidestørrelsen - antall sider er `totalAntall / sideantall`, rundet opp.
- * Tilgangsfiltrering skjer etter pagineringen, så en side kan vise færre
- * enn `sideantall` rader.
+ *
+ * [oppsummering] teller radene på denne siden, med tilgang og markører.
  */
 export type BenkOversikt<Behandling> = {
     behandlinger: Behandling[];
     totalAntall: number;
     totalAntallUfiltrert: number;
-    antallFiltrertPgaTilgang: number;
+    oppsummering: BenkOppsummering;
     side: number;
     sideantall: number;
     /** Identene tildelt en rad i fanen, ufiltrert - valg i nedtrekkslisten for saksbehandler/beslutter */

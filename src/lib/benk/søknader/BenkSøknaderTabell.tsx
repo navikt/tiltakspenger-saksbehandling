@@ -20,6 +20,7 @@ export const BenkSøknaderTabell = ({ behandlinger, aktivSortering }: Props) => 
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
+                    <BenkTabellKolonneHeader.Tilgang />
                     <BenkTabellKolonneHeader.Resultat />
                     <BenkTabellKolonneHeader.Status />
                     <Table.ColumnHeader sortable={true} sortKey={BenkSøknaderKolonne.søknadstype}>
@@ -36,10 +37,8 @@ export const BenkSøknaderTabell = ({ behandlinger, aktivSortering }: Props) => 
             <Table.Body>
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
-                        <BenkTabellCelle.Fnr
-                            fnr={behandling.fnr}
-                            saksnummer={behandling.saksnummer}
-                        />
+                        <BenkTabellCelle.Fnr behandling={behandling} />
+                        <BenkTabellCelle.Tilgang behandling={behandling} />
                         <BenkTabellCelle.Resultat behandling={behandling} />
                         <Table.DataCell>
                             <BenkStatusTag
@@ -48,7 +47,7 @@ export const BenkSøknaderTabell = ({ behandlinger, aktivSortering }: Props) => 
                             />
                         </Table.DataCell>
                         <Table.DataCell>{søknadstypeTekst[behandling.søknadstype]}</Table.DataCell>
-                        <BenkTabellCelle.Ventestatus ventestatus={behandling.ventestatus} />
+                        <BenkTabellCelle.Ventestatus behandling={behandling} />
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.kravtidspunkt} />
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
