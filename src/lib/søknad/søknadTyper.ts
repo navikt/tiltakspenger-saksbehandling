@@ -9,7 +9,6 @@ export enum SøknadshendelseType {
     GJENÅPNET = 'GJENÅPNET',
 }
 
-/** Historikken over avbrytelser og gjenåpninger av søknaden, i kronologisk rekkefølge. */
 export interface Søknadshendelse {
     type: SøknadshendelseType;
     tidspunkt: string;
@@ -29,6 +28,7 @@ interface SøknadBase {
     opprettet: string;
     tidsstempelHosOss: string;
     antallVedlegg: number;
+    /** Historikken over avbrytelser og gjenåpninger av søknaden, i kronologisk rekkefølge. */
     avbrutt: Søknadshendelse[];
     kanInnvilges: boolean;
     svar: Spørsmålsbesvarelser;
