@@ -60,6 +60,9 @@ export const BenkVisningProvider = ({ tabData, children }: Props) => {
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setValgtTildeling(new Set());
+    }, [valgtTildelingType]);
+
+    useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setValgtTildelingType(null);
     }, [tabData]);
