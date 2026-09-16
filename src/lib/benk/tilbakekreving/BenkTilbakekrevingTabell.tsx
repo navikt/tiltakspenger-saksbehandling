@@ -22,7 +22,6 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Tilgang />
                     <Table.ColumnHeader sortable={true} sortKey={BenkTilbakekrevingKolonne.kilde}>
                         {'Kilde'}
                     </Table.ColumnHeader>
@@ -47,7 +46,6 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
                         <BenkTabellCelle.Fnr behandling={behandling} />
-                        <BenkTabellCelle.Tilgang behandling={behandling} />
                         <Table.DataCell>
                             {benkTilbakekrevingKildeTekst[behandling.kilde]}
                         </Table.DataCell>

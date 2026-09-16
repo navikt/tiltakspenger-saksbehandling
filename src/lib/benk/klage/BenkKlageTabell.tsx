@@ -24,7 +24,6 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Tilgang />
                     <BenkTabellKolonneHeader.Resultat />
                     <BenkTabellKolonneHeader.Status />
                     <BenkTabellKolonneHeader.Ventestatus />
@@ -38,7 +37,6 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
                         <BenkTabellCelle.Fnr behandling={behandling} />
-                        <BenkTabellCelle.Tilgang behandling={behandling} />
                         <BenkTabellCelle.Resultat behandling={behandling} />
                         <Table.DataCell>
                             <BenkStatusTag

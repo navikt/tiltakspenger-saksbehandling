@@ -3,3 +3,9 @@
     margin: 0;
     padding: 0;
 }
+
+.tilgangWarning {
+    color: var(--ax-warning-600);
+    width: 25px;
+    height: 25px;
+}

@@ -1,4 +1,4 @@
-import {BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
@@ -34,6 +34,9 @@ import { useBenkVisning } from './filter/BenkVisningContext';
 import { kanFortsetteBenkRad } from '../utils/benkUtils';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { BenkTildelCheckbox } from '~/lib/benk/felles/tildel-flere/BenkTildelCheckbox';
+import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+
 import style from './BenkTabellCelle.module.css';
 
 /**
@@ -48,31 +51,34 @@ type BenkRadFellesfelt = Pick<
 
 /** Backend sladder fnr på rader uten tilgang, så teksten kommer alltid fra `fnr` - uten lenke og kopiering */
 const Fnr = ({ behandling }: { behandling: BenkRadFellesfelt }) => {
-    const fnrTekst = sladdbarTekst(behandling.fnr);
-
-    if (!harTilgangTilBenkRad(behandling)) {
-        return <Table.HeaderCell scope={'row'}>{fnrTekst}</Table.HeaderCell>;
-    }
+    const fnrTekst = sladdbarTekst(behandling.fnr, '[Fnr sladdet]');
 
     return (
         <Table.HeaderCell scope={'row'}>
             <HStack align={'center'} gap={'space-4'} wrap={false}>
-                <InternLenke href={personoversiktUrl(behandling.saksnummer)}>
-                    {fnrTekst}
-                </InternLenke>
-                {!erSladdet(behandling.fnr) && (
-                    <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
+                {harTilgangTilBenkRad(behandling) ? (
+                    <>
+                        <InternLenke href={personoversiktUrl(behandling.saksnummer)}>
+                            {fnrTekst}
+                        </InternLenke>
+                        {!erSladdet(behandling.fnr) && (
+                            <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
+                        )}
+                    </>
+                ) : (
+                    fnrTekst
                 )}
+                <TilgangVarsel behandling={behandling} />
             </HStack>
         </Table.HeaderCell>
     );
 };
 
 /**
- * Tilgang og personmarkører for raden. Bare merkelapper som bærer informasjon vises -
- * en rad med tilgang og uten markører viser '-', slik de andre cellene gjør for tomme verdier.
+ * Tilgang og personmarkører for raden, vist som helptekst i fnr-kolonnen.
+ * Viser ingenting for en rad med tilgang og uten markører.
  */
-const Tilgang = ({ behandling }: { behandling: BenkRadFellesfelt }) => {
+const TilgangVarsel = ({ behandling }: { behandling: BenkRadFellesfelt }) => {
     const { tilgang, personmarkører } = behandling;
     const harIkkeTilgang = tilgang.vurdering === BenkTilgangsvurdering.HAR_IKKE_TILGANG;
 
@@ -84,32 +90,30 @@ const Tilgang = ({ behandling }: { behandling: BenkRadFellesfelt }) => {
     ].filter((merkelapp) => merkelapp !== null);
 
     if (merkelapper.length === 0) {
-        return <Table.DataCell>{'-'}</Table.DataCell>;
+        return null;
     }
 
     return (
-        <Table.DataCell>
-            <VStack gap={'space-4'}>
-                <HStack
-                    as={'ul'}
-                    gap={'space-4'}
-                    wrap={true}
-                    className={style.statusliste}
-                    aria-label={'Tilgang og markeringer'}
-                >
-                    {merkelapper.map((merkelapp) => (
-                        <li key={merkelapp}>
-                            <Tag data-color={'danger'} variant={'outline'} size={'small'}>
-                                {merkelapp}
-                            </Tag>
-                        </li>
-                    ))}
-                </HStack>
-                {tilgang.vurdering === BenkTilgangsvurdering.HAR_IKKE_TILGANG && (
-                    <BodyShort size={'small'}>{tilgang.grunn.begrunnelse}</BodyShort>
-                )}
-            </VStack>
-        </Table.DataCell>
+        <RichTooltip
+            content={
+                <VStack gap={'space-8'}>
+                    <VStack as={'ul'} gap={'space-2'} className={style.statusliste}>
+                        {merkelapper.map((merkelapp) => (
+                            <li key={merkelapp}>
+                                <Tag data-color={'danger'} variant={'outline'} size={'small'}>
+                                    {merkelapp}
+                                </Tag>
+                            </li>
+                        ))}
+                    </VStack>
+                    {harIkkeTilgang && (
+                        <BodyShort size={'small'}>{tilgang.grunn.begrunnelse}</BodyShort>
+                    )}
+                </VStack>
+            }
+        >
+            <ExclamationmarkTriangleFillIcon className={style.tilgangWarning} />
+        </RichTooltip>
     );
 };
 
@@ -273,7 +277,6 @@ const RammebehandlingHandlinger = ({
 
 export const BenkTabellCelle = {
     Fnr,
-    Tilgang,
     Resultat,
     Ventestatus,
     Tidspunkt,

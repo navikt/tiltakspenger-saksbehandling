@@ -19,8 +19,6 @@ const Fnr = () => (
     </Table.ColumnHeader>
 );
 
-const Tilgang = () => <Table.ColumnHeader>{'Tilgang og markeringer'}</Table.ColumnHeader>;
-
 const Resultat = () => (
     <Table.ColumnHeader sortable={true} sortKey={'resultat'}>
         {'Resultat'}
@@ -96,7 +94,6 @@ const Handlinger = ({ behandlinger, tab }: HandlingerProps) => (
 
 export const BenkTabellKolonneHeader = {
     Fnr,
-    Tilgang,
     Resultat,
     Status,
     Ventestatus,

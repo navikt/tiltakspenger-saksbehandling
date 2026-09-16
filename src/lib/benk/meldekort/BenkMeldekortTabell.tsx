@@ -25,7 +25,6 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
             <Table.Header>
                 <Table.Row>
                     <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Tilgang />
                     <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.type}>
                         {'Type'}
                     </Table.ColumnHeader>
@@ -53,7 +52,6 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                     return (
                         <Table.Row shadeOnHover={false} key={behandling.id}>
                             <BenkTabellCelle.Fnr behandling={behandling} />
-                            <BenkTabellCelle.Tilgang behandling={behandling} />
                             <Table.DataCell>
                                 {benkMeldekortTypeTekst[behandling.type]}
                             </Table.DataCell>
