@@ -1,5 +1,6 @@
 import { ActionMenu, Button } from '@navikt/ds-react';
 import {
+    ArrowCirclepathIcon,
     ArrowUndoIcon,
     ArrowsSquarepathIcon,
     MenuElipsisVerticalIcon,
@@ -26,7 +27,8 @@ export type BehandlingsmenyDialog =
     | 'settPåVent'
     | 'overta'
     | 'angreSendTilBeslutning'
-    | 'avslutt';
+    | 'avslutt'
+    | 'gjenåpne';
 
 export type BehandlingsmenyKapabiliteter = Record<BehandlingsmenyDialog, boolean>;
 
@@ -49,6 +51,7 @@ export const behandlingsmenyKapabiliteter = (
         settPåVent: harKommando(Kommando.SettPåVent),
         overta: harKommando(Kommando.OvertaSaksbehandler, Kommando.OvertaBeslutter),
         avslutt: harKommando(Kommando.Avbryt),
+        gjenåpne: harKommando(Kommando.Gjenåpne),
     };
 };
 
@@ -77,6 +80,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
     const kanSettePåVent = kapabiliteter.settPåVent;
     const kanOverta = kapabiliteter.overta;
     const kanAvslutte = kapabiliteter.avslutt;
+    const kanGjenåpne = kapabiliteter.gjenåpne;
 
     return (
         <ActionMenu>
@@ -142,6 +146,15 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         onSelect={() => onVelg('overta')}
                     >
                         {'Overta behandling'}
+                    </ActionMenu.Item>
+                )}
+
+                {kanGjenåpne && (
+                    <ActionMenu.Item
+                        icon={<ArrowCirclepathIcon aria-hidden />}
+                        onSelect={() => onVelg('gjenåpne')}
+                    >
+                        {'Gjenåpne behandling'}
                     </ActionMenu.Item>
                 )}
 

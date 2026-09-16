@@ -21,6 +21,7 @@ import { RammebehandlingLeggTilbake } from '~/lib/rammebehandling/felles/meny/ha
 import { RammebehandlingSettPåVent } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingSettPåVent';
 import { RammebehandlingOverta } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingOverta';
 import { RammebehandlingAvslutt } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAvslutt';
+import { RammebehandlingGjenåpne } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingGjenåpne';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
@@ -197,6 +198,22 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                         PersonoversiktTab.AvsluttedeBehandlinger,
                         `${erRevurdering ? 'Revurderingen' : 'Behandlingen'} er avsluttet`,
                     )}
+                />
+            )}
+
+            {kapabiliteter.gjenåpne && (
+                <RammebehandlingGjenåpne
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
+                    åpen={aktivDialog === 'gjenåpne'}
+                    onClose={onClose}
+                    onSuccess={(nyBehandling) => {
+                        onClose();
+                        navigateWithNotification(
+                            behandlingUrl({ saksnummer: sak.saksnummer, id: nyBehandling.id }),
+                            'Søknaden er gjenåpnet, og en ny behandling er opprettet',
+                        );
+                    }}
                 />
             )}
 
