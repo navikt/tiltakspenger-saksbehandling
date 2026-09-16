@@ -94,7 +94,7 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
                             </Button>
                         )}
                         <Dialog.CloseTrigger>
-                            <Button>Lukk</Button>
+                            <Button variant={'secondary'}>Lukk</Button>
                         </Dialog.CloseTrigger>
                     </Dialog.Footer>
                 </Dialog.Popup>
