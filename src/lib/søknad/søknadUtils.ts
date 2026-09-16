@@ -1,9 +1,16 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Søknad, Søknadshendelse, SøknadshendelseType } from '~/lib/søknad/søknadTyper';
 
-/** Siste hendelse er en gjenåpning dersom søknaden ble tatt opp igjen etter å ha vært avbrutt. */
-export const hentGjenåpningAvSøknad = (søknad: Søknad): Nullable<Søknadshendelse> => {
-    const sisteHendelse = søknad.avbrutt.at(-1);
-
-    return sisteHendelse?.type === SøknadshendelseType.GJENÅPNET ? sisteHendelse : null;
-};
+/**
+ * Gjenåpningen som ligger bak en behandling, altså den siste som skjedde før behandlingen ble
+ * opprettet. Behandlinger som ble opprettet før den første gjenåpningen har ingen.
+ */
+export const hentGjenåpningForBehandling = (
+    søknad: Søknad,
+    behandlingOpprettet: string,
+): Nullable<Søknadshendelse> =>
+    søknad.avbrutt.findLast(
+        (hendelse) =>
+            hendelse.type === SøknadshendelseType.GJENÅPNET &&
+            hendelse.tidspunkt <= behandlingOpprettet,
+    ) ?? null;

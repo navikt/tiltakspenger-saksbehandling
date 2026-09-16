@@ -1,4 +1,5 @@
 import {
+    Søknadsbehandling,
     SøknadsbehandlingInnvilgelse,
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
@@ -19,7 +20,11 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandling,
+    RammebehandlingId,
+    Rammebehandlingstype,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
@@ -115,6 +120,19 @@ export const hentRammebehandling = (sak: SakProps, id: RammebehandlingId): Ramme
         `Fant ikke rammebehandling med id ${id}`,
     );
 };
+
+/** Alle søknadsbehandlinger som er opprettet på samme søknad, eldst først. */
+export const hentSøknadsbehandlingerForSøknad = (
+    sak: SakProps,
+    søknadId: SøknadId,
+): Søknadsbehandling[] =>
+    sak.rammebehandlinger
+        .filter(
+            (behandling): behandling is Søknadsbehandling =>
+                behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING &&
+                behandling.søknad.id === søknadId,
+        )
+        .toSorted((a, b) => a.opprettet.localeCompare(b.opprettet));
 
 export const hentRammevedtakMedBehandlinger = (sak: SakProps): RammevedtakMedBehandling[] => {
     return sak.alleRammevedtak.map((vedtak) => {

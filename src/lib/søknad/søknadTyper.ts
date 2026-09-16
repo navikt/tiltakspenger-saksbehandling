@@ -13,7 +13,7 @@ export interface Søknadshendelse {
     type: SøknadshendelseType;
     tidspunkt: string;
     utførtAv: string;
-    begrunnelse: Nullable<string>;
+    begrunnelse: SladdbarVerdi<Nullable<string>>;
 }
 
 interface SøknadBase {
