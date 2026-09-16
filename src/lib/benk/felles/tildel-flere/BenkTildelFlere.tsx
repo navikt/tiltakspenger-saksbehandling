@@ -31,7 +31,6 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
     const nyttFilter = parseBenkFilterForTab(tab, router.query);
 
     const tildelAlle = () => {
-        console.log(valgtTildeling);
         trigger({
             behandlinger: valgtTildeling.map((b) => ({ behandlingId: b.id, sakId: b.sakId })),
             returnerSaker: false,
