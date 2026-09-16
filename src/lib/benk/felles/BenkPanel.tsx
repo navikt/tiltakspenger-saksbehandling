@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Loader, VStack } from '@navikt/ds-react';
 import { BenkOversikt } from '../typer/felles';
 import { benkOppsummeringTekst } from '../utils/benkUtils';
 import { BenkPaginering } from './BenkPaginering';
@@ -8,10 +8,11 @@ type Props = {
     oversikt: BenkOversikt<unknown>;
     filter: ReactNode;
     tabell: ReactNode;
+    laster?: boolean;
 };
 
 /** Oppbygningen alle fanene deler: filter øverst, så tellinger, så tabellen med paginering over og under */
-export const BenkPanel = ({ oversikt, filter, tabell }: Props) => {
+export const BenkPanel = ({ oversikt, filter, tabell, laster = false }: Props) => {
     const { behandlinger, totalAntall, totalAntallUfiltrert, oppsummering } = oversikt;
 
     const oppsummeringstekst = benkOppsummeringTekst(oppsummering);
@@ -32,7 +33,14 @@ export const BenkPanel = ({ oversikt, filter, tabell }: Props) => {
                 <BenkPaginering oversikt={oversikt} />
             </HStack>
 
-            {tabell}
+            {laster ? (
+                <HStack gap={'space-8'}>
+                    <Loader size={'xsmall'} />
+                    <BodyShort>{'Laster behandlinger...'}</BodyShort>
+                </HStack>
+            ) : (
+                tabell
+            )}
 
             <HStack justify={'center'}>
                 <BenkPaginering oversikt={oversikt} />

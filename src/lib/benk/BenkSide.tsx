@@ -90,11 +90,22 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
     // Loaderen nullstilles når navigasjonen er ferdig (eller feiler)
     useEffect(() => {
         const nullstillLaster = () => setLaster(false);
+        const oppdaterLaster = (pathname: string) => {
+            const url = new URL(pathname, window.location.origin);
+
+            if (url.pathname === '/') {
+                setLaster(true);
+            }
+        };
+
         router.events.on('routeChangeComplete', nullstillLaster);
         router.events.on('routeChangeError', nullstillLaster);
+        router.events.on('routeChangeStart', oppdaterLaster);
+
         return () => {
             router.events.off('routeChangeComplete', nullstillLaster);
             router.events.off('routeChangeError', nullstillLaster);
+            router.events.off('routeChangeStart', oppdaterLaster);
         };
     }, [router.events]);
 
@@ -115,9 +126,6 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
             <Tabs
                 value={tab}
                 onChange={(nyTab) => {
-                    if (nyTab !== tab) {
-                        setLaster(true);
-                    }
                     router.push({ query: { tab: nyTab as BenkTab } });
                 }}
             >
@@ -147,6 +155,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
             <BenkVisningProvider tabData={tabData}>
                 {tabData.tab === BenkTab.SØKNADER && (
                     <BenkPanel
+                        laster={laster}
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkSøknaderFilterSkjema
@@ -165,6 +174,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 )}
                 {tabData.tab === BenkTab.REVURDERINGER && (
                     <BenkPanel
+                        laster={laster}
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkRevurderingerFilterSkjema
@@ -183,6 +193,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 )}
                 {tabData.tab === BenkTab.MELDEKORT && (
                     <BenkPanel
+                        laster={laster}
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkMeldekortFilterSkjema
@@ -201,6 +212,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 )}
                 {tabData.tab === BenkTab.KLAGE && (
                     <BenkPanel
+                        laster={laster}
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkKlageFilterSkjema
@@ -219,6 +231,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 )}
                 {tabData.tab === BenkTab.TILBAKEKREVING && (
                     <BenkPanel
+                        laster={laster}
                         oversikt={tabData.data.oversikt}
                         filter={
                             <BenkTilbakekrevingFilterSkjema
