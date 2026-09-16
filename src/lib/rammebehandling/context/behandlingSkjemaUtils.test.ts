@@ -12,6 +12,7 @@ import {
 import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
+    TiltakDeltakerstatus,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
@@ -23,7 +24,7 @@ const tiltaksdeltakelse = (id: string, periode: Periode): Tiltaksdeltakelse => (
     typeKode: 'AMO',
     deltagelseFraOgMed: periode.fraOgMed,
     deltagelseTilOgMed: periode.tilOgMed,
-    deltakelseStatus: 'DELTAR',
+    deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,
     antallDagerPerUke: null,
     kilde: TiltaksdeltakelseKilde.ARENA,

@@ -1,5 +1,6 @@
 import { Periode } from '~/types/Periode';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { TiltakDeltakerstatus } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, PeriodeSpm } from '../søknadTyper';
 
 export type ManueltRegistrertSøknad = {
@@ -35,6 +36,7 @@ export type ManuellSøknadTiltak = {
     deltakelseFraOgMed?: string;
     deltakelseTilOgMed?: string;
     visningsnavn: SladdbarVerdi<string>;
+    status: TiltakDeltakerstatus;
 };
 
 export type ManuellSøknadJaNeiSpm = Partial<JaNeiSpm>;

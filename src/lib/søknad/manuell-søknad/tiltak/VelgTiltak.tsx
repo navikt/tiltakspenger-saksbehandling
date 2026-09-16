@@ -14,6 +14,7 @@ import { formaterDatotekst } from '~/utils/date';
 import { useHentTiltaksdeltakelser } from '~/lib/søknad/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
+import { tiltakDeltakerstatusTekst } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 
 type Props = {
     sakId: SakId;
@@ -35,9 +36,14 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
     const formatLabelForTiltakValg = (tiltak: ManuellSøknadTiltak) => {
         const periodeTekst =
             tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
-                ? ` (${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)})`
-                : '';
-        return `${sladdbarTekst(tiltak.visningsnavn)}${periodeTekst}`;
+                ? `${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)}`
+                : null;
+
+        const detaljer = [periodeTekst, tiltakDeltakerstatusTekst[tiltak.status]]
+            .filter(Boolean)
+            .join(', ');
+
+        return `${sladdbarTekst(tiltak.visningsnavn)} (${detaljer})`;
     };
 
     const søknadsperiode = useWatch({ name: 'manueltSattSøknadsperiode' }) as Periode;

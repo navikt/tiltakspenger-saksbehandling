@@ -3,6 +3,7 @@ import { delOppTiltaksdeltakelser } from './tiltaksdeltakelseVisning';
 import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
+    TiltakDeltakerstatus,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 
 const tiltak = (
@@ -16,7 +17,7 @@ const tiltak = (
     typeKode: 'AMO',
     deltagelseFraOgMed,
     deltagelseTilOgMed,
-    deltakelseStatus: 'DELTAR',
+    deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,
     antallDagerPerUke: null,
     kilde: TiltaksdeltakelseKilde.ARENA,
