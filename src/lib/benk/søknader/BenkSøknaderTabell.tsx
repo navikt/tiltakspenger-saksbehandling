@@ -6,6 +6,7 @@ import { BenkStatusTag } from '../felles/BenkStatusTag';
 import { useBenkSortering } from '../felles/useBenkSortering';
 import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
 import { BenkTabellCelle } from '../felles/BenkTabellCelle';
+import { BenkTab } from '~/lib/benk/typer/tabs';
 
 type Props = {
     behandlinger: BenkSøknadsbehandling[];
@@ -31,7 +32,10 @@ export const BenkSøknaderTabell = ({ behandlinger, aktivSortering }: Props) => 
                     <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Saksbehandler />
                     <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger behandlinger={behandlinger} />
+                    <BenkTabellKolonneHeader.Handlinger
+                        behandlinger={behandlinger}
+                        tab={BenkTab.SØKNADER}
+                    />
                 </Table.Row>
             </Table.Header>
             <Table.Body>

@@ -68,7 +68,7 @@ type TilbakekrevingData = {
  * Dataene for den aktive fanen. Ligger som ett felt (ikke spredt utover props)
  * slik at diskrimineringen på `tab` bevares gjennom getServerSideProps.
  */
-type BenkTabData =
+export type BenkTabData =
     | { tab: BenkTab.SØKNADER; data: SøknaderData }
     | { tab: BenkTab.REVURDERINGER; data: RevurderingerData }
     | { tab: BenkTab.MELDEKORT; data: MeldekortData }
@@ -144,7 +144,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                 </Tabs.List>
             </Tabs>
 
-            <BenkVisningProvider skjulVentestatus={tabData.data.aktivtFilter.skjulPåVent}>
+            <BenkVisningProvider tabData={tabData}>
                 {tabData.tab === BenkTab.SØKNADER && (
                     <BenkPanel
                         oversikt={tabData.data.oversikt}

@@ -1,6 +1,8 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
 import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
+import { BenkTab } from '~/lib/benk/typer/tabs';
+import { BenkTabData } from '~/lib/benk/BenkSide';
 
 type BenkVisning = {
     skjulVentestatus: boolean;
@@ -24,17 +26,19 @@ const BenkVisningContext = createContext<BenkVisning>({
 });
 
 type Props = PropsWithChildren<{
-    skjulVentestatus: boolean;
+    tabData: BenkTabData;
 }>;
 
-type BehandlingSomKanBatchTildeles = BenkSøknadsbehandling | BenkRevurdering;
+export type BehandlingSomKanBatchTildeles = BenkSøknadsbehandling | BenkRevurdering;
+
+export type BenkTabsMedBatchTildeling = BenkTab.SØKNADER | BenkTab.REVURDERINGER;
 
 /**
  * Visningsvalg fra det aktive filteret som gjelder alle fanenes tabeller.
  * Lar delte kolonner (Ventestatus) skjules uten prop-drilling gjennom hver tabell,
  * og sørger for at kolonneoverskrift og celler alltid er i sync.
  */
-export const BenkVisningProvider = ({ skjulVentestatus, children }: Props) => {
+export const BenkVisningProvider = ({ tabData, children }: Props) => {
     const [valgtTildelingType, setValgtTildelingType] = useState<TildelingType | null>(null);
     const [valgtTildeling, setValgtTildeling] = useState<
         ReadonlySet<BehandlingSomKanBatchTildeles>
@@ -53,10 +57,17 @@ export const BenkVisningProvider = ({ skjulVentestatus, children }: Props) => {
         }
     };
 
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setValgtTildeling(new Set());
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setValgtTildelingType(null);
+    }, [tabData]);
+
     return (
         <BenkVisningContext.Provider
             value={{
-                skjulVentestatus,
+                skjulVentestatus: tabData.data.aktivtFilter.skjulPåVent,
                 valgtTildelingType: valgtTildelingType,
                 setValgtTildelingType: setValgtTildelingType,
                 valgtTildeling: [...valgtTildeling],

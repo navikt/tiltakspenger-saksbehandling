@@ -2,80 +2,94 @@ import { BenkTildelFlereMeny } from '~/lib/benk/felles/tildel-flere/BenkTildelFl
 import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
 import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
 import { useBenkVisning } from '~/lib/benk/felles/filter/BenkVisningContext';
-import { Button, Dialog, HStack, Loader, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useTildelRammebehandling } from '~/lib/rammebehandling/felles/tildel/useTildelRammebehandling';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
+import { useBenkFilterNavigasjon } from '~/lib/benk/felles/filter/useBenkFilterNavigasjon';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { BenkTab } from '~/lib/benk/typer/tabs';
+import { BenkBehandlingsstatus } from '~/lib/benk/typer/felles';
+import { parseBenkFilterForTab } from '~/lib/benk/utils/benkQuery';
 
 type Props = {
     behandlinger: Array<BenkSøknadsbehandling | BenkRevurdering>;
+    tab: BenkTab.SØKNADER | BenkTab.REVURDERINGER;
 };
 
-export const BenkTildelFlere = ({ behandlinger }: Props) => {
+export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
     const { valgtTildeling, valgtTildelingType, setValgtTildelingType } = useBenkVisning();
     const { trigger, isMutating, error, data } = useTildelRammebehandling();
+    const { oppdaterFilter } = useBenkFilterNavigasjon(tab);
+    const { innloggetSaksbehandler } = useSaksbehandler();
+
+    const router = useRouter();
+    const harFeilet = error && !isMutating;
+    const harTildelt = !!data;
+    const nyttFilter = parseBenkFilterForTab(tab, router.query);
 
     const tildelAlle = () => {
         console.log(valgtTildeling);
         trigger({
             behandlinger: valgtTildeling.map((b) => ({ behandlingId: b.id, sakId: b.sakId })),
             returnerSaker: false,
+        }).then((response) => {
+            if (response) {
+                oppdaterFilter({
+                    ...nyttFilter,
+                    status:
+                        valgtTildelingType === 'saksbehandler'
+                            ? BenkBehandlingsstatus.UNDER_BEHANDLING
+                            : valgtTildelingType === 'beslutter'
+                              ? BenkBehandlingsstatus.UNDER_BESLUTNING
+                              : null,
+                    saksbehandler: innloggetSaksbehandler.navIdent,
+                }).then(() => setValgtTildelingType(null));
+            }
         });
     };
 
-    const router = useRouter();
-    const harFeilet = error && !isMutating;
-    const harTildelt = !!data;
+    if (!valgtTildelingType) {
+        return <BenkTildelFlereMeny behandlinger={behandlinger} />;
+    }
 
-    return valgtTildelingType ? (
+    return (
         <HStack gap={'space-8'} justify={'end'}>
-            <Dialog
-                onOpenChange={(vilÅpne) => {
-                    if (!vilÅpne && harTildelt) {
-                        router.reload();
-                    }
-                }}
-            >
+            <Dialog>
                 <Dialog.Trigger>
-                    <Button variant={'primary'} size={'small'}>
+                    <Button
+                        disabled={valgtTildeling.length === 0}
+                        variant={'primary'}
+                        size={'small'}
+                    >
                         Tildel
                     </Button>
                 </Dialog.Trigger>
                 <Dialog.Popup>
                     <Dialog.Header>
                         <Dialog.Title>
-                            {harTildelt
-                                ? `Du har blitt tildelt ${valgtTildeling.length} behandlinger`
-                                : `Tildel meg ${valgtTildeling.length} behandlinger`}
+                            {`Tildel meg ${valgtTildeling.length} behandlinger`}
                         </Dialog.Title>
                     </Dialog.Header>
                     <Dialog.Body>
+                        <BodyLong>
+                            Du vil tildeles følgende behandlinger. Hvis tildelingen er vellykket vil
+                            du videresendes til oversikt over dine tildelte behandlinger.
+                        </BodyLong>
                         <VStack as={'ul'} gap={'space-4'}>
-                            {harTildelt
-                                ? data.behandlinger.map((b) => {
-                                      const url = behandlingUrl({
-                                          id: b.behandlingId,
-                                          saksnummer: b.saksnummer,
-                                      });
-                                      return (
-                                          <li key={b.behandlingId}>
-                                              <InternLenke href={url}>{url}</InternLenke>
-                                          </li>
-                                      );
-                                  })
-                                : valgtTildeling.map((b) => {
-                                      const url = behandlingUrl({
-                                          id: b.id,
-                                          saksnummer: b.saksnummer,
-                                      });
-                                      return (
-                                          <li key={b.id}>
-                                              <InternLenke href={url}>{url}</InternLenke>
-                                          </li>
-                                      );
-                                  })}
+                            {valgtTildeling.map((b) => {
+                                const url = behandlingUrl({
+                                    id: b.id,
+                                    saksnummer: b.saksnummer,
+                                });
+                                return (
+                                    <li key={b.id}>
+                                        <InternLenke href={url}>{url}</InternLenke>
+                                    </li>
+                                );
+                            })}
                         </VStack>
                         {harFeilet && (
                             <Infokort
@@ -108,7 +122,5 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
                 Avbryt
             </Button>
         </HStack>
-    ) : (
-        <BenkTildelFlereMeny behandlinger={behandlinger} />
     );
 };

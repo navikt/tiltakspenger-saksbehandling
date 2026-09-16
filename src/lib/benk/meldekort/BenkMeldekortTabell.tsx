@@ -10,6 +10,7 @@ import { BenkBehandlingMeny } from '../felles/BenkBehandlingMeny';
 import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
 import { BenkTabellCelle } from '../felles/BenkTabellCelle';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
+import { BenkTab } from '~/lib/benk/typer/tabs';
 
 type Props = {
     behandlinger: BenkMeldekort[];
@@ -41,7 +42,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                     <BenkTabellKolonneHeader.Beløp />
                     <BenkTabellKolonneHeader.Saksbehandler />
                     <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger />
+                    <BenkTabellKolonneHeader.Handlinger tab={BenkTab.MELDEKORT} />
                 </Table.Row>
             </Table.Header>
             <Table.Body>

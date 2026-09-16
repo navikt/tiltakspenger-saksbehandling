@@ -9,6 +9,7 @@ import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
 import { BenkTabellCelle } from '../felles/BenkTabellCelle';
+import { BenkTab } from '~/lib/benk/typer/tabs';
 
 type Props = {
     behandlinger: BenkKlagebehandling[];
@@ -30,7 +31,7 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                     <BenkTabellKolonneHeader.Kravtidspunkt />
                     <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Saksbehandler />
-                    <BenkTabellKolonneHeader.Handlinger />
+                    <BenkTabellKolonneHeader.Handlinger tab={BenkTab.KLAGE} />
                 </Table.Row>
             </Table.Header>
             <Table.Body>

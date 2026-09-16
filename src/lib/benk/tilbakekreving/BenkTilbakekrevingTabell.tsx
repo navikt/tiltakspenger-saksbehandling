@@ -7,6 +7,7 @@ import { BenkTilbakekrevingStatusTag } from '../felles/BenkStatusTag';
 import { useBenkSortering } from '../felles/useBenkSortering';
 import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
 import { BenkTabellCelle } from '../felles/BenkTabellCelle';
+import { BenkTab } from '~/lib/benk/typer/tabs';
 
 type Props = {
     behandlinger: BenkTilbakekreving[];
@@ -39,7 +40,7 @@ export const BenkTilbakekrevingTabell = ({ behandlinger, aktivSortering }: Props
                     <BenkTabellKolonneHeader.SistEndret />
                     <BenkTabellKolonneHeader.Saksbehandler />
                     <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger />
+                    <BenkTabellKolonneHeader.Handlinger tab={BenkTab.TILBAKEKREVING} />
                 </Table.Row>
             </Table.Header>
             <Table.Body>

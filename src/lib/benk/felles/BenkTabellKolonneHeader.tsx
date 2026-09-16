@@ -1,7 +1,11 @@
 import { Table } from '@navikt/ds-react';
-import { useBenkVisning } from './filter/BenkVisningContext';
-import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
+import {
+    BehandlingSomKanBatchTildeles,
+    BenkTabsMedBatchTildeling,
+    useBenkVisning,
+} from './filter/BenkVisningContext';
 import { BenkTildelFlere } from '~/lib/benk/felles/tildel-flere/BenkTildelFlere';
+import { BenkTab } from '~/lib/benk/typer/tabs';
 
 /**
  * Kolonneoverskriftene som går igjen på tvers av fanene i benken.
@@ -76,10 +80,17 @@ const Beløp = () => (
     </Table.ColumnHeader>
 );
 
+type HandlingerProps = {
+    behandlinger?: BehandlingSomKanBatchTildeles[];
+    tab: BenkTab;
+};
+
 /** Den tomme kolonnen til høyre med lenker og meny */
-const Handlinger = ({ behandlinger }: { behandlinger?: BenkSøknadsbehandling[] }) => (
+const Handlinger = ({ behandlinger, tab }: HandlingerProps) => (
     <Table.ColumnHeader align={'right'}>
-        {behandlinger && <BenkTildelFlere behandlinger={behandlinger} />}
+        {behandlinger && (
+            <BenkTildelFlere behandlinger={behandlinger} tab={tab as BenkTabsMedBatchTildeling} />
+        )}
     </Table.ColumnHeader>
 );
 
