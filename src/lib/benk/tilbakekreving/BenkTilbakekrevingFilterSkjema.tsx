@@ -34,6 +34,7 @@ export const BenkTilbakekrevingFilterSkjema = ({
                     kunOverMinstebeløp: false,
                     skjulEgneTilBeslutning: false,
                     skjulPåVent: false,
+                    skjulUtenTilgang: true,
                 })
             }
             skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
@@ -42,6 +43,10 @@ export const BenkTilbakekrevingFilterSkjema = ({
             }
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
+            skjulUtenTilgang={valgtFilter.skjulUtenTilgang}
+            onSkjulUtenTilgangChange={(skjulUtenTilgang) =>
+                setValgtFilter({ ...valgtFilter, skjulUtenTilgang })
+            }
         >
             <BenkFilterSelect
                 label={'Status'}

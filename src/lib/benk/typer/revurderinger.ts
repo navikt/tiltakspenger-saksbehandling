@@ -29,4 +29,5 @@ export type BenkRevurderingerFilter = {
     saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
+    skjulUtenTilgang: boolean;
 };

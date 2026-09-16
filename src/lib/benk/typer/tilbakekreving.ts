@@ -55,4 +55,5 @@ export type BenkTilbakekrevingFilter = {
     kunOverMinstebeløp: boolean;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
+    skjulUtenTilgang: boolean;
 };

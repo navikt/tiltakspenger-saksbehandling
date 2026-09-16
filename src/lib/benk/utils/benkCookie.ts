@@ -3,7 +3,9 @@ import { Nullable } from '~/types/UtilTypes';
 import { BenkTab, erBenkTab } from '../typer/tabs';
 import {
     BenkFilterMap,
+    BENK_FILTER_SKJUL_UTEN_TILGANG,
     benkBoolskVerdi,
+    benkBoolskVerdiMedDefault,
     benkFilterTilQuery,
     harBenkFilterVerdier,
     parseBenkFilterForTab,
@@ -13,9 +15,9 @@ import {
 export const BENK_COOKIE_NAME = 'benkFiltersV2';
 
 /**
- * Filter for én fane, uten de felles valgene (saksbehandler, skjulPåVent og
- * skjulEgneTilBeslutning). Lagres løst typet; verdiene valideres med fanens
- * egen parser ved innlesing.
+ * Filter for én fane, uten de felles valgene (saksbehandler, skjulPåVent,
+ * skjulEgneTilBeslutning og skjulUtenTilgang). Lagres løst typet; verdiene
+ * valideres med fanens egen parser ved innlesing.
  */
 type LagretFilter = Record<string, string | boolean | null>;
 
@@ -27,6 +29,8 @@ export type BenkLagredeValg = {
     skjulPåVent: boolean;
     /** «Skjul egne til beslutning» er felles på tvers av fanene */
     skjulEgneTilBeslutning: boolean;
+    /** «Skjul uten tilgang» er felles på tvers av fanene, og standard på */
+    skjulUtenTilgang: boolean;
     filtre: Partial<Record<BenkTab, LagretFilter>>;
 };
 
@@ -35,6 +39,7 @@ const tomtValg = (tab: BenkTab): BenkLagredeValg => ({
     saksbehandler: null,
     skjulPåVent: false,
     skjulEgneTilBeslutning: false,
+    skjulUtenTilgang: true,
     filtre: {},
 });
 
@@ -45,7 +50,8 @@ const utenFellesValg = (filter: Record<string, unknown>): LagretFilter => {
             ([nøkkel]) =>
                 nøkkel !== 'saksbehandler' &&
                 nøkkel !== 'skjulPåVent' &&
-                nøkkel !== 'skjulEgneTilBeslutning',
+                nøkkel !== 'skjulEgneTilBeslutning' &&
+                nøkkel !== BENK_FILTER_SKJUL_UTEN_TILGANG,
         ),
     ) as LagretFilter;
 };
@@ -94,6 +100,7 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
             saksbehandler: benkStrengVerdi(parsed.saksbehandler),
             skjulPåVent: benkBoolskVerdi(parsed.skjulPåVent),
             skjulEgneTilBeslutning: benkBoolskVerdi(parsed.skjulEgneTilBeslutning),
+            skjulUtenTilgang: benkBoolskVerdiMedDefault(parsed.skjulUtenTilgang, true),
             filtre,
         };
     } catch {
@@ -116,6 +123,7 @@ export const byggBenkLagredeValg = <T extends BenkTab>(
         saksbehandler: filter.saksbehandler ?? null,
         skjulPåVent: filter.skjulPåVent,
         skjulEgneTilBeslutning: filter.skjulEgneTilBeslutning,
+        skjulUtenTilgang: filter.skjulUtenTilgang,
         filtre: harBenkFilterVerdier(fanensFilter)
             ? { ...øvrigeFiltre, [tab]: fanensFilter }
             : øvrigeFiltre,
@@ -133,6 +141,7 @@ export const benkLagredeValgTilQuery = (
         saksbehandler: valg.saksbehandler,
         skjulPåVent: valg.skjulPåVent,
         skjulEgneTilBeslutning: valg.skjulEgneTilBeslutning,
+        skjulUtenTilgang: valg.skjulUtenTilgang,
     }),
 });
 
@@ -142,6 +151,8 @@ export const harBenkLagredeFiltre = (valg: BenkLagredeValg | null, tab: BenkTab)
     (valg.saksbehandler !== null ||
         valg.skjulPåVent ||
         valg.skjulEgneTilBeslutning ||
+        // Filteret er standard på, så false er et aktivt valg
+        !valg.skjulUtenTilgang ||
         harBenkFilterVerdier({ ...valg.filtre[tab] }));
 
 /**
@@ -175,6 +186,7 @@ export const nullstillBenkLagretFilter = (tab: BenkTab) => {
             saksbehandler: null,
             skjulPåVent: false,
             skjulEgneTilBeslutning: false,
+            skjulUtenTilgang: true,
             filtre: øvrigeFiltre,
         }),
         { expires: 365 },

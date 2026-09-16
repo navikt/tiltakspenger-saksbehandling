@@ -17,13 +17,16 @@ export const BenkPanel = ({ oversikt, filter, tabell, laster = false }: Props) =
 
     const oppsummeringstekst = benkOppsummeringTekst(oppsummering);
 
+    const harFlereBehandlinger = totalAntall > behandlinger.length;
+
     return (
         <VStack gap={'space-16'}>
             {filter}
 
             <VStack gap={'space-4'}>
                 <BodyShort>
-                    {`Viser ${totalAntall} av totalt ${totalAntallUfiltrert} behandlinger med valgte filtre (${behandlinger.length} på denne siden)`}
+                    {`${totalAntall} av totalt ${totalAntallUfiltrert} behandlinger matcher valgte filtre`}
+                    {harFlereBehandlinger && ` (${behandlinger.length} vises på denne siden)`}
                 </BodyShort>
 
                 {oppsummeringstekst && <BodyShort size={'small'}>{oppsummeringstekst}</BodyShort>}
