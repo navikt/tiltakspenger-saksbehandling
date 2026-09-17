@@ -104,12 +104,17 @@ export const kanFortsetteBenkRad = (
 };
 
 /**
- * Kort oppsummering av radene på siden, satt sammen av delene som er større enn null.
- * Er alle null har oppsummeringen ingenting å fortelle, og linja skal ikke vises.
+ * Kort oppsummering av radene på siden.
+ * Markørene settes bare på rader uten tilgang, så de vises som underkategorier med «herav».
+ * En flat oppramsing ville sett ut som om tallene kom i tillegg til hverandre.
+ * Har alle rader tilgang, har oppsummeringen ingenting å fortelle, og linja skal ikke vises.
  */
 export const benkOppsummeringTekst = (oppsummering: BenkOppsummering): Nullable<string> => {
-    const deler = [
-        { antall: oppsummering.antallUtenTilgang, tekst: 'uten tilgang' },
+    if (oppsummering.antallUtenTilgang === 0) {
+        return null;
+    }
+
+    const markører = [
         { antall: oppsummering.antallSkjermet, tekst: 'skjermet' },
         { antall: oppsummering.antallKode6, tekst: 'med strengt fortrolig adresse' },
         { antall: oppsummering.antallKode7, tekst: 'med fortrolig adresse' },
@@ -117,5 +122,7 @@ export const benkOppsummeringTekst = (oppsummering: BenkOppsummering): Nullable<
         .filter(({ antall }) => antall > 0)
         .map(({ antall, tekst }) => `${antall} ${tekst}`);
 
-    return deler.length === 0 ? null : deler.join(' · ');
+    const utenTilgang = `${oppsummering.antallUtenTilgang} uten tilgang`;
+
+    return markører.length === 0 ? utenTilgang : `${utenTilgang} (herav ${markører.join(', ')})`;
 };

@@ -3,7 +3,7 @@ import { AkselColor } from '@navikt/ds-react/types/theme';
 import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
-import { erSladdet, sladdbarTekst } from '~/utils/sladdetVerdi';
+import { erSladdet, hentVerdi, sladdbarTekst } from '~/utils/sladdetVerdi';
 import { Periode } from '~/types/Periode';
 import {
     antallKalenderDagerUnnaDagensDato,
@@ -52,15 +52,15 @@ type BenkRadFellesfelt = Pick<
 /** Backend sladder fnr på rader uten tilgang, så teksten kommer alltid fra `fnr` - uten lenke og kopiering */
 const Fnr = ({ behandling }: { behandling: BenkRadFellesfelt }) => {
     const fnrTekst = sladdbarTekst(behandling.fnr, '[Fnr sladdet]');
+    // Saksnummeret er sladdet på rader uten tilgang, og da finnes det ingen personoversikt å lenke til.
+    const saksnummer = hentVerdi(behandling.saksnummer);
 
     return (
         <Table.HeaderCell scope={'row'}>
             <HStack align={'center'} gap={'space-4'} wrap={false}>
-                {harTilgangTilBenkRad(behandling) ? (
+                {harTilgangTilBenkRad(behandling) && saksnummer !== null ? (
                     <>
-                        <InternLenke href={personoversiktUrl(behandling.saksnummer)}>
-                            {fnrTekst}
-                        </InternLenke>
+                        <InternLenke href={personoversiktUrl(saksnummer)}>{fnrTekst}</InternLenke>
                         {!erSladdet(behandling.fnr) && (
                             <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
                         )}
@@ -260,7 +260,7 @@ const RammebehandlingHandlinger = ({
             <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
                 <InternLenkeKnapp
                     href={behandlingUrl({
-                        saksnummer: behandling.saksnummer,
+                        saksnummer: hentVerdi(behandling.saksnummer) ?? '',
                         id: behandling.id,
                     })}
                 >

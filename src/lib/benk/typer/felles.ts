@@ -96,13 +96,14 @@ export type BenkOppsummering = {
 /**
  * Fellesfelt for alle rader i benken, uavhengig av behandlingstype.
  * Rader uten tilgang kommer med sladdet `fnr` og `ventestatus.begrunnelse` og tom `gyldigeKommandoer`.
+ * `sakId` og `saksnummer` er også sladdet på disse radene, så raden ikke kan kobles til en sak.
  */
 export type BenkBehandlingBase = {
     type: BenkBehandlingstype;
     id: string;
-    sakId: SakId;
+    sakId: SladdbarVerdi<SakId>;
     fnr: SladdbarVerdi<string>;
-    saksnummer: string;
+    saksnummer: SladdbarVerdi<string>;
     startet: string;
     sistEndret: string;
     saksbehandler: Nullable<string>;

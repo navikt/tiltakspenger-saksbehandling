@@ -4,6 +4,7 @@ import { BenkBehandlingstype, BenkSortering } from '../typer/felles';
 import { benkMeldekortTypeTekst } from '../utils/benkUtils';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { BenkStatusTag } from '../felles/BenkStatusTag';
 import { useBenkSortering } from '../felles/useBenkSortering';
 import { BenkBehandlingMeny } from '../felles/BenkBehandlingMeny';
@@ -83,7 +84,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                                     >
                                         <InternLenkeKnapp
                                             href={meldekortbehandlingUrl(
-                                                behandling.saksnummer,
+                                                hentVerdi(behandling.saksnummer) ?? '',
                                                 behandling.id,
                                             )}
                                         >
@@ -94,7 +95,7 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                                 ) : (
                                     <InternLenkeKnapp
                                         href={meldeperiodeUrl(
-                                            behandling.saksnummer,
+                                            hentVerdi(behandling.saksnummer) ?? '',
                                             // Innsendte/korrigerte meldekort dekker nøyaktig én meldeperiode
                                             behandling.meldeperioder[0],
                                             MeldeperiodekjedeTab.BrukersMeldekort,

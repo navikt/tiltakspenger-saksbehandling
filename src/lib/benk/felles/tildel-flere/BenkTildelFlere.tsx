@@ -13,6 +13,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { BenkTab } from '~/lib/benk/typer/tabs';
 import { BenkBehandlingsstatus } from '~/lib/benk/typer/felles';
 import { parseBenkFilterForTab } from '~/lib/benk/utils/benkQuery';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 
 type Props = {
     behandlinger: Array<BenkSøknadsbehandling | BenkRevurdering>;
@@ -26,13 +27,26 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const router = useRouter();
+
+    // sakId og saksnummer er sladdet på rader uten tilgang, og en slik rad kan ikke tildeles.
+    // Avkryssingen finnes bare på rader med tilgang og med gyldige kommandoer, så lista er i praksis den samme.
+    // Filteret står her for at det vi viser og det vi sender, alltid skal være det samme.
+    const tildelbare = valgtTildeling.flatMap((behandling) => {
+        const sakId = hentVerdi(behandling.sakId);
+        const saksnummer = hentVerdi(behandling.saksnummer);
+
+        return sakId !== null && saksnummer !== null
+            ? [{ id: behandling.id, sakId, saksnummer }]
+            : [];
+    });
+
     const harFeilet = error && !isMutating;
     const harTildelt = !!data;
     const nyttFilter = parseBenkFilterForTab(tab, router.query);
 
     const tildelAlle = () => {
         trigger({
-            behandlinger: valgtTildeling.map((b) => ({ behandlingId: b.id, sakId: b.sakId })),
+            behandlinger: tildelbare.map((b) => ({ behandlingId: b.id, sakId: b.sakId })),
             returnerSaker: false,
         }).then((response) => {
             if (response) {
@@ -58,18 +72,14 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
         <HStack gap={'space-8'} justify={'end'}>
             <Dialog>
                 <Dialog.Trigger>
-                    <Button
-                        disabled={valgtTildeling.length === 0}
-                        variant={'primary'}
-                        size={'small'}
-                    >
+                    <Button disabled={tildelbare.length === 0} variant={'primary'} size={'small'}>
                         Tildel
                     </Button>
                 </Dialog.Trigger>
                 <Dialog.Popup>
                     <Dialog.Header>
                         <Dialog.Title>
-                            {`Tildel meg ${valgtTildeling.length} behandlinger`}
+                            {`Tildel meg ${tildelbare.length} behandlinger`}
                         </Dialog.Title>
                     </Dialog.Header>
                     <Dialog.Body>
@@ -78,7 +88,7 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
                             du videresendes til oversikt over dine tildelte behandlinger.
                         </BodyLong>
                         <VStack as={'ul'} gap={'space-4'}>
-                            {valgtTildeling.map((b) => {
+                            {tildelbare.map((b) => {
                                 const url = behandlingUrl({
                                     id: b.id,
                                     saksnummer: b.saksnummer,

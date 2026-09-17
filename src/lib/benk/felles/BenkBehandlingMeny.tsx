@@ -19,6 +19,7 @@ import { MeldekortbehandlingOverta } from '~/lib/meldekort/felles/meny/handlinge
 import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAvslutt';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { BenkBehandlingsstatus, BenkBehandlingstype } from '../typer/felles';
 import { BenkSøknadsbehandling } from '../typer/søknader';
 import { BenkRevurdering } from '../typer/revurderinger';
@@ -72,7 +73,10 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
             const onSuccessTilBehandling = () => {
                 onClose();
                 router.push(
-                    behandlingUrl({ saksnummer: behandling.saksnummer, id: behandling.id }),
+                    behandlingUrl({
+                        saksnummer: hentVerdi(behandling.saksnummer) ?? '',
+                        id: behandling.id,
+                    }),
                 );
             };
 
@@ -95,7 +99,9 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
         case BenkBehandlingstype.MELDEKORTBEHANDLING: {
             const onSuccessTilBehandling = () => {
                 onClose();
-                router.push(meldekortbehandlingUrl(behandling.saksnummer, behandling.id));
+                router.push(
+                    meldekortbehandlingUrl(hentVerdi(behandling.saksnummer) ?? '', behandling.id),
+                );
             };
 
             return (
@@ -141,7 +147,14 @@ const RammeDialoger = ({
     behandling: BenkSøknadsbehandling | BenkRevurdering;
     erRevurdering: boolean;
 }) => {
-    const { id, sakId, saksnummer } = behandling;
+    const { id } = behandling;
+    const sakId = hentVerdi(behandling.sakId);
+    const saksnummer = hentVerdi(behandling.saksnummer);
+
+    // sakId og saksnummer er sladdet på rader uten tilgang, og da finnes det ingen behandling å åpne en dialog for.
+    if (sakId === null || saksnummer === null) {
+        return null;
+    }
 
     return (
         <>
@@ -232,7 +245,13 @@ const MeldekortDialoger = ({
     onSuccessTilBehandling,
     onSuccessTilBenk,
 }: DialogerProps & { behandling: BenkMeldekort }) => {
-    const { id, sakId } = behandling;
+    const { id } = behandling;
+    const sakId = hentVerdi(behandling.sakId);
+
+    // sakId og saksnummer er sladdet på rader uten tilgang, og da finnes det ingen behandling å åpne en dialog for.
+    if (sakId === null) {
+        return null;
+    }
 
     return (
         <>

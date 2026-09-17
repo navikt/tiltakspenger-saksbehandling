@@ -11,7 +11,7 @@ const oppsummering = (deler: Partial<BenkOppsummering> = {}): BenkOppsummering =
     ...deler,
 });
 
-test('ingen linje når alt som kan oppsummeres er null', () => {
+test('ingen linje når alle rader har tilgang', () => {
     expect(benkOppsummeringTekst(oppsummering({ antallMedTilgang: 12 }))).toBeNull();
 });
 
@@ -20,7 +20,7 @@ test('bare delene som er større enn null tas med', () => {
         benkOppsummeringTekst(
             oppsummering({ antallMedTilgang: 8, antallUtenTilgang: 3, antallKode6: 1 }),
         ),
-    ).toBe('3 uten tilgang · 1 med strengt fortrolig adresse');
+    ).toBe('3 uten tilgang (herav 1 med strengt fortrolig adresse)');
 });
 
 test('alle delene settes sammen i fast rekkefølge', () => {
@@ -35,6 +35,6 @@ test('alle delene settes sammen i fast rekkefølge', () => {
             }),
         ),
     ).toBe(
-        '6 uten tilgang · 2 skjermet · 3 med strengt fortrolig adresse · 1 med fortrolig adresse',
+        '6 uten tilgang (herav 2 skjermet, 3 med strengt fortrolig adresse, 1 med fortrolig adresse)',
     );
 });

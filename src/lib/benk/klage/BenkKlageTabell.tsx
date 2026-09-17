@@ -3,6 +3,7 @@ import { BenkKlagebehandling, BenkKlageKolonne } from '../typer/klage';
 import { BenkSortering } from '../typer/felles';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { BenkStatusTag } from '../felles/BenkStatusTag';
 import { useBenkSortering } from '../felles/useBenkSortering';
 import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
@@ -51,7 +52,7 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                         <BenkTabellCelle.Handlinger behandling={behandling}>
                             <InternLenkeKnapp
                                 href={klagebehandlingUrl(
-                                    behandling.saksnummer,
+                                    hentVerdi(behandling.saksnummer) ?? '',
                                     behandling.id,
                                     klageStegForBenkRad(behandling.resultat),
                                 )}
