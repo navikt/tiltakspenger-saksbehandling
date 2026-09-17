@@ -19,7 +19,7 @@ export const InternDekoratør = () => {
 
     const router = useRouter();
 
-    const { erSaksbehandler } = useSaksbehandler();
+    const { sladdes, erSaksbehandler } = useSaksbehandler();
 
     useEffect(() => {
         const resetSøkState = () => {
@@ -62,9 +62,9 @@ export const InternDekoratør = () => {
                             size="small"
                             variant="secondary"
                             placeholder={
-                                erSaksbehandler
-                                    ? 'Søk på fnr eller saksnummer'
-                                    : 'Søk på saksnr eller sak-id'
+                                sladdes
+                                    ? 'Søk på saksnr eller sak-id'
+                                    : 'Søk på fnr eller saksnummer'
                             }
                             value={søketekst}
                             onChange={(e) => setSøketekst(e.trim())}

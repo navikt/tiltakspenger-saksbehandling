@@ -2,7 +2,7 @@ import { createContext, PropsWithChildren, useContext, useEffect, useState } fro
 import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
 import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
 import { BenkTab } from '~/lib/benk/typer/tabs';
-import { BenkTabData } from '~/lib/benk/BenkSide';
+import { BenkTabData } from '~/lib/benk/typer/benkside';
 
 type BenkVisning = {
     skjulVentestatus: boolean;

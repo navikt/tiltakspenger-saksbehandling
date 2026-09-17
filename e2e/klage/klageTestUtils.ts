@@ -239,6 +239,7 @@ const saksbehandler: Saksbehandler = {
     navIdent,
     roller: [SaksbehandlerRolle.SAKSBEHANDLER, SaksbehandlerRolle.BESLUTTER],
     sladdes: false,
+    kanSeBenken: true,
 };
 
 const personopplysninger: Personopplysninger = {

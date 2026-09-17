@@ -8,6 +8,7 @@ type SaksbehandlerState = {
     erSaksbehandler: boolean;
     erBeslutter: boolean;
     sladdes: boolean;
+    kanSeBenken: boolean;
 };
 
 // Skal normalt kun brukes ved pre-render av statiske sider, ie feilsider.
@@ -18,6 +19,7 @@ const defaultSaksbehandler: Saksbehandler = {
     navIdent: 'ukjent',
     roller: [],
     sladdes: false,
+    kanSeBenken: true,
 } as const;
 
 const Context = createContext<SaksbehandlerState>({
@@ -25,6 +27,7 @@ const Context = createContext<SaksbehandlerState>({
     erSaksbehandler: false,
     erBeslutter: false,
     sladdes: false,
+    kanSeBenken: true,
 });
 
 type Props = {
@@ -42,6 +45,7 @@ export const SaksbehandlerProvider = ({ initialSaksbehandler, children }: Props)
                 erSaksbehandler: saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER),
                 erBeslutter: saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER),
                 sladdes: saksbehandler.sladdes,
+                kanSeBenken: saksbehandler.kanSeBenken,
             }}
         >
             {children}

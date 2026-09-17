@@ -14,6 +14,7 @@ const lagSaksbehandler = (sladdes: boolean, ...roller: SaksbehandlerRolle[]): Sa
     navIdent: 'Z12345',
     roller,
     sladdes,
+    kanSeBenken: true,
 });
 
 const rendreBanner = (saksbehandler: Saksbehandler) =>

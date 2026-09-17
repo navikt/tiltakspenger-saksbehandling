@@ -12,4 +12,5 @@ export type Saksbehandler = {
     navIdent: string;
     roller: SaksbehandlerRolle[];
     sladdes: boolean;
+    kanSeBenken: boolean;
 };
