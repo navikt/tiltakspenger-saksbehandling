@@ -1,0 +1,9 @@
+.card {
+    border-radius: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    border-radius: 0;
+}

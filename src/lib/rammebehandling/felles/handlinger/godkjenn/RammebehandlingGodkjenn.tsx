@@ -7,6 +7,7 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { personoversiktUrl } from '~/utils/urls';
 
 export const RammebehandlingGodkjenn = () => {
     const { navigateWithNotification } = useNotification();
@@ -27,7 +28,10 @@ export const RammebehandlingGodkjenn = () => {
             .then((oppdatertBehandling) => {
                 setBehandling(oppdatertBehandling);
                 setÅpen(false);
-                navigateWithNotification('/', 'Vedtaket er godkjent!');
+                navigateWithNotification(
+                    personoversiktUrl(behandling.saksnummer),
+                    'Vedtaket er godkjent.',
+                );
             })
             .catch((error: FetcherError<Rammebehandling>) => {
                 if (error.data) {

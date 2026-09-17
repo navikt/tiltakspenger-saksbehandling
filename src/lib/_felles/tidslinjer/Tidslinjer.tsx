@@ -25,9 +25,9 @@ import { classNames } from '~/utils/classNames';
 import { numberRangeToString } from '~/utils/tall';
 import { perioderOverlapper } from '~/utils/periode';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
+import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 
 import style from './Tidslinjer.module.css';
-
 type Props = {
     sak: SakProps;
     heading?: boolean;
@@ -35,29 +35,11 @@ type Props = {
 };
 
 export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
-    const { tidslinje, saksnummer, utbetalingstidslinje } = sak;
-
-    const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
-
     // Uten perioder faller datointervallet tilbake på `dayjs(undefined)` (nåtidspunktet). Det gir
     // ulik server-/klient-render (hydration-mismatch) og en meningsløs «i dag–i dag»-tidslinje.
     // Vis heller en placeholder når det ikke finnes noe å tegne.
-    const harIngenPerioder = tidslinje.elementer.length === 0 && utbetalingstidslinje.length === 0;
-
-    if (harIngenPerioder) {
-        return (
-            <div className={classNames(style.wrapper, className)}>
-                <div className={style.header}>
-                    {heading && (
-                        <Heading size={'small'} level={'2'}>
-                            {'Gjeldende vedtak og siste beregnede utbetalinger'}
-                        </Heading>
-                    )}
-                </div>
-                <BodyShort>{'Ingen vedtak eller utbetalinger å vise på tidslinjen.'}</BodyShort>
-            </div>
-        );
-    }
+    const harIngenPerioder =
+        sak.tidslinje.elementer.length === 0 && sak.utbetalingstidslinje.length === 0;
 
     return (
         <div className={classNames(style.wrapper, className)}>
@@ -68,6 +50,22 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                     </Heading>
                 )}
             </div>
+            {harIngenPerioder ? (
+                <BodyShort>{'Ingen vedtak eller utbetalinger å vise på tidslinjen.'}</BodyShort>
+            ) : (
+                <FaktiskeTidslinjer sak={sak} />
+            )}
+        </div>
+    );
+};
+
+const FaktiskeTidslinjer = ({ sak }: { sak: SakProps }) => {
+    const { tidslinje, saksnummer, utbetalingstidslinje } = sak;
+
+    const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
+
+    return (
+        <>
             {/* Obs hvis du vurderer å splitte denne i mindre komponenter: */}
             {/* Timeline fra ds-react er avhengig av at komponentene i hierarkiet har direkte children/parent relasjoner uten wrappere mellom */}
             <Timeline startDate={startDate} endDate={endDate}>
@@ -116,7 +114,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                         {tidslinjeResultatTekst[tidslinjeResultat]}
                                     </Heading>
                                     <div>
-                                        <InfoElement
+                                        <DetaljHorisontal
                                             navn={'Gjeldende vedtaksperiode'}
                                             verdi={formaterPeriode(tidslinjeElement.periode)}
                                         />
@@ -248,15 +246,14 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                     {'Neste'}
                 </Button>
             </div>
-        </div>
+        </>
     );
 };
 
 const InfoElement = ({ navn, verdi }: { navn: string; verdi: string }) => {
     return (
-        <BodyShort size={'small'}>
-            <strong>{`${navn}: `}</strong>
+        <DetaljHorisontal navn={navn} size={'small'}>
             {verdi}
-        </BodyShort>
+        </DetaljHorisontal>
     );
 };

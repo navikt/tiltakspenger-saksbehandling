@@ -11,6 +11,7 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Box, VStack } from '@navikt/ds-react';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
+import { ÅpneBehandlingerSammendrag } from '~/lib/behandling-felles/åpne-behandlinger/ÅpneBehandlingerSammendrag';
 import { useSak } from '~/lib/sak/SakContext';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
@@ -60,6 +61,10 @@ export const RammebehandlingPage = () => {
                             />
                         )}
                         <Tidslinjer sak={sak} />
+                        <ÅpneBehandlingerSammendrag
+                            sak={sak}
+                            ekskluderBehandlingId={behandling.id}
+                        />
                         {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                         {behandlingensKlage && (
                             <Box borderWidth="1">
@@ -74,9 +79,9 @@ export const RammebehandlingPage = () => {
                             ) : type === Rammebehandlingstype.REVURDERING ? (
                                 <RevurderingVedtak />
                             ) : (
-                                <Infokort
-                                    variant={'feil'}
-                                >{`Behandlingstypen er ikke implementert: ${type}`}</Infokort>
+                                <Infokort variant={'feil'}>
+                                    {`Behandlingstypen er ikke implementert: ${type}`}
+                                </Infokort>
                             )}
                         </div>
                     </VStack>

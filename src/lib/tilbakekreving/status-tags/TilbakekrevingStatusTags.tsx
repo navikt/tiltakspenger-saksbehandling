@@ -2,23 +2,28 @@ import {
     TilbakekrevingBehandling,
     TilbakekrevingBehandlingsstatus,
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { BodyShort, HelpText, Tag } from '@navikt/ds-react';
+import { BodyShort, HelpText, Tag, TagProps } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { formaterDatotekst } from '~/utils/date';
 import { tilbakekrevingVenterStatusTekst } from '~/lib/tilbakekreving/tilbakekrevingTekster';
 
 import style from './TilbakekrevingStatusTags.module.css';
 
-type Props = Pick<TilbakekrevingBehandling, 'status' | 'venter'>;
+type Props = Pick<TilbakekrevingBehandling, 'status' | 'venter'> & { size?: TagProps['size'] };
 
-export const TilbakekrevingStatusTags = ({ status, venter }: Props) => {
+export const TilbakekrevingStatusTags = ({ status, venter, size }: Props) => {
     return (
         <div className={style.tags}>
-            <Tag data-color={tilbakekrevingStatusFarge[status]} variant={'outline'}>
+            <Tag data-color={tilbakekrevingStatusFarge[status]} variant={'outline'} size={size}>
                 {tilbakekrevingStatusTekst[status]}
             </Tag>
             {venter && (
-                <Tag data-color={'neutral'} variant={'moderate'} className={style.venter}>
+                <Tag
+                    data-color={'neutral'}
+                    variant={'moderate'}
+                    className={style.venter}
+                    size={size}
+                >
                     <BodyShort size={'small'}>{'Venter'}</BodyShort>
                     <HelpText>{`${tilbakekrevingVenterStatusTekst[venter.grunn]} - Gjenopptas ${formaterDatotekst(venter.gjenopptas)}`}</HelpText>
                 </Tag>

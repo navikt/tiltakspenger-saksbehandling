@@ -9,6 +9,7 @@ import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/handlinger/varsler/BehandlingValideringVarsler';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     behandling: Rammebehandling;
@@ -41,7 +42,10 @@ export const RammebehandlingSendTilBeslutning = ({
             .then((oppdatertBehandling) => {
                 setBehandling(oppdatertBehandling);
                 setÅpen(false);
-                navigateWithNotification('/', 'Vedtaket er sendt til beslutning!');
+                navigateWithNotification(
+                    personoversiktUrl(behandling.saksnummer),
+                    'Vedtaket er sendt til beslutning.',
+                );
             })
             .catch((error: FetcherError<Rammebehandling>) => {
                 if (error.data) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { HStack, Tag } from '@navikt/ds-react';
+import { HStack, Tag, TagProps } from '@navikt/ds-react';
 import {
     ArrowUndoIcon,
     CheckmarkIcon,
@@ -28,18 +28,19 @@ type Props = {
     behandling: BehandlingProps;
     /** Mindre tags uten ikoner, til bruk i tabeller og lignende */
     kompakt?: boolean;
+    size?: TagProps['size'];
     className?: string;
 };
 
-export const BehandlingStatusTags = ({ behandling, kompakt, className }: Props) => {
+export const BehandlingStatusTags = ({ behandling, kompakt, size, className }: Props) => {
     const { status } = behandling;
 
     const erSattPåVent = erBehandlingSattPåVent(behandling);
     const erUnderkjent = erBehandlingUnderkjent(behandling);
 
     const tagProps = kompakt
-        ? ({ variant: 'outline' } as const)
-        : ({ variant: 'moderate', className: style.tag } as const);
+        ? ({ variant: 'outline', size } as const)
+        : ({ variant: 'moderate', size, className: style.tag } as const);
 
     return (
         <HStack gap={kompakt ? 'space-4' : 'space-8'} className={className}>

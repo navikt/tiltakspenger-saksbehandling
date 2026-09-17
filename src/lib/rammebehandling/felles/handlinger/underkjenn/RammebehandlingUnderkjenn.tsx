@@ -5,6 +5,7 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     behandling: Rammebehandling;
@@ -32,7 +33,10 @@ export const RammebehandlingUnderkjenn = ({ behandling }: Props) => {
 
         trigger({ begrunnelse: begrunnelseTrimmed }).then((response) => {
             if (response) {
-                navigateWithNotification('/', 'Vedtaket har blitt underkjent!');
+                navigateWithNotification(
+                    personoversiktUrl(behandling.saksnummer),
+                    'Vedtaket har blitt underkjent.',
+                );
             }
         });
     };
