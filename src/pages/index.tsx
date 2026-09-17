@@ -1,6 +1,7 @@
 import { ParsedUrlQuery } from 'node:querystring';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BenkSide, BenkSideProps } from '~/lib/benk/BenkSide';
+import { BenkSide } from '~/lib/benk/BenkSide';
+import { BenkSideProps } from '~/lib/benk/typer/benkside';
 import { BENK_TAB_DEFAULT, BenkTab, erBenkTab } from '~/lib/benk/typer/tabs';
 import { BenkSøknaderKolonne, BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
 import { BenkRevurderingerKolonne, BenkRevurdering } from '~/lib/benk/typer/revurderinger';
@@ -31,6 +32,17 @@ import {
     parseBenkCookie,
     serialiserBenkCookie,
 } from '~/lib/benk/utils/benkCookie';
+import { BenkSideUtenTilgang } from '~/lib/benk/uten-tilgang/BenkSideUtenTilgang';
+
+/**
+ * Props til benksiden, diskriminert på [harTilgang] slik backend-responsen er.
+ * Uten tilgang finnes ingen benkdata å vise.
+ */
+type Props = { harTilgang: false } | ({ harTilgang: true } & BenkSideProps);
+
+const BenkSideInner = (props: Props) => {
+    return props.harTilgang ? <BenkSide {...props} /> : <BenkSideUtenTilgang />;
+};
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const { query, req, res } = context;
@@ -47,20 +59,18 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         return redirect;
     }
 
-    const { antallPerTab, tabData, error } = await hentTabData(req, tab, query);
+    const sideData = await hentTabData(req, tab, query);
 
-    res.setHeader(
-        'Set-Cookie',
-        serialiserBenkCookie(byggBenkLagredeValg(lagredeValg, tab, tabData.data.aktivtFilter)),
-    );
+    if (sideData.harTilgang) {
+        res.setHeader(
+            'Set-Cookie',
+            serialiserBenkCookie(
+                byggBenkLagredeValg(lagredeValg, tab, sideData.tabData.data.aktivtFilter),
+            ),
+        );
+    }
 
-    return {
-        props: {
-            antallPerTab,
-            tabData,
-            error,
-        } satisfies BenkSideProps,
-    };
+    return { props: sideData };
 });
 
 /**
@@ -109,13 +119,14 @@ const hentRedirect = (
 
 /**
  * Henter data for én fane fra backend. Svaret inneholder både fanens
- * oversikt og antallet i alle fanene, slik at ett kall dekker hele siden.
+ * oversikt og antallet i alle fanene, slik at ett kall dekker hele siden -
+ * med mindre saksbehandleren ikke har tilgang, da er svaret kun { harTilgang: false }.
  */
 const hentTabData = async (
     req: NextRequest,
     tab: BenkTab,
     query: ParsedUrlQuery,
-): Promise<Pick<BenkSideProps, 'antallPerTab' | 'tabData' | 'error'>> => {
+): Promise<Props> => {
     const sorteringFraQuery = benkStrengVerdi(query.sortering);
     const side = parseBenkSide(query.side);
 
@@ -127,14 +138,19 @@ const hentTabData = async (
                 BenkSøknaderKolonne,
                 BenkSøknaderKolonne.kravtidspunkt,
             );
-            const { antallPerTab, oversikt, error } = await hentFane<BenkSøknadsbehandling>(
+            const respons = await hentFane<BenkSøknadsbehandling>(
                 req,
                 tab,
                 filters,
                 sortering,
                 side,
             );
+            if (!respons.harTilgang) {
+                return respons;
+            }
+            const { antallPerTab, oversikt, error } = respons;
             return {
+                harTilgang: true,
                 antallPerTab,
                 error,
                 tabData: {
@@ -150,14 +166,13 @@ const hentTabData = async (
                 BenkRevurderingerKolonne,
                 BenkRevurderingerKolonne.startet,
             );
-            const { antallPerTab, oversikt, error } = await hentFane<BenkRevurdering>(
-                req,
-                tab,
-                filters,
-                sortering,
-                side,
-            );
+            const respons = await hentFane<BenkRevurdering>(req, tab, filters, sortering, side);
+            if (!respons.harTilgang) {
+                return respons;
+            }
+            const { antallPerTab, oversikt, error } = respons;
             return {
+                harTilgang: true,
                 antallPerTab,
                 error,
                 tabData: {
@@ -173,14 +188,13 @@ const hentTabData = async (
                 BenkMeldekortKolonne,
                 BenkMeldekortKolonne.meldeperioder,
             );
-            const { antallPerTab, oversikt, error } = await hentFane<BenkMeldekort>(
-                req,
-                tab,
-                filters,
-                sortering,
-                side,
-            );
+            const respons = await hentFane<BenkMeldekort>(req, tab, filters, sortering, side);
+            if (!respons.harTilgang) {
+                return respons;
+            }
+            const { antallPerTab, oversikt, error } = respons;
             return {
+                harTilgang: true,
                 antallPerTab,
                 error,
                 tabData: {
@@ -196,14 +210,13 @@ const hentTabData = async (
                 BenkKlageKolonne,
                 BenkKlageKolonne.kravtidspunkt,
             );
-            const { antallPerTab, oversikt, error } = await hentFane<BenkKlagebehandling>(
-                req,
-                tab,
-                filters,
-                sortering,
-                side,
-            );
+            const respons = await hentFane<BenkKlagebehandling>(req, tab, filters, sortering, side);
+            if (!respons.harTilgang) {
+                return respons;
+            }
+            const { antallPerTab, oversikt, error } = respons;
             return {
+                harTilgang: true,
                 antallPerTab,
                 error,
                 tabData: {
@@ -219,14 +232,13 @@ const hentTabData = async (
                 BenkTilbakekrevingKolonne,
                 BenkTilbakekrevingKolonne.startet,
             );
-            const { antallPerTab, oversikt, error } = await hentFane<BenkTilbakekreving>(
-                req,
-                tab,
-                filters,
-                sortering,
-                side,
-            );
+            const respons = await hentFane<BenkTilbakekreving>(req, tab, filters, sortering, side);
+            if (!respons.harTilgang) {
+                return respons;
+            }
+            const { antallPerTab, oversikt, error } = respons;
             return {
+                harTilgang: true,
                 antallPerTab,
                 error,
                 tabData: {
@@ -246,4 +258,4 @@ const hentFane = <Behandling,>(
     side: number,
 ) => fetchBenk<Behandling>(req, tab, { sortering, filters, side });
 
-export default BenkSide;
+export default BenkSideInner;

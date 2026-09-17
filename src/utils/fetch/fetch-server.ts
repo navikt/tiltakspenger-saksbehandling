@@ -5,7 +5,8 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
-import { BenkRequestBody, BenkRespons } from '~/lib/benk/typer/felles';
+import { BenkRequestBody } from '~/lib/benk/typer/felles';
+import { BenkRespons } from '~/lib/benk/typer/respons';
 import { BenkTab, benkTabPath } from '~/lib/benk/typer/tabs';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 

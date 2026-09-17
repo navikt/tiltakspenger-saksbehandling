@@ -1,5 +1,4 @@
 import { Nullable } from '~/types/UtilTypes';
-import { BenkTab } from './tabs';
 import { SakId } from '~/lib/sak/SakTyper';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
@@ -160,20 +159,6 @@ export type BenkOversikt<Behandling> = {
     /** Identene tildelt en rad i fanen, ufiltrert - valg i nedtrekkslisten for saksbehandler/beslutter */
     saksbehandlere: string[];
     besluttere: string[];
-};
-
-/**
- * Hele svaret fra /benk: fanen det ble spurt om, og antallet i alle
- * fanene (til fanetitlene).
- *
- * [error] er satt når requesten ikke lot seg tolke (ukjent fane i url-en
- * eller ugyldige filterverdier) og backend derfor svarte med en standardvisning.
- */
-export type BenkRespons<Behandling> = {
-    tab: BenkTab;
-    antallPerTab: Record<BenkTab, number>;
-    oversikt: BenkOversikt<Behandling>;
-    error: Nullable<string>;
 };
 
 export enum BenkIkkeTildelt {

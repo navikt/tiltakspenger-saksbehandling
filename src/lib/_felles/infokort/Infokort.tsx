@@ -19,15 +19,15 @@ type Props = PropsWithChildren<Omit<InfocardProps, 'icon'> & Partial<InfocardPro
 
 export const Infokort = ({
     header,
-    variant,
+    variant = 'info',
     children,
     icon,
     className,
     'data-color': dataColor,
     ...rest
 }: Props) => {
-    const resolvedIcon = icon ?? (variant ? Ikoner[variant] : null);
-    const resolvedDataColor = dataColor ?? (variant ? DataColors[variant] : undefined);
+    const resolvedIcon = icon ?? Ikoner[variant];
+    const resolvedDataColor = dataColor ?? DataColors[variant];
 
     return header ? (
         <InfoCard className={className} data-color={resolvedDataColor} {...rest}>

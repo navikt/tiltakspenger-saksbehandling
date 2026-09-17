@@ -1,23 +1,9 @@
 import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Nullable } from '~/types/UtilTypes';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
-import { BenkOversikt, BenkSortering } from './typer/felles';
 import { BenkTab, benkTabTekst } from './typer/tabs';
-import { BenkSøknaderFilter, BenkSøknaderKolonne, BenkSøknadsbehandling } from './typer/søknader';
-import {
-    BenkRevurderingerFilter,
-    BenkRevurderingerKolonne,
-    BenkRevurdering,
-} from './typer/revurderinger';
-import { BenkMeldekort, BenkMeldekortFilter, BenkMeldekortKolonne } from './typer/meldekort';
-import { BenkKlagebehandling, BenkKlageFilter, BenkKlageKolonne } from './typer/klage';
-import {
-    BenkTilbakekreving,
-    BenkTilbakekrevingFilter,
-    BenkTilbakekrevingKolonne,
-} from './typer/tilbakekreving';
+import { BenkSideProps } from './typer/benkside';
 import { BenkSøknaderFilterSkjema } from './søknader/BenkSøknaderFilterSkjema';
 import { BenkSøknaderTabell } from './søknader/BenkSøknaderTabell';
 import { BenkRevurderingerFilterSkjema } from './revurderinger/BenkRevurderingerFilterSkjema';
@@ -33,54 +19,6 @@ import { BenkVisningProvider } from './felles/filter/BenkVisningContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './BenkSide.module.css';
-
-type SøknaderData = {
-    oversikt: BenkOversikt<BenkSøknadsbehandling>;
-    aktivtFilter: BenkSøknaderFilter;
-    aktivSortering: BenkSortering<BenkSøknaderKolonne>;
-};
-
-type RevurderingerData = {
-    oversikt: BenkOversikt<BenkRevurdering>;
-    aktivtFilter: BenkRevurderingerFilter;
-    aktivSortering: BenkSortering<BenkRevurderingerKolonne>;
-};
-
-type MeldekortData = {
-    oversikt: BenkOversikt<BenkMeldekort>;
-    aktivtFilter: BenkMeldekortFilter;
-    aktivSortering: BenkSortering<BenkMeldekortKolonne>;
-};
-
-type KlageData = {
-    oversikt: BenkOversikt<BenkKlagebehandling>;
-    aktivtFilter: BenkKlageFilter;
-    aktivSortering: BenkSortering<BenkKlageKolonne>;
-};
-
-type TilbakekrevingData = {
-    oversikt: BenkOversikt<BenkTilbakekreving>;
-    aktivtFilter: BenkTilbakekrevingFilter;
-    aktivSortering: BenkSortering<BenkTilbakekrevingKolonne>;
-};
-
-/**
- * Dataene for den aktive fanen. Ligger som ett felt (ikke spredt utover props)
- * slik at diskrimineringen på `tab` bevares gjennom getServerSideProps.
- */
-export type BenkTabData =
-    | { tab: BenkTab.SØKNADER; data: SøknaderData }
-    | { tab: BenkTab.REVURDERINGER; data: RevurderingerData }
-    | { tab: BenkTab.MELDEKORT; data: MeldekortData }
-    | { tab: BenkTab.KLAGE; data: KlageData }
-    | { tab: BenkTab.TILBAKEKREVING; data: TilbakekrevingData };
-
-export type BenkSideProps = {
-    antallPerTab: Record<BenkTab, number>;
-    tabData: BenkTabData;
-    /** Satt når backend ikke kunne tolke requesten og svarte med en standardvisning */
-    error: Nullable<string>;
-};
 
 export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
     const router = useRouter();
