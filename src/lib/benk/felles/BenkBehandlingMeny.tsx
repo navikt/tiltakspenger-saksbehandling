@@ -21,13 +21,16 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
 import { hentVerdi } from '~/utils/sladdetVerdi';
 import { BenkBehandlingsstatus, BenkBehandlingstype } from '../typer/felles';
-import { BenkSøknadsbehandling } from '../typer/søknader';
-import { BenkRevurdering } from '../typer/revurderinger';
-import { BenkMeldekort } from '../typer/meldekort';
+import { BenkSøknadsbehandlingMedTilgang } from '../typer/søknader';
+import { BenkRevurderingMedTilgang } from '../typer/revurderinger';
+import { BenkMeldekortMedTilgang } from '../typer/meldekort';
 import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
 
 type Props = {
-    behandling: BenkSøknadsbehandling | BenkRevurdering | BenkMeldekort;
+    behandling:
+        | BenkSøknadsbehandlingMedTilgang
+        | BenkRevurderingMedTilgang
+        | BenkMeldekortMedTilgang;
 };
 
 /**
@@ -66,10 +69,6 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
     );
 
     const saksnummer = hentVerdi(behandling.saksnummer);
-
-    if (!saksnummer) {
-        return null;
-    }
 
     switch (behandling.type) {
         case BenkBehandlingstype.SØKNADSBEHANDLING:
@@ -148,7 +147,7 @@ const RammeDialoger = ({
     onSuccessTilBehandling,
     onSuccessTilBenk,
 }: DialogerProps & {
-    behandling: BenkSøknadsbehandling | BenkRevurdering;
+    behandling: BenkSøknadsbehandlingMedTilgang | BenkRevurderingMedTilgang;
     erRevurdering: boolean;
 }) => {
     const { id } = behandling;
@@ -248,7 +247,7 @@ const MeldekortDialoger = ({
     onClose,
     onSuccessTilBehandling,
     onSuccessTilBenk,
-}: DialogerProps & { behandling: BenkMeldekort }) => {
+}: DialogerProps & { behandling: BenkMeldekortMedTilgang }) => {
     const { id } = behandling;
     const sakId = hentVerdi(behandling.sakId);
 

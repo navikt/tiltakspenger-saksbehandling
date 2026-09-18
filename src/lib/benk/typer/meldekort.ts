@@ -2,8 +2,8 @@ import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import {
-    BenkBehandling,
-    BenkBehandlingMedTilgang,
+    BenkBehandlingBase,
+    BenkBehandlingMedTilgangBase,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
 } from './felles';
@@ -33,8 +33,8 @@ type BenkMeldekortProps = {
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 
-export type BenkMeldekort = BenkBehandling<BenkMeldekortProps>;
-export type BenkMeldekortMedTilgang = BenkBehandlingMedTilgang<BenkMeldekort>;
+export type BenkMeldekort = BenkBehandlingBase<BenkMeldekortProps>;
+export type BenkMeldekortMedTilgang = BenkBehandlingMedTilgangBase<BenkMeldekort>;
 
 export enum BenkMeldekortKolonne {
     fnr = 'fnr',

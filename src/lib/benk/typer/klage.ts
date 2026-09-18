@@ -1,8 +1,13 @@
 import { Nullable } from '~/types/UtilTypes';
 import { KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
-import { BenkBehandlingBase, BenkBehandlingsstatus, BenkBehandlingstype } from './felles';
+import {
+    BenkBehandlingBase,
+    BenkBehandlingMedTilgangBase,
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
+} from './felles';
 
-export type BenkKlagebehandling = BenkBehandlingBase & {
+type BenkKlagebehandlingProps = {
     type: BenkBehandlingstype.KLAGEBEHANDLING;
     id: KlageId;
     status: BenkBehandlingsstatus;
@@ -10,6 +15,9 @@ export type BenkKlagebehandling = BenkBehandlingBase & {
     resultat: Nullable<KlagebehandlingResultat>;
     beslutter: null;
 };
+
+export type BenkKlagebehandling = BenkBehandlingBase<BenkKlagebehandlingProps>;
+export type BenkKlagebehandlingMedTilgang = BenkBehandlingMedTilgangBase<BenkKlagebehandlingProps>;
 
 export enum BenkKlageKolonne {
     fnr = 'fnr',

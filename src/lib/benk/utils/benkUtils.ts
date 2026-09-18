@@ -130,8 +130,8 @@ export const benkOppsummeringTekst = (oppsummering: BenkOppsummering): Nullable<
     return markører.length === 0 ? utenTilgang : `${utenTilgang} (herav ${markører.join(', ')})`;
 };
 
-export const benkBehandlingHarTilgang = <T>(
-    behandling: BenkBehandling<T>,
-): behandling is BenkBehandlingMedTilgang<T> => {
+export const benkBehandlingHarTilgang = (
+    behandling: BenkBehandling,
+): behandling is BenkBehandlingMedTilgang => {
     return behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;
 };

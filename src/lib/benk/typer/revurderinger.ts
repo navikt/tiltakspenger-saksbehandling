@@ -1,16 +1,24 @@
 import { Nullable } from '~/types/UtilTypes';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkBehandlingBase, BenkBehandlingsstatus, BenkBehandlingstype } from './felles';
+import {
+    BenkBehandlingBase,
+    BenkBehandlingMedTilgangBase,
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
+} from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
-export type BenkRevurdering = BenkBehandlingBase & {
+type BenkRevurderingProps = {
     type: BenkBehandlingstype.REVURDERING;
     id: RammebehandlingId;
     status: BenkBehandlingsstatus;
     resultat: Nullable<RevurderingResultat>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
+
+export type BenkRevurdering = BenkBehandlingBase<BenkRevurderingProps>;
+export type BenkRevurderingMedTilgang = BenkBehandlingMedTilgangBase<BenkRevurderingProps>;
 
 export enum BenkRevurderingerKolonne {
     fnr = 'fnr',

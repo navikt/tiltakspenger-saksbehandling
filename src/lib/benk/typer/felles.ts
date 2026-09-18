@@ -2,6 +2,11 @@ import { Nullable } from '~/types/UtilTypes';
 import { SakId } from '~/lib/sak/SakTyper';
 import { IkkeSladdetVerdi, SladdbarVerdi } from '~/types/SladdetVerdi';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
+import { BenkSøknadsbehandling, BenkSøknadsbehandlingMedTilgang } from '~/lib/benk/typer/søknader';
+import { BenkRevurdering, BenkRevurderingMedTilgang } from '~/lib/benk/typer/revurderinger';
+import { BenkMeldekort, BenkMeldekortMedTilgang } from '~/lib/benk/typer/meldekort';
+import { BenkKlagebehandling, BenkKlagebehandlingMedTilgang } from '~/lib/benk/typer/klage';
+import { BenkTilbakekreving, BenkTilbakekrevingMedTilgang } from '~/lib/benk/typer/tilbakekreving';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -59,6 +64,7 @@ export enum BenkTilgangsårsak {
     AVDØD = 'AVDØD',
     /** Backend setter denne når Tilgangsmaskinen avviste med en kode vi ikke kjenner. */
     UKJENT = 'UKJENT',
+    IKKE_SAKSBEHANDLER_ELLER_BESLUTTER = 'IKKE_SAKSBEHANDLER_ELLER_BESLUTTER',
 }
 
 export type BenkHarTilgang = {
@@ -96,12 +102,7 @@ export type BenkOppsummering = {
     antallKode7: number;
 };
 
-/**
- * Fellesfelt for alle rader i benken, uavhengig av behandlingstype.
- * Rader uten tilgang kommer med sladdet `fnr` og `ventestatus.begrunnelse` og tom `gyldigeKommandoer`.
- * `sakId` og `saksnummer` er også sladdet på disse radene, så raden ikke kan kobles til en sak.
- */
-export type BenkBehandlingBase = {
+export type BenkBehandlingBase<T = unknown> = T & {
     type: BenkBehandlingstype;
     id: string;
     sakId: SladdbarVerdi<SakId>;
@@ -117,19 +118,29 @@ export type BenkBehandlingBase = {
     personmarkører: BenkPersonmarkører;
 };
 
-type BenkBehandlingMedTilgangBase = Omit<BenkBehandlingBase, 'sakId' | 'fnr' | 'saksnummer'> & {
+export type BenkBehandlingMedTilgangBase<T = unknown> = Omit<
+    BenkBehandlingBase<T>,
+    'sakId' | 'fnr' | 'saksnummer'
+> & {
     sakId: IkkeSladdetVerdi<SakId>;
     fnr: IkkeSladdetVerdi<string>;
     saksnummer: IkkeSladdetVerdi<Saksnummer>;
     tilgang: BenkHarTilgang;
 };
 
-export type BenkBehandling<T> = BenkBehandlingBase & T;
+export type BenkBehandling =
+    | BenkSøknadsbehandling
+    | BenkRevurdering
+    | BenkMeldekort
+    | BenkKlagebehandling
+    | BenkTilbakekreving;
 
-export type BenkBehandlingMedTilgang<T> = BenkBehandlingMedTilgangBase & T;
-
-export const harTilgangTilBenkRad = (behandling: Pick<BenkBehandlingBase, 'tilgang'>): boolean =>
-    behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;
+export type BenkBehandlingMedTilgang =
+    | BenkSøknadsbehandlingMedTilgang
+    | BenkRevurderingMedTilgang
+    | BenkMeldekortMedTilgang
+    | BenkKlagebehandlingMedTilgang
+    | BenkTilbakekrevingMedTilgang;
 
 export enum BenkSorteringRetning {
     ASC = 'ASC',

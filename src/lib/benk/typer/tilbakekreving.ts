@@ -1,7 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkBehandlingBase, BenkBehandlingstype } from './felles';
+import { BenkBehandlingBase, BenkBehandlingMedTilgangBase, BenkBehandlingstype } from './felles';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 /**
@@ -23,7 +23,7 @@ export enum BenkTilbakekrevingKilde {
     MELDEKORT = 'MELDEKORT',
 }
 
-export type BenkTilbakekreving = BenkBehandlingBase & {
+type BenkTilbakekrevingProps = {
     type: BenkBehandlingstype.TILBAKEKREVING;
     id: TilbakekrevingId;
     status: BenkTilbakekrevingStatus;
@@ -34,6 +34,9 @@ export type BenkTilbakekreving = BenkBehandlingBase & {
     url: string;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
+
+export type BenkTilbakekreving = BenkBehandlingBase<BenkTilbakekrevingProps>;
+export type BenkTilbakekrevingMedTilgang = BenkBehandlingMedTilgangBase<BenkTilbakekrevingProps>;
 
 export enum BenkTilbakekrevingKolonne {
     fnr = 'fnr',

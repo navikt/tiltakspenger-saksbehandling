@@ -2,10 +2,15 @@ import { Nullable } from '~/types/UtilTypes';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkBehandlingBase, BenkBehandlingsstatus, BenkBehandlingstype } from './felles';
+import {
+    BenkBehandlingBase,
+    BenkBehandlingMedTilgangBase,
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
+} from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
-export type BenkSøknadsbehandling = BenkBehandlingBase & {
+type BenkSøknadsbehandlingProps = {
     type: BenkBehandlingstype.SØKNADSBEHANDLING;
     id: RammebehandlingId;
     status: BenkBehandlingsstatus;
@@ -14,6 +19,10 @@ export type BenkSøknadsbehandling = BenkBehandlingBase & {
     resultat: Nullable<SøknadsbehandlingResultat>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
+
+export type BenkSøknadsbehandling = BenkBehandlingBase<BenkSøknadsbehandlingProps>;
+export type BenkSøknadsbehandlingMedTilgang =
+    BenkBehandlingMedTilgangBase<BenkSøknadsbehandlingProps>;
 
 export enum BenkSøknaderKolonne {
     fnr = 'fnr',
