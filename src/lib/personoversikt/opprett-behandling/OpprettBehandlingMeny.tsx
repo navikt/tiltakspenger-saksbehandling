@@ -17,10 +17,11 @@ import { OpprettSøknadModal } from '~/lib/personoversikt/opprett-behandling/man
 import { StartRevurderingModal } from '~/lib/personoversikt/opprett-behandling/opprett-revurdering/StartRevurderingModal';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { opprettKlageUrl } from '~/utils/urls';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
     sakId: SakId;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     behandlinger: Rammebehandling[];
     className?: string;
 };

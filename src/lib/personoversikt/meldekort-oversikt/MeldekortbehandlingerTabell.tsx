@@ -9,9 +9,10 @@ import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/Meldekortbe
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { utbetalingsstatusTekst } from '~/lib/beregning-og-simulering/utils/utbetalingTekster';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     meldekortbehandlinger: MeldekortbehandlingProps[];
     medMeny: boolean;
 };

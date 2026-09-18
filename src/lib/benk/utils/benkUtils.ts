@@ -1,8 +1,11 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import {
+    BenkBehandling,
+    BenkBehandlingMedTilgang,
     BenkBehandlingsstatus,
     BenkOppsummering,
     BenkSorteringRetning,
+    BenkTilgangsvurdering,
     BenkVentestatus,
 } from '../typer/felles';
 import { BenkMeldekortType, benkMeldekortTyper } from '../typer/meldekort';
@@ -125,4 +128,10 @@ export const benkOppsummeringTekst = (oppsummering: BenkOppsummering): Nullable<
     const utenTilgang = `${oppsummering.antallUtenTilgang} uten tilgang`;
 
     return markører.length === 0 ? utenTilgang : `${utenTilgang} (herav ${markører.join(', ')})`;
+};
+
+export const benkBehandlingHarTilgang = <T>(
+    behandling: BenkBehandling<T>,
+): behandling is BenkBehandlingMedTilgang<T> => {
+    return behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;
 };

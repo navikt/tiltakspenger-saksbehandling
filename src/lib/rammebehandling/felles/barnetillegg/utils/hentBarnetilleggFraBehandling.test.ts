@@ -9,6 +9,8 @@ import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 
+import { tilSaksnummer } from '~/lib/sak/Saksnummer';
+
 const barnetillegg = (fraOgMed: string, tilOgMed: string, antallBarn: number) => ({
     antallBarn,
     periode: { fraOgMed, tilOgMed },
@@ -43,7 +45,7 @@ const rammevedtak = (nummer: number, barnetilleggPerioder: BarnetilleggPeriode[]
 
 const sakMedVedtak = (vedtak: Rammevedtak[]): SakProps => ({
     sakId: 'sak_1',
-    saksnummer: '202501011001',
+    saksnummer: tilSaksnummer('202501011001'),
     fnr: ikkeSladdet('12345678911'),
     kanSendeInnHelgForMeldekort: false,
     søknader: [],

@@ -1,7 +1,12 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkBehandlingBase, BenkBehandlingsstatus, BenkBehandlingstype } from './felles';
+import {
+    BenkBehandling,
+    BenkBehandlingMedTilgang,
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
+} from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 /**
@@ -17,7 +22,7 @@ export const benkMeldekortTyper = {
 
 export type BenkMeldekortType = (typeof benkMeldekortTyper)[keyof typeof benkMeldekortTyper];
 
-export type BenkMeldekort = BenkBehandlingBase & {
+type BenkMeldekortProps = {
     type: BenkMeldekortType;
     id: MeldekortbehandlingId;
     status: BenkBehandlingsstatus;
@@ -27,6 +32,9 @@ export type BenkMeldekort = BenkBehandlingBase & {
     /** Kun meldekortbehandlinger har kommandoer - innsendte/korrigerte meldekort er ikke behandlinger */
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
+
+export type BenkMeldekort = BenkBehandling<BenkMeldekortProps>;
+export type BenkMeldekortMedTilgang = BenkBehandlingMedTilgang<BenkMeldekort>;
 
 export enum BenkMeldekortKolonne {
     fnr = 'fnr',

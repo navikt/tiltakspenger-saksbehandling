@@ -6,6 +6,7 @@ import { useOpprettSøknad } from '~/lib/personoversikt/opprett-behandling/manue
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { behandlingUrl } from '~/utils/urls';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type ContextState = {
     onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
@@ -16,7 +17,7 @@ type ContextState = {
 const Context = createContext<ContextState>({} as ContextState);
 
 type Props = React.PropsWithChildren<{
-    saksnummer: string;
+    saksnummer: Saksnummer;
     personopplysninger?: Personopplysninger;
 }>;
 

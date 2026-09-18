@@ -29,6 +29,7 @@ import { KlageId } from '../../klage/typer/Klage';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 export const RammebehandlingPrefix = 'beh_' as const;
 export type RammebehandlingId = `${typeof RammebehandlingPrefix}${string}`;
@@ -39,7 +40,7 @@ export interface RammebehandlingBase {
     status: Rammebehandlingsstatus;
     resultat: RammebehandlingResultat;
     sakId: SakId;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     rammevedtakId: Nullable<VedtakId>;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;

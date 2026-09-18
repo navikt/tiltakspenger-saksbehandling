@@ -1,9 +1,10 @@
 import { Heading, VStack } from '@navikt/ds-react';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingerTabell } from './MeldekortbehandlingerTabell';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     meldekortbehandlinger: MeldekortbehandlingProps[];
 };
 

@@ -1,6 +1,7 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { nonNullish } from '~/utils/object';
 import { fetchSak } from '~/utils/fetch/fetch-server';
+import { saksnummerFraPageContext } from '~/lib/sak/Saksnummer';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -23,7 +24,15 @@ const Meldekortbehandling = ({ sak, meldekortbehandlingId }: Props) => {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string);
+    const saksnummer = saksnummerFraPageContext(context);
+
+    if (!saksnummer) {
+        return {
+            notFound: true,
+        };
+    }
+
+    const sak = await fetchSak(context.req, saksnummer);
 
     const meldekortbehandlingId = nonNullish(context.params).id as MeldekortbehandlingId;
     const meldekortbehandling = sak.meldekortbehandlinger[meldekortbehandlingId];

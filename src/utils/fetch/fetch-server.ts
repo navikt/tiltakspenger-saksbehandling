@@ -9,6 +9,7 @@ import { BenkRequestBody } from '~/lib/benk/typer/felles';
 import { BenkRespons } from '~/lib/benk/typer/respons';
 import { BenkTab, benkTabPath } from '~/lib/benk/typer/tabs';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -59,7 +60,7 @@ export const fetchJsonFraApiServerSide = async <JsonResponse>(
     });
 };
 
-export const fetchSak = async (req: NextRequest, saksnummer: string) =>
+export const fetchSak = async (req: NextRequest, saksnummer: Saksnummer) =>
     fetchJsonFraApiServerSide<SakProps>(req, `/sak/${saksnummer}`);
 
 export const fetchBenk = async <Behandling>(

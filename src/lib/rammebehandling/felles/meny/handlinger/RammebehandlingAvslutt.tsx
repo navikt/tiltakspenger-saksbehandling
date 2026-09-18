@@ -5,12 +5,13 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
     behandlingId: RammebehandlingId;
     /** Styrer tekstvalg - revurderinger avsluttes uten å avslutte søknaden */
     erRevurdering: boolean;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;

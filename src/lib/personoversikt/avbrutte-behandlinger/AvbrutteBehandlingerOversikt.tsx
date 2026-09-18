@@ -14,9 +14,10 @@ import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     avbrutteRammebehandlinger: Rammebehandling[];
     avbrutteKlagebehandlinger: Klagebehandling[];
 };

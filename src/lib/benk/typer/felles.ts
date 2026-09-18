@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { SakId } from '~/lib/sak/SakTyper';
-import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { IkkeSladdetVerdi, SladdbarVerdi } from '~/types/SladdetVerdi';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -60,18 +61,20 @@ export enum BenkTilgangsårsak {
     UKJENT = 'UKJENT',
 }
 
-export type BenkTilgang =
-    | {
-          vurdering: BenkTilgangsvurdering.HAR_TILGANG;
-          grunn: null;
-      }
-    | {
-          vurdering: BenkTilgangsvurdering.HAR_IKKE_TILGANG;
-          grunn: {
-              årsak: BenkTilgangsårsak;
-              begrunnelse: string;
-          };
-      };
+export type BenkHarTilgang = {
+    vurdering: BenkTilgangsvurdering.HAR_TILGANG;
+    grunn: null;
+};
+
+export type BenkHarIkkeTilgang = {
+    vurdering: BenkTilgangsvurdering.HAR_IKKE_TILGANG;
+    grunn: {
+        årsak: BenkTilgangsårsak;
+        begrunnelse: string;
+    };
+};
+
+export type BenkTilgang = BenkHarTilgang | BenkHarIkkeTilgang;
 
 /**
  * Markørene utledes fra regelen Tilgangsmaskinen avviste tilgangen med, og er derfor bare satt
@@ -103,7 +106,7 @@ export type BenkBehandlingBase = {
     id: string;
     sakId: SladdbarVerdi<SakId>;
     fnr: SladdbarVerdi<string>;
-    saksnummer: SladdbarVerdi<string>;
+    saksnummer: SladdbarVerdi<Saksnummer>;
     startet: string;
     sistEndret: string;
     saksbehandler: Nullable<string>;
@@ -113,6 +116,17 @@ export type BenkBehandlingBase = {
     tilgang: BenkTilgang;
     personmarkører: BenkPersonmarkører;
 };
+
+type BenkBehandlingMedTilgangBase = Omit<BenkBehandlingBase, 'sakId' | 'fnr' | 'saksnummer'> & {
+    sakId: IkkeSladdetVerdi<SakId>;
+    fnr: IkkeSladdetVerdi<string>;
+    saksnummer: IkkeSladdetVerdi<Saksnummer>;
+    tilgang: BenkHarTilgang;
+};
+
+export type BenkBehandling<T> = BenkBehandlingBase & T;
+
+export type BenkBehandlingMedTilgang<T> = BenkBehandlingMedTilgangBase & T;
 
 export const harTilgangTilBenkRad = (behandling: Pick<BenkBehandlingBase, 'tilgang'>): boolean =>
     behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;

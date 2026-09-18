@@ -27,10 +27,11 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     klagebehandling: Klagebehandling;
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];

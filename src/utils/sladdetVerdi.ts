@@ -1,12 +1,19 @@
-import { SladdbarVerdi, SladdetVerdi } from '~/types/SladdetVerdi';
+import { IkkeSladdetVerdi, SladdbarVerdi, SladdetVerdi } from '~/types/SladdetVerdi';
 import { Nullable } from '~/types/UtilTypes';
 
 export const SLADDET_TEKST_DEFAULT = '[Sladdet]';
 
 export const erSladdet = <T>(verdi: SladdbarVerdi<T>): verdi is SladdetVerdi => verdi.erSladdet;
 
-export const hentVerdi = <T>(verdi: SladdbarVerdi<T> | undefined): Nullable<T> =>
-    verdi?.verdi ?? null;
+export function hentVerdi<T>(verdi: IkkeSladdetVerdi<T>): T;
+export function hentVerdi<T>(verdi: SladdbarVerdi<T> | undefined): Nullable<T>;
+export function hentVerdi<T>(verdi: SladdbarVerdi<T> | undefined): Nullable<T> {
+    if (!verdi || verdi.erSladdet) {
+        return null;
+    }
+
+    return verdi.verdi;
+}
 
 export const formaterSladdbarVerdi = <T>(
     verdi: SladdbarVerdi<T>,

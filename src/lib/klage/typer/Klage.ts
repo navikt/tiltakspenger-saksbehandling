@@ -5,6 +5,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 export type KlageId = `klage_${string}`;
 
@@ -29,7 +30,7 @@ export enum KlagebehandlingStatus {
 export interface Klagebehandling {
     id: KlageId;
     sakId: SakId;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     fnr: SladdbarVerdi<string>;
     opprettet: string;
     sistEndret: string;

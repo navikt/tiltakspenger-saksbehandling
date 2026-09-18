@@ -6,6 +6,7 @@ import { personoversiktUrl } from '~/utils/urls';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 import styles from './OpprettSak.module.css';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 const FNR_LENGDE = 11;
 
@@ -14,7 +15,7 @@ type HentEllerOpprettSakRequest = {
 };
 
 type HentEllerOpprettSakResponse = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     opprettet: boolean;
 };
 

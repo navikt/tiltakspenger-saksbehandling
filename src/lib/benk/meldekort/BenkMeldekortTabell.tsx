@@ -1,7 +1,7 @@
 import { HStack, Table } from '@navikt/ds-react';
-import { BenkMeldekort, BenkMeldekortKolonne } from '../typer/meldekort';
+import { BenkMeldekort, BenkMeldekortKolonne, BenkMeldekortMedTilgang } from '../typer/meldekort';
 import { BenkBehandlingstype, BenkSortering } from '../typer/felles';
-import { benkMeldekortTypeTekst } from '../utils/benkUtils';
+import { benkBehandlingHarTilgang, benkMeldekortTypeTekst } from '../utils/benkUtils';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { hentVerdi } from '~/utils/sladdetVerdi';
@@ -75,34 +75,8 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                                 ident={erMeldekortbehandling ? behandling.beslutter : '-'}
                             />
                             <BenkTabellCelle.Handlinger behandling={behandling}>
-                                {behandling.type === BenkBehandlingstype.MELDEKORTBEHANDLING ? (
-                                    <HStack
-                                        gap={'space-8'}
-                                        justify={'end'}
-                                        align={'center'}
-                                        wrap={false}
-                                    >
-                                        <InternLenkeKnapp
-                                            href={meldekortbehandlingUrl(
-                                                hentVerdi(behandling.saksnummer) ?? '',
-                                                behandling.id,
-                                            )}
-                                        >
-                                            {'Åpne'}
-                                        </InternLenkeKnapp>
-                                        <BenkBehandlingMeny behandling={behandling} />
-                                    </HStack>
-                                ) : (
-                                    <InternLenkeKnapp
-                                        href={meldeperiodeUrl(
-                                            hentVerdi(behandling.saksnummer) ?? '',
-                                            // Innsendte/korrigerte meldekort dekker nøyaktig én meldeperiode
-                                            behandling.meldeperioder[0],
-                                            MeldeperiodekjedeTab.BrukersMeldekort,
-                                        )}
-                                    >
-                                        {'Åpne'}
-                                    </InternLenkeKnapp>
+                                {benkBehandlingHarTilgang(behandling) && (
+                                    <Handlinger behandling={behandling} />
                                 )}
                             </BenkTabellCelle.Handlinger>
                         </Table.Row>
@@ -110,5 +84,29 @@ export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => 
                 })}
             </Table.Body>
         </Table>
+    );
+};
+
+const Handlinger = ({ behandling }: { behandling: BenkMeldekortMedTilgang }) => {
+    const saksnummer = hentVerdi(behandling.saksnummer);
+
+    return behandling.type === BenkBehandlingstype.MELDEKORTBEHANDLING ? (
+        <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+            <InternLenkeKnapp href={meldekortbehandlingUrl(saksnummer, behandling.id)}>
+                {'Åpne'}
+            </InternLenkeKnapp>
+            <BenkBehandlingMeny behandling={behandling} />
+        </HStack>
+    ) : (
+        <InternLenkeKnapp
+            href={meldeperiodeUrl(
+                saksnummer,
+                // Innsendte/korrigerte meldekort dekker nøyaktig én meldeperiode
+                behandling.meldeperioder[0],
+                MeldeperiodekjedeTab.BrukersMeldekort,
+            )}
+        >
+            {'Åpne'}
+        </InternLenkeKnapp>
     );
 };

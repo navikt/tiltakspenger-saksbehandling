@@ -30,6 +30,8 @@ import {
     OmgjøringskravbehandlingAvsluttetUtfall,
 } from '~/lib/klage/typer/Klageinstanshendelse';
 
+import { Saksnummer } from '~/lib/sak/Saksnummer';
+
 export const getServerSideProps = pageWithAuthentication(async () => {
     if (process?.env.NEXT_PUBLIC_DEVROUTES && process.env.NEXT_PUBLIC_DEVROUTES === 'true') {
         return { props: {} };
@@ -325,7 +327,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
     });
 
     const fetchNysøknad = useFetchJsonFraApi<
-        string,
+        Saksnummer,
         {
             fnr: string | null;
             deltakelsesperiode: {

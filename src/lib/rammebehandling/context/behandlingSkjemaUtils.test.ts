@@ -17,6 +17,8 @@ import {
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 
+import { tilSaksnummer } from '~/lib/sak/Saksnummer';
+
 const tiltaksdeltakelse = (id: string, periode: Periode): Tiltaksdeltakelse => ({
     eksternDeltagelseId: id,
     gjennomføringId: null,
@@ -38,7 +40,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     status: Rammebehandlingsstatus.UNDER_BEHANDLING,
     resultat: RevurderingResultat.INNVILGELSE,
     sakId: 'sak_1',
-    saksnummer: '202501011001',
+    saksnummer: tilSaksnummer('202501011001'),
     rammevedtakId: null,
     saksbehandler: 'Z123456',
     beslutter: null,
@@ -72,7 +74,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
 
 const sakUtenVedtak: SakProps = {
     sakId: 'sak_1',
-    saksnummer: '202501011001',
+    saksnummer: tilSaksnummer('202501011001'),
     fnr: ikkeSladdet('12345678911'),
     kanSendeInnHelgForMeldekort: false,
     søknader: [],

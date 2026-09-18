@@ -1,9 +1,10 @@
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingerTabell } from './MeldekortbehandlingerTabell';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     meldekortbehandlinger: MeldekortbehandlingProps[];
 };
 

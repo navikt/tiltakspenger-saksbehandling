@@ -7,6 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, jest, test } from '
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import AvbrytKlagebehandlingModal from './AvbrytKlagebehandlingModal';
 import { SakId } from '~/lib/sak/SakTyper';
+import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { KlageId } from '~/lib/klage/typer/Klage';
 
 // jsdom implementerer ikke <dialog>, som Aksel sine dialoger baserer seg på.
@@ -51,7 +52,7 @@ const renderModal = () => {
         <AvbrytKlagebehandlingModal
             sakId={'sak_1' as SakId}
             klageId={'klage_1' as KlageId}
-            saksnummer={'12345678'}
+            saksnummer={tilSaksnummer('123456789012')}
             åpen
             onClose={onClose}
         />,

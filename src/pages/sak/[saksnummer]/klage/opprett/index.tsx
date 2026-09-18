@@ -5,6 +5,7 @@ import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
+import { saksnummerFraPageContext } from '~/lib/sak/Saksnummer';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/lib/sak/SakTyper';
 import router from 'next/router';
@@ -32,16 +33,18 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const saksnummer = saksnummerFraPageContext(context);
 
-    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
-        (e) => {
-            logger.error(
-                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
-            );
-            throw e;
-        },
-    );
+    if (!saksnummer) {
+        return {
+            notFound: true,
+        };
+    }
+
+    const sak = await fetchSak(context.req, saksnummer).catch((e) => {
+        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
+        throw e;
+    });
 
     return { props: { sak } };
 });

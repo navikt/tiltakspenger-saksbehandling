@@ -31,7 +31,7 @@ import { BenkRevurdering } from '../typer/revurderinger';
 import { BenkKlagebehandling } from '../typer/klage';
 import { BenkBehandlingMeny } from './BenkBehandlingMeny';
 import { useBenkVisning } from './filter/BenkVisningContext';
-import { kanFortsetteBenkRad } from '../utils/benkUtils';
+import { benkBehandlingHarTilgang, kanFortsetteBenkRad } from '../utils/benkUtils';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { BenkTildelCheckbox } from '~/lib/benk/felles/tildel-flere/BenkTildelCheckbox';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
@@ -257,20 +257,22 @@ const RammebehandlingHandlinger = ({
 
     return (
         <Handlinger behandling={behandling}>
-            <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                <InternLenkeKnapp
-                    href={behandlingUrl({
-                        saksnummer: hentVerdi(behandling.saksnummer) ?? '',
-                        id: behandling.id,
-                    })}
-                >
-                    {kanFortsetteBenkRad(behandling, innloggetSaksbehandler.navIdent)
-                        ? 'Fortsett'
-                        : 'Åpne'}
-                </InternLenkeKnapp>
-                <BenkBehandlingMeny behandling={behandling} />
-                <BenkTildelCheckbox behandling={behandling} />
-            </HStack>
+            {benkBehandlingHarTilgang(behandling) && (
+                <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                    <InternLenkeKnapp
+                        href={behandlingUrl({
+                            saksnummer: hentVerdi(behandling.saksnummer),
+                            id: behandling.id,
+                        })}
+                    >
+                        {kanFortsetteBenkRad(behandling, innloggetSaksbehandler.navIdent)
+                            ? 'Fortsett'
+                            : 'Åpne'}
+                    </InternLenkeKnapp>
+                    <BenkBehandlingMeny behandling={behandling} />
+                    <BenkTildelCheckbox behandling={behandling} />
+                </HStack>
+            )}
         </Handlinger>
     );
 };

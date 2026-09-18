@@ -16,6 +16,7 @@ import {
 import AvbrytKlagebehandlingForm from '../../forms/avbryt/AvbrytKlagebehandlingForm';
 
 import styles from './AvbrytKlagebehandlingModal.module.css';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 const TITTEL = 'Avslutt klagebehandling';
 
@@ -29,7 +30,7 @@ const erTerminalFeil = (status?: number) => status === 404 || status === 409;
 const AvbrytKlagebehandlingModal = (props: {
     sakId: SakId;
     klageId: KlageId;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     åpen: boolean;
     onClose: () => void;
 }) => {

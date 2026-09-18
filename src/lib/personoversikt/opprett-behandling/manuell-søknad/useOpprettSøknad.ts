@@ -1,8 +1,9 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
-export const useOpprettSøknad = (saksnummer: string) => {
+export const useOpprettSøknad = (saksnummer: Saksnummer) => {
     const {
         trigger: opprettSøknad,
         isMutating: opprettSøknadLaster,

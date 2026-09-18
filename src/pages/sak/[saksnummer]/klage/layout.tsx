@@ -26,10 +26,11 @@ import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
     children: ReactElement;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     activeTab: KlageSteg;
 };
 
@@ -148,7 +149,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
 
 export default KlageLayout;
 
-const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandling> }) => {
+const KlageHeader = (props: { saksnummer: Saksnummer; klage: Nullable<Klagebehandling> }) => {
     const utfall = props.klage ? hentSisteKlagehendelseUtfallFraKlagebehandling(props.klage) : null;
 
     return (

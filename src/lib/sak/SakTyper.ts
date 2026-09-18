@@ -16,12 +16,13 @@ import { PartialRecord } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 export type SakId = `sak_${string}`;
 
 export type SakProps = {
     sakId: SakId;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     fnr: SladdbarVerdi<string>;
 
     førsteDagSomGirRett?: string;

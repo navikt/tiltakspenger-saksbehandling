@@ -12,9 +12,10 @@ import {
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldeperiodeKjederOversikt.module.css';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     meldeperiodeKjeder: MeldeperiodekjedeProps[];
 };
 

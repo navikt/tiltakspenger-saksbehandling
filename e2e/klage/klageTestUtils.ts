@@ -33,7 +33,9 @@ import type {
     KlageinstanshendelseId,
 } from '~/lib/klage/typer/Klageinstanshendelse';
 
-const saksnummer = '10001';
+import { tilSaksnummer } from '~/lib/sak/Saksnummer';
+
+const saksnummer = tilSaksnummer('202501011001');
 const sakId: SakId = 'sak_01ABC';
 const klageId: KlageId = 'klage_01ABC';
 const fnr = ikkeSladdet('12345678911');

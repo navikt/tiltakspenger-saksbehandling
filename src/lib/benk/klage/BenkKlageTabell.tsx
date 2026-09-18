@@ -11,6 +11,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
 import { BenkTabellCelle } from '../felles/BenkTabellCelle';
 import { BenkTab } from '~/lib/benk/typer/tabs';
+import { benkBehandlingHarTilgang } from '../utils/benkUtils';
 
 type Props = {
     behandlinger: BenkKlagebehandling[];
@@ -50,15 +51,17 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
                         <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
                         <BenkTabellCelle.Handlinger behandling={behandling}>
-                            <InternLenkeKnapp
-                                href={klagebehandlingUrl(
-                                    hentVerdi(behandling.saksnummer) ?? '',
-                                    behandling.id,
-                                    klageStegForBenkRad(behandling.resultat),
-                                )}
-                            >
-                                {'Åpne'}
-                            </InternLenkeKnapp>
+                            {benkBehandlingHarTilgang(behandling) && (
+                                <InternLenkeKnapp
+                                    href={klagebehandlingUrl(
+                                        hentVerdi(behandling.saksnummer),
+                                        behandling.id,
+                                        klageStegForBenkRad(behandling.resultat),
+                                    )}
+                                >
+                                    {'Åpne'}
+                                </InternLenkeKnapp>
+                            )}
                         </BenkTabellCelle.Handlinger>
                     </Table.Row>
                 ))}

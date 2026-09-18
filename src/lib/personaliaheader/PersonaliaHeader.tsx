@@ -8,12 +8,13 @@ import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { personoversiktUrl } from '~/utils/urls';
 import { sladdbarTekst } from '~/utils/sladdetVerdi';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 import styles from './PersonaliaHeader.module.css';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
-    saksnummer: string;
+    saksnummer: Saksnummer;
     aktivTab?: PersonoversiktTab;
     visTilbakeKnapp?: boolean;
 }>;
@@ -72,7 +73,7 @@ export const PersonaliaHeader = ({
 };
 
 type PersonaliaInnholdProps = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     personopplysninger: Personopplysninger;
 };
 

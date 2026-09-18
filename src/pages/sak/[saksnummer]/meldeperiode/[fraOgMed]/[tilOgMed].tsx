@@ -2,6 +2,7 @@ import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { nonNullish } from '~/utils/object';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
+import { saksnummerFraPageContext } from '~/lib/sak/Saksnummer';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { periodeTilMeldeperiodeKjedeId } from '~/utils/periode';
@@ -22,7 +23,15 @@ const Meldeperiode = ({ kjedeId, sak }: Props) => {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string);
+    const saksnummer = saksnummerFraPageContext(context);
+
+    if (!saksnummer) {
+        return {
+            notFound: true,
+        };
+    }
+
+    const sak = await fetchSak(context.req, saksnummer);
 
     const periodeFraParam: Periode = {
         fraOgMed: nonNullish(context.params).fraOgMed as string,

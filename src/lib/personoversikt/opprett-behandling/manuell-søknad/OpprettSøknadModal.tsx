@@ -1,9 +1,10 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import router from 'next/router';
 import { registrerSoknadUrl } from '~/utils/urls';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     åpen: boolean;
     setÅpen: (åpen: boolean) => void;
 };

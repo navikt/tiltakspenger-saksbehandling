@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { fetchSak } from '~/utils/fetch/fetch-server';
+import { saksnummerFraPageContext } from '~/lib/sak/Saksnummer';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/lib/sak/SakTyper';
 import router from 'next/router';
@@ -53,17 +54,20 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const saksnummer = saksnummerFraPageContext(context);
+
+    if (!saksnummer) {
+        return {
+            notFound: true,
+        };
+    }
+
     const klageId = nonNullish(context.params).klageId as KlageId;
 
-    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
-        (e) => {
-            logger.error(
-                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
-            );
-            throw e;
-        },
-    );
+    const sak = await fetchSak(context.req, saksnummer).catch((e) => {
+        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
+        throw e;
+    });
 
     const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 

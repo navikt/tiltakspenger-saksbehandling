@@ -7,9 +7,10 @@ import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-s
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
-    saksnummer: string;
+    saksnummer: Saksnummer;
     meldeperiodeKjeder: MeldeperiodekjedeProps[];
 };
 

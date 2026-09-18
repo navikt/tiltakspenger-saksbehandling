@@ -11,6 +11,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
+import { saksnummerFraPageContext } from '~/lib/sak/Saksnummer';
 
 type Props = {
     behandlingId: RammebehandlingId;
@@ -29,17 +30,20 @@ const Behandling = ({ behandlingId, sak, klage }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const saksnummer = saksnummerFraPageContext(context);
+
+    if (!saksnummer) {
+        return {
+            notFound: true,
+        };
+    }
+
     const behandlingId = nonNullish(context.params).behandlingId as RammebehandlingId;
 
-    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
-        (e) => {
-            logger.error(
-                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
-            );
-            throw e;
-        },
-    );
+    const sak = await fetchSak(context.req, saksnummer).catch((e) => {
+        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
+        throw e;
+    });
 
     const behandling = sak.rammebehandlinger.find((behandling) => behandling.id === behandlingId);
 

@@ -65,6 +65,12 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
         />
     );
 
+    const saksnummer = hentVerdi(behandling.saksnummer);
+
+    if (!saksnummer) {
+        return null;
+    }
+
     switch (behandling.type) {
         case BenkBehandlingstype.SØKNADSBEHANDLING:
         case BenkBehandlingstype.REVURDERING: {
@@ -74,7 +80,7 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
                 onClose();
                 router.push(
                     behandlingUrl({
-                        saksnummer: hentVerdi(behandling.saksnummer) ?? '',
+                        saksnummer,
                         id: behandling.id,
                     }),
                 );
@@ -99,9 +105,7 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
         case BenkBehandlingstype.MELDEKORTBEHANDLING: {
             const onSuccessTilBehandling = () => {
                 onClose();
-                router.push(
-                    meldekortbehandlingUrl(hentVerdi(behandling.saksnummer) ?? '', behandling.id),
-                );
+                router.push(meldekortbehandlingUrl(saksnummer, behandling.id));
             };
 
             return (

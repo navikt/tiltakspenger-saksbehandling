@@ -10,6 +10,7 @@ import {
 } from '~/lib/klage/typer/Klage';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
+import { saksnummerFraPageContext } from '~/lib/sak/Saksnummer';
 import { kanNavigereTilKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
@@ -70,17 +71,20 @@ type Props = {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const saksnummer = nonNullish(context.params).saksnummer as string;
+    const saksnummer = saksnummerFraPageContext(context);
+
+    if (!saksnummer) {
+        return {
+            notFound: true,
+        };
+    }
+
     const klageId = nonNullish(context.params).klageId as KlageId;
 
-    const sak = await fetchSak(context.req, nonNullish(context.params).saksnummer as string).catch(
-        (e) => {
-            logger.error(
-                `Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`,
-            );
-            throw e;
-        },
-    );
+    const sak = await fetchSak(context.req, saksnummer).catch((e) => {
+        logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);
+        throw e;
+    });
 
     const initialKlage = sak.klagebehandlinger.find((klage) => klage.id === klageId);
 
