@@ -5,7 +5,7 @@ import { BenkTab } from '../typer/tabs';
 import { BenkSøknaderFilter } from '../typer/søknader';
 import { BenkRevurderingerFilter } from '../typer/revurderinger';
 import { BenkMeldekortFilter, benkMeldekortTyper } from '../typer/meldekort';
-import { BenkKlageFilter } from '../typer/klage';
+import { BenkKlageFilter, BenkKlageStatus } from '../typer/klage';
 import {
     BenkTilbakekrevingFilter,
     BenkTilbakekrevingKilde,
@@ -98,7 +98,7 @@ export const parseBenkMeldekortFilter = (kilde: BenkFilterKilde): BenkMeldekortF
 });
 
 export const parseBenkKlageFilter = (kilde: BenkFilterKilde): BenkKlageFilter => ({
-    status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
+    status: benkEnumVerdi(kilde.status, BenkKlageStatus),
     resultat: benkEnumVerdi(kilde.resultat, KlagebehandlingResultat),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),

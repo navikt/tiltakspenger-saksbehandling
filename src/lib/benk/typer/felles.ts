@@ -10,7 +10,8 @@ import { BenkTilbakekreving, BenkTilbakekrevingMedTilgang } from '~/lib/benk/typ
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
- * (søknader, revurderinger, meldekort og klage). Tilbakekreving har sin egen flyt og egen status.
+ * (søknader, revurderinger og meldekort). Klage og tilbakekreving har egne flyter
+ * og egne statuser.
  */
 export enum BenkBehandlingsstatus {
     UNDER_AUTOMATISK_BEHANDLING = 'UNDER_AUTOMATISK_BEHANDLING',
@@ -18,7 +19,6 @@ export enum BenkBehandlingsstatus {
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
-    KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
 }
 
 /**

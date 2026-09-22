@@ -8,6 +8,7 @@ import {
     BenkTilgangsvurdering,
     BenkVentestatus,
 } from '../typer/felles';
+import { BenkKlageStatus } from '../typer/klage';
 import { BenkMeldekortType, benkMeldekortTyper } from '../typer/meldekort';
 import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
 import { isValueInRecord } from '~/utils/object';
@@ -19,16 +20,26 @@ export const benkBehandlingsstatusTekst: Record<BenkBehandlingsstatus, string> =
     [BenkBehandlingsstatus.UNDER_BEHANDLING]: 'Under behandling',
     [BenkBehandlingsstatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
     [BenkBehandlingsstatus.UNDER_BESLUTNING]: 'Under beslutning',
-    [BenkBehandlingsstatus.KLAR_TIL_FERDIGSTILLING]: 'Klar til ferdigstilling',
 } as const;
 
 export const benkBehandlingsstatusColor: Record<BenkBehandlingsstatus, AkselColor> = {
     [BenkBehandlingsstatus.KLAR_TIL_BEHANDLING]: 'success',
     [BenkBehandlingsstatus.KLAR_TIL_BESLUTNING]: 'meta-lime',
-    [BenkBehandlingsstatus.KLAR_TIL_FERDIGSTILLING]: 'success',
     [BenkBehandlingsstatus.UNDER_BEHANDLING]: 'info',
     [BenkBehandlingsstatus.UNDER_BESLUTNING]: 'info',
     [BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'info',
+} as const;
+
+export const benkKlageStatusTekst: Record<BenkKlageStatus, string> = {
+    [BenkKlageStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
+    [BenkKlageStatus.UNDER_BEHANDLING]: 'Under behandling',
+    [BenkKlageStatus.KLAR_TIL_FERDIGSTILLING]: 'Klar til ferdigstilling',
+} as const;
+
+export const benkKlageStatusColor: Record<BenkKlageStatus, AkselColor> = {
+    [BenkKlageStatus.KLAR_TIL_BEHANDLING]: 'success',
+    [BenkKlageStatus.UNDER_BEHANDLING]: 'info',
+    [BenkKlageStatus.KLAR_TIL_FERDIGSTILLING]: 'success',
 } as const;
 
 export const benkTilbakekrevingStatusTekst: Record<BenkTilbakekrevingStatus, string> = {

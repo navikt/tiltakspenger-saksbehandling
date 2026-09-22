@@ -1,6 +1,6 @@
 import { BenkKlageFilter } from '../typer/klage';
 import { BenkTab } from '../typer/tabs';
-import { benkBehandlingsstatusTekst } from '../utils/benkUtils';
+import { benkKlageStatusTekst } from '../utils/benkUtils';
 import { klagebehandlingResultatTekst } from '~/lib/klage/utils/klageTekster';
 import { useResettableState } from '~/utils/useResettableState';
 import { useBenkFilterNavigasjon } from '../felles/filter/useBenkFilterNavigasjon';
@@ -41,7 +41,7 @@ export const BenkKlageFilterSkjema = ({ saksbehandlere, besluttere, aktivtFilter
                 label={'Status'}
                 value={valgtFilter.status}
                 onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
-                alternativer={benkBehandlingsstatusTekst}
+                alternativer={benkKlageStatusTekst}
             />
 
             <BenkFilterSelect

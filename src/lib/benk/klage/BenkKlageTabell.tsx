@@ -4,7 +4,7 @@ import { BenkSortering } from '../typer/felles';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { hentVerdi } from '~/utils/sladdetVerdi';
-import { BenkStatusTag } from '../felles/BenkStatusTag';
+import { BenkKlageStatusTag } from '../felles/BenkStatusTag';
 import { useBenkSortering } from '../felles/useBenkSortering';
 import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
@@ -41,10 +41,7 @@ export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
                         <BenkTabellCelle.Fnr behandling={behandling} />
                         <BenkTabellCelle.Resultat behandling={behandling} />
                         <Table.DataCell>
-                            <BenkStatusTag
-                                status={behandling.status}
-                                erUnderkjent={behandling.erUnderkjent}
-                            />
+                            <BenkKlageStatusTag status={behandling.status} />
                         </Table.DataCell>
                         <BenkTabellCelle.Ventestatus behandling={behandling} />
                         <BenkTabellCelle.Tidspunkt tidspunkt={behandling.kravtidspunkt} />

@@ -1,11 +1,14 @@
 import { HStack, Tag } from '@navikt/ds-react';
 import { BenkBehandlingsstatus } from '../typer/felles';
+import { BenkKlageStatus } from '../typer/klage';
 import { BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
 import {
     benkTilbakekrevingStatusColor,
     benkTilbakekrevingStatusTekst,
     benkBehandlingsstatusColor,
     benkBehandlingsstatusTekst,
+    benkKlageStatusColor,
+    benkKlageStatusTekst,
 } from '../utils/benkUtils';
 
 export const BenkStatusTag = ({
@@ -25,6 +28,12 @@ export const BenkStatusTag = ({
             </Tag>
         )}
     </HStack>
+);
+
+export const BenkKlageStatusTag = ({ status }: { status: BenkKlageStatus }) => (
+    <Tag data-color={benkKlageStatusColor[status]} variant={'outline'} size={'small'}>
+        {benkKlageStatusTekst[status]}
+    </Tag>
 );
 
 export const BenkTilbakekrevingStatusTag = ({ status }: { status: BenkTilbakekrevingStatus }) => (

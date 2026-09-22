@@ -1,16 +1,21 @@
 import { Nullable } from '~/types/UtilTypes';
 import { KlagebehandlingResultat, KlageId } from '~/lib/klage/typer/Klage';
-import {
-    BenkBehandlingBase,
-    BenkBehandlingMedTilgangBase,
-    BenkBehandlingsstatus,
-    BenkBehandlingstype,
-} from './felles';
+import { BenkBehandlingBase, BenkBehandlingMedTilgangBase, BenkBehandlingstype } from './felles';
+
+/**
+ * Statusene en klage kan ha i benken. Klage har ingen beslutningsflyt, men får
+ * KLAR_TIL_FERDIGSTILLING når den er mottatt tilbake fra klageinstans.
+ */
+export enum BenkKlageStatus {
+    KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
+    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+    KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
+}
 
 type BenkKlagebehandlingProps = {
     type: BenkBehandlingstype.KLAGEBEHANDLING;
     id: KlageId;
-    status: BenkBehandlingsstatus;
+    status: BenkKlageStatus;
     kravtidspunkt: string;
     resultat: Nullable<KlagebehandlingResultat>;
     beslutter: null;
@@ -30,7 +35,7 @@ export enum BenkKlageKolonne {
 }
 
 export type BenkKlageFilter = {
-    status: Nullable<BenkBehandlingsstatus>;
+    status: Nullable<BenkKlageStatus>;
     resultat: Nullable<KlagebehandlingResultat>;
     saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
