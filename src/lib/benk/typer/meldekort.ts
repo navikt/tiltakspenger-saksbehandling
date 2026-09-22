@@ -55,5 +55,4 @@ export type BenkMeldekortFilter = {
     saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
-    skjulUtenTilgang: boolean;
 };

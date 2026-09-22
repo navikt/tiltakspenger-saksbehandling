@@ -28,7 +28,6 @@ export const BenkKlageFilterSkjema = ({ saksbehandlere, besluttere, aktivtFilter
                     saksbehandler: null,
                     skjulEgneTilBeslutning: false,
                     skjulPåVent: false,
-                    skjulUtenTilgang: true,
                 })
             }
             skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
@@ -37,10 +36,6 @@ export const BenkKlageFilterSkjema = ({ saksbehandlere, besluttere, aktivtFilter
             }
             skjulPåVent={valgtFilter.skjulPåVent}
             onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
-            skjulUtenTilgang={valgtFilter.skjulUtenTilgang}
-            onSkjulUtenTilgangChange={(skjulUtenTilgang) =>
-                setValgtFilter({ ...valgtFilter, skjulUtenTilgang })
-            }
         >
             <BenkFilterSelect
                 label={'Status'}

@@ -10,8 +10,6 @@ type Props = {
     onSkjulEgneTilBeslutningChange: (skjulEgneTilBeslutning: boolean) => void;
     skjulPåVent: boolean;
     onSkjulPåVentChange: (skjulPåVent: boolean) => void;
-    skjulUtenTilgang: boolean;
-    onSkjulUtenTilgangChange: (skjulUtenTilgang: boolean) => void;
     children: ReactNode;
 };
 
@@ -22,8 +20,6 @@ export const BenkFilterSkjema = ({
     onSkjulEgneTilBeslutningChange,
     skjulPåVent,
     onSkjulPåVentChange,
-    skjulUtenTilgang,
-    onSkjulUtenTilgangChange,
     children,
 }: Props) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -57,20 +53,6 @@ export const BenkFilterSkjema = ({
                 <BenkFilterCheckbox checked={skjulPåVent} onChange={onSkjulPåVentChange}>
                     {'Skjul behandlinger satt på vent'}
                 </BenkFilterCheckbox>
-
-                <HStack align={'center'} gap={'space-4'}>
-                    <BenkFilterCheckbox
-                        checked={skjulUtenTilgang}
-                        onChange={onSkjulUtenTilgangChange}
-                    >
-                        {'Skjul behandlinger jeg ikke har tilgang til'}
-                    </BenkFilterCheckbox>
-                    <HelpText>
-                        {
-                            'Skjuler behandlinger for personer du ikke har tilgang til. Disse vises ellers som sladdede rader i benken.'
-                        }
-                    </HelpText>
-                </HStack>
             </VStack>
 
             <HStack gap={'space-16'}>
