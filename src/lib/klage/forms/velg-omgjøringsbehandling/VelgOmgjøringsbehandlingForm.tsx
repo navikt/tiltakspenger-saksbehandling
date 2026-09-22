@@ -15,10 +15,7 @@ import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import {
-    erBehandlingIdMeldekortbehandling,
-    erBehandlingIdRammebehandling,
-} from '~/lib/behandling-felles/utils/behandlingUtils';
+import { erMeldekortId, erRammebehandlingId } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 
 import {
@@ -52,10 +49,10 @@ export const VelgOmgjøringsbehandlingModal = (props: {
         sakId: props.sakId,
         klageId: props.klagebehandling.id,
         onSuccess: (behandling) => {
-            if (erBehandlingIdRammebehandling(behandling.id)) {
+            if (erRammebehandlingId(behandling.id)) {
                 router.push(behandlingUrl({ saksnummer: props.saksnummer, id: behandling.id }));
             }
-            if (erBehandlingIdMeldekortbehandling(behandling.id)) {
+            if (erMeldekortId(behandling.id)) {
                 router.push(
                     meldeperiodeUrl(
                         props.saksnummer,

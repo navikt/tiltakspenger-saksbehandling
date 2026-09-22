@@ -17,10 +17,7 @@ import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import FerdigstillKlageModalWrapper from './modaler/FerdigstillKlagebehandlingModal';
 import KlageTilknyttedeBehandlingerInfoCard from './KlageTilknyttedeBehandlingerInfoCard';
-import {
-    erBehandlingIdMeldekortbehandling,
-    erBehandlingIdRammebehandling,
-} from '../behandling-felles/utils/behandlingUtils';
+import { erMeldekortId, erRammebehandlingId } from '../behandling-felles/utils/behandlingUtils';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
@@ -144,10 +141,8 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     const erReadonlyForSaksbehandler =
         !erSaksbehandler || props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
     const harÅpenBehandling = !!åpenBehandlingId;
-    const klagerPåRammebehandling =
-        harÅpenBehandling && erBehandlingIdRammebehandling(åpenBehandlingId);
-    const klagerPåMeldekortbehandling =
-        harÅpenBehandling && erBehandlingIdMeldekortbehandling(åpenBehandlingId);
+    const klagerPåRammebehandling = harÅpenBehandling && erRammebehandlingId(åpenBehandlingId);
+    const klagerPåMeldekortbehandling = harÅpenBehandling && erMeldekortId(åpenBehandlingId);
 
     const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
         useState(false);

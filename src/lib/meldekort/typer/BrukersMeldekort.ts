@@ -1,8 +1,7 @@
-import { Nullable } from '~/types/UtilTypes';
+import { Branded, Nullable } from '~/types/UtilTypes';
+import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
 
-// "_bruker"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med MeldekortbehandlingId
-// Ikke gjør run-time typesjekk på denne!
-export type BrukersMeldekortId = `meldekort_${string}_bruker`;
+export type BrukersMeldekortId = Branded<MeldekortId, 'brukersMeldekortId'>;
 
 export enum BrukersMeldekortDagStatus {
     DELTATT_UTEN_LØNN_I_TILTAKET = 'DELTATT_UTEN_LØNN_I_TILTAKET',

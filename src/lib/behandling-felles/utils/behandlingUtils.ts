@@ -1,20 +1,18 @@
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPrefix,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { BehandlingId } from '../typer/BehandlingFelles';
 import {
     RammebehandlingId,
-    RammebehandlingPrefix,
+    RammebehandlingIdPrefix,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { Attestering, Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
+import { MeldekortIdPrefix } from '~/lib/meldekort/typer/MeldekortId';
 
-export const erBehandlingIdRammebehandling = (id: BehandlingId): id is RammebehandlingId =>
-    id.startsWith(RammebehandlingPrefix);
+export const erRammebehandlingId = (id: BehandlingId): id is RammebehandlingId =>
+    id.startsWith(RammebehandlingIdPrefix);
 
-export const erBehandlingIdMeldekortbehandling = (id: BehandlingId): id is MeldekortbehandlingId =>
-    id.startsWith(MeldekortbehandlingPrefix);
+export const erMeldekortId = (id: BehandlingId): id is MeldekortbehandlingId =>
+    id.startsWith(MeldekortIdPrefix);
 
 type MedVentestatus = { ventestatus: VentestatusHendelse[] };
 

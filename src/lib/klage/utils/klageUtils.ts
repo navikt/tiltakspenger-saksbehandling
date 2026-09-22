@@ -17,10 +17,7 @@ import {
     erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
 } from './KlageinstanshendelseUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import {
-    erBehandlingIdMeldekortbehandling,
-    erBehandlingIdRammebehandling,
-} from '~/lib/behandling-felles/utils/behandlingUtils';
+import { erMeldekortId, erRammebehandlingId } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
@@ -239,11 +236,11 @@ export const erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring = (
         return false;
     }
 
-    if (erBehandlingIdRammebehandling(omgjøringsbehandling.id)) {
+    if (erRammebehandlingId(omgjøringsbehandling.id)) {
         return erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling as Rammebehandling);
     }
 
-    if (erBehandlingIdMeldekortbehandling(omgjøringsbehandling.id)) {
+    if (erMeldekortId(omgjøringsbehandling.id)) {
         return erMeldekortbehandlingUnderAktivOmgjøring(
             omgjøringsbehandling as MeldekortbehandlingProps,
         );

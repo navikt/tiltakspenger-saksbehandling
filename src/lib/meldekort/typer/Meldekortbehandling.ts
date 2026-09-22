@@ -1,5 +1,5 @@
 import { MeldeperiodeId } from './Meldeperiode';
-import { Nullable } from '~/types/UtilTypes';
+import { Branded, Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Periode } from '~/types/Periode';
@@ -18,10 +18,9 @@ import { KlageId } from '~/lib/klage/typer/Klage';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
 
-export const MeldekortbehandlingPrefix = 'meldekort_' as const;
-
-export type MeldekortbehandlingId = `${typeof MeldekortbehandlingPrefix}${string}`;
+export type MeldekortbehandlingId = Branded<MeldekortId, 'meldekortbehandlingId'>;
 
 export enum MeldekortbehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',

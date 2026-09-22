@@ -31,8 +31,8 @@ import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
 
-export const RammebehandlingPrefix = 'beh_' as const;
-export type RammebehandlingId = `${typeof RammebehandlingPrefix}${string}`;
+export const RammebehandlingIdPrefix = 'beh_' as const;
+export type RammebehandlingId = `${typeof RammebehandlingIdPrefix}${string}`;
 
 export interface RammebehandlingBase {
     id: RammebehandlingId;

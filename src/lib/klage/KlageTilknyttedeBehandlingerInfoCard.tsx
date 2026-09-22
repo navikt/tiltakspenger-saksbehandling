@@ -9,7 +9,7 @@ import {
     MeldekortbehandlingProps,
 } from '../meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
-import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/behandlingUtils';
+import { erMeldekortId } from '../behandling-felles/utils/behandlingUtils';
 import {
     rammebehandlingResultatTekst,
     rammebehandlingstypeTekst,
@@ -38,7 +38,7 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                             const rammebehandling = props.rammebehandlinger.find(
                                 (b) => b.id === id,
                             );
-                            const meldekortbehandling = erBehandlingIdMeldekortbehandling(id)
+                            const meldekortbehandling = erMeldekortId(id)
                                 ? props.meldekortbehandlinger[id as MeldekortbehandlingId]
                                 : null;
 
