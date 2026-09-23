@@ -1,9 +1,10 @@
 import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { ComponentType, useEffect, useState } from 'react';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
-import { BenkTab, benkTabTekst } from './typer/tabs';
-import { BenkSideProps } from './typer/benkside';
+import { BenkTab } from './typer/tabs';
+import { BenkFaneData, BenkSideProps } from './typer/benkside';
+import { benkFaner } from './benkFaner';
 import { BenkSøknaderFilterSkjema } from './søknader/BenkSøknaderFilterSkjema';
 import { BenkSøknaderTabell } from './søknader/BenkSøknaderTabell';
 import { BenkRevurderingerFilterSkjema } from './revurderinger/BenkRevurderingerFilterSkjema';
@@ -16,9 +17,30 @@ import { BenkTilbakekrevingFilterSkjema } from './tilbakekreving/BenkTilbakekrev
 import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTabell';
 import { BenkPanel } from './felles/BenkPanel';
 import { BenkVisningProvider } from './felles/filter/BenkVisningContext';
+import { BenkFaneFilterSkjemaProps } from './felles/filter/BenkFilterSkjema';
+import { BenkFaneTabellProps } from './felles/tabell/BenkTabell';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './BenkSide.module.css';
+
+type BenkFaneKomponenter<T extends BenkTab> = {
+    Filter: ComponentType<BenkFaneFilterSkjemaProps<T>>;
+    Tabell: ComponentType<BenkFaneTabellProps<T>>;
+};
+
+const benkFaneKomponenter: { [T in BenkTab]: BenkFaneKomponenter<T> } = {
+    [BenkTab.SØKNADER]: { Filter: BenkSøknaderFilterSkjema, Tabell: BenkSøknaderTabell },
+    [BenkTab.REVURDERINGER]: {
+        Filter: BenkRevurderingerFilterSkjema,
+        Tabell: BenkRevurderingerTabell,
+    },
+    [BenkTab.MELDEKORT]: { Filter: BenkMeldekortFilterSkjema, Tabell: BenkMeldekortTabell },
+    [BenkTab.KLAGE]: { Filter: BenkKlageFilterSkjema, Tabell: BenkKlageTabell },
+    [BenkTab.TILBAKEKREVING]: {
+        Filter: BenkTilbakekrevingFilterSkjema,
+        Tabell: BenkTilbakekrevingTabell,
+    },
+};
 
 export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
     const router = useRouter();
@@ -72,7 +94,7 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
                         <Tabs.Tab
                             key={t}
                             value={t}
-                            label={`${benkTabTekst[t]} (${antallPerTab[t]})`}
+                            label={`${benkFaner[t].tekst} (${antallPerTab[t]})`}
                         />
                     ))}
 
@@ -91,102 +113,36 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
             </Tabs>
 
             <BenkVisningProvider tabData={tabData}>
-                {tabData.tab === BenkTab.SØKNADER && (
-                    <BenkPanel
-                        laster={laster}
-                        oversikt={tabData.data.oversikt}
-                        filter={
-                            <BenkSøknaderFilterSkjema
-                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
-                                besluttere={tabData.data.oversikt.besluttere}
-                                aktivtFilter={tabData.data.aktivtFilter}
-                            />
-                        }
-                        tabell={
-                            <BenkSøknaderTabell
-                                behandlinger={tabData.data.oversikt.behandlinger}
-                                aktivSortering={tabData.data.aktivSortering}
-                            />
-                        }
-                    />
-                )}
-                {tabData.tab === BenkTab.REVURDERINGER && (
-                    <BenkPanel
-                        laster={laster}
-                        oversikt={tabData.data.oversikt}
-                        filter={
-                            <BenkRevurderingerFilterSkjema
-                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
-                                besluttere={tabData.data.oversikt.besluttere}
-                                aktivtFilter={tabData.data.aktivtFilter}
-                            />
-                        }
-                        tabell={
-                            <BenkRevurderingerTabell
-                                behandlinger={tabData.data.oversikt.behandlinger}
-                                aktivSortering={tabData.data.aktivSortering}
-                            />
-                        }
-                    />
-                )}
-                {tabData.tab === BenkTab.MELDEKORT && (
-                    <BenkPanel
-                        laster={laster}
-                        oversikt={tabData.data.oversikt}
-                        filter={
-                            <BenkMeldekortFilterSkjema
-                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
-                                besluttere={tabData.data.oversikt.besluttere}
-                                aktivtFilter={tabData.data.aktivtFilter}
-                            />
-                        }
-                        tabell={
-                            <BenkMeldekortTabell
-                                behandlinger={tabData.data.oversikt.behandlinger}
-                                aktivSortering={tabData.data.aktivSortering}
-                            />
-                        }
-                    />
-                )}
-                {tabData.tab === BenkTab.KLAGE && (
-                    <BenkPanel
-                        laster={laster}
-                        oversikt={tabData.data.oversikt}
-                        filter={
-                            <BenkKlageFilterSkjema
-                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
-                                besluttere={tabData.data.oversikt.besluttere}
-                                aktivtFilter={tabData.data.aktivtFilter}
-                            />
-                        }
-                        tabell={
-                            <BenkKlageTabell
-                                behandlinger={tabData.data.oversikt.behandlinger}
-                                aktivSortering={tabData.data.aktivSortering}
-                            />
-                        }
-                    />
-                )}
-                {tabData.tab === BenkTab.TILBAKEKREVING && (
-                    <BenkPanel
-                        laster={laster}
-                        oversikt={tabData.data.oversikt}
-                        filter={
-                            <BenkTilbakekrevingFilterSkjema
-                                saksbehandlere={tabData.data.oversikt.saksbehandlere}
-                                besluttere={tabData.data.oversikt.besluttere}
-                                aktivtFilter={tabData.data.aktivtFilter}
-                            />
-                        }
-                        tabell={
-                            <BenkTilbakekrevingTabell
-                                behandlinger={tabData.data.oversikt.behandlinger}
-                                aktivSortering={tabData.data.aktivSortering}
-                            />
-                        }
-                    />
-                )}
+                <BenkFane tab={tabData.tab} data={tabData.data} laster={laster} />
             </BenkVisningProvider>
         </VStack>
+    );
+};
+
+const BenkFane = <T extends BenkTab>({
+    tab,
+    data,
+    laster,
+}: {
+    tab: T;
+    data: BenkFaneData<T>;
+    laster: boolean;
+}) => {
+    const { Filter, Tabell } = benkFaneKomponenter[tab];
+    const { oversikt, aktivtFilter, aktivSortering } = data;
+
+    return (
+        <BenkPanel
+            laster={laster}
+            oversikt={oversikt}
+            filter={
+                <Filter
+                    aktivtFilter={aktivtFilter}
+                    saksbehandlere={oversikt.saksbehandlere}
+                    besluttere={oversikt.besluttere}
+                />
+            }
+            tabell={<Tabell behandlinger={oversikt.behandlinger} aktivSortering={aktivSortering} />}
+        />
     );
 };

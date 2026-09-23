@@ -4,7 +4,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { isValueInRecord } from '~/utils/object';
-import { BenkIkkeTildelt } from '~/lib/benk/typer/felles';
+import { BenkIkkeTildelt } from '../../typer/felles';
 
 type Props = {
     saksbehandlere: string[];

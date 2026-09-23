@@ -1,71 +1,38 @@
-import { Table } from '@navikt/ds-react';
 import { BenkKlagebehandling, BenkKlageKolonne } from '../typer/klage';
-import { BenkSortering } from '../typer/felles';
+import { BenkTab } from '../typer/tabs';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 import { hentVerdi } from '~/utils/sladdetVerdi';
-import { BenkKlageStatusTag } from '../felles/BenkStatusTag';
-import { useBenkSortering } from '../felles/useBenkSortering';
 import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
-import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
-import { BenkTabellCelle } from '../felles/BenkTabellCelle';
-import { BenkTab } from '~/lib/benk/typer/tabs';
-import { benkBehandlingHarTilgang } from '../utils/benkUtils';
+import { BenkFaneTabellProps, BenkTabell } from '../felles/tabell/BenkTabell';
+import { BenkKolonne } from '../felles/tabell/BenkKolonne';
+import { benkKolonner } from '../felles/tabell/benkKolonner';
 
-type Props = {
-    behandlinger: BenkKlagebehandling[];
-    aktivSortering: BenkSortering<BenkKlageKolonne>;
-};
+const kolonner: BenkKolonne<BenkKlagebehandling, BenkKlageKolonne>[] = [
+    benkKolonner.fnr,
+    benkKolonner.resultat,
+    benkKolonner.status,
+    benkKolonner.ventestatus,
+    benkKolonner.kravtidspunkt,
+    benkKolonner.sistEndret,
+    benkKolonner.saksbehandler,
+    benkKolonner.handlinger<BenkKlagebehandling>((behandling) => (
+        <InternLenkeKnapp
+            href={klagebehandlingUrl(
+                hentVerdi(behandling.saksnummer),
+                behandling.id,
+                klageStegForBenkRad(behandling.resultat),
+            )}
+        >
+            {'Åpne'}
+        </InternLenkeKnapp>
+    )),
+];
 
-export const BenkKlageTabell = ({ behandlinger, aktivSortering }: Props) => {
-    const { sort, onSortChange } = useBenkSortering(aktivSortering);
-
-    return (
-        <Table zebraStripes={true} sort={sort} onSortChange={onSortChange}>
-            <Table.Header>
-                <Table.Row>
-                    <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Resultat />
-                    <BenkTabellKolonneHeader.Status />
-                    <BenkTabellKolonneHeader.Ventestatus />
-                    <BenkTabellKolonneHeader.Kravtidspunkt />
-                    <BenkTabellKolonneHeader.SistEndret />
-                    <BenkTabellKolonneHeader.Saksbehandler />
-                    <BenkTabellKolonneHeader.Handlinger tab={BenkTab.KLAGE} />
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {behandlinger.map((behandling) => (
-                    <Table.Row shadeOnHover={false} key={behandling.id}>
-                        <BenkTabellCelle.Fnr behandling={behandling} />
-                        <BenkTabellCelle.Resultat behandling={behandling} />
-                        <Table.DataCell>
-                            <BenkKlageStatusTag status={behandling.status} />
-                        </Table.DataCell>
-                        <BenkTabellCelle.Ventestatus behandling={behandling} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.kravtidspunkt} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
-                        <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
-                        <BenkTabellCelle.Handlinger behandling={behandling}>
-                            {benkBehandlingHarTilgang(behandling) && (
-                                <InternLenkeKnapp
-                                    href={klagebehandlingUrl(
-                                        hentVerdi(behandling.saksnummer),
-                                        behandling.id,
-                                        klageStegForBenkRad(behandling.resultat),
-                                    )}
-                                >
-                                    {'Åpne'}
-                                </InternLenkeKnapp>
-                            )}
-                        </BenkTabellCelle.Handlinger>
-                    </Table.Row>
-                ))}
-            </Table.Body>
-        </Table>
-    );
-};
+export const BenkKlageTabell = (props: BenkFaneTabellProps<BenkTab.KLAGE>) => (
+    <BenkTabell kolonner={kolonner} {...props} />
+);
 
 /**
  * Speiler `finnSisteGyldigeStegForKlage` med feltene en benk-rad har.

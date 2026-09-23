@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { benkOppsummeringTekst } from './benkUtils';
+import { benkOppsummeringTekst } from './benkTekster';
 import { BenkOppsummering } from '../typer/felles';
 
 const oppsummering = (deler: Partial<BenkOppsummering> = {}): BenkOppsummering => ({

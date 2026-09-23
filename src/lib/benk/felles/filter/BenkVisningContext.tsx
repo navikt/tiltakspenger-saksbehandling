@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
-import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
-import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
-import { BenkTab } from '~/lib/benk/typer/tabs';
-import { BenkTabData } from '~/lib/benk/typer/benkside';
+import { BenkSøknadsbehandling } from '../../typer/søknader';
+import { BenkRevurdering } from '../../typer/revurderinger';
+import { BenkTab } from '../../typer/tabs';
+import { BenkTabData } from '../../typer/benkside';
 
 type BenkVisning = {
     skjulVentestatus: boolean;

@@ -1,8 +1,8 @@
 import { Checkbox } from '@navikt/ds-react';
-import { useBenkVisning } from '~/lib/benk/felles/filter/BenkVisningContext';
+import { useBenkVisning } from '../filter/BenkVisningContext';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
-import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
+import { BenkSøknadsbehandling } from '../../typer/søknader';
+import { BenkRevurdering } from '../../typer/revurderinger';
 
 type Props = {
     behandling: BenkSøknadsbehandling | BenkRevurdering;

@@ -2,11 +2,11 @@ import { Nullable } from '~/types/UtilTypes';
 import { SakId } from '~/lib/sak/SakTyper';
 import { IkkeSladdetVerdi, SladdbarVerdi } from '~/types/SladdetVerdi';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
-import { BenkSøknadsbehandling, BenkSøknadsbehandlingMedTilgang } from '~/lib/benk/typer/søknader';
-import { BenkRevurdering, BenkRevurderingMedTilgang } from '~/lib/benk/typer/revurderinger';
-import { BenkMeldekort, BenkMeldekortMedTilgang } from '~/lib/benk/typer/meldekort';
-import { BenkKlagebehandling, BenkKlagebehandlingMedTilgang } from '~/lib/benk/typer/klage';
-import { BenkTilbakekreving, BenkTilbakekrevingMedTilgang } from '~/lib/benk/typer/tilbakekreving';
+import type { BenkSøknadsbehandling, BenkSøknadsbehandlingMedTilgang } from './søknader';
+import type { BenkRevurdering, BenkRevurderingMedTilgang } from './revurderinger';
+import type { BenkMeldekort, BenkMeldekortMedTilgang } from './meldekort';
+import type { BenkKlagebehandling, BenkKlagebehandlingMedTilgang } from './klage';
+import type { BenkTilbakekreving, BenkTilbakekrevingMedTilgang } from './tilbakekreving';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -150,9 +150,39 @@ export enum BenkSorteringRetning {
 export type BenkSortering<Kolonne extends string> = `${Kolonne},${BenkSorteringRetning}`;
 
 /**
- * Filter for én fane. Alle felter er nullable - null betyr "ikke filtrert".
+ * Kolonnene alle fanene kan sorteres på. Verdiene er sortKey-ene i kontrakten
+ * med backend (se BenkSorteringKolonne der), og fanenes egne kolonner utvider denne.
+ */
+export const benkFellesKolonner = {
+    fnr: 'fnr',
+    status: 'status',
+    sistEndret: 'sist_endret',
+    saksbehandler: 'saksbehandler',
+    ventestatusFrist: 'ventestatus_frist',
+} as const;
+
+export type BenkFellesKolonne = (typeof benkFellesKolonner)[keyof typeof benkFellesKolonner];
+
+/**
+ * Filter for én fane, løst typet. Alle felter er nullable - null betyr "ikke filtrert".
  */
 export type BenkFilter = Record<string, string | boolean | null>;
+
+/**
+ * Filtervalgene alle fanene har. De lagres én gang for alle faner i cookien,
+ * mens resten av filteret lagres per fane.
+ */
+export type BenkFellesFilter = {
+    saksbehandler: Nullable<string>;
+    skjulPåVent: boolean;
+    skjulEgneTilBeslutning: boolean;
+};
+
+export const benkFellesFilterNøkler = [
+    'saksbehandler',
+    'skjulPåVent',
+    'skjulEgneTilBeslutning',
+] as const satisfies ReadonlyArray<keyof BenkFellesFilter>;
 
 /**
  * Body-en som postes til fanens rute under /benk. Fanen ligger i url-en,

@@ -1,7 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { isValueInRecord } from '~/utils/object';
-import { BenkBehandlingsstatus } from '../typer/felles';
-import { BenkTab } from '../typer/tabs';
+import { BenkBehandlingsstatus, BenkFellesFilter, BenkFilter } from '../typer/felles';
 import { BenkSøknaderFilter } from '../typer/søknader';
 import { BenkRevurderingerFilter } from '../typer/revurderinger';
 import { BenkMeldekortFilter, benkMeldekortTyper } from '../typer/meldekort';
@@ -16,20 +15,8 @@ import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknads
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 
-/**
- * Feltnavnene i filtrene er identiske med query-parameterne, slik at samme
- * parsing kan brukes både for URL-en og for lagrede filtre i cookie.
- */
-export type BenkFilterMap = {
-    [BenkTab.SØKNADER]: BenkSøknaderFilter;
-    [BenkTab.REVURDERINGER]: BenkRevurderingerFilter;
-    [BenkTab.MELDEKORT]: BenkMeldekortFilter;
-    [BenkTab.KLAGE]: BenkKlageFilter;
-    [BenkTab.TILBAKEKREVING]: BenkTilbakekrevingFilter;
-};
-
 /** Ukjent kilde: enten ParsedUrlQuery eller JSON fra cookie */
-type BenkFilterKilde = Record<string, unknown>;
+export type BenkFilterKilde = Record<string, unknown>;
 
 export const benkStrengVerdi = (verdi: unknown): Nullable<string> =>
     typeof verdi === 'string' && verdi.length > 0 ? verdi : null;
@@ -45,7 +32,7 @@ const benkEnumVerdi = <T extends Record<string, string>>(
 export const benkBoolskVerdi = (verdi: unknown): boolean =>
     typeof verdi === 'boolean' ? verdi : verdi === 'true';
 
-const harFilterVerdi = (verdi: string | boolean | null): boolean =>
+const harFilterVerdi = (verdi: BenkFilter[string]): boolean =>
     verdi !== null && verdi !== false && verdi !== '';
 
 /**
@@ -63,6 +50,12 @@ export const parseBenkSide = (verdi: unknown): number => {
     return Number.isInteger(tall) && tall > 0 ? tall : 0;
 };
 
+const parseBenkFellesFilter = (kilde: BenkFilterKilde): BenkFellesFilter => ({
+    saksbehandler: benkStrengVerdi(kilde.saksbehandler),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
+    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
+});
+
 // Søknadstype er en string-union, ikke en enum, så vi trenger en record for validering
 const søknadstyper: Record<Søknadstype, Søknadstype> = {
     DIGITAL: 'DIGITAL',
@@ -73,71 +66,44 @@ const søknadstyper: Record<Søknadstype, Søknadstype> = {
 } as const;
 
 export const parseBenkSøknaderFilter = (kilde: BenkFilterKilde): BenkSøknaderFilter => ({
+    ...parseBenkFellesFilter(kilde),
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     resultat: benkEnumVerdi(kilde.resultat, SøknadsbehandlingResultat),
     søknadstype: benkEnumVerdi(kilde.søknadstype, søknadstyper),
-    saksbehandler: benkStrengVerdi(kilde.saksbehandler),
-    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
-    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseBenkRevurderingerFilter = (kilde: BenkFilterKilde): BenkRevurderingerFilter => ({
+    ...parseBenkFellesFilter(kilde),
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     resultat: benkEnumVerdi(kilde.resultat, RevurderingResultat),
-    saksbehandler: benkStrengVerdi(kilde.saksbehandler),
-    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
-    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseBenkMeldekortFilter = (kilde: BenkFilterKilde): BenkMeldekortFilter => ({
+    ...parseBenkFellesFilter(kilde),
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     type: benkEnumVerdi(kilde.type, benkMeldekortTyper),
-    saksbehandler: benkStrengVerdi(kilde.saksbehandler),
-    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
-    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseBenkKlageFilter = (kilde: BenkFilterKilde): BenkKlageFilter => ({
+    ...parseBenkFellesFilter(kilde),
     status: benkEnumVerdi(kilde.status, BenkKlageStatus),
     resultat: benkEnumVerdi(kilde.resultat, KlagebehandlingResultat),
-    saksbehandler: benkStrengVerdi(kilde.saksbehandler),
-    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
-    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
 export const parseBenkTilbakekrevingFilter = (
     kilde: BenkFilterKilde,
 ): BenkTilbakekrevingFilter => ({
+    ...parseBenkFellesFilter(kilde),
     status: benkEnumVerdi(kilde.status, BenkTilbakekrevingStatus),
     kilde: benkEnumVerdi(kilde.kilde, BenkTilbakekrevingKilde),
-    saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     kunOverMinstebeløp: benkBoolskVerdi(kilde.kunOverMinstebeløp),
-    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
-    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
-
-export const parseBenkFilterForTab = <T extends BenkTab>(
-    tab: T,
-    kilde: BenkFilterKilde,
-): BenkFilterMap[T] => parserPerTab[tab](kilde) as BenkFilterMap[T];
-
-const parserPerTab: {
-    [T in BenkTab]: (kilde: BenkFilterKilde) => BenkFilterMap[T];
-} = {
-    [BenkTab.SØKNADER]: parseBenkSøknaderFilter,
-    [BenkTab.REVURDERINGER]: parseBenkRevurderingerFilter,
-    [BenkTab.MELDEKORT]: parseBenkMeldekortFilter,
-    [BenkTab.KLAGE]: parseBenkKlageFilter,
-    [BenkTab.TILBAKEKREVING]: parseBenkTilbakekrevingFilter,
-} as const;
 
 /**
  * Serialiserer et filter til query-parametere. Tomme verdier (null/false/'')
  * utelates, slik at URL-en kun inneholder aktive filtre.
  */
-export const benkFilterTilQuery = (
-    filter: Record<string, string | boolean | null>,
-): Record<string, string> =>
+export const benkFilterTilQuery = (filter: BenkFilter): Record<string, string> =>
     Object.entries(filter).reduce<Record<string, string>>((query, [nøkkel, verdi]) => {
         if (!harFilterVerdi(verdi)) {
             return query;
@@ -146,5 +112,5 @@ export const benkFilterTilQuery = (
         return query;
     }, {});
 
-export const harBenkFilterVerdier = (filter: Record<string, string | boolean | null>): boolean =>
+export const harBenkFilterVerdier = (filter: BenkFilter): boolean =>
     Object.values(filter).some(harFilterVerdi);

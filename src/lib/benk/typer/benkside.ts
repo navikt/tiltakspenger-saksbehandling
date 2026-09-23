@@ -15,46 +15,61 @@ import {
     BenkTilbakekrevingKolonne,
 } from './tilbakekreving';
 
-type SøknaderData = {
-    oversikt: BenkOversikt<BenkSøknadsbehandling>;
-    aktivtFilter: BenkSøknaderFilter;
-    aktivSortering: BenkSortering<BenkSøknaderKolonne>;
+/** Radtypen, filteret og de sorterbare kolonnene for hver fane */
+export type BenkFaneTyper = {
+    [BenkTab.SØKNADER]: {
+        behandling: BenkSøknadsbehandling;
+        filter: BenkSøknaderFilter;
+        kolonne: BenkSøknaderKolonne;
+    };
+    [BenkTab.REVURDERINGER]: {
+        behandling: BenkRevurdering;
+        filter: BenkRevurderingerFilter;
+        kolonne: BenkRevurderingerKolonne;
+    };
+    [BenkTab.MELDEKORT]: {
+        behandling: BenkMeldekort;
+        filter: BenkMeldekortFilter;
+        kolonne: BenkMeldekortKolonne;
+    };
+    [BenkTab.KLAGE]: {
+        behandling: BenkKlagebehandling;
+        filter: BenkKlageFilter;
+        kolonne: BenkKlageKolonne;
+    };
+    [BenkTab.TILBAKEKREVING]: {
+        behandling: BenkTilbakekreving;
+        filter: BenkTilbakekrevingFilter;
+        kolonne: BenkTilbakekrevingKolonne;
+    };
 };
 
-type RevurderingerData = {
-    oversikt: BenkOversikt<BenkRevurdering>;
-    aktivtFilter: BenkRevurderingerFilter;
-    aktivSortering: BenkSortering<BenkRevurderingerKolonne>;
-};
+export type BenkFaneBehandling<T extends BenkTab> = BenkFaneTyper[T]['behandling'];
+/**
+ * Feltnavnene i filtrene er identiske med query-parameterne, slik at samme
+ * parsing kan brukes både for URL-en og for lagrede filtre i cookie.
+ */
+export type BenkFaneFilter<T extends BenkTab> = BenkFaneTyper[T]['filter'];
+export type BenkFaneKolonne<T extends BenkTab> = BenkFaneTyper[T]['kolonne'];
 
-type MeldekortData = {
-    oversikt: BenkOversikt<BenkMeldekort>;
-    aktivtFilter: BenkMeldekortFilter;
-    aktivSortering: BenkSortering<BenkMeldekortKolonne>;
-};
-
-type KlageData = {
-    oversikt: BenkOversikt<BenkKlagebehandling>;
-    aktivtFilter: BenkKlageFilter;
-    aktivSortering: BenkSortering<BenkKlageKolonne>;
-};
-
-type TilbakekrevingData = {
-    oversikt: BenkOversikt<BenkTilbakekreving>;
-    aktivtFilter: BenkTilbakekrevingFilter;
-    aktivSortering: BenkSortering<BenkTilbakekrevingKolonne>;
+export type BenkFaneData<T extends BenkTab> = {
+    oversikt: BenkOversikt<BenkFaneBehandling<T>>;
+    aktivtFilter: BenkFaneFilter<T>;
+    aktivSortering: BenkSortering<BenkFaneKolonne<T>>;
 };
 
 /**
  * Dataene for den aktive fanen. Ligger som ett felt (ikke spredt utover props)
  * slik at diskrimineringen på `tab` bevares gjennom getServerSideProps.
  */
-export type BenkTabData =
-    | { tab: BenkTab.SØKNADER; data: SøknaderData }
-    | { tab: BenkTab.REVURDERINGER; data: RevurderingerData }
-    | { tab: BenkTab.MELDEKORT; data: MeldekortData }
-    | { tab: BenkTab.KLAGE; data: KlageData }
-    | { tab: BenkTab.TILBAKEKREVING; data: TilbakekrevingData };
+export type BenkTabData = { [T in BenkTab]: { tab: T; data: BenkFaneData<T> } }[BenkTab];
+
+/**
+ * TypeScript klarer ikke å se at `{ tab: T, data: BenkFaneData<T> }` for en generisk T
+ * er en av variantene i BenkTabData, så sammenstillingen samles her.
+ */
+export const lagBenkTabData = <T extends BenkTab>(tab: T, data: BenkFaneData<T>): BenkTabData =>
+    ({ tab, data }) as BenkTabData;
 
 export type BenkSideProps = {
     antallPerTab: Record<BenkTab, number>;

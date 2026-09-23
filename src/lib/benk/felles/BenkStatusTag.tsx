@@ -9,7 +9,7 @@ import {
     benkBehandlingsstatusTekst,
     benkKlageStatusColor,
     benkKlageStatusTekst,
-} from '../utils/benkUtils';
+} from '../utils/benkTekster';
 
 export const BenkStatusTag = ({
     status,

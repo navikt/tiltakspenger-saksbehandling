@@ -7,7 +7,8 @@ import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
 import { BenkRequestBody } from '~/lib/benk/typer/felles';
 import { BenkRespons } from '~/lib/benk/typer/respons';
-import { BenkTab, benkTabPath } from '~/lib/benk/typer/tabs';
+import { BenkTab } from '~/lib/benk/typer/tabs';
+import { benkFaner } from '~/lib/benk/benkFaner';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
 
@@ -68,7 +69,7 @@ export const fetchBenk = async <Behandling>(
     tab: BenkTab,
     body: BenkRequestBody,
 ) =>
-    fetchJsonFraApiServerSide<BenkRespons<Behandling>>(req, `/benk/${benkTabPath[tab]}`, {
+    fetchJsonFraApiServerSide<BenkRespons<Behandling>>(req, `/benk/${benkFaner[tab].path}`, {
         body: JSON.stringify(body),
         method: 'POST',
     });

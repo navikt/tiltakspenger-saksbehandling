@@ -6,6 +6,8 @@ import {
     BenkBehandlingMedTilgangBase,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
+    BenkFellesFilter,
+    benkFellesKolonner,
 } from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
@@ -34,25 +36,20 @@ type BenkMeldekortProps = {
 };
 
 export type BenkMeldekort = BenkBehandlingBase<BenkMeldekortProps>;
-export type BenkMeldekortMedTilgang = BenkBehandlingMedTilgangBase<BenkMeldekort>;
+export type BenkMeldekortMedTilgang = BenkBehandlingMedTilgangBase<BenkMeldekortProps>;
 
-export enum BenkMeldekortKolonne {
-    fnr = 'fnr',
-    type = 'type',
+export const BenkMeldekortKolonne = {
+    ...benkFellesKolonner,
+    type: 'type',
     /** Backend sorterer på tidligste meldeperiode - sortKey-en er fortsatt 'periode' der */
-    meldeperioder = 'periode',
-    beløp = 'beløp',
-    status = 'status',
-    sistEndret = 'sist_endret',
-    saksbehandler = 'saksbehandler',
-    beslutter = 'beslutter',
-    ventestatusFrist = 'ventestatus_frist',
-}
+    meldeperioder: 'periode',
+    beløp: 'beløp',
+    beslutter: 'beslutter',
+} as const;
 
-export type BenkMeldekortFilter = {
+export type BenkMeldekortKolonne = (typeof BenkMeldekortKolonne)[keyof typeof BenkMeldekortKolonne];
+
+export type BenkMeldekortFilter = BenkFellesFilter & {
     status: Nullable<BenkBehandlingsstatus>;
     type: Nullable<BenkMeldekortType>;
-    saksbehandler: Nullable<string>;
-    skjulPåVent: boolean;
-    skjulEgneTilBeslutning: boolean;
 };

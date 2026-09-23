@@ -1,91 +1,59 @@
-import { HStack, Table } from '@navikt/ds-react';
+import { HStack } from '@navikt/ds-react';
 import { BenkMeldekort, BenkMeldekortKolonne, BenkMeldekortMedTilgang } from '../typer/meldekort';
-import { BenkBehandlingstype, BenkSortering } from '../typer/felles';
-import { benkBehandlingHarTilgang, benkMeldekortTypeTekst } from '../utils/benkUtils';
+import { BenkBehandlingstype } from '../typer/felles';
+import { BenkTab } from '../typer/tabs';
+import { benkMeldekortTypeTekst } from '../utils/benkTekster';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { hentVerdi } from '~/utils/sladdetVerdi';
-import { BenkStatusTag } from '../felles/BenkStatusTag';
-import { useBenkSortering } from '../felles/useBenkSortering';
 import { BenkBehandlingMeny } from '../felles/BenkBehandlingMeny';
-import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
-import { BenkTabellCelle } from '../felles/BenkTabellCelle';
+import { BenkFaneTabellProps, BenkTabell } from '../felles/tabell/BenkTabell';
+import { BenkKolonne } from '../felles/tabell/BenkKolonne';
+import { benkKolonner } from '../felles/tabell/benkKolonner';
+import { BenkTabellCelle } from '../felles/tabell/BenkTabellCelle';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
-import { BenkTab } from '~/lib/benk/typer/tabs';
 
-type Props = {
-    behandlinger: BenkMeldekort[];
-    aktivSortering: BenkSortering<BenkMeldekortKolonne>;
-};
+/** Innsendte og korrigerte meldekort er ikke behandlinger, og tildeles derfor ikke noen */
+const erMeldekortbehandling = (behandling: BenkMeldekort) =>
+    behandling.type === BenkBehandlingstype.MELDEKORTBEHANDLING;
 
-export const BenkMeldekortTabell = ({ behandlinger, aktivSortering }: Props) => {
-    const { sort, onSortChange } = useBenkSortering(aktivSortering);
+const kolonner: BenkKolonne<BenkMeldekort, BenkMeldekortKolonne>[] = [
+    benkKolonner.fnr,
+    {
+        id: 'type',
+        tittel: 'Type',
+        sortKey: BenkMeldekortKolonne.type,
+        celle: (behandling) => benkMeldekortTypeTekst[behandling.type],
+    },
+    benkKolonner.status,
+    benkKolonner.ventestatus,
+    {
+        id: 'meldeperioder',
+        tittel: 'Periode',
+        sortKey: BenkMeldekortKolonne.meldeperioder,
+        align: 'right',
+        celle: (behandling) => (
+            <BenkTabellCelle.Meldeperiode meldeperioder={behandling.meldeperioder} />
+        ),
+    },
+    benkKolonner.sistEndret,
+    benkKolonner.beløp,
+    {
+        ...benkKolonner.saksbehandler,
+        celle: (behandling) =>
+            erMeldekortbehandling(behandling) ? benkKolonner.saksbehandler.celle(behandling) : '-',
+    },
+    {
+        ...benkKolonner.beslutter,
+        celle: (behandling) =>
+            erMeldekortbehandling(behandling) ? benkKolonner.beslutter.celle(behandling) : '-',
+    },
+    benkKolonner.handlinger<BenkMeldekort>((behandling) => <Handlinger behandling={behandling} />),
+];
 
-    return (
-        <Table zebraStripes={true} sort={sort} onSortChange={onSortChange}>
-            <Table.Header>
-                <Table.Row>
-                    <BenkTabellKolonneHeader.Fnr />
-                    <Table.ColumnHeader sortable={true} sortKey={BenkMeldekortKolonne.type}>
-                        {'Type'}
-                    </Table.ColumnHeader>
-                    <BenkTabellKolonneHeader.Status />
-                    <BenkTabellKolonneHeader.Ventestatus />
-                    <Table.ColumnHeader
-                        sortable={true}
-                        sortKey={BenkMeldekortKolonne.meldeperioder}
-                        align={'right'}
-                    >
-                        {'Periode'}
-                    </Table.ColumnHeader>
-                    <BenkTabellKolonneHeader.SistEndret />
-                    <BenkTabellKolonneHeader.Beløp />
-                    <BenkTabellKolonneHeader.Saksbehandler />
-                    <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger tab={BenkTab.MELDEKORT} />
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {behandlinger.map((behandling) => {
-                    const erMeldekortbehandling =
-                        behandling.type === BenkBehandlingstype.MELDEKORTBEHANDLING;
-
-                    return (
-                        <Table.Row shadeOnHover={false} key={behandling.id}>
-                            <BenkTabellCelle.Fnr behandling={behandling} />
-                            <Table.DataCell>
-                                {benkMeldekortTypeTekst[behandling.type]}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                <BenkStatusTag
-                                    status={behandling.status}
-                                    erUnderkjent={behandling.erUnderkjent}
-                                />
-                            </Table.DataCell>
-                            <BenkTabellCelle.Ventestatus behandling={behandling} />
-                            <BenkTabellCelle.Meldeperiode
-                                meldeperioder={behandling.meldeperioder}
-                            />
-                            <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
-                            <BenkTabellCelle.Beløp beløp={behandling.beløp} />
-                            <BenkTabellCelle.Tildelt
-                                ident={erMeldekortbehandling ? behandling.saksbehandler : '-'}
-                            />
-                            <BenkTabellCelle.Tildelt
-                                ident={erMeldekortbehandling ? behandling.beslutter : '-'}
-                            />
-                            <BenkTabellCelle.Handlinger behandling={behandling}>
-                                {benkBehandlingHarTilgang(behandling) && (
-                                    <Handlinger behandling={behandling} />
-                                )}
-                            </BenkTabellCelle.Handlinger>
-                        </Table.Row>
-                    );
-                })}
-            </Table.Body>
-        </Table>
-    );
-};
+export const BenkMeldekortTabell = (props: BenkFaneTabellProps<BenkTab.MELDEKORT>) => (
+    <BenkTabell kolonner={kolonner} {...props} />
+);
 
 const Handlinger = ({ behandling }: { behandling: BenkMeldekortMedTilgang }) => {
     const saksnummer = hentVerdi(behandling.saksnummer);

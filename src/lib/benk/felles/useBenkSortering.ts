@@ -1,6 +1,7 @@
 import type { ParsedUrlQuery } from 'querystring';
 import { useRouter } from 'next/router';
 import { BenkSortering, BenkSorteringRetning } from '../typer/felles';
+import { splittBenkSortering } from '../utils/benkSortering';
 
 /**
  * Sortering skjer server-side - klikk på en kolonne oppdaterer
@@ -11,7 +12,7 @@ export const useBenkSortering = <Kolonne extends string>(
 ) => {
     const router = useRouter();
 
-    const [sortertKolonne, retning] = aktivSortering.split(',') as [Kolonne, BenkSorteringRetning];
+    const { kolonne: sortertKolonne, retning } = splittBenkSortering(aktivSortering);
 
     const onSortChange = (sortKey?: string) => {
         if (!sortKey) {

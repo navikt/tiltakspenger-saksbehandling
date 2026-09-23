@@ -1,63 +1,28 @@
-import { Table } from '@navikt/ds-react';
 import { BenkSøknaderKolonne, BenkSøknadsbehandling } from '../typer/søknader';
-import { BenkSortering } from '../typer/felles';
+import { BenkTab } from '../typer/tabs';
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
-import { BenkStatusTag } from '../felles/BenkStatusTag';
-import { useBenkSortering } from '../felles/useBenkSortering';
-import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
-import { BenkTabellCelle } from '../felles/BenkTabellCelle';
-import { BenkTab } from '~/lib/benk/typer/tabs';
+import { BenkFaneTabellProps, BenkTabell } from '../felles/tabell/BenkTabell';
+import { BenkKolonne } from '../felles/tabell/BenkKolonne';
+import { benkKolonner } from '../felles/tabell/benkKolonner';
 
-type Props = {
-    behandlinger: BenkSøknadsbehandling[];
-    aktivSortering: BenkSortering<BenkSøknaderKolonne>;
-};
+const kolonner: BenkKolonne<BenkSøknadsbehandling, BenkSøknaderKolonne>[] = [
+    benkKolonner.fnr,
+    benkKolonner.resultat,
+    benkKolonner.status,
+    {
+        id: 'søknadstype',
+        tittel: 'Søknadstype',
+        sortKey: BenkSøknaderKolonne.søknadstype,
+        celle: (behandling) => søknadstypeTekst[behandling.søknadstype],
+    },
+    benkKolonner.ventestatus,
+    benkKolonner.kravtidspunkt,
+    benkKolonner.sistEndret,
+    benkKolonner.saksbehandler,
+    benkKolonner.beslutter,
+    benkKolonner.rammebehandlingHandlinger(BenkTab.SØKNADER),
+];
 
-export const BenkSøknaderTabell = ({ behandlinger, aktivSortering }: Props) => {
-    const { sort, onSortChange } = useBenkSortering(aktivSortering);
-
-    return (
-        <Table zebraStripes={true} sort={sort} onSortChange={onSortChange}>
-            <Table.Header>
-                <Table.Row>
-                    <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Resultat />
-                    <BenkTabellKolonneHeader.Status />
-                    <Table.ColumnHeader sortable={true} sortKey={BenkSøknaderKolonne.søknadstype}>
-                        {'Søknadstype'}
-                    </Table.ColumnHeader>
-                    <BenkTabellKolonneHeader.Ventestatus />
-                    <BenkTabellKolonneHeader.Kravtidspunkt />
-                    <BenkTabellKolonneHeader.SistEndret />
-                    <BenkTabellKolonneHeader.Saksbehandler />
-                    <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger
-                        behandlinger={behandlinger}
-                        tab={BenkTab.SØKNADER}
-                    />
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {behandlinger.map((behandling) => (
-                    <Table.Row shadeOnHover={false} key={behandling.id}>
-                        <BenkTabellCelle.Fnr behandling={behandling} />
-                        <BenkTabellCelle.Resultat behandling={behandling} />
-                        <Table.DataCell>
-                            <BenkStatusTag
-                                status={behandling.status}
-                                erUnderkjent={behandling.erUnderkjent}
-                            />
-                        </Table.DataCell>
-                        <Table.DataCell>{søknadstypeTekst[behandling.søknadstype]}</Table.DataCell>
-                        <BenkTabellCelle.Ventestatus behandling={behandling} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.kravtidspunkt} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
-                        <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
-                        <BenkTabellCelle.Tildelt ident={behandling.beslutter} />
-                        <BenkTabellCelle.RammebehandlingHandlinger behandling={behandling} />
-                    </Table.Row>
-                ))}
-            </Table.Body>
-        </Table>
-    );
-};
+export const BenkSøknaderTabell = (props: BenkFaneTabellProps<BenkTab.SØKNADER>) => (
+    <BenkTabell kolonner={kolonner} {...props} />
+);

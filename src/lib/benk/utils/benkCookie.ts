@@ -1,54 +1,44 @@
 import Cookies from 'js-cookie';
-import { Nullable } from '~/types/UtilTypes';
 import { BenkTab, erBenkTab } from '../typer/tabs';
+import { BenkFellesFilter, benkFellesFilterNøkler, BenkFilter } from '../typer/felles';
+import { BenkFaneFilter } from '../typer/benkside';
+import { parseBenkFilterForTab } from '../benkFaner';
 import {
-    BenkFilterMap,
     benkBoolskVerdi,
     benkFilterTilQuery,
     harBenkFilterVerdier,
-    parseBenkFilterForTab,
     benkStrengVerdi,
+    BenkFilterKilde,
 } from './benkQuery';
 
 export const BENK_COOKIE_NAME = 'benkFiltersV2';
 
 /**
- * Filter for én fane, uten de felles valgene (saksbehandler, skjulPåVent
- * og skjulEgneTilBeslutning). Lagres løst typet; verdiene
- * valideres med fanens egen parser ved innlesing.
+ * Filter for én fane, uten fellesvalgene (BenkFellesFilter). Lagres løst typet;
+ * verdiene valideres med fanens egen parser ved innlesing.
  */
-type LagretFilter = Record<string, string | boolean | null>;
+type LagretFilter = BenkFilter;
 
-export type BenkLagredeValg = {
+/** Fellesvalgene lagres én gang, på tvers av fanene - resten av filteret lagres per fane */
+export type BenkLagredeValg = BenkFellesFilter & {
     tab: BenkTab;
-    /** Saksbehandlerfilteret er felles på tvers av fanene */
-    saksbehandler: Nullable<string>;
-    /** «Skjul på vent» er felles på tvers av fanene */
-    skjulPåVent: boolean;
-    /** «Skjul egne til beslutning» er felles på tvers av fanene */
-    skjulEgneTilBeslutning: boolean;
     filtre: Partial<Record<BenkTab, LagretFilter>>;
 };
 
-const tomtValg = (tab: BenkTab): BenkLagredeValg => ({
+const tomtValg = (tab: BenkTab, filtre: BenkLagredeValg['filtre'] = {}): BenkLagredeValg => ({
     tab,
     saksbehandler: null,
     skjulPåVent: false,
     skjulEgneTilBeslutning: false,
-    filtre: {},
+    filtre,
 });
 
+const erFellesValg = (nøkkel: string): boolean =>
+    (benkFellesFilterNøkler as ReadonlyArray<string>).includes(nøkkel);
+
 /** Fjerner fellesvalgene fra et filter, siden de lagres én gang for alle faner */
-const utenFellesValg = (filter: Record<string, unknown>): LagretFilter => {
-    return Object.fromEntries(
-        Object.entries(filter).filter(
-            ([nøkkel]) =>
-                nøkkel !== 'saksbehandler' &&
-                nøkkel !== 'skjulPåVent' &&
-                nøkkel !== 'skjulEgneTilBeslutning',
-        ),
-    ) as LagretFilter;
-};
+const utenFellesValg = (filter: BenkFilter): LagretFilter =>
+    Object.fromEntries(Object.entries(filter).filter(([nøkkel]) => !erFellesValg(nøkkel)));
 
 /**
  * Parser og validerer cookien. Innholdet er brukerkontrollert, så alle verdier
@@ -80,9 +70,7 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
                 return;
             }
 
-            const filter = utenFellesValg(
-                parseBenkFilterForTab(tab, lagret as Record<string, unknown>),
-            );
+            const filter = utenFellesValg(parseBenkFilterForTab(tab, lagret as BenkFilterKilde));
 
             if (harBenkFilterVerdier(filter)) {
                 filtre[tab] = filter;
@@ -105,7 +93,7 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
 export const byggBenkLagredeValg = <T extends BenkTab>(
     forrige: BenkLagredeValg | null,
     tab: T,
-    filter: BenkFilterMap[T],
+    filter: BenkFaneFilter<T>,
 ): BenkLagredeValg => {
     const fanensFilter = utenFellesValg(filter);
     const øvrigeFiltre = { ...forrige?.filtre };
@@ -168,15 +156,5 @@ export const nullstillBenkLagretFilter = (tab: BenkTab) => {
     const øvrigeFiltre = { ...forrige.filtre };
     delete øvrigeFiltre[tab];
 
-    Cookies.set(
-        BENK_COOKIE_NAME,
-        JSON.stringify({
-            tab,
-            saksbehandler: null,
-            skjulPåVent: false,
-            skjulEgneTilBeslutning: false,
-            filtre: øvrigeFiltre,
-        }),
-        { expires: 365 },
-    );
+    Cookies.set(BENK_COOKIE_NAME, JSON.stringify(tomtValg(tab, øvrigeFiltre)), { expires: 365 });
 };

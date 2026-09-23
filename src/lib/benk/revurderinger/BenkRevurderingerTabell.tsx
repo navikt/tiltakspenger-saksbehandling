@@ -1,58 +1,21 @@
-import { Table } from '@navikt/ds-react';
 import { BenkRevurderingerKolonne, BenkRevurdering } from '../typer/revurderinger';
-import { BenkSortering } from '../typer/felles';
-import { BenkStatusTag } from '../felles/BenkStatusTag';
-import { useBenkSortering } from '../felles/useBenkSortering';
-import { BenkTabellKolonneHeader } from '../felles/BenkTabellKolonneHeader';
-import { BenkTabellCelle } from '../felles/BenkTabellCelle';
-import { BenkTab } from '~/lib/benk/typer/tabs';
+import { BenkTab } from '../typer/tabs';
+import { BenkFaneTabellProps, BenkTabell } from '../felles/tabell/BenkTabell';
+import { BenkKolonne } from '../felles/tabell/BenkKolonne';
+import { benkKolonner } from '../felles/tabell/benkKolonner';
 
-type Props = {
-    behandlinger: BenkRevurdering[];
-    aktivSortering: BenkSortering<BenkRevurderingerKolonne>;
-};
+const kolonner: BenkKolonne<BenkRevurdering, BenkRevurderingerKolonne>[] = [
+    benkKolonner.fnr,
+    benkKolonner.resultat,
+    benkKolonner.status,
+    benkKolonner.ventestatus,
+    benkKolonner.startet,
+    benkKolonner.sistEndret,
+    benkKolonner.saksbehandler,
+    benkKolonner.beslutter,
+    benkKolonner.rammebehandlingHandlinger(BenkTab.REVURDERINGER),
+];
 
-export const BenkRevurderingerTabell = ({ behandlinger, aktivSortering }: Props) => {
-    const { sort, onSortChange } = useBenkSortering(aktivSortering);
-
-    return (
-        <Table zebraStripes={true} sort={sort} onSortChange={onSortChange}>
-            <Table.Header>
-                <Table.Row>
-                    <BenkTabellKolonneHeader.Fnr />
-                    <BenkTabellKolonneHeader.Resultat />
-                    <BenkTabellKolonneHeader.Status />
-                    <BenkTabellKolonneHeader.Ventestatus />
-                    <BenkTabellKolonneHeader.Startet />
-                    <BenkTabellKolonneHeader.SistEndret />
-                    <BenkTabellKolonneHeader.Saksbehandler />
-                    <BenkTabellKolonneHeader.Beslutter />
-                    <BenkTabellKolonneHeader.Handlinger
-                        behandlinger={behandlinger}
-                        tab={BenkTab.REVURDERINGER}
-                    />
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {behandlinger.map((behandling) => (
-                    <Table.Row shadeOnHover={false} key={behandling.id}>
-                        <BenkTabellCelle.Fnr behandling={behandling} />
-                        <BenkTabellCelle.Resultat behandling={behandling} />
-                        <Table.DataCell>
-                            <BenkStatusTag
-                                status={behandling.status}
-                                erUnderkjent={behandling.erUnderkjent}
-                            />
-                        </Table.DataCell>
-                        <BenkTabellCelle.Ventestatus behandling={behandling} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.startet} />
-                        <BenkTabellCelle.Tidspunkt tidspunkt={behandling.sistEndret} />
-                        <BenkTabellCelle.Tildelt ident={behandling.saksbehandler} />
-                        <BenkTabellCelle.Tildelt ident={behandling.beslutter} />
-                        <BenkTabellCelle.RammebehandlingHandlinger behandling={behandling} />
-                    </Table.Row>
-                ))}
-            </Table.Body>
-        </Table>
-    );
-};
+export const BenkRevurderingerTabell = (props: BenkFaneTabellProps<BenkTab.REVURDERINGER>) => (
+    <BenkTabell kolonner={kolonner} {...props} />
+);

@@ -1,18 +1,18 @@
-import { BenkTildelFlereMeny } from '~/lib/benk/felles/tildel-flere/BenkTildelFlereMeny';
-import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
-import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
-import { useBenkVisning } from '~/lib/benk/felles/filter/BenkVisningContext';
+import { BenkTildelFlereMeny } from './BenkTildelFlereMeny';
+import { BenkSøknadsbehandling } from '../../typer/søknader';
+import { BenkRevurdering } from '../../typer/revurderinger';
+import { useBenkVisning } from '../filter/BenkVisningContext';
 import { BodyLong, Button, Dialog, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useTildelRammebehandling } from '~/lib/rammebehandling/felles/tildel/useTildelRammebehandling';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
-import { useBenkFilterNavigasjon } from '~/lib/benk/felles/filter/useBenkFilterNavigasjon';
+import { useBenkFilterNavigasjon } from '../filter/useBenkFilterNavigasjon';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { BenkTab } from '~/lib/benk/typer/tabs';
-import { BenkBehandlingsstatus } from '~/lib/benk/typer/felles';
-import { parseBenkFilterForTab } from '~/lib/benk/utils/benkQuery';
+import { BenkTab } from '../../typer/tabs';
+import { BenkBehandlingsstatus } from '../../typer/felles';
+import { parseBenkFilterForTab } from '../../benkFaner';
 import { hentVerdi } from '~/utils/sladdetVerdi';
 
 type Props = {

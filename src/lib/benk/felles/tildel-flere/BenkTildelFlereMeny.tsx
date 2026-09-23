@@ -1,9 +1,9 @@
-import { BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
+import { BenkSøknadsbehandling } from '../../typer/søknader';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkRevurdering } from '~/lib/benk/typer/revurderinger';
-import { useBenkVisning } from '~/lib/benk/felles/filter/BenkVisningContext';
+import { BenkRevurdering } from '../../typer/revurderinger';
+import { useBenkVisning } from '../filter/BenkVisningContext';
 
 type Props = {
     behandlinger: Array<BenkSøknadsbehandling | BenkRevurdering>;

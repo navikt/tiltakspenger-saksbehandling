@@ -6,6 +6,8 @@ import {
     BenkBehandlingMedTilgangBase,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
+    BenkFellesFilter,
+    benkFellesKolonner,
 } from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
@@ -20,21 +22,17 @@ type BenkRevurderingProps = {
 export type BenkRevurdering = BenkBehandlingBase<BenkRevurderingProps>;
 export type BenkRevurderingMedTilgang = BenkBehandlingMedTilgangBase<BenkRevurderingProps>;
 
-export enum BenkRevurderingerKolonne {
-    fnr = 'fnr',
-    resultat = 'resultat',
-    status = 'status',
-    startet = 'startet',
-    sistEndret = 'sist_endret',
-    saksbehandler = 'saksbehandler',
-    beslutter = 'beslutter',
-    ventestatusFrist = 'ventestatus_frist',
-}
+export const BenkRevurderingerKolonne = {
+    ...benkFellesKolonner,
+    resultat: 'resultat',
+    startet: 'startet',
+    beslutter: 'beslutter',
+} as const;
 
-export type BenkRevurderingerFilter = {
+export type BenkRevurderingerKolonne =
+    (typeof BenkRevurderingerKolonne)[keyof typeof BenkRevurderingerKolonne];
+
+export type BenkRevurderingerFilter = BenkFellesFilter & {
     status: Nullable<BenkBehandlingsstatus>;
     resultat: Nullable<RevurderingResultat>;
-    saksbehandler: Nullable<string>;
-    skjulPåVent: boolean;
-    skjulEgneTilBeslutning: boolean;
 };

@@ -1,7 +1,13 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkBehandlingBase, BenkBehandlingMedTilgangBase, BenkBehandlingstype } from './felles';
+import {
+    BenkBehandlingBase,
+    BenkBehandlingMedTilgangBase,
+    BenkBehandlingstype,
+    BenkFellesFilter,
+    benkFellesKolonner,
+} from './felles';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 /**
@@ -38,24 +44,20 @@ type BenkTilbakekrevingProps = {
 export type BenkTilbakekreving = BenkBehandlingBase<BenkTilbakekrevingProps>;
 export type BenkTilbakekrevingMedTilgang = BenkBehandlingMedTilgangBase<BenkTilbakekrevingProps>;
 
-export enum BenkTilbakekrevingKolonne {
-    fnr = 'fnr',
-    beløp = 'beløp',
-    kilde = 'kilde',
-    status = 'status',
-    startet = 'startet',
-    sistEndret = 'sist_endret',
-    saksbehandler = 'saksbehandler',
-    beslutter = 'beslutter',
-    ventestatusFrist = 'ventestatus_frist',
-    kravgrunnlagPeriode = 'kravgrunnlag_periode',
-}
+export const BenkTilbakekrevingKolonne = {
+    ...benkFellesKolonner,
+    beløp: 'beløp',
+    kilde: 'kilde',
+    startet: 'startet',
+    beslutter: 'beslutter',
+    kravgrunnlagPeriode: 'kravgrunnlag_periode',
+} as const;
 
-export type BenkTilbakekrevingFilter = {
+export type BenkTilbakekrevingKolonne =
+    (typeof BenkTilbakekrevingKolonne)[keyof typeof BenkTilbakekrevingKolonne];
+
+export type BenkTilbakekrevingFilter = BenkFellesFilter & {
     status: Nullable<BenkTilbakekrevingStatus>;
     kilde: Nullable<BenkTilbakekrevingKilde>;
-    saksbehandler: Nullable<string>;
     kunOverMinstebeløp: boolean;
-    skjulPåVent: boolean;
-    skjulEgneTilBeslutning: boolean;
 };

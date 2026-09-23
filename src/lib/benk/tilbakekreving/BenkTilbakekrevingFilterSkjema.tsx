@@ -1,87 +1,53 @@
-import { Checkbox, HelpText, HStack } from '@navikt/ds-react';
-import { BenkTilbakekrevingFilter } from '../typer/tilbakekreving';
+import { HelpText, HStack } from '@navikt/ds-react';
 import { BenkTab } from '../typer/tabs';
-import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../utils/benkUtils';
-import { useResettableState } from '~/utils/useResettableState';
-import { useBenkFilterNavigasjon } from '../felles/filter/useBenkFilterNavigasjon';
-import { BenkFilterSkjema } from '../felles/filter/BenkFilterSkjema';
-import { BenkSaksbehandlerSelect } from '../felles/filter/BenkSaksbehandlerSelect';
+import { benkTilbakekrevingKildeTekst, benkTilbakekrevingStatusTekst } from '../utils/benkTekster';
+import { useBenkFilterSkjema } from '../felles/filter/useBenkFilterSkjema';
+import { BenkFaneFilterSkjemaProps, BenkFilterSkjema } from '../felles/filter/BenkFilterSkjema';
 import { BenkFilterSelect } from '../felles/filter/BenkFilterSelect';
-
-type Props = {
-    saksbehandlere: string[];
-    besluttere: string[];
-    aktivtFilter: BenkTilbakekrevingFilter;
-};
+import { BenkFilterCheckbox } from '../felles/filter/BenkFilterCheckbox';
 
 export const BenkTilbakekrevingFilterSkjema = ({
-    saksbehandlere,
-    besluttere,
     aktivtFilter,
-}: Props) => {
-    const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkTab.TILBAKEKREVING);
-    const [valgtFilter, setValgtFilter] =
-        useResettableState<BenkTilbakekrevingFilter>(aktivtFilter);
+    ...props
+}: BenkFaneFilterSkjemaProps<BenkTab.TILBAKEKREVING>) => {
+    const skjema = useBenkFilterSkjema(BenkTab.TILBAKEKREVING, aktivtFilter);
+    const { valgtFilter, endreFilter } = skjema;
 
     return (
         <BenkFilterSkjema
-            onSubmit={() => oppdaterFilter(valgtFilter)}
-            onNullstill={() =>
-                nullstillFilter({
-                    status: null,
-                    kilde: null,
-                    saksbehandler: null,
-                    kunOverMinstebeløp: false,
-                    skjulEgneTilBeslutning: false,
-                    skjulPåVent: false,
-                })
+            skjema={skjema}
+            {...props}
+            etterSaksbehandler={
+                <HStack align={'end'}>
+                    <HStack align={'center'} gap={'space-4'}>
+                        <BenkFilterCheckbox
+                            checked={valgtFilter.kunOverMinstebeløp}
+                            onChange={(kunOverMinstebeløp) => endreFilter({ kunOverMinstebeløp })}
+                        >
+                            {'Vis kun tilbakekrevinger over minstebeløp'}
+                        </BenkFilterCheckbox>
+                        <HelpText>
+                            {
+                                'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
+                            }
+                        </HelpText>
+                    </HStack>
+                </HStack>
             }
-            skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
-            onSkjulEgneTilBeslutningChange={(skjulEgneTilBeslutning) =>
-                setValgtFilter({ ...valgtFilter, skjulEgneTilBeslutning })
-            }
-            skjulPåVent={valgtFilter.skjulPåVent}
-            onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
         >
             <BenkFilterSelect
                 label={'Status'}
                 value={valgtFilter.status}
-                onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
+                onChange={(status) => endreFilter({ status })}
                 alternativer={benkTilbakekrevingStatusTekst}
             />
 
             <BenkFilterSelect
                 label={'Kilde'}
                 value={valgtFilter.kilde}
-                onChange={(kilde) => setValgtFilter({ ...valgtFilter, kilde })}
+                onChange={(kilde) => endreFilter({ kilde })}
                 alternativer={benkTilbakekrevingKildeTekst}
             />
-
-            <BenkSaksbehandlerSelect
-                saksbehandlere={saksbehandlere}
-                besluttere={besluttere}
-                valgtSaksbehandler={valgtFilter.saksbehandler}
-                onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
-            />
-
-            <HStack align={'end'}>
-                <HStack align={'center'} gap={'space-4'}>
-                    <Checkbox
-                        size={'small'}
-                        checked={valgtFilter.kunOverMinstebeløp}
-                        onChange={(e) =>
-                            setValgtFilter({ ...valgtFilter, kunOverMinstebeløp: e.target.checked })
-                        }
-                    >
-                        {'Vis kun tilbakekrevinger over minstebeløp'}
-                    </Checkbox>
-                    <HelpText>
-                        {
-                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
-                        }
-                    </HelpText>
-                </HStack>
-            </HStack>
         </BenkFilterSkjema>
     );
 };

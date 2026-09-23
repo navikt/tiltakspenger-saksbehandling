@@ -1,6 +1,6 @@
-import { BodyShort, CopyButton, HelpText, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, CopyButton, HelpText, HStack, Tag, VStack } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
-import { PropsWithChildren, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { erSladdet, hentVerdi, sladdbarTekst } from '~/utils/sladdetVerdi';
@@ -20,14 +20,14 @@ import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resulta
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { tilbakekrevingVenterStatusTekst } from '~/lib/tilbakekreving/tilbakekrevingTekster';
 import { TilbakekrevingVentegrunn } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { BenkBehandling, BenkBehandlingstype, BenkTilgangsvurdering } from '../typer/felles';
-import { BenkSøknadsbehandling } from '../typer/søknader';
-import { BenkRevurdering } from '../typer/revurderinger';
-import { BenkBehandlingMeny } from './BenkBehandlingMeny';
-import { useBenkVisning } from './filter/BenkVisningContext';
-import { benkBehandlingHarTilgang, kanFortsetteBenkRad } from '../utils/benkUtils';
+import { BenkBehandling, BenkBehandlingstype, BenkTilgangsvurdering } from '../../typer/felles';
+import { BenkSøknadsbehandlingMedTilgang } from '../../typer/søknader';
+import { BenkRevurderingMedTilgang } from '../../typer/revurderinger';
+import { BenkBehandlingMeny } from '../BenkBehandlingMeny';
+import { BenkStatusTag, BenkKlageStatusTag, BenkTilbakekrevingStatusTag } from '../BenkStatusTag';
+import { benkBehandlingHarTilgang, kanFortsetteBenkRad } from '../../utils/benkRad';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
-import { BenkTildelCheckbox } from '~/lib/benk/felles/tildel-flere/BenkTildelCheckbox';
+import { BenkTildelCheckbox } from '../tildel-flere/BenkTildelCheckbox';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
@@ -35,28 +35,31 @@ import style from './BenkTabellCelle.module.css';
 
 type MedBehandling = { behandling: BenkBehandling };
 
+/**
+ * Innholdet i cellene som går igjen på tvers av fanene. Selve cellen (og justeringen)
+ * lages av BenkTabell ut fra kolonnedefinisjonen - se benkKolonner.
+ */
+
 /** Backend sladder fnr på rader uten tilgang, så teksten kommer alltid fra `fnr` - uten lenke og kopiering */
 const Fnr = ({ behandling }: MedBehandling) => {
     const fnrTekst = sladdbarTekst(behandling.fnr, '[Fnr sladdet]');
 
     return (
-        <Table.HeaderCell scope={'row'}>
-            <HStack align={'center'} gap={'space-4'} wrap={false}>
-                {benkBehandlingHarTilgang(behandling) ? (
-                    <>
-                        <InternLenke href={personoversiktUrl(hentVerdi(behandling.saksnummer))}>
-                            {fnrTekst}
-                        </InternLenke>
-                        {!erSladdet(behandling.fnr) && (
-                            <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
-                        )}
-                    </>
-                ) : (
-                    fnrTekst
-                )}
-                <TilgangVarsel behandling={behandling} />
-            </HStack>
-        </Table.HeaderCell>
+        <HStack align={'center'} gap={'space-4'} wrap={false}>
+            {benkBehandlingHarTilgang(behandling) ? (
+                <>
+                    <InternLenke href={personoversiktUrl(hentVerdi(behandling.saksnummer))}>
+                        {fnrTekst}
+                    </InternLenke>
+                    {!erSladdet(behandling.fnr) && (
+                        <CopyButton copyText={fnrTekst} size={'small'} data-color={'accent'} />
+                    )}
+                </>
+            ) : (
+                fnrTekst
+            )}
+            <TilgangVarsel behandling={behandling} />
+        </HStack>
     );
 };
 
@@ -104,11 +107,7 @@ const TilgangVarsel = ({ behandling }: MedBehandling) => {
 };
 
 /** Resultatet vises som en tag når det er valgt, ellers '-' */
-const Resultat = ({ behandling }: MedBehandling) => (
-    <Table.DataCell>{resultatTag(behandling)}</Table.DataCell>
-);
-
-const resultatTag = (behandling: BenkBehandling): ReactNode => {
+const Resultat = ({ behandling }: MedBehandling): ReactNode => {
     switch (behandling.type) {
         case BenkBehandlingstype.SØKNADSBEHANDLING:
         case BenkBehandlingstype.REVURDERING:
@@ -128,36 +127,42 @@ const resultatTag = (behandling: BenkBehandling): ReactNode => {
     }
 };
 
-/** Skjult når filteret skjuler behandlinger på vent - da har alle radene uansett samme verdi */
+/** Klage og tilbakekreving har egne flyter, og dermed egne statuser */
+const Status = ({ behandling }: MedBehandling) => {
+    switch (behandling.type) {
+        case BenkBehandlingstype.KLAGEBEHANDLING:
+            return <BenkKlageStatusTag status={behandling.status} />;
+        case BenkBehandlingstype.TILBAKEKREVING:
+            return <BenkTilbakekrevingStatusTag status={behandling.status} />;
+        default:
+            return (
+                <BenkStatusTag status={behandling.status} erUnderkjent={behandling.erUnderkjent} />
+            );
+    }
+};
+
 const Ventestatus = ({
     behandling,
-    erTilbakekreving = false,
 }: {
-    behandling: Pick<BenkBehandling, 'ventestatus'>;
-    /** Tilbakekreving lagrer ventegrunnen som en enumnøkkel, ikke som fritekst */
-    erTilbakekreving?: boolean;
+    behandling: Pick<BenkBehandling, 'ventestatus' | 'type'>;
 }) => {
-    const { skjulVentestatus } = useBenkVisning();
     const { erSattPåVent, begrunnelse, frist } = behandling.ventestatus;
-    const begrunnelseVisning = begrunnelseTekst(begrunnelse, erTilbakekreving);
 
-    if (skjulVentestatus) {
-        return null;
+    if (!erSattPåVent) {
+        return '-';
     }
 
+    // Tilbakekreving lagrer ventegrunnen som en enumnøkkel, ikke som fritekst
+    const erTilbakekreving = behandling.type === BenkBehandlingstype.TILBAKEKREVING;
+    const begrunnelseVisning = begrunnelseTekst(begrunnelse, erTilbakekreving);
+
     return (
-        <Table.DataCell>
-            {erSattPåVent ? (
-                <HStack gap={'space-4'} align={'center'} wrap={false}>
-                    <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
-                        {frist ? `Venter til ${formaterDatotekst(frist)}` : 'Venter'}
-                    </Tag>
-                    {begrunnelseVisning && <HelpText>{begrunnelseVisning}</HelpText>}
-                </HStack>
-            ) : (
-                '-'
-            )}
-        </Table.DataCell>
+        <HStack gap={'space-4'} align={'center'} wrap={false}>
+            <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
+                {frist ? `Venter til ${formaterDatotekst(frist)}` : 'Venter'}
+            </Tag>
+            {begrunnelseVisning && <HelpText>{begrunnelseVisning}</HelpText>}
+        </HStack>
     );
 };
 
@@ -194,76 +199,56 @@ const finnTagColor = (fristDato: Nullable<string>): AkselColor => {
     }
 };
 
-const Tidspunkt = ({ tidspunkt }: { tidspunkt: Nullable<string> }) => (
-    <Table.DataCell align={'right'}>
-        {tidspunkt ? formaterTidspunktKort(tidspunkt) : '-'}
-    </Table.DataCell>
-);
+const Tidspunkt = ({ tidspunkt }: { tidspunkt: Nullable<string> }) =>
+    tidspunkt ? formaterTidspunktKort(tidspunkt) : '-';
 
 /** Saksbehandler- og beslutterkolonnene deler denne - tom ident betyr at ingen har tatt behandlingen */
-const Tildelt = ({ ident }: { ident: Nullable<string> }) => (
-    <Table.DataCell>{ident ?? 'Ikke tildelt'}</Table.DataCell>
-);
+const Tildelt = ({ ident }: { ident: Nullable<string> }) => ident ?? 'Ikke tildelt';
 
-const PeriodeCelle = ({ periode }: { periode: Periode }) => (
-    <Table.DataCell align={'right'}>{formaterPeriodeKort(periode)}</Table.DataCell>
-);
+const PeriodeCelle = ({ periode }: { periode: Periode }) => formaterPeriodeKort(periode);
 
 const Meldeperiode = ({ meldeperioder }: { meldeperioder: Periode[] }) => (
-    <Table.DataCell align={'right'}>
-        <MeldeperioderTabellVisning meldeperioder={meldeperioder} align={'end'} />
-    </Table.DataCell>
+    <MeldeperioderTabellVisning meldeperioder={meldeperioder} align={'end'} />
 );
 
-const Beløp = ({ beløp }: { beløp: Nullable<number> }) => (
-    <Table.DataCell align={'right'}>{beløp !== null ? formatterBeløp(beløp) : '-'}</Table.DataCell>
-);
-
-const Handlinger = ({ behandling, children }: PropsWithChildren<MedBehandling>) => (
-    <Table.DataCell align={'right'}>
-        {benkBehandlingHarTilgang(behandling) ? children : null}
-    </Table.DataCell>
-);
+const Beløp = ({ beløp }: { beløp: Nullable<number> }) =>
+    beløp !== null ? formatterBeløp(beløp) : '-';
 
 /** Lenke til behandlingen og menyen med handlingene den innloggede saksbehandleren kan gjøre */
 const RammebehandlingHandlinger = ({
     behandling,
 }: {
-    behandling: BenkSøknadsbehandling | BenkRevurdering;
+    behandling: BenkSøknadsbehandlingMedTilgang | BenkRevurderingMedTilgang;
 }) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
-        <Handlinger behandling={behandling}>
-            {benkBehandlingHarTilgang(behandling) && (
-                <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                    <InternLenkeKnapp
-                        href={behandlingUrl({
-                            saksnummer: hentVerdi(behandling.saksnummer),
-                            id: behandling.id,
-                        })}
-                    >
-                        {kanFortsetteBenkRad(behandling, innloggetSaksbehandler.navIdent)
-                            ? 'Fortsett'
-                            : 'Åpne'}
-                    </InternLenkeKnapp>
-                    <BenkBehandlingMeny behandling={behandling} />
-                    <BenkTildelCheckbox behandling={behandling} />
-                </HStack>
-            )}
-        </Handlinger>
+        <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+            <InternLenkeKnapp
+                href={behandlingUrl({
+                    saksnummer: hentVerdi(behandling.saksnummer),
+                    id: behandling.id,
+                })}
+            >
+                {kanFortsetteBenkRad(behandling, innloggetSaksbehandler.navIdent)
+                    ? 'Fortsett'
+                    : 'Åpne'}
+            </InternLenkeKnapp>
+            <BenkBehandlingMeny behandling={behandling} />
+            <BenkTildelCheckbox behandling={behandling} />
+        </HStack>
     );
 };
 
 export const BenkTabellCelle = {
     Fnr,
     Resultat,
+    Status,
     Ventestatus,
     Tidspunkt,
     Tildelt,
     Periode: PeriodeCelle,
     Meldeperiode,
     Beløp,
-    Handlinger,
     RammebehandlingHandlinger,
 };

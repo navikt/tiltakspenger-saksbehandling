@@ -1,18 +1,9 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
-import {
-    BenkBehandling,
-    BenkBehandlingMedTilgang,
-    BenkBehandlingsstatus,
-    BenkOppsummering,
-    BenkSorteringRetning,
-    BenkTilgangsvurdering,
-    BenkVentestatus,
-} from '../typer/felles';
+import { Nullable } from '~/types/UtilTypes';
+import { BenkBehandlingsstatus, BenkOppsummering } from '../typer/felles';
 import { BenkKlageStatus } from '../typer/klage';
 import { BenkMeldekortType, benkMeldekortTyper } from '../typer/meldekort';
 import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
-import { isValueInRecord } from '~/utils/object';
-import { Nullable } from '~/types/UtilTypes';
 
 export const benkBehandlingsstatusTekst: Record<BenkBehandlingsstatus, string> = {
     [BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'Under automatisk behandling',
@@ -73,50 +64,6 @@ export const benkTilbakekrevingKildeTekst: Record<BenkTilbakekrevingKilde, strin
     [BenkTilbakekrevingKilde.RAMMEVEDTAK]: 'Rammevedtak',
 } as const;
 
-export const parseBenkSortering = <Kolonne extends string>(
-    sortering: string | null,
-    kolonner: Record<string, Kolonne>,
-    fallbackKolonne: Kolonne,
-): `${Kolonne},${BenkSorteringRetning}` => {
-    const [kolonne, retning] = sortering?.split(',') ?? [];
-
-    const gyldigKolonne = isValueInRecord(kolonne, kolonner) ? kolonne : fallbackKolonne;
-    const gyldigRetning =
-        retning === BenkSorteringRetning.DESC
-            ? BenkSorteringRetning.DESC
-            : BenkSorteringRetning.ASC;
-
-    return `${gyldigKolonne},${gyldigRetning}`;
-};
-
-/**
- * Speiler `kanFortsetteBehandling` for rammebehandlinger med feltene en benk-rad har:
- * saksbehandler eier behandlingen, og den er ikke satt på vent.
- */
-export const kanFortsetteBenkRad = (
-    rad: {
-        status: BenkBehandlingsstatus;
-        saksbehandler: Nullable<string>;
-        beslutter: Nullable<string>;
-        ventestatus: BenkVentestatus;
-    },
-    navIdent: string,
-): boolean => {
-    if (rad.ventestatus.erSattPåVent) {
-        return false;
-    }
-
-    switch (rad.status) {
-        case BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
-        case BenkBehandlingsstatus.UNDER_BEHANDLING:
-            return rad.saksbehandler === navIdent;
-        case BenkBehandlingsstatus.UNDER_BESLUTNING:
-            return rad.beslutter === navIdent;
-        default:
-            return false;
-    }
-};
-
 /**
  * Kort oppsummering av radene på siden.
  * Markørene settes bare på rader uten tilgang, så de vises som underkategorier med «herav».
@@ -139,10 +86,4 @@ export const benkOppsummeringTekst = (oppsummering: BenkOppsummering): Nullable<
     const utenTilgang = `${oppsummering.antallUtenTilgang} uten tilgang`;
 
     return markører.length === 0 ? utenTilgang : `${utenTilgang} (herav ${markører.join(', ')})`;
-};
-
-export const benkBehandlingHarTilgang = (
-    behandling: BenkBehandling,
-): behandling is BenkBehandlingMedTilgang => {
-    return behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;
 };

@@ -7,6 +7,8 @@ import {
     BenkBehandlingMedTilgangBase,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
+    BenkFellesFilter,
+    benkFellesKolonner,
 } from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
@@ -24,23 +26,18 @@ export type BenkSøknadsbehandling = BenkBehandlingBase<BenkSøknadsbehandlingPr
 export type BenkSøknadsbehandlingMedTilgang =
     BenkBehandlingMedTilgangBase<BenkSøknadsbehandlingProps>;
 
-export enum BenkSøknaderKolonne {
-    fnr = 'fnr',
-    søknadstype = 'søknadstype',
-    status = 'status',
-    kravtidspunkt = 'kravtidspunkt',
-    resultat = 'resultat',
-    sistEndret = 'sist_endret',
-    saksbehandler = 'saksbehandler',
-    beslutter = 'beslutter',
-    ventestatusFrist = 'ventestatus_frist',
-}
+export const BenkSøknaderKolonne = {
+    ...benkFellesKolonner,
+    søknadstype: 'søknadstype',
+    kravtidspunkt: 'kravtidspunkt',
+    resultat: 'resultat',
+    beslutter: 'beslutter',
+} as const;
 
-export type BenkSøknaderFilter = {
+export type BenkSøknaderKolonne = (typeof BenkSøknaderKolonne)[keyof typeof BenkSøknaderKolonne];
+
+export type BenkSøknaderFilter = BenkFellesFilter & {
     status: Nullable<BenkBehandlingsstatus>;
     resultat: Nullable<SøknadsbehandlingResultat>;
     søknadstype: Nullable<Søknadstype>;
-    saksbehandler: Nullable<string>;
-    skjulPåVent: boolean;
-    skjulEgneTilBeslutning: boolean;
 };

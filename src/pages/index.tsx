@@ -1,27 +1,13 @@
 import { ParsedUrlQuery } from 'node:querystring';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BenkSide } from '~/lib/benk/BenkSide';
-import { BenkSideProps } from '~/lib/benk/typer/benkside';
+import { BenkFaneBehandling, BenkSideProps, lagBenkTabData } from '~/lib/benk/typer/benkside';
 import { BENK_TAB_DEFAULT, BenkTab, erBenkTab } from '~/lib/benk/typer/tabs';
-import { BenkSøknaderKolonne, BenkSøknadsbehandling } from '~/lib/benk/typer/søknader';
-import { BenkRevurderingerKolonne, BenkRevurdering } from '~/lib/benk/typer/revurderinger';
-import { BenkMeldekortKolonne, BenkMeldekort } from '~/lib/benk/typer/meldekort';
-import { BenkKlageKolonne, BenkKlagebehandling } from '~/lib/benk/typer/klage';
-import { BenkTilbakekrevingKolonne, BenkTilbakekreving } from '~/lib/benk/typer/tilbakekreving';
-import { BenkFilter, BenkSortering } from '~/lib/benk/typer/felles';
+import { BenkFilter } from '~/lib/benk/typer/felles';
 import { fetchBenk, NextRequest } from '~/utils/fetch/fetch-server';
-import { parseBenkSortering } from '~/lib/benk/utils/benkUtils';
-import {
-    harBenkFilterVerdier,
-    parseBenkFilterForTab,
-    parseBenkKlageFilter,
-    parseBenkMeldekortFilter,
-    parseBenkRevurderingerFilter,
-    parseBenkSøknaderFilter,
-    parseBenkTilbakekrevingFilter,
-    benkStrengVerdi,
-    parseBenkSide,
-} from '~/lib/benk/utils/benkQuery';
+import { parseBenkSortering } from '~/lib/benk/utils/benkSortering';
+import { benkFaner, parseBenkFilterForTab } from '~/lib/benk/benkFaner';
+import { harBenkFilterVerdier, benkStrengVerdi, parseBenkSide } from '~/lib/benk/utils/benkQuery';
 import {
     BENK_COOKIE_NAME,
     BenkLagredeValg,
@@ -40,7 +26,7 @@ import { BenkSideUtenTilgang } from '~/lib/benk/uten-tilgang/BenkSideUtenTilgang
  */
 type Props = { harTilgang: false } | ({ harTilgang: true } & BenkSideProps);
 
-const BenkSideInner = (props: Props) => {
+const BenkSideOuter = (props: Props) => {
     return props.harTilgang ? <BenkSide {...props} /> : <BenkSideUtenTilgang />;
 };
 
@@ -122,140 +108,43 @@ const hentRedirect = (
  * oversikt og antallet i alle fanene, slik at ett kall dekker hele siden -
  * med mindre saksbehandleren ikke har tilgang, da er svaret kun { harTilgang: false }.
  */
-const hentTabData = async (
+const hentTabData = async <T extends BenkTab>(
     req: NextRequest,
-    tab: BenkTab,
+    tab: T,
     query: ParsedUrlQuery,
 ): Promise<Props> => {
-    const sorteringFraQuery = benkStrengVerdi(query.sortering);
+    const fane = benkFaner[tab];
+
+    const filters = fane.parseFilter(query);
+    const sortering = parseBenkSortering(
+        benkStrengVerdi(query.sortering),
+        fane.kolonner,
+        fane.standardSortering,
+    );
     const side = parseBenkSide(query.side);
 
-    switch (tab) {
-        case BenkTab.SØKNADER: {
-            const filters = parseBenkSøknaderFilter(query);
-            const sortering = parseBenkSortering(
-                sorteringFraQuery,
-                BenkSøknaderKolonne,
-                BenkSøknaderKolonne.kravtidspunkt,
-            );
-            const respons = await hentFane<BenkSøknadsbehandling>(
-                req,
-                tab,
-                filters,
-                sortering,
-                side,
-            );
-            if (!respons.harTilgang) {
-                return respons;
-            }
-            const { antallPerTab, oversikt, error } = respons;
-            return {
-                harTilgang: true,
-                antallPerTab,
-                error,
-                tabData: {
-                    tab,
-                    data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
-                },
-            };
-        }
-        case BenkTab.REVURDERINGER: {
-            const filters = parseBenkRevurderingerFilter(query);
-            const sortering = parseBenkSortering(
-                sorteringFraQuery,
-                BenkRevurderingerKolonne,
-                BenkRevurderingerKolonne.startet,
-            );
-            const respons = await hentFane<BenkRevurdering>(req, tab, filters, sortering, side);
-            if (!respons.harTilgang) {
-                return respons;
-            }
-            const { antallPerTab, oversikt, error } = respons;
-            return {
-                harTilgang: true,
-                antallPerTab,
-                error,
-                tabData: {
-                    tab,
-                    data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
-                },
-            };
-        }
-        case BenkTab.MELDEKORT: {
-            const filters = parseBenkMeldekortFilter(query);
-            const sortering = parseBenkSortering(
-                sorteringFraQuery,
-                BenkMeldekortKolonne,
-                BenkMeldekortKolonne.meldeperioder,
-            );
-            const respons = await hentFane<BenkMeldekort>(req, tab, filters, sortering, side);
-            if (!respons.harTilgang) {
-                return respons;
-            }
-            const { antallPerTab, oversikt, error } = respons;
-            return {
-                harTilgang: true,
-                antallPerTab,
-                error,
-                tabData: {
-                    tab,
-                    data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
-                },
-            };
-        }
-        case BenkTab.KLAGE: {
-            const filters = parseBenkKlageFilter(query);
-            const sortering = parseBenkSortering(
-                sorteringFraQuery,
-                BenkKlageKolonne,
-                BenkKlageKolonne.kravtidspunkt,
-            );
-            const respons = await hentFane<BenkKlagebehandling>(req, tab, filters, sortering, side);
-            if (!respons.harTilgang) {
-                return respons;
-            }
-            const { antallPerTab, oversikt, error } = respons;
-            return {
-                harTilgang: true,
-                antallPerTab,
-                error,
-                tabData: {
-                    tab,
-                    data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
-                },
-            };
-        }
-        case BenkTab.TILBAKEKREVING: {
-            const filters = parseBenkTilbakekrevingFilter(query);
-            const sortering = parseBenkSortering(
-                sorteringFraQuery,
-                BenkTilbakekrevingKolonne,
-                BenkTilbakekrevingKolonne.startet,
-            );
-            const respons = await hentFane<BenkTilbakekreving>(req, tab, filters, sortering, side);
-            if (!respons.harTilgang) {
-                return respons;
-            }
-            const { antallPerTab, oversikt, error } = respons;
-            return {
-                harTilgang: true,
-                antallPerTab,
-                error,
-                tabData: {
-                    tab,
-                    data: { oversikt, aktivtFilter: filters, aktivSortering: sortering },
-                },
-            };
-        }
+    const respons = await fetchBenk<BenkFaneBehandling<T>>(req, tab, {
+        sortering,
+        filters,
+        side,
+    });
+
+    if (!respons.harTilgang) {
+        return respons;
     }
+
+    const { antallPerTab, oversikt, error } = respons;
+
+    return {
+        harTilgang: true,
+        antallPerTab,
+        error,
+        tabData: lagBenkTabData(tab, {
+            oversikt,
+            aktivtFilter: filters,
+            aktivSortering: sortering,
+        }),
+    };
 };
 
-const hentFane = <Behandling,>(
-    req: NextRequest,
-    tab: BenkTab,
-    filters: BenkFilter,
-    sortering: BenkSortering<string>,
-    side: number,
-) => fetchBenk<Behandling>(req, tab, { sortering, filters, side });
-
-export default BenkSideInner;
+export default BenkSideOuter;

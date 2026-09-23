@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { BodyShort, HStack, Loader, VStack } from '@navikt/ds-react';
 import { BenkOversikt } from '../typer/felles';
-import { benkOppsummeringTekst } from '../utils/benkUtils';
+import { benkOppsummeringTekst } from '../utils/benkTekster';
 import { BenkPaginering } from './BenkPaginering';
 
 type Props = {

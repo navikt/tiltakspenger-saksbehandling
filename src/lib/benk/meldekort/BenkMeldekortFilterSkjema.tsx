@@ -1,60 +1,30 @@
-import { BenkMeldekortFilter } from '../typer/meldekort';
 import { BenkTab } from '../typer/tabs';
-import { benkMeldekortTypeTekst, benkBehandlingsstatusTekst } from '../utils/benkUtils';
-import { useResettableState } from '~/utils/useResettableState';
-import { useBenkFilterNavigasjon } from '../felles/filter/useBenkFilterNavigasjon';
-import { BenkFilterSkjema } from '../felles/filter/BenkFilterSkjema';
-import { BenkSaksbehandlerSelect } from '../felles/filter/BenkSaksbehandlerSelect';
+import { benkMeldekortTypeTekst, benkBehandlingsstatusTekst } from '../utils/benkTekster';
+import { useBenkFilterSkjema } from '../felles/filter/useBenkFilterSkjema';
+import { BenkFaneFilterSkjemaProps, BenkFilterSkjema } from '../felles/filter/BenkFilterSkjema';
 import { BenkFilterSelect } from '../felles/filter/BenkFilterSelect';
 
-type Props = {
-    saksbehandlere: string[];
-    besluttere: string[];
-    aktivtFilter: BenkMeldekortFilter;
-};
-
-export const BenkMeldekortFilterSkjema = ({ saksbehandlere, besluttere, aktivtFilter }: Props) => {
-    const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(BenkTab.MELDEKORT);
-    const [valgtFilter, setValgtFilter] = useResettableState<BenkMeldekortFilter>(aktivtFilter);
+export const BenkMeldekortFilterSkjema = ({
+    aktivtFilter,
+    ...props
+}: BenkFaneFilterSkjemaProps<BenkTab.MELDEKORT>) => {
+    const skjema = useBenkFilterSkjema(BenkTab.MELDEKORT, aktivtFilter);
+    const { valgtFilter, endreFilter } = skjema;
 
     return (
-        <BenkFilterSkjema
-            onSubmit={() => oppdaterFilter(valgtFilter)}
-            onNullstill={() =>
-                nullstillFilter({
-                    status: null,
-                    type: null,
-                    saksbehandler: null,
-                    skjulEgneTilBeslutning: false,
-                    skjulPåVent: false,
-                })
-            }
-            skjulEgneTilBeslutning={valgtFilter.skjulEgneTilBeslutning}
-            onSkjulEgneTilBeslutningChange={(skjulEgneTilBeslutning) =>
-                setValgtFilter({ ...valgtFilter, skjulEgneTilBeslutning })
-            }
-            skjulPåVent={valgtFilter.skjulPåVent}
-            onSkjulPåVentChange={(skjulPåVent) => setValgtFilter({ ...valgtFilter, skjulPåVent })}
-        >
+        <BenkFilterSkjema skjema={skjema} {...props}>
             <BenkFilterSelect
                 label={'Type'}
                 value={valgtFilter.type}
-                onChange={(type) => setValgtFilter({ ...valgtFilter, type })}
+                onChange={(type) => endreFilter({ type })}
                 alternativer={benkMeldekortTypeTekst}
             />
 
             <BenkFilterSelect
                 label={'Status'}
                 value={valgtFilter.status}
-                onChange={(status) => setValgtFilter({ ...valgtFilter, status })}
+                onChange={(status) => endreFilter({ status })}
                 alternativer={benkBehandlingsstatusTekst}
-            />
-
-            <BenkSaksbehandlerSelect
-                saksbehandlere={saksbehandlere}
-                besluttere={besluttere}
-                valgtSaksbehandler={valgtFilter.saksbehandler}
-                onChange={(saksbehandler) => setValgtFilter({ ...valgtFilter, saksbehandler })}
             />
         </BenkFilterSkjema>
     );
