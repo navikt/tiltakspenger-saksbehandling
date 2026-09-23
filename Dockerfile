@@ -1,6 +1,6 @@
 # Digesten er det som faktisk kjører; taggen er det Dependabot følger, og gir PR når `24-alpine` flyttes.
 # `apk upgrade` under henter fortsatt sikkerhetsoppdateringer i perioden mellom digest-bumpene.
-FROM node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1
+FROM node:25-alpine@sha256:bdf2cca6fe3dabd014ea60163eca3f0f7015fbd5c7ee1b0e9ccb4ced6eb02ef4
 
 # Docker Hub-bildet kan ligge etter alpines sikkerhetsoppdateringer (openssl 7.9.2026), så pakkene løftes her.
 # npm, corepack og yarn brukes ikke i drift og drar med seg sårbare bundlede pakker (tar, brace-expansion, ip-address).
