@@ -46,7 +46,7 @@
         "@playwright/test": "Husk å oppdatere .test-and-build.yml workflow når denne versjonen oppdateres"
     },
     "devDependencies": {
-        "@eslint/css": "1.2.0",
+        "@eslint/css": "2.0.0",
         "@eslint/js": "9.39.4",
         "@jest/globals": "30.4.1",
         "@jridgewell/gen-mapping": "0.3.13",
