@@ -13,6 +13,16 @@ updates:
       exclude:
         - "@navikt/*"
         - "@nais/*"
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+      # Navs egne pakker tas med én gang; cooldownen gjelder tredjepart.
+      exclude:
+        - "ghcr.io/navikt/*"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
