@@ -1,46 +1,17 @@
 import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { ComponentType, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
-import { BenkTab } from './typer/tabs';
+import { BENK_MINE_TAB, BenkSideTab, benkSideTabs, BenkTab } from './typer/tabs';
 import { BenkFaneData, BenkSideProps } from './typer/benkside';
-import { benkFaner } from './benkFaner';
-import { BenkSøknaderFilterSkjema } from './søknader/BenkSøknaderFilterSkjema';
-import { BenkSøknaderTabell } from './søknader/BenkSøknaderTabell';
-import { BenkRevurderingerFilterSkjema } from './revurderinger/BenkRevurderingerFilterSkjema';
-import { BenkRevurderingerTabell } from './revurderinger/BenkRevurderingerTabell';
-import { BenkMeldekortFilterSkjema } from './meldekort/BenkMeldekortFilterSkjema';
-import { BenkMeldekortTabell } from './meldekort/BenkMeldekortTabell';
-import { BenkKlageFilterSkjema } from './klage/BenkKlageFilterSkjema';
-import { BenkKlageTabell } from './klage/BenkKlageTabell';
-import { BenkTilbakekrevingFilterSkjema } from './tilbakekreving/BenkTilbakekrevingFilterSkjema';
-import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTabell';
+import { benkSideTabTekst } from './benkFaner';
 import { BenkPanel } from './felles/BenkPanel';
 import { BenkVisningProvider } from './felles/filter/BenkVisningContext';
-import { BenkFaneFilterSkjemaProps } from './felles/filter/BenkFilterSkjema';
-import { BenkFaneTabellProps } from './felles/tabell/BenkTabell';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { benkFaneKomponenter } from './benkFaneKomponenter';
+import { BenkMine } from './mine/BenkMine';
 
 import style from './BenkSide.module.css';
-
-type BenkFaneKomponenter<T extends BenkTab> = {
-    Filter: ComponentType<BenkFaneFilterSkjemaProps<T>>;
-    Tabell: ComponentType<BenkFaneTabellProps<T>>;
-};
-
-const benkFaneKomponenter: { [T in BenkTab]: BenkFaneKomponenter<T> } = {
-    [BenkTab.SØKNADER]: { Filter: BenkSøknaderFilterSkjema, Tabell: BenkSøknaderTabell },
-    [BenkTab.REVURDERINGER]: {
-        Filter: BenkRevurderingerFilterSkjema,
-        Tabell: BenkRevurderingerTabell,
-    },
-    [BenkTab.MELDEKORT]: { Filter: BenkMeldekortFilterSkjema, Tabell: BenkMeldekortTabell },
-    [BenkTab.KLAGE]: { Filter: BenkKlageFilterSkjema, Tabell: BenkKlageTabell },
-    [BenkTab.TILBAKEKREVING]: {
-        Filter: BenkTilbakekrevingFilterSkjema,
-        Tabell: BenkTilbakekrevingTabell,
-    },
-};
 
 export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
     const router = useRouter();
@@ -86,15 +57,15 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
             <Tabs
                 value={tab}
                 onChange={(nyTab) => {
-                    router.push({ query: { tab: nyTab as BenkTab } });
+                    router.push({ query: { tab: nyTab as BenkSideTab } });
                 }}
             >
                 <Tabs.List>
-                    {Object.values(BenkTab).map((t) => (
+                    {benkSideTabs.map((t) => (
                         <Tabs.Tab
                             key={t}
                             value={t}
-                            label={`${benkFaner[t].tekst} (${antallPerTab[t]})`}
+                            label={`${benkSideTabTekst(t)} (${antallPerTab[t]})`}
                         />
                     ))}
 
@@ -113,7 +84,15 @@ export const BenkSide = ({ antallPerTab, tabData, error }: BenkSideProps) => {
             </Tabs>
 
             <BenkVisningProvider tabData={tabData}>
-                <BenkFane tab={tabData.tab} data={tabData.data} laster={laster} />
+                {tabData.tab === BENK_MINE_TAB ? (
+                    <BenkMine
+                        data={tabData.data}
+                        totalAntallUfiltrert={antallPerTab[BENK_MINE_TAB]}
+                        laster={laster}
+                    />
+                ) : (
+                    <BenkFane tab={tabData.tab} data={tabData.data} laster={laster} />
+                )}
             </BenkVisningProvider>
         </VStack>
     );

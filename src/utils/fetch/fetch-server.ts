@@ -6,7 +6,8 @@ import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
 import { BenkRequestBody } from '~/lib/benk/typer/felles';
-import { BenkRespons } from '~/lib/benk/typer/respons';
+import { BenkMineRespons, BenkRespons } from '~/lib/benk/typer/respons';
+import { BenkMineRequestBody } from '~/lib/benk/typer/mine';
 import { BenkTab } from '~/lib/benk/typer/tabs';
 import { benkFaner } from '~/lib/benk/benkFaner';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
@@ -70,6 +71,12 @@ export const fetchBenk = async <Behandling>(
     body: BenkRequestBody,
 ) =>
     fetchJsonFraApiServerSide<BenkRespons<Behandling>>(req, `/benk/${benkFaner[tab].path}`, {
+        body: JSON.stringify(body),
+        method: 'POST',
+    });
+
+export const fetchBenkMine = async (req: NextRequest, body: BenkMineRequestBody) =>
+    fetchJsonFraApiServerSide<BenkMineRespons>(req, '/benk/mine', {
         body: JSON.stringify(body),
         method: 'POST',
     });

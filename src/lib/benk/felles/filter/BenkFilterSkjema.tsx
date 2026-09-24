@@ -5,7 +5,7 @@ import { BenkFaneFilter } from '../../typer/benkside';
 import { BenkFellesFilter } from '../../typer/felles';
 import { BenkFilterCheckbox } from './BenkFilterCheckbox';
 import { BenkSaksbehandlerSelect } from './BenkSaksbehandlerSelect';
-import { BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
+import { BenkAvkrysningsFilter, BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
 
 /** Propsene hver fanes filterskjema tar imot */
 export type BenkFaneFilterSkjemaProps<T extends BenkTab> = {
@@ -24,7 +24,7 @@ type Props = {
     etterSaksbehandler?: ReactNode;
 };
 
-/** Skjemaet alle fanene deler, med fellesfiltrene (saksbehandler og avkrysningene) og knappene */
+/** Skjemaet køfanene deler, med saksbehandlerfilteret i tillegg til avkrysningene og knappene */
 export const BenkFilterSkjema = ({
     skjema,
     saksbehandlere,
@@ -32,6 +32,32 @@ export const BenkFilterSkjema = ({
     children,
     etterSaksbehandler,
 }: Props) => {
+    const { valgtFilter, endreFilter } = skjema;
+
+    return (
+        <BenkFilterSkjemaRamme skjema={skjema}>
+            {children}
+
+            <BenkSaksbehandlerSelect
+                saksbehandlere={saksbehandlere}
+                besluttere={besluttere}
+                valgtSaksbehandler={valgtFilter.saksbehandler}
+                onChange={(saksbehandler) => endreFilter({ saksbehandler })}
+            />
+
+            {etterSaksbehandler}
+        </BenkFilterSkjemaRamme>
+    );
+};
+
+type RammeProps = {
+    skjema: BenkFilterSkjemaTilstand<BenkAvkrysningsFilter>;
+    /** Fanens egne filtre, som vises på rad over avkrysningene */
+    children: ReactNode;
+};
+
+/** Oppbygningen alle fanenes filterskjema deler: fanens filtre, avkrysningene og knappene */
+export const BenkFilterSkjemaRamme = ({ skjema, children }: RammeProps) => {
     const { valgtFilter, endreFilter, oppdaterFilter, nullstillFilter } = skjema;
     const [isLoading, setIsLoading] = useState(false);
 
@@ -44,15 +70,6 @@ export const BenkFilterSkjema = ({
         <VStack gap={'space-16'}>
             <HStack gap={'space-16'} wrap={true}>
                 {children}
-
-                <BenkSaksbehandlerSelect
-                    saksbehandlere={saksbehandlere}
-                    besluttere={besluttere}
-                    valgtSaksbehandler={valgtFilter.saksbehandler}
-                    onChange={(saksbehandler) => endreFilter({ saksbehandler })}
-                />
-
-                {etterSaksbehandler}
             </HStack>
 
             <VStack gap={'space-4'}>

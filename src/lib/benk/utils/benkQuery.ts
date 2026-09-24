@@ -10,6 +10,8 @@ import {
     BenkTilbakekrevingKilde,
     BenkTilbakekrevingStatus,
 } from '../typer/tilbakekreving';
+import { BenkMineFilter } from '../typer/mine';
+import { BenkTab } from '../typer/tabs';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -97,6 +99,12 @@ export const parseBenkTilbakekrevingFilter = (
     status: benkEnumVerdi(kilde.status, BenkTilbakekrevingStatus),
     kilde: benkEnumVerdi(kilde.kilde, BenkTilbakekrevingKilde),
     kunOverMinstebeløp: benkBoolskVerdi(kilde.kunOverMinstebeløp),
+});
+
+export const parseBenkMineFilter = (kilde: BenkFilterKilde): BenkMineFilter => ({
+    seksjon: benkEnumVerdi(kilde.seksjon, BenkTab),
+    skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
+    skjulPåVent: benkBoolskVerdi(kilde.skjulPåVent),
 });
 
 /**

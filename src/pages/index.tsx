@@ -2,12 +2,28 @@ import { ParsedUrlQuery } from 'node:querystring';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BenkSide } from '~/lib/benk/BenkSide';
 import { BenkFaneBehandling, BenkSideProps, lagBenkTabData } from '~/lib/benk/typer/benkside';
-import { BENK_TAB_DEFAULT, BenkTab, erBenkTab } from '~/lib/benk/typer/tabs';
+import {
+    BENK_MINE_TAB,
+    BENK_TAB_DEFAULT,
+    BenkSideTab,
+    BenkTab,
+    erBenkSideTab,
+} from '~/lib/benk/typer/tabs';
+import { BenkMineSeksjoner } from '~/lib/benk/typer/mine';
 import { BenkFilter } from '~/lib/benk/typer/felles';
-import { fetchBenk, NextRequest } from '~/utils/fetch/fetch-server';
-import { parseBenkSortering } from '~/lib/benk/utils/benkSortering';
-import { benkFaner, parseBenkFilterForTab } from '~/lib/benk/benkFaner';
-import { harBenkFilterVerdier, benkStrengVerdi, parseBenkSide } from '~/lib/benk/utils/benkQuery';
+import { fetchBenk, fetchBenkMine, NextRequest } from '~/utils/fetch/fetch-server';
+import {
+    benkSorteringNøkkel,
+    benkSorteringQuery,
+    parseBenkSortering,
+} from '~/lib/benk/utils/benkSortering';
+import { benkFaner, parseBenkSideFilter } from '~/lib/benk/benkFaner';
+import {
+    harBenkFilterVerdier,
+    benkStrengVerdi,
+    parseBenkMineFilter,
+    parseBenkSide,
+} from '~/lib/benk/utils/benkQuery';
 import {
     BENK_COOKIE_NAME,
     BenkLagredeValg,
@@ -33,11 +49,11 @@ const BenkSideOuter = (props: Props) => {
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const { query, req, res } = context;
 
-    const tabFraQuery = erBenkTab(query.tab) ? query.tab : null;
+    const tabFraQuery = erBenkSideTab(query.tab) ? query.tab : null;
     const tab = tabFraQuery ?? BENK_TAB_DEFAULT;
 
     const lagredeValg = parseBenkCookie(req.cookies[BENK_COOKIE_NAME]);
-    const aktivtFilter = parseBenkFilterForTab(tab, query);
+    const aktivtFilter = parseBenkSideFilter(tab, query);
 
     const redirect = hentRedirect(tabFraQuery, aktivtFilter, lagredeValg, query);
 
@@ -45,7 +61,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         return redirect;
     }
 
-    const sideData = await hentTabData(req, tab, query);
+    const sideData =
+        tab === BENK_MINE_TAB ? await hentMineData(req, query) : await hentTabData(req, tab, query);
 
     if (sideData.harTilgang) {
         res.setHeader(
@@ -66,7 +83,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
  * ingen redirect.
  */
 const hentRedirect = (
-    tabFraQuery: BenkTab | null,
+    tabFraQuery: BenkSideTab | null,
     aktivtFilter: BenkFilter,
     lagredeValg: BenkLagredeValg | null,
     query: ParsedUrlQuery,
@@ -85,15 +102,10 @@ const hentRedirect = (
         return null;
     }
 
-    const params = new URLSearchParams(
-        benkLagredeValgTilQuery(lagredeValg, tabFraQuery ?? lagredeValg.tab),
-    );
-
-    const sortering = benkStrengVerdi(query.sortering);
-
-    if (sortering) {
-        params.set('sortering', sortering);
-    }
+    const params = new URLSearchParams({
+        ...benkLagredeValgTilQuery(lagredeValg, tabFraQuery ?? lagredeValg.tab),
+        ...benkSorteringQuery(query),
+    });
 
     return {
         redirect: {
@@ -144,6 +156,52 @@ const hentTabData = async <T extends BenkTab>(
             aktivtFilter: filters,
             aktivSortering: sortering,
         }),
+    };
+};
+
+/**
+ * Henter mine-fanen fra backend: én seksjon per fane, hver med sin egen sortering.
+ * Seksjonene pagineres ikke.
+ */
+const hentMineData = async (req: NextRequest, query: ParsedUrlQuery): Promise<Props> => {
+    const filters = parseBenkMineFilter(query);
+    const sortering = Object.fromEntries(
+        Object.values(BenkTab).map((tab) => {
+            const fane = benkFaner[tab];
+            return [
+                tab,
+                parseBenkSortering(
+                    benkStrengVerdi(query[benkSorteringNøkkel(tab)]),
+                    fane.kolonner,
+                    fane.standardSortering,
+                ),
+            ];
+        }),
+    );
+
+    const respons = await fetchBenkMine(req, { sortering, filters });
+
+    if (!respons.harTilgang) {
+        return respons;
+    }
+
+    const { antallPerTab, seksjoner, error } = respons;
+
+    const seksjonerMedSortering: BenkMineSeksjoner = Object.fromEntries(
+        Object.values(BenkTab).flatMap((tab) => {
+            const oversikt = seksjoner[tab];
+            return oversikt ? [[tab, { oversikt, aktivSortering: sortering[tab] }]] : [];
+        }),
+    );
+
+    return {
+        harTilgang: true,
+        antallPerTab,
+        error,
+        tabData: {
+            tab: BENK_MINE_TAB,
+            data: { seksjoner: seksjonerMedSortering, aktivtFilter: filters },
+        },
     };
 };
 

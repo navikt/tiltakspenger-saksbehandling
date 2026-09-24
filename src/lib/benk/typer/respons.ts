@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { BenkOversikt } from './felles';
-import { BenkTab } from './tabs';
+import { BENK_MINE_TAB, BenkSideTab, BenkTab } from './tabs';
+import { BenkFaneBehandling } from './benkside';
 
 /**
  * Svaret fra fanens rute under /benk, diskriminert på [harTilgang].
@@ -22,7 +23,22 @@ export type BenkResponsUtenTilgang = {
 export type BenkResponsMedTilgang<Behandling> = {
     harTilgang: true;
     tab: BenkTab;
-    antallPerTab: Record<BenkTab, number>;
+    antallPerTab: Record<BenkSideTab, number>;
     oversikt: BenkOversikt<Behandling>;
+    error: Nullable<string>;
+};
+
+/**
+ * Svaret fra mine-fanen: én oversikt per fane, med behandlingene tildelt den innloggede.
+ * Hver oversikt har samme format som fanens egen, men pagineres ikke - `side` er alltid 0.
+ * Seksjonene som er filtrert bort, er utelatt.
+ */
+export type BenkMineRespons = BenkResponsUtenTilgang | BenkMineResponsMedTilgang;
+
+export type BenkMineResponsMedTilgang = {
+    harTilgang: true;
+    tab: typeof BENK_MINE_TAB;
+    antallPerTab: Record<BenkSideTab, number>;
+    seksjoner: { [T in BenkTab]?: BenkOversikt<BenkFaneBehandling<T>> };
     error: Nullable<string>;
 };

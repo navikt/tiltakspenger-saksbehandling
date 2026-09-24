@@ -7,26 +7,20 @@ import { useTildelRammebehandling } from '~/lib/rammebehandling/felles/tildel/us
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
-import { useRouter } from 'next/router';
 import { useBenkFilterNavigasjon } from '../filter/useBenkFilterNavigasjon';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { BenkTab } from '../../typer/tabs';
-import { BenkBehandlingsstatus } from '../../typer/felles';
-import { parseBenkFilterForTab } from '../../benkFaner';
+import { BENK_MINE_TAB } from '../../typer/tabs';
 import { hentVerdi } from '~/utils/sladdetVerdi';
 
 type Props = {
     behandlinger: Array<BenkSøknadsbehandling | BenkRevurdering>;
-    tab: BenkTab.SØKNADER | BenkTab.REVURDERINGER;
 };
 
-export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
-    const { valgtTildeling, valgtTildelingType, setValgtTildelingType } = useBenkVisning();
+export const BenkTildelFlere = ({ behandlinger }: Props) => {
+    const { valgtTildeling, valgtTildelingType, setValgtTildelingType, kanTildeleFlere } =
+        useBenkVisning();
     const { trigger, isMutating, error, data } = useTildelRammebehandling();
-    const { oppdaterFilter } = useBenkFilterNavigasjon(tab);
-    const { innloggetSaksbehandler } = useSaksbehandler();
-
-    const router = useRouter();
+    // Etter tildelingen vises mine-fanen uten filtre, så alle de nye behandlingene er synlige
+    const { nullstillFilter: visMineBehandlinger } = useBenkFilterNavigasjon(BENK_MINE_TAB);
 
     // sakId og saksnummer er sladdet på rader uten tilgang, og en slik rad kan ikke tildeles.
     // Avkryssingen finnes bare på rader med tilgang og med gyldige kommandoer, så lista er i praksis den samme.
@@ -42,7 +36,6 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
 
     const harFeilet = error && !isMutating;
     const harTildelt = !!data;
-    const nyttFilter = parseBenkFilterForTab(tab, router.query);
 
     const tildelAlle = () => {
         trigger({
@@ -50,19 +43,14 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
             returnerSaker: false,
         }).then((response) => {
             if (response) {
-                oppdaterFilter({
-                    ...nyttFilter,
-                    status:
-                        valgtTildelingType === 'saksbehandler'
-                            ? BenkBehandlingsstatus.UNDER_BEHANDLING
-                            : valgtTildelingType === 'beslutter'
-                              ? BenkBehandlingsstatus.UNDER_BESLUTNING
-                              : null,
-                    saksbehandler: innloggetSaksbehandler.navIdent,
-                }).then(() => setValgtTildelingType(null));
+                visMineBehandlinger().then(() => setValgtTildelingType(null));
             }
         });
     };
+
+    if (!kanTildeleFlere) {
+        return null;
+    }
 
     if (!valgtTildelingType) {
         return <BenkTildelFlereMeny behandlinger={behandlinger} />;

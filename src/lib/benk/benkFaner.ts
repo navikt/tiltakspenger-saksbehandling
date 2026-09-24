@@ -1,4 +1,5 @@
-import { BenkTab } from './typer/tabs';
+import { BENK_MINE_TAB, BenkSideTab, BenkTab } from './typer/tabs';
+import { BenkFilter } from './typer/felles';
 import { BenkFaneFilter, BenkFaneKolonne } from './typer/benkside';
 import { BenkSøknaderKolonne } from './typer/søknader';
 import { BenkRevurderingerKolonne } from './typer/revurderinger';
@@ -8,6 +9,7 @@ import { BenkTilbakekrevingKolonne } from './typer/tilbakekreving';
 import {
     BenkFilterKilde,
     parseBenkKlageFilter,
+    parseBenkMineFilter,
     parseBenkMeldekortFilter,
     parseBenkRevurderingerFilter,
     parseBenkSøknaderFilter,
@@ -77,3 +79,16 @@ export const parseBenkFilterForTab = <T extends BenkTab>(
 /** Filteret uten noen valg - det samme som en url uten filterparametere */
 export const tomtBenkFilter = <T extends BenkTab>(tab: T): BenkFaneFilter<T> =>
     parseBenkFilterForTab(tab, {});
+
+/** Fanetitlene, inkludert mine-fanen */
+export const benkSideTabTekst = (tab: BenkSideTab): string =>
+    tab === BENK_MINE_TAB ? 'Mine behandlinger' : benkFaner[tab].tekst;
+
+/**
+ * Filteret for en hvilken som helst fane på siden, løst typet.
+ * Tar bare med nøklene fanen støtter, så resultatet kan sammenlignes med url-en.
+ */
+export const parseBenkSideFilter = (tab: BenkSideTab, kilde: BenkFilterKilde): BenkFilter =>
+    tab === BENK_MINE_TAB ? parseBenkMineFilter(kilde) : parseBenkFilterForTab(tab, kilde);
+
+export const tomtBenkSideFilter = (tab: BenkSideTab): BenkFilter => parseBenkSideFilter(tab, {});
