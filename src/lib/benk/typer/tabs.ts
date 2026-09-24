@@ -18,7 +18,7 @@ export const BENK_MINE_TAB = 'MINE';
 /** Alle fanene på benksiden, inkludert mine-fanen */
 export type BenkSideTab = BenkTab | typeof BENK_MINE_TAB;
 
-export const benkSideTabs: ReadonlyArray<BenkSideTab> = [...Object.values(BenkTab), BENK_MINE_TAB];
+export const benkSideTabs: ReadonlyArray<BenkSideTab> = [BENK_MINE_TAB, ...Object.values(BenkTab)];
 
 export const BENK_TAB_DEFAULT = BenkTab.SØKNADER;
 

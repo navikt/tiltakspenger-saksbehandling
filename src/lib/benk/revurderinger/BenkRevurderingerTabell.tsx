@@ -13,7 +13,7 @@ const kolonner: BenkKolonne<BenkRevurdering, BenkRevurderingerKolonne>[] = [
     benkKolonner.sistEndret,
     benkKolonner.saksbehandler,
     benkKolonner.beslutter,
-    benkKolonner.rammebehandlingHandlinger(BenkTab.REVURDERINGER),
+    benkKolonner.rammebehandlingHandlinger,
 ];
 
 export const BenkRevurderingerTabell = (props: BenkFaneTabellProps<BenkTab.REVURDERINGER>) => (

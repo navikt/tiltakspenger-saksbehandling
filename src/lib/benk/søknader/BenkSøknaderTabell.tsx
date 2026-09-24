@@ -20,7 +20,7 @@ const kolonner: BenkKolonne<BenkSøknadsbehandling, BenkSøknaderKolonne>[] = [
     benkKolonner.sistEndret,
     benkKolonner.saksbehandler,
     benkKolonner.beslutter,
-    benkKolonner.rammebehandlingHandlinger(BenkTab.SØKNADER),
+    benkKolonner.rammebehandlingHandlinger,
 ];
 
 export const BenkSøknaderTabell = (props: BenkFaneTabellProps<BenkTab.SØKNADER>) => (

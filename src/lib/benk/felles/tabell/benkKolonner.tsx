@@ -9,7 +9,6 @@ import {
 import { BenkSøknadsbehandling } from '../../typer/søknader';
 import { BenkRevurdering } from '../../typer/revurderinger';
 import { benkBehandlingHarTilgang } from '../../utils/benkRad';
-import { BenkTabsMedBatchTildeling } from '../filter/BenkVisningContext';
 import { BenkTildelFlere } from '../tildel-flere/BenkTildelFlere';
 import { BenkKolonne } from './BenkKolonne';
 import { BenkTabellCelle } from './BenkTabellCelle';
@@ -111,11 +110,10 @@ const handlinger = <Rad extends BenkBehandling>(
 });
 
 /** Handlingene for søknadsbehandlinger og revurderinger, med «Tildel flere» i overskriften */
-const rammebehandlingHandlinger = (tab: BenkTabsMedBatchTildeling) =>
-    handlinger<BenkSøknadsbehandling | BenkRevurdering>(
-        (rad) => <BenkTabellCelle.RammebehandlingHandlinger behandling={rad} />,
-        (rader) => <BenkTildelFlere behandlinger={rader} tab={tab} />,
-    );
+const rammebehandlingHandlinger = handlinger<BenkSøknadsbehandling | BenkRevurdering>(
+    (rad) => <BenkTabellCelle.RammebehandlingHandlinger behandling={rad} />,
+    (rader) => <BenkTildelFlere behandlinger={rader} />,
+);
 
 export const benkKolonner = {
     fnr,
