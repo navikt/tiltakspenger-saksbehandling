@@ -82,7 +82,7 @@ export const tomtBenkFilter = <T extends BenkTab>(tab: T): BenkFaneFilter<T> =>
 
 /** Fanetitlene, inkludert mine-fanen */
 export const benkSideTabTekst = (tab: BenkSideTab): string =>
-    tab === BENK_MINE_TAB ? 'Min benk' : benkFaner[tab].tekst;
+    tab === BENK_MINE_TAB ? 'Mine behandlinger' : benkFaner[tab].tekst;
 
 /**
  * Filteret for en hvilken som helst fane på siden, løst typet.
