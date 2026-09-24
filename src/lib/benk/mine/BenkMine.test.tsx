@@ -77,31 +77,26 @@ const renderMine = (data: BenkMineData, totalAntallUfiltrert: number) =>
     );
 
 describe('mine-fanen', () => {
-    test('viser seksjonene med behandlinger, og lenker til fanen når seksjonen er avkortet', () => {
+    test('viser bare seksjonene med behandlinger', () => {
         renderMine(
             {
                 aktivtFilter,
                 seksjoner: {
-                    [BenkTab.KLAGE]: { oversikt: oversikt([klage], 3), aktivSortering: 'fnr,ASC' },
+                    [BenkTab.KLAGE]: { oversikt: oversikt([klage], 1), aktivSortering: 'fnr,ASC' },
                     [BenkTab.MELDEKORT]: {
                         oversikt: oversikt([], 0),
                         aktivSortering: 'periode,ASC',
                     },
                 },
             },
-            4,
+            2,
         );
 
-        expect(screen.getByText('Klage (3)')).toBeInTheDocument();
+        expect(screen.getByText('Klage (1)')).toBeInTheDocument();
         expect(screen.queryByText(/^Meldekort \(/)).not.toBeInTheDocument();
         expect(
-            screen.getByText('3 av totalt 4 behandlinger tildelt deg matcher valgte filtre'),
+            screen.getByText('1 av totalt 2 behandlinger tildelt deg matcher valgte filtre'),
         ).toBeInTheDocument();
-        expect(screen.getByText('Viser de 1 første.', { exact: false })).toBeInTheDocument();
-        expect(screen.getByText('Se alle i klage-fanen').closest('a')).toHaveAttribute(
-            'href',
-            '/?tab=KLAGE&saksbehandler=ukjent',
-        );
     });
 
     test('skiller mellom ingen tildelte og ingen som matcher filtrene', () => {

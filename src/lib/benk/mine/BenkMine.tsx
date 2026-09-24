@@ -1,12 +1,9 @@
 import { BodyShort, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { BenkTab } from '../typer/tabs';
-import { BenkMineData, BenkMineFilter, BenkMineSeksjon, BenkMineSeksjoner } from '../typer/mine';
+import { BenkMineData, BenkMineSeksjon, BenkMineSeksjoner } from '../typer/mine';
 import { benkFaner } from '../benkFaner';
 import { benkFaneKomponenter } from '../benkFaneKomponenter';
 import { benkOppsummeringTekst } from '../utils/benkTekster';
-import { benkFilterTilQuery } from '../utils/benkQuery';
 import { BenkMineFilterSkjema } from './BenkMineFilterSkjema';
 
 type Props = {
@@ -18,7 +15,7 @@ type Props = {
 
 /**
  * Mine-fanen: behandlingene den innloggede er tildelt, som én seksjon per fane.
- * Hver seksjon bruker fanens egen tabell, med sin egen sortering.
+ * Hver seksjon bruker fanens egen tabell, med sin egen sortering. Seksjonene pagineres ikke — alle behandlingene er med.
  */
 export const BenkMine = ({ data, totalAntallUfiltrert, laster }: Props) => {
     const { seksjoner, aktivtFilter } = data;
@@ -56,7 +53,6 @@ export const BenkMine = ({ data, totalAntallUfiltrert, laster }: Props) => {
                         key={tab}
                         tab={tab}
                         seksjon={hentSeksjon(seksjoner, tab)}
-                        aktivtFilter={aktivtFilter}
                     />
                 ))
             )}
@@ -74,44 +70,20 @@ const hentSeksjon = <T extends BenkTab>(seksjoner: BenkMineSeksjoner, tab: T) =>
 const BenkMineSeksjonVisning = <T extends BenkTab>({
     tab,
     seksjon,
-    aktivtFilter,
 }: {
     tab: T;
     seksjon: BenkMineSeksjon<T>;
-    aktivtFilter: BenkMineFilter;
 }) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
     const { Tabell } = benkFaneKomponenter[tab];
     const { oversikt, aktivSortering } = seksjon;
     const { behandlinger, totalAntall, oppsummering } = oversikt;
 
     const oppsummeringstekst = benkOppsummeringTekst(oppsummering);
-    const harFlereBehandlinger = totalAntall > behandlinger.length;
-
-    // Saksbehandlerfilteret i fanen treffer både saksbehandler og beslutter, og gir derfor de samme behandlingene - med paginering
-    const faneQuery = {
-        tab,
-        ...benkFilterTilQuery({
-            saksbehandler: innloggetSaksbehandler.navIdent,
-            skjulPåVent: aktivtFilter.skjulPåVent,
-            skjulEgneTilBeslutning: aktivtFilter.skjulEgneTilBeslutning,
-        }),
-    };
-
     return (
         <VStack as={'section'} gap={'space-8'} aria-label={benkFaner[tab].tekst}>
             <Heading size={'small'} level={'3'}>
                 {`${benkFaner[tab].tekst} (${totalAntall})`}
             </Heading>
-
-            {harFlereBehandlinger && (
-                <BodyShort size={'small'}>
-                    {`Viser de ${behandlinger.length} første. `}
-                    <InternLenke href={{ pathname: '/', query: faneQuery }}>
-                        {`Se alle i ${benkFaner[tab].tekst.toLowerCase()}-fanen`}
-                    </InternLenke>
-                </BodyShort>
-            )}
 
             {oppsummeringstekst && <BodyShort size={'small'}>{oppsummeringstekst}</BodyShort>}
 
