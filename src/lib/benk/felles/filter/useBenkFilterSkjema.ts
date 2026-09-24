@@ -1,10 +1,7 @@
 import { useResettableState } from '~/utils/useResettableState';
 import { BenkSideTab } from '../../typer/tabs';
-import { BenkFellesFilter, BenkFilter } from '../../typer/felles';
+import { BenkAvkrysningsFilter, BenkFilter } from '../../typer/felles';
 import { useBenkFilterNavigasjon } from './useBenkFilterNavigasjon';
-
-/** Avkrysningene alle fanene har, også mine-fanen */
-export type BenkAvkrysningsFilter = Omit<BenkFellesFilter, 'saksbehandler'>;
 
 export type BenkFilterSkjemaTilstand<Filter extends BenkAvkrysningsFilter> = {
     /** Valgene i skjemaet - tas først i bruk når skjemaet sendes inn */

@@ -168,21 +168,23 @@ export type BenkFellesKolonne = (typeof benkFellesKolonner)[keyof typeof benkFel
  */
 export type BenkFilter = Record<string, string | boolean | null>;
 
-/**
- * Filtervalgene alle fanene har. De lagres én gang for alle faner i cookien,
- * mens resten av filteret lagres per fane.
- */
+/** Filtervalgene alle køfanene har */
 export type BenkFellesFilter = {
     saksbehandler: Nullable<string>;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
 };
 
-export const benkFellesFilterNøkler = [
-    'saksbehandler',
+/**
+ * Avkrysningene alle fanene har, også mine-fanen. De beholdes på tvers av fanene,
+ * mens nedtrekksvalgene nullstilles ved bytte av fane.
+ */
+export type BenkAvkrysningsFilter = Omit<BenkFellesFilter, 'saksbehandler'>;
+
+export const benkAvkrysningsNøkler = [
     'skjulPåVent',
     'skjulEgneTilBeslutning',
-] as const satisfies ReadonlyArray<keyof BenkFellesFilter>;
+] as const satisfies ReadonlyArray<keyof BenkAvkrysningsFilter>;
 
 /**
  * Body-en som postes til fanens rute under /benk. Fanen ligger i url-en,

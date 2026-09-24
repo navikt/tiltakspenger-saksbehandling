@@ -67,9 +67,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     if (sideData.harTilgang) {
         res.setHeader(
             'Set-Cookie',
-            serialiserBenkCookie(
-                byggBenkLagredeValg(lagredeValg, tab, sideData.tabData.data.aktivtFilter),
-            ),
+            serialiserBenkCookie(byggBenkLagredeValg(tab, sideData.tabData.data.aktivtFilter)),
         );
     }
 

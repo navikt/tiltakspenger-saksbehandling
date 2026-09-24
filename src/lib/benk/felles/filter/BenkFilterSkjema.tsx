@@ -2,10 +2,10 @@ import { ReactNode, useState } from 'react';
 import { Button, HelpText, HStack, VStack } from '@navikt/ds-react';
 import { BenkTab } from '../../typer/tabs';
 import { BenkFaneFilter } from '../../typer/benkside';
-import { BenkFellesFilter } from '../../typer/felles';
+import { BenkAvkrysningsFilter, BenkFellesFilter } from '../../typer/felles';
 import { BenkFilterCheckbox } from './BenkFilterCheckbox';
 import { BenkSaksbehandlerSelect } from './BenkSaksbehandlerSelect';
-import { BenkAvkrysningsFilter, BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
+import { BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
 
 /** Propsene hver fanes filterskjema tar imot */
 export type BenkFaneFilterSkjemaProps<T extends BenkTab> = {
