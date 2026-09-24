@@ -21,7 +21,8 @@ type Props = {
 };
 
 export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
-    const { valgtTildeling, valgtTildelingType, setValgtTildelingType } = useBenkVisning();
+    const { valgtTildeling, valgtTildelingType, setValgtTildelingType, kanTildeleFlere } =
+        useBenkVisning();
     const { trigger, isMutating, error, data } = useTildelRammebehandling();
     const { oppdaterFilter } = useBenkFilterNavigasjon(tab);
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -63,6 +64,10 @@ export const BenkTildelFlere = ({ behandlinger, tab }: Props) => {
             }
         });
     };
+
+    if (!kanTildeleFlere) {
+        return null;
+    }
 
     if (!valgtTildelingType) {
         return <BenkTildelFlereMeny behandlinger={behandlinger} />;

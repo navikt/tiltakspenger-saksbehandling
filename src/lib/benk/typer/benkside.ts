@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { BenkOversikt, BenkSortering } from './felles';
-import { BenkTab } from './tabs';
+import { BENK_MINE_TAB, BenkSideTab, BenkTab } from './tabs';
+import { BenkMineData } from './mine';
 import { BenkSøknaderFilter, BenkSøknaderKolonne, BenkSøknadsbehandling } from './søknader';
 import {
     BenkRevurderingerFilter,
@@ -62,7 +63,9 @@ export type BenkFaneData<T extends BenkTab> = {
  * Dataene for den aktive fanen. Ligger som ett felt (ikke spredt utover props)
  * slik at diskrimineringen på `tab` bevares gjennom getServerSideProps.
  */
-export type BenkTabData = { [T in BenkTab]: { tab: T; data: BenkFaneData<T> } }[BenkTab];
+export type BenkTabData =
+    | { [T in BenkTab]: { tab: T; data: BenkFaneData<T> } }[BenkTab]
+    | { tab: typeof BENK_MINE_TAB; data: BenkMineData };
 
 /**
  * TypeScript klarer ikke å se at `{ tab: T, data: BenkFaneData<T> }` for en generisk T
@@ -72,7 +75,7 @@ export const lagBenkTabData = <T extends BenkTab>(tab: T, data: BenkFaneData<T>)
     ({ tab, data }) as BenkTabData;
 
 export type BenkSideProps = {
-    antallPerTab: Record<BenkTab, number>;
+    antallPerTab: Record<BenkSideTab, number>;
     tabData: BenkTabData;
     /** Satt når backend ikke kunne tolke requesten og svarte med en standardvisning */
     error: Nullable<string>;

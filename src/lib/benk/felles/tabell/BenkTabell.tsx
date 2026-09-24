@@ -10,12 +10,15 @@ import { BenkKolonne } from './BenkKolonne';
 export type BenkFaneTabellProps<T extends BenkTab> = {
     behandlinger: BenkFaneBehandling<T>[];
     aktivSortering: BenkSortering<BenkFaneKolonne<T>>;
+    /** Satt når tabellen er en av flere på siden, slik at den får sin egen sortering */
+    seksjon?: string;
 };
 
 type Props<Rad extends { id: string }, Kolonne extends string> = {
     kolonner: ReadonlyArray<BenkKolonne<Rad, Kolonne>>;
     behandlinger: Rad[];
     aktivSortering: BenkSortering<Kolonne>;
+    seksjon?: string;
 };
 
 /** Tabellen alle fanene deler. Fanene bestemmer bare hvilke kolonner som vises. */
@@ -23,8 +26,9 @@ export const BenkTabell = <Rad extends { id: string }, Kolonne extends string>({
     kolonner,
     behandlinger,
     aktivSortering,
+    seksjon,
 }: Props<Rad, Kolonne>) => {
-    const { sort, onSortChange } = useBenkSortering(aktivSortering);
+    const { sort, onSortChange } = useBenkSortering(aktivSortering, seksjon);
     const { skjulVentestatus } = useBenkVisning();
 
     const synligeKolonner = kolonner.filter(

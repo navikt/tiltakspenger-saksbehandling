@@ -1,8 +1,7 @@
 import Cookies from 'js-cookie';
-import { BenkTab, erBenkTab } from '../typer/tabs';
+import { BENK_MINE_TAB, BenkSideTab, benkSideTabs, erBenkSideTab } from '../typer/tabs';
 import { BenkFellesFilter, benkFellesFilterNøkler, BenkFilter } from '../typer/felles';
-import { BenkFaneFilter } from '../typer/benkside';
-import { parseBenkFilterForTab } from '../benkFaner';
+import { parseBenkSideFilter } from '../benkFaner';
 import {
     benkBoolskVerdi,
     benkFilterTilQuery,
@@ -19,13 +18,16 @@ export const BENK_COOKIE_NAME = 'benkFiltersV2';
  */
 type LagretFilter = BenkFilter;
 
-/** Fellesvalgene lagres én gang, på tvers av fanene - resten av filteret lagres per fane */
+/**
+ * Fellesvalgene lagres én gang, på tvers av fanene - resten av filteret lagres per fane.
+ * Mine-fanen har ikke saksbehandlerfilteret, men deler avkrysningene med de andre fanene.
+ */
 export type BenkLagredeValg = BenkFellesFilter & {
-    tab: BenkTab;
-    filtre: Partial<Record<BenkTab, LagretFilter>>;
+    tab: BenkSideTab;
+    filtre: Partial<Record<BenkSideTab, LagretFilter>>;
 };
 
-const tomtValg = (tab: BenkTab, filtre: BenkLagredeValg['filtre'] = {}): BenkLagredeValg => ({
+const tomtValg = (tab: BenkSideTab, filtre: BenkLagredeValg['filtre'] = {}): BenkLagredeValg => ({
     tab,
     saksbehandler: null,
     skjulPåVent: false,
@@ -52,7 +54,7 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
     try {
         const parsed = JSON.parse(cookieVerdi) as Record<string, unknown>;
 
-        if (!erBenkTab(parsed.tab)) {
+        if (!erBenkSideTab(parsed.tab)) {
             return null;
         }
 
@@ -63,14 +65,14 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
 
         const filtre: BenkLagredeValg['filtre'] = {};
 
-        Object.values(BenkTab).forEach((tab) => {
+        benkSideTabs.forEach((tab) => {
             const lagret = lagredeFiltre[tab];
 
             if (typeof lagret !== 'object' || lagret === null) {
                 return;
             }
 
-            const filter = utenFellesValg(parseBenkFilterForTab(tab, lagret as BenkFilterKilde));
+            const filter = utenFellesValg(parseBenkSideFilter(tab, lagret as BenkFilterKilde));
 
             if (harBenkFilterVerdier(filter)) {
                 filtre[tab] = filter;
@@ -89,11 +91,14 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
     }
 };
 
-/** Slår sammen gjeldende visning med tidligere lagrede valg for de andre fanene */
-export const byggBenkLagredeValg = <T extends BenkTab>(
+/**
+ * Slår sammen gjeldende visning med tidligere lagrede valg for de andre fanene.
+ * En fane uten saksbehandlerfilteret (mine-fanen) beholder det lagrede valget for de andre fanene.
+ */
+export const byggBenkLagredeValg = (
     forrige: BenkLagredeValg | null,
-    tab: T,
-    filter: BenkFaneFilter<T>,
+    tab: BenkSideTab,
+    filter: BenkFilter & Omit<BenkFellesFilter, 'saksbehandler'>,
 ): BenkLagredeValg => {
     const fanensFilter = utenFellesValg(filter);
     const øvrigeFiltre = { ...forrige?.filtre };
@@ -101,7 +106,10 @@ export const byggBenkLagredeValg = <T extends BenkTab>(
 
     return {
         tab,
-        saksbehandler: filter.saksbehandler ?? null,
+        saksbehandler:
+            'saksbehandler' in filter
+                ? benkStrengVerdi(filter.saksbehandler)
+                : (forrige?.saksbehandler ?? null),
         skjulPåVent: filter.skjulPåVent,
         skjulEgneTilBeslutning: filter.skjulEgneTilBeslutning,
         filtre: harBenkFilterVerdier(fanensFilter)
@@ -110,27 +118,31 @@ export const byggBenkLagredeValg = <T extends BenkTab>(
     };
 };
 
-/** Query-parametere som gjenskaper de lagrede valgene for en gitt fane */
-export const benkLagredeValgTilQuery = (
-    valg: BenkLagredeValg,
-    tab: BenkTab,
-): Record<string, string> => ({
-    tab,
-    ...benkFilterTilQuery({
+/**
+ * Filteret de lagrede valgene gir for en gitt fane.
+ * Parses med fanens egen parser, slik at bare valgene fanen støtter er med -
+ * ellers ville et lagret saksbehandlervalg gitt en redirect-løkke i mine-fanen.
+ */
+const lagretFilterForTab = (valg: BenkLagredeValg, tab: BenkSideTab): BenkFilter =>
+    parseBenkSideFilter(tab, {
         ...valg.filtre[tab],
         saksbehandler: valg.saksbehandler,
         skjulPåVent: valg.skjulPåVent,
         skjulEgneTilBeslutning: valg.skjulEgneTilBeslutning,
-    }),
+    });
+
+/** Query-parametere som gjenskaper de lagrede valgene for en gitt fane */
+export const benkLagredeValgTilQuery = (
+    valg: BenkLagredeValg,
+    tab: BenkSideTab,
+): Record<string, string> => ({
+    tab,
+    ...benkFilterTilQuery(lagretFilterForTab(valg, tab)),
 });
 
 /** Har fanen lagrede filtre (inkludert fellesvalgene)? */
-export const harBenkLagredeFiltre = (valg: BenkLagredeValg | null, tab: BenkTab): boolean =>
-    valg !== null &&
-    (valg.saksbehandler !== null ||
-        valg.skjulPåVent ||
-        valg.skjulEgneTilBeslutning ||
-        harBenkFilterVerdier({ ...valg.filtre[tab] }));
+export const harBenkLagredeFiltre = (valg: BenkLagredeValg | null, tab: BenkSideTab): boolean =>
+    valg !== null && harBenkFilterVerdier(lagretFilterForTab(valg, tab));
 
 /**
  * Har brukeren lagrede valg som avviker fra standardvisningen? Brukes for å
@@ -138,7 +150,7 @@ export const harBenkLagredeFiltre = (valg: BenkLagredeValg | null, tab: BenkTab)
  */
 export const harBenkLagredeValg = (
     valg: BenkLagredeValg | null,
-    standardTab: BenkTab,
+    standardTab: BenkSideTab,
 ): valg is BenkLagredeValg =>
     valg !== null && (valg.tab !== standardTab || harBenkLagredeFiltre(valg, valg.tab));
 
@@ -147,14 +159,20 @@ export const serialiserBenkCookie = (valg: BenkLagredeValg): string =>
 
 /**
  * Nullstiller filteret for én fane, samt fellesvalgene.
+ * Mine-fanen har ikke saksbehandlerfilteret, og lar derfor det lagrede valget stå.
  *
  * Må gjøres klientsiden før navigering, slik at serveren ikke gjenoppretter
  * filtrene brukeren nettopp fjernet.
  */
-export const nullstillBenkLagretFilter = (tab: BenkTab) => {
+export const nullstillBenkLagretFilter = (tab: BenkSideTab) => {
     const forrige = parseBenkCookie(Cookies.get(BENK_COOKIE_NAME)) ?? tomtValg(tab);
     const øvrigeFiltre = { ...forrige.filtre };
     delete øvrigeFiltre[tab];
 
-    Cookies.set(BENK_COOKIE_NAME, JSON.stringify(tomtValg(tab, øvrigeFiltre)), { expires: 365 });
+    const nullstilt: BenkLagredeValg = {
+        ...tomtValg(tab, øvrigeFiltre),
+        saksbehandler: tab === BENK_MINE_TAB ? forrige.saksbehandler : null,
+    };
+
+    Cookies.set(BENK_COOKIE_NAME, JSON.stringify(nullstilt), { expires: 365 });
 };

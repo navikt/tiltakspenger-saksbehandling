@@ -1,10 +1,12 @@
 import { useResettableState } from '~/utils/useResettableState';
-import { BenkTab } from '../../typer/tabs';
-import { BenkFaneFilter } from '../../typer/benkside';
-import { BenkFellesFilter } from '../../typer/felles';
+import { BenkSideTab } from '../../typer/tabs';
+import { BenkFellesFilter, BenkFilter } from '../../typer/felles';
 import { useBenkFilterNavigasjon } from './useBenkFilterNavigasjon';
 
-export type BenkFilterSkjemaTilstand<Filter extends BenkFellesFilter> = {
+/** Avkrysningene alle fanene har, også mine-fanen */
+export type BenkAvkrysningsFilter = Omit<BenkFellesFilter, 'saksbehandler'>;
+
+export type BenkFilterSkjemaTilstand<Filter extends BenkAvkrysningsFilter> = {
     /** Valgene i skjemaet - tas først i bruk når skjemaet sendes inn */
     valgtFilter: Filter;
     endreFilter: (endring: Partial<Filter>) => void;
@@ -16,10 +18,10 @@ export type BenkFilterSkjemaTilstand<Filter extends BenkFellesFilter> = {
  * Tilstanden alle fanenes filterskjema deler: valgene holdes lokalt til skjemaet
  * sendes inn, og tilbakestilles når et nytt aktivt filter kommer fra serveren.
  */
-export const useBenkFilterSkjema = <T extends BenkTab>(
-    tab: T,
-    aktivtFilter: BenkFaneFilter<T>,
-): BenkFilterSkjemaTilstand<BenkFaneFilter<T>> => {
+export const useBenkFilterSkjema = <Filter extends BenkFilter & BenkAvkrysningsFilter>(
+    tab: BenkSideTab,
+    aktivtFilter: Filter,
+): BenkFilterSkjemaTilstand<Filter> => {
     const { oppdaterFilter, nullstillFilter } = useBenkFilterNavigasjon(tab);
     const [valgtFilter, setValgtFilter] = useResettableState(aktivtFilter);
 

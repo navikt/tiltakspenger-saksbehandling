@@ -1,11 +1,13 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { BenkSøknadsbehandling } from '../../typer/søknader';
 import { BenkRevurdering } from '../../typer/revurderinger';
-import { BenkTab } from '../../typer/tabs';
+import { BENK_MINE_TAB, BenkTab } from '../../typer/tabs';
 import { BenkTabData } from '../../typer/benkside';
 
 type BenkVisning = {
     skjulVentestatus: boolean;
+    /** Mine-fanen viser bare behandlinger som allerede er tildelt, så der kan man ikke tildele seg flere */
+    kanTildeleFlere: boolean;
     valgtTildelingType: TildelingType | null;
     setValgtTildelingType: (tildelingType: TildelingType | null) => void;
     valgtTildeling: Array<BehandlingSomKanBatchTildeles>;
@@ -21,6 +23,7 @@ const BenkVisningContext = createContext<BenkVisning>({
     setValgtTildelingType: () => {},
     valgtTildelingType: null,
     skjulVentestatus: false,
+    kanTildeleFlere: true,
     valgtTildeling: [],
     toggleValgtTildeling: () => {},
 });
@@ -71,6 +74,7 @@ export const BenkVisningProvider = ({ tabData, children }: Props) => {
         <BenkVisningContext.Provider
             value={{
                 skjulVentestatus: tabData.data.aktivtFilter.skjulPåVent,
+                kanTildeleFlere: tabData.tab !== BENK_MINE_TAB,
                 valgtTildelingType: valgtTildelingType,
                 setValgtTildelingType: setValgtTildelingType,
                 valgtTildeling: [...valgtTildeling],
