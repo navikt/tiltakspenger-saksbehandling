@@ -25,6 +25,7 @@ import { BenkSøknadsbehandlingMedTilgang } from '../typer/søknader';
 import { BenkRevurderingMedTilgang } from '../typer/revurderinger';
 import { BenkMeldekortMedTilgang } from '../typer/meldekort';
 import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
+import { MeldekortbehandlingAngre } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAngre';
 
 type Props = {
     behandling:
@@ -263,6 +264,16 @@ const MeldekortDialoger = ({
                     meldekortId={id}
                     sakId={sakId}
                     åpen={aktivDialog === 'tildelMeg'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
+                />
+            )}
+
+            {kapabiliteter.angreSendTilBeslutning && (
+                <MeldekortbehandlingAngre
+                    sakId={sakId}
+                    meldekortId={id}
+                    åpen={aktivDialog === 'angreSendTilBeslutning'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
