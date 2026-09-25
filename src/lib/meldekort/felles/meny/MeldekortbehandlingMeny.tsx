@@ -25,6 +25,7 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { meldekortbehandlingUrl, personoversiktUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
+import { MeldekortbehandlingAngre } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAngre';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
@@ -123,6 +124,16 @@ export const MeldekortbehandlingMeny = ({ meldekortbehandling, kallesFra, size }
                     meldekortId={meldekortbehandling.id}
                     sakId={sak.sakId}
                     åpen={aktivDialog === 'tildelMeg'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
+                />
+            )}
+
+            {kapabiliteter.angreSendTilBeslutning && (
+                <MeldekortbehandlingAngre
+                    sakId={sak.sakId}
+                    meldekortId={meldekortbehandling.id}
+                    åpen={aktivDialog === 'angreSendTilBeslutning'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
