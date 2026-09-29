@@ -2,7 +2,7 @@ import { BENK_MINE_TAB, BenkTab } from '../typer/tabs';
 import { BenkMineFilter } from '../typer/mine';
 import { benkFaner } from '../benkFaner';
 import { useBenkFilterSkjema } from '../felles/filter/useBenkFilterSkjema';
-import { BenkFilterSkjemaRamme } from '../felles/filter/BenkFilterSkjema';
+import BenkFilterSkjema from '../felles/filter/BenkFilterSkjema';
 import { BenkFilterSelect } from '../felles/filter/BenkFilterSelect';
 
 const seksjonTekst = Object.fromEntries(
@@ -14,13 +14,13 @@ export const BenkMineFilterSkjema = ({ aktivtFilter }: { aktivtFilter: BenkMineF
     const { valgtFilter, endreFilter } = skjema;
 
     return (
-        <BenkFilterSkjemaRamme skjema={skjema}>
+        <BenkFilterSkjema skjema={skjema}>
             <BenkFilterSelect
                 label={'Behandlingstype'}
                 value={valgtFilter.seksjon}
                 onChange={(seksjon) => endreFilter({ seksjon })}
                 alternativer={seksjonTekst}
             />
-        </BenkFilterSkjemaRamme>
+        </BenkFilterSkjema>
     );
 };

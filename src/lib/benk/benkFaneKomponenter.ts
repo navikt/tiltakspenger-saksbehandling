@@ -10,11 +10,11 @@ import { BenkKlageFilterSkjema } from './klage/BenkKlageFilterSkjema';
 import { BenkKlageTabell } from './klage/BenkKlageTabell';
 import { BenkTilbakekrevingFilterSkjema } from './tilbakekreving/BenkTilbakekrevingFilterSkjema';
 import { BenkTilbakekrevingTabell } from './tilbakekreving/BenkTilbakekrevingTabell';
-import { BenkFaneFilterSkjemaProps } from './felles/filter/BenkFilterSkjema';
+import { BenkFaneFilterProps } from './typer/benkside';
 import { BenkFaneTabellProps } from './felles/tabell/BenkTabell';
 
 type BenkFaneKomponenter<T extends BenkTab> = {
-    Filter: ComponentType<BenkFaneFilterSkjemaProps<T>>;
+    Filter: ComponentType<BenkFaneFilterProps<T>>;
     Tabell: ComponentType<BenkFaneTabellProps<T>>;
 };
 

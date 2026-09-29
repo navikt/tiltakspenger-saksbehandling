@@ -6,7 +6,8 @@ import {
     BenkBehandlingMedTilgangBase,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
-    BenkFellesFilter,
+    BenkGlobaltFilter,
+    BenkSaksbehandlerFilter,
     benkFellesKolonner,
 } from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -32,7 +33,8 @@ export const BenkRevurderingerKolonne = {
 export type BenkRevurderingerKolonne =
     (typeof BenkRevurderingerKolonne)[keyof typeof BenkRevurderingerKolonne];
 
-export type BenkRevurderingerFilter = BenkFellesFilter & {
+export type BenkRevurderingerFilter = BenkGlobaltFilter & {
+    saksbehandler: BenkSaksbehandlerFilter;
     status: Nullable<BenkBehandlingsstatus>;
     resultat: Nullable<RevurderingResultat>;
 };

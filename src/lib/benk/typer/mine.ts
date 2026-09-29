@@ -1,5 +1,5 @@
 import { Nullable } from '~/types/UtilTypes';
-import { BenkFellesFilter, BenkOversikt, BenkSortering } from './felles';
+import { BenkGlobaltFilter, BenkOversikt, BenkSortering } from './felles';
 import { BenkTab } from './tabs';
 import { BenkFaneBehandling, BenkFaneKolonne } from './benkside';
 
@@ -7,7 +7,7 @@ import { BenkFaneBehandling, BenkFaneKolonne } from './benkside';
  * Filteret i mine-fanen. Fanen er alltid avgrenset til den innloggede, så den har ikke saksbehandlerfilteret.
  * [seksjon] viser bare behandlingene fra én av fanene - null viser alle.
  */
-export type BenkMineFilter = Omit<BenkFellesFilter, 'saksbehandler'> & {
+export type BenkMineFilter = BenkGlobaltFilter & {
     seksjon: Nullable<BenkTab>;
 };
 
@@ -28,5 +28,5 @@ export type BenkMineData = {
 /** Sorteringen er per seksjon, fordi hver seksjon er en tabell med fanens egne kolonner */
 export type BenkMineRequestBody = {
     sortering: { [T in BenkTab]?: BenkSortering<BenkFaneKolonne<T>> };
-    filters: BenkMineFilter;
+    filters: Omit<BenkMineFilter, 'kunTildeltMeg'>;
 };

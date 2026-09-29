@@ -6,7 +6,8 @@ import {
     BenkBehandlingMedTilgangBase,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
-    BenkFellesFilter,
+    BenkGlobaltFilter,
+    BenkSaksbehandlerFilter,
     benkFellesKolonner,
 } from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -49,7 +50,8 @@ export const BenkMeldekortKolonne = {
 
 export type BenkMeldekortKolonne = (typeof BenkMeldekortKolonne)[keyof typeof BenkMeldekortKolonne];
 
-export type BenkMeldekortFilter = BenkFellesFilter & {
+export type BenkMeldekortFilter = BenkGlobaltFilter & {
+    saksbehandler: BenkSaksbehandlerFilter;
     status: Nullable<BenkBehandlingsstatus>;
     type: Nullable<BenkMeldekortType>;
 };

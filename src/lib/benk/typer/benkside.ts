@@ -53,6 +53,12 @@ export type BenkFaneBehandling<T extends BenkTab> = BenkFaneTyper[T]['behandling
 export type BenkFaneFilter<T extends BenkTab> = BenkFaneTyper[T]['filter'];
 export type BenkFaneKolonne<T extends BenkTab> = BenkFaneTyper[T]['kolonne'];
 
+export type BenkFaneFilterProps<T extends BenkTab> = {
+    aktivtFilter: BenkFaneFilter<T>;
+    saksbehandlere: string[];
+    besluttere: string[];
+};
+
 export type BenkFaneData<T extends BenkTab> = {
     oversikt: BenkOversikt<BenkFaneBehandling<T>>;
     aktivtFilter: BenkFaneFilter<T>;

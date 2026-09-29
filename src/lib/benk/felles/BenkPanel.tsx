@@ -24,7 +24,7 @@ export const BenkPanel = ({ oversikt, filter, tabell, laster = false }: Props) =
             {filter}
 
             <VStack gap={'space-4'}>
-                <BodyShort>
+                <BodyShort size={'small'} weight={'semibold'}>
                     {`${totalAntall} av totalt ${totalAntallUfiltrert} behandlinger matcher valgte filtre`}
                     {harFlereBehandlinger && ` (${behandlinger.length} vises på denne siden)`}
                 </BodyShort>

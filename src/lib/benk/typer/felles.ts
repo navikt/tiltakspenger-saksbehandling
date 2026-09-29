@@ -168,23 +168,22 @@ export type BenkFellesKolonne = (typeof benkFellesKolonner)[keyof typeof benkFel
  */
 export type BenkFilter = Record<string, string | boolean | null>;
 
-/** Filtervalgene alle køfanene har */
-export type BenkFellesFilter = {
-    saksbehandler: Nullable<string>;
+/**
+ * De globale filtrene alle fanene har, også mine-fanen. De beholdes på tvers av fanene
+ * og tas i bruk med en gang, mens de lokale filtrene nullstilles ved bytte av fane.
+ */
+export type BenkGlobaltFilter = {
+    /** Sendes ikke til backend, men erstatter saksbehandlerfilteret med den innloggede */
+    kunTildeltMeg: boolean;
     skjulPåVent: boolean;
     skjulEgneTilBeslutning: boolean;
 };
 
-/**
- * Avkrysningene alle fanene har, også mine-fanen. De beholdes på tvers av fanene,
- * mens nedtrekksvalgene nullstilles ved bytte av fane.
- */
-export type BenkAvkrysningsFilter = Omit<BenkFellesFilter, 'saksbehandler'>;
-
-export const benkAvkrysningsNøkler = [
+export const benkGlobaleFilterNøkler = [
+    'kunTildeltMeg',
     'skjulPåVent',
     'skjulEgneTilBeslutning',
-] as const satisfies ReadonlyArray<keyof BenkAvkrysningsFilter>;
+] as const satisfies ReadonlyArray<keyof BenkGlobaltFilter>;
 
 /**
  * Body-en som postes til fanens rute under /benk. Fanen ligger i url-en,

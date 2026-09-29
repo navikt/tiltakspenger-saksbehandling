@@ -1,6 +1,6 @@
 import { isValueInRecord } from '~/utils/object';
 
-/** Fanene med hver sin kø av behandlinger. Hver har sin egen rute, tabell og sitt eget filter. */
+/** Fanene med én type behandling hver. Hver har sin egen rute, tabell og sitt eget filter. */
 export enum BenkTab {
     SØKNADER = 'SØKNADER',
     REVURDERINGER = 'REVURDERINGER',
@@ -10,7 +10,7 @@ export enum BenkTab {
 }
 
 /**
- * Mine-fanen er ikke en egen kø, men samler behandlingene den innloggede er tildelt
+ * Mine-fanen har ikke én type behandling, men samler behandlingene den innloggede er tildelt
  * fra alle de andre fanene. Den er derfor ikke en [BenkTab].
  */
 export const BENK_MINE_TAB = 'MINE';

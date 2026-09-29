@@ -10,8 +10,13 @@ import {
     erBenkSideTab,
 } from '~/lib/benk/typer/tabs';
 import { BenkMineSeksjoner } from '~/lib/benk/typer/mine';
-import { BenkFilter } from '~/lib/benk/typer/felles';
-import { fetchBenk, fetchBenkMine, NextRequest } from '~/utils/fetch/fetch-server';
+import { BenkGlobaltFilter, BenkFilter } from '~/lib/benk/typer/felles';
+import {
+    fetchBenk,
+    fetchBenkMine,
+    fetchSaksbehandler,
+    NextRequest,
+} from '~/utils/fetch/fetch-server';
 import {
     benkSorteringNøkkel,
     benkSorteringQuery,
@@ -135,7 +140,7 @@ const hentTabData = async <T extends BenkTab>(
 
     const respons = await fetchBenk<BenkFaneBehandling<T>>(req, tab, {
         sortering,
-        filters,
+        filters: await tilBackendFilter(req, filters),
         side,
     });
 
@@ -155,6 +160,19 @@ const hentTabData = async <T extends BenkTab>(
             aktivSortering: sortering,
         }),
     };
+};
+
+/** Backend kjenner ikke [kunTildeltMeg], så valget erstatter saksbehandlerfilteret med den innloggede */
+const tilBackendFilter = async (
+    req: NextRequest,
+    { kunTildeltMeg, ...filter }: BenkGlobaltFilter & BenkFilter,
+): Promise<BenkFilter> => {
+    if (!kunTildeltMeg) {
+        return filter;
+    }
+
+    const { navIdent } = await fetchSaksbehandler(req);
+    return { ...filter, saksbehandler: navIdent };
 };
 
 /**
@@ -177,7 +195,14 @@ const hentMineData = async (req: NextRequest, query: ParsedUrlQuery): Promise<Pr
         }),
     );
 
-    const respons = await fetchBenkMine(req, { sortering, filters });
+    const respons = await fetchBenkMine(req, {
+        sortering,
+        filters: {
+            seksjon: filters.seksjon,
+            skjulPåVent: filters.skjulPåVent,
+            skjulEgneTilBeslutning: filters.skjulEgneTilBeslutning,
+        },
+    });
 
     if (!respons.harTilgang) {
         return respons;

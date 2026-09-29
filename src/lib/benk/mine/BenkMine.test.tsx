@@ -67,7 +67,12 @@ const oversikt = <T,>(behandlinger: T[], totalAntall: number): BenkOversikt<T> =
     besluttere: [],
 });
 
-const aktivtFilter = { seksjon: null, skjulPåVent: false, skjulEgneTilBeslutning: false };
+const aktivtFilter = {
+    seksjon: null,
+    kunTildeltMeg: false,
+    skjulPåVent: false,
+    skjulEgneTilBeslutning: false,
+};
 
 const renderMine = (data: BenkMineData, totalAntallUfiltrert: number) =>
     render(

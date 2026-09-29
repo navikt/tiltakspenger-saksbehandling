@@ -10,6 +10,7 @@ import {
 
 const lagredeValg = (valg: Partial<BenkLagredeValg> = {}): BenkLagredeValg => ({
     tab: BenkTab.SØKNADER,
+    kunTildeltMeg: false,
     skjulPåVent: false,
     skjulEgneTilBeslutning: false,
     filter: {},
@@ -17,7 +18,7 @@ const lagredeValg = (valg: Partial<BenkLagredeValg> = {}): BenkLagredeValg => ({
 });
 
 describe('lagrede valg ved bytte av fane', () => {
-    test('nedtrekksvalgene gjenopprettes bare i fanen de ble lagret for', () => {
+    test('de lokale filtrene gjenopprettes bare i fanen de ble lagret for', () => {
         const valg = lagredeValg({
             tab: BenkTab.SØKNADER,
             filter: { saksbehandler: 'Z123456', status: 'UNDER_BEHANDLING' },
@@ -33,7 +34,7 @@ describe('lagrede valg ved bytte av fane', () => {
         expect(benkLagredeValgTilQuery(valg, BenkTab.KLAGE)).toEqual({ tab: BenkTab.KLAGE });
     });
 
-    test('avkrysningene beholdes på tvers av fanene, også i mine-fanen', () => {
+    test('de globale filtrene beholdes på tvers av fanene, også i mine-fanen', () => {
         const valg = lagredeValg({
             tab: BenkTab.SØKNADER,
             skjulPåVent: true,
@@ -51,15 +52,31 @@ describe('lagrede valg ved bytte av fane', () => {
         });
     });
 
+    test('kun tildelt meg beholdes på tvers av fanene, mens saksbehandlervalget nullstilles', () => {
+        const valg = byggBenkLagredeValg(BenkTab.SØKNADER, {
+            saksbehandler: 'Z123456',
+            kunTildeltMeg: true,
+            skjulPåVent: false,
+            skjulEgneTilBeslutning: false,
+        });
+
+        expect(benkLagredeValgTilQuery(valg, BenkTab.KLAGE)).toEqual({
+            tab: BenkTab.KLAGE,
+            kunTildeltMeg: 'true',
+        });
+    });
+
     test('mine-fanen gjenoppretter seksjonen når brukeren kommer tilbake til den', () => {
         const valg = byggBenkLagredeValg(BENK_MINE_TAB, {
             seksjon: BenkTab.MELDEKORT,
+            kunTildeltMeg: false,
             skjulPåVent: false,
             skjulEgneTilBeslutning: true,
         });
 
         expect(valg).toEqual({
             tab: BENK_MINE_TAB,
+            kunTildeltMeg: false,
             skjulPåVent: false,
             skjulEgneTilBeslutning: true,
             filter: { seksjon: BenkTab.MELDEKORT },
@@ -81,6 +98,7 @@ describe('lagrede valg ved bytte av fane', () => {
         // Et saksbehandlervalg i mine-fanen ville gitt en redirect-løkke, siden fanen ikke leser det fra url-en
         expect(parseBenkCookie(cookie)).toEqual({
             tab: BENK_MINE_TAB,
+            kunTildeltMeg: false,
             skjulPåVent: true,
             skjulEgneTilBeslutning: false,
             filter: { seksjon: null },

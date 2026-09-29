@@ -1,64 +1,33 @@
 import { ReactNode, useState } from 'react';
-import { Button, HelpText, HStack, VStack } from '@navikt/ds-react';
-import { BenkTab } from '../../typer/tabs';
-import { BenkFaneFilter } from '../../typer/benkside';
-import { BenkAvkrysningsFilter, BenkFellesFilter } from '../../typer/felles';
-import { BenkFilterCheckbox } from './BenkFilterCheckbox';
-import { BenkSaksbehandlerSelect } from './BenkSaksbehandlerSelect';
+import { Box, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react';
+import { BenkGlobaltFilter } from '../../typer/felles';
 import { BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
 
-/** Propsene hver fanes filterskjema tar imot */
-export type BenkFaneFilterSkjemaProps<T extends BenkTab> = {
-    aktivtFilter: BenkFaneFilter<T>;
-    saksbehandlere: string[];
-    besluttere: string[];
-};
-
 type Props = {
-    skjema: BenkFilterSkjemaTilstand<BenkFellesFilter>;
-    saksbehandlere: string[];
-    besluttere: string[];
-    /** Fanens egne filtre, som vises foran saksbehandlerfilteret */
+    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter>;
+    /** Fanens lokale filtre */
     children: ReactNode;
-    /** Fanens egne filtre som vises etter saksbehandlerfilteret */
-    etterSaksbehandler?: ReactNode;
+    visKunTildeltMeg?: boolean;
 };
 
-/** Skjemaet køfanene deler, med saksbehandlerfilteret i tillegg til avkrysningene og knappene */
-export const BenkFilterSkjema = ({
-    skjema,
-    saksbehandlere,
-    besluttere,
-    children,
-    etterSaksbehandler,
-}: Props) => {
-    const { valgtFilter, endreFilter } = skjema;
+/** Filterskjemaet alle fanene deler: fanens lokale filtre, og under dem de globale */
+const BenkFilterSkjema = ({ skjema, children, visKunTildeltMeg = false }: Props) => (
+    <VStack gap={'space-16'}>
+        <BenkLokaleFiltre skjema={skjema}>{children}</BenkLokaleFiltre>
+        <BenkGlobaleFiltre skjema={skjema} visKunTildeltMeg={visKunTildeltMeg} />
+    </VStack>
+);
 
-    return (
-        <BenkFilterSkjemaRamme skjema={skjema}>
-            {children}
+export default BenkFilterSkjema;
 
-            <BenkSaksbehandlerSelect
-                saksbehandlere={saksbehandlere}
-                besluttere={besluttere}
-                valgtSaksbehandler={valgtFilter.saksbehandler}
-                onChange={(saksbehandler) => endreFilter({ saksbehandler })}
-            />
-
-            {etterSaksbehandler}
-        </BenkFilterSkjemaRamme>
-    );
-};
-
-type RammeProps = {
-    skjema: BenkFilterSkjemaTilstand<BenkAvkrysningsFilter>;
-    /** Fanens egne filtre, som vises på rad over avkrysningene */
+type LokaleFiltreProps = {
+    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter>;
     children: ReactNode;
 };
 
-/** Oppbygningen alle fanenes filterskjema deler: fanens filtre, avkrysningene og knappene */
-export const BenkFilterSkjemaRamme = ({ skjema, children }: RammeProps) => {
-    const { valgtFilter, endreFilter, oppdaterFilter, nullstillFilter } = skjema;
+/** Fanens egne filtre. De tas først i bruk når de oppdateres, og nullstilles ved bytte av fane. */
+const BenkLokaleFiltre = ({ skjema, children }: LokaleFiltreProps) => {
+    const { oppdaterFilter, nullstillFilter } = skjema;
     const [isLoading, setIsLoading] = useState(false);
 
     const kjør = (action: () => Promise<unknown>) => {
@@ -72,40 +41,7 @@ export const BenkFilterSkjemaRamme = ({ skjema, children }: RammeProps) => {
                 {children}
             </HStack>
 
-            <VStack gap={'space-4'}>
-                <HStack align={'center'} gap={'space-4'}>
-                    <BenkFilterCheckbox
-                        checked={valgtFilter.skjulEgneTilBeslutning}
-                        onChange={(skjulEgneTilBeslutning) =>
-                            endreFilter({ skjulEgneTilBeslutning })
-                        }
-                    >
-                        {'Skjul behandlinger jeg har sendt videre'}
-                    </BenkFilterCheckbox>
-                    <HelpText>
-                        {
-                            'Skjuler behandlinger som du har sendt til beslutning, eller som du har underkjent.'
-                        }
-                    </HelpText>
-                </HStack>
-
-                <BenkFilterCheckbox
-                    checked={valgtFilter.skjulPåVent}
-                    onChange={(skjulPåVent) => endreFilter({ skjulPåVent })}
-                >
-                    {'Skjul behandlinger satt på vent'}
-                </BenkFilterCheckbox>
-            </VStack>
-
             <HStack gap={'space-16'}>
-                <Button
-                    type={'button'}
-                    size={'small'}
-                    loading={isLoading}
-                    onClick={() => kjør(oppdaterFilter)}
-                >
-                    {'Oppdater filtre'}
-                </Button>
                 <Button
                     type={'button'}
                     size={'small'}
@@ -114,7 +50,72 @@ export const BenkFilterSkjemaRamme = ({ skjema, children }: RammeProps) => {
                 >
                     {'Nullstill filtre'}
                 </Button>
+                <Button
+                    type={'button'}
+                    size={'small'}
+                    loading={isLoading}
+                    onClick={() => kjør(oppdaterFilter)}
+                >
+                    {'Oppdater filtre'}
+                </Button>
             </HStack>
         </VStack>
+    );
+};
+
+type GlobaleFiltreProps = {
+    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter>;
+    /** Mine-fanen viser bare behandlinger tildelt den innloggede, så der gir valget ingen mening */
+    visKunTildeltMeg: boolean;
+};
+
+/** Filtrene som beholdes på tvers av fanene. De tas i bruk med en gang de velges. */
+const BenkGlobaleFiltre = ({ skjema, visKunTildeltMeg }: GlobaleFiltreProps) => {
+    const { aktivtFilter, endreGlobaltFilter } = skjema;
+
+    return (
+        <Box
+            borderWidth={'1 0 0 0'}
+            borderColor={'neutral-subtle'}
+            paddingBlock={'space-12 space-0'}
+        >
+            <HStack align={'center'} gap={'space-4'}>
+                <Chips>
+                    {visKunTildeltMeg && (
+                        <Chips.Toggle
+                            selected={aktivtFilter.kunTildeltMeg}
+                            onClick={() =>
+                                endreGlobaltFilter({ kunTildeltMeg: !aktivtFilter.kunTildeltMeg })
+                            }
+                        >
+                            {'Vis kun saker tildelt meg'}
+                        </Chips.Toggle>
+                    )}
+                    <Chips.Toggle
+                        selected={aktivtFilter.skjulEgneTilBeslutning}
+                        onClick={() =>
+                            endreGlobaltFilter({
+                                skjulEgneTilBeslutning: !aktivtFilter.skjulEgneTilBeslutning,
+                            })
+                        }
+                    >
+                        {'Skjul behandlinger jeg har sendt videre'}
+                    </Chips.Toggle>
+                    <Chips.Toggle
+                        selected={aktivtFilter.skjulPåVent}
+                        onClick={() =>
+                            endreGlobaltFilter({ skjulPåVent: !aktivtFilter.skjulPåVent })
+                        }
+                    >
+                        {'Skjul behandlinger satt på vent'}
+                    </Chips.Toggle>
+                </Chips>
+                <HelpText>
+                    {
+                        '«Skjul behandlinger jeg har sendt videre» skjuler behandlinger som du har sendt til beslutning, eller som du har underkjent.'
+                    }
+                </HelpText>
+            </HStack>
+        </Box>
     );
 };

@@ -1,25 +1,23 @@
 import { useMemo } from 'react';
 import { Select } from '@navikt/ds-react';
-import { Nullable } from '~/types/UtilTypes';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { isValueInRecord } from '~/utils/object';
-import { BenkIkkeTildelt } from '../../typer/felles';
+import { BenkGlobaltFilter, BenkIkkeTildelt, BenkSaksbehandlerFilter } from '../../typer/felles';
+import { BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
 
 type Props = {
+    skjema: BenkFilterSkjemaTilstand<
+        BenkGlobaltFilter & { saksbehandler: BenkSaksbehandlerFilter }
+    >;
     saksbehandlere: string[];
     besluttere: string[];
-    valgtSaksbehandler: Nullable<string>;
-    onChange: (saksbehandler: Nullable<string>) => void;
 };
 
-export const BenkSaksbehandlerSelect = ({
-    saksbehandlere,
-    besluttere,
-    valgtSaksbehandler,
-    onChange,
-}: Props) => {
+export const BenkSaksbehandlerSelect = ({ skjema, saksbehandlere, besluttere }: Props) => {
     const innloggetIdent = useSaksbehandler().innloggetSaksbehandler.navIdent;
+    const valgtSaksbehandler = skjema.valgtFilter.saksbehandler;
+    const disabled = skjema.aktivtFilter.kunTildeltMeg;
 
     // Ekskluderer innlogget saksbehandler, ettersom vi alltid ønsker å vise denne som "Meg"
     const identer = useMemo(() => {
@@ -39,8 +37,9 @@ export const BenkSaksbehandlerSelect = ({
         <Select
             label={'Saksbehandler/Beslutter'}
             size={'small'}
-            value={valgtSaksbehandler ?? ''}
-            onChange={(e) => onChange(e.target.value || null)}
+            value={disabled ? innloggetIdent : (valgtSaksbehandler ?? '')}
+            onChange={(e) => skjema.endreFilter({ saksbehandler: e.target.value || null })}
+            disabled={disabled}
         >
             <option value={''}>{'Alle'}</option>
             <option value={BenkIkkeTildelt.IKKE_TILDELT}>{'Ikke tildelt'}</option>

@@ -4,7 +4,8 @@ import {
     BenkBehandlingBase,
     BenkBehandlingMedTilgangBase,
     BenkBehandlingstype,
-    BenkFellesFilter,
+    BenkGlobaltFilter,
+    BenkSaksbehandlerFilter,
     benkFellesKolonner,
 } from './felles';
 
@@ -38,7 +39,8 @@ export const BenkKlageKolonne = {
 
 export type BenkKlageKolonne = (typeof BenkKlageKolonne)[keyof typeof BenkKlageKolonne];
 
-export type BenkKlageFilter = BenkFellesFilter & {
+export type BenkKlageFilter = BenkGlobaltFilter & {
+    saksbehandler: BenkSaksbehandlerFilter;
     status: Nullable<BenkKlageStatus>;
     resultat: Nullable<KlagebehandlingResultat>;
 };

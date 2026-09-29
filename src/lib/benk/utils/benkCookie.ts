@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { BenkSideTab, erBenkSideTab } from '../typer/tabs';
-import { BenkAvkrysningsFilter, benkAvkrysningsNøkler, BenkFilter } from '../typer/felles';
+import { BenkGlobaltFilter, benkGlobaleFilterNøkler, BenkFilter } from '../typer/felles';
 import { parseBenkSideFilter } from '../benkFaner';
 import {
     benkBoolskVerdi,
@@ -12,34 +12,35 @@ import {
 export const BENK_COOKIE_NAME = 'benkFiltersV2';
 
 /**
- * Nedtrekksvalgene for én fane, uten avkrysningene. Lagres løst typet;
+ * De lokale filtrene for én fane, uten de globale. Lagres løst typet;
  * verdiene valideres med fanens egen parser ved innlesing.
  */
 type LagretFilter = BenkFilter;
 
 /**
- * Avkrysningene lagres på tvers av fanene. Nedtrekksvalgene lagres bare for fanen
+ * De globale filtrene lagres på tvers av fanene. De lokale filtrene lagres bare for fanen
  * brukeren sist var på, og gjenopprettes kun når hen kommer tilbake til den -
  * ved bytte av fane nullstilles de.
  */
-export type BenkLagredeValg = BenkAvkrysningsFilter & {
+export type BenkLagredeValg = BenkGlobaltFilter & {
     tab: BenkSideTab;
     filter: LagretFilter;
 };
 
 const tomtValg = (tab: BenkSideTab): BenkLagredeValg => ({
     tab,
+    kunTildeltMeg: false,
     skjulPåVent: false,
     skjulEgneTilBeslutning: false,
     filter: {},
 });
 
-const erAvkrysning = (nøkkel: string): boolean =>
-    (benkAvkrysningsNøkler as ReadonlyArray<string>).includes(nøkkel);
+const erGlobaltFilter = (nøkkel: string): boolean =>
+    (benkGlobaleFilterNøkler as ReadonlyArray<string>).includes(nøkkel);
 
-/** Fjerner avkrysningene fra et filter, siden de lagres én gang for alle faner */
-const utenAvkrysninger = (filter: BenkFilter): LagretFilter =>
-    Object.fromEntries(Object.entries(filter).filter(([nøkkel]) => !erAvkrysning(nøkkel)));
+/** Fjerner de globale filtrene fra et filter, siden de lagres én gang for alle faner */
+const utenGlobaleFiltre = (filter: BenkFilter): LagretFilter =>
+    Object.fromEntries(Object.entries(filter).filter(([nøkkel]) => !erGlobaltFilter(nøkkel)));
 
 const somKilde = (verdi: unknown): BenkFilterKilde =>
     typeof verdi === 'object' && verdi !== null ? (verdi as BenkFilterKilde) : {};
@@ -62,9 +63,10 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
 
         return {
             tab: parsed.tab,
+            kunTildeltMeg: benkBoolskVerdi(parsed.kunTildeltMeg),
             skjulPåVent: benkBoolskVerdi(parsed.skjulPåVent),
             skjulEgneTilBeslutning: benkBoolskVerdi(parsed.skjulEgneTilBeslutning),
-            filter: utenAvkrysninger(parseBenkSideFilter(parsed.tab, somKilde(parsed.filter))),
+            filter: utenGlobaleFiltre(parseBenkSideFilter(parsed.tab, somKilde(parsed.filter))),
         };
     } catch {
         return null;
@@ -74,22 +76,24 @@ export const parseBenkCookie = (cookieVerdi: string | undefined): BenkLagredeVal
 /** De lagrede valgene for fanen som vises */
 export const byggBenkLagredeValg = (
     tab: BenkSideTab,
-    filter: BenkFilter & BenkAvkrysningsFilter,
+    filter: BenkFilter & BenkGlobaltFilter,
 ): BenkLagredeValg => ({
     tab,
+    kunTildeltMeg: filter.kunTildeltMeg,
     skjulPåVent: filter.skjulPåVent,
     skjulEgneTilBeslutning: filter.skjulEgneTilBeslutning,
-    filter: utenAvkrysninger(filter),
+    filter: utenGlobaleFiltre(filter),
 });
 
 /**
- * Filteret de lagrede valgene gir for en gitt fane: avkrysningene, og nedtrekksvalgene
+ * Filteret de lagrede valgene gir for en gitt fane: de globale filtrene, og de lokale
  * bare hvis de ble lagret for den samme fanen.
  * Parses med fanens egen parser, slik at bare valgene fanen støtter er med.
  */
 const lagretFilterForTab = (valg: BenkLagredeValg, tab: BenkSideTab): BenkFilter =>
     parseBenkSideFilter(tab, {
         ...(valg.tab === tab ? valg.filter : {}),
+        kunTildeltMeg: valg.kunTildeltMeg,
         skjulPåVent: valg.skjulPåVent,
         skjulEgneTilBeslutning: valg.skjulEgneTilBeslutning,
     });
@@ -103,7 +107,7 @@ export const benkLagredeValgTilQuery = (
     ...benkFilterTilQuery(lagretFilterForTab(valg, tab)),
 });
 
-/** Har fanen lagrede filtre (inkludert avkrysningene)? */
+/** Har fanen lagrede filtre (inkludert de globale)? */
 export const harBenkLagredeFiltre = (valg: BenkLagredeValg | null, tab: BenkSideTab): boolean =>
     valg !== null && harBenkFilterVerdier(lagretFilterForTab(valg, tab));
 

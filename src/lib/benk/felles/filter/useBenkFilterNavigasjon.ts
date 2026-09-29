@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { BenkSideTab } from '../../typer/tabs';
-import { BenkFilter } from '../../typer/felles';
+import { BenkGlobaltFilter, BenkFilter } from '../../typer/felles';
 import { benkFilterTilQuery, harBenkFilterVerdier } from '../../utils/benkQuery';
 import { benkSorteringQuery } from '../../utils/benkSortering';
 import { nullstillBenkLagretFilter } from '../../utils/benkCookie';
@@ -33,9 +33,7 @@ export const useBenkFilterNavigasjon = (tab: BenkSideTab) => {
 
     return {
         oppdaterFilter: naviger,
-        nullstillFilter: () => {
-            nullstillBenkLagretFilter(tab);
-            return naviger(tomtBenkSideFilter(tab));
-        },
+        nullstillFilter: (globaleFiltre: BenkGlobaltFilter) =>
+            naviger({ ...tomtBenkSideFilter(tab), ...globaleFiltre }),
     };
 };

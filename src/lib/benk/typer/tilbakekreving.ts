@@ -5,7 +5,8 @@ import {
     BenkBehandlingBase,
     BenkBehandlingMedTilgangBase,
     BenkBehandlingstype,
-    BenkFellesFilter,
+    BenkGlobaltFilter,
+    BenkSaksbehandlerFilter,
     benkFellesKolonner,
 } from './felles';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
@@ -56,7 +57,8 @@ export const BenkTilbakekrevingKolonne = {
 export type BenkTilbakekrevingKolonne =
     (typeof BenkTilbakekrevingKolonne)[keyof typeof BenkTilbakekrevingKolonne];
 
-export type BenkTilbakekrevingFilter = BenkFellesFilter & {
+export type BenkTilbakekrevingFilter = BenkGlobaltFilter & {
+    saksbehandler: BenkSaksbehandlerFilter;
     status: Nullable<BenkTilbakekrevingStatus>;
     kilde: Nullable<BenkTilbakekrevingKilde>;
     kunOverMinstebeløp: boolean;

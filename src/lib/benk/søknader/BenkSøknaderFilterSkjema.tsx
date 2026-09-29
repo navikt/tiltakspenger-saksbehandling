@@ -4,18 +4,21 @@ import { søknadsbehandlingResultatTekst } from '~/lib/rammebehandling/rammebeha
 import { søknadstypeTekst } from '~/lib/søknad/søknadTekster';
 import { Søknadstype } from '~/lib/søknad/søknadTyper';
 import { useBenkFilterSkjema } from '../felles/filter/useBenkFilterSkjema';
-import { BenkFaneFilterSkjemaProps, BenkFilterSkjema } from '../felles/filter/BenkFilterSkjema';
+import BenkFilterSkjema from '../felles/filter/BenkFilterSkjema';
 import { BenkFilterSelect } from '../felles/filter/BenkFilterSelect';
+import { BenkSaksbehandlerSelect } from '../felles/filter/BenkSaksbehandlerSelect';
+import { BenkFaneFilterProps } from '../typer/benkside';
 
 export const BenkSøknaderFilterSkjema = ({
     aktivtFilter,
-    ...props
-}: BenkFaneFilterSkjemaProps<BenkTab.SØKNADER>) => {
+    saksbehandlere,
+    besluttere,
+}: BenkFaneFilterProps<BenkTab.SØKNADER>) => {
     const skjema = useBenkFilterSkjema(BenkTab.SØKNADER, aktivtFilter);
     const { valgtFilter, endreFilter } = skjema;
 
     return (
-        <BenkFilterSkjema skjema={skjema} {...props}>
+        <BenkFilterSkjema skjema={skjema} visKunTildeltMeg={true}>
             <BenkFilterSelect
                 label={'Status'}
                 value={valgtFilter.status}
@@ -35,6 +38,12 @@ export const BenkSøknaderFilterSkjema = ({
                 value={valgtFilter.søknadstype}
                 onChange={(søknadstype) => endreFilter({ søknadstype })}
                 alternativer={søknadstypeTekst}
+            />
+
+            <BenkSaksbehandlerSelect
+                skjema={skjema}
+                saksbehandlere={saksbehandlere}
+                besluttere={besluttere}
             />
         </BenkFilterSkjema>
     );

@@ -43,7 +43,11 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
             returnerSaker: false,
         }).then((response) => {
             if (response) {
-                visMineBehandlinger().then(() => setValgtTildelingType(null));
+                visMineBehandlinger({
+                    kunTildeltMeg: false,
+                    skjulPåVent: false,
+                    skjulEgneTilBeslutning: false,
+                }).then(() => setValgtTildelingType(null));
             }
         });
     };

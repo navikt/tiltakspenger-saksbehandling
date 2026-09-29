@@ -1,12 +1,15 @@
 import { useResettableState } from '~/utils/useResettableState';
 import { BenkSideTab } from '../../typer/tabs';
-import { BenkAvkrysningsFilter, BenkFilter } from '../../typer/felles';
+import { BenkGlobaltFilter, BenkFilter } from '../../typer/felles';
 import { useBenkFilterNavigasjon } from './useBenkFilterNavigasjon';
 
-export type BenkFilterSkjemaTilstand<Filter extends BenkAvkrysningsFilter> = {
-    /** Valgene i skjemaet - tas først i bruk når skjemaet sendes inn */
+export type BenkFilterSkjemaTilstand<Filter extends BenkGlobaltFilter> = {
+    /** Valgene i de lokale filtrene - tas først i bruk når skjemaet sendes inn */
     valgtFilter: Filter;
+    /** Filteret som vises nå - de globale filtrene leses herfra, siden de tas i bruk med en gang */
+    aktivtFilter: Filter;
     endreFilter: (endring: Partial<Filter>) => void;
+    endreGlobaltFilter: (endring: Partial<BenkGlobaltFilter>) => Promise<unknown>;
     oppdaterFilter: () => Promise<unknown>;
     nullstillFilter: () => Promise<unknown>;
 };
@@ -15,7 +18,7 @@ export type BenkFilterSkjemaTilstand<Filter extends BenkAvkrysningsFilter> = {
  * Tilstanden alle fanenes filterskjema deler: valgene holdes lokalt til skjemaet
  * sendes inn, og tilbakestilles når et nytt aktivt filter kommer fra serveren.
  */
-export const useBenkFilterSkjema = <Filter extends BenkFilter & BenkAvkrysningsFilter>(
+export const useBenkFilterSkjema = <Filter extends BenkFilter & BenkGlobaltFilter>(
     tab: BenkSideTab,
     aktivtFilter: Filter,
 ): BenkFilterSkjemaTilstand<Filter> => {
@@ -24,8 +27,15 @@ export const useBenkFilterSkjema = <Filter extends BenkFilter & BenkAvkrysningsF
 
     return {
         valgtFilter,
+        aktivtFilter,
         endreFilter: (endring) => setValgtFilter((forrige) => ({ ...forrige, ...endring })),
+        endreGlobaltFilter: (endring) => oppdaterFilter({ ...aktivtFilter, ...endring }),
         oppdaterFilter: () => oppdaterFilter(valgtFilter),
-        nullstillFilter,
+        nullstillFilter: () =>
+            nullstillFilter({
+                kunTildeltMeg: aktivtFilter.kunTildeltMeg,
+                skjulPåVent: aktivtFilter.skjulPåVent,
+                skjulEgneTilBeslutning: aktivtFilter.skjulEgneTilBeslutning,
+            }),
     };
 };
