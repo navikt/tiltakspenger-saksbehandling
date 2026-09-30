@@ -1,10 +1,11 @@
 import { ReactNode, useState } from 'react';
 import { Box, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react';
-import { BenkGlobaltFilter } from '../../typer/felles';
+import { BenkBeskyttelsesfilter, BenkGlobaltFilter } from '../../typer/felles';
+import { BenkBeskyttelseSelect } from './BenkBeskyttelseSelect';
 import { BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
 
 type Props = {
-    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter>;
+    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter & BenkBeskyttelsesfilter>;
     /** Fanens lokale filtre */
     children: ReactNode;
     visKunTildeltMeg?: boolean;
@@ -21,13 +22,16 @@ const BenkFilterSkjema = ({ skjema, children, visKunTildeltMeg = false }: Props)
 export default BenkFilterSkjema;
 
 type LokaleFiltreProps = {
-    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter>;
+    skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter & BenkBeskyttelsesfilter>;
     children: ReactNode;
 };
 
-/** Fanens egne filtre. De tas først i bruk når de oppdateres, og nullstilles ved bytte av fane. */
+/**
+ * Fanens egne filtre, og til høyre for dem filteret på adressebeskyttelse og skjerming, som alle fanene har.
+ * De tas først i bruk når de oppdateres, og nullstilles ved bytte av fane.
+ */
 const BenkLokaleFiltre = ({ skjema, children }: LokaleFiltreProps) => {
-    const { oppdaterFilter, nullstillFilter } = skjema;
+    const { valgtFilter, endreFilter, oppdaterFilter, nullstillFilter } = skjema;
     const [isLoading, setIsLoading] = useState(false);
 
     const kjør = (action: () => Promise<unknown>) => {
@@ -39,6 +43,10 @@ const BenkLokaleFiltre = ({ skjema, children }: LokaleFiltreProps) => {
         <VStack gap={'space-16'}>
             <HStack gap={'space-16'} wrap={true}>
                 {children}
+                <BenkBeskyttelseSelect
+                    value={valgtFilter.beskyttelse}
+                    onChange={(beskyttelse) => endreFilter({ beskyttelse })}
+                />
             </HStack>
 
             <HStack gap={'space-16'}>

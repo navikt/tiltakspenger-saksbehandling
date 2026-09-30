@@ -69,6 +69,7 @@ const oversikt = <T,>(behandlinger: T[], totalAntall: number): BenkOversikt<T> =
 
 const aktivtFilter = {
     seksjon: null,
+    beskyttelse: null,
     kunTildeltMeg: false,
     skjulPåVent: false,
     skjulEgneTilBeslutning: false,

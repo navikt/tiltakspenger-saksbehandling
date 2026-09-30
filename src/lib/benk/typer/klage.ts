@@ -7,6 +7,7 @@ import {
     BenkGlobaltFilter,
     BenkSaksbehandlerFilter,
     benkFellesKolonner,
+    BenkBeskyttelsesfilter,
 } from './felles';
 
 /**
@@ -39,8 +40,9 @@ export const BenkKlageKolonne = {
 
 export type BenkKlageKolonne = (typeof BenkKlageKolonne)[keyof typeof BenkKlageKolonne];
 
-export type BenkKlageFilter = BenkGlobaltFilter & {
-    saksbehandler: BenkSaksbehandlerFilter;
-    status: Nullable<BenkKlageStatus>;
-    resultat: Nullable<KlagebehandlingResultat>;
-};
+export type BenkKlageFilter = BenkGlobaltFilter &
+    BenkBeskyttelsesfilter & {
+        saksbehandler: BenkSaksbehandlerFilter;
+        status: Nullable<BenkKlageStatus>;
+        resultat: Nullable<KlagebehandlingResultat>;
+    };

@@ -1,5 +1,5 @@
 import { Nullable } from '~/types/UtilTypes';
-import { BenkGlobaltFilter, BenkOversikt, BenkSortering } from './felles';
+import { BenkGlobaltFilter, BenkOversikt, BenkSortering, BenkBeskyttelsesfilter } from './felles';
 import { BenkTab } from './tabs';
 import { BenkFaneBehandling, BenkFaneKolonne } from './benkside';
 
@@ -7,9 +7,10 @@ import { BenkFaneBehandling, BenkFaneKolonne } from './benkside';
  * Filteret i mine-fanen. Fanen er alltid avgrenset til den innloggede, så den har ikke saksbehandlerfilteret.
  * [seksjon] viser bare behandlingene fra én av fanene - null viser alle.
  */
-export type BenkMineFilter = BenkGlobaltFilter & {
-    seksjon: Nullable<BenkTab>;
-};
+export type BenkMineFilter = BenkGlobaltFilter &
+    BenkBeskyttelsesfilter & {
+        seksjon: Nullable<BenkTab>;
+    };
 
 /** En seksjon i mine-fanen: fanens behandlinger tildelt den innloggede, vist i fanens egen tabell */
 export type BenkMineSeksjon<T extends BenkTab> = {

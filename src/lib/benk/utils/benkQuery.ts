@@ -1,6 +1,12 @@
 import { Nullable } from '~/types/UtilTypes';
 import { isValueInRecord } from '~/utils/object';
-import { BenkBehandlingsstatus, BenkFilter, BenkGlobaltFilter } from '../typer/felles';
+import {
+    BenkBehandlingsstatus,
+    BenkBeskyttelse,
+    BenkBeskyttelsesfilter,
+    BenkFilter,
+    BenkGlobaltFilter,
+} from '../typer/felles';
 import { BenkSøknaderFilter } from '../typer/søknader';
 import { BenkRevurderingerFilter } from '../typer/revurderinger';
 import { BenkMeldekortFilter, benkMeldekortTyper } from '../typer/meldekort';
@@ -52,6 +58,10 @@ export const parseBenkSide = (verdi: unknown): number => {
     return Number.isInteger(tall) && tall > 0 ? tall : 0;
 };
 
+const parseBenkBeskyttelsesfilter = (kilde: BenkFilterKilde): BenkBeskyttelsesfilter => ({
+    beskyttelse: benkEnumVerdi(kilde.beskyttelse, BenkBeskyttelse),
+});
+
 const parseBenkGlobaltFilter = (kilde: BenkFilterKilde): BenkGlobaltFilter => ({
     kunTildeltMeg: benkBoolskVerdi(kilde.kunTildeltMeg),
     skjulEgneTilBeslutning: benkBoolskVerdi(kilde.skjulEgneTilBeslutning),
@@ -69,6 +79,7 @@ const søknadstyper: Record<Søknadstype, Søknadstype> = {
 
 export const parseBenkSøknaderFilter = (kilde: BenkFilterKilde): BenkSøknaderFilter => ({
     ...parseBenkGlobaltFilter(kilde),
+    ...parseBenkBeskyttelsesfilter(kilde),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     resultat: benkEnumVerdi(kilde.resultat, SøknadsbehandlingResultat),
@@ -77,6 +88,7 @@ export const parseBenkSøknaderFilter = (kilde: BenkFilterKilde): BenkSøknaderF
 
 export const parseBenkRevurderingerFilter = (kilde: BenkFilterKilde): BenkRevurderingerFilter => ({
     ...parseBenkGlobaltFilter(kilde),
+    ...parseBenkBeskyttelsesfilter(kilde),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     resultat: benkEnumVerdi(kilde.resultat, RevurderingResultat),
@@ -84,6 +96,7 @@ export const parseBenkRevurderingerFilter = (kilde: BenkFilterKilde): BenkRevurd
 
 export const parseBenkMeldekortFilter = (kilde: BenkFilterKilde): BenkMeldekortFilter => ({
     ...parseBenkGlobaltFilter(kilde),
+    ...parseBenkBeskyttelsesfilter(kilde),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     status: benkEnumVerdi(kilde.status, BenkBehandlingsstatus),
     type: benkEnumVerdi(kilde.type, benkMeldekortTyper),
@@ -91,6 +104,7 @@ export const parseBenkMeldekortFilter = (kilde: BenkFilterKilde): BenkMeldekortF
 
 export const parseBenkKlageFilter = (kilde: BenkFilterKilde): BenkKlageFilter => ({
     ...parseBenkGlobaltFilter(kilde),
+    ...parseBenkBeskyttelsesfilter(kilde),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     status: benkEnumVerdi(kilde.status, BenkKlageStatus),
     resultat: benkEnumVerdi(kilde.resultat, KlagebehandlingResultat),
@@ -100,6 +114,7 @@ export const parseBenkTilbakekrevingFilter = (
     kilde: BenkFilterKilde,
 ): BenkTilbakekrevingFilter => ({
     ...parseBenkGlobaltFilter(kilde),
+    ...parseBenkBeskyttelsesfilter(kilde),
     saksbehandler: benkStrengVerdi(kilde.saksbehandler),
     status: benkEnumVerdi(kilde.status, BenkTilbakekrevingStatus),
     kilde: benkEnumVerdi(kilde.kilde, BenkTilbakekrevingKilde),
@@ -108,6 +123,7 @@ export const parseBenkTilbakekrevingFilter = (
 
 export const parseBenkMineFilter = (kilde: BenkFilterKilde): BenkMineFilter => ({
     ...parseBenkGlobaltFilter(kilde),
+    ...parseBenkBeskyttelsesfilter(kilde),
     seksjon: benkEnumVerdi(kilde.seksjon, BenkTab),
 });
 

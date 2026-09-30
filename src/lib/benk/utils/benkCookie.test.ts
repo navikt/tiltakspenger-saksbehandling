@@ -1,5 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { BENK_MINE_TAB, BenkTab } from '../typer/tabs';
+import { BenkBeskyttelse } from '../typer/felles';
+import { parseBenkFilterForTab } from '../benkFaner';
 import {
     BenkLagredeValg,
     benkLagredeValgTilQuery,
@@ -101,7 +103,25 @@ describe('lagrede valg ved bytte av fane', () => {
             kunTildeltMeg: false,
             skjulPåVent: true,
             skjulEgneTilBeslutning: false,
-            filter: { seksjon: null },
+            filter: { seksjon: null, beskyttelse: null },
         });
+    });
+
+    test('beskyttelsesfilteret lagres for fanen og nullstilles ved bytte av fane', () => {
+        const valg = byggBenkLagredeValg(
+            BenkTab.SØKNADER,
+            parseBenkFilterForTab(BenkTab.SØKNADER, {
+                beskyttelse: BenkBeskyttelse.ADRESSEBESKYTTET_ELLER_SKJERMET,
+            }),
+        );
+        const lest = parseBenkCookie(JSON.stringify(valg));
+
+        expect(lest?.filter.beskyttelse).toBe(BenkBeskyttelse.ADRESSEBESKYTTET_ELLER_SKJERMET);
+        expect(benkLagredeValgTilQuery(valg, BenkTab.SØKNADER)).toEqual({
+            tab: BenkTab.SØKNADER,
+            beskyttelse: BenkBeskyttelse.ADRESSEBESKYTTET_ELLER_SKJERMET,
+        });
+        expect(benkLagredeValgTilQuery(valg, BenkTab.KLAGE)).toEqual({ tab: BenkTab.KLAGE });
+        expect(benkLagredeValgTilQuery(valg, BENK_MINE_TAB)).toEqual({ tab: BENK_MINE_TAB });
     });
 });

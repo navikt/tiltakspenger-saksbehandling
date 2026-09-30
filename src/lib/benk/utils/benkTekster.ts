@@ -1,6 +1,6 @@
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { Nullable } from '~/types/UtilTypes';
-import { BenkBehandlingsstatus, BenkOppsummering } from '../typer/felles';
+import { BenkBehandlingsstatus, BenkBeskyttelse, BenkOppsummering } from '../typer/felles';
 import { BenkKlageStatus } from '../typer/klage';
 import { BenkMeldekortType, benkMeldekortTyper } from '../typer/meldekort';
 import { BenkTilbakekrevingKilde, BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
@@ -11,6 +11,10 @@ export const benkBehandlingsstatusTekst: Record<BenkBehandlingsstatus, string> =
     [BenkBehandlingsstatus.UNDER_BEHANDLING]: 'Under behandling',
     [BenkBehandlingsstatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
     [BenkBehandlingsstatus.UNDER_BESLUTNING]: 'Under beslutning',
+} as const;
+
+export const benkBeskyttelseTekst: Record<BenkBeskyttelse, string> = {
+    [BenkBeskyttelse.ADRESSEBESKYTTET_ELLER_SKJERMET]: 'Adressebeskyttet eller skjermet',
 } as const;
 
 export const benkBehandlingsstatusColor: Record<BenkBehandlingsstatus, AkselColor> = {

@@ -199,6 +199,7 @@ const hentMineData = async (req: NextRequest, query: ParsedUrlQuery): Promise<Pr
         sortering,
         filters: {
             seksjon: filters.seksjon,
+            beskyttelse: filters.beskyttelse,
             skjulPåVent: filters.skjulPåVent,
             skjulEgneTilBeslutning: filters.skjulEgneTilBeslutning,
         },

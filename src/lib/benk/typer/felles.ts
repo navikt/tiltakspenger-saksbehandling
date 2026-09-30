@@ -83,10 +83,11 @@ export type BenkHarIkkeTilgang = {
 export type BenkTilgang = BenkHarTilgang | BenkHarIkkeTilgang;
 
 /**
- * Markørene utledes fra regelen Tilgangsmaskinen avviste tilgangen med, og er derfor bare satt
- * på rader uten tilgang - benken slår ikke opp PDL eller skjermingsregisteret.
+ * For rader uten tilgang utledes markørene fra regelen Tilgangsmaskinen avviste tilgangen med.
  * Tilgangsmaskinen rapporterer den første regelen som avviser, så en person som både er skjermet
  * og har strengt fortrolig adresse får bare kode6.
+ * For rader med tilgang er markørene bare satt når filteret på adressebeskyttelse og skjerming er
+ * valgt, og kommer da fra PDL og skjermingsregisteret.
  */
 export type BenkPersonmarkører = {
     skjermet: boolean;
@@ -167,6 +168,19 @@ export type BenkFellesKolonne = (typeof benkFellesKolonner)[keyof typeof benkFel
  * Filter for én fane, løst typet. Alle felter er nullable - null betyr "ikke filtrert".
  */
 export type BenkFilter = Record<string, string | boolean | null>;
+
+/**
+ * Filteret på adressebeskyttelse og skjerming. Null betyr alle personene.
+ * Backend slår opp i PDL og skjermingsregisteret bare når filteret er valgt.
+ */
+export enum BenkBeskyttelse {
+    ADRESSEBESKYTTET_ELLER_SKJERMET = 'ADRESSEBESKYTTET_ELLER_SKJERMET',
+}
+
+/** Det lokale filteret alle fanene har, også mine-fanen */
+export type BenkBeskyttelsesfilter = {
+    beskyttelse: Nullable<BenkBeskyttelse>;
+};
 
 /**
  * De globale filtrene alle fanene har, også mine-fanen. De beholdes på tvers av fanene
