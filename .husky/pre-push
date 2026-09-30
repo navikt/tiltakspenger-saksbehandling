@@ -1,2 +1,8 @@
-pnpm run lint
-pnpm exec tsc --noEmit
+# eslint og tsc kjøres samtidig, og eslint-cachen gjør at bare endrede filer lintes på nytt.
+pnpm exec tsc --noEmit &
+tsc_pid=$!
+pnpm run lint --cache --cache-location node_modules/.cache/eslint/
+lint_status=$?
+wait "$tsc_pid"
+tsc_status=$?
+[ "$lint_status" -eq 0 ] && [ "$tsc_status" -eq 0 ]
