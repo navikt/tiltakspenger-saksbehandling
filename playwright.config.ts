@@ -80,6 +80,10 @@ export default defineConfig({
          * en lokal dev server på 3000 ikke forstyrres. */
         reuseExistingServer: false,
         timeout: 30000,
+        // Uten terminal (CI) starter pnpm ≥ 11.27 scriptet i en egen prosessgruppe og videresender signaler dit.
+        // Playwrights standard SIGKILL treffer da bare pnpm, mens serveren overlever, holder stdout åpen og
+        // gjør at testkjøringen aldri avslutter. SIGTERM blir videresendt av pnpm og stopper serveren pent.
+        gracefulShutdown: { signal: 'SIGTERM', timeout: 10_000 },
         env: {
             PORT: '3100',
             E2E: 'true',
