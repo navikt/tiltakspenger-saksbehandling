@@ -24,7 +24,7 @@
     },
     "dependencies": {
         "@jridgewell/trace-mapping": "0.3.31",
-        "@nais/apm": "0.7.2",
+        "@nais/apm": "0.7.3",
         "@navikt/aksel-icons": "8.18.0",
         "@navikt/ds-css": "8.18.0",
         "@navikt/ds-react": "8.18.0",
