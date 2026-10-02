@@ -64,18 +64,16 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
 
     React.useEffect(() => {
         if (skalHenteBarn && barnFraAPI) {
-            const barn: ManuellSøknadBarn[] = barnFraAPI.map(
-                (p, index): ManuellSøknadBarn => ({
-                    fornavn: hentVerdi(p.fornavn) ?? undefined,
-                    mellomnavn: hentVerdi(p.mellomnavn) ?? undefined,
-                    etternavn: hentVerdi(p.etternavn) ?? undefined,
-                    fødselsdato: hentVerdi(p.fødselsdato) ?? '',
-                    erSøktBarnetilleggFor: undefined,
-                    fnr: hentVerdi(p.fnr) ?? undefined,
-                    uuid: uuidv4(),
-                    index,
-                }),
-            );
+            const barn: ManuellSøknadBarn[] = barnFraAPI.map((p, index): ManuellSøknadBarn => ({
+                fornavn: hentVerdi(p.fornavn) ?? undefined,
+                mellomnavn: hentVerdi(p.mellomnavn) ?? undefined,
+                etternavn: hentVerdi(p.etternavn) ?? undefined,
+                fødselsdato: hentVerdi(p.fødselsdato) ?? '',
+                erSøktBarnetilleggFor: undefined,
+                fnr: hentVerdi(p.fnr) ?? undefined,
+                uuid: uuidv4(),
+                index,
+            }));
             setValue('svar.barnetilleggPdl', barn);
         }
     }, [skalHenteBarn, barnFraAPI, setValue]);

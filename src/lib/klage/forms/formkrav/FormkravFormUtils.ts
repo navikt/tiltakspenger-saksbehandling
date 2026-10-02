@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { resolverResultat } from '~/utils/resolverResultat';
 import { nonNullish } from '~/utils/object';
 import {
     KlagefristUnntakSvarord,
@@ -167,7 +168,7 @@ export const formkravValidation = (data: FormkravFormData) => {
         };
     }
 
-    return { values: data, errors: errors };
+    return resolverResultat(data, errors);
 };
 
 export const formkravFormDataTilOpprettKlageRequest = (

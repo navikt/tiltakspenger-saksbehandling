@@ -33,9 +33,7 @@ export type SøknadsbehandlingAvslag = SøknadsbehandlingBase & {
 };
 
 export type Søknadsbehandling =
-    | SøknadsbehandlingInnvilgelse
-    | SøknadsbehandlingAvslag
-    | SøknadsbehandlingIkkeValgt;
+    SøknadsbehandlingInnvilgelse | SøknadsbehandlingAvslag | SøknadsbehandlingIkkeValgt;
 
 export enum SøknadsbehandlingResultat {
     INNVILGELSE = 'INNVILGELSE',

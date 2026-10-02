@@ -44,9 +44,7 @@ export type UtbetalingskontrollUtdatert = UtbetalingskontrollBase & {
 };
 
 export type Utbetalingskontroll =
-    | UtbetalingskontrollMedEndring
-    | UtbetalingskontrollUtenEndring
-    | UtbetalingskontrollUtdatert;
+    UtbetalingskontrollMedEndring | UtbetalingskontrollUtenEndring | UtbetalingskontrollUtdatert;
 
 export type BehandlingUtbetalingProps = {
     navkontor: SladdbarVerdi<string>;

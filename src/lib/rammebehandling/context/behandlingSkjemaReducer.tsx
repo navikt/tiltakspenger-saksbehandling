@@ -27,10 +27,7 @@ import {
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 
 export type BehandlingSkjemaState =
-    | SøknadsbehandlingState
-    | RevurderingInnvilgelseState
-    | RevurderingStansState
-    | OmgjøringState;
+    SøknadsbehandlingState | RevurderingInnvilgelseState | RevurderingStansState | OmgjøringState;
 
 export type BehandlingSkjemaActions =
     | SøknadsbehandlingActions

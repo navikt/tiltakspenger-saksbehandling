@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { resolverResultat } from '~/utils/resolverResultat';
 import { AvbrytKlagebehandlingRequest, AvbrytKlagebehandlingStatus } from '../../typer/Klage';
 
 export enum AvbrytKlagebehandlingFormStatus {
@@ -40,7 +41,7 @@ export const avbrytKlagebehandlingFormValidation = (data: AvbrytKlagebehandlingF
         };
     }
 
-    return { values: data, errors: errors };
+    return resolverResultat(data, errors);
 };
 
 const statusMap: Record<AvbrytKlagebehandlingFormStatus, AvbrytKlagebehandlingStatus> = {

@@ -1,9 +1,9 @@
-import { Nullable } from '~/types/UtilTypes';
-import { Periode } from '~/types/Periode';
-import { Barnetillegg, BarnetilleggPeriode } from './Barnetillegg';
-import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import {Nullable} from '~/types/UtilTypes';
+import {Periode} from '~/types/Periode';
+import {Barnetillegg, BarnetilleggPeriode} from './Barnetillegg';
+import {RammebehandlingId, Rammebehandling, RammebehandlingResultat} from './Rammebehandling';
+import {Innvilgelsesperiode} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {VedtakType} from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type VedtakId = `vedtak_${string}`;
 
@@ -67,9 +67,7 @@ export type RammevedtakKommandoStans = {
 };
 
 export type RammevedtakKommando =
-    | RammevedtakKommandoOmgjør
-    | RammevedtakKommandoOpphør
-    | RammevedtakKommandoStans;
+    RammevedtakKommandoOmgjør | RammevedtakKommandoOpphør | RammevedtakKommandoStans;
 
 export enum Omgjøringsgrad {
     HELT = 'HELT',

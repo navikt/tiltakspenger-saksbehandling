@@ -19,7 +19,8 @@ import React from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { Controller, FieldErrors, useFieldArray, useForm } from 'react-hook-form';
+import { resolverResultat } from '~/utils/resolverResultat';
 import { dateTilISOTekst } from '~/utils/date';
 import { personoversiktUrl } from '~/utils/urls';
 
@@ -101,15 +102,18 @@ const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
             utfall: '',
         },
         resolver: async (values) => {
-            const errors: Record<string, { message: string }> = {};
+            const errors: FieldErrors<KlageHendelseFormData> = {};
             if (!values.klagebehandlingId) {
-                errors.klagebehandlingId = { message: 'Klagebehandling ID er påkrevd' };
+                errors.klagebehandlingId = {
+                    type: 'required',
+                    message: 'Klagebehandling ID er påkrevd',
+                };
             }
             if (!values.type) {
-                errors.type = { message: 'Type er påkrevd' };
+                errors.type = { type: 'required', message: 'Type er påkrevd' };
             }
             if (!values.utfall) {
-                errors.utfall = { message: 'Utfall er påkrevd' };
+                errors.utfall = { type: 'required', message: 'Utfall er påkrevd' };
             }
 
             if (values.type && values.utfall) {
@@ -119,7 +123,10 @@ const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
                             values.utfall as KlageHendelseKlagebehandlingAvsluttetUtfall,
                         )
                     ) {
-                        errors.utfall = { message: 'Ugyldig utfall for klagebehandling avsluttet' };
+                        errors.utfall = {
+                            type: 'validate',
+                            message: 'Ugyldig utfall for klagebehandling avsluttet',
+                        };
                     }
                 } else if (values.type === LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET) {
                     if (
@@ -128,6 +135,7 @@ const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
                         )
                     ) {
                         errors.utfall = {
+                            type: 'validate',
                             message: 'Ugyldig utfall for omgjøringskravbehandling avsluttet',
                         };
                     }
@@ -137,12 +145,15 @@ const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
                             values.utfall as KlageHendelseFeilregistrertType,
                         )
                     ) {
-                        errors.utfall = { message: 'Ugyldig utfall for behandling feilregistrert' };
+                        errors.utfall = {
+                            type: 'validate',
+                            message: 'Ugyldig utfall for behandling feilregistrert',
+                        };
                     }
                 }
             }
 
-            return { values, errors };
+            return resolverResultat(values, errors);
         },
     });
 

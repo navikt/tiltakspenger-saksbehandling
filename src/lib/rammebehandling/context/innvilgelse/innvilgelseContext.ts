@@ -45,9 +45,7 @@ export type InnvilgelseMedPerioderState = {
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
 
 export type BehandlingMedInnvilgelseState =
-    | OmgjøringInnvilgelseState
-    | RevurderingInnvilgelseState
-    | SøknadsbehandlingInnvilgelseState;
+    OmgjøringInnvilgelseState | RevurderingInnvilgelseState | SøknadsbehandlingInnvilgelseState;
 
 export type BehandlingMedInnvilgelsesperioderState = {
     innvilgelse: InnvilgelseMedPerioderState;

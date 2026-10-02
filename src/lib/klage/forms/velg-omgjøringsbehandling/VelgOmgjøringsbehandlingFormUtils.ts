@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { resolverResultat } from '~/utils/resolverResultat';
 import { OpprettOmgjøringsbehandlingForKlageRequest } from '~/lib/klage/typer/Klage';
 import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { SøknadId } from '~/lib/søknad/søknadTyper';
@@ -50,7 +51,7 @@ export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbeh
         };
     }
 
-    return { values: data, errors: errors };
+    return resolverResultat(data, errors);
 };
 
 export enum VelgOmgjøringsbehandlingTyper {

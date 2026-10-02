@@ -137,14 +137,10 @@ export type OppdaterOmgjøringIkkeValgtDTO = OppdaterBehandlingBaseDTO & {
 };
 
 export type OppdaterOmgjøringDTO =
-    | OppdaterOmgjøringInnvilgelseDTO
-    | OppdaterOmgjøringOpphørDTO
-    | OppdaterOmgjøringIkkeValgtDTO;
+    OppdaterOmgjøringInnvilgelseDTO | OppdaterOmgjøringOpphørDTO | OppdaterOmgjøringIkkeValgtDTO;
 
 export type OppdaterRevurderingDTO =
-    | OppdaterRevurderingStansDTO
-    | OppdaterRevurderingInnvilgelseDTO
-    | OppdaterOmgjøringDTO;
+    OppdaterRevurderingStansDTO | OppdaterRevurderingInnvilgelseDTO | OppdaterOmgjøringDTO;
 
 export type StartRevurderingDTO = {
     revurderingType: RevurderingResultat;

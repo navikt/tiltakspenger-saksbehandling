@@ -27,8 +27,7 @@ export enum VedtakType {
 }
 
 export type RammevedtakEllerKlageMedBehandling =
-    | RammevedtakMedBehandling
-    | KlagevedtakMedBehandling;
+    RammevedtakMedBehandling | KlagevedtakMedBehandling;
 
 /**
  * Sidene en behandlingsmeny kan kalles fra. Styrer om handlingene i menyen navigerer,

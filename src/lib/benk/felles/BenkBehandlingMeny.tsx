@@ -29,9 +29,7 @@ import { MeldekortbehandlingAngre } from '~/lib/meldekort/felles/meny/handlinger
 
 type Props = {
     behandling:
-        | BenkSøknadsbehandlingMedTilgang
-        | BenkRevurderingMedTilgang
-        | BenkMeldekortMedTilgang;
+        BenkSøknadsbehandlingMedTilgang | BenkRevurderingMedTilgang | BenkMeldekortMedTilgang;
 };
 
 /**

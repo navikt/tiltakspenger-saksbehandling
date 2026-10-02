@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { resolverResultat } from '~/utils/resolverResultat';
 import {
     ForhåndsvisBrevKlageRequest,
     Klagebehandling,
@@ -56,7 +57,7 @@ export const brevFormValidation = (data: BrevFormData) => {
         }
     });
 
-    return { values: data, errors };
+    return resolverResultat(data, errors);
 };
 
 /**

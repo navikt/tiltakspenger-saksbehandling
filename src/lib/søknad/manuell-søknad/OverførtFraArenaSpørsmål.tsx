@@ -34,8 +34,7 @@ export const OverførtFraArenaSpørsmål = () => {
     const { control } = formContext;
 
     const overførtFraArenaSvar = useWatch({ control, name: 'overfortFraArena' }) as
-        | JaNeiSvar
-        | undefined;
+        JaNeiSvar | undefined;
     const skalViseBehandlingsårsak = overførtFraArenaSvar === 'JA';
 
     const { field: behandlingsårsakField, fieldState: behandlingsårsakFieldState } = useController({

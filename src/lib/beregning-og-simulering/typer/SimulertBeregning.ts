@@ -50,9 +50,7 @@ type SimulertBeregningUtenSimulering = SimulertBeregningBase & {
 };
 
 export type SimulertBeregning =
-    | SimulertBeregningMedEndring
-    | SimulertBeregningIngenEndring
-    | SimulertBeregningUtenSimulering;
+    SimulertBeregningMedEndring | SimulertBeregningIngenEndring | SimulertBeregningUtenSimulering;
 
 export type SimulertBeregningPerMeldeperiode = {
     kjedeId: MeldeperiodeKjedeId;

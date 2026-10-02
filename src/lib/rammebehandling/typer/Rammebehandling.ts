@@ -100,8 +100,6 @@ export type OppdaterBehandlingBaseDTO = {
 };
 
 export type RammebehandlingMedInnvilgelse =
-    | SøknadsbehandlingInnvilgelse
-    | RevurderingInnvilgelse
-    | OmgjøringInnvilgelse;
+    SøknadsbehandlingInnvilgelse | RevurderingInnvilgelse | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];

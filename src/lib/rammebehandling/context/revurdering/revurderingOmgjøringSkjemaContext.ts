@@ -43,9 +43,7 @@ export type OmgjøringInnvilgelseState = {
 };
 
 export type OmgjøringState =
-    | OmgjøringIkkeValgtState
-    | OmgjøringOpphørState
-    | OmgjøringInnvilgelseState;
+    OmgjøringIkkeValgtState | OmgjøringOpphørState | OmgjøringInnvilgelseState;
 
 type OmgjøringSetResultatAction = {
     type: 'setResultat';
@@ -69,10 +67,7 @@ type VedtaksperiodeAction = {
 };
 
 type Actions =
-    | InnvilgelseActions
-    | VedtaksperiodeAction
-    | OmgjøringSetResultatAction
-    | OmgjøringOpphørAction;
+    InnvilgelseActions | VedtaksperiodeAction | OmgjøringSetResultatAction | OmgjøringOpphørAction;
 
 export type OmgjøringActions = ReducerSuperAction<
     Actions,

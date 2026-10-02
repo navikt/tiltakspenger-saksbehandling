@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { resolverResultat } from '~/utils/resolverResultat';
 import {
     Klagebehandling,
     KlagebehandlingResultat,
@@ -154,7 +155,7 @@ export const vurderingFormValidation = (data: VurderingFormData) => {
         }
     }
 
-    return { values: data, errors: errors };
+    return resolverResultat(data, errors);
 };
 
 const validerOmgjøringForm = (data: OmgjøringFormData) => {

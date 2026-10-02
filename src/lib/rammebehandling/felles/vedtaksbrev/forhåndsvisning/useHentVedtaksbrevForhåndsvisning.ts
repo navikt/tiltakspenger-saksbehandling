@@ -66,8 +66,7 @@ export type OmgjøringOpphørBrevForhåndsvisningDTO = {
 };
 
 export type OmgjøringBrevForhåndsvisningDTO =
-    | OmgjøringInnvilgelseBrevForhåndsvisningDTO
-    | OmgjøringOpphørBrevForhåndsvisningDTO;
+    OmgjøringInnvilgelseBrevForhåndsvisningDTO | OmgjøringOpphørBrevForhåndsvisningDTO;
 
 export type BrevForhåndsvisningDTO =
     | SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO

@@ -52,9 +52,7 @@ type SøknadsbehandlingSetResultatAction = {
 };
 
 type Actions =
-    | SøknadsbehandlingSetResultatAction
-    | SøknadsbehandlingAvslagAction
-    | InnvilgelseActions;
+    SøknadsbehandlingSetResultatAction | SøknadsbehandlingAvslagAction | InnvilgelseActions;
 
 export type SøknadsbehandlingActions = ReducerSuperAction<
     Actions,

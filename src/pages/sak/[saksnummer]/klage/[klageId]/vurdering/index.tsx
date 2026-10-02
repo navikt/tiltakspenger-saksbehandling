@@ -104,9 +104,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             sak,
             initialKlage: initialKlage as Klagebehandling & {
                 resultat:
-                    | KlagebehandlingsresultatOmgjør
-                    | KlagebehandlingsresultatOpprettholdt
-                    | null;
+                    KlagebehandlingsresultatOmgjør | KlagebehandlingsresultatOpprettholdt | null;
             },
             rammevedtak: sak.alleRammevedtak,
             meldekortvedtak: sak.meldekortvedtak,
