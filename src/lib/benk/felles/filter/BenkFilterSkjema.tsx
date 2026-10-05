@@ -8,13 +8,22 @@ type Props = {
     skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter & BenkBeskyttelsesfilter>;
     /** Fanens lokale filtre */
     children: ReactNode;
+    /** Fanens lokale filtre som vises på en egen rad under select-filtrene, f.eks. avkrysningsbokser */
+    tilleggsfiltre?: ReactNode;
     visKunTildeltMeg?: boolean;
 };
 
 /** Filterskjemaet alle fanene deler: fanens lokale filtre, og under dem de globale */
-const BenkFilterSkjema = ({ skjema, children, visKunTildeltMeg = false }: Props) => (
+const BenkFilterSkjema = ({
+    skjema,
+    children,
+    tilleggsfiltre,
+    visKunTildeltMeg = false,
+}: Props) => (
     <VStack gap={'space-16'}>
-        <BenkLokaleFiltre skjema={skjema}>{children}</BenkLokaleFiltre>
+        <BenkLokaleFiltre skjema={skjema} tilleggsfiltre={tilleggsfiltre}>
+            {children}
+        </BenkLokaleFiltre>
         <BenkGlobaleFiltre skjema={skjema} visKunTildeltMeg={visKunTildeltMeg} />
     </VStack>
 );
@@ -24,13 +33,14 @@ export default BenkFilterSkjema;
 type LokaleFiltreProps = {
     skjema: BenkFilterSkjemaTilstand<BenkGlobaltFilter & BenkBeskyttelsesfilter>;
     children: ReactNode;
+    tilleggsfiltre?: ReactNode;
 };
 
 /**
  * Fanens egne filtre, og til høyre for dem filteret på adressebeskyttelse og skjerming, som alle fanene har.
  * De tas først i bruk når de oppdateres, og nullstilles ved bytte av fane.
  */
-const BenkLokaleFiltre = ({ skjema, children }: LokaleFiltreProps) => {
+const BenkLokaleFiltre = ({ skjema, children, tilleggsfiltre }: LokaleFiltreProps) => {
     const { valgtFilter, endreFilter, oppdaterFilter, nullstillFilter } = skjema;
     const [isLoading, setIsLoading] = useState(false);
 
@@ -48,6 +58,12 @@ const BenkLokaleFiltre = ({ skjema, children }: LokaleFiltreProps) => {
                     onChange={(beskyttelse) => endreFilter({ beskyttelse })}
                 />
             </HStack>
+
+            {tilleggsfiltre && (
+                <HStack gap={'space-16'} wrap={true}>
+                    {tilleggsfiltre}
+                </HStack>
+            )}
 
             <HStack gap={'space-16'}>
                 <Button

@@ -17,7 +17,25 @@ export const BenkTilbakekrevingFilterSkjema = ({
     const { valgtFilter, endreFilter } = skjema;
 
     return (
-        <BenkFilterSkjema skjema={skjema} visKunTildeltMeg={true}>
+        <BenkFilterSkjema
+            skjema={skjema}
+            visKunTildeltMeg={true}
+            tilleggsfiltre={
+                <HStack align={'center'} gap={'space-4'}>
+                    <BenkFilterCheckbox
+                        checked={valgtFilter.kunOverMinstebeløp}
+                        onChange={(kunOverMinstebeløp) => endreFilter({ kunOverMinstebeløp })}
+                    >
+                        {'Vis kun tilbakekrevinger over minstebeløp'}
+                    </BenkFilterCheckbox>
+                    <HelpText>
+                        {
+                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
+                        }
+                    </HelpText>
+                </HStack>
+            }
+        >
             <BenkFilterSelect
                 label={'Status'}
                 value={valgtFilter.status}
@@ -37,22 +55,6 @@ export const BenkTilbakekrevingFilterSkjema = ({
                 saksbehandlere={saksbehandlere}
                 besluttere={besluttere}
             />
-
-            <HStack align={'end'}>
-                <HStack align={'center'} gap={'space-4'}>
-                    <BenkFilterCheckbox
-                        checked={valgtFilter.kunOverMinstebeløp}
-                        onChange={(kunOverMinstebeløp) => endreFilter({ kunOverMinstebeløp })}
-                    >
-                        {'Vis kun tilbakekrevinger over minstebeløp'}
-                    </BenkFilterCheckbox>
-                    <HelpText>
-                        {
-                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
-                        }
-                    </HelpText>
-                </HStack>
-            </HStack>
         </BenkFilterSkjema>
     );
 };

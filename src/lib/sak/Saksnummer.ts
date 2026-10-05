@@ -7,7 +7,7 @@ export const tilSaksnummer = (s: string): Saksnummer => {
     if (!erSaksnummer(s)) {
         throw new Error(`Ugyldig saksnummer: ${s}`);
     }
-    return s as Saksnummer;
+    return s;
 };
 
 export const erSaksnummer = (s: string): s is Saksnummer => {
