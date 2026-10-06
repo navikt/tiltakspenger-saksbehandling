@@ -1,5 +1,5 @@
 import {
-    MeldekortbehandlingSkjemaState,
+    MeldekortbehandlingSkjemaContext,
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
@@ -12,7 +12,6 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
-import { hentVerdi } from '~/utils/sladdetVerdi';
 
 export type MeldekortDagValideringsfeil = {
     dato: string;
@@ -85,7 +84,7 @@ export type MeldekortbehandlingSkjemaValideringsfeil = {
 };
 
 export const validerMeldekortbehandlingSkjema = (
-    skjema: MeldekortbehandlingSkjemaState,
+    skjema: MeldekortbehandlingSkjemaContext,
     behandling: MeldekortbehandlingProps,
     sak: SakProps,
 ): MeldekortbehandlingSkjemaValideringsfeil | null => {
@@ -95,7 +94,7 @@ export const validerMeldekortbehandlingSkjema = (
 
     const overordnedeFeil: string[] = [];
 
-    if (skjema.skalJournalføreNotat && !hentVerdi(behandling.begrunnelse)) {
+    if (skjema.skalJournalføreNotat && !skjema.begrunnelse.getValue()) {
         overordnedeFeil.push('Begrunnelsen må være utfylt når notatet skal journalføres');
     }
 
