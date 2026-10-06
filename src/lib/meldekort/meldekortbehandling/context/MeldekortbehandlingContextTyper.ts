@@ -19,6 +19,7 @@ export type MeldeperiodeSkjema = {
 export type MeldekortbehandlingSkjemaState = {
     meldeperioder: MeldeperiodeSkjema[];
     skalSendeVedtaksbrev: boolean;
+    skalJournalføreNotat: boolean;
 };
 
 export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & {
@@ -34,5 +35,6 @@ export type MeldekortbehandlingSkjemaActions =
       >
     | ReducerAction<'setDager', MeldeperiodeSkjema>
     | ReducerAction<'setSkalSendeVedtaksbrev', { skalSendeVedtaksbrev: boolean }>
+    | ReducerAction<'setSkalJournalføreNotat', { skalJournalføreNotat: boolean }>
     | ReducerAction<'leggTilMeldeperioder', { meldeperiodeKjeder: MeldeperiodekjedeProps[] }>
     | ReducerAction<'fjernMeldeperiode', { kjedeId: MeldeperiodeKjedeId }>;

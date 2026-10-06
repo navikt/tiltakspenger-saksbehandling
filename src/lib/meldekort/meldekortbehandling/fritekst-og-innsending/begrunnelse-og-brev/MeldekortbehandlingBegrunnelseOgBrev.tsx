@@ -6,11 +6,12 @@ import {
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Checkbox, Heading, HStack, InlineMessage } from '@navikt/ds-react';
 import { MeldekortbehandlingForhåndsvisBrev } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/forhåndsvis-brev/MeldekortbehandlingForhåndsvisBrev';
+import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './MeldekortbehandlingBegrunnelseOgBrev.module.css';
 
 export const MeldekortbehandlingBegrunnelseOgBrev = () => {
-    const { begrunnelse, brevtekst, erReadonly, skalSendeVedtaksbrev } =
+    const { begrunnelse, brevtekst, erReadonly, skalSendeVedtaksbrev, skalJournalføreNotat } =
         useMeldekortbehandlingSkjema();
 
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
@@ -39,6 +40,16 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
                         defaultValue={begrunnelse.getValue() ?? ''}
                         readOnly={erReadonly}
                         ref={begrunnelse.ref}
+                    />
+                    <JournalførNotatValg
+                        skalJournalføreNotat={skalJournalføreNotat}
+                        onChange={(valgt) =>
+                            dispatch({
+                                type: 'setSkalJournalføreNotat',
+                                payload: { skalJournalføreNotat: valgt },
+                            })
+                        }
+                        readOnly={erReadonly}
                     />
                 </MeldekortbehandlingSeksjon.Høyre>
             </MeldekortbehandlingSeksjon>

@@ -1,5 +1,5 @@
 import {
-    MeldekortbehandlingSkjemaState,
+    MeldekortbehandlingSkjemaContext,
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
@@ -84,7 +84,7 @@ export type MeldekortbehandlingSkjemaValideringsfeil = {
 };
 
 export const validerMeldekortbehandlingSkjema = (
-    skjema: MeldekortbehandlingSkjemaState,
+    skjema: MeldekortbehandlingSkjemaContext,
     behandling: MeldekortbehandlingProps,
     sak: SakProps,
 ): MeldekortbehandlingSkjemaValideringsfeil | null => {
@@ -93,6 +93,10 @@ export const validerMeldekortbehandlingSkjema = (
     }
 
     const overordnedeFeil: string[] = [];
+
+    if (skjema.skalJournalføreNotat && !skjema.begrunnelse.getValue()) {
+        overordnedeFeil.push('Begrunnelsen må være utfylt når notatet skal journalføres');
+    }
 
     const meldeperioderFeil = skjema.meldeperioder
         .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, behandling, sak))

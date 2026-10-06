@@ -34,6 +34,7 @@ const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO | 
         resultat: RevurderingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+        skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
         valgteHjemler: skjema.hjemlerForStans,
         ...(skjema.harValgtStansFraFørsteDagSomGirRett
             ? {

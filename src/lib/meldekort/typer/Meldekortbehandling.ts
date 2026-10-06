@@ -80,6 +80,7 @@ export type OppdaterMeldekortbehandlingDTO = {
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
     skalSendeVedtaksbrev: boolean;
+    skalJournalføreNotat: boolean;
 };
 
 export type OppdatertMeldeperiodeDTO = {
@@ -129,6 +130,7 @@ export type MeldekortbehandlingProps = {
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     klagebehandlingId: Nullable<KlageId>;
     skalSendeVedtaksbrev: boolean;
+    skalJournalføreNotat: boolean;
     ventestatus: VentestatusHendelse[];
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };

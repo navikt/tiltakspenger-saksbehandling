@@ -59,6 +59,7 @@ export interface RammebehandlingBase {
     klagebehandlingId: Nullable<KlageId>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
+    skalJournalføreNotat: boolean;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 }
 
@@ -97,6 +98,7 @@ export type OppdaterBehandlingBaseDTO = {
     resultat: RammebehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
+    skalJournalføreNotat: boolean;
 };
 
 export type RammebehandlingMedInnvilgelse =

@@ -66,6 +66,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     klagebehandlingId: null,
     tilbakekrevingId: null,
     skalSendeVedtaksbrev: true,
+    skalJournalføreNotat: false,
     gyldigeKommandoer: [],
     automatiskOpprettetGrunn: null,
     innvilgelsesperioder: null,

@@ -26,6 +26,7 @@ export const meldekortbehandlingSkjemaInitialState = (
         })),
     })),
     skalSendeVedtaksbrev: meldekortbehandling.skalSendeVedtaksbrev,
+    skalJournalføreNotat: meldekortbehandling.skalJournalføreNotat,
 });
 
 export const meldekortbehandlingSkjemaReducer: Reducer<
@@ -66,6 +67,10 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
 
         case 'setSkalSendeVedtaksbrev': {
             return { ...state, skalSendeVedtaksbrev: action.payload.skalSendeVedtaksbrev };
+        }
+
+        case 'setSkalJournalføreNotat': {
+            return { ...state, skalJournalføreNotat: action.payload.skalJournalføreNotat };
         }
 
         case 'leggTilMeldeperioder': {

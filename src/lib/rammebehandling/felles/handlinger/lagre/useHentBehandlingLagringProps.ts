@@ -39,8 +39,28 @@ export const useHentBehandlingLagringProps = ({
         setIsDirty(!isEqualJson(hentDTO(), sisteLagring));
     }, [hentDTO, sisteLagring]);
 
-    const validerOgHentLagringDTO = (type: ValideringType) => {
+    const validerVedtak: ValideringFunc = (type) => {
         const valideringResultat = validerSkjema(type);
+
+        if (
+            type === 'tilBeslutning' &&
+            skjema.journalføring.skalJournalføreNotat &&
+            skjema.textAreas.begrunnelse.getValue() === null
+        ) {
+            return {
+                ...valideringResultat,
+                errors: [
+                    ...valideringResultat.errors,
+                    'Begrunnelsen må være utfylt når notatet skal journalføres',
+                ],
+            };
+        }
+
+        return valideringResultat;
+    };
+
+    const validerOgHentLagringDTO = (type: ValideringType) => {
+        const valideringResultat = validerVedtak(type);
         const harErrors = valideringResultat.errors.length > 0;
 
         const vedtakDTO = harErrors ? null : hentDTO();
@@ -75,5 +95,5 @@ export const useHentBehandlingLagringProps = ({
         updateDirtyState();
     }, [skjema, updateDirtyState]);
 
-    return { validerOgHentLagringDTO, validerVedtak: validerSkjema, isDirty };
+    return { validerOgHentLagringDTO, validerVedtak, isDirty };
 };
