@@ -8,13 +8,14 @@ import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
+import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 
 export const BegrunnelseVilkårsvurdering = () => {
     const { begrunnelseVilkårsvurdering } = useBehandling().behandling;
 
-    const { textAreas, erReadonly } = useBehandlingSkjema();
+    const { textAreas, erReadonly, journalføring } = useBehandlingSkjema();
     const { begrunnelse } = textAreas;
 
     return (
@@ -58,6 +59,11 @@ export const BegrunnelseVilkårsvurdering = () => {
                     }
                     readOnly={erReadonly}
                     ref={begrunnelse.ref}
+                />
+                <JournalførNotatValg
+                    skalJournalføreNotat={journalføring.skalJournalføreNotat}
+                    onChange={journalføring.setSkalJournalføreNotat}
+                    readOnly={erReadonly}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>

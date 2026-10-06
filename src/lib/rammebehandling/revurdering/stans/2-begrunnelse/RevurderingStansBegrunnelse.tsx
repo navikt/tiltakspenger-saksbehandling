@@ -6,11 +6,12 @@ import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
+import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './RevurderingStansBegrunnelse.module.css';
 
 export const RevurderingStansBegrunnelse = () => {
-    const { textAreas, erReadonly } = useBehandlingSkjema();
+    const { textAreas, erReadonly, journalføring } = useBehandlingSkjema();
     const { begrunnelse } = textAreas;
 
     const { behandling } = useRevurderingBehandling();
@@ -28,6 +29,11 @@ export const RevurderingStansBegrunnelse = () => {
                     defaultValue={sladdbarTekstEllerNull(begrunnelseVilkårsvurdering) ?? ''}
                     readOnly={erReadonly}
                     ref={begrunnelse.ref}
+                />
+                <JournalførNotatValg
+                    skalJournalføreNotat={journalføring.skalJournalføreNotat}
+                    onChange={journalføring.setSkalJournalføreNotat}
+                    readOnly={erReadonly}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>

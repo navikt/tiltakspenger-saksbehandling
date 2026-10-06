@@ -12,6 +12,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 
 export type MeldekortDagValideringsfeil = {
     dato: string;
@@ -93,6 +94,10 @@ export const validerMeldekortbehandlingSkjema = (
     }
 
     const overordnedeFeil: string[] = [];
+
+    if (skjema.skalJournalføreNotat && !hentVerdi(behandling.begrunnelse)) {
+        overordnedeFeil.push('Begrunnelsen må være utfylt når notatet skal journalføres');
+    }
 
     const meldeperioderFeil = skjema.meldeperioder
         .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, behandling, sak))

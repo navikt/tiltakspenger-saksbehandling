@@ -91,6 +91,7 @@ const genererDtoFraSkjema = (
             dager: it.dager,
         })),
         skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
+        skalJournalføreNotat: skjema.skalJournalføreNotat,
         begrunnelse: skjema.begrunnelse.getValue(),
         tekstTilVedtaksbrev: skjema.brevtekst.getValue(),
     };

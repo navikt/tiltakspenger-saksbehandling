@@ -6,6 +6,7 @@ import {
     useContext,
     useReducer,
     useRef,
+    useState,
 } from 'react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
@@ -34,6 +35,10 @@ export type BehandlingSkjemaContextBase<T> = T & {
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
         barnetilleggBegrunnelse: TextAreaInput;
+    };
+    journalføring: {
+        skalJournalføreNotat: boolean;
+        setSkalJournalføreNotat: (skalJournalføreNotat: boolean) => void;
     };
 };
 
@@ -70,6 +75,10 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
         behandlingSkjemaReducer,
         { behandling, sak },
         initialState,
+    );
+
+    const [skalJournalføreNotat, setSkalJournalføreNotat] = useState(
+        behandling.skalJournalføreNotat,
     );
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
@@ -122,6 +131,10 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
                             ref: barnetilleggBegrunnelseRef,
                             getValue: getBarnetilleggBegrunnelse,
                         },
+                    },
+                    journalføring: {
+                        skalJournalføreNotat,
+                        setSkalJournalføreNotat,
                     },
                 }}
             >
