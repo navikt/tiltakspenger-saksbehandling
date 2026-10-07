@@ -2,7 +2,9 @@ import { createContext, ReactNode, useContext } from 'react';
 
 type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
-const featureTogglesDefaultState = {} as const satisfies TogglesRecord;
+const featureTogglesDefaultState = {
+    manueltSattSøknadMottattDatoToggle: false,
+} as const satisfies TogglesRecord;
 
 type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
 
@@ -19,7 +21,11 @@ export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const isLocal = !deployEnv;
 
-    return <Context.Provider value={{}}>{children}</Context.Provider>;
+    return (
+        <Context.Provider value={{ manueltSattSøknadMottattDatoToggle: !isProd }}>
+            {children}
+        </Context.Provider>
+    );
 };
 
 export const useFeatureToggles = () => {

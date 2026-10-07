@@ -16,6 +16,8 @@ import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/søknad/manuell-søk
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './ManuellSøknadSide.module.css';
+import { ManueltSattSøknadMottattDato } from '~/lib/søknad/manuell-søknad/ManueltSattSøknadMottattDato';
+import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 
 type Props = {
     fnrFraPersonopplysninger?: string;
@@ -24,6 +26,7 @@ type Props = {
 export const ManuellSøknadSide = ({ fnrFraPersonopplysninger }: Props) => {
     const { sakId } = useSak().sak;
     const { onSubmit, opprettSøknadLaster, opprettSøknadError } = useManuellSøknadForm();
+    const { manueltSattSøknadMottattDatoToggle } = useFeatureToggles();
 
     return (
         <form onSubmit={onSubmit}>
@@ -36,6 +39,9 @@ export const ManuellSøknadSide = ({ fnrFraPersonopplysninger }: Props) => {
                     <JournalpostIdForm fnrFraPersonopplysninger={fnrFraPersonopplysninger} />
 
                     <ManuellSøknadTypeSelect />
+
+                    {manueltSattSøknadMottattDatoToggle && <ManueltSattSøknadMottattDato />}
+
                     <OverførtFraArenaSpørsmål />
 
                     <Periodevelger

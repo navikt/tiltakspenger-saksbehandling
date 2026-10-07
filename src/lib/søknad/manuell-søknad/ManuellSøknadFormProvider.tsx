@@ -72,6 +72,7 @@ export const useManuellSøknadForm = () => {
 const initialSøknadValues: ManueltRegistrertSøknad = {
     journalpostId: '',
     manueltSattSøknadsperiode: undefined,
+    manueltSattSøknadMottattDato: undefined,
     antallVedlegg: 0,
     søknadstype: undefined,
     overfortFraArena: undefined,
