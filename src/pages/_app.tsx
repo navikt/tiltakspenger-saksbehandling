@@ -67,7 +67,18 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                                 >
                                     <InternDekoratør />
                                     <main className={style.main}>
-                                        {getLayout(<Component {...pageProps} />)}
+                                        {pageProps.ingenTilgang ? (
+                                            <Box padding={'space-32'}>
+                                                <Infokort
+                                                    variant={'advarsel'}
+                                                    header={'Ingen tilgang'}
+                                                >
+                                                    <BodyShort>{pageProps.ingenTilgang}</BodyShort>
+                                                </Infokort>
+                                            </Box>
+                                        ) : (
+                                            getLayout(<Component {...pageProps} />)
+                                        )}
                                     </main>
                                 </SWRConfig>
                             </NotificationProvider>

@@ -7,6 +7,7 @@ import {
 import { logger } from '@navikt/next-logger';
 import { validerToken } from '~/auth/tokens';
 import { fetchSaksbehandler } from '~/utils/fetch/fetch-server';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
@@ -51,7 +52,13 @@ export const pageWithAuthentication = (
                 logger.error(`Feil under henting av saksbehandler - ${e}`);
                 return null;
             }),
-            getServerSideProps(context),
+            getServerSideProps(context).catch((e) => {
+                if (e instanceof FetcherError && e.status === 403) {
+                    context.res.statusCode = 403;
+                    return { props: { ingenTilgang: e.message } };
+                }
+                throw e;
+            }),
         ]);
 
         return {
