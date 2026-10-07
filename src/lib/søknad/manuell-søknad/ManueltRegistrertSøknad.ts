@@ -6,6 +6,7 @@ import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, PeriodeSpm } from '../søknadType
 export type ManueltRegistrertSøknad = {
     journalpostId: string;
     manueltSattSøknadsperiode?: Periode;
+    manueltSattSøknadMottattDato?: string;
     manueltSattTiltak?: string;
     søknadstype?: SøknadstypeManueltRegistrertSøknad;
     overfortFraArena?: ManuellSøknadJaNeiSpm;
