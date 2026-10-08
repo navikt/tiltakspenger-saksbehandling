@@ -135,6 +135,7 @@ const lagRammebehandling = (): RevurderingStans => ({
     skalSendeVedtaksbrev: false,
     skalJournalføreNotat: false,
     gyldigeKommandoer: [],
+    manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
     valgtHjemmelHarIkkeRettighet: null,
     harValgtStansFraFørsteDagSomGirRett: null,

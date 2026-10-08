@@ -19,7 +19,7 @@ export const RevurderingInnvilgelseVedtak = () => {
     // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
     const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
 
-    const { automatiskOpprettetGrunn } = behandling;
+    const { automatiskOpprettetGrunn, manueltBehandlesGrunner } = behandling;
 
     return (
         <>
@@ -31,6 +31,7 @@ export const RevurderingInnvilgelseVedtak = () => {
                 <>
                     <RevurderingAutomatiskOpprettetGrunn
                         automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                        manueltBehandlesGrunner={manueltBehandlesGrunner}
                     />
                     <Separator />
                 </>
