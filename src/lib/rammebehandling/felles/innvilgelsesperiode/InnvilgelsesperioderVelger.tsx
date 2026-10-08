@@ -13,7 +13,7 @@ import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/inn
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { erHelg, formaterPeriode } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
@@ -157,8 +157,6 @@ const InnvilgelsesperiodeVelgerFull = ({
 
     const harFeil = !harValgtGyldigTiltak || harValgtUgyldigPeriodeForOmgjøring;
 
-    const innvilgelsesperiodeStarterIHelgen = periode?.fraOgMed && erHelg(periode.fraOgMed);
-
     return (
         <VStack gap={'space-8'} className={classNames(harFeil && style.feilOmriss)}>
             <HStack gap={'space-12'} align={'end'}>
@@ -244,20 +242,6 @@ const InnvilgelsesperiodeVelgerFull = ({
                     </Button>
                 )}
             </HStack>
-
-            {/*
-                Varselet vises selv om de foregående dagene i meldeperioden til innvilgelsesperioden
-                er innvilget. Her kunne man gjort varselet smartere ved å faktisk sjekke at de eneste
-                dagene med innvilgelse for en meldeperiode er helgedager. Det er valgt å holde det
-                holde sjekken enkel ved å bare sjekke om første dag i innvilgelsesperioden er en helgedag,
-                da dette uansett prøver å tette hullene i skru-på-helg toggelen.
-                https://nav-it.slack.com/archives/C02CPSB47JL/p1770989740471839
-            */}
-            {innvilgelsesperiodeStarterIHelgen && (
-                <Infokort variant={'advarsel'} size={'small'}>
-                    {`Innvilgelsesperioden starter i en helg. Husk å "skru på meldekort helg" i personoversikten hvis bruker skal kunne melde helg i meldekortet.`}
-                </Infokort>
-            )}
 
             {!harValgtGyldigTiltak && (
                 <InlineMessage status={'error'} size={'small'}>
