@@ -62,7 +62,7 @@ export interface RammebehandlingBase {
     skalJournalføreNotat: boolean;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
     /** Hvorfor en automatisk behandling ble overlatt til en saksbehandler. */
-    manueltBehandlesGrunner: ManueltBehandlesGrunn[];
+    manueltBehandlesGrunner?: ManueltBehandlesGrunn[];
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

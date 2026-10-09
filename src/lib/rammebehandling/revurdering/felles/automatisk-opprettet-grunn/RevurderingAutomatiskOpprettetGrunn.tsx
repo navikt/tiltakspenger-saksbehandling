@@ -12,7 +12,7 @@ import { ManueltBehandlesGrunnerInfo } from '~/lib/rammebehandling/felles/manuel
 
 type Props = {
     automatiskOpprettetGrunn: AutomatiskOpprettetGrunn;
-    manueltBehandlesGrunner: ManueltBehandlesGrunn[];
+    manueltBehandlesGrunner?: ManueltBehandlesGrunn[];
 };
 
 export const RevurderingAutomatiskOpprettetGrunn = ({
@@ -35,7 +35,9 @@ export const RevurderingAutomatiskOpprettetGrunn = ({
                         <List.Item key={endring.type}>{endringTekst(endring)}</List.Item>
                     ))}
                 </List>
-                <ManueltBehandlesGrunnerInfo grunner={manueltBehandlesGrunner} />
+                {manueltBehandlesGrunner && (
+                    <ManueltBehandlesGrunnerInfo grunner={manueltBehandlesGrunner} />
+                )}
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );
