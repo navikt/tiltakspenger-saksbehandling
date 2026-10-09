@@ -11,7 +11,8 @@ import { useRevurderingBehandling } from '~/lib/rammebehandling/context/Behandli
 import style from './RevurderingStansVedtak.module.css';
 
 export const RevurderingStansVedtak = () => {
-    const { automatiskOpprettetGrunn } = useRevurderingBehandling().behandling;
+    const { automatiskOpprettetGrunn, manueltBehandlesGrunner } =
+        useRevurderingBehandling().behandling;
 
     return (
         <>
@@ -22,6 +23,7 @@ export const RevurderingStansVedtak = () => {
                 <>
                     <RevurderingAutomatiskOpprettetGrunn
                         automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                        manueltBehandlesGrunner={manueltBehandlesGrunner}
                     />
                     <Separator />
                 </>

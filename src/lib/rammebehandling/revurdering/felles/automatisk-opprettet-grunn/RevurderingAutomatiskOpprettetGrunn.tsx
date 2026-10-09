@@ -7,12 +7,18 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Heading, List } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';
+import { ManueltBehandlesGrunn } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { ManueltBehandlesGrunnerInfo } from '~/lib/rammebehandling/felles/manuelt-behandles-grunner/ManueltBehandlesGrunnerInfo';
 
 type Props = {
     automatiskOpprettetGrunn: AutomatiskOpprettetGrunn;
+    manueltBehandlesGrunner: ManueltBehandlesGrunn[];
 };
 
-export const RevurderingAutomatiskOpprettetGrunn = ({ automatiskOpprettetGrunn }: Props) => {
+export const RevurderingAutomatiskOpprettetGrunn = ({
+    automatiskOpprettetGrunn,
+    manueltBehandlesGrunner,
+}: Props) => {
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre gap={'space-16'}>
@@ -29,6 +35,7 @@ export const RevurderingAutomatiskOpprettetGrunn = ({ automatiskOpprettetGrunn }
                         <List.Item key={endring.type}>{endringTekst(endring)}</List.Item>
                     ))}
                 </List>
+                <ManueltBehandlesGrunnerInfo grunner={manueltBehandlesGrunner} />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );
