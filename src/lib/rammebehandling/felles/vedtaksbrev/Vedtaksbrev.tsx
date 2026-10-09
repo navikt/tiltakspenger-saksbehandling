@@ -8,10 +8,9 @@ import { BrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbre
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 import style from './Vedtaksbrev.module.css';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 type Props = {
     header: ReactNode;
@@ -23,8 +22,6 @@ type Props = {
 
 export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly }: Props) => {
     const { behandling } = useBehandling();
-    const { fritekstTilVedtaksbrev } = behandling;
-
     const { textAreas, erReadonly } = useBehandlingSkjema();
 
     return (
@@ -37,7 +34,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly
                 <FritekstInput
                     label={'Tekst til vedtaksbrev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
-                    defaultValue={sladdbarTekstEllerNull(fritekstTilVedtaksbrev) ?? ''}
+                    defaultValue={textAreas.brevtekst.getValue() ?? ''}
                     readOnly={readonly ?? erReadonly}
                     ref={textAreas.brevtekst.ref}
                 />

@@ -1,12 +1,4 @@
-import {
-    createContext,
-    Dispatch,
-    PropsWithChildren,
-    useCallback,
-    useContext,
-    useReducer,
-    useRef,
-} from 'react';
+import { createContext, Dispatch, PropsWithChildren, useContext, useReducer } from 'react';
 import {
     MeldekortbehandlingSkjemaActions,
     MeldekortbehandlingSkjemaContext,
@@ -22,11 +14,10 @@ import {
 } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaReducer';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
-import { getTextAreaRefValue } from '~/lib/_felles/fritekst/fritekstUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
-import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
+import { useFritekstInput } from '~/lib/_felles/fritekst/useFritekstInput';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 
@@ -54,25 +45,8 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
         meldekortbehandlingSkjemaInitialState,
     );
 
-    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
-    const brevtekstRef = useRef<HTMLTextAreaElement>(null);
-
-    const getBegrunnelse = useCallback(
-        () =>
-            getTextAreaRefValue(
-                begrunnelseRef,
-                sladdbarTekstEllerNull(meldekortbehandling.begrunnelse),
-            ),
-        [meldekortbehandling.begrunnelse],
-    );
-    const getBrevtekst = useCallback(
-        () =>
-            getTextAreaRefValue(
-                brevtekstRef,
-                sladdbarTekstEllerNull(meldekortbehandling.tekstTilVedtaksbrev),
-            ),
-        [meldekortbehandling.tekstTilVedtaksbrev],
-    );
+    const begrunnelse = useFritekstInput(meldekortbehandling.begrunnelse);
+    const brevtekst = useFritekstInput(meldekortbehandling.tekstTilVedtaksbrev);
 
     return (
         <MeldekortbehandlingContext.Provider value={meldekortbehandling}>
@@ -81,14 +55,8 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
                     value={{
                         ...skjema,
                         erReadonly,
-                        begrunnelse: {
-                            ref: begrunnelseRef,
-                            getValue: getBegrunnelse,
-                        },
-                        brevtekst: {
-                            ref: brevtekstRef,
-                            getValue: getBrevtekst,
-                        },
+                        begrunnelse,
+                        brevtekst,
                     }}
                 >
                     <MeldekortbehandlingLagringProvider>

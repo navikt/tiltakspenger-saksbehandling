@@ -2,10 +2,8 @@ import {
     createContext,
     Dispatch,
     PropsWithChildren,
-    useCallback,
     useContext,
     useReducer,
-    useRef,
     useState,
 } from 'react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
@@ -21,13 +19,13 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { getTextAreaRefValue, TextAreaInput } from '~/lib/_felles/fritekst/fritekstUtils';
+import { TextAreaInput } from '~/lib/_felles/fritekst/fritekstUtils';
+import { useFritekstInput } from '~/lib/_felles/fritekst/useFritekstInput';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 
 export type BehandlingSkjemaContextBase<T> = T & {
     erReadonly: boolean;
@@ -81,35 +79,10 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
         behandling.skalJournalføreNotat,
     );
 
-    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
-    const brevtekstRef = useRef<HTMLTextAreaElement>(null);
-    const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
-
-    const getBegrunnelse = useCallback(
-        () =>
-            getTextAreaRefValue(
-                begrunnelseRef,
-                sladdbarTekstEllerNull(behandling.begrunnelseVilkårsvurdering),
-            ),
-        [begrunnelseRef, behandling.begrunnelseVilkårsvurdering],
-    );
-    const getBrevtekst = useCallback(
-        () =>
-            getTextAreaRefValue(
-                brevtekstRef,
-                sladdbarTekstEllerNull(behandling.fritekstTilVedtaksbrev),
-            ),
-        [brevtekstRef, behandling.fritekstTilVedtaksbrev],
-    );
-    const getBarnetilleggBegrunnelse = useCallback(
-        () =>
-            getTextAreaRefValue(
-                barnetilleggBegrunnelseRef,
-                sladdbarTekstEllerNull(
-                    rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg?.begrunnelse,
-                ),
-            ),
-        [barnetilleggBegrunnelseRef, behandling],
+    const begrunnelse = useFritekstInput(behandling.begrunnelseVilkårsvurdering);
+    const brevtekst = useFritekstInput(behandling.fritekstTilVedtaksbrev);
+    const barnetilleggBegrunnelse = useFritekstInput(
+        rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg?.begrunnelse,
     );
 
     return (
@@ -119,18 +92,9 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
                     ...skjema,
                     erReadonly,
                     textAreas: {
-                        begrunnelse: {
-                            ref: begrunnelseRef,
-                            getValue: getBegrunnelse,
-                        },
-                        brevtekst: {
-                            ref: brevtekstRef,
-                            getValue: getBrevtekst,
-                        },
-                        barnetilleggBegrunnelse: {
-                            ref: barnetilleggBegrunnelseRef,
-                            getValue: getBarnetilleggBegrunnelse,
-                        },
+                        begrunnelse,
+                        brevtekst,
+                        barnetilleggBegrunnelse,
                     },
                     journalføring: {
                         skalJournalføreNotat,

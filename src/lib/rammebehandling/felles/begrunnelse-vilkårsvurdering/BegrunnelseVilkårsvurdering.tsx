@@ -5,16 +5,12 @@ import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/Vedta
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
-import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 
 export const BegrunnelseVilkårsvurdering = () => {
-    const { begrunnelseVilkårsvurdering } = useBehandling().behandling;
-
     const { textAreas, erReadonly, journalføring } = useBehandlingSkjema();
     const { begrunnelse } = textAreas;
 
@@ -52,11 +48,7 @@ export const BegrunnelseVilkårsvurdering = () => {
             <VedtakSeksjon.Venstre>
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering'}
-                    defaultValue={
-                        begrunnelse.getValue() ??
-                        sladdbarTekstEllerNull(begrunnelseVilkårsvurdering) ??
-                        ''
-                    }
+                    defaultValue={begrunnelse.getValue() ?? ''}
                     readOnly={erReadonly}
                     ref={begrunnelse.ref}
                 />
