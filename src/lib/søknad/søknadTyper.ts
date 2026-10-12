@@ -27,6 +27,7 @@ interface SøknadBase {
     behandlingsarsak: Nullable<Behandlingsårsak>;
     opprettet: string;
     tidsstempelHosOss: string;
+    mottatt: string;
     antallVedlegg: number;
     /** Historikken over avbrytelser og gjenåpninger av søknaden, i kronologisk rekkefølge. */
     avbrutt: Søknadshendelse[];

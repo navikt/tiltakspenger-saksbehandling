@@ -157,6 +157,7 @@ const lagSøknad = (): Søknad => {
         behandlingsarsak: null,
         opprettet: '2025-03-01T10:00:00',
         tidsstempelHosOss: '2025-03-01T10:00:00',
+        mottatt: '2025-03-01T10:00:00',
         antallVedlegg: 0,
         avbrutt: [],
         kanInnvilges: false,
