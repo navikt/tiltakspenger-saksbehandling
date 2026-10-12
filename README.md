@@ -50,6 +50,8 @@ Ved bruk av fake tokens, gå rett på http://localhost:3000.
 
 Du kan bytte fake-token/fake-bruker ved å sette i .env.local `LOKAL_FAKE_TOKEN=<token>`
 Bruk `TokenMcTokenface` eller `TokenMcTokenface2` for vanlig saksbehandler og beslutter lokalt. `Veileder` gir veilederinnsyn, mens `Utvikler` gir utviklerrollen med sladdede personopplysninger.
+`TokenMcTokenface` og `TokenMcTokenface2` har tilgang til fortrolig og strengt fortrolig adresse.
+`Veileder` og `Utvikler` avvises for fnr som starter på `2` (fortrolig), `3` (strengt fortrolig) eller `4` (strengt fortrolig i utlandet), så bruk dem for å teste manglende tilgang.
 
 Dette kan være nyttig når du kjapt vil bytte mellom en saksbehandler og beslutter lokalt.
 
