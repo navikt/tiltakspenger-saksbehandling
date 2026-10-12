@@ -140,7 +140,7 @@ const propsForRad = (
 
     switch (åpenBehandling.type) {
         case ÅpenBehandlingType.SØKNAD: {
-            const { opprettet, tidsstempelHosOss, mottatt } = hentSøknad(sak, åpenBehandling.id);
+            const { opprettet, mottatt } = hentSøknad(sak, åpenBehandling.id);
 
             return {
                 typeTekst,
@@ -150,7 +150,7 @@ const propsForRad = (
                         {'Søknad'}
                     </Tag>
                 ),
-                kravtidspunkt: formaterTidspunkt(tidsstempelHosOss || mottatt),
+                kravtidspunkt: formaterTidspunkt(mottatt),
                 meny: (
                     <InlineMessage status={'info'} size={'small'}>
                         {'Søknadsbehandling opprettes automatisk'}
@@ -175,7 +175,7 @@ const propsForRad = (
                 periodeTekst: vedtaksperiode ? formaterPeriode(vedtaksperiode) : undefined,
                 kravtidspunkt:
                     rammebehandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-                        ? formaterTidspunkt(rammebehandling.søknad.tidsstempelHosOss)
+                        ? formaterTidspunkt(rammebehandling.søknad.mottatt)
                         : undefined,
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
