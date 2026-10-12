@@ -36,10 +36,6 @@ export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) =
                         <RammebehandlingGodkjenn />
                     </HStack>
                 )}
-
-                <InlineMessage status={'info'} size={'small'}>
-                    {'Handlinger er flyttet til menyen, øverst til venstre'}
-                </InlineMessage>
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Høyre>
