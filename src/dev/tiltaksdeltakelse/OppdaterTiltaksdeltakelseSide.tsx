@@ -76,6 +76,9 @@ const tilTall = (verdi: string): Nullable<number> => {
     return trimmet ? Number(trimmet) : null;
 };
 
+// Uten maks-dato slutter årsvelgeren i datovelgeren ved utgangen av inneværende år.
+const senesteVelgbareDato = dayjs().add(2, 'year').endOf('year').toDate();
+
 const erUtenforIntervall = (tall: Nullable<number>, min: number, maks: number) =>
     tall !== null && (Number.isNaN(tall) || tall < min || tall > maks);
 
@@ -190,6 +193,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                                     label="Fra og med"
                                     size="small"
                                     dropdownCaption
+                                    maxDate={senesteVelgbareDato}
                                     defaultSelected={field.value}
                                     selected={field.value}
                                     onDateChange={field.onChange}
@@ -205,6 +209,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                                     label="Til og med"
                                     size="small"
                                     dropdownCaption
+                                    maxDate={senesteVelgbareDato}
                                     defaultSelected={field.value}
                                     selected={field.value}
                                     onDateChange={field.onChange}

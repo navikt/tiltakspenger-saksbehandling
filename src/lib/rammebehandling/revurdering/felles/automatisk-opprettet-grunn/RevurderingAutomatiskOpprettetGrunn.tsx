@@ -5,7 +5,7 @@ import {
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
-import { Heading, List } from '@navikt/ds-react';
+import { List } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';
 import { ManueltBehandlesGrunn } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ManueltBehandlesGrunnerInfo } from '~/lib/rammebehandling/felles/manuelt-behandles-grunner/ManueltBehandlesGrunnerInfo';
@@ -22,19 +22,20 @@ export const RevurderingAutomatiskOpprettetGrunn = ({
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre gap={'space-16'}>
-                <Heading size={'small'} level={'3'}>
-                    {'Automatisk opprettet revurdering'}
-                </Heading>
-                <Infokort variant={'info'} size={'small'}>
+                <Infokort
+                    variant={'info'}
+                    size={'small'}
+                    header={'Automatisk opprettet revurdering'}
+                >
                     {
-                        'Revurderingen ble automatisk opprettet på grunn av endringer i tiltaksdeltakelsen'
+                        'Revurderingen ble automatisk opprettet på grunn av endringer i tiltaksdeltakelsen:'
                     }
+                    <List size={'small'}>
+                        {automatiskOpprettetGrunn.endringer.map((endring) => (
+                            <List.Item key={endring.type}>{endringTekst(endring)}</List.Item>
+                        ))}
+                    </List>
                 </Infokort>
-                <List>
-                    {automatiskOpprettetGrunn.endringer.map((endring) => (
-                        <List.Item key={endring.type}>{endringTekst(endring)}</List.Item>
-                    ))}
-                </List>
                 {manueltBehandlesGrunner && (
                     <ManueltBehandlesGrunnerInfo grunner={manueltBehandlesGrunner} />
                 )}

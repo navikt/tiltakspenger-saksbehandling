@@ -1,4 +1,3 @@
-import { BodyShort } from '@navikt/ds-react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { ManueltBehandlesGrunn } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -14,9 +13,13 @@ export const ManueltBehandlesGrunnerInfo = ({ grunner, className }: Props) => {
     }
 
     return (
-        <Infokort variant={'advarsel'} size="small" className={className}>
-            <BodyShort spacing={true}>{'Kunne ikke behandle saken automatisk:'}</BodyShort>
-            <TekstListe tekster={grunner.map((grunn) => tekster[grunn])} />
+        <Infokort
+            header={'Kunne ikke behandle saken automatisk'}
+            variant={'advarsel'}
+            size={'small'}
+            className={className}
+        >
+            <TekstListe size={'small'} tekster={grunner.map((grunn) => tekster[grunn])} />
         </Infokort>
     );
 };
@@ -61,11 +64,20 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     STANS_SLUTTDATO_ER_IKKE_PASSERT: 'Sluttdatoen for tiltaksdeltakelsen er ikke passert ennå',
     STANS_INGEN_INNVILGEDE_DAGER_ETTER_SLUTTDATO:
         'Det er ingen innvilgede dager for tiltaksdeltakelsen etter sluttdatoen',
+    STANS_INGEN_INNVILGEDE_DAGER_ETTER_SISTE_UTBETALING:
+        'Alle innvilgede dager for tiltaksdeltakelsen etter sluttdatoen er allerede utbetalt',
     STANS_ANDRE_DELTAKELSER_INNVILGET_ETTER_SLUTTDATO:
         'Bruker har andre tiltaksdeltakelser som er innvilget etter sluttdatoen',
-    STANS_UTBETALING_KAN_IKKE_IVERKSETTES: 'Utbetalingen for stansen kan ikke iverksettes',
-    STANS_KAN_IKKE_SENDES_TIL_BESLUTNING:
-        'Stansen kunne ikke fylles ut eller sendes til beslutning automatisk',
+    STANS_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for stansen mangler simulering',
+    STANS_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
+        'Simuleringen av stansen gir feilutbetaling, som ikke støttes for stans',
+    STANS_UTBETALING_STOTTER_IKKE_JUSTERING:
+        'Simuleringen av stansen gir justering, som ikke støttes for stans',
+    STANS_UTBETALING_KONTROLLSIMULERING_HAR_ENDRINGER:
+        'Kontrollsimuleringen av stansen avviker fra simuleringen',
+    STANS_KAN_IKKE_FYLLES_UT: 'Stansen kunne ikke fylles ut automatisk',
+    STANS_UGYLDIGE_MELDEPERIODER_FOR_HELG: 'Stansen gir ugyldige meldeperioder for helg',
+    STANS_KAN_IKKE_SENDES_TIL_BESLUTNING: 'Stansen kunne ikke sendes til beslutning automatisk',
 
     ANNET_APEN_BEHANDLING: 'Det finnes en annen åpen behandling på saken',
     ANNET_VEDTAK_FOR_SAMME_PERIODE: 'Det finnes et annet vedtak som overlapper med søknadsperioden',
