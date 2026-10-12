@@ -53,6 +53,11 @@ kun for testkode og importeres aldri fra appkoden).
 
 Sladdebanneret øverst på siden styres direkte av feltet `sladdes` fra saksbehandler-endepunktet.
 
+## Dev-siden (`/dev`)
+
+- Siden kaller backendens lokale dev-ruter (`/dev/...`) og er bare tilgjengelig når `NEXT_PUBLIC_DEVROUTES=true`.
+- Komponentene ligger i `src/dev/` og lastes kun via `next/dynamic` bak `process.env.NEXT_PUBLIC_DEVROUTES === 'true'` i page-filene under `src/pages/dev/`. Siden variabelen inlines ved bygg, blir de ikke med i prod-bygget. Sjekken må stå inline i hver page-fil (ikke importert), og `~/dev` skal ikke importeres andre steder, ellers havner koden i bygget igjen.
+
 ## Lokal testdata
 
 - For å teste mot ekte behandlinger lokalt kan du generere testdata med scriptene i [`scripts/testdata/`](scripts/testdata/). Kjør `./scripts/testdata/opprett-alt-digital.sh` (digital søknad) eller `./scripts/testdata/opprett-alt-papir.sh` (papirsøknad) for å opprette en sak med innvilget vedtak, en meldekortbehandling og en klagebehandling. Scriptene skriver ut et saksnummer du kan søke opp i frontend.

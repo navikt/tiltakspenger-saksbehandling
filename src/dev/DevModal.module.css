@@ -1,0 +1,7 @@
+/* Skjemaet ligger mellom Dialog.Popup og header/body/footer. Uten dette vokser det forbi
+   popupens maks-høyde og blir kuttet, i stedet for at Dialog.Body scroller. */
+.form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
