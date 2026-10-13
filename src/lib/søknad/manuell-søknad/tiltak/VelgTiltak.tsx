@@ -7,7 +7,7 @@ import {
     ManueltRegistrertSøknad,
     ManuellSøknadTiltak,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
-import { BodyShort, Button, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, List, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
@@ -154,25 +154,14 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                                     <BodyShort weight={'semibold'}>
                                         {'Tiltak som kan frata rett til tiltakspenger'}
                                     </BodyShort>
-                                    <BodyShort size={'small'}>
-                                        {
-                                            'Disse er registrert på bruker, men kan ikke velges fordi de kan frata rett til tiltakspenger.'
-                                        }
-                                    </BodyShort>
-                                    <VStack gap="space-4">
+                                    <List>
                                         {tiltakSomFratarRett.map((tiltak) => (
-                                            <HStack
-                                                key={tiltak.eksternDeltakelseId}
-                                                gap="space-8"
-                                                align="center"
-                                            >
-                                                <BodyShort>
-                                                    {formatLabelForTiltakValg(tiltak)}
-                                                </BodyShort>
+                                            <List.Item key={tiltak.eksternDeltakelseId}>
+                                                {`${formatLabelForTiltakValg(tiltak)} `}
                                                 <GirIkkeRettTag />
-                                            </HStack>
+                                            </List.Item>
                                         ))}
-                                    </VStack>
+                                    </List>
                                 </VStack>
                             )}
                         </>
