@@ -28,8 +28,13 @@ export const RammebehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
 
     const { saksopplysninger, type, attesteringer } = behandling;
-    const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
-        saksopplysninger;
+    const {
+        ytelser,
+        tiltakspengevedtakFraArena,
+        tiltaksdeltagelse,
+        tiltaksdeltakelserSomFratarRett,
+        fødselsdato,
+    } = saksopplysninger;
 
     return (
         <VStack className={style.container}>
@@ -62,6 +67,7 @@ export const RammebehandlingSaksopplysninger = () => {
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 <BehandlingTiltakOpplysninger
                     tiltaksdeltakelser={tiltaksdeltagelse}
+                    tiltaksdeltakelserSomFratarRett={tiltaksdeltakelserSomFratarRett}
                     vurderingsperiode={saksopplysninger.periode}
                 />
             </OpplysningerSeksjon>

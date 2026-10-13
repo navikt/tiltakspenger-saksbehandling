@@ -277,6 +277,25 @@ Under er full klikksti i frontend. Den speiler curl-stegene over.
 13. Fyll ut klageskjemaet (klager er part, klagefrist overholdt, klagen er signert,
     innsendingsdato, innsendingskilde) og lagre.
 
+### F. Legge til lønnstilskudd (tiltak som fratar rett)
+
+Lønnstilskudd fratar rett til tiltakspenger, og vises i saksopplysningene og i valg
+av tiltak for papirsøknad.
+Slik legger du ett til en sak lokalt:
+
+14. Gå til **Opprett/oppdater tiltaksdeltakelse** på `/dev` (eller `/dev/deltakelse`).
+15. Fyll inn **Sak-ID**, velg et lønnstilskudd under **Tiltakstype** og sett datoer som
+    overlapper behandlingen. La ekstern ID være tom, så genereres den.
+16. Oppdater saksopplysningene i behandlingen. Lønnstilskuddet vises med merket «Fratar
+    rett til tiltakspenger».
+
+Det samme med curl:
+
+```bash
+curl -sf -X POST "$B/dev/tiltaksdeltakelse" -H "$T1" -H "$CT" \
+  -d '{"sakId":"'"$SAK_ID"'","tiltakskode":"MIDLONTIL","fraOgMed":"2025-04-01","tilOgMed":"2025-04-10"}'
+```
+
 ---
 
 ## Forhåndsvise PDF-er (vedtaksbrev, meldekortbrev, klagebrev)

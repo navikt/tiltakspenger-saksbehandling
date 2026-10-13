@@ -7,14 +7,19 @@ import {
     ManueltRegistrertSøknad,
     ManuellSøknadTiltak,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
-import { Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
-import { useHentTiltaksdeltakelser } from '~/lib/søknad/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
+import {
+    girRettTilTiltakspenger,
+    TiltaksdeltakelseFraRegister,
+    useHentTiltaksdeltakelser,
+} from '~/lib/søknad/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 import { tiltakDeltakerstatusTekst } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { FratarRettTag } from '~/lib/rammebehandling/saksopplysninger/tiltak/FratarRettTag';
 
 type Props = {
     sakId: SakId;
@@ -33,7 +38,9 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
 
     const [skalHenteTiltak, setSkalHenteTiltak] = React.useState(false);
 
-    const formatLabelForTiltakValg = (tiltak: ManuellSøknadTiltak) => {
+    const formatLabelForTiltakValg = (
+        tiltak: ManuellSøknadTiltak | TiltaksdeltakelseFraRegister,
+    ) => {
         const periodeTekst =
             tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
                 ? `${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)}`
@@ -55,8 +62,9 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
         error,
     } = useHentTiltaksdeltakelser(sakId, fraOgMed, tilOgMed, skalHenteTiltak);
 
-    const muligeTiltak: ManuellSøknadTiltak[] =
-        skalHenteTiltak && tiltaksdeltakelser ? tiltaksdeltakelser : [];
+    const hentedeTiltak = skalHenteTiltak && tiltaksdeltakelser ? tiltaksdeltakelser : [];
+    const muligeTiltak = hentedeTiltak.filter(girRettTilTiltakspenger);
+    const tiltakSomFratarRett = hentedeTiltak.filter((tiltak) => !girRettTilTiltakspenger(tiltak));
 
     return (
         <div className={classNames(styles.informasjonsInnhentingBlokk, styles.blokk)}>
@@ -110,8 +118,8 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                         <>
                             {muligeTiltak.length === 0 && (
                                 <Infokort variant={'advarsel'}>
-                                    Fant ingen tiltaksdeltakelser for den angitte perioden. Du kan
-                                    skrive inn tiltaket manuelt under.
+                                    Fant ingen tiltaksdeltakelser som gir rett til tiltakspenger for
+                                    den angitte perioden. Du kan skrive inn tiltaket manuelt under.
                                 </Infokort>
                             )}
                             {muligeTiltak.length > 0 && (
@@ -139,6 +147,32 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                                             </Radio>
                                         ))}
                                     </RadioGroup>
+                                </VStack>
+                            )}
+                            {tiltakSomFratarRett.length > 0 && (
+                                <VStack gap="space-8">
+                                    <BodyShort weight={'semibold'}>
+                                        {'Tiltak som fratar rett til tiltakspenger'}
+                                    </BodyShort>
+                                    <BodyShort size={'small'}>
+                                        {
+                                            'Disse er registrert på bruker, men kan ikke velges fordi de fratar rett til tiltakspenger.'
+                                        }
+                                    </BodyShort>
+                                    <VStack gap="space-4">
+                                        {tiltakSomFratarRett.map((tiltak) => (
+                                            <HStack
+                                                key={tiltak.eksternDeltakelseId}
+                                                gap="space-8"
+                                                align="center"
+                                            >
+                                                <BodyShort>
+                                                    {formatLabelForTiltakValg(tiltak)}
+                                                </BodyShort>
+                                                <FratarRettTag />
+                                            </HStack>
+                                        ))}
+                                    </VStack>
                                 </VStack>
                             )}
                         </>
