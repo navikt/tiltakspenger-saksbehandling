@@ -27,7 +27,7 @@ import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkj
 import { erRammebehandlingInnvilgelseResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 import style from './SøknadOpplysningerBarn.module.css';
-import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
+import { formaterSøknadsspørsmålSvar, oppholdsstedTekst } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -135,7 +135,15 @@ type BarnProps = {
 };
 
 const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
-    const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØSSpm, kilde } = barn;
+    const {
+        fornavn,
+        mellomnavn,
+        etternavn,
+        fødselsdato,
+        oppholderSegIEØSSpm,
+        oppholdssted,
+        kilde,
+    } = barn;
 
     const navn = [fornavn, mellomnavn, etternavn]
         .map((navn) => sladdbarTekst(navn))
@@ -192,11 +200,19 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
                     visVarsel
                 />
             )}
-            <BehandlingSaksopplysning
-                navn={'Oppholder seg i Norge/EØS?'}
-                verdi={oppholderSegIEØSSpm.svar}
-                visVarsel={oppholderSegIEØSSpm.svar !== 'JA'}
-            />
+            {oppholdssted ? (
+                <BehandlingSaksopplysning
+                    navn={'Oppholdssted'}
+                    verdi={oppholdsstedTekst[oppholdssted]}
+                    visVarsel={oppholdssted === 'IKKE_EØS_LAND'}
+                />
+            ) : (
+                <BehandlingSaksopplysning
+                    navn={'Oppholder seg i Norge/EØS?'}
+                    verdi={formaterSøknadsspørsmålSvar(oppholderSegIEØSSpm.svar)}
+                    visVarsel={oppholderSegIEØSSpm.svar !== 'JA'}
+                />
+            )}
             <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} />
 
             {(fortrolig || strengtFortrolig || strengtFortroligUtland) && (

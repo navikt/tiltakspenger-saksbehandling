@@ -10,6 +10,7 @@ import type {
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { LeggTilBarnManuelt } from '~/lib/søknad/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
+import { OppholdsstedSpørsmål } from '~/lib/søknad/manuell-søknad/OppholdsstedSpørsmål';
 import { useHentPersonopplysningerBarn } from '~/lib/søknad/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { hentVerdi } from '~/utils/sladdetVerdi';
 import { v4 as uuidv4 } from 'uuid';
@@ -144,9 +145,9 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
                                     />
                                     {barnetilleggPdlWatch?.[index]?.erSøktBarnetilleggFor?.svar ===
                                         'JA' && (
-                                        <JaNeiSpørsmål
-                                            name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs.svar`}
-                                            legend="Oppholder seg i EØS-land i tiltaksperioden"
+                                        <OppholdsstedSpørsmål
+                                            name={`svar.barnetilleggPdl.${index}.oppholdssted.svar`}
+                                            legend="Oppholdssted i tiltaksperioden"
                                         />
                                     )}
                                 </div>

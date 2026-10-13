@@ -1,5 +1,6 @@
-import { Behandlingsårsak, JaNeiSvar, Søknadstype } from '~/lib/søknad/søknadTyper';
+import { Behandlingsårsak, JaNeiSvar, Oppholdssted, Søknadstype } from '~/lib/søknad/søknadTyper';
 import {
+    ManuellSøknadOppholdsstedSvar,
     SøknadBehandlingsårsakManueltRegistrertSøknad,
     SøknadstypeManueltRegistrertSøknad,
 } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
@@ -20,6 +21,17 @@ export const søknadBehandlingsårsakTekst: Record<
     SOKNADSBEHANDLING_FRA_ARENA: 'Søknadsbehandling fra Arena',
     OVERLAPPENDE_TILTAK_I_ARENA: 'Overlappende tiltak i Arena',
     ANNET: 'Annet',
+} as const;
+
+export const oppholdsstedTekst: Record<Oppholdssted, string> = {
+    NORGE: 'Norge',
+    ANNET_EØS_LAND: 'Annet EØS-land',
+    IKKE_EØS_LAND: 'Land utenfor EØS',
+} as const;
+
+export const manuellSøknadOppholdsstedSvarTekst: Record<ManuellSøknadOppholdsstedSvar, string> = {
+    ...oppholdsstedTekst,
+    IKKE_BESVART: 'Ikke besvart',
 } as const;
 
 const jaNeiSvarTekst: Record<JaNeiSvar, string> = {

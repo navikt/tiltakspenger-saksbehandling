@@ -27,6 +27,7 @@ const barnSomBlir16FørPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -39,6 +40,7 @@ const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'NEI',
     },
+    oppholdssted: 'IKKE_EØS_LAND',
     fnr: ikkeSladdet(null),
 };
 
@@ -51,6 +53,7 @@ const barnSomBlir16TidligIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -63,6 +66,7 @@ const barnSomBlir16MidtIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -75,6 +79,7 @@ const barnSomBlir16SentIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -87,6 +92,7 @@ const barnSomErUnder16HelePerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -99,6 +105,7 @@ const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -111,6 +118,7 @@ const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 
@@ -123,6 +131,7 @@ const barnSomBlirFødtSentIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    oppholdssted: null,
     fnr: ikkeSladdet(null),
 };
 

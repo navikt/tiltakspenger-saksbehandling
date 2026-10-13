@@ -5,7 +5,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Controller, FieldPath, useFormContext, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
-import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
+import { OppholdsstedSpørsmål } from '~/lib/søknad/manuell-søknad/OppholdsstedSpørsmål';
 import type {
     ManuellSøknadBarn,
     ManueltRegistrertSøknad,
@@ -19,7 +19,7 @@ const TOM_BARN_KLADD: ManuellSøknadBarn = {
     etternavn: '',
     fødselsdato: '',
     erSøktBarnetilleggFor: undefined,
-    oppholdInnenforEøs: undefined,
+    oppholdssted: undefined,
     manueltRegistrertBarnAntallVedlegg: undefined,
 };
 
@@ -40,12 +40,12 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
 
     const fornavn = 'svar.barnetilleggKladd.fornavn';
     const etternavn = 'svar.barnetilleggKladd.etternavn';
-    const oppholdInnenforEøsSvar = 'svar.barnetilleggKladd.oppholdInnenforEøs.svar';
+    const oppholdsstedSvar = 'svar.barnetilleggKladd.oppholdssted.svar';
     const manueltBarnAntallVedlegg = 'svar.barnetilleggKladd.manueltRegistrertBarnAntallVedlegg';
     const fødselsdato = 'svar.barnetilleggKladd.fødselsdato';
     const fornavnWatch = useWatch({ name: fornavn });
     const etternavnWatch = useWatch({ name: etternavn });
-    const oppholdInnenforEøsWatch = useWatch({ name: oppholdInnenforEøsSvar });
+    const oppholdsstedWatch = useWatch({ name: oppholdsstedSvar });
     const manueltBarnAntallVedleggWatch = useWatch({ name: manueltBarnAntallVedlegg });
     const fødselsdatoWatch = useWatch({ name: fødselsdato });
     const fødselsdatoErFørDagensDato = dayjs(fødselsdatoWatch).isBefore(dagensDato);
@@ -54,7 +54,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         if (fornavnWatch !== undefined && fornavnWatch.trim() !== '') clearErrors(fornavn);
         if (etternavnWatch !== undefined && etternavnWatch.trim() !== '') clearErrors(etternavn);
         if (!fødselsdatoErFørDagensDato) clearErrors(fødselsdato);
-        if (oppholdInnenforEøsWatch !== undefined) clearErrors(oppholdInnenforEøsSvar);
+        if (oppholdsstedWatch !== undefined) clearErrors(oppholdsstedSvar);
         if (manueltBarnAntallVedleggWatch !== undefined && manueltBarnAntallVedleggWatch !== '')
             clearErrors(manueltBarnAntallVedlegg);
     }, [
@@ -63,7 +63,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         etternavnWatch,
         fødselsdatoWatch,
         fødselsdatoErFørDagensDato,
-        oppholdInnenforEøsWatch,
+        oppholdsstedWatch,
         manueltBarnAntallVedleggWatch,
     ]);
 
@@ -92,8 +92,8 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
             validationError(fødselsdato, 'Fødselsdato må være før dagens dato.');
         }
 
-        if (oppholdInnenforEøsWatch === undefined) {
-            validationError(oppholdInnenforEøsSvar, 'Du må velge et svar.');
+        if (oppholdsstedWatch === undefined) {
+            validationError(oppholdsstedSvar, 'Du må velge et svar.');
         }
 
         if (manueltBarnAntallVedleggWatch === undefined || manueltBarnAntallVedleggWatch === '') {
@@ -112,7 +112,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         fornavnWatch,
         etternavnWatch,
         fødselsdatoErFørDagensDato,
-        oppholdInnenforEøsWatch,
+        oppholdsstedWatch,
         manueltBarnAntallVedleggWatch,
         setError,
     ]);
@@ -157,7 +157,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                 fornavn: '',
                                 etternavn: '',
                                 fødselsdato: '',
-                                oppholdInnenforEøs: undefined,
+                                oppholdssted: undefined,
                                 uuid: '',
                             };
                             return (
@@ -200,9 +200,9 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                         }}
                                         error={errors.svar?.barnetilleggKladd?.fødselsdato?.message}
                                     />
-                                    <JaNeiSpørsmål
-                                        name={oppholdInnenforEøsSvar}
-                                        legend="Oppholder seg i EØS-land"
+                                    <OppholdsstedSpørsmål
+                                        name={oppholdsstedSvar}
+                                        legend="Oppholdssted i tiltaksperioden"
                                     />
                                     <TextField
                                         label="Antall vedlegg i Gosys som dokumenterer barnet"

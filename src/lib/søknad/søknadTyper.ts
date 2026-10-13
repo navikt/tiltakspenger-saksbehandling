@@ -74,7 +74,13 @@ export interface TiltaksdeltakelseFraSøknad {
 }
 
 export interface SøknadBarn {
+    /**
+     * Om barnet oppholder seg i Norge eller et annet EØS-land.
+     * Avledet fra `oppholdssted` når det er satt.
+     */
     oppholderSegIEØSSpm: JaNeiSpm;
+    /** Null for søknader fra før søknaden spurte om oppholdssted, og når spørsmålet ikke er besvart. */
+    oppholdssted: Nullable<Oppholdssted>;
     fornavn: SladdbarVerdi<Nullable<string>>;
     mellomnavn: SladdbarVerdi<Nullable<string>>;
     etternavn: SladdbarVerdi<Nullable<string>>;
@@ -87,6 +93,8 @@ export enum SøknadBarnKilde {
     PDL = 'PDL',
     Manuell = 'Manuell',
 }
+
+export type Oppholdssted = 'NORGE' | 'ANNET_EØS_LAND' | 'IKKE_EØS_LAND';
 
 export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
 
