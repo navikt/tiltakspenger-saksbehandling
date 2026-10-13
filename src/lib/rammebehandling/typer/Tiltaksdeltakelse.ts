@@ -50,7 +50,7 @@ export type Tiltaksdeltakelse = {
 };
 
 /**
- * Tiltak som er registrert på bruker, og som fratar rett til tiltakspenger (i første omgang lønnstilskudd).
+ * Tiltak som er registrert på bruker, og som kan frata rett til tiltakspenger (i første omgang lønnstilskudd).
  * Vises kun som informasjon til saksbehandler.
  */
 export type TiltaksdeltakelseSomFratarRett = {

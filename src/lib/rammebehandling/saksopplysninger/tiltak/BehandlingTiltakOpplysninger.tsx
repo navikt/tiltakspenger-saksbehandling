@@ -10,7 +10,7 @@ import { BodyShort, ReadMore, VStack } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { delOppTiltaksdeltakelser } from './tiltaksdeltakelseVisning';
-import { FratarRettTag } from './FratarRettTag';
+import { GirIkkeRettTag } from './GirIkkeRettTag';
 
 type Props = {
     tiltaksdeltakelser: Tiltaksdeltakelse[];
@@ -86,7 +86,7 @@ const TiltakSomFratarRettListe = ({
 
                 return (
                     <VStack key={eksternDeltakelseId} gap={'space-4'} align={'start'}>
-                        <FratarRettTag />
+                        <GirIkkeRettTag />
                         <div>
                             <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
                             <BehandlingSaksopplysning

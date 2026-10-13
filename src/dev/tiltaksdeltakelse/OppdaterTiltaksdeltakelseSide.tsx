@@ -117,10 +117,10 @@ const suksessmelding = ({
     girRett,
 }: LagretTiltaksdeltakelseRespons) => {
     if (opprettet) {
-        const fratarRett = girRett ? '' : ' (fratar rett til tiltakspenger)';
+        const fratarRett = girRett ? '' : ' (kan frata rett til tiltakspenger)';
         return `Tiltaksdeltakelsen ${eksternDeltakelseId}${fratarRett} er opprettet. Oppdater saksopplysningene i behandlingen for å se den.`;
     }
-    // Tiltak som fratar rett lagres ikke som deltaker, så det registreres ingen endring for jobben å plukke opp.
+    // Tiltak som kan frata rett lagres ikke som deltaker, så det registreres ingen endring for jobben å plukke opp.
     return girRett
         ? 'Tiltaksdeltakelsen er oppdatert. Endringen plukkes opp ved neste kjøring av jobben for oppdaterte tiltaksdeltakelser.'
         : 'Tiltaksdeltakelsen er oppdatert. Oppdater saksopplysningene i behandlingen for å se endringen.';
@@ -229,7 +229,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                     <BodyShort size="small">
                         Uten en eksisterende deltakelse opprettes en ny på saken, og da må
                         tiltakstype velges. Ekstern ID genereres dersom den ikke fylles ut. Velg et
-                        lønnstilskudd for å teste tiltak som fratar rett til tiltakspenger. Nye
+                        lønnstilskudd for å teste tiltak som kan frata rett til tiltakspenger. Nye
                         deltakelser vises i behandlingen etter at saksopplysningene er oppdatert, og
                         i valg av tiltak for papirsøknad kun når de har både fra- og til-dato.
                     </BodyShort>

@@ -5,7 +5,7 @@ import { ManuellSøknadTiltak } from '~/lib/søknad/manuell-søknad/ManueltRegis
 import { SakId } from '~/lib/sak/SakTyper';
 
 /**
- * Tiltak som fratar rett til tiltakspenger (i første omgang lønnstilskudd) har ingen typeKode.
+ * Tiltak som kan frata rett til tiltakspenger (i første omgang lønnstilskudd) har ingen typeKode.
  * De vises for saksbehandler, men kan ikke velges.
  */
 export type TiltaksdeltakelseFraRegister = Omit<ManuellSøknadTiltak, 'typeKode'> & {

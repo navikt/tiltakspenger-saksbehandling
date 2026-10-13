@@ -24,7 +24,7 @@ export const tiltakstyperSomGirRett = [
     'UTVIDET_OPPFØLGING_I_OPPLÆRING',
 ] as const;
 
-// Kildens koder for lønnstilskudd, som fratar rett til tiltakspenger (se kodetabellene for FratarRett i tiltakspenger-libs).
+// Kildens koder for lønnstilskudd, som kan frata rett til tiltakspenger (se kodetabellene for FratarRett i tiltakspenger-libs).
 export const lønnstilskuddstyper: { kode: string; navn: string }[] = [
     { kode: 'MIDLONTIL', navn: 'Midlertidig lønnstilskudd' },
     { kode: 'VARLONTIL', navn: 'Varig lønnstilskudd' },

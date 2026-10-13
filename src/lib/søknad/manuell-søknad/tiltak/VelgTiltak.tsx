@@ -19,7 +19,7 @@ import {
 import { SakId } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 import { tiltakDeltakerstatusTekst } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { FratarRettTag } from '~/lib/rammebehandling/saksopplysninger/tiltak/FratarRettTag';
+import { GirIkkeRettTag } from '~/lib/rammebehandling/saksopplysninger/tiltak/GirIkkeRettTag';
 
 type Props = {
     sakId: SakId;
@@ -152,11 +152,11 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                             {tiltakSomFratarRett.length > 0 && (
                                 <VStack gap="space-8">
                                     <BodyShort weight={'semibold'}>
-                                        {'Tiltak som fratar rett til tiltakspenger'}
+                                        {'Tiltak som kan frata rett til tiltakspenger'}
                                     </BodyShort>
                                     <BodyShort size={'small'}>
                                         {
-                                            'Disse er registrert på bruker, men kan ikke velges fordi de fratar rett til tiltakspenger.'
+                                            'Disse er registrert på bruker, men kan ikke velges fordi de kan frata rett til tiltakspenger.'
                                         }
                                     </BodyShort>
                                     <VStack gap="space-4">
@@ -169,7 +169,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                                                 <BodyShort>
                                                     {formatLabelForTiltakValg(tiltak)}
                                                 </BodyShort>
-                                                <FratarRettTag />
+                                                <GirIkkeRettTag />
                                             </HStack>
                                         ))}
                                     </VStack>

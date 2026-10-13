@@ -1,7 +1,7 @@
 import { Tag } from '@navikt/ds-react';
 
-export const FratarRettTag = () => (
+export const GirIkkeRettTag = () => (
     <Tag data-color="warning" variant="outline" size="xsmall">
-        {'Fratar rett til tiltakspenger'}
+        {'Gir ikke rett til tiltakspenger'}
     </Tag>
 );
