@@ -3,9 +3,12 @@ import { BenkSøknadsbehandling } from '../../typer/søknader';
 import { BenkRevurdering } from '../../typer/revurderinger';
 import { BENK_MINE_TAB } from '../../typer/tabs';
 import { BenkTabData } from '../../typer/benkside';
+import { BenkGlobaltFilter } from '../../typer/felles';
 
 type BenkVisning = {
     skjulVentestatus: boolean;
+    /** De globale filtrene som er aktive nå, slik at de kan beholdes ved navigering til en annen fane */
+    globaleFiltre: BenkGlobaltFilter;
     /** Mine-fanen viser bare behandlinger som allerede er tildelt, så der kan man ikke tildele seg flere */
     kanTildeleFlere: boolean;
     valgtTildelingType: TildelingType | null;
@@ -23,6 +26,7 @@ const BenkVisningContext = createContext<BenkVisning>({
     setValgtTildelingType: () => {},
     valgtTildelingType: null,
     skjulVentestatus: false,
+    globaleFiltre: { kunTildeltMeg: false, skjulPåVent: false, skjulEgneTilBeslutning: false },
     kanTildeleFlere: true,
     valgtTildeling: [],
     toggleValgtTildeling: () => {},
@@ -68,10 +72,13 @@ export const BenkVisningProvider = ({ tabData, children }: Props) => {
         setValgtTildelingType(null);
     }, [tabData]);
 
+    const { kunTildeltMeg, skjulPåVent, skjulEgneTilBeslutning } = tabData.data.aktivtFilter;
+
     return (
         <BenkVisningContext.Provider
             value={{
-                skjulVentestatus: tabData.data.aktivtFilter.skjulPåVent,
+                skjulVentestatus: skjulPåVent,
+                globaleFiltre: { kunTildeltMeg, skjulPåVent, skjulEgneTilBeslutning },
                 kanTildeleFlere: tabData.tab !== BENK_MINE_TAB,
                 valgtTildelingType: valgtTildelingType,
                 setValgtTildelingType: setValgtTildelingType,

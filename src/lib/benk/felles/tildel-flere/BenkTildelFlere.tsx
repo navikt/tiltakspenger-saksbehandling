@@ -16,10 +16,15 @@ type Props = {
 };
 
 export const BenkTildelFlere = ({ behandlinger }: Props) => {
-    const { valgtTildeling, valgtTildelingType, setValgtTildelingType, kanTildeleFlere } =
-        useBenkVisning();
+    const {
+        valgtTildeling,
+        valgtTildelingType,
+        setValgtTildelingType,
+        kanTildeleFlere,
+        globaleFiltre,
+    } = useBenkVisning();
     const { trigger, isMutating, error, data } = useTildelRammebehandling();
-    // Etter tildelingen vises mine-fanen uten filtre, så alle de nye behandlingene er synlige
+    // Etter tildelingen vises mine-fanen uten lokale filtre, mens de globale filtrene beholdes
     const { nullstillFilter: visMineBehandlinger } = useBenkFilterNavigasjon(BENK_MINE_TAB);
 
     // sakId og saksnummer er sladdet på rader uten tilgang, og en slik rad kan ikke tildeles.
@@ -43,11 +48,7 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
             returnerSaker: false,
         }).then((response) => {
             if (response) {
-                visMineBehandlinger({
-                    kunTildeltMeg: false,
-                    skjulPåVent: false,
-                    skjulEgneTilBeslutning: false,
-                }).then(() => setValgtTildelingType(null));
+                visMineBehandlinger(globaleFiltre).then(() => setValgtTildelingType(null));
             }
         });
     };

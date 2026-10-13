@@ -69,18 +69,18 @@ const BenkLokaleFiltre = ({ skjema, children, tilleggsfiltre }: LokaleFiltreProp
                 <Button
                     type={'button'}
                     size={'small'}
-                    variant={'secondary'}
-                    onClick={() => kjør(nullstillFilter)}
-                >
-                    {'Nullstill filtre'}
-                </Button>
-                <Button
-                    type={'button'}
-                    size={'small'}
                     loading={isLoading}
                     onClick={() => kjør(oppdaterFilter)}
                 >
                     {'Oppdater filtre'}
+                </Button>
+                <Button
+                    type={'button'}
+                    size={'small'}
+                    variant={'secondary'}
+                    onClick={() => kjør(nullstillFilter)}
+                >
+                    {'Nullstill filtre'}
                 </Button>
             </HStack>
         </VStack>
