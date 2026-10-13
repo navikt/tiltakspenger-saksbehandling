@@ -25,6 +25,10 @@ import { resolverResultat } from '~/utils/resolverResultat';
 
 type OppdaterTiltaksdeltakelseFormData = {
     eksternDeltakelseId: string;
+    sakId: string;
+    tiltakskode: string;
+    typeNavn: string;
+    kilde: Tiltakskilde | '';
     fraOgMed: Date | undefined;
     tilOgMed: Date | undefined;
     status: TiltakDeltakerstatus | '';
@@ -33,12 +37,23 @@ type OppdaterTiltaksdeltakelseFormData = {
 };
 
 type OppdaterTiltaksdeltakelseRequest = {
-    eksternDeltakelseId: string;
+    eksternDeltakelseId: Nullable<string>;
+    sakId: Nullable<string>;
+    tiltakskode: Nullable<string>;
+    typeNavn: Nullable<string>;
+    kilde: Nullable<Tiltakskilde>;
     fraOgMed: Nullable<string>;
     tilOgMed: Nullable<string>;
     status: Nullable<TiltakDeltakerstatus>;
     deltakelseProsent: Nullable<number>;
     antallDagerPerUke: Nullable<number>;
+};
+
+type LagretTiltaksdeltakelseRespons = {
+    eksternDeltakelseId: string;
+    opprettet: boolean;
+    girRett: boolean;
+    deltakelse: unknown;
 };
 
 type QueryVerdi = NextRouter['query'][string];
@@ -61,8 +76,17 @@ const tilStatus = (verdi: QueryVerdi): TiltakDeltakerstatus | '' => {
     return Object.values(TiltakDeltakerstatus).find((status) => status === tekst) ?? '';
 };
 
+const tilKilde = (verdi: QueryVerdi): Tiltakskilde | '' => {
+    const tekst = førsteVerdi(verdi);
+    return tiltakskilder.find((kilde) => kilde === tekst) ?? '';
+};
+
 const startverdierFraRoute = (query: NextRouter['query']): OppdaterTiltaksdeltakelseFormData => ({
     eksternDeltakelseId: førsteVerdi(query.id) ?? '',
+    sakId: førsteVerdi(query.sakId) ?? '',
+    tiltakskode: førsteVerdi(query.tiltakskode) ?? '',
+    typeNavn: førsteVerdi(query.typeNavn) ?? '',
+    kilde: tilKilde(query.kilde),
     fraOgMed: tilDato(query.fraOgMed),
     tilOgMed: tilDato(query.tilOgMed),
     status: tilStatus(query.status),
@@ -79,11 +103,28 @@ const tilTall = (verdi: string): Nullable<number> => {
 // Uten maks-dato slutter årsvelgeren i datovelgeren ved utgangen av inneværende år.
 const senesteVelgbareDato = dayjs().add(2, 'year').endOf('year').toDate();
 
+const tilTekst = (verdi: string): Nullable<string> => verdi.trim() || null;
+
+const suksessmelding = ({
+    eksternDeltakelseId,
+    opprettet,
+    girRett,
+}: LagretTiltaksdeltakelseRespons) => {
+    if (opprettet) {
+        const fratarRett = girRett ? '' : ' (kan frata rett til tiltakspenger)';
+        return `Tiltaksdeltakelsen ${eksternDeltakelseId}${fratarRett} er opprettet. Oppdater saksopplysningene i behandlingen for å se den.`;
+    }
+    // Tiltak som kan frata rett lagres ikke som deltaker, så det registreres ingen endring for jobben å plukke opp.
+    return girRett
+        ? 'Tiltaksdeltakelsen er oppdatert. Endringen plukkes opp ved neste kjøring av jobben for oppdaterte tiltaksdeltakelser.'
+        : 'Tiltaksdeltakelsen er oppdatert. Oppdater saksopplysningene i behandlingen for å se endringen.';
+};
+
 const erUtenforIntervall = (tall: Nullable<number>, min: number, maks: number) =>
     tall !== null && (Number.isNaN(tall) || tall < min || tall > maks);
 
 /**
- * Route: /dev/deltakelse/[id]?fraOgMed=&tilOgMed=&status=&deltakelseProsent=&antallDagerPerUke=
+ * Route: /dev/deltakelse/[id]?sakId=&tiltakskode=&typeNavn=&kilde=&fraOgMed=&tilOgMed=&status=&deltakelseProsent=&antallDagerPerUke=
  * Alle deler er valgfrie, og brukes til å forhåndsutfylle skjemaet.
  */
 export const OppdaterTiltaksdeltakelseSide = () => {
@@ -103,19 +144,23 @@ const OppdaterTiltaksdeltakelseSkjema = ({
 }: {
     startverdier: OppdaterTiltaksdeltakelseFormData;
 }) => {
-    const oppdaterTiltaksdeltakelse = useFetchJsonFraApi<unknown, OppdaterTiltaksdeltakelseRequest>(
-        '/dev/tiltaksdeltakelse',
-        'POST',
-    );
+    const oppdaterTiltaksdeltakelse = useFetchJsonFraApi<
+        LagretTiltaksdeltakelseRespons,
+        OppdaterTiltaksdeltakelseRequest
+    >('/dev/tiltaksdeltakelse', 'POST');
 
     const form = useForm<OppdaterTiltaksdeltakelseFormData>({
         defaultValues: startverdier,
         resolver: async (values) => {
             const errors: FieldErrors<OppdaterTiltaksdeltakelseFormData> = {};
-            if (!values.eksternDeltakelseId.trim()) {
+            if (!values.eksternDeltakelseId.trim() && !values.sakId.trim()) {
                 errors.eksternDeltakelseId = {
                     type: 'required',
-                    message: 'Ekstern deltakelse-ID er påkrevd',
+                    message: 'Ekstern deltakelse-ID eller sak-ID er påkrevd',
+                };
+                errors.sakId = {
+                    type: 'required',
+                    message: 'Ekstern deltakelse-ID eller sak-ID er påkrevd',
                 };
             }
             if (values.fraOgMed && values.tilOgMed && values.fraOgMed > values.tilOgMed) {
@@ -140,35 +185,52 @@ const OppdaterTiltaksdeltakelseSkjema = ({
         },
     });
 
-    const onSubmit = (values: OppdaterTiltaksdeltakelseFormData) => {
-        oppdaterTiltaksdeltakelse.trigger({
-            eksternDeltakelseId: values.eksternDeltakelseId.trim(),
+    const onSubmit = async (values: OppdaterTiltaksdeltakelseFormData) => {
+        const lagret = await oppdaterTiltaksdeltakelse.trigger({
+            eksternDeltakelseId: tilTekst(values.eksternDeltakelseId),
+            sakId: tilTekst(values.sakId),
+            tiltakskode: values.tiltakskode || null,
+            typeNavn: tilTekst(values.typeNavn),
+            kilde: values.kilde || null,
             fraOgMed: values.fraOgMed ? dateTilISOTekst(values.fraOgMed) : null,
             tilOgMed: values.tilOgMed ? dateTilISOTekst(values.tilOgMed) : null,
             status: values.status || null,
             deltakelseProsent: tilTall(values.deltakelseProsent),
             antallDagerPerUke: tilTall(values.antallDagerPerUke),
         });
+        // Fyller inn den genererte IDen, slik at neste innsending oppdaterer deltakelsen som ble opprettet.
+        if (lagret?.opprettet) {
+            form.setValue('eksternDeltakelseId', lagret.eksternDeltakelseId);
+        }
     };
 
     const feil = oppdaterTiltaksdeltakelse.error;
+    const lagret = oppdaterTiltaksdeltakelse.data;
 
     return (
         <Box padding="space-32">
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack gap="space-20" style={{ maxWidth: '40rem' }}>
                     <Heading size="medium" level="1">
-                        Oppdater tiltaksdeltakelse
+                        Opprett eller oppdater tiltaksdeltakelse
                     </Heading>
                     <BodyShort size="small">
-                        Setter tiltaksdeltakelsen som tiltakshistorikken svarer med lokalt, og
-                        registrerer en endring på deltakeren slik Kafka-consumerne gjør. Felter som
-                        ikke fylles ut beholder dagens verdi.
+                        Setter tiltaksdeltakelsen som tiltakshistorikken svarer med lokalt. En
+                        eksisterende deltakelse oppdateres, og det registreres en endring på
+                        deltakeren slik Kafka-consumerne gjør. Felter som ikke fylles ut beholder
+                        dagens verdi.
+                    </BodyShort>
+                    <BodyShort size="small">
+                        Uten en eksisterende deltakelse opprettes en ny på saken, og da må
+                        tiltakstype velges. Ekstern ID genereres dersom den ikke fylles ut. Velg et
+                        lønnstilskudd for å teste tiltak som kan frata rett til tiltakspenger. Nye
+                        deltakelser vises i behandlingen etter at saksopplysningene er oppdatert, og
+                        i valg av tiltak for papirsøknad kun når de har både fra- og til-dato.
                     </BodyShort>
                     <BodyShort size="small">
                         Skjemaet kan forhåndsutfylles via URL-en:{' '}
                         <code>
-                            /dev/deltakelse/[id]?fraOgMed=YYYY-MM-DD&amp;tilOgMed=YYYY-MM-DD&amp;status=Deltar&amp;deltakelseProsent=100&amp;antallDagerPerUke=5
+                            /dev/deltakelse/[id]?sakId=&amp;tiltakskode=MIDLONTIL&amp;kilde=Arena&amp;typeNavn=&amp;fraOgMed=YYYY-MM-DD&amp;tilOgMed=YYYY-MM-DD&amp;status=Deltar&amp;deltakelseProsent=100&amp;antallDagerPerUke=5
                         </code>
                     </BodyShort>
                     <Controller
@@ -179,11 +241,88 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                                 {...field}
                                 error={fieldState.error?.message}
                                 label="Ekstern deltakelse-ID"
-                                description="IDen til en tiltaksdeltakelse som allerede finnes på en sak"
+                                description="IDen til en eksisterende tiltaksdeltakelse, eller IDen en ny skal få. Genereres dersom den er tom."
                                 size="small"
                             />
                         )}
                     />
+                    <Controller
+                        control={form.control}
+                        name={'sakId'}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                error={fieldState.error?.message}
+                                label="Sak-ID"
+                                description="Påkrevd for å opprette en ny deltakelse, f.eks. sak_01J..."
+                                size="small"
+                            />
+                        )}
+                    />
+                    <Controller
+                        control={form.control}
+                        name={'tiltakskode'}
+                        render={({ field, fieldState }) => (
+                            <Select
+                                {...field}
+                                label="Tiltakstype"
+                                description="Påkrevd for nye deltakelser, og kan ikke endres på eksisterende"
+                                size="small"
+                                error={fieldState.error?.message}
+                            >
+                                <option value="">Behold dagens tiltakstype</option>
+                                <optgroup label="Lønnstilskudd (gir ikke rett)">
+                                    {lønnstilskuddstyper.map(({ kode, navn }) => (
+                                        <option key={kode} value={kode}>
+                                            {navn} ({kode})
+                                        </option>
+                                    ))}
+                                </optgroup>
+                                <optgroup label="Gir rett">
+                                    {tiltakstyperSomGirRett.map((kode) => (
+                                        <option key={kode} value={kode}>
+                                            {kode}
+                                        </option>
+                                    ))}
+                                </optgroup>
+                            </Select>
+                        )}
+                    />
+                    <HStack gap="space-16">
+                        <Controller
+                            control={form.control}
+                            name={'typeNavn'}
+                            render={({ field, fieldState }) => (
+                                <TextField
+                                    {...field}
+                                    error={fieldState.error?.message}
+                                    label="Navn på tiltakstypen"
+                                    description="Tomt gir standardnavnet for typen"
+                                    size="small"
+                                />
+                            )}
+                        />
+                        <Controller
+                            control={form.control}
+                            name={'kilde'}
+                            render={({ field, fieldState }) => (
+                                <Select
+                                    {...field}
+                                    label="Kilde"
+                                    description="Kan ikke endres på eksisterende"
+                                    size="small"
+                                    error={fieldState.error?.message}
+                                >
+                                    <option value="">Automatisk</option>
+                                    {tiltakskilder.map((kilde) => (
+                                        <option key={kilde} value={kilde}>
+                                            {kilde}
+                                        </option>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                    </HStack>
                     <HStack gap="space-16">
                         <Controller
                             control={form.control}
@@ -228,7 +367,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                                 size="small"
                                 error={fieldState.error?.message}
                             >
-                                <option value="">Behold dagens status</option>
+                                <option value="">Behold dagens status (Deltar for nye)</option>
                                 {Object.values(TiltakDeltakerstatus).map((status) => (
                                     <option key={status} value={status}>
                                         {tiltakDeltakerstatusTekst[status]}
@@ -266,18 +405,13 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                         />
                     </HStack>
                     {feil && (
-                        <Infokort variant={'feil'}>
-                            {feil.status === 404
-                                ? 'Fant ingen tiltaksdeltakelse med denne eksterne IDen.'
-                                : `[${feil.status}] ${feil.message}`}
-                        </Infokort>
+                        <Infokort variant={'feil'}>{`[${feil.status}] ${feil.message}`}</Infokort>
                     )}
-                    {oppdaterTiltaksdeltakelse.data !== undefined && !feil && (
+                    {lagret !== undefined && !feil && (
                         <Infokort variant={'suksess'}>
-                            Tiltaksdeltakelsen er oppdatert. Endringen plukkes opp ved neste kjøring
-                            av jobben for oppdaterte tiltaksdeltakelser.
+                            {suksessmelding(lagret)}
                             <pre style={{ whiteSpace: 'pre-wrap' }}>
-                                {JSON.stringify(oppdaterTiltaksdeltakelse.data, null, 2)}
+                                {JSON.stringify(lagret, null, 2)}
                             </pre>
                         </Infokort>
                     )}
@@ -289,7 +423,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                             loading={oppdaterTiltaksdeltakelse.isMutating}
                             size="small"
                         >
-                            Oppdater tiltaksdeltakelse
+                            Lagre tiltaksdeltakelse
                         </Button>
                     </HStack>
                 </VStack>
@@ -297,3 +431,53 @@ const OppdaterTiltaksdeltakelseSkjema = ({
         </Box>
     );
 };
+
+// Speiler TiltakstypeSomGirRettDTO i tiltakspenger-libs. Backend fyller inn visningsnavnet.
+const tiltakstyperSomGirRett = [
+    'ARBEIDSFORBEREDENDE_TRENING',
+    'ARBEIDSMARKEDSOPPLAERING',
+    'ARBEIDSRETTET_REHABILITERING',
+    'ARBEIDSTRENING',
+    'AVKLARING',
+    'DIGITAL_JOBBKLUBB',
+    'ENKELTPLASS_AMO',
+    'ENKELTPLASS_VGS_OG_HØYERE_YRKESFAG',
+    'FAG_OG_YRKESOPPLAERING',
+    'FORSØK_OPPLÆRING_LENGRE_VARIGHET',
+    'GRUPPE_AMO',
+    'GRUPPE_VGS_OG_HØYERE_YRKESFAG',
+    'HØYERE_UTDANNING',
+    'HOYERE_YRKESFAGLIG_UTDANNING',
+    'INDIVIDUELL_JOBBSTØTTE',
+    'INDIVIDUELL_KARRIERESTØTTE_UNG',
+    'JOBBKLUBB',
+    'OPPFØLGING',
+    'NORSKOPPLAERING_GRUNNLEGGENDE_FERDIGHETER_FOV',
+    'STUDIESPESIALISERING',
+    'UTVIDET_OPPFØLGING_I_NAV',
+    'UTVIDET_OPPFØLGING_I_OPPLÆRING',
+] as const;
+
+// Kildens koder for lønnstilskudd, som kan frata rett til tiltakspenger (se kodetabellene for FratarRett i tiltakspenger-libs).
+const lønnstilskuddstyper: { kode: string; navn: string }[] = [
+    { kode: 'MIDLONTIL', navn: 'Midlertidig lønnstilskudd' },
+    { kode: 'VARLONTIL', navn: 'Varig lønnstilskudd' },
+    { kode: 'MIDLERTIDIG_LONNSTILSKUDD', navn: 'Midlertidig lønnstilskudd (Team Tiltak)' },
+    { kode: 'VARIG_LONNSTILSKUDD', navn: 'Varig lønnstilskudd (Team Tiltak)' },
+    {
+        kode: 'FIREARIG_LONNSTILSKUDD',
+        navn: 'Forskrift om forsøk med fireårig lønnstilskudd for unge',
+    },
+    { kode: 'FLEKSJOBB', navn: 'Fleksibel jobb - lønnstilskudd av lengre varighet' },
+    { kode: 'LONNTILS', navn: 'Lønnstilskudd' },
+    { kode: 'REAKTUFOR', navn: 'Lønnstilskudd - reaktivisering av uførepensjonister' },
+    { kode: 'LONNTILL', navn: 'Lønnstilskudd av lengre varighet' },
+    { kode: 'LONNTIL', navn: 'Tidsbegrenset lønnstilskudd' },
+    { kode: 'TIDSUBLONN', navn: 'Tidsubestemt lønnstilskudd' },
+    { kode: 'UFØREPENLØ', navn: 'Uførepensjon som lønnstilskudd' },
+    { kode: 'LONNTILAAP', navn: 'Arbeidsavklaringspenger som lønnstilskudd' },
+];
+
+const tiltakskilder = ['Arena', 'Komet', 'TeamTiltak'] as const;
+
+type Tiltakskilde = (typeof tiltakskilder)[number];

@@ -13,7 +13,7 @@ import {
     SøknadsbehandlingResultat,
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
-import { Tiltaksdeltakelse } from './Tiltaksdeltakelse';
+import { Tiltaksdeltakelse, TiltaksdeltakelseSomFratarRett } from './Tiltaksdeltakelse';
 import {
     BehandlingUtbetalingProps,
     Utbetalingskontroll,
@@ -131,6 +131,7 @@ export enum ManueltBehandlesGrunn {
 export type Saksopplysninger = {
     fødselsdato: SladdbarVerdi<string>;
     tiltaksdeltagelse: Tiltaksdeltakelse[];
+    tiltaksdeltakelserSomFratarRett: TiltaksdeltakelseSomFratarRett[];
     periode: Nullable<Periode>;
     ytelser: Ytelse[];
     tiltakspengevedtakFraArena: ArenaTPVedtak[];

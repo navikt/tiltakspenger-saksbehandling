@@ -47,6 +47,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     saksopplysninger: {
         fødselsdato: ikkeSladdet('1990-01-01'),
         tiltaksdeltagelse,
+        tiltaksdeltakelserSomFratarRett: [],
         periode: null,
         ytelser: [],
         tiltakspengevedtakFraArena: [],

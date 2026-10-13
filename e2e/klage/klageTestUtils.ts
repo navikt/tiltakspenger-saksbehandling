@@ -114,6 +114,7 @@ const lagRammebehandling = (): RevurderingStans => ({
     saksopplysninger: {
         fødselsdato: ikkeSladdet('1990-01-01'),
         tiltaksdeltagelse: [],
+        tiltaksdeltakelserSomFratarRett: [],
         periode: vedtaksperiode,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
@@ -191,6 +192,7 @@ const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
     saksopplysninger: {
         fødselsdato: ikkeSladdet('1990-01-01'),
         tiltaksdeltagelse: [],
+        tiltaksdeltakelserSomFratarRett: [],
         periode: vedtaksperiode,
         ytelser: [],
         tiltakspengevedtakFraArena: [],

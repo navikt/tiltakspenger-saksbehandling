@@ -10,7 +10,7 @@ export const LokalDevSide = () => {
                 <NySøknad />
                 <KlageHendelse />
                 <InternLenkeKnapp href="/dev/deltakelse" size="medium">
-                    Oppdater tiltaksdeltakelse
+                    Opprett/oppdater tiltaksdeltakelse
                 </InternLenkeKnapp>
             </HStack>
         </VStack>

@@ -49,6 +49,22 @@ export type Tiltaksdeltakelse = {
     internDeltakelseId: string;
 };
 
+/**
+ * Tiltak som er registrert på bruker, og som kan frata rett til tiltakspenger (i første omgang lønnstilskudd).
+ * Vises kun som informasjon til saksbehandler.
+ */
+export type TiltaksdeltakelseSomFratarRett = {
+    eksternDeltakelseId: string;
+    typeNavn: string;
+    tiltakskodeFraKilden: string;
+    deltakelseFraOgMed: string | null;
+    deltakelseTilOgMed: string | null;
+    deltakelseStatus: TiltakDeltakerstatus;
+    deltakelseProsent: number | null;
+    antallDagerPerUke: number | null;
+    kilde: TiltaksdeltakelseKilde;
+};
+
 export type TiltaksdeltakelseMedPeriode = Tiltaksdeltakelse & {
     deltagelseFraOgMed: string;
     deltagelseTilOgMed: string;
