@@ -15,6 +15,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { RangePickerDate } from '~/dev/søknad/RangePickerDate';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
 import { Nullable } from '~/types/UtilTypes';
+import { Oppholdssted } from '~/lib/søknad/søknadTyper';
 import { dateTilISOTekst } from '~/utils/date';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { personoversiktUrl } from '~/utils/urls';
@@ -28,7 +29,7 @@ interface NySøknadFormData {
         fødselsdato: string;
         fornavn: string;
         etternavn: string;
-        oppholderSegIEØS: { svar: 'Ja' | 'Nei' };
+        oppholdssted: Oppholdssted;
     }[];
 }
 
@@ -60,6 +61,7 @@ export const NySøknadModal = (props: { open: boolean; onClose: () => void }) =>
                 fornavn: Nullable<string>;
                 etternavn: Nullable<string>;
                 oppholderSegIEØS: { svar: 'Ja' | 'Nei' };
+                oppholdssted: Oppholdssted;
             }[];
         }
     >('/dev/soknad/ny', 'POST', {
@@ -85,7 +87,10 @@ export const NySøknadModal = (props: { open: boolean; onClose: () => void }) =>
                           fødselsdato: b.fødselsdato || null,
                           fornavn: b.fornavn || null,
                           etternavn: b.etternavn || null,
-                          oppholderSegIEØS: b.oppholderSegIEØS,
+                          oppholderSegIEØS: {
+                              svar: b.oppholdssted === 'IKKE_EØS_LAND' ? 'Nei' : 'Ja',
+                          },
+                          oppholdssted: b.oppholdssted,
                       }))
                     : [],
         });
@@ -210,15 +215,22 @@ export const NySøknadModal = (props: { open: boolean; onClose: () => void }) =>
                                                             render={({ field }) => (
                                                                 <RadioGroup
                                                                     size="small"
-                                                                    legend={'Oppholder seg i EØS?'}
+                                                                    legend={'Oppholdssted'}
                                                                     {...field}
                                                                     value={field.value}
                                                                 >
-                                                                    <Radio value={'Ja'}>Ja</Radio>
-                                                                    <Radio value={'Nei'}>Nei</Radio>
+                                                                    <Radio value={'NORGE'}>
+                                                                        Norge
+                                                                    </Radio>
+                                                                    <Radio value={'ANNET_EØS_LAND'}>
+                                                                        Annet EØS-land
+                                                                    </Radio>
+                                                                    <Radio value={'IKKE_EØS_LAND'}>
+                                                                        Land utenfor EØS
+                                                                    </Radio>
                                                                 </RadioGroup>
                                                             )}
-                                                            name={`barnetillegg.${index}.oppholderSegIEØS.svar`}
+                                                            name={`barnetillegg.${index}.oppholdssted`}
                                                             control={form.control}
                                                         />
                                                         <Button
@@ -245,7 +257,7 @@ export const NySøknadModal = (props: { open: boolean; onClose: () => void }) =>
                                                     fødselsdato: '',
                                                     fornavn: '',
                                                     etternavn: '',
-                                                    oppholderSegIEØS: { svar: 'Ja' },
+                                                    oppholdssted: 'NORGE',
                                                 })
                                             }
                                         >

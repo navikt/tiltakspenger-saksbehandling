@@ -4,7 +4,7 @@ import { ManuellSøknadBarn } from '~/lib/søknad/manuell-søknad/ManueltRegistr
 import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from '~/utils/periode';
 import { finn16årsdag } from '~/utils/date';
-import { formaterSøknadsspørsmålSvar } from '~/lib/søknad/søknadTekster';
+import { manuellSøknadOppholdsstedSvarTekst } from '~/lib/søknad/søknadTekster';
 
 type Props = {
     barn: ManuellSøknadBarn;
@@ -36,8 +36,10 @@ export const InformasjonOmBarnManuell = ({ barn, søknadsperiode }: Props) => {
                 )}
             </HStack>
             <div>
-                Oppholder seg i EØS-land i tiltaksperioden:{' '}
-                {formaterSøknadsspørsmålSvar(barn.oppholdInnenforEøs?.svar)}
+                Oppholdssted i tiltaksperioden:{' '}
+                {barn.oppholdssted?.svar
+                    ? manuellSøknadOppholdsstedSvarTekst[barn.oppholdssted.svar]
+                    : '-'}
                 <br />
                 Antall vedlegg (dokumentasjon) for barnet:{' '}
                 {barn.manueltRegistrertBarnAntallVedlegg ?? 0}

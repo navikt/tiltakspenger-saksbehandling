@@ -1,7 +1,7 @@
 import { Periode } from '~/types/Periode';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { TiltakDeltakerstatus } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, PeriodeSpm } from '../søknadTyper';
+import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, Oppholdssted, PeriodeSpm } from '../søknadTyper';
 
 export type ManueltRegistrertSøknad = {
     journalpostId: string;
@@ -42,6 +42,10 @@ export type ManuellSøknadTiltak = {
 
 export type ManuellSøknadJaNeiSpm = Partial<JaNeiSpm>;
 
+export type ManuellSøknadOppholdsstedSvar = Oppholdssted | 'IKKE_BESVART';
+
+export type ManuellSøknadOppholdsstedSpm = { svar?: ManuellSøknadOppholdsstedSvar };
+
 export type ManuellSøknadFraOgMedDatoSpm = Partial<FraOgMedDatoSpm>;
 
 export type ManuellSøknadPeriodeSpm = Partial<PeriodeSpm>;
@@ -75,7 +79,7 @@ export type ManuellSøknadBarn = {
     etternavn?: string;
     fødselsdato: string;
     fnr?: string;
-    oppholdInnenforEøs?: ManuellSøknadJaNeiSpm;
+    oppholdssted?: ManuellSøknadOppholdsstedSpm;
     erSøktBarnetilleggFor?: ManuellSøknadJaNeiSpm;
     manueltRegistrertBarnAntallVedlegg?: number;
 };
