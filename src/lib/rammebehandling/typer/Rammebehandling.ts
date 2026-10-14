@@ -60,12 +60,22 @@ export interface RammebehandlingBase {
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
+    /** Prioriterte behandlinger ligger alltid øverst i benken. */
+    prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
     /** Hvorfor en automatisk behandling ble overlatt til en saksbehandler. */
     manueltBehandlesGrunner?: ManueltBehandlesGrunn[];
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;
+
+export type Prioritering = {
+    begrunnelse: SladdbarVerdi<Nullable<string>>;
+};
+
+export type OppdaterPrioriteringDTO = {
+    begrunnelse: string;
+};
 
 export type RammebehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
 
@@ -148,6 +158,7 @@ export type OppdaterBehandlingBaseDTO = {
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
     skalJournalføreNotat: boolean;
+    prioritering: Nullable<OppdaterPrioriteringDTO>;
 };
 
 export type RammebehandlingMedInnvilgelse =

@@ -25,13 +25,13 @@ export const SimuleringOppsummering = ({
     const { simuleringResultat, simulerteBeløp } = simulertBeregning;
 
     const oppdaterKnapp = visOppdaterKnapp && (
-        <OppdaterSimuleringKnapp behandlingId={behandlingId} />
+        <OppdaterSimuleringKnapp behandlingId={behandlingId} className={style.knapp} />
     );
 
     if (simuleringResultat === SimuleringResultat.IKKE_SIMULERT) {
         return (
-            <Infokort variant={'advarsel'} className={style.varsel}>
-                <BodyShort>{'Simulering mangler!'}</BodyShort>
+            <Infokort variant={'advarsel'} size={'small'}>
+                <BodyShort spacing={true}>{'Simulering mangler!'}</BodyShort>
                 {oppdaterKnapp}
             </Infokort>
         );
@@ -39,8 +39,8 @@ export const SimuleringOppsummering = ({
 
     if (simuleringResultat === SimuleringResultat.INGEN_ENDRING) {
         return (
-            <Infokort variant={'info'} className={style.varsel}>
-                <BodyShort>{'Simulering viser ingen endring i utbetalingen'}</BodyShort>
+            <Infokort variant={'info'} size={'small'}>
+                {'Simulering viser ingen endring i utbetalingen'}
                 {oppdaterKnapp}
             </Infokort>
         );
@@ -48,8 +48,8 @@ export const SimuleringOppsummering = ({
 
     if (!simulerteBeløp) {
         return (
-            <Infokort variant={'advarsel'} className={style.varsel}>
-                <BodyShort>{'Simuleringen har ingen simulerte beløp'}</BodyShort>
+            <Infokort variant={'advarsel'} size={'small'}>
+                <BodyShort spacing={true}>{'Simuleringen har ingen simulerte beløp'}</BodyShort>
                 {oppdaterKnapp}
             </Infokort>
         );

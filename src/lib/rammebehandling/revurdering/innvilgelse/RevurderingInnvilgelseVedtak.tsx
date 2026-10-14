@@ -11,10 +11,13 @@ import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begru
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RevurderingAutomatiskOpprettetGrunn } from '~/lib/rammebehandling/revurdering/felles/automatisk-opprettet-grunn/RevurderingAutomatiskOpprettetGrunn';
+import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
+import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 
 export const RevurderingInnvilgelseVedtak = () => {
     const { behandling, klagebehandling } = useRevurderingBehandling();
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
+    const { prioriteringToggle } = useFeatureToggles();
 
     // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
     const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
@@ -51,6 +54,12 @@ export const RevurderingInnvilgelseVedtak = () => {
                         </>
                     )}
                     <Separator />
+                    {prioriteringToggle && (
+                        <>
+                            <BehandlingPrioritering />
+                            <Separator />
+                        </>
+                    )}
                     <RevurderingInnvilgelseHandlinger />
                 </>
             ) : (

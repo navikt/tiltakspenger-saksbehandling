@@ -33,10 +33,15 @@ export type BehandlingSkjemaContextBase<T> = T & {
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
         barnetilleggBegrunnelse: TextAreaInput;
+        prioriteringBegrunnelse: TextAreaInput;
     };
     journalføring: {
         skalJournalføreNotat: boolean;
         setSkalJournalføreNotat: (skalJournalføreNotat: boolean) => void;
+    };
+    prioritering: {
+        erPrioritert: boolean;
+        setErPrioritert: (erPrioritert: boolean) => void;
     };
 };
 
@@ -79,11 +84,14 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
         behandling.skalJournalføreNotat,
     );
 
+    const [erPrioritert, setErPrioritert] = useState(behandling.prioritering !== null);
+
     const begrunnelse = useFritekstInput(behandling.begrunnelseVilkårsvurdering);
     const brevtekst = useFritekstInput(behandling.fritekstTilVedtaksbrev);
     const barnetilleggBegrunnelse = useFritekstInput(
         rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg?.begrunnelse,
     );
+    const prioriteringBegrunnelse = useFritekstInput(behandling.prioritering?.begrunnelse);
 
     return (
         <DispatchContext.Provider value={dispatch}>
@@ -95,10 +103,15 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
                         begrunnelse,
                         brevtekst,
                         barnetilleggBegrunnelse,
+                        prioriteringBegrunnelse,
                     },
                     journalføring: {
                         skalJournalføreNotat,
                         setSkalJournalføreNotat,
+                    },
+                    prioritering: {
+                        erPrioritert,
+                        setErPrioritert,
                     },
                 }}
             >

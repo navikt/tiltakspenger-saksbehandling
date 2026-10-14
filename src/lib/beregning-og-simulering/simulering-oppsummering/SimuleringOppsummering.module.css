@@ -1,6 +1,3 @@
-.varsel > div {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: space-between;
+.knapp {
+    margin-top: 0.5rem;
 }

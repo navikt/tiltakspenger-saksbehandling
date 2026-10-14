@@ -12,7 +12,7 @@ import {
     benkFellesKolonner,
     BenkBeskyttelsesfilter,
 } from './felles';
-import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Prioritering, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type BenkSøknadsbehandlingProps = {
     type: BenkBehandlingstype.SØKNADSBEHANDLING;
@@ -21,6 +21,7 @@ type BenkSøknadsbehandlingProps = {
     søknadstype: Søknadstype;
     kravtidspunkt: string;
     resultat: Nullable<SøknadsbehandlingResultat>;
+    prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 

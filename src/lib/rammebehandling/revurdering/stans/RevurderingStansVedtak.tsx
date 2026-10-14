@@ -9,10 +9,13 @@ import { RevurderingAutomatiskOpprettetGrunn } from '~/lib/rammebehandling/revur
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
 import style from './RevurderingStansVedtak.module.css';
+import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
+import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 
 export const RevurderingStansVedtak = () => {
     const { automatiskOpprettetGrunn, manueltBehandlesGrunner } =
         useRevurderingBehandling().behandling;
+    const { prioriteringToggle } = useFeatureToggles();
 
     return (
         <>
@@ -34,6 +37,12 @@ export const RevurderingStansVedtak = () => {
             <RevurderingStansBrev />
             <Separator />
             <BehandlingBeregningOgSimulering />
+            {prioriteringToggle && (
+                <>
+                    <Separator />
+                    <BehandlingPrioritering />
+                </>
+            )}
             <RevurderingStansHandlinger />
         </>
     );

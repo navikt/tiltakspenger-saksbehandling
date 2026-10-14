@@ -15,6 +15,7 @@ import { revurderingOmgjøringValidering } from '~/lib/rammebehandling/revurderi
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
+import { tilOppdaterPrioriteringDTO } from '~/lib/rammebehandling/felles/prioritering/prioriteringUtils';
 
 export const RevurderingOmgjøringHandlinger = () => {
     const { sak } = useSak();
@@ -44,6 +45,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
                 skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                prioritering: tilOppdaterPrioriteringDTO(skjema),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 vedtaksperiode,
                 barnetillegg: innvilgelse.harBarnetillegg
@@ -67,6 +69,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                prioritering: tilOppdaterPrioriteringDTO(skjema),
                 vedtaksperiode,
                 valgteHjemler,
                 skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
@@ -79,6 +82,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
                 fritekstTilVedtaksbrev: null,
                 begrunnelseVilkårsvurdering: null,
                 skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                prioritering: tilOppdaterPrioriteringDTO(skjema),
             } satisfies OppdaterOmgjøringIkkeValgtDTO;
         }
     }

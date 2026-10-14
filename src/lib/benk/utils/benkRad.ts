@@ -1,8 +1,10 @@
 import { Nullable } from '~/types/UtilTypes';
+import { Prioritering } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     BenkBehandling,
     BenkBehandlingMedTilgang,
     BenkBehandlingsstatus,
+    BenkBehandlingstype,
     BenkTilgangsvurdering,
     BenkVentestatus,
 } from '../typer/felles';
@@ -39,4 +41,15 @@ export const benkBehandlingHarTilgang = (
     behandling: BenkBehandling,
 ): behandling is BenkBehandlingMedTilgang => {
     return behandling.tilgang.vurdering === BenkTilgangsvurdering.HAR_TILGANG;
+};
+
+/** Kun rammebehandlinger kan prioriteres. Backend sorterer de prioriterte radene øverst. */
+export const benkPrioritering = (behandling: BenkBehandling): Nullable<Prioritering> => {
+    switch (behandling.type) {
+        case BenkBehandlingstype.SØKNADSBEHANDLING:
+        case BenkBehandlingstype.REVURDERING:
+            return behandling.prioritering;
+        default:
+            return null;
+    }
 };

@@ -11,13 +11,14 @@ import {
     benkFellesKolonner,
     BenkBeskyttelsesfilter,
 } from './felles';
-import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Prioritering, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type BenkRevurderingProps = {
     type: BenkBehandlingstype.REVURDERING;
     id: RammebehandlingId;
     status: BenkBehandlingsstatus;
     resultat: Nullable<RevurderingResultat>;
+    prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 

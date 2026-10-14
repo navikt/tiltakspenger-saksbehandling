@@ -12,6 +12,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/lib/sak/SakContext';
+import { tilOppdaterPrioriteringDTO } from '~/lib/rammebehandling/felles/prioritering/prioriteringUtils';
 
 export const RevurderingInnvilgelseHandlinger = () => {
     const { behandling } = useRevurderingBehandling();
@@ -41,6 +42,7 @@ const tilDTO = (
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+        prioritering: tilOppdaterPrioriteringDTO(skjema),
         innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
         barnetillegg: innvilgelse.harBarnetillegg
             ? {

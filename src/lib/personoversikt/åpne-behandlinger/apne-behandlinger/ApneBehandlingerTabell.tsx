@@ -31,6 +31,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { PrioritertBehandlingTag } from '~/lib/rammebehandling/felles/prioritering/PrioritertBehandlingTag';
 import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
@@ -162,14 +163,19 @@ const propsForRad = (
         case ÅpenBehandlingType.REVURDERING: {
             const rammebehandling = hentRammebehandling(sak, åpenBehandling.id);
 
-            const { opprettet, resultat, saksbehandler, beslutter, vedtaksperiode } =
+            const { opprettet, resultat, saksbehandler, beslutter, vedtaksperiode, prioritering } =
                 rammebehandling;
 
             return {
                 typeTekst,
                 opprettet,
                 resultatTag: <RammebehandlingResultatTag resultat={resultat} />,
-                statusTag: <BehandlingStatusTags behandling={rammebehandling} kompakt={true} />,
+                statusTag: (
+                    <HStack gap={'space-4'} align={'center'} wrap={false}>
+                        <BehandlingStatusTags behandling={rammebehandling} kompakt={true} />
+                        {prioritering && <PrioritertBehandlingTag prioritering={prioritering} />}
+                    </HStack>
+                ),
                 saksbehandler,
                 beslutter,
                 periodeTekst: vedtaksperiode ? formaterPeriode(vedtaksperiode) : undefined,

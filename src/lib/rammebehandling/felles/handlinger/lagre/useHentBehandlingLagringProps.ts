@@ -40,7 +40,7 @@ export const useHentBehandlingLagringProps = ({
     }, [hentDTO, sisteLagring]);
 
     const validerVedtak: ValideringFunc = (type) => {
-        const valideringResultat = validerSkjema(type);
+        const valideringResultat = validerPrioritering(skjema, validerSkjema(type));
 
         if (
             type === 'tilBeslutning' &&
@@ -96,4 +96,25 @@ export const useHentBehandlingLagringProps = ({
     }, [skjema, updateDirtyState]);
 
     return { validerOgHentLagringDTO, validerVedtak, isDirty };
+};
+
+// Backend avviser en prioritering uten begrunnelse, så dette må valideres før både lagring og sending til beslutning.
+const validerPrioritering = (
+    skjema: BehandlingSkjemaContext,
+    valideringResultat: ValideringResultat,
+): ValideringResultat => {
+    if (
+        skjema.prioritering.erPrioritert &&
+        skjema.textAreas.prioriteringBegrunnelse.getValue() === null
+    ) {
+        return {
+            ...valideringResultat,
+            errors: [
+                ...valideringResultat.errors,
+                'Begrunnelsen for prioriteringen må være utfylt når behandlingen er prioritert',
+            ],
+        };
+    }
+
+    return valideringResultat;
 };

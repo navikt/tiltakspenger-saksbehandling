@@ -25,7 +25,12 @@ import { BenkSøknadsbehandlingMedTilgang } from '../../typer/søknader';
 import { BenkRevurderingMedTilgang } from '../../typer/revurderinger';
 import { BenkBehandlingMeny } from '../BenkBehandlingMeny';
 import { BenkStatusTag, BenkKlageStatusTag, BenkTilbakekrevingStatusTag } from '../BenkStatusTag';
-import { benkBehandlingHarTilgang, kanFortsetteBenkRad } from '../../utils/benkRad';
+import {
+    benkBehandlingHarTilgang,
+    benkPrioritering,
+    kanFortsetteBenkRad,
+} from '../../utils/benkRad';
+import { PrioritertBehandlingTag } from '~/lib/rammebehandling/felles/prioritering/PrioritertBehandlingTag';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { BenkTildelCheckbox } from '../tildel-flere/BenkTildelCheckbox';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
@@ -129,6 +134,17 @@ const Resultat = ({ behandling }: MedBehandling): ReactNode => {
 
 /** Klage og tilbakekreving har egne flyter, og dermed egne statuser */
 const Status = ({ behandling }: MedBehandling) => {
+    const prioritering = benkPrioritering(behandling);
+
+    return (
+        <HStack gap={'space-4'} align={'center'} wrap={false}>
+            <Behandlingsstatus behandling={behandling} />
+            {prioritering && <PrioritertBehandlingTag prioritering={prioritering} />}
+        </HStack>
+    );
+};
+
+const Behandlingsstatus = ({ behandling }: MedBehandling) => {
     switch (behandling.type) {
         case BenkBehandlingstype.KLAGEBEHANDLING:
             return <BenkKlageStatusTag status={behandling.status} />;

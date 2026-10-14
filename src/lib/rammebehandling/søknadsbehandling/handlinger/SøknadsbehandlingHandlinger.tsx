@@ -15,6 +15,7 @@ import {
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/lib/sak/SakContext';
+import { tilOppdaterPrioriteringDTO } from '~/lib/rammebehandling/felles/prioritering/prioriteringUtils';
 
 export const SøknadsbehandlingHandlinger = () => {
     const { sak } = useSak();
@@ -47,6 +48,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
                 skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                prioritering: tilOppdaterPrioriteringDTO(skjema),
                 innvilgelsesperioder,
                 barnetillegg: harBarnetillegg
                     ? {
@@ -68,6 +70,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                prioritering: tilOppdaterPrioriteringDTO(skjema),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
                 skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
             } satisfies OppdaterSøknadsbehandlingAvslagDTO;
@@ -78,6 +81,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                prioritering: tilOppdaterPrioriteringDTO(skjema),
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies OppdaterSøknadsbehandlingIkkeValgtDTO;
         }

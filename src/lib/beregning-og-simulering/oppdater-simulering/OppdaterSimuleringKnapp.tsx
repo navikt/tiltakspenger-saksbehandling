@@ -6,9 +6,10 @@ import { SakProps } from '~/lib/sak/SakTyper';
 
 type Props = {
     behandlingId: BehandlingId;
+    className?: string;
 };
 
-export const OppdaterSimuleringKnapp = ({ behandlingId }: Props) => {
+export const OppdaterSimuleringKnapp = ({ behandlingId, className }: Props) => {
     const { sak, setSak } = useSak();
     const { sakId } = sak;
 
@@ -18,7 +19,7 @@ export const OppdaterSimuleringKnapp = ({ behandlingId }: Props) => {
     );
 
     return (
-        <HStack gap={'space-20'} align={'center'}>
+        <HStack gap={'space-20'} align={'center'} className={className}>
             {error && (
                 <InlineMessage status={'error'} size={'small'}>
                     {error.message}
