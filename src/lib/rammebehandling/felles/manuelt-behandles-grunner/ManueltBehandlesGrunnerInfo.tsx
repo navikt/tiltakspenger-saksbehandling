@@ -82,6 +82,39 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     STANS_UGYLDIGE_MELDEPERIODER_FOR_HELG: 'Stansen gir ugyldige meldeperioder for helg',
     STANS_KAN_IKKE_SENDES_TIL_BESLUTNING: 'Stansen kunne ikke sendes til beslutning automatisk',
 
+    FORLENGELSE_FANT_IKKE_GJELDENDE_VEDTAK:
+        'Fant ikke et gjeldende vedtak som innvilger tiltaksdeltakelsen',
+    FORLENGELSE_VEDTAKET_ER_STANSET_ELLER_OPPHORT:
+        'Det gjeldende vedtaket er stanset, opphørt eller omgjort før sluttdatoen',
+    FORLENGELSE_INNVILGELSEN_SLUTTER_FOR_DELTAKELSEN:
+        'Det gjeldende vedtaket slutter før den tidligere sluttdatoen for tiltaksdeltakelsen',
+    FORLENGELSE_FANT_IKKE_TILTAKSDELTAKELSE: 'Fant ikke tiltaksdeltakelsen som endringen gjelder',
+    FORLENGELSE_DELTAKELSEN_HAR_UGYLDIG_STATUS:
+        'Tiltaksdeltakelsen har en status som ikke gir rett til tiltakspenger',
+    FORLENGELSE_TILTAKET_GIR_IKKE_RETT: 'Tiltaket gir ikke rett til tiltakspenger',
+    FORLENGELSE_DELTAKELSEN_MANGLER_SLUTTDATO: 'Tiltaksdeltakelsen mangler sluttdato',
+    FORLENGELSE_SLUTTDATO_ER_IKKE_ETTER_INNVILGELSEN:
+        'Ny sluttdato for tiltaksdeltakelsen er ikke etter siste innvilgede dag',
+    FORLENGELSE_ENDRET_STARTDATO: 'Startdatoen for tiltaksdeltakelsen er endret',
+    FORLENGELSE_ENDRET_DELTAKELSESMENGDE: 'Deltakelsesmengden for tiltaksdeltakelsen er endret',
+    FORLENGELSE_OVERLAPPER_ANDRE_VEDTAK: 'Forlengelsen overlapper med andre vedtak på saken',
+    FORLENGELSE_OVERLAPPENDE_TILTAK:
+        'Bruker har overlappende tiltaksdeltakelser i forlengelsesperioden',
+    FORLENGELSE_ANDRE_YTELSER: 'Bruker mottar andre ytelser',
+    FORLENGELSE_VEDTAK_I_ARENA: 'Det finnes tiltakspengevedtak i Arena',
+    FORLENGELSE_HAR_BARNETILLEGG: 'Det gjeldende vedtaket har barnetillegg',
+    FORLENGELSE_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for forlengelsen mangler simulering',
+    FORLENGELSE_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
+        'Simuleringen av forlengelsen gir feilutbetaling, som ikke støttes for forlengelse',
+    FORLENGELSE_UTBETALING_STOTTER_IKKE_JUSTERING:
+        'Simuleringen av forlengelsen gir justering, som ikke støttes for forlengelse',
+    FORLENGELSE_UTBETALING_KONTROLLSIMULERING_HAR_ENDRINGER:
+        'Kontrollsimuleringen av forlengelsen avviker fra simuleringen',
+    FORLENGELSE_KAN_IKKE_FYLLES_UT: 'Forlengelsen kunne ikke fylles ut automatisk',
+    FORLENGELSE_UGYLDIGE_MELDEPERIODER_FOR_HELG: 'Forlengelsen gir ugyldige meldeperioder for helg',
+    FORLENGELSE_KAN_IKKE_SENDES_TIL_BESLUTNING:
+        'Forlengelsen kunne ikke sendes til beslutning automatisk',
+
     ANNET_APEN_BEHANDLING: 'Det finnes en annen åpen behandling på saken',
     ANNET_VEDTAK_FOR_SAMME_PERIODE: 'Det finnes et annet vedtak som overlapper med søknadsperioden',
     ANNET_HAR_SOKT_FOR_SENT: 'Tiltaksdeltakelsen startet mer enn tre måneder før kravdato',
