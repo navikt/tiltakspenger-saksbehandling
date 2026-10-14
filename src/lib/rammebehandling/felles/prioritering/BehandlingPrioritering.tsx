@@ -1,44 +1,26 @@
-import { Checkbox } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
-import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
+import { PrioriteringValg } from '~/lib/_felles/prioritering/PrioriteringValg';
 
 export const BehandlingPrioritering = () => {
     const { textAreas, erReadonly, erPrioritert } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaFellesDispatch();
-    const { prioriteringBegrunnelse } = textAreas;
 
     return (
         <VedtakSeksjon>
-            <VedtakSeksjon.Venstre gap={'space-8'}>
-                <Checkbox
-                    size={'small'}
-                    checked={erPrioritert}
-                    readOnly={erReadonly}
-                    onChange={(e) =>
+            <VedtakSeksjon.Venstre>
+                <PrioriteringValg
+                    erPrioritert={erPrioritert}
+                    onChange={(valgt) =>
                         dispatch({
                             type: 'setErPrioritert',
-                            payload: { erPrioritert: e.target.checked },
+                            payload: { erPrioritert: valgt },
                         })
                     }
-                    description={
-                        'Kun for hastesaker. Disse vises alltid øverst i behandlingsoversikten.'
-                    }
-                >
-                    {'Prioritert behandling'}
-                </Checkbox>
-                {erPrioritert && (
-                    <FritekstInput
-                        label={'Begrunnelse for prioritering'}
-                        hideLabel={false}
-                        size={'small'}
-                        minRows={2}
-                        defaultValue={prioriteringBegrunnelse.getValue() ?? ''}
-                        readOnly={erReadonly}
-                        ref={prioriteringBegrunnelse.ref}
-                    />
-                )}
+                    begrunnelse={textAreas.prioriteringBegrunnelse}
+                    readOnly={erReadonly}
+                />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );

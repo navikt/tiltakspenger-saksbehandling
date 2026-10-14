@@ -30,7 +30,7 @@ import {
     benkPrioritering,
     kanFortsetteBenkRad,
 } from '../../utils/benkRad';
-import { PrioritertBehandlingTag } from '~/lib/rammebehandling/felles/prioritering/PrioritertBehandlingTag';
+import { PrioritertBehandlingTag } from '~/lib/_felles/prioritering/PrioritertBehandlingTag';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { BenkTildelCheckbox } from '../tildel-flere/BenkTildelCheckbox';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
@@ -139,7 +139,7 @@ const Status = ({ behandling }: MedBehandling) => {
     return (
         <HStack gap={'space-4'} align={'center'} wrap={false}>
             <Behandlingsstatus behandling={behandling} />
-            {prioritering && <PrioritertBehandlingTag prioritering={prioritering} />}
+            {prioritering && <PrioritertBehandlingTag prioritering={prioritering} size={'small'} />}
         </HStack>
     );
 };

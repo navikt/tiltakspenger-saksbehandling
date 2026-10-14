@@ -6,6 +6,7 @@ import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingKorrigeringUtfall } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/korrigering-utfall/MeldekortbehandlingKorrigeringUtfall';
+import { MeldekortbehandlingPrioritering } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/prioritering/MeldekortbehandlingPrioritering';
 
 export const MeldekortbehandlingFritekstOgSendInn = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -27,6 +28,8 @@ export const MeldekortbehandlingFritekstOgSendInn = () => {
                 </>
             )}
             <MeldekortbehandlingBegrunnelseOgBrev />
+            <Separator />
+            <MeldekortbehandlingPrioritering />
             <Separator />
             <MeldekortbehandlingSendOgGodkjenn />
         </>

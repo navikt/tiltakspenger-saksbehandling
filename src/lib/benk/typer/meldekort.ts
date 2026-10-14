@@ -12,6 +12,7 @@ import {
     BenkBeskyttelsesfilter,
 } from './felles';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Prioritering } from '~/lib/_felles/prioritering/prioriteringTyper';
 
 /**
  * Meldekort-fanen samler både meldekortbehandlinger startet av saksbehandler
@@ -33,6 +34,8 @@ type BenkMeldekortProps = {
     meldeperioder: Periode[];
     /** Beregnet beløp for meldekortbehandlinger som er beregnet, ellers null */
     beløp: Nullable<number>;
+    /** Innsendte og korrigerte meldekort kan ikke prioriteres, og har alltid null */
+    prioritering: Nullable<Prioritering>;
     /** Kun meldekortbehandlinger har kommandoer - innsendte/korrigerte meldekort er ikke behandlinger */
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };

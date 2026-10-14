@@ -30,6 +30,10 @@ import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
+import {
+    OppdaterPrioriteringDTO,
+    Prioritering,
+} from '~/lib/_felles/prioritering/prioriteringTyper';
 
 export const RammebehandlingIdPrefix = 'beh_' as const;
 export type RammebehandlingId = `${typeof RammebehandlingIdPrefix}${string}`;
@@ -68,14 +72,6 @@ export interface RammebehandlingBase {
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;
-
-export type Prioritering = {
-    begrunnelse: SladdbarVerdi<Nullable<string>>;
-};
-
-export type OppdaterPrioriteringDTO = {
-    begrunnelse: string;
-};
 
 export type RammebehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
 

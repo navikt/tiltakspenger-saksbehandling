@@ -9,6 +9,10 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingSkjemaContext } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { OppdaterBehandlingDTO } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    PRIORITERING_MANGLER_BEGRUNNELSE,
+    prioriteringManglerBegrunnelse,
+} from '~/lib/_felles/prioritering/prioriteringUtils';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
@@ -98,18 +102,19 @@ export const useHentBehandlingLagringProps = ({
     return { validerOgHentLagringDTO, validerVedtak, isDirty };
 };
 
-// Backend avviser en prioritering uten begrunnelse, så dette må valideres før både lagring og sending til beslutning.
 const validerPrioritering = (
     skjema: BehandlingSkjemaContext,
     valideringResultat: ValideringResultat,
 ): ValideringResultat => {
-    if (skjema.erPrioritert && skjema.textAreas.prioriteringBegrunnelse.getValue() === null) {
+    if (
+        prioriteringManglerBegrunnelse(
+            skjema.erPrioritert,
+            skjema.textAreas.prioriteringBegrunnelse.getValue(),
+        )
+    ) {
         return {
             ...valideringResultat,
-            errors: [
-                ...valideringResultat.errors,
-                'Begrunnelsen for prioriteringen må være utfylt når behandlingen er prioritert',
-            ],
+            errors: [...valideringResultat.errors, PRIORITERING_MANGLER_BEGRUNNELSE],
         };
     }
 

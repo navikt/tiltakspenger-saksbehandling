@@ -12,6 +12,10 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import {
+    PRIORITERING_MANGLER_BEGRUNNELSE,
+    prioriteringManglerBegrunnelse,
+} from '~/lib/_felles/prioritering/prioriteringUtils';
 
 export type MeldekortDagValideringsfeil = {
     dato: string;
@@ -96,6 +100,15 @@ export const validerMeldekortbehandlingSkjema = (
 
     if (skjema.skalJournalføreNotat && !skjema.begrunnelse.getValue()) {
         overordnedeFeil.push('Begrunnelsen må være utfylt når notatet skal journalføres');
+    }
+
+    if (
+        prioriteringManglerBegrunnelse(
+            skjema.erPrioritert,
+            skjema.prioriteringBegrunnelse.getValue(),
+        )
+    ) {
+        overordnedeFeil.push(PRIORITERING_MANGLER_BEGRUNNELSE);
     }
 
     const meldeperioderFeil = skjema.meldeperioder

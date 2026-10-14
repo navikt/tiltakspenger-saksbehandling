@@ -11,7 +11,7 @@ import {
     RevurderingStansContext,
     useRevurderingStansSkjema,
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
-import { tilOppdaterPrioriteringDTO } from '~/lib/rammebehandling/felles/prioritering/prioriteringUtils';
+import { tilOppdaterPrioriteringDTO } from '~/lib/_felles/prioritering/prioriteringUtils';
 
 export const RevurderingStansHandlinger = () => {
     const skjema = useRevurderingStansSkjema();
@@ -36,7 +36,10 @@ const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO | 
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         skalJournalføreNotat: skjema.skalJournalføreNotat,
-        prioritering: tilOppdaterPrioriteringDTO(skjema),
+        prioritering: tilOppdaterPrioriteringDTO(
+            skjema.erPrioritert,
+            skjema.textAreas.prioriteringBegrunnelse.getValue(),
+        ),
         valgteHjemler: skjema.hjemlerForStans,
         ...(skjema.harValgtStansFraFørsteDagSomGirRett
             ? {

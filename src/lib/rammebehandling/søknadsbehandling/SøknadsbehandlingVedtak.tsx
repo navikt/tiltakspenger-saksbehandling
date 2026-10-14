@@ -14,13 +14,11 @@ import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilg
 import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
-import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 
 export const SøknadsbehandlingVedtak = () => {
     const { klagebehandling } = useBehandling();
 
     const { resultat } = useBehandlingSkjema();
-    const { prioriteringToggle } = useFeatureToggles();
 
     return (
         <>
@@ -34,12 +32,8 @@ export const SøknadsbehandlingVedtak = () => {
             {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
             {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
             <Separator />
-            {prioriteringToggle && (
-                <>
-                    <BehandlingPrioritering />
-                    <Separator />
-                </>
-            )}
+            <BehandlingPrioritering />
+            <Separator />
             <SøknadsbehandlingHandlinger />
         </>
     );

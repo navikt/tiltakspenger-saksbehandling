@@ -12,7 +12,8 @@ import {
     benkFellesKolonner,
     BenkBeskyttelsesfilter,
 } from './felles';
-import { Prioritering, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Prioritering } from '~/lib/_felles/prioritering/prioriteringTyper';
 
 type BenkSøknadsbehandlingProps = {
     type: BenkBehandlingstype.SØKNADSBEHANDLING;

@@ -1,14 +1,15 @@
-import { BodyShort, Heading, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, Tag, TagProps, VStack } from '@navikt/ds-react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
-import { Prioritering } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Prioritering } from '~/lib/_felles/prioritering/prioriteringTyper';
 import { sladdbarTekst } from '~/utils/sladdetVerdi';
 
 type Props = {
     prioritering: Prioritering;
+    size?: TagProps['size'];
 };
 
-export const PrioritertBehandlingTag = ({ prioritering }: Props) => {
+export const PrioritertBehandlingTag = ({ prioritering, size }: Props) => {
     return (
         <RichTooltip
             content={
@@ -22,7 +23,7 @@ export const PrioritertBehandlingTag = ({ prioritering }: Props) => {
         >
             <Tag
                 data-color={'warning'}
-                size={'small'}
+                size={size}
                 icon={<ExclamationmarkTriangleIcon aria-hidden />}
                 tabIndex={0}
             >

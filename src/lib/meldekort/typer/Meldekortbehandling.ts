@@ -19,6 +19,10 @@ import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
+import {
+    OppdaterPrioriteringDTO,
+    Prioritering,
+} from '~/lib/_felles/prioritering/prioriteringTyper';
 
 export type MeldekortbehandlingId = Branded<MeldekortId, 'meldekortbehandlingId'>;
 
@@ -81,6 +85,7 @@ export type OppdaterMeldekortbehandlingDTO = {
     tekstTilVedtaksbrev: Nullable<string>;
     skalSendeVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
+    prioritering: Nullable<OppdaterPrioriteringDTO>;
 };
 
 export type OppdatertMeldeperiodeDTO = {
@@ -131,6 +136,8 @@ export type MeldekortbehandlingProps = {
     klagebehandlingId: Nullable<KlageId>;
     skalSendeVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
+    /** Prioriterte behandlinger ligger alltid øverst i benken. */
+    prioritering: Nullable<Prioritering>;
     ventestatus: VentestatusHendelse[];
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };

@@ -31,7 +31,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { PrioritertBehandlingTag } from '~/lib/rammebehandling/felles/prioritering/PrioritertBehandlingTag';
+import { PrioritertBehandlingTag } from '~/lib/_felles/prioritering/PrioritertBehandlingTag';
 import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
@@ -205,14 +205,20 @@ const propsForRad = (
         case ÅpenBehandlingType.MELDEKORT: {
             const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
 
-            const { id, opprettet, saksbehandler, beslutter, meldeperioder } = meldekortbehandling;
+            const { id, opprettet, saksbehandler, beslutter, meldeperioder, prioritering } =
+                meldekortbehandling;
 
             const perioder = meldeperioder.map((meldeperiode) => meldeperiode.periode);
 
             return {
                 typeTekst,
                 opprettet,
-                statusTag: <BehandlingStatusTags behandling={meldekortbehandling} kompakt={true} />,
+                statusTag: (
+                    <HStack gap={'space-4'} align={'center'} wrap={false}>
+                        <BehandlingStatusTags behandling={meldekortbehandling} kompakt={true} />
+                        {prioritering && <PrioritertBehandlingTag prioritering={prioritering} />}
+                    </HStack>
+                ),
                 saksbehandler,
                 beslutter,
                 periodeTekst: (

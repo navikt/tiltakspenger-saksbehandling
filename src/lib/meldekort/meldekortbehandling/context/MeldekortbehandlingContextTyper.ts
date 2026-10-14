@@ -20,12 +20,14 @@ export type MeldekortbehandlingSkjemaState = {
     meldeperioder: MeldeperiodeSkjema[];
     skalSendeVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
+    erPrioritert: boolean;
 };
 
 export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & {
     erReadonly: boolean;
     begrunnelse: TextAreaInput;
     brevtekst: TextAreaInput;
+    prioriteringBegrunnelse: TextAreaInput;
 };
 
 export type MeldekortbehandlingSkjemaActions =
@@ -36,5 +38,6 @@ export type MeldekortbehandlingSkjemaActions =
     | ReducerAction<'setDager', MeldeperiodeSkjema>
     | ReducerAction<'setSkalSendeVedtaksbrev', { skalSendeVedtaksbrev: boolean }>
     | ReducerAction<'setSkalJournalføreNotat', { skalJournalføreNotat: boolean }>
+    | ReducerAction<'setErPrioritert', { erPrioritert: boolean }>
     | ReducerAction<'leggTilMeldeperioder', { meldeperiodeKjeder: MeldeperiodekjedeProps[] }>
     | ReducerAction<'fjernMeldeperiode', { kjedeId: MeldeperiodeKjedeId }>;

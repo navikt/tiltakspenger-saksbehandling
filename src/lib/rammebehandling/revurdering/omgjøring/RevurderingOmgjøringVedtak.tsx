@@ -16,7 +16,6 @@ import { OmgjøringOpphørVelger } from '~/lib/rammebehandling/revurdering/omgj�
 import { OmgjøringInnvilgelseVedtaksperiodeVelger } from '~/lib/rammebehandling/revurdering/omgjøring/innvilgelse/OmgjøringInnvilgelseVedtaksperiodeVelger';
 import { RevurderingAutomatiskOpprettetGrunn } from '~/lib/rammebehandling/revurdering/felles/automatisk-opprettet-grunn/RevurderingAutomatiskOpprettetGrunn';
 import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
-import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 
 export const RevurderingOmgjøringVedtak = () => {
     const skjema = useOmgjøringSkjema();
@@ -24,7 +23,6 @@ export const RevurderingOmgjøringVedtak = () => {
 
     const { automatiskOpprettetGrunn, manueltBehandlesGrunner } =
         useRevurderingBehandling().behandling;
-    const { prioriteringToggle } = useFeatureToggles();
 
     return (
         <>
@@ -48,12 +46,8 @@ export const RevurderingOmgjøringVedtak = () => {
                 <IkkeValgt />
             )}
             <Separator />
-            {prioriteringToggle && (
-                <>
-                    <BehandlingPrioritering />
-                    <Separator />
-                </>
-            )}
+            <BehandlingPrioritering />
+            <Separator />
             <RevurderingOmgjøringHandlinger />
         </>
     );

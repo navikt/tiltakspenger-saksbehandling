@@ -18,6 +18,7 @@ import { MeldekortbehandlingSkjemaContext } from '~/lib/meldekort/meldekortbehan
 import { meldekortbehandlingSkjemaInitialState } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaReducer';
 import { isEqualJson } from '~/utils/is-equal-json';
 import { sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
+import { tilOppdaterPrioriteringDTO } from '~/lib/_felles/prioritering/prioriteringUtils';
 
 type LagringContextState = {
     dto: OppdaterMeldekortbehandlingDTO;
@@ -39,7 +40,11 @@ export const MeldekortbehandlingLagringProvider = ({ children }: PropsWithChildr
     }, [skjema]);
 
     useEffect(() => {
-        const fritekstElementer = [skjema.begrunnelse, skjema.brevtekst]
+        const fritekstElementer = [
+            skjema.begrunnelse,
+            skjema.brevtekst,
+            skjema.prioriteringBegrunnelse,
+        ]
             .map((fritekst) => fritekst.ref.current)
             .filter((element) => element !== null);
 
@@ -52,7 +57,7 @@ export const MeldekortbehandlingLagringProvider = ({ children }: PropsWithChildr
                 element.removeEventListener('input', oppdaterDto);
             });
         };
-    }, [skjema.begrunnelse, skjema.brevtekst, oppdaterDto]);
+    }, [skjema.begrunnelse, skjema.brevtekst, skjema.prioriteringBegrunnelse, oppdaterDto]);
 
     useEffect(() => {
         /* eslint-disable-next-line react-hooks/set-state-in-effect */
@@ -75,10 +80,16 @@ export const MeldekortbehandlingLagringProvider = ({ children }: PropsWithChildr
 const genererDtoFraBehandling = (
     behandling: MeldekortbehandlingProps,
 ): OppdaterMeldekortbehandlingDTO => {
+    const { erPrioritert, ...skjemaState } = meldekortbehandlingSkjemaInitialState(behandling);
+
     return {
-        ...meldekortbehandlingSkjemaInitialState(behandling),
+        ...skjemaState,
         begrunnelse: sladdbarTekstEllerNull(behandling.begrunnelse),
         tekstTilVedtaksbrev: sladdbarTekstEllerNull(behandling.tekstTilVedtaksbrev),
+        prioritering: tilOppdaterPrioriteringDTO(
+            erPrioritert,
+            sladdbarTekstEllerNull(behandling.prioritering?.begrunnelse),
+        ),
     };
 };
 
@@ -94,6 +105,10 @@ const genererDtoFraSkjema = (
         skalJournalføreNotat: skjema.skalJournalføreNotat,
         begrunnelse: skjema.begrunnelse.getValue(),
         tekstTilVedtaksbrev: skjema.brevtekst.getValue(),
+        prioritering: tilOppdaterPrioriteringDTO(
+            skjema.erPrioritert,
+            skjema.prioriteringBegrunnelse.getValue(),
+        ),
     };
 };
 

@@ -47,6 +47,7 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
 
     const begrunnelse = useFritekstInput(meldekortbehandling.begrunnelse);
     const brevtekst = useFritekstInput(meldekortbehandling.tekstTilVedtaksbrev);
+    const prioriteringBegrunnelse = useFritekstInput(meldekortbehandling.prioritering?.begrunnelse);
 
     return (
         <MeldekortbehandlingContext.Provider value={meldekortbehandling}>
@@ -57,6 +58,7 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
                         erReadonly,
                         begrunnelse,
                         brevtekst,
+                        prioriteringBegrunnelse,
                     }}
                 >
                     <MeldekortbehandlingLagringProvider>
