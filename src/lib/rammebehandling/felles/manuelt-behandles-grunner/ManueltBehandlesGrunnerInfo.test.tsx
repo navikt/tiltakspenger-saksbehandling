@@ -26,15 +26,17 @@ test('viser grunnene til at en automatisk forlengelse må behandles manuelt', ()
     render(
         <ManueltBehandlesGrunnerInfo
             grunner={[
-                ManueltBehandlesGrunn.FORLENGELSE_HAR_BARNETILLEGG,
-                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_DELTAKELSESMENGDE,
+                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_STARTDATO,
+                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_DELTAKELSESMENGDE_OG_KAN_MELDE_I_HELG,
             ]}
         />,
     );
 
-    expect(screen.getByText('Det gjeldende vedtaket har barnetillegg')).toBeInTheDocument();
+    expect(screen.getByText('Startdatoen for tiltaksdeltakelsen er endret')).toBeInTheDocument();
     expect(
-        screen.getByText('Deltakelsesmengden for tiltaksdeltakelsen er endret'),
+        screen.getByText(
+            'Deltakelsesmengden for tiltaksdeltakelsen er endret, og bruker kan melde i helg',
+        ),
     ).toBeInTheDocument();
 });
 

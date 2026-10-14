@@ -96,13 +96,15 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     FORLENGELSE_SLUTTDATO_ER_IKKE_ETTER_INNVILGELSEN:
         'Ny sluttdato for tiltaksdeltakelsen er ikke etter siste innvilgede dag',
     FORLENGELSE_ENDRET_STARTDATO: 'Startdatoen for tiltaksdeltakelsen er endret',
-    FORLENGELSE_ENDRET_DELTAKELSESMENGDE: 'Deltakelsesmengden for tiltaksdeltakelsen er endret',
+    FORLENGELSE_ENDRET_DELTAKELSESMENGDE_OG_KAN_MELDE_I_HELG:
+        'Deltakelsesmengden for tiltaksdeltakelsen er endret, og bruker kan melde i helg',
+    FORLENGELSE_KAN_IKKE_UTLEDE_DELTAKELSESMENGDE:
+        'Deltakelsesmengden for tiltaksdeltakelsen er endret, men mangler både dager per uke og prosent, eller er mer enn fulltid',
     FORLENGELSE_OVERLAPPER_ANDRE_VEDTAK: 'Forlengelsen overlapper med andre vedtak på saken',
     FORLENGELSE_OVERLAPPENDE_TILTAK:
         'Bruker har overlappende tiltaksdeltakelser i forlengelsesperioden',
     FORLENGELSE_ANDRE_YTELSER: 'Bruker mottar andre ytelser',
     FORLENGELSE_VEDTAK_I_ARENA: 'Det finnes tiltakspengevedtak i Arena',
-    FORLENGELSE_HAR_BARNETILLEGG: 'Det gjeldende vedtaket har barnetillegg',
     FORLENGELSE_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for forlengelsen mangler simulering',
     FORLENGELSE_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
         'Simuleringen av forlengelsen gir feilutbetaling, som ikke støttes for forlengelse',
