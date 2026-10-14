@@ -102,6 +102,8 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Deltakelsesmengden for tiltaksdeltakelsen er endret, men mangler både dager per uke og prosent, eller er mer enn fulltid',
     FORLENGELSE_DELTAKELSESMENGDE_GIR_IKKE_HELE_DAGER:
         'Deltakelsesmengden for tiltaksdeltakelsen er endret, men gir ikke et helt antall dager per meldeperiode',
+    FORLENGELSE_KAN_IKKE_UTLEDE_BARNETILLEGG:
+        'Barnetillegget i det gjeldende vedtaket samsvarer ikke med barna i søknaden',
     FORLENGELSE_OVERLAPPER_ANDRE_VEDTAK: 'Forlengelsen overlapper med andre vedtak på saken',
     FORLENGELSE_OVERLAPPENDE_TILTAK:
         'Bruker har overlappende tiltaksdeltakelser i forlengelsesperioden',
