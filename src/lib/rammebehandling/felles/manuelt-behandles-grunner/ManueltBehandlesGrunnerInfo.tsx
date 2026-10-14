@@ -47,6 +47,9 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Bruker har overlappende tiltaksdeltakelser i søknadsperioden',
     SAKSOPPLYSNING_MINDRE_ENN_14_DAGER_MELLOM_TILTAK_OG_SOKNAD:
         'Bruker har tiltaksdeltakelse som starter eller slutter mindre enn 14 dager før eller etter søknadsperioden',
+    SAKSOPPLYSNING_HAR_LONNSTILSKUDD: 'Bruker har lønnstilskudd i søknadsperioden',
+    SAKSOPPLYSNING_HAR_TILTAK_SOM_FRATAR_RETT:
+        'Bruker har tiltak som fratar rett til tiltakspenger i søknadsperioden',
     SAKSOPPLYSNING_ULIK_TILTAKSPERIODE:
         'Tiltaksdeltakelsen har ikke samme periode som det er søkt for',
     SAKSOPPLYSNING_HAR_IKKE_DELTATT_PA_TILTAK:
