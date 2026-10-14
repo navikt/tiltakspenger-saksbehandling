@@ -55,8 +55,8 @@ Sladdebanneret øverst på siden styres direkte av feltet `sladdes` fra saksbeha
 
 ## Dev-siden (`/dev`)
 
-- Siden kaller backendens lokale dev-ruter (`/dev/...`) og er bare tilgjengelig når `NEXT_PUBLIC_DEVROUTES=true`.
-- Komponentene ligger i `src/dev/` og lastes kun via `next/dynamic` bak `process.env.NEXT_PUBLIC_DEVROUTES === 'true'` i page-filene under `src/pages/dev/`. Siden variabelen inlines ved bygg, blir de ikke med i prod-bygget. Sjekken må stå inline i hver page-fil (ikke importert), og `~/dev` skal ikke importeres andre steder, ellers havner koden i bygget igjen.
+- Siden kaller backendens lokale dev-ruter (`/dev/...`) og er bare tilgjengelig under `next dev` (`process.env.NODE_ENV === 'development'`).
+- Komponentene ligger i `src/dev/` og lastes kun via `next/dynamic` bak `process.env.NODE_ENV === 'development'` i page-filene under `src/pages/dev/`. Siden variabelen inlines ved bygg, blir de ikke med i prod-bygget. Sjekken må stå inline i hver page-fil (ikke importert), og `~/dev` skal ikke importeres andre steder, ellers havner koden i bygget igjen. Dette håndheves av ESLint (`no-restricted-imports` for statiske og `no-restricted-syntax` for dynamiske importer) i `eslint.config.ts`.
 
 ## Lokal testdata
 

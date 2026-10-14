@@ -4,6 +4,50 @@ import globals from 'globals';
 import css from '@eslint/css';
 import nextConfig from 'eslint-config-next';
 
+const restrictedImportPaths = [
+    {
+        name: '@navikt/ds-react',
+        importNames: ['Alert'],
+        message:
+            'Alert er deprecated. Bruk Infokort (~/lib/_felles/infokort/Infokort) for varselbokser, eller InlineMessage for inline-varsler.',
+    },
+    {
+        name: '@navikt/ds-react',
+        importNames: ['Modal'],
+        message: 'Modal er deprecated. Bruk Dialog fra @navikt/ds-react.',
+    },
+];
+
+const restrictedImportPatterns = [
+    {
+        group: ['**/e2e/**'],
+        message: 'App code must not import from the e2e/ folder.',
+    },
+];
+
+// Dev-koden skal kun lastes via next/dynamic fra src/pages/dev, slik at den ikke havner i prod-bygget.
+const devImportMessage =
+    'Filer i src/dev skal kun importeres fra src/dev eller src/pages/dev (via next/dynamic bak NODE_ENV === "development").';
+
+const devImportPattern = {
+    group: ['~/dev', '~/dev/**', '**/dev', '**/dev/**'],
+    message: devImportMessage,
+};
+
+// no-restricted-imports fanger ikke dynamiske import(), så de sjekkes via no-restricted-syntax.
+const devDynamicImportSyntax = {
+    selector: 'ImportExpression[source.value=/(^|\\/)dev(\\/|$)/]',
+    message: devImportMessage,
+};
+
+const restrictedSyntax = [
+    {
+        selector: 'TSNonNullExpression',
+        message:
+            'Non-null assertions skal gjøres runtime. Bruk nonNullish() fra ~/utils/object, eller atNonNull() for array-oppslag.',
+    },
+];
+
 const eslintConfig = [
     {
         ignores: [
@@ -40,14 +84,7 @@ const eslintConfig = [
             ...tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {}),
             'no-undef': 'off',
             '@typescript-eslint/no-explicit-any': 'error',
-            'no-restricted-syntax': [
-                'error',
-                {
-                    selector: 'TSNonNullExpression',
-                    message:
-                        'Non-null assertions skal gjøres runtime. Bruk nonNullish() fra ~/utils/object, eller atNonNull() for array-oppslag.',
-                },
-            ],
+            'no-restricted-syntax': ['error', ...restrictedSyntax, devDynamicImportSyntax],
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 { argsIgnorePattern: '^(_|req|res|next)$' },
@@ -58,30 +95,23 @@ const eslintConfig = [
             'no-restricted-imports': [
                 'error',
                 {
-                    paths: [
-                        {
-                            name: '@navikt/ds-react',
-                            importNames: ['Alert'],
-                            message:
-                                'Alert er deprecated. Bruk Infokort (~/lib/_felles/infokort/Infokort) for varselbokser, eller InlineMessage for inline-varsler.',
-                        },
-                        {
-                            name: '@navikt/ds-react',
-                            importNames: ['Modal'],
-                            message: 'Modal er deprecated. Bruk Dialog fra @navikt/ds-react.',
-                        },
-                    ],
-                    patterns: [
-                        {
-                            group: ['**/e2e/**'],
-                            message: 'App code must not import from the e2e/ folder.',
-                        },
-                    ],
+                    paths: restrictedImportPaths,
+                    patterns: [...restrictedImportPatterns, devImportPattern],
                 },
             ],
         },
         linterOptions: {
             reportUnusedDisableDirectives: 'off',
+        },
+    },
+    {
+        files: ['src/dev/**/*.{ts,tsx,js,jsx}', 'src/pages/dev/**/*.{ts,tsx,js,jsx}'],
+        rules: {
+            'no-restricted-imports': [
+                'error',
+                { paths: restrictedImportPaths, patterns: restrictedImportPatterns },
+            ],
+            'no-restricted-syntax': ['error', ...restrictedSyntax],
         },
     },
     {
