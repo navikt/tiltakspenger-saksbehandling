@@ -96,12 +96,8 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     FORLENGELSE_SLUTTDATO_ER_IKKE_ETTER_INNVILGELSEN:
         'Ny sluttdato for tiltaksdeltakelsen er ikke etter siste innvilgede dag',
     FORLENGELSE_ENDRET_STARTDATO: 'Startdatoen for tiltaksdeltakelsen er endret',
-    FORLENGELSE_ENDRET_DELTAKELSESMENGDE_OG_KAN_MELDE_I_HELG:
-        'Deltakelsesmengden for tiltaksdeltakelsen er endret, og bruker kan melde i helg',
-    FORLENGELSE_KAN_IKKE_UTLEDE_DELTAKELSESMENGDE:
-        'Deltakelsesmengden for tiltaksdeltakelsen er endret, men mangler både dager per uke og prosent, eller er mer enn fulltid',
-    FORLENGELSE_DELTAKELSESMENGDE_GIR_IKKE_HELE_DAGER:
-        'Deltakelsesmengden for tiltaksdeltakelsen er endret, men gir ikke et helt antall dager per meldeperiode',
+    FORLENGELSE_ENDRET_DELTAKELSESMENGDE:
+        'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
     FORLENGELSE_KAN_IKKE_UTLEDE_BARNETILLEGG:
         'Barnetillegget i det gjeldende vedtaket samsvarer ikke med barna i søknaden',
     FORLENGELSE_OVERLAPPER_ANDRE_VEDTAK: 'Forlengelsen overlapper med andre vedtak på saken',

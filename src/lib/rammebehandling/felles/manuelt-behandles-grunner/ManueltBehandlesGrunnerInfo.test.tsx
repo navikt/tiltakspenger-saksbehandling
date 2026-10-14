@@ -27,7 +27,7 @@ test('viser grunnene til at en automatisk forlengelse må behandles manuelt', ()
         <ManueltBehandlesGrunnerInfo
             grunner={[
                 ManueltBehandlesGrunn.FORLENGELSE_ENDRET_STARTDATO,
-                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_DELTAKELSESMENGDE_OG_KAN_MELDE_I_HELG,
+                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_DELTAKELSESMENGDE,
             ]}
         />,
     );
@@ -35,7 +35,7 @@ test('viser grunnene til at en automatisk forlengelse må behandles manuelt', ()
     expect(screen.getByText('Startdatoen for tiltaksdeltakelsen er endret')).toBeInTheDocument();
     expect(
         screen.getByText(
-            'Deltakelsesmengden for tiltaksdeltakelsen er endret, og bruker kan melde i helg',
+            'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
         ),
     ).toBeInTheDocument();
 });
