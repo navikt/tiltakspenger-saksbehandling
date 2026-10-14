@@ -44,7 +44,7 @@ export const useHentBehandlingLagringProps = ({
 
         if (
             type === 'tilBeslutning' &&
-            skjema.journalføring.skalJournalføreNotat &&
+            skjema.skalJournalføreNotat &&
             skjema.textAreas.begrunnelse.getValue() === null
         ) {
             return {
@@ -103,10 +103,7 @@ const validerPrioritering = (
     skjema: BehandlingSkjemaContext,
     valideringResultat: ValideringResultat,
 ): ValideringResultat => {
-    if (
-        skjema.prioritering.erPrioritert &&
-        skjema.textAreas.prioriteringBegrunnelse.getValue() === null
-    ) {
+    if (skjema.erPrioritert && skjema.textAreas.prioriteringBegrunnelse.getValue() === null) {
         return {
             ...valideringResultat,
             errors: [

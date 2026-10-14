@@ -1,11 +1,4 @@
-import {
-    createContext,
-    Dispatch,
-    PropsWithChildren,
-    useContext,
-    useReducer,
-    useState,
-} from 'react';
+import { createContext, Dispatch, PropsWithChildren, useContext, useReducer } from 'react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
     BehandlingSkjemaActions,
@@ -26,24 +19,21 @@ import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/s�
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import {
+    behandlingSkjemaFellesInitialState,
+    BehandlingSkjemaFellesState,
+} from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 
-export type BehandlingSkjemaContextBase<T> = T & {
-    erReadonly: boolean;
-    textAreas: {
-        begrunnelse: TextAreaInput;
-        brevtekst: TextAreaInput;
-        barnetilleggBegrunnelse: TextAreaInput;
-        prioriteringBegrunnelse: TextAreaInput;
+export type BehandlingSkjemaContextBase<T> = T &
+    BehandlingSkjemaFellesState & {
+        erReadonly: boolean;
+        textAreas: {
+            begrunnelse: TextAreaInput;
+            brevtekst: TextAreaInput;
+            barnetilleggBegrunnelse: TextAreaInput;
+            prioriteringBegrunnelse: TextAreaInput;
+        };
     };
-    journalføring: {
-        skalJournalføreNotat: boolean;
-        setSkalJournalføreNotat: (skalJournalføreNotat: boolean) => void;
-    };
-    prioritering: {
-        erPrioritert: boolean;
-        setErPrioritert: (erPrioritert: boolean) => void;
-    };
-};
 
 export type BehandlingSkjemaContext = BehandlingSkjemaContextBase<BehandlingSkjemaState>;
 
@@ -80,12 +70,6 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
         initialState,
     );
 
-    const [skalJournalføreNotat, setSkalJournalføreNotat] = useState(
-        behandling.skalJournalføreNotat,
-    );
-
-    const [erPrioritert, setErPrioritert] = useState(behandling.prioritering !== null);
-
     const begrunnelse = useFritekstInput(behandling.begrunnelseVilkårsvurdering);
     const brevtekst = useFritekstInput(behandling.fritekstTilVedtaksbrev);
     const barnetilleggBegrunnelse = useFritekstInput(
@@ -105,14 +89,6 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
                         barnetilleggBegrunnelse,
                         prioriteringBegrunnelse,
                     },
-                    journalføring: {
-                        skalJournalføreNotat,
-                        setSkalJournalføreNotat,
-                    },
-                    prioritering: {
-                        erPrioritert,
-                        setErPrioritert,
-                    },
                 }}
             >
                 {children}
@@ -128,9 +104,15 @@ const initialState = ({
     behandling: Rammebehandling;
     sak: SakProps;
 }): BehandlingSkjemaState => {
-    return behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-        ? søknadsbehandlingInitialState(behandling)
-        : revurderingInitialState(behandling, sak);
+    const resultatState =
+        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
+            ? søknadsbehandlingInitialState(behandling)
+            : revurderingInitialState(behandling, sak);
+
+    return {
+        ...resultatState,
+        ...behandlingSkjemaFellesInitialState(behandling),
+    };
 };
 
 export const useBehandlingSkjema = () => {

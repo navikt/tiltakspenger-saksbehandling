@@ -47,7 +47,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
             return {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                skalJournalføreNotat: skjema.skalJournalføreNotat,
                 prioritering: tilOppdaterPrioriteringDTO(skjema),
                 innvilgelsesperioder,
                 barnetillegg: harBarnetillegg
@@ -69,7 +69,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 avslagsgrunner: skjema.avslagsgrunner,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                skalJournalføreNotat: skjema.skalJournalføreNotat,
                 prioritering: tilOppdaterPrioriteringDTO(skjema),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
                 skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
@@ -80,7 +80,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: skjema.journalføring.skalJournalføreNotat,
+                skalJournalføreNotat: skjema.skalJournalføreNotat,
                 prioritering: tilOppdaterPrioriteringDTO(skjema),
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies OppdaterSøknadsbehandlingIkkeValgtDTO;

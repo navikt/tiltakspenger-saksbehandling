@@ -6,12 +6,14 @@ import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetek
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 
 export const BegrunnelseVilkårsvurdering = () => {
-    const { textAreas, erReadonly, journalføring } = useBehandlingSkjema();
+    const { textAreas, erReadonly, skalJournalføreNotat } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaFellesDispatch();
     const { begrunnelse } = textAreas;
 
     return (
@@ -53,8 +55,13 @@ export const BegrunnelseVilkårsvurdering = () => {
                     ref={begrunnelse.ref}
                 />
                 <JournalførNotatValg
-                    skalJournalføreNotat={journalføring.skalJournalføreNotat}
-                    onChange={journalføring.setSkalJournalføreNotat}
+                    skalJournalføreNotat={skalJournalføreNotat}
+                    onChange={(skalJournalføreNotat) =>
+                        dispatch({
+                            type: 'setSkalJournalføreNotat',
+                            payload: { skalJournalføreNotat },
+                        })
+                    }
                     readOnly={erReadonly}
                 />
             </VedtakSeksjon.Venstre>

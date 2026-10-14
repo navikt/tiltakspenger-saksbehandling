@@ -4,9 +4,9 @@ import { Nullable } from '~/types/UtilTypes';
 
 // En prioritering uten begrunnelse stoppes av valideringen før lagring, så den sendes aldri til backend.
 export const tilOppdaterPrioriteringDTO = (
-    skjema: Pick<BehandlingSkjemaContext, 'prioritering' | 'textAreas'>,
+    skjema: Pick<BehandlingSkjemaContext, 'erPrioritert' | 'textAreas'>,
 ): Nullable<OppdaterPrioriteringDTO> => {
-    if (!skjema.prioritering.erPrioritert) {
+    if (!skjema.erPrioritert) {
         return null;
     }
 

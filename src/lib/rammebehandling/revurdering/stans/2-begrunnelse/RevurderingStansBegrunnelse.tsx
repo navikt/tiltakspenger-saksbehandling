@@ -4,12 +4,14 @@ import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetek
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './RevurderingStansBegrunnelse.module.css';
 
 export const RevurderingStansBegrunnelse = () => {
-    const { textAreas, erReadonly, journalføring } = useBehandlingSkjema();
+    const { textAreas, erReadonly, skalJournalføreNotat } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaFellesDispatch();
     const { begrunnelse } = textAreas;
 
     return (
@@ -26,8 +28,13 @@ export const RevurderingStansBegrunnelse = () => {
                     ref={begrunnelse.ref}
                 />
                 <JournalførNotatValg
-                    skalJournalføreNotat={journalføring.skalJournalføreNotat}
-                    onChange={journalføring.setSkalJournalføreNotat}
+                    skalJournalføreNotat={skalJournalføreNotat}
+                    onChange={(skalJournalføreNotat) =>
+                        dispatch({
+                            type: 'setSkalJournalføreNotat',
+                            payload: { skalJournalføreNotat },
+                        })
+                    }
                     readOnly={erReadonly}
                 />
             </VedtakSeksjon.Venstre>

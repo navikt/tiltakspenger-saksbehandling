@@ -25,11 +25,20 @@ import {
     erOmgjøringContext,
     erSøknadsbehandlingContext,
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import {
+    BehandlingSkjemaFellesActions,
+    behandlingSkjemaFellesReducer,
+    BehandlingSkjemaFellesState,
+    hentBehandlingSkjemaFellesState,
+} from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 
-export type BehandlingSkjemaState =
+export type BehandlingSkjemaResultatState =
     SøknadsbehandlingState | RevurderingInnvilgelseState | RevurderingStansState | OmgjøringState;
 
+export type BehandlingSkjemaState = BehandlingSkjemaFellesState & BehandlingSkjemaResultatState;
+
 export type BehandlingSkjemaActions =
+    | BehandlingSkjemaFellesActions
     | SøknadsbehandlingActions
     | RevurderingInnvilgelseActions
     | OmgjøringActions
@@ -42,7 +51,22 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
     const { resultat } = state;
     const { superType, type } = action;
 
+    // Reducerne for resultatene kan bytte ut hele staten når resultatet endres, så fellesfeltene må bevares her
+    const medFellesState = (
+        resultatState: BehandlingSkjemaResultatState,
+    ): BehandlingSkjemaState => ({
+        ...resultatState,
+        ...hentBehandlingSkjemaFellesState(state),
+    });
+
     switch (superType) {
+        case BehandlingSkjemaType.Felles: {
+            return {
+                ...state,
+                ...behandlingSkjemaFellesReducer(hentBehandlingSkjemaFellesState(state), action),
+            };
+        }
+
         case BehandlingSkjemaType.Søknadsbehandling: {
             if (!erSøknadsbehandlingContext(state)) {
                 throw Error(
@@ -50,7 +74,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
                 );
             }
 
-            return søknadsbehandlingReducer(state, action);
+            return medFellesState(søknadsbehandlingReducer(state, action));
         }
 
         case BehandlingSkjemaType.RevurderingInnvilgelse: {
@@ -60,7 +84,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
                 );
             }
 
-            return revurderingInnvilgelseReducer(state, action);
+            return medFellesState(revurderingInnvilgelseReducer(state, action));
         }
 
         case BehandlingSkjemaType.RevurderingOmgjøring: {
@@ -70,7 +94,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
                 );
             }
 
-            return omgjøringReducer(state, action);
+            return medFellesState(omgjøringReducer(state, action));
         }
 
         case BehandlingSkjemaType.RevurderingStans: {
@@ -80,7 +104,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
                 );
             }
 
-            return revurderingStansReducer(state, action);
+            return medFellesState(revurderingStansReducer(state, action));
         }
     }
 };

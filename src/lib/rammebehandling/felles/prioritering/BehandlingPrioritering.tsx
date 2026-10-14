@@ -2,9 +2,11 @@ import { Checkbox } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 
 export const BehandlingPrioritering = () => {
-    const { textAreas, erReadonly, prioritering } = useBehandlingSkjema();
+    const { textAreas, erReadonly, erPrioritert } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaFellesDispatch();
     const { prioriteringBegrunnelse } = textAreas;
 
     return (
@@ -12,16 +14,21 @@ export const BehandlingPrioritering = () => {
             <VedtakSeksjon.Venstre gap={'space-8'}>
                 <Checkbox
                     size={'small'}
-                    checked={prioritering.erPrioritert}
+                    checked={erPrioritert}
                     readOnly={erReadonly}
-                    onChange={(e) => prioritering.setErPrioritert(e.target.checked)}
+                    onChange={(e) =>
+                        dispatch({
+                            type: 'setErPrioritert',
+                            payload: { erPrioritert: e.target.checked },
+                        })
+                    }
                     description={
                         'Kun for hastesaker. Disse vises alltid øverst i behandlingsoversikten.'
                     }
                 >
                     {'Prioritert behandling'}
                 </Checkbox>
-                {prioritering.erPrioritert && (
+                {erPrioritert && (
                     <FritekstInput
                         label={'Begrunnelse for prioritering'}
                         hideLabel={false}

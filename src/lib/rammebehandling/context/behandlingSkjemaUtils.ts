@@ -10,7 +10,10 @@ import {
     BehandlingMedInnvilgelsesperioderState,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { SøknadsbehandlingState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { BehandlingSkjemaState } from '~/lib/rammebehandling/context/behandlingSkjemaReducer';
+import {
+    BehandlingSkjemaResultatState,
+    BehandlingSkjemaState,
+} from '~/lib/rammebehandling/context/behandlingSkjemaReducer';
 import {
     inneholderHelePerioden,
     krympPeriodisering,
@@ -31,19 +34,19 @@ import { hentRammevedtak } from '~/lib/sak/sakUtils';
 export const ANTALL_DAGER_DEFAULT = 10;
 
 export const erRammebehandlingInnvilgelseContext = (
-    context: BehandlingSkjemaState,
+    context: BehandlingSkjemaResultatState,
 ): context is BehandlingMedInnvilgelseState => {
     return erRammebehandlingInnvilgelseResultat(context.resultat);
 };
 
 export const erRammebehandlingInnvilgelseMedPerioderContext = (
-    context: BehandlingSkjemaState,
+    context: BehandlingSkjemaResultatState,
 ): context is BehandlingMedInnvilgelsesperioderState => {
     return erRammebehandlingInnvilgelseContext(context) && context.innvilgelse.harValgtPeriode;
 };
 
 export const erSøknadsbehandlingContext = (
-    context: BehandlingSkjemaState,
+    context: BehandlingSkjemaResultatState,
 ): context is SøknadsbehandlingState => {
     return erSøknadsbehandlingResultat(context.resultat);
 };
@@ -53,6 +56,7 @@ export const erOmgjøringContext = (context: BehandlingSkjemaState): context is 
 };
 
 export enum BehandlingSkjemaType {
+    Felles = 'Felles',
     Søknadsbehandling = 'Søknadsbehandling',
     RevurderingInnvilgelse = 'RevurderingInnvilgelse',
     RevurderingOmgjøring = 'RevurderingOmgjøring',

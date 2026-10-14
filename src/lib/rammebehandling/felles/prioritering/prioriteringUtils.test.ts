@@ -8,9 +8,9 @@ const skjema = (
     begrunnelse: Nullable<string>,
 ): Parameters<typeof tilOppdaterPrioriteringDTO>[0] =>
     ({
-        prioritering: { erPrioritert, setErPrioritert: () => {} },
+        erPrioritert,
         textAreas: { prioriteringBegrunnelse: { getValue: () => begrunnelse } },
-    }) as unknown as Pick<BehandlingSkjemaContext, 'prioritering' | 'textAreas'>;
+    }) as unknown as Pick<BehandlingSkjemaContext, 'erPrioritert' | 'textAreas'>;
 
 describe('tilOppdaterPrioriteringDTO', () => {
     test('sender begrunnelsen når behandlingen er prioritert', () => {
