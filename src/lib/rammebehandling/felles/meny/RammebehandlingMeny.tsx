@@ -195,7 +195,7 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                     åpen={aktivDialog === 'avslutt'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt(
-                        PersonoversiktTab.AvsluttedeBehandlinger,
+                        PersonoversiktTab.ÅpneBehandlinger,
                         `${erRevurdering ? 'Revurderingen' : 'Behandlingen'} er avsluttet`,
                     )}
                 />
