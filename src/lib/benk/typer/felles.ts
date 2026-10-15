@@ -238,4 +238,7 @@ export enum BenkIkkeTildelt {
     IKKE_TILDELT_BESLUTTER = 'IKKE_TILDELT_BESLUTTER',
 }
 
+/** Ident backenden bruker som saksbehandler på automatisk behandlede behandlinger */
+export const AUTOMATISK_SAKSBEHANDLER_IDENT = 'tp-sak';
+
 export type BenkSaksbehandlerFilter = Nullable<string | BenkIkkeTildelt>;

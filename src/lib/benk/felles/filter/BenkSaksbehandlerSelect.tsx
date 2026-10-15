@@ -3,7 +3,12 @@ import { Select } from '@navikt/ds-react';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { isValueInRecord } from '~/utils/object';
-import { BenkGlobaltFilter, BenkIkkeTildelt, BenkSaksbehandlerFilter } from '../../typer/felles';
+import {
+    AUTOMATISK_SAKSBEHANDLER_IDENT,
+    BenkGlobaltFilter,
+    BenkIkkeTildelt,
+    BenkSaksbehandlerFilter,
+} from '../../typer/felles';
 import { BenkFilterSkjemaTilstand } from './useBenkFilterSkjema';
 
 type Props = {
@@ -19,7 +24,7 @@ export const BenkSaksbehandlerSelect = ({ skjema, saksbehandlere, besluttere }: 
     const valgtSaksbehandler = skjema.valgtFilter.saksbehandler;
     const disabled = skjema.aktivtFilter.kunTildeltMeg;
 
-    // Ekskluderer innlogget saksbehandler, ettersom vi alltid ønsker å vise denne som "Meg"
+    // Ekskluderer innlogget og automatisk saksbehandler, ettersom disse alltid vises øverst
     const identer = useMemo(() => {
         return [
             ...saksbehandlere,
@@ -28,7 +33,9 @@ export const BenkSaksbehandlerSelect = ({ skjema, saksbehandlere, besluttere }: 
         ]
             .filter(
                 (ident, index, array) =>
-                    ident !== innloggetIdent && removeDuplicatesFilter()(ident, index, array),
+                    ident !== innloggetIdent &&
+                    ident !== AUTOMATISK_SAKSBEHANDLER_IDENT &&
+                    removeDuplicatesFilter()(ident, index, array),
             )
             .toSorted();
     }, [saksbehandlere, besluttere, innloggetIdent, valgtSaksbehandler]);
@@ -50,6 +57,7 @@ export const BenkSaksbehandlerSelect = ({ skjema, saksbehandlere, besluttere }: 
                 {'Ikke tildelt beslutter'}
             </option>
             <option value={innloggetIdent}>{`Meg (${innloggetIdent})`}</option>
+            <option value={AUTOMATISK_SAKSBEHANDLER_IDENT}>{'Automatisk behandlet'}</option>
             <option disabled={true}>{'──────────'}</option>
             {identer.map((ident) => (
                 <option key={ident} value={ident}>
