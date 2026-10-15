@@ -11,7 +11,7 @@ import {
 
 const ikkeValgtState: BehandlingSkjemaState = {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT,
-    skalJournalføreNotat: false,
+    skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
     erPrioritert: false,
 };
 
@@ -25,13 +25,13 @@ describe('behandlingSkjemaReducer', () => {
 
         const journalført = behandlingSkjemaReducer(prioritert, {
             superType: BehandlingSkjemaType.Felles,
-            type: 'setSkalJournalføreNotat',
+            type: 'setSkalJournalføreNotatVilkårsvurdering',
             payload: { skalJournalføreNotat: true },
         });
 
         expect(journalført).toEqual({
             resultat: SøknadsbehandlingResultat.IKKE_VALGT,
-            skalJournalføreNotat: true,
+            skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
             erPrioritert: true,
         });
     });
@@ -39,7 +39,7 @@ describe('behandlingSkjemaReducer', () => {
     test('beholder fellesfeltene når resultatet endres', () => {
         const state: BehandlingSkjemaState = {
             ...ikkeValgtState,
-            skalJournalføreNotat: true,
+            skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
             erPrioritert: true,
         };
 
@@ -58,7 +58,7 @@ describe('behandlingSkjemaReducer', () => {
             resultat: SøknadsbehandlingResultat.AVSLAG,
             avslagsgrunner: [],
             skalSendeVedtaksbrev: true,
-            skalJournalføreNotat: true,
+            skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
             erPrioritert: true,
         });
     });

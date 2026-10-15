@@ -22,7 +22,8 @@ import {
 } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling, SkalJournalføreNotat } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { BehandlingSkjemaContext } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -53,6 +54,23 @@ export const erSøknadsbehandlingContext = (
 
 export const erOmgjøringContext = (context: BehandlingSkjemaState): context is OmgjøringContext => {
     return erOmgjøringResultat(context.resultat);
+};
+
+export const skalJournalføreBarnetilleggNotat = (skjema: BehandlingSkjemaContext): boolean => {
+    return (
+        skjema.skalJournalføreNotat.barnetillegg &&
+        erRammebehandlingInnvilgelseMedPerioderContext(skjema) &&
+        skjema.innvilgelse.harBarnetillegg
+    );
+};
+
+export const tilSkalJournalføreNotatDTO = (
+    skjema: BehandlingSkjemaContext,
+): SkalJournalføreNotat => {
+    return {
+        vilkårsvurdering: skjema.skalJournalføreNotat.vilkårsvurdering,
+        barnetillegg: skalJournalføreBarnetilleggNotat(skjema),
+    };
 };
 
 export enum BehandlingSkjemaType {

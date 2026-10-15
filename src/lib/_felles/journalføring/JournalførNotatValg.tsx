@@ -7,9 +7,15 @@ type Props = {
     skalJournalføreNotat: boolean;
     onChange: (skalJournalføreNotat: boolean) => void;
     readOnly: boolean;
+    label?: string;
 };
 
-export const JournalførNotatValg = ({ skalJournalføreNotat, onChange, readOnly }: Props) => {
+export const JournalførNotatValg = ({
+    skalJournalføreNotat,
+    onChange,
+    readOnly,
+    label = 'Journalfør begrunnelsen som notat',
+}: Props) => {
     return (
         <div className={style.container}>
             <Checkbox
@@ -21,7 +27,7 @@ export const JournalførNotatValg = ({ skalJournalføreNotat, onChange, readOnly
                     'Notatet journalføres i Joark og blir synlig i Gosys. Det sendes ikke til bruker.'
                 }
             >
-                {'Journalfør begrunnelsen som notat'}
+                {label}
             </Checkbox>
             {skalJournalføreNotat && (
                 <Infokort variant={'advarsel'} size={'small'}>

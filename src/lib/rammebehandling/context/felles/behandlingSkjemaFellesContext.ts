@@ -1,6 +1,6 @@
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/ReducerAction';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling, SkalJournalføreNotat } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useBehandlingSkjemaDispatch } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 
@@ -9,13 +9,17 @@ import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSk
  * Disse beholdes når saksbehandler endrer resultatet på behandlingen.
  */
 export type BehandlingSkjemaFellesState = {
-    skalJournalføreNotat: boolean;
+    skalJournalføreNotat: SkalJournalføreNotat;
     erPrioritert: boolean;
 };
 
 type Actions =
     | {
-          type: 'setSkalJournalføreNotat';
+          type: 'setSkalJournalføreNotatVilkårsvurdering';
+          payload: { skalJournalføreNotat: boolean };
+      }
+    | {
+          type: 'setSkalJournalføreNotatBarnetillegg';
           payload: { skalJournalføreNotat: boolean };
       }
     | {
@@ -50,10 +54,22 @@ export const behandlingSkjemaFellesReducer: Reducer<
     const { type, payload } = action;
 
     switch (type) {
-        case 'setSkalJournalføreNotat':
+        case 'setSkalJournalføreNotatVilkårsvurdering':
             return {
                 ...state,
-                skalJournalføreNotat: payload.skalJournalføreNotat,
+                skalJournalføreNotat: {
+                    ...state.skalJournalføreNotat,
+                    vilkårsvurdering: payload.skalJournalføreNotat,
+                },
+            };
+
+        case 'setSkalJournalføreNotatBarnetillegg':
+            return {
+                ...state,
+                skalJournalføreNotat: {
+                    ...state.skalJournalføreNotat,
+                    barnetillegg: payload.skalJournalføreNotat,
+                },
             };
 
         case 'setErPrioritert':

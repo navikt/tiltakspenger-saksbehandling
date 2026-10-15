@@ -1,3 +1,4 @@
+import { tilSkalJournalføreNotatDTO } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
@@ -41,7 +42,7 @@ const tilDTO = (
         resultat: RevurderingResultat.INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        skalJournalføreNotat: skjema.skalJournalføreNotat,
+        skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
         prioritering: tilOppdaterPrioriteringDTO(
             skjema.erPrioritert,
             skjema.textAreas.prioriteringBegrunnelse.getValue(),

@@ -1,3 +1,4 @@
+import { tilSkalJournalføreNotatDTO } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
@@ -47,7 +48,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
             return {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: skjema.skalJournalføreNotat,
+                skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
                 prioritering: tilOppdaterPrioriteringDTO(
                     skjema.erPrioritert,
                     skjema.textAreas.prioriteringBegrunnelse.getValue(),
@@ -72,7 +73,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 avslagsgrunner: skjema.avslagsgrunner,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: skjema.skalJournalføreNotat,
+                skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
                 prioritering: tilOppdaterPrioriteringDTO(
                     skjema.erPrioritert,
                     skjema.textAreas.prioriteringBegrunnelse.getValue(),
@@ -86,7 +87,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: skjema.skalJournalføreNotat,
+                skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
                 prioritering: tilOppdaterPrioriteringDTO(
                     skjema.erPrioritert,
                     skjema.textAreas.prioriteringBegrunnelse.getValue(),
