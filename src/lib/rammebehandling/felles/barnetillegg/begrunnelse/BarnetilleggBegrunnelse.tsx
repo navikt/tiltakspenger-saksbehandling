@@ -4,11 +4,14 @@ import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
+import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
-    const { textAreas, erReadonly } = useBehandlingSkjema();
+    const { textAreas, erReadonly, skalJournalføreNotat } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaFellesDispatch();
     const { barnetilleggBegrunnelse } = textAreas;
 
     return (
@@ -29,6 +32,17 @@ export const BarnetilleggBegrunnelse = () => {
                     defaultValue={barnetilleggBegrunnelse.getValue() ?? ''}
                     readOnly={erReadonly}
                     ref={barnetilleggBegrunnelse.ref}
+                />
+                <JournalførNotatValg
+                    skalJournalføreNotat={skalJournalføreNotat.barnetillegg}
+                    onChange={(skalJournalføreNotat) =>
+                        dispatch({
+                            type: 'setSkalJournalføreNotatBarnetillegg',
+                            payload: { skalJournalføreNotat },
+                        })
+                    }
+                    readOnly={erReadonly}
+                    label={'Journalfør begrunnelsen for barnetillegg som notat'}
                 />
             </VedtakSeksjon.Venstre>
 

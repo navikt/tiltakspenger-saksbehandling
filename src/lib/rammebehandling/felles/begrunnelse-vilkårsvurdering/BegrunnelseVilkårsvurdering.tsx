@@ -55,10 +55,10 @@ export const BegrunnelseVilkårsvurdering = () => {
                     ref={begrunnelse.ref}
                 />
                 <JournalførNotatValg
-                    skalJournalføreNotat={skalJournalføreNotat}
+                    skalJournalføreNotat={skalJournalføreNotat.vilkårsvurdering}
                     onChange={(skalJournalføreNotat) =>
                         dispatch({
-                            type: 'setSkalJournalføreNotat',
+                            type: 'setSkalJournalføreNotatVilkårsvurdering',
                             payload: { skalJournalføreNotat },
                         })
                     }

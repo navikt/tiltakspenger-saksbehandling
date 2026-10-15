@@ -63,7 +63,7 @@ export interface RammebehandlingBase {
     klagebehandlingId: Nullable<KlageId>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
-    skalJournalføreNotat: boolean;
+    skalJournalføreNotat: SkalJournalføreNotat;
     /** Prioriterte behandlinger ligger alltid øverst i benken. */
     prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
@@ -72,6 +72,11 @@ export interface RammebehandlingBase {
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;
+
+export type SkalJournalføreNotat = {
+    vilkårsvurdering: boolean;
+    barnetillegg: boolean;
+};
 
 export type RammebehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
 
@@ -176,11 +181,13 @@ export type OppdaterBehandlingBaseDTO = {
     resultat: RammebehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
-    skalJournalføreNotat: boolean;
+    skalJournalføreNotat: SkalJournalføreNotat;
     prioritering: Nullable<OppdaterPrioriteringDTO>;
 };
 
 export type RammebehandlingMedInnvilgelse =
-    SøknadsbehandlingInnvilgelse | RevurderingInnvilgelse | OmgjøringInnvilgelse;
+    | SøknadsbehandlingInnvilgelse
+    | RevurderingInnvilgelse
+    | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];

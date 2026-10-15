@@ -13,6 +13,7 @@ import {
     PRIORITERING_MANGLER_BEGRUNNELSE,
     prioriteringManglerBegrunnelse,
 } from '~/lib/_felles/prioritering/prioriteringUtils';
+import { skalJournalføreBarnetilleggNotat } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
@@ -46,21 +47,36 @@ export const useHentBehandlingLagringProps = ({
     const validerVedtak: ValideringFunc = (type) => {
         const valideringResultat = validerPrioritering(skjema, validerSkjema(type));
 
-        if (
-            type === 'tilBeslutning' &&
-            skjema.skalJournalføreNotat &&
-            skjema.textAreas.begrunnelse.getValue() === null
-        ) {
-            return {
-                ...valideringResultat,
-                errors: [
-                    ...valideringResultat.errors,
-                    'Begrunnelsen må være utfylt når notatet skal journalføres',
-                ],
-            };
+        if (type !== 'tilBeslutning') {
+            return valideringResultat;
         }
 
-        return valideringResultat;
+        const journalføringErrors: string[] = [];
+
+        if (
+            skjema.skalJournalføreNotat.vilkårsvurdering &&
+            skjema.textAreas.begrunnelse.getValue() === null
+        ) {
+            journalføringErrors.push('Begrunnelsen må være utfylt når notatet skal journalføres');
+        }
+
+        if (
+            skalJournalføreBarnetilleggNotat(skjema) &&
+            skjema.textAreas.barnetilleggBegrunnelse.getValue() === null
+        ) {
+            journalføringErrors.push(
+                'Begrunnelsen for barnetillegg må være utfylt når den skal journalføres som notat',
+            );
+        }
+
+        if (journalføringErrors.length === 0) {
+            return valideringResultat;
+        }
+
+        return {
+            ...valideringResultat,
+            errors: [...valideringResultat.errors, ...journalføringErrors],
+        };
     };
 
     const validerOgHentLagringDTO = (type: ValideringType) => {
