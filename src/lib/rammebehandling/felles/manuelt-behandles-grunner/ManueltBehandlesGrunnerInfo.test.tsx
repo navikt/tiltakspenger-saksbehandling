@@ -22,6 +22,24 @@ test('viser grunnene til at en automatisk stans må behandles manuelt', () => {
     expect(screen.getByText('Det finnes en annen åpen behandling på saken')).toBeInTheDocument();
 });
 
+test('viser grunnene til at en automatisk forlengelse må behandles manuelt', () => {
+    render(
+        <ManueltBehandlesGrunnerInfo
+            grunner={[
+                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_STARTDATO,
+                ManueltBehandlesGrunn.FORLENGELSE_ENDRET_DELTAKELSESMENGDE,
+            ]}
+        />,
+    );
+
+    expect(screen.getByText('Startdatoen for tiltaksdeltakelsen er endret')).toBeInTheDocument();
+    expect(
+        screen.getByText(
+            'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
+        ),
+    ).toBeInTheDocument();
+});
+
 test('viser ingenting når det ikke finnes grunner', () => {
     const { container } = render(<ManueltBehandlesGrunnerInfo grunner={[]} />);
 
