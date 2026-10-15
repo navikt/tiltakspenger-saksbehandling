@@ -7,14 +7,13 @@ import {
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { nonNullish } from '~/utils/object';
-import { finnPerioderHull, perioderOverlapper, totalPeriode } from '~/utils/periode';
+import { finnPerioderHull, slåSammenPerioder, totalPeriode } from '~/utils/periode';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/lib/sak/sakUtils';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { classNames } from '~/utils/classNames';
 import { VedtaksperiodevelgerGjeldendePerioder } from '~/lib/rammebehandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodevelgerGjeldendePerioder';
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Periode } from '~/types/Periode';
 
 import style from './OmgjøringVedtaksperiodeVelger.module.css';
@@ -32,36 +31,29 @@ export const OmgjøringVedtaksperiodeVelger = () => {
 
     const vedtak = nonNullish(hentRammevedtak(sak, behandling.omgjørVedtak));
 
-    const perioderSomKanOmgjøres = erOpphør
-        ? vedtak.gjeldendeInnvilgetPerioder
-        : vedtak.gjeldendeVedtaksperioder;
-
-    const hullMellomGjeldendePerioder = finnPerioderHull(perioderSomKanOmgjøres);
-    const gjeldendeVedtakHarHull = hullMellomGjeldendePerioder.length > 0;
-    const harValgtMedOverlappOverHull = hullMellomGjeldendePerioder.some((hull) =>
-        perioderOverlapper(hull, vedtaksperiode),
+    // Opphør må starte og slutte i en gjeldende innvilgelsesperiode, men kan gå over hull.
+    // Innvilgelse kan gå både over hull og utenfor gjeldende perioder, så lenge minst ett vedtak omgjøres.
+    const perioderSomKanOmgjøres = slåSammenPerioder(
+        (erOpphør ? sak.innvilgetTidslinje : sak.tidslinje).elementer.map((it) => it.periode),
     );
 
     const overlappendeVedtak = hentGjeldendeRammevedtakIPeriode(sak, vedtaksperiode);
-    const harValgtOmgjøringAvFlereVedtak = overlappendeVedtak.length > 1;
 
-    const periodeSomMåOmgjøresInnenfor = gyldigTotalOmgjøringsperiode(behandling, vedtak);
+    const periodeSomMåOmgjøresInnenfor = gyldigTotalOmgjøringsperiode(
+        behandling,
+        sak,
+        perioderSomKanOmgjøres,
+    );
 
     const commonProps: Partial<DatovelgerProps> = {
         readOnly: erReadonly,
         size: 'small',
         dropdownCaption: true,
-        disabledPerioder: hullMellomGjeldendePerioder,
+        disabledPerioder: erOpphør ? finnPerioderHull(perioderSomKanOmgjøres) : [],
     };
 
     return (
-        <VStack
-            gap={'space-8'}
-            className={classNames(
-                (harValgtMedOverlappOverHull || harValgtOmgjøringAvFlereVedtak) &&
-                    style.feilPeriode,
-            )}
-        >
+        <VStack gap={'space-8'}>
             <Heading size={'small'} level={'3'}>
                 {'Vedtaksperiode'}
             </Heading>
@@ -121,37 +113,31 @@ export const OmgjøringVedtaksperiodeVelger = () => {
                 />
             </HStack>
 
-            {gjeldendeVedtakHarHull && (
-                <VedtakHjelpetekst variant={'advarsel'}>
-                    {
-                        'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
-                    }
-                </VedtakHjelpetekst>
-            )}
-
-            {harValgtMedOverlappOverHull && (
-                <VedtakHjelpetekst variant={'feil'}>
-                    {'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'}
-                </VedtakHjelpetekst>
-            )}
-
             {overlappendeVedtak.length > 1 && (
-                <VedtakHjelpetekst variant={'feil'}>
-                    {`Den valgte perioden overlapper med ${overlappendeVedtak.length} vedtak. Du må velge en periode som kun overlapper med vedtaket som skal omgjøres.`}
+                <VedtakHjelpetekst variant={'info'}>
+                    {`Den valgte perioden omgjør ${overlappendeVedtak.length} vedtak.`}
                 </VedtakHjelpetekst>
             )}
         </VStack>
     );
 };
 
-// Perioden av det gjeldende vedtaket som det er gyldig å omgjøre innenfor
-// Ved innvilgelse kan vi gå utenfor denne perioden, men minst en dag må være innenfor
-const gyldigTotalOmgjøringsperiode = (behandling: Omgjøring, vedtak: Rammevedtak): Periode => {
-    if (!vedtak.erGjeldende || behandling.status === 'VEDTATT') {
+// Perioden det er gyldig å omgjøre innenfor, på tvers av alle gjeldende vedtak.
+// Ved innvilgelse kan vi gå utenfor denne perioden, men minst en dag må være innenfor.
+const gyldigTotalOmgjøringsperiode = (
+    behandling: Omgjøring,
+    sak: SakProps,
+    perioderSomKanOmgjøres: Periode[],
+): Periode => {
+    const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak);
+
+    if (
+        !vedtak.erGjeldende ||
+        behandling.status === 'VEDTATT' ||
+        perioderSomKanOmgjøres.length === 0
+    ) {
         return nonNullish(behandling.vedtaksperiode);
     }
 
-    return behandling.resultat === RevurderingResultat.OMGJØRING_OPPHØR
-        ? totalPeriode(vedtak.gjeldendeInnvilgetPerioder)
-        : totalPeriode(vedtak.gjeldendeVedtaksperioder);
+    return totalPeriode(perioderSomKanOmgjøres);
 };
