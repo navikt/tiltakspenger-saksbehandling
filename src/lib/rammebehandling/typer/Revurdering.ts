@@ -4,8 +4,8 @@ import {
     OppdaterBehandlingBaseDTO,
     RammebehandlingBase,
 } from './Rammebehandling';
-import { Nullable } from '../../../types/UtilTypes';
-import { VedtakId } from './Rammevedtak';
+import { Nullable } from '~/types/UtilTypes';
+import { Omgjøringsgrad, VedtakId } from './Rammevedtak';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 
@@ -55,12 +55,14 @@ export type RevurderingInnvilgelse = RevurderingBase & {
     barnetillegg: Nullable<Barnetillegg>;
 };
 
+// omgjørVedtak er det eldste vedtaket i omgjørRammevedtak, og erstattes av omgjørRammevedtak.
 export type OmgjøringInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING;
     vedtaksperiode: Periode;
     innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
     omgjørVedtak: VedtakId;
+    omgjørRammevedtak: OmgjørRammevedtak[];
     skalSendeVedtaksbrev: boolean;
 };
 
@@ -69,11 +71,21 @@ export type OmgjøringOpphør = RevurderingBase & {
     vedtaksperiode: Periode;
     valgteHjemler: HjemmelForOpphør[];
     omgjørVedtak: VedtakId;
+    omgjørRammevedtak: OmgjørRammevedtak[];
 };
 
 export type OmgjøringIkkeValgt = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT;
     omgjørVedtak: VedtakId;
+    omgjørRammevedtak: OmgjørRammevedtak[];
+};
+
+// Vedtakene (og periodene av dem) som omgjøres av behandlingen, sortert på periode.
+// Samme vedtak kan forekomme flere ganger dersom det omgjøres over flere perioder.
+export type OmgjørRammevedtak = {
+    vedtakId: VedtakId;
+    periode: Periode;
+    omgjøringsgrad: Omgjøringsgrad;
 };
 
 export type Omgjøring = OmgjøringInnvilgelse | OmgjøringOpphør | OmgjøringIkkeValgt;
