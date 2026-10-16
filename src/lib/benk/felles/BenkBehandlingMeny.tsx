@@ -205,9 +205,21 @@ const RammeDialoger = ({
                 <RammebehandlingSettPåVent
                     behandlingId={id}
                     sakId={sakId}
+                    oppdaterSattPåVent={false}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBenk('Behandlingen er satt på vent')}
+                />
+            )}
+
+            {kapabiliteter.oppdatereSettPåVent && (
+                <RammebehandlingSettPåVent
+                    behandlingId={id}
+                    sakId={sakId}
+                    oppdaterSattPåVent={true}
+                    åpen={aktivDialog === 'oppdatereSettPåVent'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBenk('Ventestatusen er endret')}
                 />
             )}
 

@@ -6,6 +6,7 @@ import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
+import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 import { dateTilISOTekst } from '~/utils/date';
 
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -28,6 +29,8 @@ export const MeldekortbehandlingSettPåVent = ({
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
+    const [fristValideringsfeil, setFristValideringsfeil] = useState<string | undefined>();
+    const [visFristValideringsfeil, setVisFristValideringsfeil] = useState(false);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
@@ -36,8 +39,9 @@ export const MeldekortbehandlingSettPåVent = ({
 
     const settPåVent = () => {
         const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();
-        if (!begrunnelseTrimmet) {
-            setValideringsfeil('Du må fylle ut en begrunnelse');
+        setValideringsfeil(begrunnelseTrimmet ? null : 'Du må fylle ut en begrunnelse');
+        setVisFristValideringsfeil(true);
+        if (!begrunnelseTrimmet || fristValideringsfeil) {
             return;
         }
 
@@ -49,7 +53,18 @@ export const MeldekortbehandlingSettPåVent = ({
     };
 
     return (
-        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
+        <Dialog
+            open={åpen}
+            onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}
+            onOpenChangeComplete={(erÅpen) => {
+                if (!erÅpen) {
+                    setFrist(null);
+                    setValideringsfeil(null);
+                    setFristValideringsfeil(undefined);
+                    setVisFristValideringsfeil(false);
+                }
+            }}
+        >
             <Dialog.Popup>
                 <Dialog.Header>
                     <strong>{'Sett meldekortbehandlingen på vent?'}</strong>
@@ -72,6 +87,15 @@ export const MeldekortbehandlingSettPåVent = ({
                             label={'Når burde behandlingen gjenopptas? (valgfritt)'}
                             minDate={new Date()}
                             onDateChange={(dato) => setFrist(dato ? dateTilISOTekst(dato) : null)}
+                            onValidate={(validering) =>
+                                setFristValideringsfeil(
+                                    datovalideringsfeil(
+                                        validering,
+                                        'Fristen kan ikke være før dagens dato',
+                                    ),
+                                )
+                            }
+                            error={visFristValideringsfeil ? fristValideringsfeil : undefined}
                         />
 
                         {error && (

@@ -6,7 +6,8 @@ import styles from './Periodevelger.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useMemo } from 'react';
+import { useRef } from 'react';
+import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 
 export type ManuellSøknadPeriodeFelt = FieldPathByValue<
     ManueltRegistrertSøknad,
@@ -26,30 +27,29 @@ type Props = {
 };
 
 export const Periodevelger = ({ periodeFelt, tittel, validate }: Props) => {
-    const { control, watch, setError } = useFormContext<ManueltRegistrertSøknad>();
+    const {
+        control,
+        getValues,
+        setValue,
+        trigger,
+        formState: { isSubmitted },
+    } = useFormContext<ManueltRegistrertSøknad>();
+    const fraOgMedValideringsfeil = useRef<string | undefined>(undefined);
+    const tilOgMedValideringsfeil = useRef<string | undefined>(undefined);
 
-    const periodeWatch = watch(periodeFelt);
+    const hentPeriodeValideringsfeil = () => validate?.(getValues(periodeFelt) ?? {}) ?? {};
 
-    const validationErrors = useMemo(
-        () => validate?.(periodeWatch ?? {}) ?? {},
-        [periodeWatch, validate],
-    );
+    const revaliderPeriode = () => {
+        if (isSubmitted) {
+            void trigger([periodeFelt, `${periodeFelt}.fraOgMed`, `${periodeFelt}.tilOgMed`]);
+        }
+    };
 
     const periodeController = useController({
         name: periodeFelt,
         control,
         rules: {
-            validate: () => {
-                if (validationErrors.periode) {
-                    setError(periodeFelt, {
-                        type: 'validate',
-                        message: validationErrors.periode,
-                    });
-                    return validationErrors.periode;
-                }
-
-                return true;
-            },
+            validate: () => hentPeriodeValideringsfeil().periode ?? true,
         },
     });
 
@@ -57,17 +57,8 @@ export const Periodevelger = ({ periodeFelt, tittel, validate }: Props) => {
         name: `${periodeFelt}.fraOgMed`,
         control,
         rules: {
-            validate: () => {
-                if (validationErrors.fraOgMed) {
-                    setError(`${periodeFelt}.fraOgMed`, {
-                        type: 'validate',
-                        message: validationErrors.fraOgMed,
-                    });
-                    return validationErrors.fraOgMed;
-                }
-
-                return true;
-            },
+            validate: () =>
+                fraOgMedValideringsfeil.current ?? hentPeriodeValideringsfeil().fraOgMed ?? true,
         },
     });
 
@@ -75,17 +66,8 @@ export const Periodevelger = ({ periodeFelt, tittel, validate }: Props) => {
         name: `${periodeFelt}.tilOgMed`,
         control,
         rules: {
-            validate: () => {
-                if (validationErrors.tilOgMed) {
-                    setError(`${periodeFelt}.tilOgMed`, {
-                        type: 'validate',
-                        message: validationErrors.tilOgMed,
-                    });
-                    return validationErrors.tilOgMed;
-                }
-
-                return true;
-            },
+            validate: () =>
+                tilOgMedValideringsfeil.current ?? hentPeriodeValideringsfeil().tilOgMed ?? true,
         },
     });
 
@@ -101,19 +83,43 @@ export const Periodevelger = ({ periodeFelt, tittel, validate }: Props) => {
             )}
             <HStack gap="space-32">
                 <Datovelger
+                    name={fraOgMedController.field.name}
+                    ref={fraOgMedController.field.ref}
                     label="Fra og med"
                     selected={fraOgMedController.field.value}
                     onDateChange={(dato) =>
-                        fraOgMedController.field.onChange(dato ? dateTilISOTekst(dato) : undefined)
+                        setValue(
+                            `${periodeFelt}.fraOgMed`,
+                            dato ? dateTilISOTekst(dato) : undefined,
+                            {
+                                shouldDirty: true,
+                            },
+                        )
                     }
+                    onValidate={(validering) => {
+                        fraOgMedValideringsfeil.current = datovalideringsfeil(validering);
+                        revaliderPeriode();
+                    }}
                     error={fraOgMedController.fieldState.error?.message}
                 />
                 <Datovelger
+                    name={tilOgMedController.field.name}
+                    ref={tilOgMedController.field.ref}
                     label="Til og med"
                     selected={tilOgMedController.field.value}
                     onDateChange={(dato) =>
-                        tilOgMedController.field.onChange(dato ? dateTilISOTekst(dato) : undefined)
+                        setValue(
+                            `${periodeFelt}.tilOgMed`,
+                            dato ? dateTilISOTekst(dato) : undefined,
+                            {
+                                shouldDirty: true,
+                            },
+                        )
                     }
+                    onValidate={(validering) => {
+                        tilOgMedValideringsfeil.current = datovalideringsfeil(validering);
+                        revaliderPeriode();
+                    }}
                     error={tilOgMedController.fieldState.error?.message}
                 />
             </HStack>

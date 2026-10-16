@@ -1,4 +1,4 @@
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
+import { DatePicker, DateValidationT, useDatepicker } from '@navikt/ds-react';
 import { ComponentProps, useEffect } from 'react';
 import { DateOrString, tilDate } from '~/utils/date';
 import { Periode } from '~/types/Periode';
@@ -7,6 +7,7 @@ type MatcherProps = ComponentProps<typeof DatePicker>['disabled'];
 
 export type DatovelgerProps = {
     onDateChange: (date: Date | undefined) => void;
+    onValidate?: (validation: DateValidationT) => void;
     defaultSelected?: DateOrString;
     selected?: DateOrString;
     minDate?: DateOrString;
@@ -19,6 +20,7 @@ export type DatovelgerProps = {
 
 export const Datovelger = ({
     onDateChange,
+    onValidate,
     defaultSelected,
     selected,
     maxDate,
@@ -31,6 +33,7 @@ export const Datovelger = ({
 }: DatovelgerProps) => {
     const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
         onDateChange,
+        onValidate,
         fromDate: tilDate(minDate),
         defaultMonth: tilDate(defaultMonth ?? minDate),
         toDate: tilDate(maxDate),
