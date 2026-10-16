@@ -44,6 +44,7 @@ export enum SaksbehandlerBehandlingKommando {
     LeggTilbakeSaksbehandler = 'LeggTilbakeSaksbehandler',
     LeggTilbakeBeslutter = 'LeggTilbakeBeslutter',
     SettPåVent = 'SettPåVent',
+    OppdatereSettPåVent = 'OppdatereSettPåVent',
     Gjenoppta = 'Gjenoppta',
     Avbryt = 'Avbryt',
     Gjenåpne = 'Gjenåpne',

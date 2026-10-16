@@ -1,10 +1,12 @@
 import { PauseIcon } from '@navikt/aksel-icons';
 import { Button, Dialog, HStack, LocalAlert, Textarea } from '@navikt/ds-react';
 import { Controller, useForm } from 'react-hook-form';
+import { useRef } from 'react';
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
-import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst } from '~/utils/date';
+import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 
 import styles from './SettKlagebehandlingPåVentModal.module.css';
 
@@ -17,12 +19,23 @@ const SettKlagebehandlingPåVentModal = (props: {
         error: Nullable<FetcherError>;
     };
 }) => {
+    const fristValideringsfeil = useRef<string | undefined>(undefined);
     const form = useForm<{ begrunnelse: string; frist: Nullable<string> }>({
         defaultValues: { begrunnelse: '', frist: '' },
     });
+    const { isSubmitted } = form.formState;
 
     return (
-        <Dialog open={props.åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}>
+        <Dialog
+            open={props.åpen}
+            onOpenChange={(nesteÅpen) => !nesteÅpen && props.onClose()}
+            onOpenChangeComplete={(erÅpen) => {
+                if (!erÅpen) {
+                    fristValideringsfeil.current = undefined;
+                    form.reset();
+                }
+            }}
+        >
             <Dialog.Popup
                 width={'700px'}
                 className={styles.dialog}
@@ -56,16 +69,29 @@ const SettKlagebehandlingPåVentModal = (props: {
                         />
                         <Controller
                             control={form.control}
+                            rules={{ validate: () => fristValideringsfeil.current ?? true }}
                             render={({ field, fieldState }) => (
                                 <Datovelger
-                                    {...field}
+                                    name={field.name}
+                                    ref={field.ref}
+                                    selected={field.value || undefined}
                                     error={fieldState.error?.message}
                                     className={styles.felt}
                                     onDateChange={(dato) =>
-                                        field.onChange(dato ? dateTilISOTekst(dato) : '')
+                                        form.setValue('frist', dato ? dateTilISOTekst(dato) : '', {
+                                            shouldDirty: true,
+                                        })
                                     }
+                                    onValidate={(validering) => {
+                                        fristValideringsfeil.current = datovalideringsfeil(
+                                            validering,
+                                            'Fristen kan ikke være før dagens dato',
+                                        );
+                                        if (isSubmitted) {
+                                            void form.trigger('frist');
+                                        }
+                                    }}
                                     minDate={new Date()}
-                                    value={field.value ? datoTilDatoInputText(field.value) : ''}
                                     label={'Når burde behandlingen gjenopptas? (valgfritt)'}
                                 />
                             )}

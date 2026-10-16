@@ -167,11 +167,26 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                 <RammebehandlingSettPåVent
                     behandlingId={behandling.id}
                     sakId={sak.sakId}
+                    oppdaterSattPåVent={false}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt(
                         PersonoversiktTab.ÅpneBehandlinger,
                         'Behandlingen er satt på vent',
+                    )}
+                />
+            )}
+
+            {kapabiliteter.oppdatereSettPåVent && (
+                <RammebehandlingSettPåVent
+                    behandlingId={behandling.id}
+                    sakId={sak.sakId}
+                    oppdaterSattPåVent={true}
+                    åpen={aktivDialog === 'oppdatereSettPåVent'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilPersonoversikt(
+                        PersonoversiktTab.ÅpneBehandlinger,
+                        'Ventestatusen er endret',
                     )}
                 />
             )}

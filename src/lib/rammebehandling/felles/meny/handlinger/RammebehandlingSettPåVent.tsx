@@ -6,12 +6,14 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
+import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 import { dateTilISOTekst } from '~/utils/date';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     behandlingId: RammebehandlingId;
     sakId: SakId;
+    oppdaterSattPåVent: boolean;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
@@ -20,6 +22,7 @@ type Props = {
 export const RammebehandlingSettPåVent = ({
     behandlingId,
     sakId,
+    oppdaterSattPåVent,
     åpen,
     onClose,
     onSuccess,
@@ -27,31 +30,49 @@ export const RammebehandlingSettPåVent = ({
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
+    const [fristValideringsfeil, setFristValideringsfeil] = useState<string | undefined>();
+    const [visFristValideringsfeil, setVisFristValideringsfeil] = useState(false);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
-        { begrunnelse: string; frist: Nullable<string> }
+        { begrunnelse: string; frist: Nullable<string>; oppdaterSattPåVent: boolean }
     >(`/sak/${sakId}/behandling/${behandlingId}/pause`, 'POST');
 
     const settPåVent = () => {
         const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();
-        if (!begrunnelseTrimmet) {
-            setValideringsfeil('Du må fylle ut en begrunnelse');
+        setValideringsfeil(begrunnelseTrimmet ? null : 'Du må fylle ut en begrunnelse');
+        setVisFristValideringsfeil(true);
+        if (!begrunnelseTrimmet || fristValideringsfeil) {
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, frist }).then((oppdatertSak) => {
-            if (oppdatertSak) {
-                onSuccess(oppdatertSak);
-            }
-        });
+        trigger({ begrunnelse: begrunnelseTrimmet, frist, oppdaterSattPåVent }).then(
+            (oppdatertSak) => {
+                if (oppdatertSak) {
+                    onSuccess(oppdatertSak);
+                }
+            },
+        );
     };
 
     return (
-        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
+        <Dialog
+            open={åpen}
+            onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}
+            onOpenChangeComplete={(erÅpen) => {
+                if (!erÅpen) {
+                    setFrist(null);
+                    setValideringsfeil(null);
+                    setFristValideringsfeil(undefined);
+                    setVisFristValideringsfeil(false);
+                }
+            }}
+        >
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Sett behandlingen på vent?'}</strong>
+                    <strong>
+                        {oppdaterSattPåVent ? 'Endre ventestatus' : 'Sett behandlingen på vent?'}
+                    </strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
@@ -69,14 +90,32 @@ export const RammebehandlingSettPåVent = ({
 
                         <Datovelger
                             label={'Når burde behandlingen gjenopptas? (valgfritt)'}
+                            description={
+                                oppdaterSattPåVent
+                                    ? 'Har behandlingen en frist fra før, blir den fjernet hvis du ikke velger ny.'
+                                    : undefined
+                            }
                             minDate={new Date()}
                             onDateChange={(dato) => setFrist(dato ? dateTilISOTekst(dato) : null)}
+                            onValidate={(validering) =>
+                                setFristValideringsfeil(
+                                    datovalideringsfeil(
+                                        validering,
+                                        'Fristen kan ikke være før dagens dato',
+                                    ),
+                                )
+                            }
+                            error={visFristValideringsfeil ? fristValideringsfeil : undefined}
                         />
 
                         {error && (
                             <Infokort
                                 variant={'feil'}
-                                header={'Feil ved å sette på vent'}
+                                header={
+                                    oppdaterSattPåVent
+                                        ? 'Feil ved å endre ventestatus'
+                                        : 'Feil ved å sette på vent'
+                                }
                             >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
                         )}
                     </VStack>
@@ -89,7 +128,7 @@ export const RammebehandlingSettPåVent = ({
                         loading={isMutating}
                         onClick={settPåVent}
                     >
-                        {'Sett behandling på vent'}
+                        {oppdaterSattPåVent ? 'Endre ventestatus' : 'Sett behandling på vent'}
                     </Button>
 
                     <Dialog.CloseTrigger>

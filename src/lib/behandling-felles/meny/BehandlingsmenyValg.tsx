@@ -25,6 +25,7 @@ export type BehandlingsmenyDialog =
     | 'gjenoppta'
     | 'leggTilbake'
     | 'settPåVent'
+    | 'oppdatereSettPåVent'
     | 'overta'
     | 'angreSendTilBeslutning'
     | 'avslutt'
@@ -49,6 +50,7 @@ export const behandlingsmenyKapabiliteter = (
         gjenoppta: harKommando(Kommando.Gjenoppta),
         leggTilbake: harKommando(Kommando.LeggTilbakeSaksbehandler, Kommando.LeggTilbakeBeslutter),
         settPåVent: harKommando(Kommando.SettPåVent),
+        oppdatereSettPåVent: harKommando(Kommando.OppdatereSettPåVent),
         overta: harKommando(Kommando.OvertaSaksbehandler, Kommando.OvertaBeslutter),
         avslutt: harKommando(Kommando.Avbryt),
         gjenåpne: harKommando(Kommando.Gjenåpne),
@@ -78,6 +80,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
     const kanGjenoppta = kapabiliteter.gjenoppta;
     const kanLeggeTilbake = kapabiliteter.leggTilbake;
     const kanSettePåVent = kapabiliteter.settPåVent;
+    const kanOppdatereSettPåVent = kapabiliteter.oppdatereSettPåVent;
     const kanOverta = kapabiliteter.overta;
     const kanAvslutte = kapabiliteter.avslutt;
     const kanGjenåpne = kapabiliteter.gjenåpne;
@@ -137,6 +140,15 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         onSelect={() => onVelg('settPåVent')}
                     >
                         {'Sett på vent'}
+                    </ActionMenu.Item>
+                )}
+
+                {kanOppdatereSettPåVent && (
+                    <ActionMenu.Item
+                        icon={<PauseIcon aria-hidden />}
+                        onSelect={() => onVelg('oppdatereSettPåVent')}
+                    >
+                        {'Endre ventestatus'}
                     </ActionMenu.Item>
                 )}
 
