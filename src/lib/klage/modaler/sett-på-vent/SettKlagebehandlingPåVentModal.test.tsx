@@ -1,15 +1,21 @@
 /** @jest-environment jsdom */
 import '@testing-library/jest-dom/jest-globals';
-import { expect, jest, test } from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
+import { FetcherError } from '~/utils/fetch/fetch';
+import { Nullable } from '~/types/UtilTypes';
 import SettKlagebehandlingPåVentModal from './SettKlagebehandlingPåVentModal';
 
 const DialogUtenNavigasjon = ({
     onSubmit,
+    oppdater = false,
+    error = null,
 }: {
     onSubmit: (begrunnelse: string, frist: string | null) => void;
+    oppdater?: boolean;
+    error?: Nullable<FetcherError>;
 }) => {
     const [åpen, setÅpen] = useState(true);
     return (
@@ -18,13 +24,14 @@ const DialogUtenNavigasjon = ({
             <SettKlagebehandlingPåVentModal
                 åpen={åpen}
                 onClose={() => setÅpen(false)}
+                oppdaterSattPåVent={oppdater}
                 api={{
                     trigger: (begrunnelse, frist) => {
                         onSubmit(begrunnelse, frist);
                         setÅpen(false);
                     },
                     isMutating: false,
-                    error: null,
+                    error,
                 }}
             />
         </>
@@ -41,8 +48,68 @@ const fyllFrist = (value: string) =>
         target: { value },
     });
 
-const sendInn = () =>
-    fireEvent.click(screen.getByRole('button', { name: 'Sett behandling på vent' }));
+const sendInn = (oppdater = false) =>
+    fireEvent.click(
+        screen.getByRole('button', {
+            name: oppdater ? 'Endre ventestatus' : 'Sett behandling på vent',
+        }),
+    );
+
+const fristFjernesTekst =
+    'Har behandlingen en frist fra før, blir den fjernet hvis du ikke velger ny.';
+
+describe.each([
+    {
+        oppdater: false,
+        tittel: 'Sett behandling på vent',
+        feilTittel: 'Kunne ikke sette behandling på vent',
+    },
+    {
+        oppdater: true,
+        tittel: 'Endre ventestatus',
+        feilTittel: 'Kunne ikke endre ventestatus',
+    },
+])('oppdaterSattPåVent=$oppdater', ({ oppdater, tittel, feilTittel }) => {
+    test('viser riktig tittel og hjelpetekst for fristen', () => {
+        render(<DialogUtenNavigasjon onSubmit={jest.fn()} oppdater={oppdater} />);
+
+        expect(screen.getByRole('dialog', { name: tittel })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: tittel })).toBeInTheDocument();
+        if (oppdater) {
+            expect(screen.getByText(fristFjernesTekst)).toBeInTheDocument();
+        } else {
+            expect(screen.queryByText(fristFjernesTekst)).not.toBeInTheDocument();
+        }
+    });
+
+    test.each([
+        ['01.01.2099', '2099-01-01'],
+        ['', ''],
+    ])('sender begrunnelse og frist "%s"', async (fristInput, forventetFrist) => {
+        const onSubmit = jest.fn();
+        render(<DialogUtenNavigasjon onSubmit={onSubmit} oppdater={oppdater} />);
+        fyllBegrunnelse();
+        if (fristInput) {
+            fyllFrist(fristInput);
+        }
+        sendInn(oppdater);
+
+        await waitFor(() =>
+            expect(onSubmit).toHaveBeenCalledWith('Venter på opplysninger', forventetFrist),
+        );
+    });
+
+    test('viser feilmelding fra API-et under riktig tittel', () => {
+        const error = new FetcherError({
+            status: 400,
+            message: 'Behandlingen må være satt på vent for å kunne oppdateres.',
+        });
+        render(<DialogUtenNavigasjon onSubmit={jest.fn()} oppdater={oppdater} error={error} />);
+
+        expect(screen.getByText(feilTittel)).toBeInTheDocument();
+        expect(screen.getByText(error.message)).toBeInTheDocument();
+    });
+});
 
 test.each([
     ['32.13.2099', 'Skriv inn en gyldig dato (dd.mm.åååå)'],
