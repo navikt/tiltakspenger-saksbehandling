@@ -5,17 +5,26 @@ import { classNames } from '~/utils/classNames';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { sladdbarTekst } from '~/utils/sladdetVerdi';
+import { Nullable } from '~/types/UtilTypes';
 
 import styles from './OppsummeringAvVentestatus.module.css';
 
 type Props = {
     ventestatus: VentestatusHendelse;
     historikk?: VentestatusHendelse[];
+    /** Tidspunktet en automatisk behandling tas opp igjen. Vises adskilt fra fristen. */
+    venterTil?: Nullable<string>;
     className?: string;
     size?: 'medium' | 'small';
 };
 
-export const OppsummeringAvVentestatus = ({ ventestatus, className, size, historikk }: Props) => {
+export const OppsummeringAvVentestatus = ({
+    ventestatus,
+    className,
+    size,
+    historikk,
+    venterTil,
+}: Props) => {
     return (
         <Box className={classNames(styles.box, size === 'small' && styles.boxSmall, className)}>
             <VStack gap="space-24">
@@ -40,6 +49,13 @@ export const OppsummeringAvVentestatus = ({ ventestatus, className, size, histor
                             <OppsummeringsPar
                                 label={'Frist'}
                                 verdi={formaterDatotekst(ventestatus.frist)}
+                                retning="vertikal"
+                            />
+                        )}
+                        {ventestatus.erSattPåVent && venterTil && (
+                            <OppsummeringsPar
+                                label={'Automatisk behandling venter til'}
+                                verdi={formaterTidspunkt(venterTil)}
                                 retning="vertikal"
                             />
                         )}

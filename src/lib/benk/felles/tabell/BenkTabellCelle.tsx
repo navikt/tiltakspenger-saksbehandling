@@ -162,7 +162,7 @@ const Ventestatus = ({
 }: {
     behandling: Pick<BenkBehandling, 'ventestatus' | 'type'>;
 }) => {
-    const { erSattPåVent, begrunnelse, frist } = behandling.ventestatus;
+    const { erSattPåVent, begrunnelse, frist, venterTil } = behandling.ventestatus;
 
     if (!erSattPåVent) {
         return '-';
@@ -174,9 +174,21 @@ const Ventestatus = ({
 
     return (
         <HStack gap={'space-4'} align={'center'} wrap={false}>
-            <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
-                {frist ? `Venter til ${formaterDatotekst(frist)}` : 'Venter'}
-            </Tag>
+            {frist && (
+                <Tag data-color={finnTagColor(frist)} variant={'moderate'} size={'small'}>
+                    {`Frist ${formaterDatotekst(frist)}`}
+                </Tag>
+            )}
+            {venterTil && (
+                <Tag data-color={'neutral'} variant={'moderate'} size={'small'}>
+                    {`Venter til ${formaterTidspunktKort(venterTil)}`}
+                </Tag>
+            )}
+            {!frist && !venterTil && (
+                <Tag data-color={'danger'} variant={'moderate'} size={'small'}>
+                    {'Venter'}
+                </Tag>
+            )}
             {begrunnelseVisning && <HelpText>{begrunnelseVisning}</HelpText>}
         </HStack>
     );
@@ -199,11 +211,7 @@ const begrunnelseTekst = (
     return verdi;
 };
 
-const finnTagColor = (fristDato: Nullable<string>): AkselColor => {
-    if (!fristDato) {
-        return 'danger';
-    }
-
+const finnTagColor = (fristDato: string): AkselColor => {
     const antallDager = antallKalenderDagerUnnaDagensDato(fristDato);
 
     if (antallDager <= 0) {

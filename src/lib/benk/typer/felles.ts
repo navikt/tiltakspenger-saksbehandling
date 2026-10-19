@@ -40,6 +40,8 @@ export type BenkVentestatus = {
     erSattPåVent: boolean;
     begrunnelse: SladdbarVerdi<Nullable<string>>;
     frist: Nullable<string>;
+    /** Tidspunktet en automatisk behandling på vent tas opp igjen. Er adskilt fra fristen. */
+    venterTil: Nullable<string>;
 };
 
 export enum BenkTilgangsvurdering {

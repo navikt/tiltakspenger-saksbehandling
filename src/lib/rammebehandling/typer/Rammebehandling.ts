@@ -58,6 +58,8 @@ export interface RammebehandlingBase {
     sistEndret: string;
     iverksattTidspunkt: Nullable<string>;
     ventestatus: VentestatusHendelse[];
+    /** Tidspunktet en automatisk behandling på vent tas opp igjen. Er adskilt fra fristen i ventestatus. */
+    venterTil: Nullable<string>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     klagebehandlingId: Nullable<KlageId>;
@@ -186,8 +188,6 @@ export type OppdaterBehandlingBaseDTO = {
 };
 
 export type RammebehandlingMedInnvilgelse =
-    | SøknadsbehandlingInnvilgelse
-    | RevurderingInnvilgelse
-    | OmgjøringInnvilgelse;
+    SøknadsbehandlingInnvilgelse | RevurderingInnvilgelse | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];

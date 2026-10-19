@@ -40,7 +40,12 @@ const klage: BenkKlagebehandling = {
     saksbehandler: 'Z123456',
     beslutter: null,
     erUnderkjent: false,
-    ventestatus: { erSattPåVent: false, begrunnelse: ikkeSladdet(null), frist: null },
+    ventestatus: {
+        erSattPåVent: false,
+        begrunnelse: ikkeSladdet(null),
+        frist: null,
+        venterTil: null,
+    },
     tilgang: {
         vurdering: BenkTilgangsvurdering.HAR_IKKE_TILGANG,
         grunn: { årsak: BenkTilgangsårsak.SKJERMET, begrunnelse: 'Skjermet' },

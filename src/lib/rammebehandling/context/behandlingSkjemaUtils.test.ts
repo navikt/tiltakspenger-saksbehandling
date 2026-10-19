@@ -62,6 +62,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     sistEndret: '2025-01-01T09:00:00',
     iverksattTidspunkt: null,
     ventestatus: [],
+    venterTil: null,
     utbetaling: null,
     utbetalingskontroll: null,
     klagebehandlingId: null,

@@ -58,6 +58,7 @@ export const RammebehandlingPage = () => {
                             <OppsummeringAvVentestatus
                                 ventestatus={ventestatus.atNonNull(0)}
                                 historikk={ventestatus}
+                                venterTil={behandling.venterTil}
                             />
                         )}
                         <Tidslinjer sak={sak} />
