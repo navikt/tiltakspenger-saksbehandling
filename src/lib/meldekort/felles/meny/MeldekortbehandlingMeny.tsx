@@ -163,9 +163,21 @@ export const MeldekortbehandlingMeny = ({ meldekortbehandling, kallesFra, size }
                 <MeldekortbehandlingSettPåVent
                     meldekortId={meldekortbehandling.id}
                     sakId={sak.sakId}
+                    oppdaterSattPåVent={false}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt('Meldekortbehandlingen er satt på vent')}
+                />
+            )}
+
+            {kapabiliteter.oppdatereSettPåVent && (
+                <MeldekortbehandlingSettPåVent
+                    meldekortId={meldekortbehandling.id}
+                    sakId={sak.sakId}
+                    oppdaterSattPåVent={true}
+                    åpen={aktivDialog === 'oppdatereSettPåVent'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilPersonoversikt('Ventestatusen er endret')}
                 />
             )}
 

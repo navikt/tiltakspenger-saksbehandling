@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import '@testing-library/jest-dom/jest-globals';
-import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ afterEach(() => {
     global.fetch = opprinneligFetch;
 });
 
-const DialogUtenNavigasjon = () => {
+const DialogUtenNavigasjon = ({ oppdater = false }: { oppdater?: boolean }) => {
     const [åpen, setÅpen] = useState(true);
     return (
         <>
@@ -28,6 +28,7 @@ const DialogUtenNavigasjon = () => {
             <MeldekortbehandlingSettPåVent
                 sakId={'sak_test' as SakId}
                 meldekortId={'meldekort_test' as MeldekortbehandlingId}
+                oppdaterSattPåVent={oppdater}
                 åpen={åpen}
                 onClose={() => setÅpen(false)}
                 onSuccess={() => setÅpen(false)}
@@ -46,17 +47,89 @@ const fyllFrist = (value: string) =>
         target: { value },
     });
 
-const sendInn = () =>
-    fireEvent.click(screen.getByRole('button', { name: 'Sett behandling på vent' }));
+const sendInn = (oppdater = false) =>
+    fireEvent.click(
+        screen.getByRole('button', {
+            name: oppdater ? 'Endre ventestatus' : 'Sett behandling på vent',
+        }),
+    );
 
-const forventFrist = (frist: string | null) =>
+const forventFrist = (frist: string | null, oppdater = false) =>
     expect(fetchMock).toHaveBeenLastCalledWith(
         '/api/sak/sak_test/meldekort/meldekort_test/vent',
         expect.objectContaining({
             method: 'PATCH',
-            body: JSON.stringify({ begrunnelse: 'Venter på opplysninger', frist }),
+            body: JSON.stringify({
+                begrunnelse: 'Venter på opplysninger',
+                frist,
+                oppdaterSattPåVent: oppdater,
+            }),
         }),
     );
+
+const fristFjernesTekst =
+    'Har behandlingen en frist fra før, blir den fjernet hvis du ikke velger ny.';
+
+describe.each([
+    {
+        oppdater: false,
+        tittel: 'Sett meldekortbehandlingen på vent?',
+        feilTittel: 'Feil ved å sette på vent',
+    },
+    {
+        oppdater: true,
+        tittel: 'Endre ventestatus',
+        feilTittel: 'Feil ved å endre ventestatus',
+    },
+])('oppdaterSattPåVent=$oppdater', ({ oppdater, tittel, feilTittel }) => {
+    test('viser riktige tekster', () => {
+        render(<DialogUtenNavigasjon oppdater={oppdater} />);
+
+        expect(screen.getByText(tittel, { selector: 'strong' })).toBeInTheDocument();
+        if (oppdater) {
+            expect(screen.getByText(fristFjernesTekst)).toBeInTheDocument();
+        } else {
+            expect(screen.queryByText(fristFjernesTekst)).not.toBeInTheDocument();
+        }
+    });
+
+    test.each([
+        ['01.01.2099', '2099-01-01'],
+        ['', null],
+    ])('sender flagget med frist "%s"', async (fristInput, forventetFrist) => {
+        render(<DialogUtenNavigasjon oppdater={oppdater} />);
+        fyllBegrunnelse();
+        if (fristInput) {
+            fyllFrist(fristInput);
+        }
+        sendInn(oppdater);
+
+        await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+        forventFrist(forventetFrist, oppdater);
+    });
+
+    test('viser feilkort når kallet feiler', async () => {
+        fetchMock.mockResolvedValue({
+            ok: false,
+            status: 500,
+            json: async () => {
+                throw new Error('ikke json');
+            },
+        } as unknown as Response);
+        const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+        try {
+            render(<DialogUtenNavigasjon oppdater={oppdater} />);
+            fyllBegrunnelse();
+            sendInn(oppdater);
+
+            expect(await screen.findByText(feilTittel)).toBeInTheDocument();
+            expect(consoleError).toHaveBeenCalledTimes(1);
+        } finally {
+            consoleError.mockRestore();
+        }
+    });
+});
 
 test.each([
     ['32.13.2099', 'Skriv inn en gyldig dato (dd.mm.åååå)'],
