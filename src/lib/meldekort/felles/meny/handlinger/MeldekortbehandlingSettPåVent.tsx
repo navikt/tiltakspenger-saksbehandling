@@ -14,6 +14,7 @@ import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling
 type Props = {
     meldekortId: MeldekortbehandlingId;
     sakId: SakId;
+    oppdaterSattPåVent: boolean;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
@@ -22,6 +23,7 @@ type Props = {
 export const MeldekortbehandlingSettPåVent = ({
     meldekortId,
     sakId,
+    oppdaterSattPåVent,
     åpen,
     onClose,
     onSuccess,
@@ -34,7 +36,7 @@ export const MeldekortbehandlingSettPåVent = ({
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
-        { begrunnelse: string; frist: Nullable<string> }
+        { begrunnelse: string; frist: Nullable<string>; oppdaterSattPåVent: boolean }
     >(`/sak/${sakId}/meldekort/${meldekortId}/vent`, 'PATCH');
 
     const settPåVent = () => {
@@ -45,11 +47,13 @@ export const MeldekortbehandlingSettPåVent = ({
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, frist }).then((oppdatertSak) => {
-            if (oppdatertSak) {
-                onSuccess(oppdatertSak);
-            }
-        });
+        trigger({ begrunnelse: begrunnelseTrimmet, frist, oppdaterSattPåVent }).then(
+            (oppdatertSak) => {
+                if (oppdatertSak) {
+                    onSuccess(oppdatertSak);
+                }
+            },
+        );
     };
 
     return (
@@ -67,7 +71,11 @@ export const MeldekortbehandlingSettPåVent = ({
         >
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Sett meldekortbehandlingen på vent?'}</strong>
+                    <strong>
+                        {oppdaterSattPåVent
+                            ? 'Endre ventestatus'
+                            : 'Sett meldekortbehandlingen på vent?'}
+                    </strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
@@ -85,6 +93,11 @@ export const MeldekortbehandlingSettPåVent = ({
 
                         <Datovelger
                             label={'Når burde behandlingen gjenopptas? (valgfritt)'}
+                            description={
+                                oppdaterSattPåVent
+                                    ? 'Har behandlingen en frist fra før, blir den fjernet hvis du ikke velger ny.'
+                                    : undefined
+                            }
                             minDate={new Date()}
                             onDateChange={(dato) => setFrist(dato ? dateTilISOTekst(dato) : null)}
                             onValidate={(validering) =>
@@ -101,7 +114,11 @@ export const MeldekortbehandlingSettPåVent = ({
                         {error && (
                             <Infokort
                                 variant={'feil'}
-                                header={'Feil ved å sette på vent'}
+                                header={
+                                    oppdaterSattPåVent
+                                        ? 'Feil ved å endre ventestatus'
+                                        : 'Feil ved å sette på vent'
+                                }
                             >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
                         )}
                     </VStack>
@@ -114,7 +131,7 @@ export const MeldekortbehandlingSettPåVent = ({
                         loading={isMutating}
                         onClick={settPåVent}
                     >
-                        {'Sett behandling på vent'}
+                        {oppdaterSattPåVent ? 'Endre ventestatus' : 'Sett behandling på vent'}
                     </Button>
 
                     <Dialog.CloseTrigger>

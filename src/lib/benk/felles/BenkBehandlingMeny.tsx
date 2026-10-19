@@ -313,9 +313,21 @@ const MeldekortDialoger = ({
                 <MeldekortbehandlingSettPåVent
                     meldekortId={id}
                     sakId={sakId}
+                    oppdaterSattPåVent={false}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBenk('Meldekortbehandlingen er satt på vent')}
+                />
+            )}
+
+            {kapabiliteter.oppdatereSettPåVent && (
+                <MeldekortbehandlingSettPåVent
+                    meldekortId={id}
+                    sakId={sakId}
+                    oppdaterSattPåVent={true}
+                    åpen={aktivDialog === 'oppdatereSettPåVent'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBenk('Ventestatusen er endret')}
                 />
             )}
 
