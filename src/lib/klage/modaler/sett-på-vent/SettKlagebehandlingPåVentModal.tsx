@@ -13,6 +13,7 @@ import styles from './SettKlagebehandlingPåVentModal.module.css';
 const SettKlagebehandlingPåVentModal = (props: {
     åpen: boolean;
     onClose: () => void;
+    oppdaterSattPåVent: boolean;
     api: {
         trigger: (begrunnelse: string, frist: Nullable<string>) => void;
         isMutating: boolean;
@@ -39,7 +40,9 @@ const SettKlagebehandlingPåVentModal = (props: {
             <Dialog.Popup
                 width={'700px'}
                 className={styles.dialog}
-                aria-label="Sett behandling på vent"
+                aria-label={
+                    props.oppdaterSattPåVent ? 'Endre ventestatus' : 'Sett behandling på vent'
+                }
             >
                 <form
                     onSubmit={form.handleSubmit((values) => {
@@ -49,7 +52,11 @@ const SettKlagebehandlingPåVentModal = (props: {
                     <Dialog.Header>
                         <HStack gap="space-8" align="center">
                             <PauseIcon title="Pause ikon" fontSize="1.5rem" />
-                            <Dialog.Title>{'Sett behandling på vent'}</Dialog.Title>
+                            <Dialog.Title>
+                                {props.oppdaterSattPåVent
+                                    ? 'Endre ventestatus'
+                                    : 'Sett behandling på vent'}
+                            </Dialog.Title>
                         </HStack>
                     </Dialog.Header>
 
@@ -73,6 +80,11 @@ const SettKlagebehandlingPåVentModal = (props: {
                             render={({ field, fieldState }) => (
                                 <Datovelger
                                     name={field.name}
+                                    description={
+                                        props.oppdaterSattPåVent
+                                            ? 'Har behandlingen en frist fra før, blir den fjernet hvis du ikke velger ny.'
+                                            : undefined
+                                    }
                                     ref={field.ref}
                                     selected={field.value || undefined}
                                     error={fieldState.error?.message}
@@ -102,7 +114,9 @@ const SettKlagebehandlingPåVentModal = (props: {
                             <LocalAlert status="error" size="small">
                                 <LocalAlert.Header>
                                     <LocalAlert.Title>
-                                        Kunne ikke sette behandling på vent
+                                        {props.oppdaterSattPåVent
+                                            ? 'Kunne ikke endre ventestatus'
+                                            : 'Kunne ikke sette behandling på vent'}
                                     </LocalAlert.Title>
                                 </LocalAlert.Header>
                                 <LocalAlert.Content>{props.api.error.message}</LocalAlert.Content>
@@ -112,7 +126,9 @@ const SettKlagebehandlingPåVentModal = (props: {
 
                     <Dialog.Footer>
                         <Button variant="primary" loading={props.api.isMutating} type="submit">
-                            Sett behandling på vent
+                            {props.oppdaterSattPåVent
+                                ? 'Endre ventestatus'
+                                : 'Sett behandling på vent'}
                         </Button>
 
                         <Dialog.CloseTrigger>

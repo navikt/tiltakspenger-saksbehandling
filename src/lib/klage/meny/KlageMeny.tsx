@@ -44,7 +44,7 @@ const KlageMeny = (props: {
     const { innloggetSaksbehandler, erSaksbehandler } = useSaksbehandler();
     const [visVilOvertaModal, setVisVilOvertaModal] = React.useState(false);
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
-    const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = React.useState(false);
+    const [ventemodus, setVentemodus] = React.useState<Nullable<Ventemodus>>(null);
     const [apiError, setApiError] = React.useState<ApiErrorState>({
         visFeilModal: false,
         feil: null,
@@ -92,9 +92,14 @@ const KlageMeny = (props: {
         klageId: props.klage.id,
         onSuccess: (sak) => {
             setSak(sak);
-            setVisSettBehandlingPåVentModal(false);
+            setVentemodus(null);
         },
     });
+
+    const åpneVentemodal = (modus: Ventemodus) => {
+        settPåVent.reset();
+        setVentemodus(modus);
+    };
 
     const gjenoppta = useGjenopptaKlagebehandling({
         sakId: props.klage.sakId,
@@ -136,14 +141,24 @@ const KlageMeny = (props: {
                             </ActionMenu.Item>
 
                             {erBehandlingSattPåVent(props.klage) && (
-                                <ActionMenu.Item
-                                    icon={<PlayIcon aria-hidden />}
-                                    onClick={() => {
-                                        gjenoppta.trigger();
-                                    }}
-                                >
-                                    Gjenoppta
-                                </ActionMenu.Item>
+                                <>
+                                    <ActionMenu.Item
+                                        icon={<PlayIcon aria-hidden />}
+                                        onClick={() => {
+                                            gjenoppta.trigger();
+                                        }}
+                                    >
+                                        Gjenoppta
+                                    </ActionMenu.Item>
+                                    <ActionMenu.Item
+                                        icon={<PauseIcon aria-hidden />}
+                                        onClick={() => {
+                                            åpneVentemodal('endreVentestatus');
+                                        }}
+                                    >
+                                        Endre ventestatus
+                                    </ActionMenu.Item>
+                                </>
                             )}
                         </>
                     )}
@@ -172,7 +187,7 @@ const KlageMeny = (props: {
                                 <ActionMenu.Item
                                     icon={<PauseIcon aria-hidden />}
                                     onClick={() => {
-                                        setVisSettBehandlingPåVentModal(true);
+                                        åpneVentemodal('settPåVent');
                                     }}
                                 >
                                     Sett på vent
@@ -219,12 +234,18 @@ const KlageMeny = (props: {
                     }}
                 />
             )}
-            {visSettBehandlingPåVentModal && (
+            {ventemodus && (
                 <SettKlagebehandlingPåVentModal
-                    åpen={visSettBehandlingPåVentModal}
-                    onClose={() => setVisSettBehandlingPåVentModal(false)}
+                    åpen={true}
+                    onClose={() => setVentemodus(null)}
+                    oppdaterSattPåVent={ventemodus === 'endreVentestatus'}
                     api={{
-                        trigger: (begrunnelse, frist) => settPåVent.trigger({ begrunnelse, frist }),
+                        trigger: (begrunnelse, frist) =>
+                            settPåVent.trigger({
+                                begrunnelse,
+                                frist,
+                                oppdaterSattPåVent: ventemodus === 'endreVentestatus',
+                            }),
                         isMutating: settPåVent.isMutating,
                         error: settPåVent.error ?? null,
                     }}
@@ -242,3 +263,5 @@ const KlageMeny = (props: {
 };
 
 export default KlageMeny;
+
+type Ventemodus = 'settPåVent' | 'endreVentestatus';

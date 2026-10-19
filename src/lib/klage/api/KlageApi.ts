@@ -107,11 +107,10 @@ export const useSettKlagebehandlingPåVent = (args: {
     klageId: KlageId;
     onSuccess: (sak: SakProps) => void;
 }) =>
-    useFetchJsonFraApi<SakProps, { begrunnelse: string; frist: Nullable<string> }>(
-        `/sak/${args.sakId}/klage/${args.klageId}/vent`,
-        'PATCH',
-        { onSuccess: args.onSuccess },
-    );
+    useFetchJsonFraApi<
+        SakProps,
+        { begrunnelse: string; frist: Nullable<string>; oppdaterSattPåVent: boolean }
+    >(`/sak/${args.sakId}/klage/${args.klageId}/vent`, 'PATCH', { onSuccess: args.onSuccess });
 
 export const useGjenopptaKlagebehandling = (args: {
     sakId: string;
