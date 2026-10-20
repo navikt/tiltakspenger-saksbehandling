@@ -58,6 +58,17 @@ export const OverførtFraArenaSpørsmål = () => {
                 name={'overfortFraArena'}
                 legend={'Overført fra Arena?'}
                 måVæreBesvart={true}
+                onChange={(value) => {
+                    // Nullstiller felt som skjules, slik at vi bare sender det som faktisk er valgt.
+                    // Mottatt-datoen hører til ManueltSattSøknadMottattDato, men skjules av dette svaret.
+                    if (value === 'JA') {
+                        formContext.setValue('manueltSattSøknadMottattDato', undefined);
+                        formContext.clearErrors('manueltSattSøknadMottattDato');
+                    } else {
+                        formContext.setValue('behandlingsarsak', undefined);
+                        formContext.clearErrors('behandlingsarsak');
+                    }
+                }}
             />
 
             {skalViseBehandlingsårsak && (
