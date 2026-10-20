@@ -108,8 +108,9 @@ export const ManuellSøknadSide = ({ fnrFraPersonopplysninger }: Props) => {
 
                     {opprettSøknadError && (
                         <Infokort variant={'feil'}>
-                            Noe gikk galt ved registrering av papirsøknad. Vennligst prøv igjen litt
-                            senere.
+                            {opprettSøknadError.status === 400
+                                ? opprettSøknadError.message
+                                : 'Noe gikk galt ved registrering av papirsøknad. Vennligst prøv igjen litt senere.'}
                         </Infokort>
                     )}
 
