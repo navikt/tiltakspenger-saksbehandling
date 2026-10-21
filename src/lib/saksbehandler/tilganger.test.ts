@@ -68,15 +68,13 @@ describe('hentRolleForBehandling under beslutning', () => {
         expect(hentRolleForBehandling(behandling, kunBeslutter)).toBe(SaksbehandlerRolle.BESLUTTER);
     });
 
-    test('saksbehandler uten beslutterrolle på delautomatisk innstilt søknad får rollen beslutter', () => {
+    test('saksbehandler uten beslutterrolle på delautomatisk innstilt søknad får ingen rolle', () => {
         const behandling = behandlingUnderBeslutning({
             type: Rammebehandlingstype.SØKNADSBEHANDLING,
             automatiskSaksbehandlet: true,
         });
 
-        expect(hentRolleForBehandling(behandling, kunSaksbehandler)).toBe(
-            SaksbehandlerRolle.BESLUTTER,
-        );
+        expect(hentRolleForBehandling(behandling, kunSaksbehandler)).toBeNull();
     });
 
     test('saksbehandler uten beslutterrolle på manuelt innstilt søknad får ingen rolle', () => {

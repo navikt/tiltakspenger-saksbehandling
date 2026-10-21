@@ -1,7 +1,6 @@
 import {
     Rammebehandling,
     Rammebehandlingsstatus,
-    Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Saksbehandler, SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
@@ -12,20 +11,6 @@ export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
 export const erBeslutter = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER);
 
-/**
- * Speiler backendens `Rammebehandling.kanTaOgUnderkjenneSomBeslutter`.
- * En delautomatisk innstilt søknad har ikke vært hos en saksbehandler, så en saksbehandler uten
- * beslutterrolle kan også ta og underkjenne den. Godkjenning krever fortsatt beslutterrolle.
- */
-export const kanOpptreSomBeslutter = (
-    behandling: Rammebehandling,
-    innloggetSaksbehandler: Saksbehandler,
-): boolean =>
-    erBeslutter(innloggetSaksbehandler) ||
-    (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING &&
-        behandling.automatiskSaksbehandlet &&
-        erSaksbehandler(innloggetSaksbehandler));
-
 export const kanBeslutteForBehandling = (
     behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
@@ -33,7 +18,7 @@ export const kanBeslutteForBehandling = (
     const { status, saksbehandler, beslutter } = behandling;
 
     return (
-        kanOpptreSomBeslutter(behandling, innloggetSaksbehandler) &&
+        erBeslutter(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent === beslutter &&
         innloggetSaksbehandler.navIdent !== saksbehandler &&
         status === Rammebehandlingsstatus.UNDER_BESLUTNING &&
