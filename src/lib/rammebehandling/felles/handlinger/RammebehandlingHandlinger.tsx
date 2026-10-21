@@ -77,7 +77,9 @@ export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) =
                                 </Button>
                             )}
                             {erBeslutter && (
-                                <RammebehandlingGodkjenn disabled={harUlagredeEndringer} />
+                                <RammebehandlingGodkjenn
+                                    disabled={harUlagredeEndringer || lagreApi.isMutating}
+                                />
                             )}
                         </HStack>
                     </VStack>
