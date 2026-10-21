@@ -32,18 +32,14 @@ export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) =
         behandling.skalJournalføreNotat,
     );
 
-    const { trigger, isMutating, error } = useFetchJsonFraApi<
+    const lagreApi = useFetchJsonFraApi<
         Rammebehandling,
         { skalJournalføreNotat: SkalJournalføreNotat }
-    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/beslutter/oppdater`, 'POST');
-
-    const lagre = () => {
-        trigger({ skalJournalføreNotat }).then((oppdatertBehandling) => {
-            if (oppdatertBehandling) {
-                setBehandling(oppdatertBehandling);
-            }
-        });
-    };
+    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/beslutter/oppdater`, 'POST', {
+        onSuccess: (oppdatertBehandling) => {
+            setBehandling(oppdatertBehandling);
+        },
+    });
 
     return (
         <VedtakSeksjon>
@@ -63,15 +59,20 @@ export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) =
                                 godkjennes
                             </Infokort>
                         )}
-                        {error && (
+                        {lagreApi.error && (
                             <Infokort variant={'feil'} size={'small'}>
-                                Feil ved lagring: {error.message} (kode {error.status})
+                                Feil ved lagring: {lagreApi.error.message} (kode{' '}
+                                {lagreApi.error.status})
                             </Infokort>
                         )}
                         <HStack gap={'space-16'} justify={'end'}>
                             <RammebehandlingUnderkjenn behandling={behandling} />
                             {harUlagredeEndringer && (
-                                <Button variant={'secondary'} loading={isMutating} onClick={lagre}>
+                                <Button
+                                    variant={'secondary'}
+                                    loading={lagreApi.isMutating}
+                                    onClick={() => lagreApi.trigger({ skalJournalføreNotat })}
+                                >
                                     Lagre
                                 </Button>
                             )}

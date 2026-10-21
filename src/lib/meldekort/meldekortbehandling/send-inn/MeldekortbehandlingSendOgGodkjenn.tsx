@@ -25,18 +25,15 @@ export const MeldekortbehandlingSendOgGodkjenn = () => {
 
     const harUlagredeEndringer = skalJournalføreNotat !== meldekortbehandling.skalJournalføreNotat;
 
-    const { trigger, isMutating, error } = useFetchJsonFraApi<
-        SakProps,
-        { skalJournalføreNotat: boolean }
-    >(`/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/beslutter/oppdater`, 'POST');
-
-    const lagre = () => {
-        trigger({ skalJournalføreNotat }).then((oppdatertSak) => {
-            if (oppdatertSak) {
+    const lagreApi = useFetchJsonFraApi<SakProps, { skalJournalføreNotat: boolean }>(
+        `/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/beslutter/oppdater`,
+        'POST',
+        {
+            onSuccess: (oppdatertSak) => {
                 setSak(oppdatertSak);
-            }
-        });
-    };
+            },
+        },
+    );
 
     return (
         <MeldekortbehandlingSeksjon>
@@ -52,19 +49,26 @@ export const MeldekortbehandlingSendOgGodkjenn = () => {
                                 godkjennes
                             </Infokort>
                         )}
-                        {error && (
+                        {lagreApi.error && (
                             <Infokort variant={'feil'} size={'small'}>
-                                Feil ved lagring: {error.message} (kode {error.status})
+                                Feil ved lagring: {lagreApi.error.message} (kode{' '}
+                                {lagreApi.error.status})
                             </Infokort>
                         )}
                         <HStack gap={'space-8'}>
                             <MeldekortbehandlingUnderkjenn />
                             {harUlagredeEndringer && (
-                                <Button variant={'secondary'} loading={isMutating} onClick={lagre}>
+                                <Button
+                                    variant={'secondary'}
+                                    loading={lagreApi.isMutating}
+                                    onClick={() => lagreApi.trigger({ skalJournalføreNotat })}
+                                >
                                     Lagre
                                 </Button>
                             )}
-                            <MeldekortbehandlingGodkjenn disabled={harUlagredeEndringer} />
+                            <MeldekortbehandlingGodkjenn
+                                disabled={harUlagredeEndringer || lagreApi.isMutating}
+                            />
                         </HStack>
                     </VStack>
                 )}
