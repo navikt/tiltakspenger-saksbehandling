@@ -66,6 +66,7 @@ export interface RammebehandlingBase {
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
     skalJournalføreNotat: SkalJournalføreNotat;
+    beslutterEndringer: RammebehandlingBeslutterEndringer;
     /** Prioriterte behandlinger ligger alltid øverst i benken. */
     prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
@@ -191,3 +192,25 @@ export type RammebehandlingMedInnvilgelse =
     SøknadsbehandlingInnvilgelse | RevurderingInnvilgelse | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];
+
+/** Endringer beslutter har gjort i saksbehandlers valg, mens behandlingen er under beslutning. */
+export type RammebehandlingBeslutterEndringer = {
+    skalJournalføreNotat: Nullable<RammebehandlingSkalJournalføreNotatEndring>;
+};
+
+/** Bare begrunnelsene beslutter har endret valget for, er satt. */
+export type RammebehandlingSkalJournalføreNotatEndring = {
+    tidspunkt: string;
+    vilkårsvurdering: VilkårsvurderingSkalJournalføreNotatEndring | null;
+    barnetillegg: BarnetilleggSkalJournalføreNotatEndring | null;
+};
+
+export type VilkårsvurderingSkalJournalføreNotatEndring = {
+    saksbehandler: boolean;
+    beslutter: boolean;
+};
+
+export type BarnetilleggSkalJournalføreNotatEndring = {
+    saksbehandler: boolean;
+    beslutter: boolean;
+};

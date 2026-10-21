@@ -1,3 +1,8 @@
+import { Nullable } from '~/types/UtilTypes';
+import {
+    beslutterEndringAvJournalførNotat,
+    EndringAvJournalførNotat,
+} from '~/lib/_felles/journalføring/beslutterEndringAvJournalførNotat';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
@@ -81,3 +86,15 @@ export const formaterMeldeperioder = (meldekortbehandling: MeldekortbehandlingPr
         ? `${formaterPeriode(periode)} (${antallPerioder} meldeperioder, uke ${ukenummerFraPeriode(periode)})`
         : formaterMeldeperiode(periode);
 };
+
+export const journalførNotatEndringFraBeslutter = (
+    meldekortbehandling: MeldekortbehandlingProps,
+    skjemaValg: boolean,
+    beslutterRedigerer: boolean,
+): Nullable<EndringAvJournalførNotat> =>
+    beslutterEndringAvJournalførNotat({
+        lagretEndring: meldekortbehandling.beslutterEndringer.skalJournalføreNotat,
+        lagretValg: meldekortbehandling.skalJournalføreNotat,
+        skjemaValg,
+        beslutterRedigerer,
+    });

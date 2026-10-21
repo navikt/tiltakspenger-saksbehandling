@@ -11,7 +11,7 @@ import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 
-export const MeldekortbehandlingGodkjenn = () => {
+export const MeldekortbehandlingGodkjenn = (props: { disabled?: boolean }) => {
     const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
     const { navigateWithNotification } = useNotification();
@@ -46,26 +46,22 @@ export const MeldekortbehandlingGodkjenn = () => {
     return (
         <Dialog open={åpen} onOpenChange={setÅpen}>
             <Dialog.Trigger>
-                <Button variant={'primary'} icon={<CheckmarkIcon />}>
-                    {'Godkjenn meldekort'}
+                <Button variant={'primary'} icon={<CheckmarkIcon />} disabled={props.disabled}>
+                    Godkjenn meldekort
                 </Button>
             </Dialog.Trigger>
 
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Godkjenn meldekortet?'}</strong>
+                    <strong>Godkjenn meldekortet?</strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
-                    {
-                        'Er du sikker på at meldekortet er korrekt og ønsker å sende det til utbetaling?'
-                    }
-
+                    Er du sikker på at meldekortet er korrekt og ønsker å sende det til utbetaling?
                     {error && (
-                        <Infokort
-                            variant={'feil'}
-                            header={'Feil ved godkjenning'}
-                        >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
+                        <Infokort variant={'feil'} header={'Feil ved godkjenning'}>
+                            Feil: {error.message} (kode {error.status})
+                        </Infokort>
                     )}
                 </Dialog.Body>
 
@@ -76,11 +72,11 @@ export const MeldekortbehandlingGodkjenn = () => {
                         loading={isMutating}
                         onClick={godkjenn}
                     >
-                        {'Godkjenn meldekort'}
+                        Godkjenn meldekort
                     </Button>
 
                     <Dialog.CloseTrigger>
-                        <Button variant={'secondary'}>{'Avbryt'}</Button>
+                        <Button variant={'secondary'}>Avbryt</Button>
                     </Dialog.CloseTrigger>
                 </Dialog.Footer>
             </Dialog.Popup>

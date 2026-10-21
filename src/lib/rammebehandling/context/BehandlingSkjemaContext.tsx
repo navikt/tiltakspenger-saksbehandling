@@ -27,6 +27,7 @@ import {
 export type BehandlingSkjemaContextBase<T> = T &
     BehandlingSkjemaFellesState & {
         erReadonly: boolean;
+        kanEndreSkalJournalføreNotat: boolean;
         textAreas: {
             begrunnelse: TextAreaInput;
             brevtekst: TextAreaInput;
@@ -64,6 +65,12 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
         behandling.status !== Rammebehandlingsstatus.UNDER_BEHANDLING ||
         erBehandlingSattPåVent(behandling);
 
+    const kanEndreSkalJournalføreNotat =
+        !erReadonly ||
+        (rolleForBehandling === SaksbehandlerRolle.BESLUTTER &&
+            behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING &&
+            !erBehandlingSattPåVent(behandling));
+
     const [skjema, dispatch] = useReducer(
         behandlingSkjemaReducer,
         { behandling, sak },
@@ -83,6 +90,7 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
                 value={{
                     ...skjema,
                     erReadonly,
+                    kanEndreSkalJournalføreNotat,
                     textAreas: {
                         begrunnelse,
                         brevtekst,

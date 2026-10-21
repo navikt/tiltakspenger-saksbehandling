@@ -9,7 +9,7 @@ import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { personoversiktUrl } from '~/utils/urls';
 
-export const RammebehandlingGodkjenn = () => {
+export const RammebehandlingGodkjenn = (props: { disabled?: boolean }) => {
     const { navigateWithNotification } = useNotification();
     const { behandling, setBehandling } = useBehandling();
 
@@ -43,24 +43,22 @@ export const RammebehandlingGodkjenn = () => {
     return (
         <Dialog open={åpen} onOpenChange={setÅpen}>
             <Dialog.Trigger>
-                <Button variant={'primary'} icon={<CheckmarkIcon />}>
-                    {'Godkjenn vedtaket'}
+                <Button variant={'primary'} icon={<CheckmarkIcon />} disabled={props.disabled}>
+                    Godkjenn vedtaket
                 </Button>
             </Dialog.Trigger>
 
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Godkjenn vedtaket?'}</strong>
+                    <strong>Godkjenn vedtaket?</strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
-                    {'Er du sikker på at vedtaket er korrekt og ønsker å iverksette det?'}
-
+                    Er du sikker på at vedtaket er korrekt og ønsker å iverksette det?
                     {error && (
-                        <Infokort
-                            variant={'feil'}
-                            header={'Feil ved godkjenning'}
-                        >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
+                        <Infokort variant={'feil'} header={'Feil ved godkjenning'}>
+                            Feil: {error.message} (kode {error.status})
+                        </Infokort>
                     )}
                 </Dialog.Body>
 
@@ -71,11 +69,11 @@ export const RammebehandlingGodkjenn = () => {
                         loading={isMutating}
                         onClick={godkjenn}
                     >
-                        {'Godkjenn vedtaket'}
+                        Godkjenn vedtaket
                     </Button>
 
                     <Dialog.CloseTrigger>
-                        <Button variant={'secondary'}>{'Avbryt'}</Button>
+                        <Button variant={'secondary'}>Avbryt</Button>
                     </Dialog.CloseTrigger>
                 </Dialog.Footer>
             </Dialog.Popup>
