@@ -13,7 +13,7 @@ type Props = Pick<TilbakekrevingBehandling, 'status' | 'venter'> & { size?: TagP
 
 export const TilbakekrevingStatusTags = ({ status, venter, size }: Props) => {
     return (
-        <div className={style.tags}>
+        <span className={style.tags}>
             <Tag data-color={tilbakekrevingStatusFarge[status]} variant={'outline'} size={size}>
                 {tilbakekrevingStatusTekst[status]}
             </Tag>
@@ -28,7 +28,7 @@ export const TilbakekrevingStatusTags = ({ status, venter, size }: Props) => {
                     <HelpText>{`${tilbakekrevingVenterStatusTekst[venter.grunn]} - Gjenopptas ${formaterDatotekst(venter.gjenopptas)}`}</HelpText>
                 </Tag>
             )}
-        </div>
+        </span>
     );
 };
 
