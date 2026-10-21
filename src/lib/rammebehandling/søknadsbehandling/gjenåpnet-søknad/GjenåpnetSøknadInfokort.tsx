@@ -42,7 +42,7 @@ export const GjenåpnetSøknadInfokort = (props: { behandling: Rammebehandling }
                         </BodyShort>
                     )}
 
-                    {gjenåpning?.begrunnelse.verdi && (
+                    {gjenåpning?.begrunnelse?.verdi && (
                         <BodyShort
                             size={'small'}
                         >{`Begrunnelse: ${formaterSladdbarVerdi(gjenåpning.begrunnelse, (v) => v)}`}</BodyShort>
