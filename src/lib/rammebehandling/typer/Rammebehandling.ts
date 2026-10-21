@@ -34,6 +34,7 @@ import {
     OppdaterPrioriteringDTO,
     Prioritering,
 } from '~/lib/_felles/prioritering/prioriteringTyper';
+import { TidslinjeFørOgEtter } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 
 export const RammebehandlingIdPrefix = 'beh_' as const;
 export type RammebehandlingId = `${typeof RammebehandlingIdPrefix}${string}`;
@@ -72,6 +73,8 @@ export interface RammebehandlingBase {
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
     /** Hvorfor en automatisk behandling ble overlatt til en saksbehandler. */
     manueltBehandlesGrunner?: ManueltBehandlesGrunn[];
+    /** Null dersom behandlingen er avbrutt eller mangler vedtaksperiode. */
+    tidslinjeFørOgEtter: Nullable<TidslinjeFørOgEtter>;
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

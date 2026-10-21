@@ -11,6 +11,7 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Box, VStack } from '@navikt/ds-react';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
+import { FørOgEtterTidslinje } from '~/lib/_felles/tidslinjer/FørOgEtterTidslinje';
 import { ÅpneBehandlingerSammendrag } from '~/lib/behandling-felles/åpne-behandlinger/ÅpneBehandlingerSammendrag';
 import { useSak } from '~/lib/sak/SakContext';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
@@ -66,6 +67,13 @@ export const RammebehandlingPage = () => {
                             sak={sak}
                             ekskluderBehandlingId={behandling.id}
                         />
+                        {behandling.tidslinjeFørOgEtter && (
+                            <FørOgEtterTidslinje
+                                tidslinje={behandling.tidslinjeFørOgEtter}
+                                behandlingId={behandling.id}
+                                saksnummer={saksnummer}
+                            />
+                        )}
                         {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                         {behandlingensKlage && (
                             <Box borderWidth="1">

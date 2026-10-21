@@ -72,6 +72,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     beslutterEndringer: { skalJournalføreNotat: null },
     prioritering: null,
     gyldigeKommandoer: [],
+    tidslinjeFørOgEtter: null,
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
     innvilgelsesperioder: null,
