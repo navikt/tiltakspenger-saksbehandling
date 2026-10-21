@@ -37,7 +37,9 @@ export const FørOgEtterTidslinje = ({ tidslinje, behandlingId, saksnummer, clas
         <div className={classNames(style.wrapper, className)}>
             <div className={style.header}>
                 <Heading size={'small'} level={'2'}>
-                    {'Vedtaksperioden før og etter behandlingen'}
+                    {
+                        'Tilstand for vedtaksperioden, før og etter iverksetting av denne behandlingen'
+                    }
                 </Heading>
             </div>
             <Timeline startDate={new Date(periode.fraOgMed)} endDate={new Date(periode.tilOgMed)}>
