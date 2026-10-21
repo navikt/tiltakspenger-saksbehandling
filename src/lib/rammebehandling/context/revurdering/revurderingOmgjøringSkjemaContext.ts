@@ -23,15 +23,16 @@ import {
 import { Periode } from '~/types/Periode';
 import { omgjøringInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { oppdaterPeriode } from '~/utils/periode';
+import { oppdaterPartialPeriode } from '~/utils/periode';
 
 export type OmgjøringIkkeValgtState = {
     resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT;
 };
 
+// Vedtaksperioden er tom inntil saksbehandler har valgt den, med mindre backend har forhåndsutfylt den.
 export type OmgjøringOpphørState = {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
-    vedtaksperiode: Periode;
+    vedtaksperiode: Partial<Periode>;
     valgteHjemler: HjemmelForOpphør[];
     skalSendeVedtaksbrev: boolean;
 };
@@ -39,7 +40,7 @@ export type OmgjøringOpphørState = {
 export type OmgjøringInnvilgelseState = {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelse: InnvilgelseState;
-    vedtaksperiode: Periode;
+    vedtaksperiode: Partial<Periode>;
 };
 
 export type OmgjøringState =
@@ -112,7 +113,7 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
                 throw Error('Kan ikke sette vedtaksperiode før omgjøringstype er valgt');
             }
 
-            const nyVedtaksperiode = oppdaterPeriode(
+            const nyVedtaksperiode = oppdaterPartialPeriode(
                 state.vedtaksperiode,
                 payload.periodeOppdatering,
             );

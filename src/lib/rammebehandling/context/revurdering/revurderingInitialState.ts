@@ -15,8 +15,9 @@ import {
     OmgjøringState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
-import { hentRammevedtak } from '~/lib/sak/sakUtils';
-import { totalPeriode } from '~/utils/periode';
+import { overlappendePeriode, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
+import { Periode } from '~/types/Periode';
+import { isNonNullish } from '~/utils/object';
 
 type RevurderingState = RevurderingInnvilgelseState | RevurderingStansState | OmgjøringState;
 
@@ -125,18 +126,8 @@ const omgjøringInnvilgelseInitialState = (
     sak: SakProps,
 ): OmgjøringInnvilgelseState => {
     if (behandling.resultat !== RevurderingResultat.OMGJØRING) {
-        const perioderSomKanOmgjøres = hentRammevedtak(sak, behandling.omgjørVedtak)
-            ?.gyldigeKommandoer.OMGJØR?.perioderSomKanOmgjøres;
-
-        const vedtaksperiode =
-            behandling.vedtaksperiode ??
-            (perioderSomKanOmgjøres ? totalPeriode(perioderSomKanOmgjøres) : undefined);
-
-        if (!vedtaksperiode) {
-            throw new Error(
-                'Kan ikke omgjøre et vedtak som ikke har gjeldende perioder som kan omgjøres',
-            );
-        }
+        const vedtaksperiode: Partial<Periode> =
+            behandling.vedtaksperiode ?? forhåndsutfyltOmgjøringsperiode(behandling) ?? {};
 
         return {
             resultat: RevurderingResultat.OMGJØRING,
@@ -201,17 +192,27 @@ const omgjøringOpphørInitialState = (
         };
     }
 
-    const perioderSomKanOpphøres = hentRammevedtak(sak, behandling.omgjørVedtak)?.gyldigeKommandoer
-        .OPPHØR?.innvilgelsesperioder;
+    const forhåndsutfyltPeriode = forhåndsutfyltOmgjøringsperiode(behandling);
 
-    if (!perioderSomKanOpphøres) {
-        throw Error('Kan ikke opphøre et vedtak som ikke har gjeldende innvilgelsesperioder');
-    }
+    // Opphøret må starte og slutte i en innvilgelse, så den forhåndsutfylte perioden avgrenses til de innvilgede periodene i den.
+    const perioderSomKanOpphøres = forhåndsutfyltPeriode
+        ? sak.innvilgetTidslinje.elementer
+              .map((it) => overlappendePeriode(it.periode, forhåndsutfyltPeriode))
+              .filter(isNonNullish)
+        : [];
 
     return {
         resultat: RevurderingResultat.OMGJØRING_OPPHØR,
-        vedtaksperiode: totalPeriode(perioderSomKanOpphøres),
+        vedtaksperiode:
+            perioderSomKanOpphøres.length > 0 ? totalPeriode(perioderSomKanOpphøres) : {},
         valgteHjemler: [],
         skalSendeVedtaksbrev: true,
     };
 };
+
+// En omgjøring som er startet fra et vedtak er forhåndsutfylt av backend med perioden til vedtaket.
+// En omgjøring startet fra menyen omgjør ingen vedtak ennå, og saksbehandler må selv velge vedtaksperioden.
+const forhåndsutfyltOmgjøringsperiode = (behandling: Omgjøring): Periode | undefined =>
+    behandling.omgjørRammevedtak.length > 0
+        ? periodiseringTotalPeriode(behandling.omgjørRammevedtak)
+        : undefined;

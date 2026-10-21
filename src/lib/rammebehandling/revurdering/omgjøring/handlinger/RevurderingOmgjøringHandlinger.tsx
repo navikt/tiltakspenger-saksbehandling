@@ -17,6 +17,7 @@ import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/Behandli
 import { useSak } from '~/lib/sak/SakContext';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 import { tilOppdaterPrioriteringDTO } from '~/lib/_felles/prioritering/prioriteringUtils';
+import { erFullstendigPeriode } from '~/utils/periode';
 
 export const RevurderingOmgjøringHandlinger = () => {
     const { sak } = useSak();
@@ -37,7 +38,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
         case RevurderingResultat.OMGJØRING: {
             const { innvilgelse, vedtaksperiode, textAreas } = skjema;
 
-            if (!innvilgelse.harValgtPeriode) {
+            if (!innvilgelse.harValgtPeriode || !erFullstendigPeriode(vedtaksperiode)) {
                 return null;
             }
 
@@ -67,6 +68,10 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
 
         case RevurderingResultat.OMGJØRING_OPPHØR: {
             const { vedtaksperiode, textAreas, valgteHjemler } = skjema;
+
+            if (!erFullstendigPeriode(vedtaksperiode)) {
+                return null;
+            }
 
             return {
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,

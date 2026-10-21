@@ -3,9 +3,10 @@ import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/vali
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
+import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import {
     erDatoIPeriode,
+    erFullstendigPeriode,
     perioderOverlapper,
     periodiseringTotalPeriode,
     totalPeriode,
@@ -24,22 +25,24 @@ export const revurderingOmgjøringValidering = (
         warnings: [],
     };
 
-    const valgtVedtak = hentGjeldendeRammevedtak(sak, behandling.omgjørVedtak);
-
-    if (!valgtVedtak) {
-        validering.errors.push(
-            `Fant ikke valgt vedtak som skal omgjøres: ${behandling.omgjørVedtak} - Vedtaket kan allerede være omgjort`,
-        );
+    if (skjema.resultat === RevurderingResultat.OMGJØRING_IKKE_VALGT) {
         return validering;
     }
 
-    if (skjema.resultat === RevurderingResultat.OMGJØRING_IKKE_VALGT) {
+    const { vedtaksperiode } = skjema;
+
+    if (!erFullstendigPeriode(vedtaksperiode)) {
+        validering.errors.push(
+            skjema.resultat === RevurderingResultat.OMGJØRING_OPPHØR
+                ? 'Du må velge perioden som skal opphøres.'
+                : 'Du må velge en vedtaksperiode.',
+        );
         return validering;
     }
 
     // En omgjøring kan omgjøre flere vedtak, og omgjør alle gjeldende vedtak som overlapper vedtaksperioden.
     const omgjortTidslinje = sak.tidslinje.elementer.filter((element) =>
-        perioderOverlapper(skjema.vedtaksperiode, element.periode),
+        perioderOverlapper(vedtaksperiode, element.periode),
     );
 
     if (omgjortTidslinje.length === 0) {
@@ -56,8 +59,6 @@ export const revurderingOmgjøringValidering = (
         validering.warnings.push(...innvilgelseValidering.warnings);
 
         if (skjema.innvilgelse.harValgtPeriode) {
-            const { vedtaksperiode } = skjema;
-
             const innvilgelsesperiodeTotal = periodiseringTotalPeriode(
                 skjema.innvilgelse.innvilgelsesperioder,
             );
@@ -97,13 +98,13 @@ export const revurderingOmgjøringValidering = (
                 erDatoIPeriode(dato, element.periode),
             );
 
-        if (!erInnvilget(skjema.vedtaksperiode.fraOgMed)) {
+        if (!erInnvilget(vedtaksperiode.fraOgMed)) {
             validering.errors.push(
                 'Perioden som opphøres må starte i en gjeldende innvilgelsesperiode',
             );
         }
 
-        if (!erInnvilget(skjema.vedtaksperiode.tilOgMed)) {
+        if (!erInnvilget(vedtaksperiode.tilOgMed)) {
             validering.errors.push(
                 'Perioden som opphøres må slutte i en gjeldende innvilgelsesperiode',
             );

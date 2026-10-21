@@ -2,7 +2,11 @@ import { BodyShort, InlineMessage } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { forrigeDag, nesteDag, formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
-import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
+import {
+    erFullstendigPeriode,
+    overlappendePeriode,
+    perioderErSammenhengende,
+} from '~/utils/periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { finnGjeldendeInnvilgelserIPeriode } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
@@ -41,7 +45,7 @@ export const VedtaksperioderUtenInnvilgelseVarsel = ({ children }: PropsWithChil
 
     const { innvilgelse, vedtaksperiode } = skjemaContext;
 
-    if (!innvilgelse.harValgtPeriode) {
+    if (!innvilgelse.harValgtPeriode || !erFullstendigPeriode(vedtaksperiode)) {
         return children;
     }
 

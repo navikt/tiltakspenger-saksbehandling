@@ -15,6 +15,7 @@ import {
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
 import { Checkbox, Heading, HStack } from '@navikt/ds-react';
+import { erFullstendigPeriode } from '~/utils/periode';
 
 export const RevurderingOmgjøringBrev = () => {
     const { sak } = useSak();
@@ -76,11 +77,17 @@ const tilForhåndsvisningDTO = (skjema: OmgjøringContext): OmgjøringBrevForhå
 
     switch (resultat) {
         case RevurderingResultat.OMGJØRING_OPPHØR: {
+            const { vedtaksperiode } = skjema;
+
+            if (!erFullstendigPeriode(vedtaksperiode)) {
+                throw Error('Kan ikke forhåndsvise brev før perioden som opphøres er valgt');
+            }
+
             return {
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,
                 fritekst: textAreas.brevtekst.getValue(),
                 valgteHjemler: skjema.valgteHjemler,
-                vedtaksperiode: skjema.vedtaksperiode,
+                vedtaksperiode,
             } satisfies OmgjøringOpphørBrevForhåndsvisningDTO;
         }
 

@@ -5,7 +5,6 @@ import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandl
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { behandlingUrl } from '~/utils/urls';
-import { TabsIcon } from '@navikt/aksel-icons';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentGjeldendeRammevedtak, hentRammevedtak } from '~/lib/sak/sakUtils';
@@ -14,16 +13,13 @@ export const RevurderingOmgjøringHeader = () => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
 
-    const { omgjørVedtak, omgjørRammevedtak, klagebehandlingId } = behandling;
+    const { omgjørRammevedtak, klagebehandlingId } = behandling;
 
     const erVedtatt = behandling.status === Rammebehandlingsstatus.VEDTATT;
 
-    const vedtakIder =
-        omgjørRammevedtak.length > 0
-            ? omgjørRammevedtak
-                  .map((it) => it.vedtakId)
-                  .filter((vedtakId, index, array) => array.indexOf(vedtakId) === index)
-            : [omgjørVedtak];
+    const vedtakIder = omgjørRammevedtak
+        .map((it) => it.vedtakId)
+        .filter((vedtakId, index, array) => array.indexOf(vedtakId) === index);
 
     const vedtakSomBlirOmgjort = vedtakIder.map((vedtakId) =>
         erVedtatt ? hentRammevedtak(sak, vedtakId) : hentGjeldendeRammevedtak(sak, vedtakId),
@@ -49,6 +45,10 @@ export const RevurderingOmgjøringHeader = () => {
                     verdi={formaterPeriode(nonNullish(behandling.vedtaksperiode))}
                     variant={'inlineColon'}
                 />
+            ) : vedtakSomBlirOmgjort.length === 0 ? (
+                <BodyShort>
+                    {'Vedtakene som omgjøres bestemmes av vedtaksperioden du velger.'}
+                </BodyShort>
             ) : (
                 vedtakSomBlirOmgjort.filter(isNonNullish).map((vedtak) => (
                     <BodyShort key={vedtak.id}>
@@ -58,10 +58,8 @@ export const RevurderingOmgjøringHeader = () => {
                                 saksnummer: sak.saksnummer,
                                 id: vedtak.behandlingId,
                             })}
-                            target={'_blank'}
                         >
-                            {'Se opprinnelig vedtak (åpner i ny fane)'}
-                            <TabsIcon title={'Se vedtak (åpner i ny fane)'} />
+                            {'Se opprinnelig vedtak'}
                         </Link>
                     </BodyShort>
                 ))

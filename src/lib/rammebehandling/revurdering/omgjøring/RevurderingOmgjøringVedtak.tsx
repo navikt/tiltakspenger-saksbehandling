@@ -3,7 +3,11 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
-import { useOmgjøringSkjema } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import {
+    useOmgjøringMedValgtResultatSkjema,
+    useOmgjøringSkjema,
+} from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { erFullstendigPeriode } from '~/utils/periode';
 import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
@@ -55,6 +59,7 @@ export const RevurderingOmgjøringVedtak = () => {
 
 const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
     const { behandling } = useRevurderingOmgjøring();
+    const { vedtaksperiode } = useOmgjøringMedValgtResultatSkjema();
 
     // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
     const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
@@ -66,6 +71,15 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
                     {'Fant ingen tiltaksdeltakelser det kan innvilges for.'}
                 </Infokort>
                 <Separator />
+            </>
+        );
+    }
+
+    if (!erFullstendigPeriode(vedtaksperiode)) {
+        return (
+            <>
+                <Separator />
+                <OmgjøringInnvilgelseVedtaksperiodeVelger />
             </>
         );
     }
@@ -92,6 +106,17 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
 };
 
 const Opphør = () => {
+    const { vedtaksperiode } = useOmgjøringMedValgtResultatSkjema();
+
+    if (!erFullstendigPeriode(vedtaksperiode)) {
+        return (
+            <>
+                <Separator />
+                <OmgjøringOpphørVelger />
+            </>
+        );
+    }
+
     return (
         <>
             <Separator />

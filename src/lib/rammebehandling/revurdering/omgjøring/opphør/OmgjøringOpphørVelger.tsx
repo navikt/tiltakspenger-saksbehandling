@@ -9,9 +9,10 @@ import {
 import { OmgjøringVedtaksperiodeVelger } from '~/lib/rammebehandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { HjemmelForOpphør } from '~/lib/rammebehandling/typer/Revurdering';
+import { erFullstendigPeriode } from '~/utils/periode';
 
 export const OmgjøringOpphørVelger = () => {
-    const { valgteHjemler } = useOmgjøringOpphørSkjema();
+    const { valgteHjemler, vedtaksperiode } = useOmgjøringOpphørSkjema();
     const dispatch = useOmgjøringSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
@@ -25,17 +26,19 @@ export const OmgjøringOpphørVelger = () => {
             <VedtakSeksjon.Venstre gap={'space-24'}>
                 <OmgjøringVedtaksperiodeVelger />
 
-                <StansOgOpphørHjemmelVelger
-                    label={'Hjemmel for opphør'}
-                    aktuelleHjemler={hjemlerForOpphør}
-                    valgteHjemler={valgteHjemler}
-                    onChange={(hjemler) =>
-                        dispatch({
-                            type: 'setHjemlerForOpphør',
-                            payload: { hjemler },
-                        })
-                    }
-                />
+                {erFullstendigPeriode(vedtaksperiode) && (
+                    <StansOgOpphørHjemmelVelger
+                        label={'Hjemmel for opphør'}
+                        aktuelleHjemler={hjemlerForOpphør}
+                        valgteHjemler={valgteHjemler}
+                        onChange={(hjemler) =>
+                            dispatch({
+                                type: 'setHjemlerForOpphør',
+                                payload: { hjemler },
+                            })
+                        }
+                    />
+                )}
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Høyre gap={'space-16'}>
