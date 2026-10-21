@@ -136,8 +136,20 @@ export type MeldekortbehandlingProps = {
     klagebehandlingId: Nullable<KlageId>;
     skalSendeVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
+    beslutterEndringer: MeldekortbehandlingBeslutterEndringer;
     /** Prioriterte behandlinger ligger alltid øverst i benken. */
     prioritering: Nullable<Prioritering>;
     ventestatus: VentestatusHendelse[];
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
+};
+
+/** Endringer beslutter har gjort i saksbehandlers valg, mens behandlingen er under beslutning. */
+export type MeldekortbehandlingBeslutterEndringer = {
+    skalJournalføreNotat: Nullable<MeldekortbehandlingSkalJournalføreNotatEndring>;
+};
+
+export type MeldekortbehandlingSkalJournalføreNotatEndring = {
+    tidspunkt: string;
+    saksbehandler: boolean;
+    beslutter: boolean;
 };

@@ -6,11 +6,15 @@ import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
+import { journalførNotatEndringFraBeslutter } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
 import style from './RevurderingStansBegrunnelse.module.css';
 
 export const RevurderingStansBegrunnelse = () => {
-    const { textAreas, erReadonly, skalJournalføreNotat } = useBehandlingSkjema();
+    const { textAreas, erReadonly, kanEndreSkalJournalføreNotat, skalJournalføreNotat } =
+        useBehandlingSkjema();
+    const { behandling } = useBehandling();
     const dispatch = useBehandlingSkjemaFellesDispatch();
     const { begrunnelse } = textAreas;
 
@@ -35,12 +39,18 @@ export const RevurderingStansBegrunnelse = () => {
                             payload: { skalJournalføreNotat },
                         })
                     }
-                    readOnly={erReadonly}
+                    readOnly={!kanEndreSkalJournalføreNotat}
+                    endringFraBeslutter={journalførNotatEndringFraBeslutter(
+                        behandling,
+                        'vilkårsvurdering',
+                        skalJournalføreNotat.vilkårsvurdering,
+                        erReadonly && kanEndreSkalJournalføreNotat,
+                    )}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
                 <VedtakHjelpetekst header={'Stans av tiltakspenger'}>
-                    <BodyLong size={'small'}>{'Vurder hjemmel for stans og noter ned: '}</BodyLong>
+                    <BodyLong size={'small'}>Vurder hjemmel for stans og noter ned: </BodyLong>
                     <TekstListe
                         tekster={[
                             'Hvilke faktum som er lagt til grunn og hvordan regel er vurdert opp mot faktumet',

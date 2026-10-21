@@ -6,11 +6,15 @@ import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
+import { journalførNotatEndringFraBeslutter } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
-    const { textAreas, erReadonly, skalJournalføreNotat } = useBehandlingSkjema();
+    const { textAreas, erReadonly, kanEndreSkalJournalføreNotat, skalJournalføreNotat } =
+        useBehandlingSkjema();
+    const { behandling } = useBehandling();
     const dispatch = useBehandlingSkjemaFellesDispatch();
     const { barnetilleggBegrunnelse } = textAreas;
 
@@ -18,11 +22,11 @@ export const BarnetilleggBegrunnelse = () => {
         <>
             <VedtakSeksjon.Venstre>
                 <Heading size={'xsmall'} level={'2'} className={style.header}>
-                    {'Begrunnelse vilkårsvurdering barnetillegg'}
+                    Begrunnelse vilkårsvurdering barnetillegg
                 </Heading>
-                <BodyLong size={'small'}>{'Noter ned vurderingen.'}</BodyLong>
+                <BodyLong size={'small'}>Noter ned vurderingen.</BodyLong>
                 <BodyLong size={'small'} className={style.personinfo}>
-                    {'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'}
+                    Ikke skriv personsensitiv informasjon som ikke er relevant for saken.
                 </BodyLong>
             </VedtakSeksjon.Venstre>
 
@@ -41,7 +45,13 @@ export const BarnetilleggBegrunnelse = () => {
                             payload: { skalJournalføreNotat },
                         })
                     }
-                    readOnly={erReadonly}
+                    readOnly={!kanEndreSkalJournalføreNotat}
+                    endringFraBeslutter={journalførNotatEndringFraBeslutter(
+                        behandling,
+                        'barnetillegg',
+                        skalJournalføreNotat.barnetillegg,
+                        erReadonly && kanEndreSkalJournalføreNotat,
+                    )}
                     label={'Journalfør begrunnelsen for barnetillegg som notat'}
                 />
             </VedtakSeksjon.Venstre>
@@ -49,7 +59,7 @@ export const BarnetilleggBegrunnelse = () => {
             <VedtakSeksjon.Høyre>
                 <VedtakHjelpetekst header={'Vilkårsvurdering barnetillegg'}>
                     <BodyLong size={'small'}>
-                        {'Vurder vilkårene for barnetillegg og noter ned:'}
+                        Vurder vilkårene for barnetillegg og noter ned:
                     </BodyLong>
                     <TekstListe
                         tekster={[

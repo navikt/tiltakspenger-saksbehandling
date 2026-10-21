@@ -25,6 +25,8 @@ export type MeldekortbehandlingSkjemaState = {
 
 export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & {
     erReadonly: boolean;
+    /** Beslutter kan endre valget om journalføring av notat selv om resten av skjemaet er låst. */
+    kanEndreSkalJournalføreNotat: boolean;
     begrunnelse: TextAreaInput;
     brevtekst: TextAreaInput;
     prioriteringBegrunnelse: TextAreaInput;

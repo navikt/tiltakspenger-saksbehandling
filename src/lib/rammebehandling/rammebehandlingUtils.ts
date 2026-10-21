@@ -7,11 +7,16 @@ import {
 import { erDatoIPeriode, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
+    beslutterEndringAvJournalførNotat,
+    EndringAvJournalførNotat,
+} from '~/lib/_felles/journalføring/beslutterEndringAvJournalførNotat';
+import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
     RammebehandlingResultat,
     Rammebehandlingsstatus,
     Rammebehandlingstype,
+    SkalJournalføreNotat,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     Søknadsbehandling,
@@ -200,3 +205,16 @@ export const fyller18ÅrISøknadsperioden = (behandling: Rammebehandling, sak: S
 
     return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
 };
+
+export const journalførNotatEndringFraBeslutter = (
+    behandling: Rammebehandling,
+    felt: keyof SkalJournalføreNotat,
+    skjemaValg: boolean,
+    beslutterRedigerer: boolean,
+): Nullable<EndringAvJournalførNotat> =>
+    beslutterEndringAvJournalførNotat({
+        lagretEndring: behandling.beslutterEndringer.skalJournalføreNotat?.[felt] ?? null,
+        lagretValg: behandling.skalJournalføreNotat[felt],
+        skjemaValg,
+        beslutterRedigerer,
+    });

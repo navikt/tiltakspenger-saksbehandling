@@ -1,18 +1,27 @@
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import {
+    useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Checkbox, Heading, HStack, InlineMessage } from '@navikt/ds-react';
 import { MeldekortbehandlingForhåndsvisBrev } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/forhåndsvis-brev/MeldekortbehandlingForhåndsvisBrev';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
+import { journalførNotatEndringFraBeslutter } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 import style from './MeldekortbehandlingBegrunnelseOgBrev.module.css';
 
 export const MeldekortbehandlingBegrunnelseOgBrev = () => {
-    const { begrunnelse, brevtekst, erReadonly, skalSendeVedtaksbrev, skalJournalføreNotat } =
-        useMeldekortbehandlingSkjema();
+    const {
+        begrunnelse,
+        brevtekst,
+        erReadonly,
+        kanEndreSkalJournalføreNotat,
+        skalSendeVedtaksbrev,
+        skalJournalføreNotat,
+    } = useMeldekortbehandlingSkjema();
+    const meldekortbehandling = useMeldekortbehandling();
 
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 
@@ -21,15 +30,14 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
             <MeldekortbehandlingSeksjon className={style.begrunnelse}>
                 <MeldekortbehandlingSeksjon.Høyre className={style.header}>
                     <Heading size={'small'} level={'3'}>
-                        {'Begrunnelse (valgfri)'}
+                        Begrunnelse (valgfri)
                     </Heading>
                 </MeldekortbehandlingSeksjon.Høyre>
 
                 <MeldekortbehandlingSeksjon.Venstre>
                     <InlineMessage status={'info'}>
-                        {
-                            'Noter vurderingen. Ikke skriv personsensitive opplysninger som ikke er relevant for saken'
-                        }
+                        Noter vurderingen. Ikke skriv personsensitive opplysninger som ikke er
+                        relevant for saken
                     </InlineMessage>
                 </MeldekortbehandlingSeksjon.Venstre>
 
@@ -49,7 +57,12 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
                                 payload: { skalJournalføreNotat: valgt },
                             })
                         }
-                        readOnly={erReadonly}
+                        readOnly={!kanEndreSkalJournalføreNotat}
+                        endringFraBeslutter={journalførNotatEndringFraBeslutter(
+                            meldekortbehandling,
+                            skalJournalføreNotat,
+                            erReadonly && kanEndreSkalJournalføreNotat,
+                        )}
                     />
                 </MeldekortbehandlingSeksjon.Høyre>
             </MeldekortbehandlingSeksjon>
@@ -58,14 +71,14 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
                 <MeldekortbehandlingSeksjon.Høyre className={style.header}>
                     <HStack justify={'space-between'}>
                         <Heading size={'small'} level={'3'}>
-                            {'Tekst til vedtaksbrev (valgfri)'}
+                            Tekst til vedtaksbrev (valgfri)
                         </Heading>
                     </HStack>
                 </MeldekortbehandlingSeksjon.Høyre>
 
                 <MeldekortbehandlingSeksjon.Venstre>
                     <InlineMessage status={'info'}>
-                        {'Teksten vises i vedtaksbrevet til bruker.'}
+                        Teksten vises i vedtaksbrevet til bruker.
                     </InlineMessage>
                 </MeldekortbehandlingSeksjon.Venstre>
 
@@ -90,7 +103,7 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
                                 })
                             }
                         >
-                            {'Ikke send vedtaksbrev'}
+                            Ikke send vedtaksbrev
                         </Checkbox>
 
                         <MeldekortbehandlingForhåndsvisBrev />

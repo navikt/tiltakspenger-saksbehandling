@@ -18,6 +18,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { useFritekstInput } from '~/lib/_felles/fritekst/useFritekstInput';
+import { kanBeslutteForMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 
@@ -39,6 +40,9 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
         !kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) ||
         meldekortbehandling.status !== MeldekortbehandlingStatus.UNDER_BEHANDLING;
 
+    const kanEndreSkalJournalføreNotat =
+        !erReadonly || kanBeslutteForMeldekort(meldekortbehandling, innloggetSaksbehandler);
+
     const [skjema, dispatch] = useReducer(
         meldekortbehandlingSkjemaReducer,
         meldekortbehandling,
@@ -56,6 +60,7 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
                     value={{
                         ...skjema,
                         erReadonly,
+                        kanEndreSkalJournalføreNotat,
                         begrunnelse,
                         brevtekst,
                         prioriteringBegrunnelse,

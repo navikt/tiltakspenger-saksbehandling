@@ -8,11 +8,15 @@ import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNotatValg';
+import { journalførNotatEndringFraBeslutter } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 
 export const BegrunnelseVilkårsvurdering = () => {
-    const { textAreas, erReadonly, skalJournalføreNotat } = useBehandlingSkjema();
+    const { textAreas, erReadonly, kanEndreSkalJournalføreNotat, skalJournalføreNotat } =
+        useBehandlingSkjema();
+    const { behandling } = useBehandling();
     const dispatch = useBehandlingSkjemaFellesDispatch();
     const { begrunnelse } = textAreas;
 
@@ -20,13 +24,12 @@ export const BegrunnelseVilkårsvurdering = () => {
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
                 <Heading size={'xsmall'} level={'2'}>
-                    {'Begrunnelse vilkårsvurdering'}
+                    Begrunnelse vilkårsvurdering
                 </Heading>
-                <BodyLong size={'small'}>{'Noter ned vurderingen.'}</BodyLong>
+                <BodyLong size={'small'}>Noter ned vurderingen.</BodyLong>
                 <BodyLong size={'small'} className={style.personinfoVarsel}>
-                    {
-                        'Ikke skriv personsensitiv informasjon som ikke er relevant for saken. Husk at bruker har rett til innsyn.'
-                    }
+                    Ikke skriv personsensitiv informasjon som ikke er relevant for saken. Husk at
+                    bruker har rett til innsyn.
                 </BodyLong>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
@@ -35,7 +38,7 @@ export const BegrunnelseVilkårsvurdering = () => {
                         href={'https://lovdata.no/nav/forskrift/2013-11-04-1286'}
                         ikon={ParagraphIcon}
                     >
-                        {'Forskrift'}
+                        Forskrift
                     </LovKnapp>
                     <LovKnapp
                         href={
@@ -43,7 +46,7 @@ export const BegrunnelseVilkårsvurdering = () => {
                         }
                         ikon={TasklistIcon}
                     >
-                        {'Rundskriv'}
+                        Rundskriv
                     </LovKnapp>
                 </div>
             </VedtakSeksjon.Høyre>
@@ -62,13 +65,19 @@ export const BegrunnelseVilkårsvurdering = () => {
                             payload: { skalJournalføreNotat },
                         })
                     }
-                    readOnly={erReadonly}
+                    readOnly={!kanEndreSkalJournalføreNotat}
+                    endringFraBeslutter={journalførNotatEndringFraBeslutter(
+                        behandling,
+                        'vilkårsvurdering',
+                        skalJournalføreNotat.vilkårsvurdering,
+                        erReadonly && kanEndreSkalJournalføreNotat,
+                    )}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
                 <VedtakHjelpetekst header={'Vilkårsvurdering'}>
                     <BodyLong size={'small'}>
-                        {'Vurder vilkårene for tiltakspenger og noter ned:'}
+                        Vurder vilkårene for tiltakspenger og noter ned:
                     </BodyLong>
                     <TekstListe
                         tekster={[
