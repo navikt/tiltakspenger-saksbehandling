@@ -55,13 +55,11 @@ export type RevurderingInnvilgelse = RevurderingBase & {
     barnetillegg: Nullable<Barnetillegg>;
 };
 
-// omgjørVedtak er det eldste vedtaket i omgjørRammevedtak, og erstattes av omgjørRammevedtak.
 export type OmgjøringInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING;
     vedtaksperiode: Periode;
     innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
-    omgjørVedtak: VedtakId;
     omgjørRammevedtak: OmgjørRammevedtak[];
     skalSendeVedtaksbrev: boolean;
 };
@@ -70,13 +68,11 @@ export type OmgjøringOpphør = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
     valgteHjemler: HjemmelForOpphør[];
-    omgjørVedtak: VedtakId;
     omgjørRammevedtak: OmgjørRammevedtak[];
 };
 
 export type OmgjøringIkkeValgt = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT;
-    omgjørVedtak: VedtakId;
     omgjørRammevedtak: OmgjørRammevedtak[];
 };
 

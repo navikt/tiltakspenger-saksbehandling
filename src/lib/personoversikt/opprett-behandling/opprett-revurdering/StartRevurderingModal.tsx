@@ -43,6 +43,7 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
                         >
                             <Radio value={RevurderingResultat.INNVILGELSE}>{'Innvilgelse'}</Radio>
                             <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>
+                            <Radio value={RevurderingResultat.OMGJØRING}>{'Omgjøring'}</Radio>
                         </RadioGroup>
 
                         {startRevurderingError && (
@@ -75,7 +76,7 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
                             });
                         }}
                     >
-                        {`Opprett revurdering${valgtType ? ` (${revurderingResultatTekst[valgtType]})` : ''}`}
+                        {`Opprett revurdering${valgtType ? ` (${valgtTypeTekst(valgtType)})` : ''}`}
                     </Button>
 
                     <Dialog.CloseTrigger>
@@ -88,3 +89,7 @@ export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
         </Dialog>
     );
 };
+
+// Omgjøringen får først resultat når saksbehandler velger det i behandlingen.
+const valgtTypeTekst = (type: RevurderingResultat): string =>
+    type === RevurderingResultat.OMGJØRING ? 'Omgjøring' : revurderingResultatTekst[type];

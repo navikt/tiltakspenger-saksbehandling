@@ -8,9 +8,11 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     HjemmelForOpphør,
+    OmgjøringIkkeValgt,
     OmgjøringOpphør,
     RevurderingResultat,
 } from '~/lib/rammebehandling/typer/Revurdering';
+import { omgjøringInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
 import { Omgjøringsgrad, Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
@@ -117,15 +119,31 @@ const omgjøringOpphør = (omgjørVedtak: VedtakId, vedtaksperiode: Periode): Om
     beslutterEndringer: { skalJournalføreNotat: null },
     tidslinjeFørOgEtter: null,
     valgteHjemler: [HjemmelForOpphør.DeltarIkkePåArbeidsmarkedstiltak],
-    omgjørVedtak,
     omgjørRammevedtak: [
         { vedtakId: omgjørVedtak, periode: vedtaksperiode, omgjøringsgrad: Omgjøringsgrad.HELT },
     ],
 });
 
+// En omgjøring som ikke har valgt resultat, og som omgjør vedtakene backend har forhåndsutfylt.
+// Tom liste betyr at omgjøringen er startet fra menyen, uten et vedtak som utgangspunkt.
+const omgjøringIkkeValgt = (omgjørRammevedtak: Periode[]): OmgjøringIkkeValgt => {
+    const behandling: Partial<OmgjøringOpphør> = omgjøringOpphør('vedtak_1', januar);
+    delete behandling.valgteHjemler;
+    return {
+        ...(behandling as Omit<OmgjøringOpphør, 'valgteHjemler'>),
+        resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT,
+        vedtaksperiode: null,
+        omgjørRammevedtak: omgjørRammevedtak.map((periode, index) => ({
+            vedtakId: `vedtak_${index + 1}`,
+            periode,
+            omgjøringsgrad: Omgjøringsgrad.HELT,
+        })),
+    };
+};
+
 const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
 
-const opphørSkjema = (vedtaksperiode: Periode): OmgjøringContext => ({
+const opphørSkjema = (vedtaksperiode: Partial<Periode>): OmgjøringContext => ({
     resultat: RevurderingResultat.OMGJØRING_OPPHØR,
     vedtaksperiode,
     valgteHjemler: [HjemmelForOpphør.DeltarIkkePåArbeidsmarkedstiltak],
@@ -143,6 +161,25 @@ const opphørSkjema = (vedtaksperiode: Periode): OmgjøringContext => ({
 });
 
 describe('revurderingOmgjøringValidering', () => {
+    test.each([{}, { fraOgMed: '2025-01-01' }, { tilOgMed: '2025-01-31' }])(
+        'krever at hele perioden som opphøres er valgt (%o)',
+        (vedtaksperiode) => {
+            const validering = revurderingOmgjøringValidering(
+                omgjøringIkkeValgt([]),
+                opphørSkjema(vedtaksperiode),
+                sak([
+                    {
+                        rammevedtakId: 'vedtak_1',
+                        periode: januar,
+                        tidslinjeResultat: TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE,
+                    },
+                ]),
+            );
+
+            expect(validering.errors).toEqual(['Du må velge perioden som skal opphøres.']);
+        },
+    );
+
     test('godtar opphør over flere vedtak', () => {
         const sakMedTreVedtak = sak([
             {
@@ -295,5 +332,68 @@ describe('revurderingOmgjøringValidering', () => {
         );
 
         expect(validering.errors).toEqual(['Valgt vedtaksperiode omgjør ingen tidligere vedtak']);
+    });
+});
+
+describe('omgjøringInitialState', () => {
+    const sakMedStansIMidten = sak([
+        {
+            rammevedtakId: 'vedtak_1',
+            periode: januar,
+            tidslinjeResultat: TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE,
+        },
+        { rammevedtakId: 'vedtak_2', periode: februar, tidslinjeResultat: TidslinjeResultat.STANS },
+        {
+            rammevedtakId: 'vedtak_3',
+            periode: mars,
+            tidslinjeResultat: TidslinjeResultat.REVURDERING_INNVILGELSE,
+        },
+    ]);
+
+    test.each([RevurderingResultat.OMGJØRING, RevurderingResultat.OMGJØRING_OPPHØR] as const)(
+        'starter med tom vedtaksperiode for %s når omgjøringen er startet fra menyen',
+        (resultat) => {
+            const state = omgjøringInitialState(
+                omgjøringIkkeValgt([]),
+                sakMedStansIMidten,
+                resultat,
+            );
+
+            expect(state).toMatchObject({ resultat, vedtaksperiode: {} });
+        },
+    );
+
+    test('forhåndsutfyller innvilgelse med perioden backend har forhåndsutfylt', () => {
+        const state = omgjøringInitialState(
+            omgjøringIkkeValgt([{ fraOgMed: '2025-01-15', tilOgMed: '2025-02-15' }]),
+            sakMedStansIMidten,
+            RevurderingResultat.OMGJØRING,
+        );
+
+        expect(state).toMatchObject({
+            vedtaksperiode: { fraOgMed: '2025-01-15', tilOgMed: '2025-02-15' },
+        });
+    });
+
+    test('forhåndsutfyller opphør med de innvilgede periodene innenfor perioden backend har forhåndsutfylt', () => {
+        const state = omgjøringInitialState(
+            omgjøringIkkeValgt([{ fraOgMed: '2025-01-15', tilOgMed: '2025-02-15' }]),
+            sakMedStansIMidten,
+            RevurderingResultat.OMGJØRING_OPPHØR,
+        );
+
+        expect(state).toMatchObject({
+            vedtaksperiode: { fraOgMed: '2025-01-15', tilOgMed: '2025-01-31' },
+        });
+    });
+
+    test('starter med tom vedtaksperiode for opphør når den forhåndsutfylte perioden ikke har innvilgelse', () => {
+        const state = omgjøringInitialState(
+            omgjøringIkkeValgt([februar]),
+            sakMedStansIMidten,
+            RevurderingResultat.OMGJØRING_OPPHØR,
+        );
+
+        expect(state).toMatchObject({ vedtaksperiode: {} });
     });
 });

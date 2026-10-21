@@ -23,7 +23,7 @@ import {
     VedtaksperioderUtenInnvilgelseVarsel,
 } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelseHullVarsel';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { inneholderHelePerioden } from '~/utils/periode';
+import { erFullstendigPeriode, inneholderHelePerioden } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { classNames } from '~/utils/classNames';
 
@@ -282,6 +282,7 @@ const harValgtUtenforVedtaksperiodeForOmgjøring = (
 ) => {
     return (
         skjemaContext.resultat === RevurderingResultat.OMGJØRING &&
+        erFullstendigPeriode(skjemaContext.vedtaksperiode) &&
         !inneholderHelePerioden(skjemaContext.vedtaksperiode, valgtPeriode)
     );
 };

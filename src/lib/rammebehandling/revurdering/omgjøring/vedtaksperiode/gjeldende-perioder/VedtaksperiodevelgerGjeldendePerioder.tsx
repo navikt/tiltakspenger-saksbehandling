@@ -5,25 +5,20 @@ import {
     useOmgjøringSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Periode } from '~/types/Periode';
-import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 type Props = {
-    vedtakSomOmgjøres: Rammevedtak;
+    perioderSomKanOmgjøres: Periode[];
     valgtResultat: OmgjøringResultat;
     className?: string;
 };
 
 export const VedtaksperiodevelgerGjeldendePerioder = ({
-    vedtakSomOmgjøres,
+    perioderSomKanOmgjøres,
     valgtResultat,
     className,
 }: Props) => {
-    const { gjeldendeVedtaksperioder, gjeldendeInnvilgetPerioder } = vedtakSomOmgjøres;
-
     const erOpphør = valgtResultat === RevurderingResultat.OMGJØRING_OPPHØR;
-
-    const perioderSomKanOmgjøres = erOpphør ? gjeldendeInnvilgetPerioder : gjeldendeVedtaksperioder;
 
     const periodeTekst = erOpphør ? 'innvilgelsesperiode' : 'vedtaksperiode';
 
@@ -34,7 +29,7 @@ export const VedtaksperiodevelgerGjeldendePerioder = ({
     if (perioderSomKanOmgjøres.length === 1) {
         return (
             <HStack gap={'space-4'} align={'center'} className={className}>
-                <BodyShort size={'small'}>{`Gjeldende ${periodeTekst} i valgt vedtak: `}</BodyShort>
+                <BodyShort size={'small'}>{`Gjeldende ${periodeTekst} på saken: `}</BodyShort>
                 <PeriodeMedVelgKnapp periode={perioderSomKanOmgjøres.atNonNull(0)} />
             </HStack>
         );
@@ -42,7 +37,7 @@ export const VedtaksperiodevelgerGjeldendePerioder = ({
 
     return (
         <VStack gap={'space-4'} align={'start'} className={className}>
-            <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}r i valgt vedtak:`}</BodyShort>
+            <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}r på saken:`}</BodyShort>
             {perioderSomKanOmgjøres.map((periode) => (
                 <PeriodeMedVelgKnapp
                     periode={periode}

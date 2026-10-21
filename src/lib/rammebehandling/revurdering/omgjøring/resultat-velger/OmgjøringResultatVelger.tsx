@@ -1,5 +1,4 @@
 import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
-import { nonNullish } from '~/utils/object';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import {
     useOmgjøringSkjema,
@@ -8,7 +7,6 @@ import {
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
 import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { useSak } from '~/lib/sak/SakContext';
-import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 
 import style from './OmgjøringResultatVelger.module.css';
@@ -20,11 +18,8 @@ export const OmgjøringResultatVelger = () => {
     const { resultat, erReadonly } = useOmgjøringSkjema();
     const dispatch = useOmgjøringSkjemaDispatch();
 
-    const vedtak = nonNullish(hentRammevedtak(sak, behandling.omgjørVedtak));
-
-    const kanInnvilge =
-        !!vedtak.gyldigeKommandoer.OMGJØR && vedtak.gjeldendeVedtaksperioder.length > 0;
-    const kanOpphøre = !!vedtak.gyldigeKommandoer.OPPHØR;
+    const kanInnvilge = sak.tidslinje.elementer.length > 0;
+    const kanOpphøre = sak.innvilgetTidslinje.elementer.length > 0;
 
     return (
         <VedtakSeksjon>
@@ -79,7 +74,7 @@ export const OmgjøringResultatVelger = () => {
                     {'Velg innvilgelse dersom hele eller deler av omgjøringen skal være en innvilgelse.' +
                         ' Velg opphør dersom omgjøringen skal være et rent opphør.'}
                     {!kanOpphøre &&
-                        ` Vedtaket kan kun opphøres dersom det har gjeldende innvilgelsesperioder.`}
+                        ` Det kan kun opphøres dersom saken har gjeldende innvilgelsesperioder.`}
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
