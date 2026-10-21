@@ -41,7 +41,9 @@ export const OmgjøringOpphørVelger = () => {
             <VedtakSeksjon.Høyre gap={'space-16'}>
                 <VedtakHjelpetekst header={'Velg periode for opphør'}>
                     {'Du kan opphøre hele eller deler av de gjeldende innvilgelsesperiodene.'}
-                    {' Opphørsperioden må starte og slutte innenfor innvilgelsesperiodene.'}
+                    {
+                        ' Opphørsperioden må starte og slutte innenfor perioder med gjeldende innvilgelse.'
+                    }
                 </VedtakHjelpetekst>
 
                 <VedtakHjelpetekst variant={'advarsel'}>

@@ -34,7 +34,7 @@ export const VedtaksperiodevelgerGjeldendePerioder = ({
     if (perioderSomKanOmgjøres.length === 1) {
         return (
             <HStack gap={'space-4'} align={'center'} className={className}>
-                <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}: `}</BodyShort>
+                <BodyShort size={'small'}>{`Gjeldende ${periodeTekst} i valgt vedtak: `}</BodyShort>
                 <PeriodeMedVelgKnapp periode={perioderSomKanOmgjøres.atNonNull(0)} />
             </HStack>
         );
@@ -42,7 +42,7 @@ export const VedtaksperiodevelgerGjeldendePerioder = ({
 
     return (
         <VStack gap={'space-4'} align={'start'} className={className}>
-            <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}r:`}</BodyShort>
+            <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}r i valgt vedtak:`}</BodyShort>
             {perioderSomKanOmgjøres.map((periode) => (
                 <PeriodeMedVelgKnapp
                     periode={periode}

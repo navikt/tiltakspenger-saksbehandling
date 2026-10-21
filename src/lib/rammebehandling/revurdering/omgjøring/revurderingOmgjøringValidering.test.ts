@@ -114,6 +114,8 @@ const omgjøringOpphør = (omgjørVedtak: VedtakId, vedtaksperiode: Periode): Om
     gyldigeKommandoer: [],
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
+    beslutterEndringer: { skalJournalføreNotat: null },
+    tidslinjeFørOgEtter: null,
     valgteHjemler: [HjemmelForOpphør.DeltarIkkePåArbeidsmarkedstiltak],
     omgjørVedtak,
     omgjørRammevedtak: [
@@ -131,6 +133,7 @@ const opphørSkjema = (vedtaksperiode: Periode): OmgjøringContext => ({
     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
     erPrioritert: false,
     erReadonly: false,
+    kanEndreSkalJournalføreNotat: true,
     textAreas: {
         begrunnelse: tomtTekstfelt,
         brevtekst: tomtTekstfelt,

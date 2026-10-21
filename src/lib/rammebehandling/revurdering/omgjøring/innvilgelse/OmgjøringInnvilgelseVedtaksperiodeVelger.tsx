@@ -13,7 +13,10 @@ export const OmgjøringInnvilgelseVedtaksperiodeVelger = () => {
                 <VedtakHjelpetekst header={'Velg ny vedtaksperiode'}>
                     {'Du kan omgjøre hele eller deler av de gjeldende vedtaksperiodene.'}
                     {
-                        ' Ved innvilgelse kan du forlenge vedtaksperioden utover det opprinnelige vedtaket, så lenge det ikke overlapper med andre gjeldende vedtak.'
+                        ' Perioden kan gå over flere vedtak, og alle gjeldende vedtak som overlapper perioden blir omgjort.'
+                    }
+                    {
+                        ' Ved innvilgelse kan du også forlenge vedtaksperioden utover de gjeldende vedtaksperiodene.'
                     }
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>
