@@ -111,6 +111,7 @@ const Hjelpetekst = () => {
                     'Om det er noe som reduserer retten i deler av perioden de har søkt på',
                     'Eventuelt andre relevante opplysninger som ikke kommer frem i standardtekstene i brevet',
                 ]}
+                size={'small'}
             />
         </>
     );

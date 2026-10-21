@@ -56,6 +56,7 @@ export const BarnetilleggBegrunnelse = () => {
                             'Er det noe som begrenser retten? Vis til informasjonen du har funnet, hvordan det endrer retten og paragrafen det gjelder',
                             'Eventuelle kommentarer til beslutter',
                         ]}
+                        size={'small'}
                     />
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>

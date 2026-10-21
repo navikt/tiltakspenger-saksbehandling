@@ -11,6 +11,7 @@ export const RevurderingBrevHjelpetekst = () => {
                     'Hvordan du har vurdert faktum opp mot reglene',
                     'Eventuelt andre relevante opplysninger som ikke kommer frem i standardtekstene i brevet',
                 ]}
+                size={'small'}
             />
         </>
     );

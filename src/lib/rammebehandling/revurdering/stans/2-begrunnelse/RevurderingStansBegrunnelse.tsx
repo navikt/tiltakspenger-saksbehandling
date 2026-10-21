@@ -46,6 +46,7 @@ export const RevurderingStansBegrunnelse = () => {
                             'Hvilke faktum som er lagt til grunn og hvordan regel er vurdert opp mot faktumet',
                             'Eventuelle kommentarer til beslutter',
                         ]}
+                        size={'small'}
                     />
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>
