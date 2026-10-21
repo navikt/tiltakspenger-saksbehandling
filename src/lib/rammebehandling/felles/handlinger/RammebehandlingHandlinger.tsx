@@ -1,5 +1,5 @@
 import { HStack, InlineMessage } from '@navikt/ds-react';
-import { useRolleForBehandling, useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { BehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
@@ -16,26 +16,24 @@ type Props = {
 
 export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) => {
     const rolleForBehandling = useRolleForBehandling(behandling);
-    const { erBeslutter: harBeslutterrolle } = useSaksbehandler();
 
-    const erSaksbehandlerForBehandling = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
-    // Kan også være en saksbehandler uten beslutterrolle på en delautomatisk innstilling, se kanOpptreSomBeslutter.
-    const erBeslutterForBehandling = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
+    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+    const erBeslutter = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
 
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre gap={'space-16'}>
-                {erSaksbehandlerForBehandling && (
+                {erSaksbehandler && (
                     <RammebehandlingSaksbehandlerHandlinger
                         behandling={behandling}
                         lagringProps={lagringProps}
                     />
                 )}
 
-                {erBeslutterForBehandling && (
+                {erBeslutter && (
                     <HStack gap={'space-16'} justify={'end'}>
                         <RammebehandlingUnderkjenn behandling={behandling} />
-                        {harBeslutterrolle && <RammebehandlingGodkjenn />}
+                        <RammebehandlingGodkjenn />
                     </HStack>
                 )}
             </VedtakSeksjon.Venstre>
