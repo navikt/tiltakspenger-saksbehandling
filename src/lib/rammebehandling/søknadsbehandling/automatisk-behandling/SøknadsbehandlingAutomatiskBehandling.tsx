@@ -14,12 +14,10 @@ export const SøknadsbehandlingAutomatiskBehandling = () => {
                     Saksbehandlingen er gjort automatisk.
                 </Infokort>
             )}
-            {behandling.manueltBehandlesGrunner && (
-                <ManueltBehandlesGrunnerInfo
-                    grunner={behandling.manueltBehandlesGrunner}
-                    className={style.infoboks}
-                />
-            )}
+            <ManueltBehandlesGrunnerInfo
+                grunner={behandling.manueltBehandlesGrunner}
+                className={style.infoboks}
+            />
         </>
     );
 };

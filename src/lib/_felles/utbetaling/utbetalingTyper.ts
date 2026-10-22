@@ -18,11 +18,22 @@ export enum Utbetalingsstatus {
     IKKE_GODKJENT = 'IKKE_GODKJENT',
 }
 
+/** Status for en utbetaling i utbetalingstidslinjen på saken. Har andre verdier enn [Utbetalingsstatus]. */
+export enum UtbetalingstidslinjeStatus {
+    IkkePåbegynt = 'IkkePåbegynt',
+    SendtTilOppdrag = 'SendtTilOppdrag',
+    FeiletMotOppdrag = 'FeiletMotOppdrag',
+    Ok = 'Ok',
+    OkUtenUtbetaling = 'OkUtenUtbetaling',
+    Avbrutt = 'Avbrutt',
+}
+
 export type UtbetalingstidslinjePeriode = {
     kjedeId: MeldeperiodeKjedeId;
     periode: Periode;
     beløp: BeløpProps;
-    status: Utbetalingsstatus;
+    /** Null før utbetalingen har fått en status. */
+    status: Nullable<UtbetalingstidslinjeStatus>;
 };
 
 type UtbetalingskontrollBase = {

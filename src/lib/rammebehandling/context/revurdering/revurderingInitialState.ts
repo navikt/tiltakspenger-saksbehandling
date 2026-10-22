@@ -206,7 +206,7 @@ const omgjøringOpphørInitialState = (
         vedtaksperiode:
             perioderSomKanOpphøres.length > 0 ? totalPeriode(perioderSomKanOpphøres) : {},
         valgteHjemler: [],
-        skalSendeVedtaksbrev: true,
+        skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
     };
 };
 

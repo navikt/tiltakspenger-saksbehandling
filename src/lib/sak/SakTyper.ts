@@ -1,3 +1,4 @@
+import { Nullable } from '~/types/UtilTypes';
 import { ÅpenBehandling } from '../personoversikt/typer/ÅpenBehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { UtbetalingstidslinjePeriode } from '~/lib/_felles/utbetaling/utbetalingTyper';
@@ -25,8 +26,8 @@ export type SakProps = {
     saksnummer: Saksnummer;
     fnr: SladdbarVerdi<string>;
 
-    førsteDagSomGirRett?: string;
-    sisteDagSomGirRett?: string;
+    førsteDagSomGirRett: Nullable<string>;
+    sisteDagSomGirRett: Nullable<string>;
     kanSendeInnHelgForMeldekort: boolean;
 
     søknader: Søknad[];

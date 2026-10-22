@@ -13,7 +13,7 @@ export const SøknadsopplysningerTiltak = ({ søknad }: Props) => {
     const { harSøktPåTiltak } = svar;
 
     const render = () => {
-        if (harSøktPåTiltak?.svar === 'JA' || tiltak) {
+        if (harSøktPåTiltak.svar === 'JA' || tiltak) {
             if (tiltak) {
                 return (
                     <>
@@ -45,10 +45,10 @@ export const SøknadsopplysningerTiltak = ({ søknad }: Props) => {
             <BehandlingSaksopplysning
                 navn="Har søkt på tiltak"
                 verdi={
-                    harSøktPåTiltak?.svar === 'JA'
+                    harSøktPåTiltak.svar === 'JA'
                         ? formaterSøknadsspørsmålSvar(harSøktPåTiltak.svar) +
                           ' - tiltaksnavn ikke oppgitt'
-                        : formaterSøknadsspørsmålSvar(harSøktPåTiltak?.svar)
+                        : formaterSøknadsspørsmålSvar(harSøktPåTiltak.svar)
                 }
                 visVarsel
             />

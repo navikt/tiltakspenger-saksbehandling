@@ -198,7 +198,7 @@ describe('behandlingSkjemaInitialState', () => {
             avslagsgrunner: [Avslagsgrunn.Alder],
             skalSendeVedtaksbrev: false,
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
-            prioritering: { begrunnelse: ikkeSladdet(null) },
+            prioritering: { begrunnelse: ikkeSladdet('Haster') },
         });
 
         expect(behandlingSkjemaInitialState({ behandling, sak: sak() })).toEqual({

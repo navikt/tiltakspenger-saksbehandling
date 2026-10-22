@@ -9,6 +9,7 @@ import {
     meldeperiodeKjedeIdTilPeriode,
     oppdaterPartialPeriode,
     oppdaterPeriode,
+    oppdaterPeriodiseringUtenOverlapp,
     overlappendePeriode,
     periodeTilMeldeperiodeKjedeId,
     perioderErLike,
@@ -1116,5 +1117,138 @@ describe('oppdaterPartialPeriode', () => {
                 true,
             ),
         ).toEqual([{ antall: 1, periode: { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' } }]);
+    });
+});
+
+describe('oppdaterPeriodiseringUtenOverlapp', () => {
+    const periodisering = [
+        element('2025-01-01', '2025-01-31', 1),
+        element('2025-02-01', '2025-02-28', 2),
+        element('2025-03-01', '2025-03-31', 3),
+    ];
+
+    test('endrer kun det oppdaterte elementet når det ikke overlapper andre', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-02-01', '2025-02-28', 5),
+                1,
+            ),
+        ).toEqual([
+            element('2025-01-01', '2025-01-31', 1),
+            element('2025-02-01', '2025-02-28', 5),
+            element('2025-03-01', '2025-03-31', 3),
+        ]);
+    });
+
+    test('forkorter senere element som overlapper starten av det', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-02-01', '2025-03-10', 2),
+                1,
+            ),
+        ).toEqual([
+            element('2025-01-01', '2025-01-31', 1),
+            element('2025-02-01', '2025-03-10', 2),
+            element('2025-03-11', '2025-03-31', 3),
+        ]);
+    });
+
+    test('forkorter tidligere element som overlapper slutten av det', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-01-20', '2025-02-28', 2),
+                1,
+            ),
+        ).toEqual([
+            element('2025-01-01', '2025-01-19', 1),
+            element('2025-01-20', '2025-02-28', 2),
+            element('2025-03-01', '2025-03-31', 3),
+        ]);
+    });
+
+    test('fjerner elementer som dekkes helt av det oppdaterte elementet', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-01-01', '2025-03-15', 1),
+                0,
+            ),
+        ).toEqual([element('2025-01-01', '2025-03-15', 1), element('2025-03-16', '2025-03-31', 3)]);
+    });
+
+    test('fjerner element med lik periode', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-03-01', '2025-03-31', 2),
+                1,
+            ),
+        ).toEqual([element('2025-01-01', '2025-01-31', 1), element('2025-03-01', '2025-03-31', 2)]);
+    });
+
+    test('forkorter element med samme fraOgMed til etter det oppdaterte elementet', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                [element('2025-01-01', '2025-01-31', 1), element('2025-02-01', '2025-02-28', 2)],
+                element('2025-02-01', '2025-02-10', 1),
+                0,
+            ),
+        ).toEqual([element('2025-02-01', '2025-02-10', 1), element('2025-02-11', '2025-02-28', 2)]);
+    });
+
+    test('beholder kun delen før når det oppdaterte elementet ligger inni et annet element', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                [element('2025-01-01', '2025-03-31', 1), element('2025-04-01', '2025-04-30', 2)],
+                element('2025-02-01', '2025-02-28', 2),
+                1,
+            ),
+        ).toEqual([element('2025-01-01', '2025-01-31', 1), element('2025-02-01', '2025-02-28', 2)]);
+    });
+
+    test('sorterer elementet til riktig plass når perioden flyttes', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-04-01', '2025-04-30', 1),
+                0,
+            ),
+        ).toEqual([
+            element('2025-02-01', '2025-02-28', 2),
+            element('2025-03-01', '2025-03-31', 3),
+            element('2025-04-01', '2025-04-30', 1),
+        ]);
+    });
+
+    test('legger til nytt element når index er lik lengden på listen', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp(
+                periodisering,
+                element('2025-03-15', '2025-04-30', 4),
+                periodisering.length,
+            ),
+        ).toEqual([
+            element('2025-01-01', '2025-01-31', 1),
+            element('2025-02-01', '2025-02-28', 2),
+            element('2025-03-01', '2025-03-14', 3),
+            element('2025-03-15', '2025-04-30', 4),
+        ]);
+    });
+
+    test('legger til element i tom liste', () => {
+        expect(
+            oppdaterPeriodiseringUtenOverlapp([], element('2025-01-01', '2025-01-31', 1), 0),
+        ).toEqual([element('2025-01-01', '2025-01-31', 1)]);
+    });
+
+    test('endrer ikke den opprinnelige listen', () => {
+        const original = structuredClone(periodisering);
+
+        oppdaterPeriodiseringUtenOverlapp(periodisering, element('2025-01-01', '2025-03-15', 1), 0);
+
+        expect(periodisering).toEqual(original);
     });
 });

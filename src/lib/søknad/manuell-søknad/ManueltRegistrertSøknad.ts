@@ -1,7 +1,7 @@
 import { Periode } from '~/types/Periode';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { TiltakDeltakerstatus } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { FraOgMedDatoSpm, JaNeiSpm, JaNeiSvar, Oppholdssted, PeriodeSpm } from '../søknadTyper';
+import { JaNeiSpm, JaNeiSvar, Oppholdssted } from '../søknadTyper';
 
 export type ManueltRegistrertSøknad = {
     journalpostId: string;
@@ -46,9 +46,9 @@ export type ManuellSøknadOppholdsstedSvar = Oppholdssted | 'IKKE_BESVART';
 
 export type ManuellSøknadOppholdsstedSpm = { svar?: ManuellSøknadOppholdsstedSvar };
 
-export type ManuellSøknadFraOgMedDatoSpm = Partial<FraOgMedDatoSpm>;
+export type ManuellSøknadFraOgMedDatoSpm = { svar?: JaNeiSvar; fraOgMed?: string };
 
-export type ManuellSøknadPeriodeSpm = Partial<PeriodeSpm>;
+export type ManuellSøknadPeriodeSpm = { svar?: JaNeiSvar; periode?: Periode };
 
 export type ManuellSøknadSvar = {
     tiltak?: ManuellSøknadTiltak;

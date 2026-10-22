@@ -3,6 +3,7 @@ import {
     erFullstendigPeriode,
     oppdaterPartialPeriode,
     oppdaterPeriode,
+    oppdaterPeriodiseringUtenOverlapp,
     periodiseringerErLike,
     periodiseringTotalPeriode,
     utvidPeriodisering,
@@ -11,10 +12,7 @@ import { InnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innv
 import { Reducer } from 'react';
 import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
-import {
-    lagForhåndsutfyltInnvilgelse,
-    oppdaterPeriodiseringUtenOverlapp,
-} from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { lagForhåndsutfyltInnvilgelse } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';

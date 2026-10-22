@@ -41,9 +41,6 @@ export const SøknadOpplysningerBarn = ({
     visBarnetilleggPeriodiseringKnapp,
 }: Props) => {
     const getBarnetilleggTekst = () => {
-        if (!søknad.svar.harSøktOmBarnetillegg) {
-            return 'Nei';
-        }
         if (søknad.svar.harSøktOmBarnetillegg.svar === 'JA') {
             return (
                 formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg.svar) +
@@ -69,7 +66,7 @@ export const SøknadOpplysningerBarn = ({
                     verdi={getBarnetilleggTekst()}
                     visVarsel={
                         søknad.barnetillegg.length === 0 &&
-                        søknad.svar.harSøktOmBarnetillegg?.svar !== 'NEI'
+                        søknad.svar.harSøktOmBarnetillegg.svar !== 'NEI'
                     }
                 />
             )}

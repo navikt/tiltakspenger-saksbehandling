@@ -2,9 +2,12 @@ import { nesteDag } from '~/utils/date';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
-import { oppdaterPeriodiseringUtenOverlapp } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
-import { oppdaterPeriode, periodiseringTotalPeriode } from '~/utils/periode';
+import {
+    oppdaterPeriode,
+    oppdaterPeriodiseringUtenOverlapp,
+    periodiseringTotalPeriode,
+} from '~/utils/periode';
 
 export type BarnetilleggActions =
     | {
@@ -74,7 +77,11 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
 
             return {
                 ...state,
-                barnetilleggPerioder: [...state.barnetilleggPerioder, nyBarnetilleggperiode],
+                barnetilleggPerioder: oppdaterPeriodiseringUtenOverlapp(
+                    state.barnetilleggPerioder,
+                    nyBarnetilleggperiode,
+                    state.barnetilleggPerioder.length,
+                ),
             };
         }
 

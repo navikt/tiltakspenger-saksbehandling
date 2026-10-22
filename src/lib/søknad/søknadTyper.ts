@@ -56,8 +56,8 @@ export interface SpørsmålsbesvarelserPengestøtter {
 }
 
 export interface Spørsmålsbesvarelser extends SpørsmålsbesvarelserPengestøtter {
-    harSøktPåTiltak: JaNeiSpm | undefined;
-    harSøktOmBarnetillegg: JaNeiSpm | undefined;
+    harSøktPåTiltak: JaNeiSpm;
+    harSøktOmBarnetillegg: JaNeiSpm;
     kvp: PeriodeSpm;
     intro: PeriodeSpm;
     institusjon: PeriodeSpm;
@@ -104,12 +104,14 @@ export interface JaNeiSpm {
 
 export interface FraOgMedDatoSpm {
     svar: JaNeiSvar;
-    fraOgMed: string;
+    /** Null når svaret ikke er JA. */
+    fraOgMed: Nullable<string>;
 }
 
 export interface PeriodeSpm {
     svar: JaNeiSvar;
-    periode: Periode;
+    /** Null når svaret ikke er JA. */
+    periode: Nullable<Periode>;
 }
 
 export type Søknadstype = 'DIGITAL' | 'PAPIR_SKJEMA' | 'PAPIR_FRIHAND' | 'MODIA' | 'ANNET';

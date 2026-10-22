@@ -47,6 +47,8 @@ const sakMedVedtak = (vedtak: Rammevedtak[]): SakProps => ({
     sakId: 'sak_1',
     saksnummer: tilSaksnummer('202501011001'),
     fnr: ikkeSladdet('12345678911'),
+    førsteDagSomGirRett: null,
+    sisteDagSomGirRett: null,
     kanSendeInnHelgForMeldekort: false,
     søknader: [],
     åpneBehandlinger: [],

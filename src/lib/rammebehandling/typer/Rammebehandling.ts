@@ -72,7 +72,7 @@ export interface RammebehandlingBase {
     prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
     /** Hvorfor en automatisk behandling ble overlatt til en saksbehandler. */
-    manueltBehandlesGrunner?: ManueltBehandlesGrunn[];
+    manueltBehandlesGrunner: ManueltBehandlesGrunn[];
     /** Null dersom behandlingen er avbrutt eller mangler vedtaksperiode. */
     tidslinjeFørOgEtter: Nullable<TidslinjeFørOgEtter>;
 }

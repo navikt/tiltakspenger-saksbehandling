@@ -14,14 +14,8 @@ import {
     BehandlingSkjemaResultatState,
     BehandlingSkjemaState,
 } from '~/lib/rammebehandling/context/behandlingSkjemaReducer';
-import {
-    inneholderHelePerioden,
-    krympPeriodisering,
-    perioderOverlapper,
-    sorterPeriodisering,
-} from '~/utils/periode';
-import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
-import { MedPeriode, Periode } from '~/types/Periode';
+import { krympPeriodisering, perioderOverlapper } from '~/utils/periode';
+import { Periode } from '~/types/Periode';
 import { Rammebehandling, SkalJournalføreNotat } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingSkjemaContext } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
@@ -29,7 +23,6 @@ import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesper
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
-import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 
 export const ANTALL_DAGER_DEFAULT = 10;
@@ -81,49 +74,6 @@ export enum BehandlingSkjemaType {
     RevurderingStans = 'RevurderingStans',
 }
 
-export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
-    listeMedPerioder: T[],
-    oppdatertElement: T,
-    oppdatertIndex: number,
-): T[] => {
-    return listeMedPerioder
-        .toSpliced(oppdatertIndex, 1, oppdatertElement)
-        .filter((it, index) => {
-            if (index === oppdatertIndex) {
-                return true;
-            }
-
-            return !inneholderHelePerioden(oppdatertElement.periode, it.periode);
-        })
-        .map((it) => {
-            if (it === oppdatertElement) {
-                return it;
-            }
-
-            const erTidligerePeriode = it.periode.fraOgMed < oppdatertElement.periode.fraOgMed;
-
-            return {
-                ...it,
-                periode: erTidligerePeriode
-                    ? {
-                          fraOgMed: it.periode.fraOgMed,
-                          tilOgMed: datoMin(
-                              it.periode.tilOgMed,
-                              forrigeDag(oppdatertElement.periode.fraOgMed),
-                          ),
-                      }
-                    : {
-                          fraOgMed: datoMax(
-                              it.periode.fraOgMed,
-                              nesteDag(oppdatertElement.periode.tilOgMed),
-                          ),
-                          tilOgMed: it.periode.tilOgMed,
-                      },
-            };
-        })
-        .toSorted(sorterPeriodisering());
-};
-
 // Forhåndsutfyller andre perioder for en innvilgelse ut fra valgt innvilgelsesperiode
 export const lagForhåndsutfyltInnvilgelse = (
     behandling: Rammebehandling,
@@ -157,10 +107,7 @@ export const lagForhåndsutfyltInnvilgelse = (
         innvilgelsesperioder,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        skalSendeVedtaksbrev:
-            behandling.resultat === RevurderingResultat.OMGJØRING
-                ? behandling.skalSendeVedtaksbrev
-                : true,
+        skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
     };
 };
 

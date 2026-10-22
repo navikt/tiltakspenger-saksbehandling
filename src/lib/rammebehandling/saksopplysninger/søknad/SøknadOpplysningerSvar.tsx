@@ -40,7 +40,7 @@ export const SøknadOpplysningerSvar = ({ className, pengestøtter }: Props) => 
                         <BehandlingSaksopplysning
                             navn={'Alderspensjon fra'}
                             verdi={
-                                alderspensjon.svar === 'JA'
+                                alderspensjon.svar === 'JA' && alderspensjon.fraOgMed
                                     ? `${formaterSøknadsspørsmålSvar(alderspensjon.svar)} (${formaterDatotekst(alderspensjon.fraOgMed)})`
                                     : alderspensjon.svar
                             }

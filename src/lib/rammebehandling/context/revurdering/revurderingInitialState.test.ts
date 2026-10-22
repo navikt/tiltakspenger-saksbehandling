@@ -232,7 +232,7 @@ describe('omgjøringInitialState', () => {
             });
         });
 
-        test('avgrenser forhåndsutfylt vedtaksperiode til innvilgede perioder ved bytte av resultat', () => {
+        test('avgrenser forhåndsutfylt vedtaksperiode til innvilgede perioder og beholder vedtaksbrev-valget ved bytte av resultat', () => {
             const behandling = omgjøringIkkeValgt({
                 omgjørRammevedtak: [omgjørVedtak],
                 skalSendeVedtaksbrev: false,
@@ -248,7 +248,7 @@ describe('omgjøringInitialState', () => {
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,
                 vedtaksperiode: periode('2025-02-01', '2025-04-30'),
                 valgteHjemler: [],
-                skalSendeVedtaksbrev: true,
+                skalSendeVedtaksbrev: false,
             });
         });
 

@@ -53,8 +53,8 @@ export const RevurderingStansResultat = () => {
                 <HStack align={'end'} gap={'space-16'}>
                     <Datovelger
                         label={'Stans fra og med'}
-                        minDate={førsteDagSomGirRett}
-                        maxDate={sisteDagSomGirRett}
+                        minDate={førsteDagSomGirRett ?? undefined}
+                        maxDate={sisteDagSomGirRett ?? undefined}
                         readOnly={erReadonly || harValgtStansFraFørsteDagSomGirRett}
                         defaultSelected={fraDato}
                         defaultMonth={
