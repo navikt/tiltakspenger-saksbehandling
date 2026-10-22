@@ -13,6 +13,7 @@ export enum TiltaksdeltakerEndringType {
     AVBRUTT_DELTAKELSE = 'AVBRUTT_DELTAKELSE',
     IKKE_AKTUELL_DELTAKELSE = 'IKKE_AKTUELL_DELTAKELSE',
     FORLENGELSE = 'FORLENGELSE',
+    AVKORTET = 'AVKORTET',
     ENDRET_SLUTTDATO = 'ENDRET_SLUTTDATO',
     ENDRET_STARTDATO = 'ENDRET_STARTDATO',
     ENDRET_DELTAKELSESMENGDE = 'ENDRET_DELTAKELSESMENGDE',
@@ -23,6 +24,7 @@ export type TiltaksdeltakerEndring =
     | { type: TiltaksdeltakerEndringType.AVBRUTT_DELTAKELSE }
     | { type: TiltaksdeltakerEndringType.IKKE_AKTUELL_DELTAKELSE }
     | { type: TiltaksdeltakerEndringType.FORLENGELSE; nySluttdato: string }
+    | { type: TiltaksdeltakerEndringType.AVKORTET; nySluttdato: string }
     | { type: TiltaksdeltakerEndringType.ENDRET_SLUTTDATO; nySluttdato: Nullable<string> }
     | { type: TiltaksdeltakerEndringType.ENDRET_STARTDATO; nyStartdato: Nullable<string> }
     | {

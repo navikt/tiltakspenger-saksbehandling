@@ -50,6 +50,8 @@ const endringTekst = (endring: TiltaksdeltakerEndring): string => {
             return 'Deltakelsen er ikke aktuell';
         case TiltaksdeltakerEndringType.FORLENGELSE:
             return `Deltakelsen har blitt forlenget. Ny sluttdato: ${formaterDatotekst(endring.nySluttdato)}`;
+        case TiltaksdeltakerEndringType.AVKORTET:
+            return `Deltakelsen har blitt avkortet. Ny sluttdato: ${formaterDatotekst(endring.nySluttdato)}`;
         case TiltaksdeltakerEndringType.ENDRET_SLUTTDATO:
             return endring.nySluttdato
                 ? `Endret sluttdato til ${formaterDatotekst(endring.nySluttdato)}`

@@ -125,7 +125,7 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Tiltaksdeltakelsen har ikke lenger status deltar',
     OMGJORING_TILTAKET_GIR_IKKE_RETT: 'Tiltaket gir ikke rett til tiltakspenger',
     OMGJORING_DELTAKELSEN_MANGLER_SLUTTDATO: 'Tiltaksdeltakelsen mangler sluttdato',
-    OMGJORING_SLUTTDATO_ER_IKKE_PASSERT: 'Sluttdatoen for tiltaksdeltakelsen er ikke passert ennå',
+    OMGJORING_SLUTTDATO_ER_PASSERT: 'Sluttdatoen for tiltaksdeltakelsen er passert',
     OMGJORING_SLUTTDATO_ER_IKKE_FOR_INNVILGELSEN_SLUTTER:
         'Ny sluttdato for tiltaksdeltakelsen er ikke før siste innvilgede dag i vedtaket',
     OMGJORING_SLUTTDATO_ER_FOR_INNVILGELSEN_STARTER:
