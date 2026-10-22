@@ -8,6 +8,8 @@ import { BenkKolonne } from '../felles/tabell/BenkKolonne';
 import { benkKolonner } from '../felles/tabell/benkKolonner';
 import { BenkTabellCelle } from '../felles/tabell/BenkTabellCelle';
 import { BenkBehandlingMeny } from '../felles/BenkBehandlingMeny';
+import { BenkTildelCheckbox } from '../felles/tildel-flere/BenkTildelCheckbox';
+import { BenkTildelFlere } from '../felles/tildel-flere/BenkTildelFlere';
 
 const kolonner: BenkKolonne<BenkTilbakekreving, BenkTilbakekrevingKolonne>[] = [
     benkKolonner.fnr,
@@ -31,22 +33,26 @@ const kolonner: BenkKolonne<BenkTilbakekreving, BenkTilbakekrevingKolonne>[] = [
     benkKolonner.sistEndret,
     benkKolonner.saksbehandler,
     benkKolonner.beslutter,
-    benkKolonner.handlinger<BenkTilbakekreving>((behandling) => (
-        <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-            <Button
-                as={'a'}
-                href={behandling.url}
-                variant={'secondary'}
-                size={'small'}
-                icon={<ExternalLinkIcon aria-hidden />}
-                iconPosition={'right'}
-                target={'_blank'}
-            >
-                {'Åpne tilbakekreving'}
-            </Button>
-            <BenkBehandlingMeny behandling={behandling} />
-        </HStack>
-    )),
+    benkKolonner.handlinger<BenkTilbakekreving>(
+        (behandling) => (
+            <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                <Button
+                    as={'a'}
+                    href={behandling.url}
+                    variant={'secondary'}
+                    size={'small'}
+                    icon={<ExternalLinkIcon aria-hidden />}
+                    iconPosition={'right'}
+                    target={'_blank'}
+                >
+                    {'Åpne tilbakekreving'}
+                </Button>
+                <BenkBehandlingMeny behandling={behandling} />
+                <BenkTildelCheckbox behandling={behandling} />
+            </HStack>
+        ),
+        (rader) => <BenkTildelFlere behandlinger={rader} />,
+    ),
 ];
 
 export const BenkTilbakekrevingTabell = (props: BenkFaneTabellProps<BenkTab.TILBAKEKREVING>) => (

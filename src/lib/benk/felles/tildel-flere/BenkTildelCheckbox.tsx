@@ -1,11 +1,9 @@
 import { Checkbox } from '@navikt/ds-react';
-import { useBenkVisning } from '../filter/BenkVisningContext';
+import { BehandlingSomKanBatchTildeles, useBenkVisning } from '../filter/BenkVisningContext';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkSøknadsbehandling } from '../../typer/søknader';
-import { BenkRevurdering } from '../../typer/revurderinger';
 
 type Props = {
-    behandling: BenkSøknadsbehandling | BenkRevurdering;
+    behandling: BehandlingSomKanBatchTildeles;
 };
 
 export const BenkTildelCheckbox = ({ behandling }: Props) => {

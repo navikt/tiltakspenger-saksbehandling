@@ -1,12 +1,10 @@
-import { BenkSøknadsbehandling } from '../../typer/søknader';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BenkRevurdering } from '../../typer/revurderinger';
-import { useBenkVisning } from '../filter/BenkVisningContext';
+import { BehandlingSomKanBatchTildeles, useBenkVisning } from '../filter/BenkVisningContext';
 
 type Props = {
-    behandlinger: Array<BenkSøknadsbehandling | BenkRevurdering>;
+    behandlinger: Array<BehandlingSomKanBatchTildeles>;
 };
 
 export const BenkTildelFlereMeny = ({ behandlinger }: Props) => {

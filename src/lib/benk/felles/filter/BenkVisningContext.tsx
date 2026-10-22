@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { BenkSøknadsbehandling } from '../../typer/søknader';
 import { BenkRevurdering } from '../../typer/revurderinger';
+import { BenkTilbakekreving } from '../../typer/tilbakekreving';
 import { BENK_MINE_TAB } from '../../typer/tabs';
 import { BenkTabData } from '../../typer/benkside';
 import { BenkGlobaltFilter } from '../../typer/felles';
@@ -36,7 +37,8 @@ type Props = PropsWithChildren<{
     tabData: BenkTabData;
 }>;
 
-export type BehandlingSomKanBatchTildeles = BenkSøknadsbehandling | BenkRevurdering;
+export type BehandlingSomKanBatchTildeles =
+    BenkSøknadsbehandling | BenkRevurdering | BenkTilbakekreving;
 
 /**
  * Visningsvalg fra det aktive filteret som gjelder alle fanenes tabeller.

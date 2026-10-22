@@ -1,18 +1,20 @@
+import { useState } from 'react';
 import { BenkTildelFlereMeny } from './BenkTildelFlereMeny';
-import { BenkSøknadsbehandling } from '../../typer/søknader';
-import { BenkRevurdering } from '../../typer/revurderinger';
-import { useBenkVisning } from '../filter/BenkVisningContext';
+import { BehandlingSomKanBatchTildeles, useBenkVisning } from '../filter/BenkVisningContext';
 import { BodyLong, Button, Dialog, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useTildelRammebehandling } from '~/lib/rammebehandling/felles/tildel/useTildelRammebehandling';
+import { useTildelTilbakekrevinger } from '~/lib/tilbakekreving/tildel/useTildelTilbakekrevinger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
-import { behandlingUrl } from '~/utils/urls';
+import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { useBenkFilterNavigasjon } from '../filter/useBenkFilterNavigasjon';
 import { BENK_MINE_TAB } from '../../typer/tabs';
+import { BenkBehandlingstype } from '../../typer/felles';
 import { hentVerdi } from '~/utils/sladdetVerdi';
 
 type Props = {
-    behandlinger: Array<BenkSøknadsbehandling | BenkRevurdering>;
+    behandlinger: Array<BehandlingSomKanBatchTildeles>;
 };
 
 export const BenkTildelFlere = ({ behandlinger }: Props) => {
@@ -23,7 +25,9 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
         kanTildeleFlere,
         globaleFiltre,
     } = useBenkVisning();
-    const { trigger, isMutating, error, data } = useTildelRammebehandling();
+    const rammebehandlingTildeling = useTildelRammebehandling();
+    const tilbakekrevingTildeling = useTildelTilbakekrevinger();
+    const [harTildelt, setHarTildelt] = useState(false);
     // Etter tildelingen vises mine-fanen uten lokale filtre, mens de globale filtrene beholdes
     const { nullstillFilter: visMineBehandlinger } = useBenkFilterNavigasjon(BENK_MINE_TAB);
 
@@ -34,23 +38,40 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
         const sakId = hentVerdi(behandling.sakId);
         const saksnummer = hentVerdi(behandling.saksnummer);
 
-        return sakId !== null && saksnummer !== null
-            ? [{ id: behandling.id, sakId, saksnummer }]
-            : [];
+        return sakId !== null && saksnummer !== null ? [{ behandling, sakId, saksnummer }] : [];
     });
 
-    const harFeilet = error && !isMutating;
-    const harTildelt = !!data;
+    // Hver fane på benken har én behandlingstype, så i praksis er en av listene alltid tom.
+    const rammebehandlinger = tildelbare.flatMap(({ behandling, sakId }) =>
+        behandling.type !== BenkBehandlingstype.TILBAKEKREVING
+            ? [{ behandlingId: behandling.id, sakId }]
+            : [],
+    );
+    const tilbakekrevinger = tildelbare.flatMap(({ behandling, sakId }) =>
+        behandling.type === BenkBehandlingstype.TILBAKEKREVING
+            ? [{ tilbakekrevingId: behandling.id, sakId }]
+            : [],
+    );
 
-    const tildelAlle = () => {
-        trigger({
-            behandlinger: tildelbare.map((b) => ({ behandlingId: b.id, sakId: b.sakId })),
-            returnerSaker: false,
-        }).then((response) => {
-            if (response) {
-                visMineBehandlinger(globaleFiltre).then(() => setValgtTildelingType(null));
-            }
-        });
+    const isMutating = rammebehandlingTildeling.isMutating || tilbakekrevingTildeling.isMutating;
+    const error = rammebehandlingTildeling.error ?? tilbakekrevingTildeling.error;
+    const harFeilet = error && !isMutating;
+
+    const tildelAlle = async () => {
+        const [rammebehandlingerTildelt, tilbakekrevingerTildelt] = await Promise.all([
+            rammebehandlinger.length === 0 ||
+                rammebehandlingTildeling
+                    .trigger({ behandlinger: rammebehandlinger, returnerSaker: false })
+                    .then(Boolean),
+            tilbakekrevinger.length === 0 ||
+                tilbakekrevingTildeling.trigger({ tilbakekrevinger }).then(Boolean),
+        ]);
+
+        if (rammebehandlingerTildelt && tilbakekrevingerTildelt) {
+            setHarTildelt(true);
+            await visMineBehandlinger(globaleFiltre);
+            setValgtTildelingType(null);
+        }
     };
 
     if (!kanTildeleFlere) {
@@ -81,13 +102,16 @@ export const BenkTildelFlere = ({ behandlinger }: Props) => {
                             du videresendes til oversikt over dine tildelte behandlinger.
                         </BodyLong>
                         <VStack as={'ul'} gap={'space-4'}>
-                            {tildelbare.map((b) => {
-                                const url = behandlingUrl({
-                                    id: b.id,
-                                    saksnummer: b.saksnummer,
-                                });
+                            {tildelbare.map(({ behandling, saksnummer }) => {
+                                const url =
+                                    behandling.type === BenkBehandlingstype.TILBAKEKREVING
+                                        ? personoversiktUrl(
+                                              saksnummer,
+                                              PersonoversiktTab.Tilbakekreving,
+                                          )
+                                        : behandlingUrl({ id: behandling.id, saksnummer });
                                 return (
-                                    <li key={b.id}>
+                                    <li key={behandling.id}>
                                         <InternLenke href={url}>{url}</InternLenke>
                                     </li>
                                 );
