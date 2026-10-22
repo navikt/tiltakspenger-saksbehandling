@@ -74,7 +74,7 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
     const [skjema, dispatch] = useReducer(
         behandlingSkjemaReducer,
         { behandling, sak },
-        initialState,
+        behandlingSkjemaInitialState,
     );
 
     const begrunnelse = useFritekstInput(behandling.begrunnelseVilkårsvurdering);
@@ -105,7 +105,7 @@ const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
     );
 };
 
-const initialState = ({
+export const behandlingSkjemaInitialState = ({
     behandling,
     sak,
 }: {

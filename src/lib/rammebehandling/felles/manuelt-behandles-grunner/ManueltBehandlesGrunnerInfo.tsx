@@ -117,6 +117,36 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     FORLENGELSE_KAN_IKKE_SENDES_TIL_BESLUTNING:
         'Forlengelsen kunne ikke sendes til beslutning automatisk',
 
+    OMGJORING_VEDTAKET_INNVILGER_IKKE_DELTAKELSEN:
+        'Vedtaket som skal omgjøres innvilger ikke tiltaksdeltakelsen',
+    OMGJORING_OMGJOR_FLERE_VEDTAK: 'Omgjøringen av vedtaket vil også omgjøre andre vedtak på saken',
+    OMGJORING_FANT_IKKE_TILTAKSDELTAKELSE: 'Fant ikke tiltaksdeltakelsen som endringen gjelder',
+    OMGJORING_DELTAKELSEN_HAR_IKKE_STATUS_DELTAR:
+        'Tiltaksdeltakelsen har ikke lenger status deltar',
+    OMGJORING_TILTAKET_GIR_IKKE_RETT: 'Tiltaket gir ikke rett til tiltakspenger',
+    OMGJORING_DELTAKELSEN_MANGLER_SLUTTDATO: 'Tiltaksdeltakelsen mangler sluttdato',
+    OMGJORING_SLUTTDATO_ER_IKKE_PASSERT: 'Sluttdatoen for tiltaksdeltakelsen er ikke passert ennå',
+    OMGJORING_SLUTTDATO_ER_IKKE_FOR_INNVILGELSEN_SLUTTER:
+        'Ny sluttdato for tiltaksdeltakelsen er ikke før siste innvilgede dag i vedtaket',
+    OMGJORING_SLUTTDATO_ER_FOR_INNVILGELSEN_STARTER:
+        'Ny sluttdato for tiltaksdeltakelsen er før første innvilgede dag i vedtaket',
+    OMGJORING_ENDRET_STARTDATO: 'Startdatoen for tiltaksdeltakelsen er endret',
+    OMGJORING_ENDRET_DELTAKELSESMENGDE:
+        'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
+    OMGJORING_ANDRE_ENDRINGER_I_TILTAKSDELTAKELSENE:
+        'Tiltaksdeltakelsene i vedtaket har andre endringer enn ny sluttdato',
+    OMGJORING_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for omgjøringen mangler simulering',
+    OMGJORING_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
+        'Simuleringen av omgjøringen gir feilutbetaling, som må vurderes av saksbehandler',
+    OMGJORING_UTBETALING_STOTTER_IKKE_JUSTERING:
+        'Simuleringen av omgjøringen gir justering, som må vurderes av saksbehandler',
+    OMGJORING_UTBETALING_KONTROLLSIMULERING_HAR_ENDRINGER:
+        'Kontrollsimuleringen av omgjøringen avviker fra simuleringen',
+    OMGJORING_KAN_IKKE_FYLLES_UT: 'Omgjøringen kunne ikke fylles ut automatisk',
+    OMGJORING_UGYLDIGE_MELDEPERIODER_FOR_HELG: 'Omgjøringen gir ugyldige meldeperioder for helg',
+    OMGJORING_KAN_IKKE_SENDES_TIL_BESLUTNING:
+        'Omgjøringen kunne ikke sendes til beslutning automatisk',
+
     ANNET_APEN_BEHANDLING: 'Det finnes en annen åpen behandling på saken',
     ANNET_VEDTAK_FOR_SAMME_PERIODE: 'Det finnes et annet vedtak som overlapper med søknadsperioden',
     ANNET_HAR_SOKT_FOR_SENT: 'Tiltaksdeltakelsen startet mer enn tre måneder før kravdato',
