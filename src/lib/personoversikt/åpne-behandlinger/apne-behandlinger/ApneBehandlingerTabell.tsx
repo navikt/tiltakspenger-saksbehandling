@@ -33,6 +33,7 @@ import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/Tilba
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PrioritertBehandlingTag } from '~/lib/_felles/prioritering/PrioritertBehandlingTag';
 import { RammebehandlingMeny } from '~/lib/rammebehandling/felles/meny/RammebehandlingMeny';
+import { TilbakekrevingMeny } from '~/lib/tilbakekreving/meny/TilbakekrevingMeny';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
@@ -293,6 +294,8 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingType.TILBAKEKREVING: {
+            const tilbakekreving = hentTilbakekreving(sak, åpenBehandling.id);
+
             const {
                 opprettet,
                 status,
@@ -302,7 +305,7 @@ const propsForRad = (
                 totaltFeilutbetaltBeløp,
                 saksbehandler,
                 beslutter,
-            } = hentTilbakekreving(sak, åpenBehandling.id);
+            } = tilbakekreving;
 
             return {
                 typeTekst,
@@ -313,17 +316,21 @@ const propsForRad = (
                 beslutter,
                 periodeTekst: formaterPeriode(kravgrunnlagTotalPeriode),
                 meny: (
-                    <Button
-                        as={'a'}
-                        href={url}
-                        variant={'secondary'}
-                        size={'small'}
-                        icon={<ExternalLinkIcon aria-hidden />}
-                        iconPosition={'right'}
-                        target={'_blank'}
-                    >
-                        {'Åpne tilbakekreving'}
-                    </Button>
+                    <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+                        <Button
+                            as={'a'}
+                            href={url}
+                            variant={'secondary'}
+                            size={'small'}
+                            icon={<ExternalLinkIcon aria-hidden />}
+                            iconPosition={'right'}
+                            target={'_blank'}
+                        >
+                            {'Åpne tilbakekreving'}
+                        </Button>
+
+                        <TilbakekrevingMeny tilbakekreving={tilbakekreving} />
+                    </HStack>
                 ),
             };
         }

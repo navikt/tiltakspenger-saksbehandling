@@ -1,4 +1,4 @@
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { BenkTilbakekreving, BenkTilbakekrevingKolonne } from '../typer/tilbakekreving';
 import { BenkTab } from '../typer/tabs';
@@ -7,6 +7,7 @@ import { BenkFaneTabellProps, BenkTabell } from '../felles/tabell/BenkTabell';
 import { BenkKolonne } from '../felles/tabell/BenkKolonne';
 import { benkKolonner } from '../felles/tabell/benkKolonner';
 import { BenkTabellCelle } from '../felles/tabell/BenkTabellCelle';
+import { BenkBehandlingMeny } from '../felles/BenkBehandlingMeny';
 
 const kolonner: BenkKolonne<BenkTilbakekreving, BenkTilbakekrevingKolonne>[] = [
     benkKolonner.fnr,
@@ -31,17 +32,20 @@ const kolonner: BenkKolonne<BenkTilbakekreving, BenkTilbakekrevingKolonne>[] = [
     benkKolonner.saksbehandler,
     benkKolonner.beslutter,
     benkKolonner.handlinger<BenkTilbakekreving>((behandling) => (
-        <Button
-            as={'a'}
-            href={behandling.url}
-            variant={'secondary'}
-            size={'small'}
-            icon={<ExternalLinkIcon aria-hidden />}
-            iconPosition={'right'}
-            target={'_blank'}
-        >
-            {'Åpne tilbakekreving'}
-        </Button>
+        <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
+            <Button
+                as={'a'}
+                href={behandling.url}
+                variant={'secondary'}
+                size={'small'}
+                icon={<ExternalLinkIcon aria-hidden />}
+                iconPosition={'right'}
+                target={'_blank'}
+            >
+                {'Åpne tilbakekreving'}
+            </Button>
+            <BenkBehandlingMeny behandling={behandling} />
+        </HStack>
     )),
 ];
 

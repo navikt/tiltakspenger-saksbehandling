@@ -11,7 +11,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useSak } from '~/lib/sak/SakContext';
 import { beregningKildeUrl } from '~/utils/urls';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
-import { TilbakekrevingTildeling } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingTildeling';
+import { TilbakekrevingMeny } from '~/lib/tilbakekreving/meny/TilbakekrevingMeny';
 
 import style from './TIlbakekrevingOversikt.module.css';
 
@@ -142,9 +142,12 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                             <Table.DataCell>{beslutter ?? '-'}</Table.DataCell>
 
                             <Table.DataCell align={'right'}>
-                                <HStack gap={'space-16'} align={'center'} justify={'end'}>
-                                    <TilbakekrevingTildeling tilbakekreving={tilbakekreving} />
-
+                                <HStack
+                                    gap={'space-8'}
+                                    align={'center'}
+                                    justify={'end'}
+                                    wrap={false}
+                                >
                                     <Button
                                         as={'a'}
                                         href={url}
@@ -156,6 +159,8 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                     >
                                         {'Åpne tilbakekreving'}
                                     </Button>
+
+                                    <TilbakekrevingMeny tilbakekreving={tilbakekreving} />
                                 </HStack>
                             </Table.DataCell>
                         </Table.Row>

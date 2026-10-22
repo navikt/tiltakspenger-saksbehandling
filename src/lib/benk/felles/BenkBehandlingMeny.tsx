@@ -18,18 +18,24 @@ import { MeldekortbehandlingSettPåVent } from '~/lib/meldekort/felles/meny/hand
 import { MeldekortbehandlingOverta } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingOverta';
 import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAvslutt';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
+import { behandlingUrl, meldekortbehandlingUrl, personoversiktUrl } from '~/utils/urls';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { hentVerdi } from '~/utils/sladdetVerdi';
 import { BenkBehandlingsstatus, BenkBehandlingstype } from '../typer/felles';
 import { BenkSøknadsbehandlingMedTilgang } from '../typer/søknader';
 import { BenkRevurderingMedTilgang } from '../typer/revurderinger';
 import { BenkMeldekortMedTilgang } from '../typer/meldekort';
+import { BenkTilbakekrevingMedTilgang, BenkTilbakekrevingStatus } from '../typer/tilbakekreving';
+import { TilbakekrevingDialoger } from '~/lib/tilbakekreving/meny/TilbakekrevingDialoger';
 import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
 import { MeldekortbehandlingAngre } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAngre';
 
 type Props = {
     behandling:
-        BenkSøknadsbehandlingMedTilgang | BenkRevurderingMedTilgang | BenkMeldekortMedTilgang;
+        | BenkSøknadsbehandlingMedTilgang
+        | BenkRevurderingMedTilgang
+        | BenkMeldekortMedTilgang
+        | BenkTilbakekrevingMedTilgang;
 };
 
 /**
@@ -38,6 +44,7 @@ type Props = {
  *
  * Handlinger som tar saksbehandler til behandlingen (tildel, overta, gjenoppta)
  * navigerer dit. Resten laster benken på nytt med en bekreftelse.
+ * Tilbakekrevinger behandles i tilbakekrevingsløsningen, så tildeling og overtakelse navigerer i stedet til tilbakekrevingsfanen i personoversikten.
  */
 export const BenkBehandlingMeny = ({ behandling }: Props) => {
     const router = useRouter();
@@ -55,7 +62,8 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
     };
 
     const overtarFra =
-        behandling.status === BenkBehandlingsstatus.UNDER_BESLUTNING
+        behandling.status === BenkBehandlingsstatus.UNDER_BESLUTNING ||
+        behandling.status === BenkTilbakekrevingStatus.UNDER_GODKJENNING
             ? (behandling.beslutter ?? 'Ukjent beslutter')
             : (behandling.saksbehandler ?? 'Ukjent saksbehandler');
 
@@ -117,6 +125,38 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
                         onClose={onClose}
                         onSuccessTilBehandling={onSuccessTilBehandling}
                         onSuccessTilBenk={onSuccessTilBenk}
+                    />
+                </>
+            );
+        }
+        case BenkBehandlingstype.TILBAKEKREVING: {
+            const sakId = hentVerdi(behandling.sakId);
+
+            // sakId er sladdet på rader uten tilgang, og da finnes det ingen behandling å åpne en dialog for.
+            if (sakId === null) {
+                return null;
+            }
+
+            const onSuccessTilPersonoversikt = (melding: string) => () => {
+                onClose();
+                navigateWithNotification(
+                    personoversiktUrl(saksnummer, PersonoversiktTab.Tilbakekreving),
+                    melding,
+                );
+            };
+
+            return (
+                <>
+                    {meny}
+                    <TilbakekrevingDialoger
+                        tilbakekrevingId={behandling.id}
+                        sakId={sakId}
+                        gyldigeKommandoer={behandling.gyldigeKommandoer}
+                        overtarFra={overtarFra}
+                        aktivDialog={aktivDialog}
+                        onClose={onClose}
+                        onSuccessTildelt={onSuccessTilPersonoversikt}
+                        onSuccessLagtTilbake={onSuccessTilBenk}
                     />
                 </>
             );
