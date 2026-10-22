@@ -117,19 +117,19 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     FORLENGELSE_KAN_IKKE_SENDES_TIL_BESLUTNING:
         'Forlengelsen kunne ikke sendes til beslutning automatisk',
 
-    OMGJORING_VEDTAKET_INNVILGER_IKKE_DELTAKELSEN:
-        'Vedtaket som skal omgjøres innvilger ikke tiltaksdeltakelsen',
-    OMGJORING_OMGJOR_FLERE_VEDTAK: 'Omgjøringen av vedtaket vil også omgjøre andre vedtak på saken',
+    OMGJORING_DELTAKELSEN_ER_IKKE_INNVILGET:
+        'Tiltaksdeltakelsen er ikke innvilget i noe gjeldende vedtak på saken',
+    OMGJORING_OMGJOR_DELER_AV_VEDTAK: 'Omgjøringen ville bare omgjort deler av et vedtak på saken',
+    OMGJORING_VEDTAKSPERIODEN_HAR_DAGER_UTEN_VEDTAK:
+        'Vedtaksperioden for omgjøringen har dager uten gjeldende vedtak',
     OMGJORING_FANT_IKKE_TILTAKSDELTAKELSE: 'Fant ikke tiltaksdeltakelsen som endringen gjelder',
     OMGJORING_DELTAKELSEN_HAR_IKKE_STATUS_DELTAR:
         'Tiltaksdeltakelsen har ikke lenger status deltar',
     OMGJORING_TILTAKET_GIR_IKKE_RETT: 'Tiltaket gir ikke rett til tiltakspenger',
     OMGJORING_DELTAKELSEN_MANGLER_SLUTTDATO: 'Tiltaksdeltakelsen mangler sluttdato',
-    OMGJORING_SLUTTDATO_ER_PASSERT: 'Sluttdatoen for tiltaksdeltakelsen er passert',
     OMGJORING_SLUTTDATO_ER_IKKE_FOR_INNVILGELSEN_SLUTTER:
-        'Ny sluttdato for tiltaksdeltakelsen er ikke før siste innvilgede dag i vedtaket',
-    OMGJORING_SLUTTDATO_ER_FOR_INNVILGELSEN_STARTER:
-        'Ny sluttdato for tiltaksdeltakelsen er før første innvilgede dag i vedtaket',
+        'Ny sluttdato for tiltaksdeltakelsen er ikke før siste innvilgede dag',
+    OMGJORING_SLUTTDATO_ER_IKKE_INNVILGET: 'Ny sluttdato for tiltaksdeltakelsen er ikke innvilget',
     OMGJORING_ENDRET_STARTDATO: 'Startdatoen for tiltaksdeltakelsen er endret',
     OMGJORING_ENDRET_DELTAKELSESMENGDE:
         'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
