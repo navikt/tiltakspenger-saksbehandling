@@ -18,19 +18,19 @@ const menyvalg = (elementer: HTMLElement[]) => elementer.map((element) => elemen
  * som er klare til beslutning, og TildelBeslutter bare til besluttere.
  */
 describe('BehandlingsmenyValg - automatisk behandlet og klar til beslutning', () => {
-    test('med begge rollene skilles tildelingene på rolle', async () => {
+    test('med begge rollene vises begge handlingene', async () => {
         const valg = await åpneMeny([Kommando.TildelBeslutter, Kommando.HentTilbake]);
 
         expect(menyvalg(valg)).toEqual([
             'Tildel meg som beslutter',
-            'Tildel meg som saksbehandler',
+            'Hent tilbake som saksbehandler',
         ]);
     });
 
-    test('med bare saksbehandlerrollen vises bare tildeling som saksbehandler', async () => {
+    test('med bare saksbehandlerrollen vises bare henting tilbake', async () => {
         const valg = await åpneMeny([Kommando.HentTilbake]);
 
-        expect(menyvalg(valg)).toEqual(['Tildel meg som saksbehandler']);
+        expect(menyvalg(valg)).toEqual(['Hent tilbake som saksbehandler']);
     });
 
     test('med bare beslutterrollen vises vanlig tildeling', async () => {

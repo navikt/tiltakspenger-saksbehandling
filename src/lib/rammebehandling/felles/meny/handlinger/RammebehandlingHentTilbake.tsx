@@ -37,7 +37,7 @@ export const RammebehandlingHentTilbake = ({
 
     const terminal = erTerminalFeil(error?.status);
 
-    const tildel = () => {
+    const hentTilbake = () => {
         trigger().then((oppdatertSak) => {
             if (oppdatertSak) {
                 onSuccess(oppdatertSak);
@@ -49,7 +49,7 @@ export const RammebehandlingHentTilbake = ({
         <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && !isMutating && onClose()}>
             <Dialog.Popup>
                 <Dialog.Header>
-                    <Dialog.Title>{'Tildel deg behandlingen?'}</Dialog.Title>
+                    <Dialog.Title>{'Hent tilbake behandlingen som saksbehandler?'}</Dialog.Title>
                 </Dialog.Header>
 
                 <Dialog.Body>
@@ -60,7 +60,7 @@ export const RammebehandlingHentTilbake = ({
                     {error && (
                         <Infokort
                             variant={'feil'}
-                            header={'Feil ved tildeling'}
+                            header={'Kunne ikke hente tilbake behandlingen'}
                         >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
                     )}
                 </Dialog.Body>
@@ -75,9 +75,9 @@ export const RammebehandlingHentTilbake = ({
                             variant={'primary'}
                             icon={<PersonIcon aria-hidden />}
                             loading={isMutating}
-                            onClick={tildel}
+                            onClick={hentTilbake}
                         >
-                            {'Tildel meg som saksbehandler'}
+                            {'Hent tilbake som saksbehandler'}
                         </Button>
                     )}
 

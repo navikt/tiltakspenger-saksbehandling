@@ -40,10 +40,11 @@ const renderDialog = () => {
     return onSuccess;
 };
 
-const tildelKnapp = () => screen.queryByRole('button', { name: 'Tildel meg som saksbehandler' });
+const hentTilbakeKnapp = () =>
+    screen.queryByRole('button', { name: 'Hent tilbake som saksbehandler' });
 
-const klikkTildel = () =>
-    fireEvent.click(screen.getByRole('button', { name: 'Tildel meg som saksbehandler' }));
+const klikkHentTilbake = () =>
+    fireEvent.click(screen.getByRole('button', { name: 'Hent tilbake som saksbehandler' }));
 
 describe('RammebehandlingHentTilbake', () => {
     test('venter på bekreftelse, sender POST til henttilbake og gir oppdatert sak til onSuccess', async () => {
@@ -52,12 +53,12 @@ describe('RammebehandlingHentTilbake', () => {
         const onSuccess = renderDialog();
 
         expect(
-            screen.getByRole('dialog', { name: 'Tildel deg behandlingen?' }),
+            screen.getByRole('dialog', { name: 'Hent tilbake behandlingen som saksbehandler?' }),
         ).toBeInTheDocument();
         expect(screen.getByText(/Det automatiske resultatet nullstilles/)).toBeInTheDocument();
         expect(fetchMock).not.toHaveBeenCalled();
 
-        klikkTildel();
+        klikkHentTilbake();
 
         await waitFor(() => expect(onSuccess).toHaveBeenCalledWith(oppdatertSak));
         expect(fetchMock).toHaveBeenCalledWith(
@@ -70,10 +71,10 @@ describe('RammebehandlingHentTilbake', () => {
         fetchMock.mockResolvedValue(svar(500, { melding: 'Noe gikk galt', kode: 'ukjent' }));
         const onSuccess = renderDialog();
 
-        klikkTildel();
+        klikkHentTilbake();
 
         expect(await screen.findByText(/kode 500/)).toBeInTheDocument();
-        expect(tildelKnapp()).toBeInTheDocument();
+        expect(hentTilbakeKnapp()).toBeInTheDocument();
         expect(
             screen.queryByRole('link', { name: 'Gå til personoversikten' }),
         ).not.toBeInTheDocument();
@@ -81,16 +82,16 @@ describe('RammebehandlingHentTilbake', () => {
     });
 
     test.each([404, 409])(
-        '%i (terminal): skjuler tildel-knappen og viser lenke til personoversikten',
+        '%i (terminal): skjuler knappen for å hente tilbake og viser lenke til personoversikten',
         async (status) => {
             fetchMock.mockResolvedValue(svar(status, { melding: 'Feil', kode: 'feil' }));
             const onSuccess = renderDialog();
 
-            klikkTildel();
+            klikkHentTilbake();
 
             const lenke = await screen.findByRole('link', { name: 'Gå til personoversikten' });
             expect(lenke).toHaveAttribute('href', expect.stringContaining('202501011001'));
-            expect(tildelKnapp()).not.toBeInTheDocument();
+            expect(hentTilbakeKnapp()).not.toBeInTheDocument();
             expect(onSuccess).not.toHaveBeenCalled();
         },
     );

@@ -142,7 +142,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         icon={<PersonIcon aria-hidden />}
                         onSelect={() => onVelg('hentTilbake')}
                     >
-                        {'Tildel meg som saksbehandler'}
+                        {'Hent tilbake som saksbehandler'}
                     </ActionMenu.Item>
                 )}
 
