@@ -29,6 +29,7 @@ import { BenkTilbakekrevingMedTilgang, BenkTilbakekrevingStatus } from '../typer
 import { TilbakekrevingDialoger } from '~/lib/tilbakekreving/meny/TilbakekrevingDialoger';
 import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
 import { MeldekortbehandlingAngre } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAngre';
+import { RammebehandlingHentTilbake } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingHentTilbake';
 
 type Props = {
     behandling:
@@ -238,6 +239,17 @@ const RammeDialoger = ({
                     åpen={aktivDialog === 'leggTilbake'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBenk('Behandlingen er lagt tilbake')}
+                />
+            )}
+
+            {kapabiliteter.hentTilbake && (
+                <RammebehandlingHentTilbake
+                    sakId={sakId}
+                    saksnummer={saksnummer}
+                    behandlingId={id}
+                    åpen={aktivDialog === 'hentTilbake'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
                 />
             )}
 
