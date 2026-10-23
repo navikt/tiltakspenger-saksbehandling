@@ -28,6 +28,7 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
 import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
+import { RammebehandlingHentTilbake } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingHentTilbake';
 
 type Props = {
     behandling: Rammebehandling;
@@ -160,6 +161,17 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                         PersonoversiktTab.ÅpneBehandlinger,
                         'Behandlingen er lagt tilbake',
                     )}
+                />
+            )}
+
+            {kapabiliteter.hentTilbake && (
+                <RammebehandlingHentTilbake
+                    sakId={sak.sakId}
+                    saksnummer={sak.saksnummer}
+                    behandlingId={behandling.id}
+                    åpen={aktivDialog === 'hentTilbake'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
                 />
             )}
 

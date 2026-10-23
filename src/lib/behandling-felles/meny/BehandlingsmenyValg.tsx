@@ -26,6 +26,7 @@ export type BehandlingsmenyDialog =
     | 'leggTilbake'
     | 'settPåVent'
     | 'oppdatereSettPåVent'
+    | 'hentTilbake'
     | 'overta'
     | 'angreSendTilBeslutning'
     | 'avslutt'
@@ -49,6 +50,7 @@ export const behandlingsmenyKapabiliteter = (
         angreSendTilBeslutning: harKommando(Kommando.AngreSendTilBeslutning),
         gjenoppta: harKommando(Kommando.Gjenoppta),
         leggTilbake: harKommando(Kommando.LeggTilbakeSaksbehandler, Kommando.LeggTilbakeBeslutter),
+        hentTilbake: harKommando(Kommando.HentTilbake),
         settPåVent: harKommando(Kommando.SettPåVent),
         oppdatereSettPåVent: harKommando(Kommando.OppdatereSettPåVent),
         overta: harKommando(Kommando.OvertaSaksbehandler, Kommando.OvertaBeslutter),
@@ -79,6 +81,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
     const kanAngreSendTilBeslutning = kapabiliteter.angreSendTilBeslutning;
     const kanGjenoppta = kapabiliteter.gjenoppta;
     const kanLeggeTilbake = kapabiliteter.leggTilbake;
+    const kanHenteTilbake = kapabiliteter.hentTilbake;
     const kanSettePåVent = kapabiliteter.settPåVent;
     const kanOppdatereSettPåVent = kapabiliteter.oppdatereSettPåVent;
     const kanOverta = kapabiliteter.overta;
@@ -103,7 +106,7 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         icon={<PersonIcon aria-hidden />}
                         onSelect={() => onVelg('tildelMeg')}
                     >
-                        {'Tildel meg'}
+                        {kanHenteTilbake ? 'Tildel meg som beslutter' : 'Tildel meg'}
                     </ActionMenu.Item>
                 )}
 
@@ -131,6 +134,15 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         onSelect={() => onVelg('leggTilbake')}
                     >
                         {'Legg tilbake'}
+                    </ActionMenu.Item>
+                )}
+
+                {kanHenteTilbake && (
+                    <ActionMenu.Item
+                        icon={<PersonIcon aria-hidden />}
+                        onSelect={() => onVelg('hentTilbake')}
+                    >
+                        {'Tildel meg som saksbehandler'}
                     </ActionMenu.Item>
                 )}
 

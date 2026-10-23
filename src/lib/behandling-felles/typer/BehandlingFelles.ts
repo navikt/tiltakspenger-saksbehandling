@@ -43,6 +43,7 @@ export enum SaksbehandlerBehandlingKommando {
     OvertaBeslutter = 'OvertaBeslutter',
     LeggTilbakeSaksbehandler = 'LeggTilbakeSaksbehandler',
     LeggTilbakeBeslutter = 'LeggTilbakeBeslutter',
+    HentTilbake = 'HentTilbake',
     SettPåVent = 'SettPåVent',
     OppdatereSettPåVent = 'OppdatereSettPåVent',
     Gjenoppta = 'Gjenoppta',
