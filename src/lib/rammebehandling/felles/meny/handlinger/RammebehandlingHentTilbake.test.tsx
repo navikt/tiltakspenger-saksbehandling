@@ -51,6 +51,9 @@ describe('RammebehandlingHentTilbake', () => {
         fetchMock.mockResolvedValue(svar(200, oppdatertSak));
         const onSuccess = renderDialog();
 
+        expect(
+            screen.getByRole('dialog', { name: 'Tildel deg behandlingen?' }),
+        ).toBeInTheDocument();
         expect(screen.getByText(/Det automatiske resultatet nullstilles/)).toBeInTheDocument();
         expect(fetchMock).not.toHaveBeenCalled();
 

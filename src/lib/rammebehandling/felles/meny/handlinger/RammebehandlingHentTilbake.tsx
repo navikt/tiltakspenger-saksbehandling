@@ -49,7 +49,7 @@ export const RammebehandlingHentTilbake = ({
         <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && !isMutating && onClose()}>
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Tildel deg behandlingen?'}</strong>
+                    <Dialog.Title>{'Tildel deg behandlingen?'}</Dialog.Title>
                 </Dialog.Header>
 
                 <Dialog.Body>
