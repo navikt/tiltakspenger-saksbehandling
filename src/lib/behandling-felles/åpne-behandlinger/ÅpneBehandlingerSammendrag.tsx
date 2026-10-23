@@ -215,12 +215,12 @@ const propsForRad = (åpenBehandling: ÅpenBehandling, sak: SakProps): RadProps 
                     <TilbakekrevingStatusTags status={status} venter={venter} size={'small'} />
                 ),
                 periodeTekst: formaterPeriode(kravgrunnlagTotalPeriode),
-                lenke: (
+                lenke: url ? (
                     <Link href={url} target={'_blank'}>
                         {'Åpne tilbakekreving'}
                         <ExternalLinkIcon aria-hidden />
                     </Link>
-                ),
+                ) : undefined,
             };
         }
     }

@@ -38,8 +38,8 @@ type BenkTilbakekrevingProps = {
     beløp: number;
     kilde: BenkTilbakekrevingKilde;
     kravgrunnlagPeriode: Periode;
-    /** Lenke til behandlingen i tilbakekrevingsløsningen */
-    url: string;
+    /** Lenke til behandlingen i tilbakekrevingsløsningen. Er null dersom saksbehandler mangler tilbakekrevingsrollen. */
+    url: Nullable<string>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };
 

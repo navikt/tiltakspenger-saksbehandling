@@ -36,17 +36,19 @@ const kolonner: BenkKolonne<BenkTilbakekreving, BenkTilbakekrevingKolonne>[] = [
     benkKolonner.handlinger<BenkTilbakekreving>(
         (behandling) => (
             <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                <Button
-                    as={'a'}
-                    href={behandling.url}
-                    variant={'secondary'}
-                    size={'small'}
-                    icon={<ExternalLinkIcon aria-hidden />}
-                    iconPosition={'right'}
-                    target={'_blank'}
-                >
-                    {'Åpne tilbakekreving'}
-                </Button>
+                {behandling.url && (
+                    <Button
+                        as={'a'}
+                        href={behandling.url}
+                        variant={'secondary'}
+                        size={'small'}
+                        icon={<ExternalLinkIcon aria-hidden />}
+                        iconPosition={'right'}
+                        target={'_blank'}
+                    >
+                        {'Åpne tilbakekreving'}
+                    </Button>
+                )}
                 <BenkBehandlingMeny behandling={behandling} />
                 <BenkTildelCheckbox behandling={behandling} />
             </HStack>

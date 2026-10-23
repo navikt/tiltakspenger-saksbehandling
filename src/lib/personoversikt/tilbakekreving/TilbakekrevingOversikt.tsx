@@ -148,17 +148,19 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                     justify={'end'}
                                     wrap={false}
                                 >
-                                    <Button
-                                        as={'a'}
-                                        href={url}
-                                        variant={'secondary'}
-                                        size={'small'}
-                                        icon={<ExternalLinkIcon />}
-                                        iconPosition={'right'}
-                                        target={'_blank'}
-                                    >
-                                        {'Åpne tilbakekreving'}
-                                    </Button>
+                                    {url && (
+                                        <Button
+                                            as={'a'}
+                                            href={url}
+                                            variant={'secondary'}
+                                            size={'small'}
+                                            icon={<ExternalLinkIcon />}
+                                            iconPosition={'right'}
+                                            target={'_blank'}
+                                        >
+                                            {'Åpne tilbakekreving'}
+                                        </Button>
+                                    )}
 
                                     <TilbakekrevingMeny tilbakekreving={tilbakekreving} />
                                 </HStack>
