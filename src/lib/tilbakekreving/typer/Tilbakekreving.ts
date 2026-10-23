@@ -16,7 +16,8 @@ export interface TilbakekrevingBehandling {
     opprettet: string;
     sistEndret: string;
     status: TilbakekrevingBehandlingsstatus;
-    url: string;
+    /** Lenke til behandlingen i tilbakekrevingsløsningen. Er null dersom saksbehandler mangler tilbakekrevingsrollen. */
+    url: Nullable<string>;
     kravgrunnlagTotalPeriode: Periode;
     totaltFeilutbetaltBeløp: number;
     varselSendt: Nullable<string>;

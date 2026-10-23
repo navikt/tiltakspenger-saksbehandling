@@ -70,18 +70,20 @@ export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
                     retning={'vertikal'}
                 />
             </div>
-            <Button
-                as={'a'}
-                href={url}
-                variant={'secondary'}
-                size={'small'}
-                icon={<ExternalLinkIcon />}
-                iconPosition={'right'}
-                target={'_blank'}
-                className={style.button}
-            >
-                {'Åpne tilbakekreving'}
-            </Button>
+            {url && (
+                <Button
+                    as={'a'}
+                    href={url}
+                    variant={'secondary'}
+                    size={'small'}
+                    icon={<ExternalLinkIcon />}
+                    iconPosition={'right'}
+                    target={'_blank'}
+                    className={style.button}
+                >
+                    {'Åpne tilbakekreving'}
+                </Button>
+            )}
         </VStack>
     );
 };

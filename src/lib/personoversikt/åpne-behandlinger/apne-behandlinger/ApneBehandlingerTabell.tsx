@@ -317,17 +317,19 @@ const propsForRad = (
                 periodeTekst: formaterPeriode(kravgrunnlagTotalPeriode),
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
-                        <Button
-                            as={'a'}
-                            href={url}
-                            variant={'secondary'}
-                            size={'small'}
-                            icon={<ExternalLinkIcon aria-hidden />}
-                            iconPosition={'right'}
-                            target={'_blank'}
-                        >
-                            {'Åpne tilbakekreving'}
-                        </Button>
+                        {url && (
+                            <Button
+                                as={'a'}
+                                href={url}
+                                variant={'secondary'}
+                                size={'small'}
+                                icon={<ExternalLinkIcon aria-hidden />}
+                                iconPosition={'right'}
+                                target={'_blank'}
+                            >
+                                {'Åpne tilbakekreving'}
+                            </Button>
+                        )}
 
                         <TilbakekrevingMeny tilbakekreving={tilbakekreving} />
                     </HStack>
