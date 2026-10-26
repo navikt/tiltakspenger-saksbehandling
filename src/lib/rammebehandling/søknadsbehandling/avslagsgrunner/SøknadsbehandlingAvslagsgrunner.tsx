@@ -50,4 +50,5 @@ const AvslagsgrunnTekst: Record<Avslagsgrunn, string> = {
     [Avslagsgrunn.LønnFraAndre]: 'Lønn fra andre',
     [Avslagsgrunn.Institusjonsopphold]: 'Institusjonsopphold',
     [Avslagsgrunn.FremmetForSent]: 'Fremmet for sent',
+    [Avslagsgrunn.ForlengetVentetid]: 'Forlenget ventetid',
 } as const;
