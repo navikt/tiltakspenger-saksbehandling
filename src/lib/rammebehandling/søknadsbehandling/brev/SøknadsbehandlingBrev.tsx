@@ -1,13 +1,12 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
+import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { søknadsbehandlingValidering } from '~/lib/rammebehandling/søknadsbehandling/handlinger/søknadsbehandlingValidering';
-import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
+import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
-    useSøknadsbehandlingSkjemaDispatch,
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import {
     SøknadsbehandlingAvslagBrevForhåndsvisningDTO,
@@ -21,47 +20,12 @@ export const SøknadsbehandlingBrev = () => {
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
 
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
-
     return (
-        <Vedtaksbrev
-            header={
-                <HStack justify="space-between" align="center">
-                    <Heading size={'xsmall'} level={'2'}>
-                        Vedtaksbrev for tiltakspenger og barnetillegg
-                    </Heading>
-
-                    <Checkbox
-                        readOnly={skjema.erReadonly}
-                        onChange={(e) =>
-                            dispatch({
-                                type: 'setSkalSendeVedtaksbrev',
-                                payload: { skalSendeVedtaksbrev: !e.target.checked },
-                            })
-                        }
-                        checked={
-                            (skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
-                                skjema.innvilgelse.harValgtPeriode &&
-                                !skjema.innvilgelse.skalSendeVedtaksbrev) ||
-                            (skjema.resultat === SøknadsbehandlingResultat.AVSLAG &&
-                                !skjema.skalSendeVedtaksbrev)
-                        }
-                    >
-                        Ikke send vedtaksbrev
-                    </Checkbox>
-                </HStack>
-            }
+        <RammebehandlingVedtaksbrev
+            tittel={'Vedtaksbrev for tiltakspenger og barnetillegg'}
             validering={søknadsbehandlingValidering(sak, behandling, skjema)('tilBeslutning')}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<Hjelpetekst />}
-            readonly={
-                skjema.erReadonly ||
-                (skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
-                    skjema.innvilgelse.harValgtPeriode &&
-                    !skjema.innvilgelse.skalSendeVedtaksbrev) ||
-                (skjema.resultat === SøknadsbehandlingResultat.AVSLAG &&
-                    !skjema.skalSendeVedtaksbrev)
-            }
         />
     );
 };

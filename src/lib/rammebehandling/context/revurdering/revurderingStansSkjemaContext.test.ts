@@ -13,7 +13,6 @@ const state: RevurderingStansState = {
     fraDato: undefined,
     hjemlerForStans: [],
     harValgtStansFraFørsteDagSomGirRett: false,
-    skalSendeVedtaksbrev: true,
 };
 
 describe('revurderingStansReducer', () => {
@@ -60,15 +59,5 @@ describe('revurderingStansReducer', () => {
                 payload: {},
             }),
         ).toEqual(valgtState);
-    });
-
-    test('setSkalSendeVedtaksbrev setter vedtaksbrev-valget', () => {
-        expect(
-            revurderingStansReducer(state, {
-                superType,
-                type: 'setSkalSendeVedtaksbrev',
-                payload: { skalSendeVedtaksbrev: false },
-            }),
-        ).toEqual({ ...state, skalSendeVedtaksbrev: false });
     });
 });

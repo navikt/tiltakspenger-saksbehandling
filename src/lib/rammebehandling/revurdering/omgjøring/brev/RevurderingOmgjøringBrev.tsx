@@ -4,17 +4,15 @@ import {
     OmgjøringInnvilgelseBrevForhåndsvisningDTO,
     OmgjøringOpphørBrevForhåndsvisningDTO,
 } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
+import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { revurderingOmgjøringValidering } from '~/lib/rammebehandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import {
     OmgjøringContext,
     useOmgjøringSkjema,
-    useOmgjøringSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
-import { Checkbox, Heading, HStack } from '@navikt/ds-react';
 import { erFullstendigPeriode } from '~/utils/periode';
 
 export const RevurderingOmgjøringBrev = () => {
@@ -24,50 +22,12 @@ export const RevurderingOmgjøringBrev = () => {
     const skjema = useOmgjøringSkjema();
     const { resultat } = skjema;
 
-    const dispatch = useOmgjøringSkjemaDispatch();
-
     return (
-        <Vedtaksbrev
-            header={
-                <HStack justify="space-between" align="center">
-                    <Heading size={'xsmall'} level={'2'}>
-                        Vedtaksbrev for{' '}
-                        {resultat === RevurderingResultat.OMGJØRING
-                            ? 'revurdering av innvilgelse'
-                            : 'opphør'}
-                    </Heading>
-
-                    <Checkbox
-                        readOnly={skjema.erReadonly}
-                        onChange={(e) =>
-                            dispatch({
-                                type: 'setSkalSendeVedtaksbrev',
-                                payload: { skalSendeVedtaksbrev: !e.target.checked },
-                            })
-                        }
-                        checked={
-                            (skjema.resultat === RevurderingResultat.OMGJØRING &&
-                                skjema.innvilgelse.harValgtPeriode &&
-                                !skjema.innvilgelse.skalSendeVedtaksbrev) ||
-                            (skjema.resultat === RevurderingResultat.OMGJØRING_OPPHØR &&
-                                !skjema.skalSendeVedtaksbrev)
-                        }
-                    >
-                        Ikke send vedtaksbrev
-                    </Checkbox>
-                </HStack>
-            }
+        <RammebehandlingVedtaksbrev
+            tittel={`Vedtaksbrev for ${resultat === RevurderingResultat.OMGJØRING ? 'revurdering av innvilgelse' : 'opphør'}`}
             validering={revurderingOmgjøringValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
-            readonly={
-                skjema.erReadonly ||
-                (skjema.resultat === RevurderingResultat.OMGJØRING &&
-                    skjema.innvilgelse.harValgtPeriode &&
-                    !skjema.innvilgelse.skalSendeVedtaksbrev) ||
-                (skjema.resultat === RevurderingResultat.OMGJØRING_OPPHØR &&
-                    !skjema.skalSendeVedtaksbrev)
-            }
         />
     );
 };

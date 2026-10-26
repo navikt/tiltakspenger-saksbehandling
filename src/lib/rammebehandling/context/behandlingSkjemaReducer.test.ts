@@ -26,6 +26,7 @@ const ikkeValgtState: BehandlingSkjemaState = {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT,
     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
     erPrioritert: false,
+    skalSendeVedtaksbrev: true,
 };
 
 describe('behandlingSkjemaReducer', () => {
@@ -46,6 +47,7 @@ describe('behandlingSkjemaReducer', () => {
             resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
             erPrioritert: true,
+            skalSendeVedtaksbrev: true,
         });
     });
 
@@ -54,6 +56,7 @@ describe('behandlingSkjemaReducer', () => {
             ...ikkeValgtState,
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
             erPrioritert: true,
+            skalSendeVedtaksbrev: false,
         };
 
         const behandling = {
@@ -70,9 +73,9 @@ describe('behandlingSkjemaReducer', () => {
         expect(nyState).toEqual({
             resultat: SøknadsbehandlingResultat.AVSLAG,
             avslagsgrunner: [],
-            skalSendeVedtaksbrev: true,
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
             erPrioritert: true,
+            skalSendeVedtaksbrev: false,
         });
     });
 });
@@ -80,6 +83,7 @@ describe('behandlingSkjemaReducer', () => {
 const fellesState = {
     skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
     erPrioritert: true,
+    skalSendeVedtaksbrev: true,
 };
 
 const stansState: BehandlingSkjemaState = {
@@ -88,7 +92,6 @@ const stansState: BehandlingSkjemaState = {
     fraDato: undefined,
     hjemlerForStans: [],
     harValgtStansFraFørsteDagSomGirRett: false,
-    skalSendeVedtaksbrev: true,
 };
 
 const revurderingInnvilgelseState: BehandlingSkjemaState = {
@@ -99,7 +102,6 @@ const revurderingInnvilgelseState: BehandlingSkjemaState = {
         innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
         harBarnetillegg: false,
         barnetilleggPerioder: [],
-        skalSendeVedtaksbrev: true,
     },
 };
 
@@ -123,12 +125,19 @@ describe('behandlingSkjemaReducer for revurderinger', () => {
         expect(
             behandlingSkjemaReducer(revurderingInnvilgelseState, {
                 superType: BehandlingSkjemaType.RevurderingInnvilgelse,
-                type: 'setSkalSendeVedtaksbrev',
-                payload: { skalSendeVedtaksbrev: false },
+                type: 'settAntallDager',
+                payload: { antallDager: 8, index: 0 },
             }),
-        ).toMatchObject({
-            ...fellesState,
-            innvilgelse: { skalSendeVedtaksbrev: false },
+        ).toEqual({
+            ...revurderingInnvilgelseState,
+            innvilgelse: {
+                ...revurderingInnvilgelseState.innvilgelse,
+                innvilgelsesperioder: [
+                    innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
+                        antallDagerPerMeldeperiode: 8,
+                    }),
+                ],
+            },
         });
     });
 
@@ -148,7 +157,6 @@ describe('behandlingSkjemaReducer for revurderinger', () => {
             resultat: RevurderingResultat.OMGJØRING_OPPHØR,
             vedtaksperiode: {},
             valgteHjemler: [],
-            skalSendeVedtaksbrev: true,
         });
     });
 });
@@ -204,8 +212,8 @@ describe('behandlingSkjemaInitialState', () => {
         expect(behandlingSkjemaInitialState({ behandling, sak: sak() })).toEqual({
             resultat: SøknadsbehandlingResultat.AVSLAG,
             avslagsgrunner: [Avslagsgrunn.Alder],
-            skalSendeVedtaksbrev: false,
             ...fellesState,
+            skalSendeVedtaksbrev: false,
         });
     });
 

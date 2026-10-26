@@ -44,7 +44,6 @@ const medPerioderState = (
     innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
     harBarnetillegg: true,
     barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-01', '2025-03-31'))],
-    skalSendeVedtaksbrev: true,
     ...overstyringer,
 });
 
@@ -88,13 +87,11 @@ describe('innvilgelsesperioderReducer', () => {
                 innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-06', '2025-03-31'))],
                 harBarnetillegg: true,
                 barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-06', '2025-03-31'))],
-                skalSendeVedtaksbrev: true,
             });
         });
 
         test.each<InnvilgelsesperioderActions>([
             { type: 'settAntallDager', payload: { antallDager: 8, index: 0 } },
-            { type: 'setSkalSendeVedtaksbrev', payload: { skalSendeVedtaksbrev: false } },
             {
                 type: 'leggTilInnvilgelsesperiode',
                 payload: { behandling: behandlingMedBarnISøknad, sak: sak() },
@@ -277,14 +274,5 @@ describe('innvilgelsesperioderReducer', () => {
                 internDeltakelseId: 'deltakelse_2',
             }),
         ]);
-    });
-
-    test('setSkalSendeVedtaksbrev setter vedtaksbrev-valget', () => {
-        expect(
-            innvilgelsesperioderReducer(medPerioderState(), {
-                type: 'setSkalSendeVedtaksbrev',
-                payload: { skalSendeVedtaksbrev: false },
-            }),
-        ).toEqual(medPerioderState({ skalSendeVedtaksbrev: false }));
     });
 });

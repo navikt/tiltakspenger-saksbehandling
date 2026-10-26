@@ -63,7 +63,6 @@ const innvilgelseInitialState = (
             innvilgelsesperioder: behandling.innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
-            skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
         },
     };
 };
@@ -75,6 +74,5 @@ const avslagInitialState = (behandling: Søknadsbehandling): SøknadsbehandlingA
             behandling.resultat === SøknadsbehandlingResultat.AVSLAG
                 ? behandling.avslagsgrunner
                 : [],
-        skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
     };
 };

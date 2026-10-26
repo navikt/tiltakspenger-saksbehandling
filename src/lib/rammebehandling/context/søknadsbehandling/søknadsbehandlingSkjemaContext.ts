@@ -28,7 +28,6 @@ export type SøknadsbehandlingIkkeValgtState = {
 export type SøknadsbehandlingAvslagState = {
     resultat: SøknadsbehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
-    skalSendeVedtaksbrev: boolean;
 };
 
 export type SøknadsbehandlingInnvilgelseState = {
@@ -70,31 +69,6 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         case 'setResultat': {
             const { resultat: nyttResultat, behandling } = payload;
             return søknadsbehandlingInitialState(behandling, nyttResultat);
-        }
-
-        case 'setSkalSendeVedtaksbrev': {
-            const { skalSendeVedtaksbrev } = payload;
-            if (resultat === SøknadsbehandlingResultat.IKKE_VALGT) {
-                throw Error('Behandlingen må ha resultat for å sette skalSendeVedtaksbrev');
-            }
-
-            if (resultat === SøknadsbehandlingResultat.AVSLAG) {
-                return {
-                    ...state,
-                    skalSendeVedtaksbrev: skalSendeVedtaksbrev,
-                };
-            }
-
-            if (resultat === SøknadsbehandlingResultat.INNVILGELSE) {
-                return {
-                    ...state,
-                    innvilgelse: innvilgelseReducer(state.innvilgelse, action),
-                };
-            }
-
-            throw Error(
-                `Ugyldig resultat for søknadsbehandling vedtak: ${resultat satisfies never}`,
-            );
         }
 
         case 'oppdaterAvslagsgrunner': {

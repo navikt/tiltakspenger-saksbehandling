@@ -1,4 +1,4 @@
-import { BodyLong } from '@navikt/ds-react';
+import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
@@ -8,26 +8,46 @@ import { BrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbre
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
+import { useBehandlingSkjemaFellesDispatch } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
-import style from './Vedtaksbrev.module.css';
+import style from './RammebehandlingVedtaksbrev.module.css';
 
 type Props = {
-    header: ReactNode;
+    tittel: string;
     hjelpetekst?: ReactNode;
     validering: ValideringResultat;
     hentDto: () => BrevForhåndsvisningDTO;
-    readonly?: boolean;
 };
 
-export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly }: Props) => {
+export const RammebehandlingVedtaksbrev = ({ tittel, hjelpetekst, validering, hentDto }: Props) => {
     const { behandling } = useBehandling();
-    const { textAreas, erReadonly } = useBehandlingSkjema();
+    const { textAreas, erReadonly, skalSendeVedtaksbrev } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaFellesDispatch();
+
+    const brevErReadonly = erReadonly || !skalSendeVedtaksbrev;
 
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                {header}
+                <HStack justify="space-between" align="center">
+                    <Heading size={'xsmall'} level={'2'}>
+                        {tittel}
+                    </Heading>
+                    <Checkbox
+                        size={'small'}
+                        readOnly={erReadonly}
+                        checked={!skalSendeVedtaksbrev}
+                        onChange={(e) =>
+                            dispatch({
+                                type: 'setSkalSendeVedtaksbrev',
+                                payload: { skalSendeVedtaksbrev: !e.target.checked },
+                            })
+                        }
+                    >
+                        {'Ikke send vedtaksbrev'}
+                    </Checkbox>
+                </HStack>
                 <BodyLong size={'small'}>{'Teksten vises i vedtaksbrevet til bruker.'}</BodyLong>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Venstre className={style.brev}>
@@ -35,7 +55,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly
                     label={'Tekst til vedtaksbrev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
                     defaultValue={textAreas.brevtekst.getValue() ?? ''}
-                    readOnly={readonly ?? erReadonly}
+                    readOnly={brevErReadonly}
                     ref={textAreas.brevtekst.ref}
                 />
                 <VedtaksbrevForhåndsvisning
@@ -46,7 +66,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly
                         behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING ||
                         behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING
                             ? !behandling.skalSendeVedtaksbrev
-                            : (readonly ?? erReadonly)
+                            : brevErReadonly
                     }
                 />
             </VedtakSeksjon.Venstre>

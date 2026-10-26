@@ -34,7 +34,6 @@ export type OmgjøringOpphørState = {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Partial<Periode>;
     valgteHjemler: HjemmelForOpphør[];
-    skalSendeVedtaksbrev: boolean;
 };
 
 export type OmgjøringInnvilgelseState = {
@@ -83,29 +82,6 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
         case 'setResultat': {
             const { resultat: nyttResultat, behandling, sak } = payload;
             return omgjøringInitialState(behandling, sak, nyttResultat);
-        }
-
-        case 'setSkalSendeVedtaksbrev': {
-            const { skalSendeVedtaksbrev } = payload;
-            if (resultat === RevurderingResultat.OMGJØRING_IKKE_VALGT) {
-                throw Error('Behandlingen må ha resultat for å sette skalSendeVedtaksbrev');
-            }
-
-            if (resultat === RevurderingResultat.OMGJØRING_OPPHØR) {
-                return {
-                    ...state,
-                    skalSendeVedtaksbrev: skalSendeVedtaksbrev,
-                };
-            }
-
-            if (resultat === RevurderingResultat.OMGJØRING) {
-                return {
-                    ...state,
-                    innvilgelse: innvilgelseReducer(state.innvilgelse, action),
-                };
-            }
-
-            throw Error(`Ugyldig resultat for omgjøring vedtak: ${resultat satisfies never}`);
         }
 
         case 'oppdaterVedtaksperiode': {

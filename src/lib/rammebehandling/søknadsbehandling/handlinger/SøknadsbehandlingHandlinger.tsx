@@ -64,7 +64,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                           perioder: [],
                       },
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
-                skalSendeVedtaksbrev: innvilgelse.skalSendeVedtaksbrev,
+                skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
             } satisfies OppdaterSøknadsbehandlingInnvilgelseDTO;
         }
 

@@ -43,7 +43,6 @@ describe('revurderingInitialState', () => {
                 vedtaksperiode: periode('2025-03-01', '2025-06-30'),
                 valgtHjemmelHarIkkeRettighet: [HjemmelForStans.Alder],
                 harValgtStansFraFørsteDagSomGirRett: true,
-                skalSendeVedtaksbrev: false,
             });
 
             expect(revurderingInitialState(behandling, sak())).toEqual({
@@ -51,7 +50,6 @@ describe('revurderingInitialState', () => {
                 fraDato: '2025-03-01',
                 hjemlerForStans: [HjemmelForStans.Alder],
                 harValgtStansFraFørsteDagSomGirRett: true,
-                skalSendeVedtaksbrev: false,
             });
         });
 
@@ -61,7 +59,6 @@ describe('revurderingInitialState', () => {
                 fraDato: undefined,
                 hjemlerForStans: [],
                 harValgtStansFraFørsteDagSomGirRett: false,
-                skalSendeVedtaksbrev: true,
             });
         });
     });
@@ -83,7 +80,6 @@ describe('revurderingInitialState', () => {
                     perioder: [barnetilleggPeriode(1, periode('2025-04-01', '2025-05-31'))],
                     begrunnelse: ikkeSladdet(null),
                 },
-                skalSendeVedtaksbrev: false,
             });
 
             expect(revurderingInitialState(behandling, sak())).toEqual({
@@ -95,7 +91,6 @@ describe('revurderingInitialState', () => {
                     barnetilleggPerioder: [
                         barnetilleggPeriode(1, periode('2025-04-01', '2025-05-31')),
                     ],
-                    skalSendeVedtaksbrev: false,
                 },
             });
         });
@@ -143,7 +138,6 @@ describe('omgjøringInitialState', () => {
                     perioder: [barnetilleggPeriode(1, periode('2025-02-01', '2025-03-31'))],
                     begrunnelse: ikkeSladdet(null),
                 },
-                skalSendeVedtaksbrev: false,
             });
 
             expect(omgjøringInitialState(behandling, sak())).toEqual({
@@ -156,7 +150,6 @@ describe('omgjøringInitialState', () => {
                     barnetilleggPerioder: [
                         barnetilleggPeriode(1, periode('2025-02-01', '2025-03-31')),
                     ],
-                    skalSendeVedtaksbrev: false,
                 },
             });
         });
@@ -221,21 +214,18 @@ describe('omgjøringInitialState', () => {
             const behandling = omgjøringOpphør({
                 vedtaksperiode: periode('2025-03-01', '2025-03-31'),
                 valgteHjemler: [HjemmelForOpphør.FremmetForSent],
-                skalSendeVedtaksbrev: false,
             });
 
             expect(omgjøringInitialState(behandling, sakMedInnvilgetTidslinje)).toEqual({
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,
                 vedtaksperiode: periode('2025-03-01', '2025-03-31'),
                 valgteHjemler: [HjemmelForOpphør.FremmetForSent],
-                skalSendeVedtaksbrev: false,
             });
         });
 
-        test('avgrenser forhåndsutfylt vedtaksperiode til innvilgede perioder og beholder vedtaksbrev-valget ved bytte av resultat', () => {
+        test('avgrenser forhåndsutfylt vedtaksperiode til innvilgede perioder ved bytte av resultat', () => {
             const behandling = omgjøringIkkeValgt({
                 omgjørRammevedtak: [omgjørVedtak],
-                skalSendeVedtaksbrev: false,
             });
 
             expect(
@@ -248,7 +238,6 @@ describe('omgjøringInitialState', () => {
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,
                 vedtaksperiode: periode('2025-02-01', '2025-04-30'),
                 valgteHjemler: [],
-                skalSendeVedtaksbrev: false,
             });
         });
 

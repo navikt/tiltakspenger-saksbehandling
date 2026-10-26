@@ -22,7 +22,6 @@ const ikkeValgtState: SøknadsbehandlingIkkeValgtState = {
 const avslagState: SøknadsbehandlingAvslagState = {
     resultat: SøknadsbehandlingResultat.AVSLAG,
     avslagsgrunner: [Avslagsgrunn.Alder],
-    skalSendeVedtaksbrev: true,
 };
 
 const innvilgelseUtenPerioderState: SøknadsbehandlingInnvilgelseState = {
@@ -37,22 +36,14 @@ const innvilgelseState: SøknadsbehandlingInnvilgelseState = {
         innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
         harBarnetillegg: false,
         barnetilleggPerioder: [],
-        skalSendeVedtaksbrev: true,
     },
 };
-
-const setSkalSendeVedtaksbrev = (skalSendeVedtaksbrev: boolean): SøknadsbehandlingActions => ({
-    superType,
-    type: 'setSkalSendeVedtaksbrev',
-    payload: { skalSendeVedtaksbrev },
-});
 
 describe('søknadsbehandlingReducer', () => {
     describe('setResultat', () => {
         test('lager initial state for nytt resultat ut fra lagret behandling', () => {
             const behandling = søknadsbehandlingAvslag({
                 avslagsgrunner: [Avslagsgrunn.FremmetForSent],
-                skalSendeVedtaksbrev: false,
             });
 
             const innvilgelse = søknadsbehandlingReducer(avslagState, {
@@ -72,41 +63,7 @@ describe('søknadsbehandlingReducer', () => {
             expect(tilbakeTilAvslag).toEqual({
                 resultat: SøknadsbehandlingResultat.AVSLAG,
                 avslagsgrunner: [Avslagsgrunn.FremmetForSent],
-                skalSendeVedtaksbrev: false,
             });
-        });
-    });
-
-    describe('setSkalSendeVedtaksbrev', () => {
-        test('setter vedtaksbrev for avslag', () => {
-            expect(søknadsbehandlingReducer(avslagState, setSkalSendeVedtaksbrev(false))).toEqual({
-                ...avslagState,
-                skalSendeVedtaksbrev: false,
-            });
-        });
-
-        test('setter vedtaksbrev på innvilgelsen', () => {
-            expect(
-                søknadsbehandlingReducer(innvilgelseState, setSkalSendeVedtaksbrev(false)),
-            ).toEqual({
-                ...innvilgelseState,
-                innvilgelse: { ...innvilgelseState.innvilgelse, skalSendeVedtaksbrev: false },
-            });
-        });
-
-        test('kaster feil når resultat ikke er valgt', () => {
-            expect(() =>
-                søknadsbehandlingReducer(ikkeValgtState, setSkalSendeVedtaksbrev(false)),
-            ).toThrow();
-        });
-
-        test('kaster feil når innvilgelsesperioden ikke er valgt', () => {
-            expect(() =>
-                søknadsbehandlingReducer(
-                    innvilgelseUtenPerioderState,
-                    setSkalSendeVedtaksbrev(false),
-                ),
-            ).toThrow();
         });
     });
 

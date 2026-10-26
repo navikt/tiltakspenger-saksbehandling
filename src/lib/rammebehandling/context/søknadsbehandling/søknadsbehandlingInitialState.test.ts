@@ -30,16 +30,14 @@ describe('søknadsbehandlingInitialState', () => {
     });
 
     describe('avslag', () => {
-        test('henter lagrede avslagsgrunner og vedtaksbrev-valg', () => {
+        test('henter lagrede avslagsgrunner', () => {
             const behandling = søknadsbehandlingAvslag({
                 avslagsgrunner: [Avslagsgrunn.Alder, Avslagsgrunn.FremmetForSent],
-                skalSendeVedtaksbrev: false,
             });
 
             expect(søknadsbehandlingInitialState(behandling)).toEqual({
                 resultat: SøknadsbehandlingResultat.AVSLAG,
                 avslagsgrunner: [Avslagsgrunn.Alder, Avslagsgrunn.FremmetForSent],
-                skalSendeVedtaksbrev: false,
             });
         });
 
@@ -51,7 +49,6 @@ describe('søknadsbehandlingInitialState', () => {
             ).toEqual({
                 resultat: SøknadsbehandlingResultat.AVSLAG,
                 avslagsgrunner: [],
-                skalSendeVedtaksbrev: true,
             });
         });
     });
@@ -74,7 +71,6 @@ describe('søknadsbehandlingInitialState', () => {
                     ],
                     begrunnelse: ikkeSladdet(null),
                 },
-                skalSendeVedtaksbrev: false,
             });
 
             expect(søknadsbehandlingInitialState(behandling)).toEqual({
@@ -86,7 +82,6 @@ describe('søknadsbehandlingInitialState', () => {
                     barnetilleggPerioder: [
                         barnetilleggPeriode(1, periode('2025-01-01', '2025-01-31')),
                     ],
-                    skalSendeVedtaksbrev: false,
                 },
             });
         });

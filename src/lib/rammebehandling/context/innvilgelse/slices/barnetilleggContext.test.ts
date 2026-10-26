@@ -13,7 +13,6 @@ const state = (
     ],
     harBarnetillegg: barnetilleggPerioder.length > 0,
     barnetilleggPerioder,
-    skalSendeVedtaksbrev: true,
 });
 
 const toPerioder = [

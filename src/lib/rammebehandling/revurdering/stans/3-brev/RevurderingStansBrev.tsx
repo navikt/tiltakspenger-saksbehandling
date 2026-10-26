@@ -1,4 +1,4 @@
-import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
+import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { nonNullish } from '~/utils/object';
 import { revurderingStansValidering } from '~/lib/rammebehandling/revurdering/stans/revurderingStansValidering';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
@@ -6,42 +6,18 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     RevurderingStansContext,
     useRevurderingStansSkjema,
-    useRevurderingStansSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
-import { Checkbox, Heading, HStack } from '@navikt/ds-react';
 
 export const RevurderingStansBrev = () => {
     const skjema = useRevurderingStansSkjema();
 
-    const dispatch = useRevurderingStansSkjemaDispatch();
-
     return (
-        <Vedtaksbrev
-            header={
-                <HStack justify="space-between" align="center">
-                    <Heading size={'xsmall'} level={'2'}>
-                        Vedtaksbrev for stans
-                    </Heading>
-
-                    <Checkbox
-                        readOnly={skjema.erReadonly}
-                        onChange={(e) =>
-                            dispatch({
-                                type: 'setSkalSendeVedtaksbrev',
-                                payload: { skalSendeVedtaksbrev: !e.target.checked },
-                            })
-                        }
-                        checked={!skjema.skalSendeVedtaksbrev}
-                    >
-                        Ikke send vedtaksbrev
-                    </Checkbox>
-                </HStack>
-            }
+        <RammebehandlingVedtaksbrev
+            tittel={'Vedtaksbrev for stans'}
             validering={revurderingStansValidering(skjema)}
             hentDto={(): RevurderingStansBrevForhåndsvisningDTO => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
-            readonly={skjema.erReadonly || !skjema.skalSendeVedtaksbrev}
         />
     );
 };

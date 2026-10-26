@@ -53,7 +53,6 @@ const stansInitialState = (behandling: RevurderingStans): RevurderingStansState 
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
         harValgtStansFraFørsteDagSomGirRett:
             behandling.harValgtStansFraFørsteDagSomGirRett ?? false,
-        skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
     };
 };
 
@@ -90,7 +89,6 @@ const innvilgelseInitialState = (
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
-            skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
         },
     };
 };
@@ -174,7 +172,6 @@ const omgjøringInnvilgelseInitialState = (
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
-            skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
         },
     };
 };
@@ -188,7 +185,6 @@ const omgjøringOpphørInitialState = (
             resultat: RevurderingResultat.OMGJØRING_OPPHØR,
             vedtaksperiode: behandling.vedtaksperiode,
             valgteHjemler: behandling.valgteHjemler,
-            skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
         };
     }
 
@@ -206,7 +202,6 @@ const omgjøringOpphørInitialState = (
         vedtaksperiode:
             perioderSomKanOpphøres.length > 0 ? totalPeriode(perioderSomKanOpphøres) : {},
         valgteHjemler: [],
-        skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
     };
 };
 

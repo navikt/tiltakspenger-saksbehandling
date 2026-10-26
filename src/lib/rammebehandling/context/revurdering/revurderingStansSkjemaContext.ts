@@ -13,7 +13,6 @@ export type RevurderingStansState = {
     fraDato?: string;
     harValgtStansFraFørsteDagSomGirRett: boolean;
     hjemlerForStans: HjemmelForStans[];
-    skalSendeVedtaksbrev: boolean;
 };
 
 type Actions =
@@ -28,10 +27,6 @@ type Actions =
     | {
           type: 'setHarValgtFørsteDagSomGirRett';
           payload: { harValgtFørsteDagSomGirRett?: boolean };
-      }
-    | {
-          type: 'setSkalSendeVedtaksbrev';
-          payload: { skalSendeVedtaksbrev: boolean };
       };
 
 export type RevurderingStansActions = ReducerSuperAction<
@@ -65,13 +60,6 @@ export const revurderingStansReducer: Reducer<RevurderingStansState, Revurdering
                     payload.harValgtFørsteDagSomGirRett ??
                     state.harValgtStansFraFørsteDagSomGirRett,
             };
-
-        case 'setSkalSendeVedtaksbrev': {
-            return {
-                ...state,
-                skalSendeVedtaksbrev: payload.skalSendeVedtaksbrev,
-            };
-        }
     }
 
     throw Error(`Ugyldig action for revurdering stans: ${type satisfies never}`);

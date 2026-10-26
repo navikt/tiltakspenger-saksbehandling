@@ -16,7 +16,6 @@ const medPerioderState: InnvilgelseMedPerioderState = {
     innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
     harBarnetillegg: false,
     barnetilleggPerioder: [],
-    skalSendeVedtaksbrev: true,
 };
 
 describe('innvilgelseReducer', () => {

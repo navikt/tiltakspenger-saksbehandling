@@ -13,6 +13,7 @@ const superType = BehandlingSkjemaType.Felles;
 const state: BehandlingSkjemaFellesState = {
     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
     erPrioritert: false,
+    skalSendeVedtaksbrev: true,
 };
 
 describe('behandlingSkjemaFellesInitialState', () => {
@@ -20,11 +21,13 @@ describe('behandlingSkjemaFellesInitialState', () => {
         const behandling = søknadsbehandlingIkkeValgt({
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
             prioritering: { begrunnelse: ikkeSladdet('Haster') },
+            skalSendeVedtaksbrev: false,
         });
 
         expect(behandlingSkjemaFellesInitialState(behandling)).toEqual({
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
             erPrioritert: true,
+            skalSendeVedtaksbrev: false,
         });
     });
 
@@ -76,5 +79,15 @@ describe('behandlingSkjemaFellesReducer', () => {
         });
 
         expect(nyState).toEqual({ ...state, erPrioritert: true });
+    });
+
+    test('setSkalSendeVedtaksbrev endrer vedtaksbrev-valget', () => {
+        const nyState = behandlingSkjemaFellesReducer(state, {
+            superType,
+            type: 'setSkalSendeVedtaksbrev',
+            payload: { skalSendeVedtaksbrev: false },
+        });
+
+        expect(nyState).toEqual({ ...state, skalSendeVedtaksbrev: false });
     });
 });

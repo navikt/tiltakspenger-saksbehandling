@@ -127,7 +127,6 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
             ],
             harBarnetillegg: false,
             barnetilleggPerioder: [],
-            skalSendeVedtaksbrev: true,
         });
     });
 });

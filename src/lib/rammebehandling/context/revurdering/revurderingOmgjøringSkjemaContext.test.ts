@@ -20,7 +20,6 @@ const opphørState: OmgjøringOpphørState = {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR,
     vedtaksperiode: periode('2025-01-01', '2025-03-31'),
     valgteHjemler: [],
-    skalSendeVedtaksbrev: true,
 };
 
 const innvilgelseUtenPerioderState: OmgjøringInnvilgelseState = {
@@ -37,15 +36,8 @@ const innvilgelseState: OmgjøringInnvilgelseState = {
         innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
         harBarnetillegg: false,
         barnetilleggPerioder: [],
-        skalSendeVedtaksbrev: true,
     },
 };
-
-const setSkalSendeVedtaksbrev = (skalSendeVedtaksbrev: boolean): OmgjøringActions => ({
-    superType,
-    type: 'setSkalSendeVedtaksbrev',
-    payload: { skalSendeVedtaksbrev },
-});
 
 const oppdaterVedtaksperiode = (
     periodeOppdatering: Partial<{ fraOgMed: string; tilOgMed: string }>,
@@ -60,7 +52,6 @@ describe('omgjøringReducer', () => {
         const behandling = omgjøringOpphør({
             vedtaksperiode: periode('2025-02-01', '2025-02-28'),
             valgteHjemler: [HjemmelForOpphør.Alder],
-            skalSendeVedtaksbrev: false,
         });
 
         const nullstilt = omgjøringReducer(opphørState, {
@@ -81,29 +72,6 @@ describe('omgjøringReducer', () => {
             resultat: RevurderingResultat.OMGJØRING_OPPHØR,
             vedtaksperiode: periode('2025-02-01', '2025-02-28'),
             valgteHjemler: [HjemmelForOpphør.Alder],
-            skalSendeVedtaksbrev: false,
-        });
-    });
-
-    describe('setSkalSendeVedtaksbrev', () => {
-        test('setter vedtaksbrev for opphør', () => {
-            expect(omgjøringReducer(opphørState, setSkalSendeVedtaksbrev(false))).toEqual({
-                ...opphørState,
-                skalSendeVedtaksbrev: false,
-            });
-        });
-
-        test('setter vedtaksbrev på innvilgelsen', () => {
-            expect(omgjøringReducer(innvilgelseState, setSkalSendeVedtaksbrev(false))).toEqual({
-                ...innvilgelseState,
-                innvilgelse: { ...innvilgelseState.innvilgelse, skalSendeVedtaksbrev: false },
-            });
-        });
-
-        test('kaster feil når resultat ikke er valgt', () => {
-            expect(() =>
-                omgjøringReducer(ikkeValgtState, setSkalSendeVedtaksbrev(false)),
-            ).toThrow();
         });
     });
 

@@ -11,6 +11,7 @@ import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSk
 export type BehandlingSkjemaFellesState = {
     skalJournalføreNotat: SkalJournalføreNotat;
     erPrioritert: boolean;
+    skalSendeVedtaksbrev: boolean;
 };
 
 type Actions =
@@ -25,6 +26,10 @@ type Actions =
     | {
           type: 'setErPrioritert';
           payload: { erPrioritert: boolean };
+      }
+    | {
+          type: 'setSkalSendeVedtaksbrev';
+          payload: { skalSendeVedtaksbrev: boolean };
       };
 
 export type BehandlingSkjemaFellesActions = ReducerSuperAction<
@@ -37,14 +42,17 @@ export const behandlingSkjemaFellesInitialState = (
 ): BehandlingSkjemaFellesState => ({
     skalJournalføreNotat: behandling.skalJournalføreNotat,
     erPrioritert: behandling.prioritering !== null,
+    skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
 });
 
 export const hentBehandlingSkjemaFellesState = ({
     skalJournalføreNotat,
     erPrioritert,
+    skalSendeVedtaksbrev,
 }: BehandlingSkjemaFellesState): BehandlingSkjemaFellesState => ({
     skalJournalføreNotat,
     erPrioritert,
+    skalSendeVedtaksbrev,
 });
 
 export const behandlingSkjemaFellesReducer: Reducer<
@@ -76,6 +84,12 @@ export const behandlingSkjemaFellesReducer: Reducer<
             return {
                 ...state,
                 erPrioritert: payload.erPrioritert,
+            };
+
+        case 'setSkalSendeVedtaksbrev':
+            return {
+                ...state,
+                skalSendeVedtaksbrev: payload.skalSendeVedtaksbrev,
             };
     }
 

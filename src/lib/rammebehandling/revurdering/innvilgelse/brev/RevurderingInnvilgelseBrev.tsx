@@ -1,56 +1,26 @@
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
+import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
-    useRevurderingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
-import { Checkbox, Heading, HStack } from '@navikt/ds-react';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling } = useRevurderingBehandling();
     const skjema = useRevurderingInnvilgelseSkjema();
     const { sak } = useSak();
 
-    const dispatch = useRevurderingInnvilgelseSkjemaDispatch();
-
     return (
-        <Vedtaksbrev
-            header={
-                <HStack justify="space-between" align="center">
-                    <Heading size={'xsmall'} level={'2'}>
-                        Vedtaksbrev for revurdering av innvilgelse
-                    </Heading>
-
-                    <Checkbox
-                        readOnly={skjema.erReadonly}
-                        onChange={(e) =>
-                            dispatch({
-                                type: 'setSkalSendeVedtaksbrev',
-                                payload: { skalSendeVedtaksbrev: !e.target.checked },
-                            })
-                        }
-                        checked={
-                            skjema.innvilgelse.harValgtPeriode &&
-                            !skjema.innvilgelse.skalSendeVedtaksbrev
-                        }
-                    >
-                        Ikke send vedtaksbrev
-                    </Checkbox>
-                </HStack>
-            }
+        <RammebehandlingVedtaksbrev
+            tittel={'Vedtaksbrev for revurdering av innvilgelse'}
             validering={revurderingInnvilgelseValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
-            readonly={
-                skjema.erReadonly ||
-                (skjema.innvilgelse.harValgtPeriode && !skjema.innvilgelse.skalSendeVedtaksbrev)
-            }
         />
     );
 };

@@ -107,7 +107,6 @@ export const lagForhåndsutfyltInnvilgelse = (
         innvilgelsesperioder,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
     };
 };
 
