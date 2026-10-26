@@ -84,7 +84,6 @@ describe('revurderingForlengelseReducer', () => {
                 ],
                 harBarnetillegg: false,
                 barnetilleggPerioder: [],
-                skalSendeVedtaksbrev: true,
             },
         });
     });
