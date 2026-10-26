@@ -16,6 +16,11 @@ import {
     RevurderingInnvilgelseState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import {
+    RevurderingForlengelseActions,
+    revurderingForlengelseReducer,
+    RevurderingForlengelseState,
+} from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
+import {
     OmgjøringActions,
     omgjøringReducer,
     OmgjøringState,
@@ -33,7 +38,11 @@ import {
 } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
 
 export type BehandlingSkjemaResultatState =
-    SøknadsbehandlingState | RevurderingInnvilgelseState | RevurderingStansState | OmgjøringState;
+    | SøknadsbehandlingState
+    | RevurderingInnvilgelseState
+    | RevurderingForlengelseState
+    | RevurderingStansState
+    | OmgjøringState;
 
 export type BehandlingSkjemaState = BehandlingSkjemaFellesState & BehandlingSkjemaResultatState;
 
@@ -41,6 +50,7 @@ export type BehandlingSkjemaActions =
     | BehandlingSkjemaFellesActions
     | SøknadsbehandlingActions
     | RevurderingInnvilgelseActions
+    | RevurderingForlengelseActions
     | OmgjøringActions
     | RevurderingStansActions;
 
@@ -85,6 +95,16 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
             }
 
             return medFellesState(revurderingInnvilgelseReducer(state, action));
+        }
+
+        case BehandlingSkjemaType.RevurderingForlengelse: {
+            if (resultat !== RevurderingResultat.FORLENGELSE) {
+                throw Error(
+                    `Action ${type} / ${superType} må tilhøre en forlengelse - var ${resultat}`,
+                );
+            }
+
+            return medFellesState(revurderingForlengelseReducer(state, action));
         }
 
         case BehandlingSkjemaType.RevurderingOmgjøring: {

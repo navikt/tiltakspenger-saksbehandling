@@ -142,6 +142,7 @@ export const erRammebehandlingInnvilgelseResultat = (resultat: RammebehandlingRe
     return (
         resultat === SøknadsbehandlingResultat.INNVILGELSE ||
         resultat === RevurderingResultat.INNVILGELSE ||
+        resultat === RevurderingResultat.FORLENGELSE ||
         resultat === RevurderingResultat.OMGJØRING
     );
 };

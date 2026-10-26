@@ -15,6 +15,7 @@ import {
     OmgjøringIkkeValgt,
     OmgjøringInnvilgelse,
     OmgjøringOpphør,
+    RevurderingForlengelse,
     RevurderingInnvilgelse,
     RevurderingResultat,
     RevurderingStans,
@@ -218,6 +219,19 @@ export const revurderingInnvilgelse = (
 ): RevurderingInnvilgelse => ({
     ...revurderingBase(),
     resultat: RevurderingResultat.INNVILGELSE,
+    innvilgelsesperioder: null,
+    barnetillegg: null,
+    ...overstyringer,
+});
+
+export const revurderingForlengelse = (
+    overstyringer: Partial<RevurderingForlengelse> = {},
+): RevurderingForlengelse => ({
+    ...revurderingBase(),
+    resultat: RevurderingResultat.FORLENGELSE,
+    forlengerRammevedtakId: 'vedtak_1',
+    forlengesFraOgMed: '2025-04-01',
+    harEndretBarnetillegg: false,
     innvilgelsesperioder: null,
     barnetillegg: null,
     ...overstyringer,

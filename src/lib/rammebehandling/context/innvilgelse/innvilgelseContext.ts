@@ -27,6 +27,7 @@ import {
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { OmgjøringInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { RevurderingForlengelseState } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { SøknadsbehandlingInnvilgelseState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export type InnvilgelseUtenPerioderState = {
@@ -44,7 +45,10 @@ export type InnvilgelseMedPerioderState = {
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
 
 export type BehandlingMedInnvilgelseState =
-    OmgjøringInnvilgelseState | RevurderingInnvilgelseState | SøknadsbehandlingInnvilgelseState;
+    | OmgjøringInnvilgelseState
+    | RevurderingInnvilgelseState
+    | RevurderingForlengelseState
+    | SøknadsbehandlingInnvilgelseState;
 
 export type BehandlingMedInnvilgelsesperioderState = {
     innvilgelse: InnvilgelseMedPerioderState;
@@ -131,4 +135,5 @@ const reducerSuperType = {
     [SøknadsbehandlingResultat.INNVILGELSE]: BehandlingSkjemaType.Søknadsbehandling,
     [RevurderingResultat.INNVILGELSE]: BehandlingSkjemaType.RevurderingInnvilgelse,
     [RevurderingResultat.OMGJØRING]: BehandlingSkjemaType.RevurderingOmgjøring,
+    [RevurderingResultat.FORLENGELSE]: BehandlingSkjemaType.RevurderingForlengelse,
 } as const satisfies Record<RammebehandlingResultatMedInnvilgelse, BehandlingSkjemaType>;

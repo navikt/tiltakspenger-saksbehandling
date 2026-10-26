@@ -51,6 +51,14 @@ export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
+export type RevurderingForlengelseBrevForhåndsvisningDTO = {
+    resultat: RevurderingResultat.FORLENGELSE;
+    fritekst: Nullable<string>;
+    tilOgMed: string;
+    // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
+    barnetillegg: Nullable<BarnetilleggPeriode[]>;
+};
+
 export type OmgjøringInnvilgelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.OMGJØRING;
     fritekst: Nullable<string>;
@@ -73,4 +81,5 @@ export type BrevForhåndsvisningDTO =
     | SøknadsbehandlingAvslagBrevForhåndsvisningDTO
     | RevurderingStansBrevForhåndsvisningDTO
     | RevurderingInnvilgelseBrevForhåndsvisningDTO
+    | RevurderingForlengelseBrevForhåndsvisningDTO
     | OmgjøringBrevForhåndsvisningDTO;

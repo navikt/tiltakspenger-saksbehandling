@@ -1,6 +1,7 @@
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Heading, HStack, Radio, RadioGroup } from '@navikt/ds-react';
+import { ReactNode } from 'react';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BarnetilleggTidslinje } from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
@@ -15,7 +16,12 @@ import { periodiseringTotalPeriode } from '~/utils/periode';
 
 import style from './BehandlingBarnetillegg.module.css';
 
-export const BehandlingBarnetillegg = () => {
+type Props = {
+    // Vises til høyre for overskriften, f.eks. en checkbox for å slå av redigeringen.
+    headerHandling?: ReactNode;
+};
+
+export const BehandlingBarnetillegg = ({ headerHandling }: Props) => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
@@ -30,9 +36,12 @@ export const BehandlingBarnetillegg = () => {
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    <Heading level={'3'} size={'small'} className={style.header}>
-                        {'Barnetillegg'}
-                    </Heading>
+                    <HStack justify={'space-between'} align={'center'}>
+                        <Heading level={'3'} size={'small'}>
+                            {'Barnetillegg'}
+                        </Heading>
+                        {headerHandling}
+                    </HStack>
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>

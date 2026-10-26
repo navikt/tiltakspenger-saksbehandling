@@ -1,9 +1,9 @@
-import {Nullable} from '~/types/UtilTypes';
-import {Periode} from '~/types/Periode';
-import {Barnetillegg, BarnetilleggPeriode} from './Barnetillegg';
-import {RammebehandlingId, Rammebehandling, RammebehandlingResultat} from './Rammebehandling';
-import {Innvilgelsesperiode} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import {VedtakType} from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Nullable } from '~/types/UtilTypes';
+import { Periode } from '~/types/Periode';
+import { Barnetillegg, BarnetilleggPeriode } from './Barnetillegg';
+import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type VedtakId = `vedtak_${string}`;
 
@@ -46,6 +46,7 @@ export enum RammevedtakKommandoType {
     OMGJØR = 'OMGJØR',
     OPPHØR = 'OPPHØR',
     STANS = 'STANS',
+    FORLENG = 'FORLENG',
 }
 
 export type RammevedtakKommandoOmgjør = {
@@ -66,8 +67,17 @@ export type RammevedtakKommandoStans = {
     tvungenStansTilOgMedDato: string;
 };
 
+// Vedtaket kan forlenges fra og med denne datoen, som er dagen etter siste innvilgede dag i vedtaket.
+export type RammevedtakKommandoForleng = {
+    type: RammevedtakKommandoType.FORLENG;
+    forlengesFraOgMed: string;
+};
+
 export type RammevedtakKommando =
-    RammevedtakKommandoOmgjør | RammevedtakKommandoOpphør | RammevedtakKommandoStans;
+    | RammevedtakKommandoOmgjør
+    | RammevedtakKommandoOpphør
+    | RammevedtakKommandoStans
+    | RammevedtakKommandoForleng;
 
 export enum Omgjøringsgrad {
     HELT = 'HELT',

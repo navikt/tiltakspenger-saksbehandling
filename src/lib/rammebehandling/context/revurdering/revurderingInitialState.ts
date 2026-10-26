@@ -15,11 +15,19 @@ import {
     OmgjøringState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import {
+    forlengelseInitialState,
+    RevurderingForlengelseState,
+} from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { overlappendePeriode, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { isNonNullish } from '~/utils/object';
 
-type RevurderingState = RevurderingInnvilgelseState | RevurderingStansState | OmgjøringState;
+type RevurderingState =
+    | RevurderingInnvilgelseState
+    | RevurderingForlengelseState
+    | RevurderingStansState
+    | OmgjøringState;
 
 export const revurderingInitialState = (
     behandling: Revurdering,
@@ -34,6 +42,10 @@ export const revurderingInitialState = (
 
         case RevurderingResultat.STANS: {
             return stansInitialState(behandling);
+        }
+
+        case RevurderingResultat.FORLENGELSE: {
+            return forlengelseInitialState(behandling);
         }
 
         case RevurderingResultat.OMGJØRING:
