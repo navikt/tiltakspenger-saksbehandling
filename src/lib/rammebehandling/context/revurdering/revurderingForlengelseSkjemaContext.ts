@@ -85,9 +85,6 @@ export const revurderingForlengelseReducer: Reducer<
                     innvilgelsesperioder,
                     harBarnetillegg: barnetilleggPerioder.length > 0,
                     barnetilleggPerioder,
-                    skalSendeVedtaksbrev: forrige.harValgtPeriode
-                        ? forrige.skalSendeVedtaksbrev
-                        : behandling.skalSendeVedtaksbrev,
                 },
             };
         }
@@ -127,10 +124,6 @@ export const revurderingForlengelseReducer: Reducer<
                 harEndretBarnetillegg: true,
                 innvilgelse: innvilgelseReducer(state.innvilgelse, action),
             };
-        }
-
-        case 'setSkalSendeVedtaksbrev': {
-            return { ...state, innvilgelse: innvilgelseReducer(state.innvilgelse, action) };
         }
 
         case 'oppdaterInnvilgelsesperiode':
@@ -174,7 +167,6 @@ export const forlengelseInitialState = (
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
-            skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
         },
     };
 };

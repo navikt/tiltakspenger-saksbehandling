@@ -59,6 +59,6 @@ const tilDTO = (
                   perioder: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : [],
               }
             : null,
-        skalSendeVedtaksbrev: innvilgelse.skalSendeVedtaksbrev,
+        skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
     };
 };
