@@ -58,6 +58,18 @@ export type RevurderingInnvilgelse = RevurderingBase & {
     barnetillegg: Nullable<Barnetillegg>;
 };
 
+// Forlenger et innvilget vedtak fra dagen etter det slutter. Saksbehandler velger bare til og med-datoen.
+// Innvilgelsesperiodene og barnetillegget er null til til og med-datoen er valgt.
+export type RevurderingForlengelse = RevurderingBase & {
+    resultat: RevurderingResultat.FORLENGELSE;
+    forlengerRammevedtakId: VedtakId;
+    forlengesFraOgMed: string;
+    // Om saksbehandler har valgt barnetillegget selv. Ellers er det utledet fra vedtaket som forlenges.
+    harEndretBarnetillegg: boolean;
+    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
+    barnetillegg: Nullable<Barnetillegg>;
+};
+
 export type OmgjøringInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING;
     vedtaksperiode: Periode;
@@ -89,7 +101,8 @@ export type OmgjørRammevedtak = {
 
 export type Omgjøring = OmgjøringInnvilgelse | OmgjøringOpphør | OmgjøringIkkeValgt;
 
-export type Revurdering = RevurderingStans | RevurderingInnvilgelse | Omgjøring;
+export type Revurdering =
+    RevurderingStans | RevurderingInnvilgelse | RevurderingForlengelse | Omgjøring;
 
 export enum RevurderingResultat {
     STANS = 'STANS',
@@ -97,6 +110,7 @@ export enum RevurderingResultat {
     OMGJØRING = 'OMGJØRING',
     OMGJØRING_OPPHØR = 'OMGJØRING_OPPHØR',
     OMGJØRING_IKKE_VALGT = 'OMGJØRING_IKKE_VALGT',
+    FORLENGELSE = 'FORLENGELSE',
 }
 
 export type OmgjøringResultat =
@@ -126,6 +140,14 @@ export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     skalSendeVedtaksbrev: boolean;
 };
 
+export type OppdaterRevurderingForlengelseDTO = OppdaterBehandlingBaseDTO & {
+    resultat: RevurderingResultat.FORLENGELSE;
+    tilOgMed: string;
+    // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
+    barnetillegg: Nullable<BarnetilleggDTO>;
+    skalSendeVedtaksbrev: boolean;
+};
+
 export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelsesperioder: Innvilgelsesperiode[];
@@ -151,11 +173,15 @@ export type OppdaterOmgjøringDTO =
     OppdaterOmgjøringInnvilgelseDTO | OppdaterOmgjøringOpphørDTO | OppdaterOmgjøringIkkeValgtDTO;
 
 export type OppdaterRevurderingDTO =
-    OppdaterRevurderingStansDTO | OppdaterRevurderingInnvilgelseDTO | OppdaterOmgjøringDTO;
+    | OppdaterRevurderingStansDTO
+    | OppdaterRevurderingInnvilgelseDTO
+    | OppdaterRevurderingForlengelseDTO
+    | OppdaterOmgjøringDTO;
 
 export type StartRevurderingDTO = {
     revurderingType: RevurderingResultat;
-    rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
+    rammevedtakIdSomOmgjøres?: Nullable<VedtakId>;
+    rammevedtakIdSomForlenges?: Nullable<VedtakId>;
 };
 
 export enum HjemmelForStans {

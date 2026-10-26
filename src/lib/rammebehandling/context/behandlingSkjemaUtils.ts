@@ -70,6 +70,7 @@ export enum BehandlingSkjemaType {
     Felles = 'Felles',
     Søknadsbehandling = 'Søknadsbehandling',
     RevurderingInnvilgelse = 'RevurderingInnvilgelse',
+    RevurderingForlengelse = 'RevurderingForlengelse',
     RevurderingOmgjøring = 'RevurderingOmgjøring',
     RevurderingStans = 'RevurderingStans',
 }

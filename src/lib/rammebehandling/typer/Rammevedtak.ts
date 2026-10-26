@@ -47,6 +47,7 @@ export enum RammevedtakKommandoType {
     OMGJØR = 'OMGJØR',
     OPPHØR = 'OPPHØR',
     STANS = 'STANS',
+    FORLENG = 'FORLENG',
 }
 
 export type RammevedtakKommandoOmgjør = {
@@ -67,8 +68,17 @@ export type RammevedtakKommandoStans = {
     tvungenStansTilOgMedDato: Dato;
 };
 
+// Vedtaket kan forlenges fra og med denne datoen, som er dagen etter siste innvilgede dag i vedtaket.
+export type RammevedtakKommandoForleng = {
+    type: RammevedtakKommandoType.FORLENG;
+    forlengesFraOgMed: string;
+};
+
 export type RammevedtakKommando =
-    RammevedtakKommandoOmgjør | RammevedtakKommandoOpphør | RammevedtakKommandoStans;
+    | RammevedtakKommandoOmgjør
+    | RammevedtakKommandoOpphør
+    | RammevedtakKommandoStans
+    | RammevedtakKommandoForleng;
 
 export enum Omgjøringsgrad {
     HELT = 'HELT',

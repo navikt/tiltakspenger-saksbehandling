@@ -26,4 +26,5 @@ const resultatFarge: Record<RammebehandlingResultat, TagProps['data-color']> = {
     [RevurderingResultat.INNVILGELSE]: 'info',
     [RevurderingResultat.OMGJØRING]: 'meta-purple',
     [RevurderingResultat.OMGJØRING_IKKE_VALGT]: 'neutral',
+    [RevurderingResultat.FORLENGELSE]: 'success',
 } as const;

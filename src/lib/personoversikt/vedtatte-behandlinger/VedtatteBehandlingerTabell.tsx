@@ -11,6 +11,8 @@ import {
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/lib/personoversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
+import { ForlengVedtakMenyvalg } from '~/lib/personoversikt/vedtatte-behandlinger/ForlengVedtakMenyvalg';
+import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 import { classNames } from '~/utils/classNames';
 import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
@@ -79,6 +81,7 @@ const RammevedtakMedBehandlingRad = ({
     rammevedtak: RammevedtakMedBehandling;
 }) => {
     const { erSaksbehandler } = useSaksbehandler();
+    const { forlengelseToggle } = useFeatureToggles();
 
     const {
         omgjortGrad,
@@ -137,10 +140,18 @@ const RammevedtakMedBehandlingRad = ({
                                         søknadId={(behandling as Søknadsbehandling).søknad.id}
                                     />
                                 ) : (
-                                    <OmgjørVedtakMenyvalg
-                                        vedtak={rammevedtak}
-                                        sakId={behandling.sakId}
-                                    />
+                                    <>
+                                        <OmgjørVedtakMenyvalg
+                                            vedtak={rammevedtak}
+                                            sakId={behandling.sakId}
+                                        />
+                                        {forlengelseToggle && (
+                                            <ForlengVedtakMenyvalg
+                                                vedtak={rammevedtak}
+                                                sakId={behandling.sakId}
+                                            />
+                                        )}
+                                    </>
                                 )}
                             </ActionMenu.Content>
                         </ActionMenu>

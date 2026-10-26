@@ -8,6 +8,7 @@ export const erTidslinjeElementInnvilgelse = (r: TidslinjeResultat): boolean => 
         case TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE:
         case TidslinjeResultat.REVURDERING_INNVILGELSE:
         case TidslinjeResultat.OMGJØRING_INNVILGELSE:
+        case TidslinjeResultat.FORLENGELSE:
             return true;
         default:
             return false;
