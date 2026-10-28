@@ -3,10 +3,7 @@ import React from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
-import {
-    ManueltRegistrertSøknad,
-    ManuellSøknadTiltak,
-} from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
+import { ManueltRegistrertSøknad } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { BodyShort, Button, List, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
@@ -18,6 +15,7 @@ import {
 } from '~/lib/søknad/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
+import { erLukketPeriode } from '~/utils/periode';
 import { tiltakDeltakerstatusTekst } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { GirIkkeRettTag } from '~/lib/rammebehandling/saksopplysninger/tiltak/GirIkkeRettTag';
 
@@ -38,13 +36,11 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
 
     const [skalHenteTiltak, setSkalHenteTiltak] = React.useState(false);
 
-    const formatLabelForTiltakValg = (
-        tiltak: ManuellSøknadTiltak | TiltaksdeltakelseFraRegister,
-    ) => {
-        const periodeTekst =
-            tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
-                ? `${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)}`
-                : null;
+    const formatLabelForTiltakValg = (tiltak: TiltaksdeltakelseFraRegister) => {
+        const { periode } = tiltak;
+        const periodeTekst = erLukketPeriode(periode)
+            ? `${formaterDatotekst(periode.fraOgMed)} - ${formaterDatotekst(periode.tilOgMed)}`
+            : null;
 
         const detaljer = [periodeTekst, tiltakDeltakerstatusTekst[tiltak.status]]
             .filter(Boolean)
@@ -137,8 +133,10 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                                                 key={tiltak.eksternDeltakelseId}
                                                 value={{
                                                     eksternDeltakelseId: tiltak.eksternDeltakelseId,
-                                                    deltakelseFraOgMed: tiltak.deltakelseFraOgMed,
-                                                    deltakelseTilOgMed: tiltak.deltakelseTilOgMed,
+                                                    deltakelseFraOgMed:
+                                                        tiltak.periode.fraOgMed ?? undefined,
+                                                    deltakelseTilOgMed:
+                                                        tiltak.periode.tilOgMed ?? undefined,
                                                     typeKode: tiltak.typeKode,
                                                     typeNavn: tiltak.typeNavn,
                                                 }}

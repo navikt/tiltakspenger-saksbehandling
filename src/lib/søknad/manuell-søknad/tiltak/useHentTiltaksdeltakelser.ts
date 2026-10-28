@@ -3,13 +3,18 @@ import { nonNullish } from '~/utils/object';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import { ManuellSøknadTiltak } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { SakId } from '~/lib/sak/SakTyper';
+import { ÅpenPeriode } from '~/types/Periode';
 
 /**
  * Tiltak som kan frata rett til tiltakspenger (i første omgang lønnstilskudd) har ingen typeKode.
  * De vises for saksbehandler, men kan ikke velges.
  */
-export type TiltaksdeltakelseFraRegister = Omit<ManuellSøknadTiltak, 'typeKode'> & {
+export type TiltaksdeltakelseFraRegister = Omit<
+    ManuellSøknadTiltak,
+    'typeKode' | 'deltakelseFraOgMed' | 'deltakelseTilOgMed'
+> & {
     typeKode: string | null;
+    periode: ÅpenPeriode;
     fratarRett: boolean;
 };
 

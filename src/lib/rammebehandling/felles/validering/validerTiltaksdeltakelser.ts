@@ -43,13 +43,13 @@ export const validerTiltaksdeltakelser = (
             return;
         }
 
-        if (dayjs(it.periode.fraOgMed).isBefore(dayjs(deltakelse.deltagelseFraOgMed))) {
+        if (dayjs(it.periode.fraOgMed).isBefore(dayjs(deltakelse.periode.fraOgMed))) {
             validering.errors.push(
                 'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
             );
         }
 
-        if (dayjs(it.periode.tilOgMed).isAfter(dayjs(deltakelse.deltagelseTilOgMed))) {
+        if (dayjs(it.periode.tilOgMed).isAfter(dayjs(deltakelse.periode.tilOgMed))) {
             validering.errors.push(
                 'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
             );

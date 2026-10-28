@@ -4,8 +4,8 @@ import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 
 const sorterNyesteFørst = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
-    const aDato = a.deltagelseFraOgMed ?? a.deltagelseTilOgMed;
-    const bDato = b.deltagelseFraOgMed ?? b.deltagelseTilOgMed;
+    const aDato = a.periode.fraOgMed ?? a.periode.tilOgMed;
+    const bDato = b.periode.fraOgMed ?? b.periode.tilOgMed;
 
     if (aDato === bDato) {
         return 0;
@@ -21,7 +21,7 @@ const sorterNyesteFørst = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
 };
 
 const erHistorisk = (tiltak: Tiltaksdeltakelse, skillelinje: string) =>
-    tiltak.deltagelseTilOgMed !== null && tiltak.deltagelseTilOgMed < skillelinje;
+    tiltak.periode.tilOgMed !== null && tiltak.periode.tilOgMed < skillelinje;
 
 export const delOppTiltaksdeltakelser = (
     tiltaksdeltakelser: Tiltaksdeltakelse[],

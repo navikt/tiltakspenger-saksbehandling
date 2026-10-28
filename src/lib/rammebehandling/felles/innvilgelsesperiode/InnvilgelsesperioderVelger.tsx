@@ -12,7 +12,7 @@ import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { InnvilgbarTiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { InnvilgbarTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -124,7 +124,7 @@ export const InnvilgelsesperioderVelger = () => {
 
 type VelgerFullProps = {
     innvilgelsesperioder: Innvilgelsesperiode[];
-    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelseMedPeriode[];
+    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[];
     behandling: Rammebehandling;
     sak: SakProps;
     index: number;
@@ -259,8 +259,8 @@ const InnvilgelsesperiodeVelgerFull = ({
 };
 
 const tiltakVisningsnavn = (
-    tiltaksdeltakelse: InnvilgbarTiltaksdeltakelseMedPeriode,
-    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelseMedPeriode[],
+    tiltaksdeltakelse: InnvilgbarTiltaksdeltakelse,
+    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[],
 ): string => {
     const deltakelserMedType = tiltaksdeltakelser.filter(
         (t) => t.typeKode === tiltaksdeltakelse.typeKode,

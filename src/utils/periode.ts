@@ -1,4 +1,4 @@
-import { MedPeriode, Periode } from '~/types/Periode';
+import { MedPeriode, Periode, ÅpenPeriode } from '~/types/Periode';
 import { nonNullish } from '~/utils/object';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
@@ -9,6 +9,9 @@ export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Per
 
     return { fraOgMed, tilOgMed };
 };
+
+export const erLukketPeriode = (periode: ÅpenPeriode): periode is Periode =>
+    periode.fraOgMed !== null && periode.tilOgMed !== null;
 
 export const periodeTilMeldeperiodeKjedeId = (periode: Periode): MeldeperiodeKjedeId => {
     return `${periode.fraOgMed}/${periode.tilOgMed}`;

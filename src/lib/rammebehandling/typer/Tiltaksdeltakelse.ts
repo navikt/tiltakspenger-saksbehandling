@@ -1,4 +1,4 @@
-import { Periode } from '~/types/Periode';
+import { Periode, ÅpenPeriode } from '~/types/Periode';
 
 export enum TiltaksdeltakelseKilde {
     KOMET = 'Komet',
@@ -52,14 +52,12 @@ type TiltaksdeltakelseBase = {
  */
 export type InnvilgbarTiltaksdeltakelse = TiltaksdeltakelseBase & {
     kanInnvilges: true;
-    deltagelseFraOgMed: string;
-    deltagelseTilOgMed: string;
+    periode: Periode;
 };
 
 export type IkkeInnvilgbarTiltaksdeltakelse = TiltaksdeltakelseBase & {
     kanInnvilges: false;
-    deltagelseFraOgMed: string | null;
-    deltagelseTilOgMed: string | null;
+    periode: ÅpenPeriode;
 };
 
 export type Tiltaksdeltakelse = InnvilgbarTiltaksdeltakelse | IkkeInnvilgbarTiltaksdeltakelse;
@@ -72,14 +70,9 @@ export type TiltaksdeltakelseSomFratarRett = {
     eksternDeltakelseId: string;
     typeNavn: string;
     tiltakskodeFraKilden: string;
-    deltakelseFraOgMed: string | null;
-    deltakelseTilOgMed: string | null;
+    periode: ÅpenPeriode;
     deltakelseStatus: TiltakDeltakerstatus;
     deltakelseProsent: number | null;
     antallDagerPerUke: number | null;
     kilde: TiltaksdeltakelseKilde;
-};
-
-export type InnvilgbarTiltaksdeltakelseMedPeriode = InnvilgbarTiltaksdeltakelse & {
-    periode: Periode;
 };

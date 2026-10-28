@@ -8,15 +8,14 @@ import {
 
 const tiltak = (
     id: string,
-    deltagelseFraOgMed: string | null,
-    deltagelseTilOgMed: string | null,
+    fraOgMed: string | null,
+    tilOgMed: string | null,
 ): Tiltaksdeltakelse => ({
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
     typeKode: 'AMO',
-    deltagelseFraOgMed,
-    deltagelseTilOgMed,
+    periode: { fraOgMed, tilOgMed },
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,
     antallDagerPerUke: null,

@@ -2,7 +2,6 @@ import { Periode } from '~/types/Periode';
 import { nonNullish } from '~/utils/object';
 import {
     InnvilgbarTiltaksdeltakelse,
-    InnvilgbarTiltaksdeltakelseMedPeriode,
     Tiltaksdeltakelse,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { erDatoIPeriode, perioderOverlapper, totalPeriode } from '~/utils/periode';
@@ -52,16 +51,10 @@ export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdelt
 
 export const hentInnvilgbareTiltaksdeltakelser = (
     behandling: Rammebehandling,
-): InnvilgbarTiltaksdeltakelseMedPeriode[] =>
-    hentTiltaksdeltakelser(behandling)
-        .filter((t): t is InnvilgbarTiltaksdeltakelse => t.kanInnvilges)
-        .map((t) => ({
-            ...t,
-            periode: {
-                fraOgMed: t.deltagelseFraOgMed,
-                tilOgMed: t.deltagelseTilOgMed,
-            },
-        }));
+): InnvilgbarTiltaksdeltakelse[] =>
+    hentTiltaksdeltakelser(behandling).filter(
+        (t): t is InnvilgbarTiltaksdeltakelse => t.kanInnvilges,
+    );
 
 export const harInnvilgbareTiltaksdeltakelser = (behandling: Rammebehandling): boolean =>
     hentTiltaksdeltakelser(behandling).some((t) => t.kanInnvilges);
@@ -72,7 +65,7 @@ export const deltarPåFlereInnvilgbareTiltak = (behandling: Rammebehandling): bo
 export const hentInnvilgbareTiltaksdeltakelserFraPeriode = (
     behandling: Rammebehandling,
     periode: Periode,
-): InnvilgbarTiltaksdeltakelseMedPeriode[] =>
+): InnvilgbarTiltaksdeltakelse[] =>
     hentInnvilgbareTiltaksdeltakelser(behandling).filter((td) =>
         perioderOverlapper(periode, td.periode),
     );
@@ -86,22 +79,18 @@ export const finnForsteStartdatoForTiltaksdeltakelse = (
     behandling: Rammebehandling,
 ): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
-        .filter((t) => t.deltagelseFraOgMed != null)
-        .sort((a, b) =>
-            nonNullish(b.deltagelseFraOgMed) > nonNullish(a.deltagelseFraOgMed) ? -1 : 1,
-        );
-    return sorterteDeltakelser[0]?.deltagelseFraOgMed;
+        .filter((t) => t.periode.fraOgMed != null)
+        .sort((a, b) => (nonNullish(b.periode.fraOgMed) > nonNullish(a.periode.fraOgMed) ? -1 : 1));
+    return sorterteDeltakelser[0]?.periode.fraOgMed;
 };
 
 export const finnSisteSluttdatoForTiltaksdeltakelse = (
     behandling: Rammebehandling,
 ): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
-        .filter((t) => t.deltagelseTilOgMed != null)
-        .sort((a, b) =>
-            nonNullish(a.deltagelseTilOgMed) > nonNullish(b.deltagelseTilOgMed) ? -1 : 1,
-        );
-    return sorterteDeltakelser[0]?.deltagelseTilOgMed;
+        .filter((t) => t.periode.tilOgMed != null)
+        .sort((a, b) => (nonNullish(a.periode.tilOgMed) > nonNullish(b.periode.tilOgMed) ? -1 : 1));
+    return sorterteDeltakelser[0]?.periode.tilOgMed;
 };
 
 export const erRammebehandlingMedInnvilgelse = (

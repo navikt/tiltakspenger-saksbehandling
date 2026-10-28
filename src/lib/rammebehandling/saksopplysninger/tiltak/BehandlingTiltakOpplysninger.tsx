@@ -1,5 +1,6 @@
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { formaterPeriode } from '~/utils/date';
+import { erLukketPeriode } from '~/utils/periode';
 import {
     tiltakDeltakerstatusTekst,
     Tiltaksdeltakelse,
@@ -76,8 +77,7 @@ const TiltakSomFratarRettListe = ({
                 const {
                     eksternDeltakelseId,
                     typeNavn,
-                    deltakelseFraOgMed,
-                    deltakelseTilOgMed,
+                    periode,
                     deltakelseStatus,
                     deltakelseProsent,
                     antallDagerPerUke,
@@ -92,12 +92,7 @@ const TiltakSomFratarRettListe = ({
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
                                 verdi={
-                                    deltakelseFraOgMed && deltakelseTilOgMed
-                                        ? formaterPeriode({
-                                              fraOgMed: deltakelseFraOgMed,
-                                              tilOgMed: deltakelseTilOgMed,
-                                          })
-                                        : 'Ukjent'
+                                    erLukketPeriode(periode) ? formaterPeriode(periode) : 'Ukjent'
                                 }
                             />
                             <BehandlingSaksopplysning
@@ -136,8 +131,7 @@ const TiltakListe = ({ tiltaksdeltakelser }: { tiltaksdeltakelser: Tiltaksdeltak
                     antallDagerPerUke,
                     deltakelseProsent,
                     deltakelseStatus,
-                    deltagelseTilOgMed,
-                    deltagelseFraOgMed,
+                    periode,
                     typeNavn,
                     kilde,
                     gjennomføringId,
@@ -148,13 +142,10 @@ const TiltakListe = ({ tiltaksdeltakelser }: { tiltaksdeltakelser: Tiltaksdeltak
                 return (
                     <div key={eksternDeltagelseId}>
                         <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
-                        {deltagelseFraOgMed && deltagelseTilOgMed && (
+                        {erLukketPeriode(periode) && (
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
-                                verdi={formaterPeriode({
-                                    fraOgMed: deltagelseFraOgMed,
-                                    tilOgMed: deltagelseTilOgMed,
-                                })}
+                                verdi={formaterPeriode(periode)}
                             />
                         )}
                         <BehandlingSaksopplysning
