@@ -22,7 +22,7 @@ import {
 import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
+import { kanSaksbehandleEllerBeslutte } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
 import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingStatusTags';
@@ -189,7 +189,9 @@ const propsForRad = (
                         <InternLenkeKnapp
                             href={behandlingUrl({ saksnummer, id: rammebehandling.id })}
                         >
-                            {kanFortsetteBehandling(rammebehandling) ? 'Fortsett' : 'Se behandling'}
+                            {kanSaksbehandleEllerBeslutte(rammebehandling)
+                                ? 'Fortsett'
+                                : 'Se behandling'}
                         </InternLenkeKnapp>
 
                         <RammebehandlingMeny

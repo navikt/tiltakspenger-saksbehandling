@@ -5,11 +5,7 @@ import {
     behandlingSkjemaReducer,
     BehandlingSkjemaState,
 } from '~/lib/rammebehandling/context/behandlingSkjemaReducer';
-import {
-    Rammebehandling,
-    Rammebehandlingsstatus,
-    Rammebehandlingstype,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { TextAreaInput } from '~/lib/_felles/fritekst/fritekstUtils';
@@ -17,8 +13,7 @@ import { useFritekstInput } from '~/lib/_felles/fritekst/useFritekstInput';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
-import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { kanSaksbehandleEllerBeslutte, kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import {
     behandlingSkjemaFellesInitialState,
     BehandlingSkjemaFellesState,
@@ -58,18 +53,10 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
 
 const BehandlingSkjemaProviderInner = ({ children }: PropsWithChildren) => {
     const { sak } = useSak();
-    const { behandling, rolleForBehandling } = useBehandling();
+    const { behandling } = useBehandling();
 
-    const erReadonly =
-        rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER ||
-        behandling.status !== Rammebehandlingsstatus.UNDER_BEHANDLING ||
-        erBehandlingSattPåVent(behandling);
-
-    const kanEndreSkalJournalføreNotat =
-        !erReadonly ||
-        (rolleForBehandling === SaksbehandlerRolle.BESLUTTER &&
-            behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING &&
-            !erBehandlingSattPåVent(behandling));
+    const erReadonly = !kanSaksbehandle(behandling);
+    const kanEndreSkalJournalføreNotat = kanSaksbehandleEllerBeslutte(behandling);
 
     const [skjema, dispatch] = useReducer(
         behandlingSkjemaReducer,

@@ -15,7 +15,7 @@ import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
-import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
+import { kanSaksbehandleEllerBeslutte } from '~/lib/saksbehandler/tilganger';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { tilbakekrevingVenterStatusTekst } from '~/lib/tilbakekreving/tilbakekrevingTekster';
@@ -248,7 +248,7 @@ const RammebehandlingHandlinger = ({
                     id: behandling.id,
                 })}
             >
-                {kanFortsetteBehandling(behandling) ? 'Fortsett' : 'Åpne'}
+                {kanSaksbehandleEllerBeslutte(behandling) ? 'Fortsett' : 'Åpne'}
             </InternLenkeKnapp>
             <BenkBehandlingMeny behandling={behandling} />
             <BenkTildelCheckbox behandling={behandling} />

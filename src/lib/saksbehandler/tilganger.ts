@@ -13,7 +13,7 @@ export const kanSaksbehandle = (behandling: MedGyldigeKommandoer): boolean =>
 export const kanBeslutte = (behandling: MedGyldigeKommandoer): boolean =>
     behandling.gyldigeKommandoer.includes(SaksbehandlerBehandlingKommando.Beslutte);
 
-export const kanFortsetteBehandling = (behandling: MedGyldigeKommandoer): boolean =>
+export const kanSaksbehandleEllerBeslutte = (behandling: MedGyldigeKommandoer): boolean =>
     kanSaksbehandle(behandling) || kanBeslutte(behandling);
 
 export const hentRolleForBehandling = (behandling: MedGyldigeKommandoer) => {
