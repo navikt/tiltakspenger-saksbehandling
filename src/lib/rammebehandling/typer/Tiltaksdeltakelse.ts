@@ -34,13 +34,11 @@ export const tiltakDeltakerstatusTekst: Record<TiltakDeltakerstatus, string> = {
     [TiltakDeltakerstatus.VURDERES]: 'Vurderes',
 };
 
-export type Tiltaksdeltakelse = {
+type TiltaksdeltakelseBase = {
     eksternDeltagelseId: string;
     gjennomføringId: string | null;
     typeNavn: string;
     typeKode: string;
-    deltagelseFraOgMed: string | null;
-    deltagelseTilOgMed: string | null;
     deltakelseStatus: TiltakDeltakerstatus;
     deltakelseProsent: number | null;
     antallDagerPerUke: number | null;
@@ -48,6 +46,23 @@ export type Tiltaksdeltakelse = {
     gjennomforingsprosent: number | null;
     internDeltakelseId: string;
 };
+
+/**
+ * Backend avgjør om det kan innvilges for deltakelsen. Deltakelser som kan innvilges har alltid start- og sluttdato.
+ */
+export type InnvilgbarTiltaksdeltakelse = TiltaksdeltakelseBase & {
+    kanInnvilges: true;
+    deltagelseFraOgMed: string;
+    deltagelseTilOgMed: string;
+};
+
+export type IkkeInnvilgbarTiltaksdeltakelse = TiltaksdeltakelseBase & {
+    kanInnvilges: false;
+    deltagelseFraOgMed: string | null;
+    deltagelseTilOgMed: string | null;
+};
+
+export type Tiltaksdeltakelse = InnvilgbarTiltaksdeltakelse | IkkeInnvilgbarTiltaksdeltakelse;
 
 /**
  * Tiltak som er registrert på bruker, og som kan frata rett til tiltakspenger (i første omgang lønnstilskudd).
@@ -65,8 +80,6 @@ export type TiltaksdeltakelseSomFratarRett = {
     kilde: TiltaksdeltakelseKilde;
 };
 
-export type TiltaksdeltakelseMedPeriode = Tiltaksdeltakelse & {
-    deltagelseFraOgMed: string;
-    deltagelseTilOgMed: string;
+export type InnvilgbarTiltaksdeltakelseMedPeriode = InnvilgbarTiltaksdeltakelse & {
     periode: Periode;
 };

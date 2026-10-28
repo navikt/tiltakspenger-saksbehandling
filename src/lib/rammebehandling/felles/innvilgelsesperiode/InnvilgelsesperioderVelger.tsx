@@ -4,7 +4,7 @@ import {
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
@@ -12,7 +12,7 @@ import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { InnvilgbarTiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -42,7 +42,7 @@ export const InnvilgelsesperioderVelger = () => {
         throw Error('Minst en innvilgelsesperiode skal alltid finnes!');
     }
 
-    const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
+    const tiltaksdeltakelser = hentInnvilgbareTiltaksdeltakelser(behandling);
 
     if (tiltaksdeltakelser.length === 0) {
         return (
@@ -124,7 +124,7 @@ export const InnvilgelsesperioderVelger = () => {
 
 type VelgerFullProps = {
     innvilgelsesperioder: Innvilgelsesperiode[];
-    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[];
+    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelseMedPeriode[];
     behandling: Rammebehandling;
     sak: SakProps;
     index: number;
@@ -259,18 +259,15 @@ const InnvilgelsesperiodeVelgerFull = ({
 };
 
 const tiltakVisningsnavn = (
-    tiltaksdeltakelse: TiltaksdeltakelseMedPeriode,
-    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[],
+    tiltaksdeltakelse: InnvilgbarTiltaksdeltakelseMedPeriode,
+    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelseMedPeriode[],
 ): string => {
     const deltakelserMedType = tiltaksdeltakelser.filter(
         (t) => t.typeKode === tiltaksdeltakelse.typeKode,
     );
 
     if (deltakelserMedType.length > 1) {
-        return `${tiltaksdeltakelse.typeNavn} (${formaterPeriode({
-            fraOgMed: tiltaksdeltakelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
-        })})`;
+        return `${tiltaksdeltakelse.typeNavn} (${formaterPeriode(tiltaksdeltakelse.periode)})`;
     } else {
         return tiltaksdeltakelse.typeNavn;
     }

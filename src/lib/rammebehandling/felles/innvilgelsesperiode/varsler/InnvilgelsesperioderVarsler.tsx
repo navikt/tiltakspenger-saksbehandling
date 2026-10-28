@@ -3,7 +3,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { VStack } from '@navikt/ds-react';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { deltarPaFlereTiltakMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { deltarPåFlereInnvilgbareTiltak } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 type Props = {
     innvilgelsesperioder: Innvilgelsesperiode[];
@@ -20,7 +20,7 @@ export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder, behandling }
         antallDagerPerMeldeperiode[0] > 10 ||
         erOddetall(antallDagerPerMeldeperiode[0]);
 
-    const harFlereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
+    const harFlereTiltak = deltarPåFlereInnvilgbareTiltak(behandling);
 
     if (!antallDagerSettesIkkeAutomatiskIBrev && !harFlereTiltak) {
         return null;

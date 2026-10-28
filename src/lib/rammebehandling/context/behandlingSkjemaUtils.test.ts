@@ -10,6 +10,7 @@ import {
     RevurderingResultat,
 } from '~/lib/rammebehandling/typer/Revurdering';
 import {
+    InnvilgbarTiltaksdeltakelse,
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
     TiltakDeltakerstatus,
@@ -19,7 +20,7 @@ import { Periode } from '~/types/Periode';
 
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 
-const tiltaksdeltakelse = (id: string, periode: Periode): Tiltaksdeltakelse => ({
+const tiltaksdeltakelse = (id: string, periode: Periode): InnvilgbarTiltaksdeltakelse => ({
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
@@ -32,6 +33,7 @@ const tiltaksdeltakelse = (id: string, periode: Periode): Tiltaksdeltakelse => (
     kilde: TiltaksdeltakelseKilde.ARENA,
     gjennomforingsprosent: null,
     internDeltakelseId: id,
+    kanInnvilges: true,
 });
 
 const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilgelse => ({
@@ -128,5 +130,17 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
             harBarnetillegg: false,
             barnetilleggPerioder: [],
         });
+    });
+
+    test('velger ikke tiltaksdeltakelser som ikke kan innvilges, selv om de har periode', () => {
+        const periode = { fraOgMed: '2025-01-01', tilOgMed: '2025-02-28' };
+        const behandling = revurdering([
+            { ...tiltaksdeltakelse('ikke_innvilgbar', periode), kanInnvilges: false },
+            tiltaksdeltakelse('innvilgbar', periode),
+        ]);
+
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode, sakUtenVedtak);
+
+        expect(innvilgelse.innvilgelsesperioder[0]?.internDeltakelseId).toBe('innvilgbar');
     });
 });

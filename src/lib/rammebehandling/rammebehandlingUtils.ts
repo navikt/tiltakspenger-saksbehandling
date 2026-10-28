@@ -1,8 +1,9 @@
 import { Periode } from '~/types/Periode';
 import { nonNullish } from '~/utils/object';
 import {
+    InnvilgbarTiltaksdeltakelse,
+    InnvilgbarTiltaksdeltakelseMedPeriode,
     Tiltaksdeltakelse,
-    TiltaksdeltakelseMedPeriode,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { erDatoIPeriode, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Nullable } from '~/types/UtilTypes';
@@ -46,59 +47,38 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
     return null;
 };
 
-export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: Rammebehandling) =>
-    hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
-
 export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdeltakelse[] =>
     behandling.saksopplysninger.tiltaksdeltagelse ?? [];
 
-export const hentTiltaksdeltakelserMedStartOgSluttdato = (
+export const hentInnvilgbareTiltaksdeltakelser = (
     behandling: Rammebehandling,
-): TiltaksdeltakelseMedPeriode[] =>
+): InnvilgbarTiltaksdeltakelseMedPeriode[] =>
     hentTiltaksdeltakelser(behandling)
-        .filter(
-            (t): t is TiltaksdeltakelseMedPeriode =>
-                t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
-        )
-        .map((t) => {
-            return {
-                ...t,
-                periode: {
-                    fraOgMed: t.deltagelseFraOgMed,
-                    tilOgMed: t.deltagelseTilOgMed,
-                },
-            };
-        });
+        .filter((t): t is InnvilgbarTiltaksdeltakelse => t.kanInnvilges)
+        .map((t) => ({
+            ...t,
+            periode: {
+                fraOgMed: t.deltagelseFraOgMed,
+                tilOgMed: t.deltagelseTilOgMed,
+            },
+        }));
 
-export const hentTiltaksdeltakelserFraPeriode = (
+export const harInnvilgbareTiltaksdeltakelser = (behandling: Rammebehandling): boolean =>
+    hentTiltaksdeltakelser(behandling).some((t) => t.kanInnvilges);
+
+export const deltarPåFlereInnvilgbareTiltak = (behandling: Rammebehandling): boolean =>
+    hentInnvilgbareTiltaksdeltakelser(behandling).length > 1;
+
+export const hentInnvilgbareTiltaksdeltakelserFraPeriode = (
     behandling: Rammebehandling,
     periode: Periode,
-): TiltaksdeltakelseMedPeriode[] => {
-    return hentTiltaksdeltakelserMedStartOgSluttdato(behandling).reduce<
-        TiltaksdeltakelseMedPeriode[]
-    >((acc, td) => {
-        const { deltagelseFraOgMed, deltagelseTilOgMed } = td;
-
-        const deltakelsesperiode: Periode = {
-            fraOgMed: deltagelseFraOgMed,
-            tilOgMed: deltagelseTilOgMed,
-        };
-
-        if (perioderOverlapper(periode, deltakelsesperiode)) {
-            acc.push({ ...td, periode: deltakelsesperiode });
-        }
-
-        return acc;
-    }, []);
-};
+): InnvilgbarTiltaksdeltakelseMedPeriode[] =>
+    hentInnvilgbareTiltaksdeltakelser(behandling).filter((td) =>
+        perioderOverlapper(periode, td.periode),
+    );
 
 export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling): Periode | null => {
-    const perioder = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
-        (tiltaksdeltakelse) => ({
-            fraOgMed: tiltaksdeltakelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
-        }),
-    );
+    const perioder = hentInnvilgbareTiltaksdeltakelser(behandling).map((td) => td.periode);
     return perioder.length > 0 ? totalPeriode(perioder) : null;
 };
 

@@ -4,12 +4,12 @@ import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
-import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { InnvilgbarTiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { finnPeriodiseringHull, periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {
     periode: Partial<Periode>;
-    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[];
+    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelseMedPeriode[];
     index: number;
     readOnly: boolean;
 };

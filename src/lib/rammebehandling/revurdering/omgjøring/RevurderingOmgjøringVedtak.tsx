@@ -2,7 +2,7 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { harInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
 import {
     useOmgjøringMedValgtResultatSkjema,
     useOmgjøringSkjema,
@@ -61,8 +61,7 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
     const { behandling } = useRevurderingOmgjøring();
     const { vedtaksperiode } = useOmgjøringMedValgtResultatSkjema();
 
-    // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
-    const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
+    const kanInnvilges = harInnvilgbareTiltaksdeltakelser(behandling);
 
     if (!kanInnvilges) {
         return (

@@ -20,7 +20,7 @@ import {
     RevurderingStans,
 } from '~/lib/rammebehandling/typer/Revurdering';
 import {
-    Tiltaksdeltakelse,
+    InnvilgbarTiltaksdeltakelse,
     TiltaksdeltakelseKilde,
     TiltakDeltakerstatus,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
@@ -64,7 +64,7 @@ export const tiltaksdeltakelse = (
     id: string,
     p: Periode,
     antallDagerPerUke: number | null = null,
-): Tiltaksdeltakelse => ({
+): InnvilgbarTiltaksdeltakelse => ({
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
@@ -77,6 +77,7 @@ export const tiltaksdeltakelse = (
     kilde: TiltaksdeltakelseKilde.ARENA,
     gjennomforingsprosent: null,
     internDeltakelseId: id,
+    kanInnvilges: true,
 });
 
 export const søknadBarn = (fødselsdato: string): SøknadBarn => ({

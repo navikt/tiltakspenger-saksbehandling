@@ -23,6 +23,7 @@ const tiltak = (
     kilde: TiltaksdeltakelseKilde.ARENA,
     gjennomforingsprosent: null,
     internDeltakelseId: id,
+    kanInnvilges: false,
 });
 
 const vurderingsperiode = { fraOgMed: '2025-01-01', tilOgMed: '2025-06-30' };

@@ -8,7 +8,7 @@ import { useRevurderingInnvilgelseSkjema } from '~/lib/rammebehandling/context/r
 import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { harInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RevurderingAutomatiskOpprettetGrunn } from '~/lib/rammebehandling/revurdering/felles/automatisk-opprettet-grunn/RevurderingAutomatiskOpprettetGrunn';
 import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
@@ -17,8 +17,7 @@ export const RevurderingInnvilgelseVedtak = () => {
     const { behandling, klagebehandling } = useRevurderingBehandling();
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
 
-    // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
-    const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
+    const kanInnvilges = harInnvilgbareTiltaksdeltakelser(behandling);
 
     const { automatiskOpprettetGrunn, manueltBehandlesGrunner } = behandling;
 

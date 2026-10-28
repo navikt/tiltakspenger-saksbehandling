@@ -1,5 +1,5 @@
 import {
-    deltarPaFlereTiltakMedStartOgSluttdato,
+    deltarPåFlereInnvilgbareTiltak,
     hentTiltaksdeltakelser,
 } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
@@ -16,7 +16,7 @@ export const validerTiltaksdeltakelser = (
         warnings: [],
     };
 
-    const harFlereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
+    const harFlereTiltak = deltarPåFlereInnvilgbareTiltak(behandling);
 
     if (!harFlereTiltak) {
         return validering;
@@ -33,26 +33,26 @@ export const validerTiltaksdeltakelser = (
             validering.errors.push(
                 'Valgt tiltaksdeltakelse finnes ikke i saksopplysningene, skal ikke kunne skje!',
             );
+            return;
         }
 
-        if (deltakelse && !deltakelse.deltagelseFraOgMed && !deltakelse.deltagelseTilOgMed) {
+        if (!deltakelse.kanInnvilges) {
             validering.errors.push(
-                'Kan ikke velge tiltaksdeltakelse som mangler start- eller sluttdato',
+                'Kan ikke velge tiltaksdeltakelse som det ikke kan innvilges for',
+            );
+            return;
+        }
+
+        if (dayjs(it.periode.fraOgMed).isBefore(dayjs(deltakelse.deltagelseFraOgMed))) {
+            validering.errors.push(
+                'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
             );
         }
 
-        if (deltakelse && deltakelse.deltagelseFraOgMed && deltakelse.deltagelseTilOgMed) {
-            if (dayjs(it.periode.fraOgMed).isBefore(dayjs(deltakelse.deltagelseFraOgMed))) {
-                validering.errors.push(
-                    'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
-                );
-            }
-
-            if (dayjs(it.periode.tilOgMed).isAfter(dayjs(deltakelse.deltagelseTilOgMed))) {
-                validering.errors.push(
-                    'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
-                );
-            }
+        if (dayjs(it.periode.tilOgMed).isAfter(dayjs(deltakelse.deltagelseTilOgMed))) {
+            validering.errors.push(
+                'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
+            );
         }
     });
 

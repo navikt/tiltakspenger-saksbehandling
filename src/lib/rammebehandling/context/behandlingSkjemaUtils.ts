@@ -2,7 +2,7 @@ import {
     erOmgjøringResultat,
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
-    hentTiltaksdeltakelserFraPeriode,
+    hentInnvilgbareTiltaksdeltakelserFraPeriode,
 } from '~/lib/rammebehandling/rammebehandlingUtils';
 import {
     InnvilgelseMedPerioderState,
@@ -80,7 +80,10 @@ export const lagForhåndsutfyltInnvilgelse = (
     førsteInnvilgelsesperiode: Periode,
     sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const tiltak = hentTiltaksdeltakelserFraPeriode(behandling, førsteInnvilgelsesperiode);
+    const tiltak = hentInnvilgbareTiltaksdeltakelserFraPeriode(
+        behandling,
+        førsteInnvilgelsesperiode,
+    );
 
     const innvilgelsesperioder: Innvilgelsesperiode[] = [
         {
@@ -116,11 +119,14 @@ export const antallDagerPerMeldeperiodeForPeriode = (
     behandling: Rammebehandling,
     periode: Periode,
 ): number => {
-    const dagerPerUke = hentTiltaksdeltakelserFraPeriode(behandling, periode).reduce((acc, td) => {
-        const { antallDagerPerUke } = td;
+    const dagerPerUke = hentInnvilgbareTiltaksdeltakelserFraPeriode(behandling, periode).reduce(
+        (acc, td) => {
+            const { antallDagerPerUke } = td;
 
-        return antallDagerPerUke ? Math.max(antallDagerPerUke, acc) : acc;
-    }, 0);
+            return antallDagerPerUke ? Math.max(antallDagerPerUke, acc) : acc;
+        },
+        0,
+    );
 
     return dagerPerUke === 0 ? ANTALL_DAGER_DEFAULT : dagerPerUke * 2;
 };
