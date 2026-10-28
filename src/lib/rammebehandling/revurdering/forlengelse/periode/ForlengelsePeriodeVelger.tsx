@@ -4,9 +4,11 @@ import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
-import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { ForlengelseTiltakVelger } from '~/lib/rammebehandling/revurdering/forlengelse/periode/ForlengelseTiltakVelger';
 import {
     hentForlengelseTilOgMed,
+    hentForlengelseTiltaksdeltakelse,
     useForlengelseBehandling,
     useRevurderingForlengelseSkjema,
     useRevurderingForlengelseSkjemaDispatch,
@@ -20,7 +22,13 @@ export const ForlengelsePeriodeVelger = () => {
 
     const vedtak = hentRammevedtak(sak, behandling.forlengerRammevedtakId);
     const tilOgMed = hentForlengelseTilOgMed(skjema);
-    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+    const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
+    const tiltaksdeltakelserSomKanForlenges = behandling.tiltaksdeltakelserSomKanForlenges
+        .map((id) => tiltaksdeltakelser.find((t) => t.internDeltakelseId === id))
+        .filter((t) => t !== undefined);
+    const valgtTiltaksdeltakelse = tiltaksdeltakelserSomKanForlenges.find(
+        (t) => t.internDeltakelseId === hentForlengelseTiltaksdeltakelse(skjema),
+    );
 
     return (
         <VedtakSeksjon>
@@ -28,12 +36,15 @@ export const ForlengelsePeriodeVelger = () => {
                 <VStack gap={'space-16'}>
                     <BodyLong size={'small'}>
                         {`Forlenger vedtaket med innvilgelse ${formaterPeriode(vedtak.opprinneligVedtaksperiode)}. `}
-                        {`Forlengelsen gjelder fra og med ${formaterDatotekst(skjema.forlengesFraOgMed)}, med samme antall dager og tiltaksdeltakelse som slutten av vedtaket.`}
+                        {`Forlengelsen gjelder fra og med ${formaterDatotekst(skjema.forlengesFraOgMed)}, med samme antall dager per meldeperiode som tiltaket sist var innvilget med i vedtaket.`}
                     </BodyLong>
+                    <ForlengelseTiltakVelger
+                        tiltaksdeltakelser={tiltaksdeltakelserSomKanForlenges}
+                    />
                     <Datovelger
                         label={'Forleng til og med'}
                         minDate={skjema.forlengesFraOgMed}
-                        maxDate={tiltaksdeltakelsesperiode?.tilOgMed}
+                        maxDate={valgtTiltaksdeltakelse?.deltagelseTilOgMed}
                         defaultMonth={new Date(tilOgMed ?? skjema.forlengesFraOgMed)}
                         defaultSelected={tilOgMed}
                         selected={tilOgMed}

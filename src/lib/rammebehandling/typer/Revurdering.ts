@@ -68,6 +68,8 @@ export type RevurderingForlengelse = RevurderingBase & {
     harEndretBarnetillegg: boolean;
     // Om barnetillegget ikke kunne utledes fra vedtaket som forlenges. Da er harEndretBarnetillegg alltid true.
     kanIkkeUtledeBarnetillegg: boolean;
+    // Intern-id til tiltaksdeltakelsene vedtaket kan forlenges for. Deltakelsen fra slutten av vedtaket kommer først.
+    tiltaksdeltakelserSomKanForlenges: string[];
     innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
 };
@@ -145,6 +147,7 @@ export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
 export type OppdaterRevurderingForlengelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.FORLENGELSE;
     tilOgMed: string;
+    internDeltakelseId: string;
     // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
     barnetillegg: Nullable<BarnetilleggDTO>;
     skalSendeVedtaksbrev: boolean;

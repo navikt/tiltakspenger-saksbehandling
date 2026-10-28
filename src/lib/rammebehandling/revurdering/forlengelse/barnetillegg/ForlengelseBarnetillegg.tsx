@@ -4,7 +4,7 @@ import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/Vedta
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import {
-    erLagretMedSammeTilOgMed,
+    erLagretMedSammePeriodeOgTiltak,
     useForlengelseBehandling,
     useRevurderingForlengelseSkjema,
     useRevurderingForlengelseSkjemaDispatch,
@@ -68,7 +68,7 @@ export const ForlengelseBarnetillegg = () => {
                 </HStack>
                 <VStack gap={'space-8'}>
                     {!innvilgelse.harValgtPeriode ||
-                    !erLagretMedSammeTilOgMed(skjema, behandling) ? (
+                    !erLagretMedSammePeriodeOgTiltak(skjema, behandling) ? (
                         <BodyShort size={'small'} weight={'semibold'}>
                             {'Barnetillegget oppdateres når behandlingen lagres.'}
                         </BodyShort>

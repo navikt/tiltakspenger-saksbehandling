@@ -235,6 +235,7 @@ export const revurderingForlengelse = (
     forlengesFraOgMed: '2025-04-01',
     harEndretBarnetillegg: false,
     kanIkkeUtledeBarnetillegg: false,
+    tiltaksdeltakelserSomKanForlenges: [standardTiltaksdeltakelse.internDeltakelseId],
     innvilgelsesperioder: null,
     barnetillegg: null,
     ...overstyringer,

@@ -23,12 +23,12 @@ import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesper
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { hentLagredePerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { utvidPeriodisering } from '~/utils/periode';
-import { hentTiltaksdeltakelserFraPeriode } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Periode } from '~/types/Periode';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
-// Innvilgelsen holdes synkron med valgt til og med-dato, slik at felles komponenter for barnetillegg,
-// validering og forhåndsvisning kan gjenbrukes. Backend utleder selv innvilgelsesperioden fra til og med-datoen.
+// Innvilgelsen holdes synkron med valgt til og med-dato og tiltaksdeltakelse, slik at felles komponenter for barnetillegg,
+// validering og forhåndsvisning kan gjenbrukes. Backend utleder selv innvilgelsesperioden fra disse.
+// Inntil begge er valgt, ligger valgene i den ufullstendige innvilgelsesperioden.
 export type RevurderingForlengelseState = {
     resultat: RevurderingResultat.FORLENGELSE;
     forlengesFraOgMed: string;
@@ -43,6 +43,14 @@ type ForlengelseActions =
           type: 'settForlengelseTilOgMed';
           payload: {
               tilOgMed: string;
+              behandling: RevurderingForlengelse;
+              sak: SakProps;
+          };
+      }
+    | {
+          type: 'settForlengelseTiltaksdeltakelse';
+          payload: {
+              internDeltakelseId: string;
               behandling: RevurderingForlengelse;
               sak: SakProps;
           };
@@ -68,25 +76,23 @@ export const revurderingForlengelseReducer: Reducer<
         case 'settForlengelseTilOgMed': {
             const { tilOgMed, behandling, sak } = action.payload;
 
-            const periode: Periode = { fraOgMed: state.forlengesFraOgMed, tilOgMed };
-            const innvilgelsesperioder = [lagInnvilgelsesperiode(periode, behandling, sak)];
+            return medInnvilgelsesperiode(
+                state,
+                { tilOgMed, internDeltakelseId: hentForlengelseTiltaksdeltakelse(state) },
+                behandling,
+                sak,
+            );
+        }
 
-            const forrige = state.innvilgelse;
+        case 'settForlengelseTiltaksdeltakelse': {
+            const { internDeltakelseId, behandling, sak } = action.payload;
 
-            // Uten valgt barnetillegg er dette det sist lagrede fra backend, som saksbehandler kan endre med utgangspunkt i.
-            const barnetilleggPerioder = forrige.harValgtPeriode
-                ? utvidPeriodisering(forrige.barnetilleggPerioder, periode)
-                : [];
-
-            return {
-                ...state,
-                innvilgelse: {
-                    harValgtPeriode: true,
-                    innvilgelsesperioder,
-                    harBarnetillegg: barnetilleggPerioder.length > 0,
-                    barnetilleggPerioder,
-                },
-            };
+            return medInnvilgelsesperiode(
+                state,
+                { tilOgMed: hentForlengelseTilOgMed(state), internDeltakelseId },
+                behandling,
+                sak,
+            );
         }
 
         case 'settHarValgtBarnetillegg': {
@@ -144,13 +150,24 @@ export const forlengelseInitialState = (
     const { innvilgelsesperioder, forlengesFraOgMed, harEndretBarnetillegg } = behandling;
 
     if (!innvilgelsesperioder) {
+        const { tiltaksdeltakelserSomKanForlenges } = behandling;
+
         return {
             resultat: RevurderingResultat.FORLENGELSE,
             forlengesFraOgMed,
             harEndretBarnetillegg,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [{ periode: { fraOgMed: forlengesFraOgMed } }],
+                innvilgelsesperioder: [
+                    {
+                        periode: { fraOgMed: forlengesFraOgMed },
+                        // Saksbehandler må velge selv når vedtaket kan forlenges for flere tiltak.
+                        internDeltakelseId:
+                            tiltaksdeltakelserSomKanForlenges.length === 1
+                                ? tiltaksdeltakelserSomKanForlenges[0]
+                                : undefined,
+                    },
+                ],
             },
         };
     }
@@ -174,42 +191,95 @@ export const forlengelseInitialState = (
 export const hentForlengelseTilOgMed = (state: RevurderingForlengelseState): string | undefined =>
     state.innvilgelse.innvilgelsesperioder.at(-1)?.periode.tilOgMed;
 
-// Det lagrede barnetillegget gjelder bare så lenge til og med-datoen ikke er endret siden behandlingen ble lagret.
-export const erLagretMedSammeTilOgMed = (
+export const hentForlengelseTiltaksdeltakelse = (
+    state: RevurderingForlengelseState,
+): string | undefined => state.innvilgelse.innvilgelsesperioder.at(-1)?.internDeltakelseId;
+
+// Det lagrede barnetillegget gjelder bare så lenge verken til og med-datoen eller tiltaksdeltakelsen er endret siden behandlingen ble lagret.
+export const erLagretMedSammePeriodeOgTiltak = (
     state: RevurderingForlengelseState,
     behandling: RevurderingForlengelse,
 ): boolean => {
     const tilOgMed = hentForlengelseTilOgMed(state);
+    const lagret = behandling.innvilgelsesperioder?.at(-1);
     return (
         tilOgMed !== undefined &&
-        tilOgMed === behandling.innvilgelsesperioder?.at(-1)?.periode.tilOgMed
+        tilOgMed === lagret?.periode.tilOgMed &&
+        hentForlengelseTiltaksdeltakelse(state) === lagret.internDeltakelseId
     );
 };
 
-// Antall dager og tiltaksdeltakelse videreføres fra slutten av vedtaket som forlenges, slik backend gjør.
-const lagInnvilgelsesperiode = (
-    periode: Periode,
+const medInnvilgelsesperiode = (
+    state: RevurderingForlengelseState,
+    valgt: { tilOgMed?: string; internDeltakelseId?: string },
     behandling: RevurderingForlengelse,
     sak: SakProps,
-): Innvilgelsesperiode => {
-    const mal =
-        behandling.innvilgelsesperioder?.at(-1) ??
-        hentRammevedtak(sak, behandling.forlengerRammevedtakId).innvilgelsesperioder?.at(-1);
+): RevurderingForlengelseState => {
+    const { tilOgMed, internDeltakelseId } = valgt;
 
-    if (mal) {
+    if (!tilOgMed || !internDeltakelseId) {
         return {
-            periode,
-            antallDagerPerMeldeperiode: mal.antallDagerPerMeldeperiode,
-            internDeltakelseId: mal.internDeltakelseId,
+            ...state,
+            innvilgelse: {
+                harValgtPeriode: false,
+                innvilgelsesperioder: [
+                    {
+                        periode: { fraOgMed: state.forlengesFraOgMed, tilOgMed },
+                        internDeltakelseId,
+                    },
+                ],
+            },
         };
     }
 
+    const periode: Periode = { fraOgMed: state.forlengesFraOgMed, tilOgMed };
+    const forrige = state.innvilgelse;
+
+    // Uten valgt barnetillegg er dette det sist lagrede fra backend, som saksbehandler kan endre med utgangspunkt i.
+    const barnetilleggPerioder = forrige.harValgtPeriode
+        ? utvidPeriodisering(forrige.barnetilleggPerioder, periode)
+        : [];
+
     return {
-        periode,
-        antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(behandling, periode),
-        internDeltakelseId: hentTiltaksdeltakelserFraPeriode(behandling, periode).atNonNull(0)
-            .internDeltakelseId,
+        ...state,
+        innvilgelse: {
+            harValgtPeriode: true,
+            innvilgelsesperioder: [
+                {
+                    periode,
+                    antallDagerPerMeldeperiode: hentAntallDagerPerMeldeperiode(
+                        periode,
+                        internDeltakelseId,
+                        behandling,
+                        sak,
+                    ),
+                    internDeltakelseId,
+                },
+            ],
+            harBarnetillegg: barnetilleggPerioder.length > 0,
+            barnetilleggPerioder,
+        },
     };
+};
+
+// Antall dager videreføres fra den siste perioden vedtaket som forlenges innvilget for tiltaksdeltakelsen, slik backend gjør.
+const hentAntallDagerPerMeldeperiode = (
+    periode: Periode,
+    internDeltakelseId: string,
+    behandling: RevurderingForlengelse,
+    sak: SakProps,
+): number => {
+    const erValgtTiltak = (innvilgelsesperiode: Innvilgelsesperiode) =>
+        innvilgelsesperiode.internDeltakelseId === internDeltakelseId;
+
+    const mal =
+        hentRammevedtak(sak, behandling.forlengerRammevedtakId)
+            .innvilgelsesperioder?.filter(erValgtTiltak)
+            .at(-1) ?? behandling.innvilgelsesperioder?.filter(erValgtTiltak).at(-1);
+
+    return (
+        mal?.antallDagerPerMeldeperiode ?? antallDagerPerMeldeperiodeForPeriode(behandling, periode)
+    );
 };
 
 export type RevurderingForlengelseContext =

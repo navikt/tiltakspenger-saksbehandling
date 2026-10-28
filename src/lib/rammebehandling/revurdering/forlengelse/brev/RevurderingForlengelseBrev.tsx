@@ -33,13 +33,14 @@ const tilForhåndsvisningDTO = (
     const { innvilgelse, textAreas, harEndretBarnetillegg } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {
-        throw Error('Kan ikke forhåndsvise brev før til og med-dato er valgt');
+        throw Error('Kan ikke forhåndsvise brev før til og med-dato og tiltak er valgt');
     }
 
     return {
         resultat: RevurderingResultat.FORLENGELSE,
         fritekst: textAreas.brevtekst.getValue(),
         tilOgMed: nonNullish(hentForlengelseTilOgMed(skjema)),
+        internDeltakelseId: innvilgelse.innvilgelsesperioder.atNonNull(-1).internDeltakelseId,
         barnetillegg: harEndretBarnetillegg
             ? innvilgelse.harBarnetillegg
                 ? innvilgelse.barnetilleggPerioder

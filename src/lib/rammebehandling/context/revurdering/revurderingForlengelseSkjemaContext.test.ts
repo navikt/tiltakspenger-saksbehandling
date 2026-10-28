@@ -8,7 +8,7 @@ import {
 } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import {
-    erLagretMedSammeTilOgMed,
+    erLagretMedSammePeriodeOgTiltak,
     forlengelseInitialState,
     RevurderingForlengelseActions,
     revurderingForlengelseReducer,
@@ -36,7 +36,9 @@ const sak = sakMedInnvilgetVedtak(vedtaksperiode, {
     },
 });
 
-const nyBehandling = revurderingForlengelse();
+const nyBehandling = revurderingForlengelse({
+    tiltaksdeltakelserSomKanForlenges: ['deltakelse_vedtak'],
+});
 
 // Barnetillegget backend har utledet og lagret, der ett av barna fyller 16 år i forlengelsen.
 const utledetBarnetillegg = [
@@ -96,7 +98,7 @@ describe('revurderingForlengelseReducer', () => {
             harBarnetillegg: true,
             barnetilleggPerioder: utledetBarnetillegg,
         });
-        expect(erLagretMedSammeTilOgMed(state, lagretBehandling)).toBe(true);
+        expect(erLagretMedSammePeriodeOgTiltak(state, lagretBehandling)).toBe(true);
     });
 
     test('det lagrede barnetillegget gjelder ikke lenger når til og med-datoen endres', () => {
@@ -105,7 +107,17 @@ describe('revurderingForlengelseReducer', () => {
             settTilOgMed('2025-05-31', lagretBehandling),
         );
 
-        expect(erLagretMedSammeTilOgMed(state, lagretBehandling)).toBe(false);
+        expect(erLagretMedSammePeriodeOgTiltak(state, lagretBehandling)).toBe(false);
+    });
+
+    test('det lagrede barnetillegget gjelder ikke lenger når tiltaksdeltakelsen endres', () => {
+        const state = revurderingForlengelseReducer(forlengelseInitialState(lagretBehandling), {
+            superType,
+            type: 'settForlengelseTiltaksdeltakelse',
+            payload: { internDeltakelseId: 'deltakelse_annen', behandling: lagretBehandling, sak },
+        });
+
+        expect(erLagretMedSammePeriodeOgTiltak(state, lagretBehandling)).toBe(false);
     });
 
     test('endring av barnetillegget markerer det som valgt av saksbehandler', () => {
@@ -176,5 +188,77 @@ describe('revurderingForlengelseReducer', () => {
                 payload: { antallDager: 2, index: 0 },
             }),
         ).toThrow();
+    });
+});
+
+describe('valg av tiltaksdeltakelse ved forlengelse', () => {
+    const sakMedToTiltak = sakMedInnvilgetVedtak(vedtaksperiode, {
+        vedtak: {
+            innvilgelsesperioder: [
+                innvilgelsesperiode(periode('2025-01-01', '2025-01-31'), {
+                    antallDagerPerMeldeperiode: 4,
+                    internDeltakelseId: 'deltakelse_tidlig',
+                }),
+                innvilgelsesperiode(periode('2025-02-01', '2025-02-28'), {
+                    antallDagerPerMeldeperiode: 8,
+                    internDeltakelseId: 'deltakelse_vedtak',
+                }),
+                innvilgelsesperiode(periode('2025-03-01', '2025-03-31'), {
+                    antallDagerPerMeldeperiode: 6,
+                    internDeltakelseId: 'deltakelse_tidlig',
+                }),
+            ],
+        },
+    });
+
+    const behandlingMedToTiltak = revurderingForlengelse({
+        tiltaksdeltakelserSomKanForlenges: ['deltakelse_tidlig', 'deltakelse_vedtak'],
+    });
+
+    test('tiltaket er forhåndsvalgt når vedtaket bare kan forlenges for ett tiltak', () => {
+        expect(forlengelseInitialState(nyBehandling).innvilgelse.innvilgelsesperioder).toEqual([
+            { periode: { fraOgMed: '2025-04-01' }, internDeltakelseId: 'deltakelse_vedtak' },
+        ]);
+    });
+
+    test('perioden er ikke valgt før både til og med-dato og tiltak er valgt', () => {
+        const medTilOgMed = revurderingForlengelseReducer(
+            forlengelseInitialState(behandlingMedToTiltak),
+            {
+                superType,
+                type: 'settForlengelseTilOgMed',
+                payload: {
+                    tilOgMed: '2025-06-30',
+                    behandling: behandlingMedToTiltak,
+                    sak: sakMedToTiltak,
+                },
+            },
+        );
+
+        expect(medTilOgMed.innvilgelse).toEqual({
+            harValgtPeriode: false,
+            innvilgelsesperioder: [{ periode: forlengelsesperiode, internDeltakelseId: undefined }],
+        });
+
+        const medTiltak = revurderingForlengelseReducer(medTilOgMed, {
+            superType,
+            type: 'settForlengelseTiltaksdeltakelse',
+            payload: {
+                internDeltakelseId: 'deltakelse_vedtak',
+                behandling: behandlingMedToTiltak,
+                sak: sakMedToTiltak,
+            },
+        });
+
+        // Antall dager hentes fra den siste perioden vedtaket innvilget for tiltaket, ikke fra slutten av vedtaket.
+        expect(medTiltak.innvilgelse).toMatchObject({
+            harValgtPeriode: true,
+            innvilgelsesperioder: [
+                innvilgelsesperiode(forlengelsesperiode, {
+                    antallDagerPerMeldeperiode: 8,
+                    internDeltakelseId: 'deltakelse_vedtak',
+                }),
+            ],
+        });
     });
 });

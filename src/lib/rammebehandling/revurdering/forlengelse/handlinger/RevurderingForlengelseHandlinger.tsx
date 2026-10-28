@@ -43,6 +43,7 @@ const tilDTO = (
     return {
         resultat: RevurderingResultat.FORLENGELSE,
         tilOgMed,
+        internDeltakelseId: innvilgelse.innvilgelsesperioder.atNonNull(-1).internDeltakelseId,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
