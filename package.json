@@ -28,7 +28,7 @@
         "@navikt/aksel-icons": "8.18.0",
         "@navikt/ds-css": "8.18.0",
         "@navikt/ds-react": "8.18.0",
-        "@navikt/ds-tokens": "8.18.0",
+        "@navikt/ds-tokens": "8.20.1",
         "@navikt/next-logger": "5.0.1",
         "@navikt/oasis": "4.2.2",
         "dayjs": "1.11.23",
