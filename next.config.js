@@ -15,6 +15,9 @@ export default {
     experimental: {
         optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
         testProxy: isE2E,
+        // Med delt runtime (på som standard i Next 16.4) legger Turbopack et inline bootstrap-script i HTML-en,
+        // som CSP-en vår (script-src uten 'unsafe-inline'/nonce) blokkerer, slik at appen aldri hydreres.
+        turbopackSharedRuntime: false,
     },
     // Dropper optimalizeringen med standalone for tester, slik at test-serveren alltid har alle ressurser tilgjengelig
     output: isE2E ? undefined : 'standalone',
