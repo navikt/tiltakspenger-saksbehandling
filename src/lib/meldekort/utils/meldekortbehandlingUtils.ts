@@ -7,8 +7,6 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { erBeslutter, kanBehandle } from '~/lib/saksbehandler/tilganger';
-import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
@@ -21,28 +19,6 @@ import {
 export const kanBehandleMeldeperiodekjede = ({
     kanIkkeBehandlesGrunn,
 }: MeldeperiodekjedeProps): boolean => kanIkkeBehandlesGrunn === null;
-
-export const kanSaksbehandleForMeldekort = (
-    meldekortbehandling: MeldekortbehandlingProps,
-    innloggetSaksbehandler: Saksbehandler,
-): boolean =>
-    kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) &&
-    meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING &&
-    !erMeldekortbehandlingSattPaVent(meldekortbehandling);
-
-export const kanBeslutteForMeldekort = (
-    meldekort: MeldekortbehandlingProps,
-    innloggetSaksbehandler: Saksbehandler,
-): boolean => {
-    const { status, saksbehandler } = meldekort;
-
-    return (
-        erBeslutter(innloggetSaksbehandler) &&
-        innloggetSaksbehandler.navIdent !== saksbehandler &&
-        status === MeldekortbehandlingStatus.UNDER_BESLUTNING &&
-        !erMeldekortbehandlingSattPaVent(meldekort)
-    );
-};
 
 export const erMeldekortbehandlingSattPaVent = (
     meldekortbehandling: MeldekortbehandlingProps,

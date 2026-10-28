@@ -16,12 +16,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { MeldekortbehandlingFritekstOgSendInn } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/MeldekortbehandlingFritekstOgSendInn';
 import { classNames } from '~/utils/classNames';
 import { MeldekortbehandlingLagre } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagre';
-import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import {
-    kanBeslutteForMeldekort,
-    kanSaksbehandleForMeldekort,
-} from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { kanBeslutte, kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 import style from './MeldekortbehandlingSide.module.css';
@@ -39,7 +34,6 @@ export const MeldekortbehandlingSide = () => {
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
     const meldekortbehandling = useMeldekortbehandling();
-    const { innloggetSaksbehandler } = useSaksbehandler();
 
     useEffect(() => {
         const stegFraHash = asPath.split('#').at(1)?.split('-').at(1);
@@ -65,9 +59,7 @@ export const MeldekortbehandlingSide = () => {
                             >
                                 <Steg steg={1}>{'Meldeperioder'}</Steg>
                                 <Steg steg={2}>{'Beregning og simulering'}</Steg>
-                                <Steg steg={3}>
-                                    {sisteStegTekst(meldekortbehandling, innloggetSaksbehandler)}
-                                </Steg>
+                                <Steg steg={3}>{sisteStegTekst(meldekortbehandling)}</Steg>
                             </Stepper>
                         </MeldekortbehandlingSeksjon.FullBredde>
                     </MeldekortbehandlingSeksjon>
@@ -117,15 +109,12 @@ const Steg = ({ steg, children }: StegProps) => {
     );
 };
 
-const sisteStegTekst = (
-    behandling: MeldekortbehandlingProps,
-    saksbehandler: Saksbehandler,
-): string => {
-    if (kanSaksbehandleForMeldekort(behandling, saksbehandler)) {
+const sisteStegTekst = (behandling: MeldekortbehandlingProps): string => {
+    if (kanSaksbehandle(behandling)) {
         return 'Begrunnelse, brev og innsending';
     }
 
-    if (kanBeslutteForMeldekort(behandling, saksbehandler)) {
+    if (kanBeslutte(behandling)) {
         return 'Begrunnelse, brev og godkjenning';
     }
 

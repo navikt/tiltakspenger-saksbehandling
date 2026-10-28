@@ -7,8 +7,7 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { kanSaksbehandleForBehandling } from '~/lib/saksbehandler/tilganger';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import {
     Rammebehandling,
     RammebehandlingId,
@@ -69,8 +68,6 @@ const BeregningOgSimuleringSeksjon = ({
     behandling,
     utbetaling,
 }: BeregningOgSimuleringSeksjonProps) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
-
     const { status, utbetalingskontroll, tilbakekrevingId } = behandling;
 
     const {
@@ -113,10 +110,7 @@ const BeregningOgSimuleringSeksjon = ({
                     <SimuleringOppsummering
                         simulertBeregning={simulertBeregning}
                         behandlingId={behandling.id}
-                        visOppdaterKnapp={kanSaksbehandleForBehandling(
-                            behandling,
-                            innloggetSaksbehandler,
-                        )}
+                        visOppdaterKnapp={kanSaksbehandle(behandling)}
                     />
                 </VStack>
             </VedtakSeksjon.Venstre>

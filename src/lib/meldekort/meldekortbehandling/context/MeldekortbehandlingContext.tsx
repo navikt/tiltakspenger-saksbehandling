@@ -6,19 +6,16 @@ import {
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
-    MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     meldekortbehandlingSkjemaInitialState,
     meldekortbehandlingSkjemaReducer,
 } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaReducer';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { kanBehandle } from '~/lib/saksbehandler/tilganger';
+import { kanBeslutte, kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { useFritekstInput } from '~/lib/_felles/fritekst/useFritekstInput';
-import { kanBeslutteForMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 
@@ -34,14 +31,9 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
     const { sak } = useSak();
     const meldekortbehandling = hentMeldekortbehandling(sak, id);
 
-    const { innloggetSaksbehandler } = useSaksbehandler();
+    const erReadonly = !kanSaksbehandle(meldekortbehandling);
 
-    const erReadonly =
-        !kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) ||
-        meldekortbehandling.status !== MeldekortbehandlingStatus.UNDER_BEHANDLING;
-
-    const kanEndreSkalJournalføreNotat =
-        !erReadonly || kanBeslutteForMeldekort(meldekortbehandling, innloggetSaksbehandler);
+    const kanEndreSkalJournalføreNotat = !erReadonly || kanBeslutte(meldekortbehandling);
 
     const [skjema, dispatch] = useReducer(
         meldekortbehandlingSkjemaReducer,

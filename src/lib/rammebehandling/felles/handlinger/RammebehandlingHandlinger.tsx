@@ -1,6 +1,5 @@
 import { Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
-import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { kanBeslutte, kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { BehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
 import { RammebehandlingSaksbehandlerHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingSaksbehandlerHandlinger';
@@ -20,12 +19,11 @@ type Props = {
 };
 
 export const RammebehandlingHandlinger = ({ behandling, lagringProps }: Props) => {
-    const rolleForBehandling = useRolleForBehandling(behandling);
     const { setBehandling } = useBehandling();
     const { skalJournalføreNotat } = useBehandlingSkjema();
 
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
-    const erBeslutter = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
+    const erSaksbehandler = kanSaksbehandle(behandling);
+    const erBeslutter = kanBeslutte(behandling);
 
     const harUlagredeEndringer = !isEqualJson(
         skalJournalføreNotat,

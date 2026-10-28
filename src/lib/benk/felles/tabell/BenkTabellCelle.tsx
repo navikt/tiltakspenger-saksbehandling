@@ -15,7 +15,7 @@ import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { kanFortsetteBehandling } from '~/lib/saksbehandler/tilganger';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResultatTag';
 import { tilbakekrevingVenterStatusTekst } from '~/lib/tilbakekreving/tilbakekrevingTekster';
@@ -25,11 +25,7 @@ import { BenkSøknadsbehandlingMedTilgang } from '../../typer/søknader';
 import { BenkRevurderingMedTilgang } from '../../typer/revurderinger';
 import { BenkBehandlingMeny } from '../BenkBehandlingMeny';
 import { BenkStatusTag, BenkKlageStatusTag, BenkTilbakekrevingStatusTag } from '../BenkStatusTag';
-import {
-    benkBehandlingHarTilgang,
-    benkPrioritering,
-    kanFortsetteBenkRad,
-} from '../../utils/benkRad';
+import { benkBehandlingHarTilgang, benkPrioritering } from '../../utils/benkRad';
 import { PrioritertBehandlingTag } from '~/lib/_felles/prioritering/PrioritertBehandlingTag';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { BenkTildelCheckbox } from '../tildel-flere/BenkTildelCheckbox';
@@ -244,8 +240,6 @@ const RammebehandlingHandlinger = ({
 }: {
     behandling: BenkSøknadsbehandlingMedTilgang | BenkRevurderingMedTilgang;
 }) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
-
     return (
         <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
             <InternLenkeKnapp
@@ -254,9 +248,7 @@ const RammebehandlingHandlinger = ({
                     id: behandling.id,
                 })}
             >
-                {kanFortsetteBenkRad(behandling, innloggetSaksbehandler.navIdent)
-                    ? 'Fortsett'
-                    : 'Åpne'}
+                {kanFortsetteBehandling(behandling) ? 'Fortsett' : 'Åpne'}
             </InternLenkeKnapp>
             <BenkBehandlingMeny behandling={behandling} />
             <BenkTildelCheckbox behandling={behandling} />

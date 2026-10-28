@@ -36,6 +36,8 @@ export type RammevedtakEllerKlageMedBehandling =
 export type BehandlingsmenyKallesFra = 'benk' | 'personoversikt' | 'behandling';
 
 export enum SaksbehandlerBehandlingKommando {
+    Saksbehandle = 'Saksbehandle',
+    Beslutte = 'Beslutte',
     TildelSaksbehandler = 'TildelSaksbehandler',
     TildelBeslutter = 'TildelBeslutter',
     AngreSendTilBeslutning = 'AngreSendTilBeslutning',

@@ -189,9 +189,7 @@ const propsForRad = (
                         <InternLenkeKnapp
                             href={behandlingUrl({ saksnummer, id: rammebehandling.id })}
                         >
-                            {kanFortsetteBehandling(rammebehandling, innloggetSaksbehandler)
-                                ? 'Fortsett'
-                                : 'Se behandling'}
+                            {kanFortsetteBehandling(rammebehandling) ? 'Fortsett' : 'Se behandling'}
                         </InternLenkeKnapp>
 
                         <RammebehandlingMeny

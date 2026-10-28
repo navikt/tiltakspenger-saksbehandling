@@ -1,7 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { Saksbehandler, SaksbehandlerRolle } from './SaksbehandlerTyper';
-import { hentRolleForBehandling } from '~/lib/saksbehandler/tilganger';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;
@@ -55,8 +53,4 @@ export const SaksbehandlerProvider = ({ initialSaksbehandler, children }: Props)
 
 export const useSaksbehandler = () => {
     return useContext(Context);
-};
-
-export const useRolleForBehandling = (behandling: Rammebehandling) => {
-    return hentRolleForBehandling(behandling, useSaksbehandler().innloggetSaksbehandler);
 };

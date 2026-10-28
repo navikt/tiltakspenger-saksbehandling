@@ -2,22 +2,21 @@ import { MeldekortbehandlingBegrunnelseOgBrev } from '~/lib/meldekort/meldekortb
 import { MeldekortbehandlingSendOgGodkjenn } from '~/lib/meldekort/meldekortbehandling/send-inn/MeldekortbehandlingSendOgGodkjenn';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
-import { kanBehandle } from '~/lib/saksbehandler/tilganger';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingKorrigeringUtfall } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/korrigering-utfall/MeldekortbehandlingKorrigeringUtfall';
 import { MeldekortbehandlingPrioritering } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/prioritering/MeldekortbehandlingPrioritering';
 
 export const MeldekortbehandlingFritekstOgSendInn = () => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const { meldeperioder, simulertBeregning, saksbehandler } = useMeldekortbehandling();
+    const meldekortbehandling = useMeldekortbehandling();
+    const { meldeperioder, simulertBeregning } = meldekortbehandling;
 
     const harKorrigering = meldeperioder.some(
         (it) => it.type === MeldeperiodebehandlingType.KORRIGERING,
     );
 
     const skalViseUtfallVarsel =
-        !!simulertBeregning && harKorrigering && kanBehandle(innloggetSaksbehandler, saksbehandler);
+        !!simulertBeregning && harKorrigering && kanSaksbehandle(meldekortbehandling);
 
     return (
         <>

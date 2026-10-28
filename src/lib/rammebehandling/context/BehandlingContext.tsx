@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
-import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { hentRolleForBehandling } from '~/lib/saksbehandler/tilganger';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import {
     Rammebehandlingstype,
@@ -36,7 +36,7 @@ export const BehandlingProvider = ({ behandlingId, klagebehandling, children }: 
 
     const [behandling, setBehandling] = useResettableState<Rammebehandling>(initialBehandling);
 
-    const rolleForBehandling = useRolleForBehandling(behandling);
+    const rolleForBehandling = hentRolleForBehandling(behandling);
 
     return (
         <Context.Provider
