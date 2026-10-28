@@ -75,5 +75,5 @@ export enum Avslagsgrunn {
     LønnFraAndre = 'LønnFraAndre',
     Institusjonsopphold = 'Institusjonsopphold',
     FremmetForSent = 'FremmetForSent',
-    ForlengetVentetid = 'ForlengetVentetid',
+    RettTilDagpenger = 'RettTilDagpenger',
 }
