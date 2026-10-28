@@ -65,6 +65,8 @@ export type RevurderingForlengelse = RevurderingBase & {
     forlengesFraOgMed: string;
     // Om saksbehandler har valgt barnetillegget selv. Ellers er det utledet fra vedtaket som forlenges.
     harEndretBarnetillegg: boolean;
+    // Om barnetillegget ikke kunne utledes fra vedtaket som forlenges. Da er harEndretBarnetillegg alltid true.
+    kanIkkeUtledeBarnetillegg: boolean;
     innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
 };

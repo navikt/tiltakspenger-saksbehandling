@@ -1,4 +1,5 @@
-import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
+import { BodyLong, Heading, HStack } from '@navikt/ds-react';
+import { CheckboxMedLabelTilVenstre } from '~/lib/_felles/checkbox/CheckboxMedLabelTilVenstre';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
@@ -34,7 +35,7 @@ export const RammebehandlingVedtaksbrev = ({ tittel, hjelpetekst, validering, he
                     <Heading size={'xsmall'} level={'2'}>
                         {tittel}
                     </Heading>
-                    <Checkbox
+                    <CheckboxMedLabelTilVenstre
                         size={'small'}
                         readOnly={erReadonly}
                         checked={!skalSendeVedtaksbrev}
@@ -46,7 +47,7 @@ export const RammebehandlingVedtaksbrev = ({ tittel, hjelpetekst, validering, he
                         }
                     >
                         {'Ikke send vedtaksbrev'}
-                    </Checkbox>
+                    </CheckboxMedLabelTilVenstre>
                 </HStack>
                 <BodyLong size={'small'}>{'Teksten vises i vedtaksbrevet til bruker.'}</BodyLong>
             </VedtakSeksjon.Venstre>

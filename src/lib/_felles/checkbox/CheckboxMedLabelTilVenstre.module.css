@@ -1,0 +1,15 @@
+.checkbox {
+    grid-template-columns: 1fr auto;
+
+    & > :global(.aksel-checkbox__input-wrapper) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    & > :global(.aksel-checkbox__label) {
+        grid-column: 1;
+        grid-row: 1;
+        padding-left: 0;
+        padding-right: var(--ax-space-8);
+    }
+}
