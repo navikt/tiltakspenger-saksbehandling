@@ -234,6 +234,7 @@ export const revurderingForlengelse = (
     forlengerRammevedtakId: 'vedtak_1',
     forlengesFraOgMed: '2025-04-01',
     harEndretBarnetillegg: false,
+    kanIkkeUtledeBarnetillegg: false,
     innvilgelsesperioder: null,
     barnetillegg: null,
     ...overstyringer,

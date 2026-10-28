@@ -19,9 +19,11 @@ import style from './BehandlingBarnetillegg.module.css';
 type Props = {
     // Vises til høyre for overskriften, f.eks. en checkbox for å slå av redigeringen.
     headerHandling?: ReactNode;
+    // Vises under overskriften.
+    varsel?: ReactNode;
 };
 
-export const BehandlingBarnetillegg = ({ headerHandling }: Props) => {
+export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
@@ -42,6 +44,7 @@ export const BehandlingBarnetillegg = ({ headerHandling }: Props) => {
                         </Heading>
                         {headerHandling}
                     </HStack>
+                    {varsel}
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>

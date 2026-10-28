@@ -1,4 +1,5 @@
-import { BodyShort, Checkbox, Heading, HStack, List, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, List, VStack } from '@navikt/ds-react';
+import { CheckboxMedLabelTilVenstre } from '~/lib/_felles/checkbox/CheckboxMedLabelTilVenstre';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
@@ -9,6 +10,7 @@ import {
     useRevurderingForlengelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { formaterPeriode } from '~/utils/date';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 export const ForlengelseBarnetillegg = () => {
     const behandling = useForlengelseBehandling();
@@ -17,9 +19,9 @@ export const ForlengelseBarnetillegg = () => {
     const dispatch = useRevurderingForlengelseSkjemaDispatch();
 
     const endreBarnetillegg = (
-        <Checkbox
+        <CheckboxMedLabelTilVenstre
             size={'small'}
-            readOnly={erReadonly}
+            readOnly={erReadonly || behandling.kanIkkeUtledeBarnetillegg}
             checked={harEndretBarnetillegg}
             onChange={(e) =>
                 dispatch({
@@ -32,11 +34,27 @@ export const ForlengelseBarnetillegg = () => {
             }
         >
             {'Endre barnetillegg'}
-        </Checkbox>
+        </CheckboxMedLabelTilVenstre>
     );
 
     if (harEndretBarnetillegg) {
-        return <BehandlingBarnetillegg headerHandling={endreBarnetillegg} />;
+        return (
+            <BehandlingBarnetillegg
+                headerHandling={endreBarnetillegg}
+                varsel={
+                    behandling.kanIkkeUtledeBarnetillegg && (
+                        <Infokort variant={'advarsel'} size={'small'}>
+                            {
+                                'Barnetillegget kunne ikke utledes fra søknaden, så antall barn i vedtaket som forlenges er videreført uendret.'
+                            }
+                            {
+                                ' Du må vurdere barnetillegget selv, for eksempel om noen barn fyller 16 år i forlengelsen.'
+                            }
+                        </Infokort>
+                    )
+                }
+            />
+        );
     }
 
     return (
