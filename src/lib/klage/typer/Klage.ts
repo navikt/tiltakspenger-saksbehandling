@@ -47,6 +47,16 @@ export interface Klagebehandling {
     formkrav: KlageFormkrav;
     tilknyttedeBehandlingIder: BehandlingId[];
     åpenBehandlingId: Nullable<BehandlingId>;
+    forvaltningsmelding: Nullable<Forvaltningsmelding>;
+}
+
+export interface Forvaltningsmelding {
+    tekster: Brevtekst[];
+    saksbehandler: string;
+    sendtTidspunkt: string;
+    journalpostId: Nullable<string>;
+    journalføringstidspunkt: Nullable<string>;
+    distribusjonstidspunkt: Nullable<string>;
 }
 
 export interface KlagebehandlingAvbrutt {
@@ -167,6 +177,10 @@ export interface VurderKlageRequest {
 
 export interface ForhåndsvisBrevKlageRequest {
     tekstTilVedtaksbrev: BrevtekstDTO[];
+}
+
+export interface ForvaltningsmeldingRequest {
+    tekster: BrevtekstDTO[];
 }
 
 export interface LagreBrevtekstKlageRequest {

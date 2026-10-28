@@ -25,6 +25,7 @@ export const personoversiktUrl = (saksnummer: Saksnummer, tab?: PersonoversiktTa
 
 export enum KlageStegUrlSegment {
     Formkrav = 'formkrav',
+    Forvaltningsmelding = 'forvaltningsmelding',
     Vurdering = 'vurdering',
     Brev = 'brev',
     Resultat = 'resultat',

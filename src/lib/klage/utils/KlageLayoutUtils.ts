@@ -9,6 +9,7 @@ import { klagebehandlingUrl, KlageStegUrlSegment } from '~/utils/urls';
 
 export enum KlageSteg {
     FORMKRAV = 'FORMKRAV',
+    FORVALTNINGSMELDING = 'FORVALTNINGSMELDING',
     VURDERING = 'VURDERING',
     BREV = 'BREV',
     RESULTAT = 'RESULTAT',
@@ -17,6 +18,10 @@ export enum KlageSteg {
 export const finnNesteKlageSteg = (k: Klagebehandling, fra: KlageSteg): string => {
     switch (fra) {
         case KlageSteg.FORMKRAV: {
+            return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Forvaltningsmelding);
+        }
+
+        case KlageSteg.FORVALTNINGSMELDING: {
             if (k.resultat?.type === KlagebehandlingResultat.AVVIST) {
                 return klagebehandlingUrl(k.saksnummer, k.id, KlageStegUrlSegment.Brev);
             }
@@ -47,6 +52,7 @@ export const finnNesteKlageSteg = (k: Klagebehandling, fra: KlageSteg): string =
 export const kanNavigereTilKlageSteg = (klage: Klagebehandling, steg: KlageSteg): boolean => {
     switch (steg) {
         case KlageSteg.FORMKRAV:
+        case KlageSteg.FORVALTNINGSMELDING:
             return true;
         case KlageSteg.VURDERING:
             return kanVurdereKlage(klage);

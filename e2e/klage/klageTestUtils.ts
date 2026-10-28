@@ -77,6 +77,7 @@ const lagInitiellKlage = (): Klagebehandling => ({
     },
     tilknyttedeBehandlingIder: [],
     åpenBehandlingId: null,
+    forvaltningsmelding: null,
 });
 
 const vedtaksperiode = { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' };

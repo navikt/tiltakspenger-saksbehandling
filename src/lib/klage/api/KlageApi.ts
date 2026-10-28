@@ -1,6 +1,7 @@
 import {
     AvbrytKlagebehandlingStatus,
     ForhåndsvisBrevKlageRequest,
+    ForvaltningsmeldingRequest,
     Klagebehandling,
     KlagebehandlingsresultatAvvist,
     KlagebehandlingsresultatOpprettholdt,
@@ -193,5 +194,27 @@ export const useVisInnstillingsbrevKlagebehandling = (args: {
     useFetchBlobFraApi(
         `/sak/${args.sakId}/klage/${args.klageId}/innstillingsbrev/${args.dokumentInfoId}`,
         'GET',
+        { onSuccess: args.onSuccess },
+    );
+
+export const useForhåndsvisForvaltningsmelding = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (blob: Blob) => void;
+}) =>
+    useFetchBlobFraApi<ForvaltningsmeldingRequest>(
+        `/sak/${args.sakId}/klage/${args.klageId}/forvaltningsmelding/forhandsvis`,
+        'POST',
+        { onSuccess: args.onSuccess },
+    );
+
+export const useSendForvaltningsmelding = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (klage: Klagebehandling) => void;
+}) =>
+    useFetchJsonFraApi<Klagebehandling, ForvaltningsmeldingRequest>(
+        `/sak/${args.sakId}/klage/${args.klageId}/forvaltningsmelding`,
+        'POST',
         { onSuccess: args.onSuccess },
     );
