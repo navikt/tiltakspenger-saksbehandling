@@ -4,6 +4,7 @@ import { stripLeadingSlash } from '../string';
 type ErrorContructorProps<Data = unknown> = {
     status: number;
     message: string;
+    kode?: string;
     data?: Data;
 };
 
@@ -15,12 +16,14 @@ export type JsonError<Data = unknown> = {
 
 export class FetcherError<Data = unknown> extends Error {
     status?: number;
+    kode?: string;
     data?: Data;
 
-    constructor({ status, message, data }: ErrorContructorProps<Data>) {
+    constructor({ status, message, kode, data }: ErrorContructorProps<Data>) {
         super();
         this.status = status;
         this.message = message;
+        this.kode = kode;
         this.data = data;
     }
 }
@@ -32,6 +35,7 @@ export const errorFraApiResponse = async (res: Response) => {
         return new FetcherError({
             status: res.status,
             message: finnFetchFeilmelding(json),
+            kode: json.kode,
             data: json.data,
         });
     } catch {

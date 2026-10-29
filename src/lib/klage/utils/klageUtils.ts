@@ -250,3 +250,12 @@ export const erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring = (
         `Omgjøringsbehandling har en åpen behandling, men behandlingstypen er verken rammebehandling eller meldekortbehandling`,
     );
 };
+
+export const kanSendeForvaltningsmelding = (
+    k: Klagebehandling,
+    innloggetSaksbehandler: Saksbehandler,
+): boolean =>
+    k.status === KlagebehandlingStatus.UNDER_BEHANDLING &&
+    k.saksbehandler === innloggetSaksbehandler.navIdent &&
+    !erKlagebehandlingSattPåVent(k) &&
+    k.forvaltningsmelding === null;

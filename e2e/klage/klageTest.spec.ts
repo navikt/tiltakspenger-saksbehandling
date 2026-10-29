@@ -155,7 +155,15 @@ test.describe('Klage', () => {
             timeout: 60_000,
         });
 
-        // 5. Gå videre til brev-steget (avvist -> brev).
+        // 5. Gå videre via forvaltningsmelding-steget til brev-steget (avvist -> brev).
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        await expect(page).toHaveURL(
+            new RegExp(`/sak/${saksnummer}/klage/${klageId}/forvaltningsmelding$`),
+        );
+        await expect(page.getByRole('heading', { name: 'Forvaltningsmelding' })).toBeVisible({
+            timeout: 60_000,
+        });
         await page.getByRole('button', { name: 'Fortsett' }).click();
 
         await expect(page).toHaveURL(new RegExp(`/sak/${saksnummer}/klage/${klageId}/brev$`));
@@ -349,7 +357,15 @@ test.describe('Klage', () => {
             timeout: 60_000,
         });
 
-        // 5. Gå videre til vurderingssteget (formkrav oppfylt -> vurdering).
+        // 5. Gå videre via forvaltningsmelding-steget til vurderingssteget (formkrav oppfylt -> vurdering).
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        await expect(page).toHaveURL(
+            new RegExp(`/sak/${saksnummer}/klage/${klageId}/forvaltningsmelding$`),
+        );
+        await expect(page.getByRole('heading', { name: 'Forvaltningsmelding' })).toBeVisible({
+            timeout: 60_000,
+        });
         await page.getByRole('button', { name: 'Fortsett' }).click();
 
         await expect(page).toHaveURL(new RegExp(`/sak/${saksnummer}/klage/${klageId}/vurdering$`));
@@ -563,7 +579,15 @@ test.describe('Klage', () => {
             timeout: 60_000,
         });
 
-        // 5. Gå videre til vurderingssteget (formkrav oppfylt -> vurdering).
+        // 5. Gå videre via forvaltningsmelding-steget til vurderingssteget (formkrav oppfylt -> vurdering).
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        await expect(page).toHaveURL(
+            new RegExp(`/sak/${saksnummer}/klage/${klageId}/forvaltningsmelding$`),
+        );
+        await expect(page.getByRole('heading', { name: 'Forvaltningsmelding' })).toBeVisible({
+            timeout: 60_000,
+        });
         await page.getByRole('button', { name: 'Fortsett' }).click();
 
         await expect(page).toHaveURL(new RegExp(`/sak/${saksnummer}/klage/${klageId}/vurdering$`));

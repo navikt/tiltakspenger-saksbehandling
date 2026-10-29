@@ -231,6 +231,18 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
                 }
                 return;
             }
+            case KlageSteg.FORVALTNINGSMELDING: {
+                if (props.klage && kanNavigereTilKlageSteg(props.klage, value)) {
+                    router.push(
+                        klagebehandlingUrl(
+                            props.klage.saksnummer,
+                            props.klage.id,
+                            KlageStegUrlSegment.Forvaltningsmelding,
+                        ),
+                    );
+                }
+                return;
+            }
             case KlageSteg.VURDERING: {
                 if (props.klage && kanNavigereTilKlageSteg(props.klage, value)) {
                     router.push(
@@ -283,17 +295,22 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
             <Tabs.List className={styles.tabsList}>
                 <Tabs.Tab className={styles.tab} value={KlageSteg.FORMKRAV} label="1. Formkrav" />
                 <Tabs.Tab
+                    className={styles.tab}
+                    value={KlageSteg.FORVALTNINGSMELDING}
+                    label="2. Forvaltningsmelding"
+                />
+                <Tabs.Tab
                     className={classNames(
                         styles.tab,
                         kanNavigereTilVurdering ? '' : styles.tabDisabled,
                     )}
                     value={KlageSteg.VURDERING}
-                    label="2. Vurdering"
+                    label="3. Vurdering"
                 />
                 <Tabs.Tab
                     className={classNames(styles.tab, kanNavigereTilBrev ? '' : styles.tabDisabled)}
                     value={KlageSteg.BREV}
-                    label="3. Brev"
+                    label="4. Brev"
                 />
                 <Tabs.Tab
                     className={classNames(
@@ -301,7 +318,7 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
                         kanNavigereTilResultat ? '' : styles.tabDisabled,
                     )}
                     value={KlageSteg.RESULTAT}
-                    label="4. Resultat"
+                    label="5. Resultat"
                 />
             </Tabs.List>
         </Tabs>

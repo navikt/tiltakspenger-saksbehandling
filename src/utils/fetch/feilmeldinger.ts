@@ -29,6 +29,10 @@ const feilmeldinger: Record<string, string> = {
     ugyldig_status_for_legg_tilbake:
         'Behandlingen har endret status etter at siden ble lastet. Last siden på nytt og prøv igjen.',
     pdf_krever_fagrolle: 'Brev i PDF kan ikke sladdes og krever fagrolle',
+    forvaltningsmelding_allerede_sendt:
+        'Det er allerede sendt en forvaltningsmelding for denne klagebehandlingen',
+    forvaltningsmelding_mangler_tekst:
+        'Forvaltningsmeldingen må ha minst ett avsnitt, og tittel og tekst kan ikke være tomme',
 } as const;
 
 export const finnFetchFeilmelding = (error?: JsonError): string => {
