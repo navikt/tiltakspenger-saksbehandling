@@ -25,6 +25,7 @@ const svarMed = (status: number, body: unknown) => {
         ok: status >= 200 && status < 300,
         status,
         json: async () => body,
+        blob: async () => new Blob(['%PDF'], { type: 'application/pdf' }),
     }));
     global.fetch = fetchMock as unknown as typeof global.fetch;
     return fetchMock;
@@ -116,18 +117,22 @@ describe('SendForvaltningsmeldingSkjema', () => {
         expect(fetchMock).not.toHaveBeenCalled();
     });
 
-    test('viser feilmelding fra backend når sending feiler', async () => {
-        svarMed(400, {
-            kode: 'forvaltningsmelding_allerede_sendt',
-            melding: 'Allerede sendt',
-        });
-        const { onSendt } = renderSkjema();
-
+    const sendOgBekreft = async () => {
         erstattPlassholdere();
         klikkSend();
         fireEvent.click(
             await screen.findByRole('button', { name: 'Ja, send forvaltningsmelding til bruker' }),
         );
+    };
+
+    test('allerede sendt er terminal og hindrer nytt forsøk', async () => {
+        const fetchMock = svarMed(400, {
+            kode: 'forvaltningsmelding_allerede_sendt',
+            melding: 'Allerede sendt',
+        });
+        const { onSendt } = renderSkjema();
+
+        await sendOgBekreft();
 
         expect(
             await screen.findByText(
@@ -135,17 +140,57 @@ describe('SendForvaltningsmeldingSkjema', () => {
             ),
         ).toBeInTheDocument();
         expect(onSendt).not.toHaveBeenCalled();
+        expect(screen.queryByRole('button', { name: /send forvaltningsmelding/i })).toBeNull();
+        expect(screen.queryByRole('button', { name: 'Tilbake til redigering' })).toBeNull();
+        expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 
-    test('forhåndsvisning sender tekstene til forhåndsvis-endepunktet', async () => {
-        const fetchMock = svarMed(200, {});
+    test.each([404, 409])('status %i er terminal og hindrer nytt forsøk', async (status) => {
+        svarMed(status, { kode: 'ukjent', melding: 'Feil' });
         renderSkjema();
 
-        fireEvent.click(screen.getByRole('button', { name: 'Forhåndsvis' }));
+        await sendOgBekreft();
 
-        await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-        const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
-        expect(url).toBe('/api/sak/sak_1/klage/klage_1/forvaltningsmelding/forhandsvis');
-        expect(JSON.parse(init.body as string).tekster).toHaveLength(2);
+        expect(await screen.findByText(/Last inn siden på nytt/)).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /send forvaltningsmelding/i })).toBeNull();
+        expect(screen.queryByRole('button', { name: 'Tilbake til redigering' })).toBeNull();
+    });
+
+    test('andre feil kan prøves på nytt', async () => {
+        svarMed(500, { kode: 'ukjent', melding: 'Feil' });
+        renderSkjema();
+
+        await sendOgBekreft();
+
+        expect(await screen.findByText(/Prøv igjen om litt/)).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Ja, send forvaltningsmelding til bruker' }),
+        ).toBeInTheDocument();
+    });
+
+    test('forhåndsvisning sender tekstene til forhåndsvis-endepunktet og åpner PDF-en', async () => {
+        const fetchMock = svarMed(200, {});
+        const opprinneligCreateObjectURL = URL.createObjectURL;
+        const opprinneligOpen = window.open;
+        URL.createObjectURL = jest.fn(() => 'blob:forhandsvisning');
+        const openMock = jest.fn();
+        window.open = openMock as unknown as typeof window.open;
+
+        try {
+            renderSkjema();
+
+            fireEvent.click(screen.getByRole('button', { name: 'Forhåndsvis' }));
+
+            await waitFor(() => expect(openMock).toHaveBeenCalledWith('blob:forhandsvisning'));
+            const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+            expect(url).toBe('/api/sak/sak_1/klage/klage_1/forvaltningsmelding/forhandsvis');
+            expect(JSON.parse(init.body as string).tekster).toHaveLength(2);
+            expect(
+                screen.queryByText('Feil ved forhåndsvisning av forvaltningsmelding'),
+            ).not.toBeInTheDocument();
+        } finally {
+            URL.createObjectURL = opprinneligCreateObjectURL;
+            window.open = opprinneligOpen;
+        }
     });
 });

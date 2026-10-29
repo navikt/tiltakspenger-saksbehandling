@@ -17,7 +17,13 @@ import {
     standardtekstForvaltningsmelding,
 } from '~/lib/klage/forms/forvaltningsmelding/ForvaltningsmeldingFormUtils';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { FetcherError } from '~/utils/fetch/fetch';
 import styles from './SendForvaltningsmeldingSkjema.module.css';
+
+const erTerminalFeil = (feil?: FetcherError) =>
+    feil?.status === 404 ||
+    feil?.status === 409 ||
+    feil?.kode === 'forvaltningsmelding_allerede_sendt';
 
 const SendForvaltningsmeldingSkjema = (props: {
     sakId: SakId;
@@ -48,7 +54,12 @@ const SendForvaltningsmeldingSkjema = (props: {
         },
     });
 
+    const terminal = erTerminalFeil(send.error);
+
     const onSubmit = form.handleSubmit((values) => {
+        if (terminal) {
+            return;
+        }
         if (!skalBekrefte) {
             forhåndsvis.reset();
             setSkalBekrefte(true);
@@ -92,12 +103,21 @@ const SendForvaltningsmeldingSkjema = (props: {
                                 Kunne ikke sende forvaltningsmelding
                             </LocalAlert.Title>
                         </LocalAlert.Header>
-                        <LocalAlert.Content>{send.error.message}</LocalAlert.Content>
+                        <LocalAlert.Content>
+                            <VStack gap="space-8">
+                                <span>{send.error.message}</span>
+                                {terminal ? (
+                                    <span>Last inn siden på nytt for å se oppdatert status.</span>
+                                ) : (
+                                    <span>Prøv igjen om litt.</span>
+                                )}
+                            </VStack>
+                        </LocalAlert.Content>
                     </LocalAlert>
                 )}
 
                 <HStack gap="space-16" align="center">
-                    {skalBekrefte && (
+                    {skalBekrefte && !terminal && (
                         <Button
                             variant="secondary"
                             type="button"
@@ -124,11 +144,13 @@ const SendForvaltningsmeldingSkjema = (props: {
                     >
                         Forhåndsvis
                     </Button>
-                    <Button variant="primary" type="submit" loading={send.isMutating}>
-                        {skalBekrefte
-                            ? 'Ja, send forvaltningsmelding til bruker'
-                            : 'Send forvaltningsmelding'}
-                    </Button>
+                    {!terminal && (
+                        <Button variant="primary" type="submit" loading={send.isMutating}>
+                            {skalBekrefte
+                                ? 'Ja, send forvaltningsmelding til bruker'
+                                : 'Send forvaltningsmelding'}
+                        </Button>
+                    )}
                 </HStack>
             </VStack>
         </form>
