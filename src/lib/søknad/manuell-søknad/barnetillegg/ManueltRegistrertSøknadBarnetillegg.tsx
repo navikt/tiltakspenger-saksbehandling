@@ -1,6 +1,5 @@
 import React from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import styles from './ManueltRegistrertSøknadBarnetillegg.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
@@ -19,6 +18,10 @@ import { InformasjonOmBarnPDL } from '~/lib/søknad/manuell-søknad/barnetillegg
 import { InformasjonOmBarnManuell } from '~/lib/søknad/manuell-søknad/barnetillegg/InformasjonOmBarnManuell';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Periode } from '~/types/Periode';
+
+// Kortere filnavn enn komponenten: Turbopack (Next 16.4) kutter chunk-navn uten å respektere
+// UTF-8-grenser, og krasjet når kuttet havnet midt i en "ø" i stien.
+import styles from './ManueltRegistrertBarnetillegg.module.css';
 
 type Props = {
     sakId: SakId;

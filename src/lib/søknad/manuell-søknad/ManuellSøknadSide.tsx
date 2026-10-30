@@ -1,4 +1,5 @@
 import { useManuellSøknadForm } from '~/lib/søknad/manuell-søknad/ManuellSøknadFormProvider';
+import { personoversiktUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { JournalpostIdForm } from '~/lib/_felles/journalpostId/JournalpostIdForm';
@@ -14,16 +15,17 @@ import { JaNeiSpørsmål } from '~/lib/søknad/manuell-søknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/lib/søknad/manuell-søknad/MottarPengestøtterSpørsmål';
 import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/søknad/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { ManueltSattSøknadMottattDato } from '~/lib/søknad/manuell-søknad/ManueltSattSøknadMottattDato';
+import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 
 import style from './ManuellSøknadSide.module.css';
-import { ManueltSattSøknadMottattDato } from '~/lib/søknad/manuell-søknad/ManueltSattSøknadMottattDato';
 
 type Props = {
     fnrFraPersonopplysninger?: string;
 };
 
 export const ManuellSøknadSide = ({ fnrFraPersonopplysninger }: Props) => {
-    const { sakId } = useSak().sak;
+    const { sakId, saksnummer } = useSak().sak;
     const { onSubmit, opprettSøknadLaster, opprettSøknadError } = useManuellSøknadForm();
 
     return (
@@ -115,9 +117,9 @@ export const ManuellSøknadSide = ({ fnrFraPersonopplysninger }: Props) => {
                     )}
 
                     <HStack gap="space-16">
-                        <Button variant="secondary" type="reset">
+                        <InternLenkeKnapp size={'medium'} href={personoversiktUrl(saksnummer)}>
                             Avbryt
-                        </Button>
+                        </InternLenkeKnapp>
                         <Button type="submit" loading={opprettSøknadLaster}>
                             Start behandling
                         </Button>

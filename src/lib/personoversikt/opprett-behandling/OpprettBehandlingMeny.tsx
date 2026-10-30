@@ -13,10 +13,9 @@ import {
     Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakId } from '~/lib/sak/SakTyper';
-import { OpprettSøknadModal } from '~/lib/personoversikt/opprett-behandling/manuell-søknad/OpprettSøknadModal';
 import { StartRevurderingModal } from '~/lib/personoversikt/opprett-behandling/opprett-revurdering/StartRevurderingModal';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { opprettKlageUrl } from '~/utils/urls';
+import { opprettKlageUrl, registrerSoknadUrl } from '~/utils/urls';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
 
 type Props = {
@@ -31,7 +30,6 @@ export const OpprettBehandlingMeny = ({ sakId, saksnummer, behandlinger, classNa
     const { erSaksbehandler } = useSaksbehandler();
 
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
-    const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
     if (!erSaksbehandler) {
         return null;
@@ -60,7 +58,7 @@ export const OpprettBehandlingMeny = ({ sakId, saksnummer, behandlinger, classNa
 
                     <ActionMenu.Item
                         icon={<TasklistSaveIcon aria-hidden />}
-                        onClick={() => setRegistrerSøknadManueltModalÅpen(true)}
+                        onSelect={() => router.push(registrerSoknadUrl(saksnummer))}
                     >
                         {'Registrer søknad manuelt'}
                     </ActionMenu.Item>
@@ -74,12 +72,6 @@ export const OpprettBehandlingMeny = ({ sakId, saksnummer, behandlinger, classNa
                     </ActionMenu.Item>
                 </ActionMenu.Content>
             </ActionMenu>
-
-            <OpprettSøknadModal
-                saksnummer={saksnummer}
-                åpen={registrerSøknadManueltModalÅpen}
-                setÅpen={setRegistrerSøknadManueltModalÅpen}
-            />
 
             <StartRevurderingModal
                 sakId={sakId}
