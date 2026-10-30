@@ -211,6 +211,8 @@ const KlageHeader = (props: { saksnummer: Saksnummer; klage: Nullable<Klagebehan
 };
 
 const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klagebehandling> }) => {
+    const kanNavigereTilForvaltningsmelding =
+        props.klage && kanNavigereTilKlageSteg(props.klage, KlageSteg.FORVALTNINGSMELDING);
     const kanNavigereTilBrev = props.klage && kanNavigereTilKlageSteg(props.klage, KlageSteg.BREV);
     const kanNavigereTilVurdering =
         props.klage && kanNavigereTilKlageSteg(props.klage, KlageSteg.VURDERING);
@@ -295,7 +297,10 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
             <Tabs.List className={styles.tabsList}>
                 <Tabs.Tab className={styles.tab} value={KlageSteg.FORMKRAV} label="1. Formkrav" />
                 <Tabs.Tab
-                    className={styles.tab}
+                    className={classNames(
+                        styles.tab,
+                        kanNavigereTilForvaltningsmelding ? '' : styles.tabDisabled,
+                    )}
                     value={KlageSteg.FORVALTNINGSMELDING}
                     label="2. Forvaltningsmelding"
                 />

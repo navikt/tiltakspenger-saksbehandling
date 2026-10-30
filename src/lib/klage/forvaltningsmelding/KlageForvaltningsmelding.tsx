@@ -90,14 +90,15 @@ const KlageForvaltningsmelding = (props: {
     }
 
     return (
-        <Box>
+        <VStack gap="space-16">
+            <BodyShort>Det er valgfritt å sende forvaltningsmelding.</BodyShort>
             <SendForvaltningsmeldingSkjema
                 sakId={klage.sakId}
                 klageId={klage.id}
                 innsendingsdato={klage.formkrav.innsendingsdato}
                 onSendt={props.onSendt}
             />
-        </Box>
+        </VStack>
     );
 };
 
