@@ -167,6 +167,7 @@ export enum HjemmelForStans {
     LønnFraAndre = 'LønnFraAndre',
     Institusjonsopphold = 'Institusjonsopphold',
     IkkeLovligOpphold = 'IkkeLovligOpphold',
+    RettTilDagpenger = 'RettTilDagpenger',
 }
 
 export enum HjemmelForOpphør {
@@ -180,4 +181,5 @@ export enum HjemmelForOpphør {
     Institusjonsopphold = 'Institusjonsopphold',
     IkkeLovligOpphold = 'IkkeLovligOpphold',
     FremmetForSent = 'FremmetForSent',
+    RettTilDagpenger = 'RettTilDagpenger',
 }

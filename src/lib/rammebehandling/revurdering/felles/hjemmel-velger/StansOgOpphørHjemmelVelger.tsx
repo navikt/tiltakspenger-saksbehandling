@@ -56,4 +56,5 @@ const hjemmelBeskrivelser: Record<HjemmelForStansEllerOpphør, string> = {
     IkkeLovligOpphold: 'Ikke lovlig opphold - arbeidsmarkedsloven § 2',
     FremmetForSent:
         'Fremmet for sent - tiltakspengeforskriften § 11, arbeidsmarkedsloven § 15 - frist',
+    RettTilDagpenger: 'Sanksjonsperiode/Dagpenger - tiltakspengeforskriften § 7, første ledd',
 } as const;
