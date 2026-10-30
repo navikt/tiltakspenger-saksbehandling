@@ -56,6 +56,7 @@ export const klagebehandling = (overstyringer: Partial<Klagebehandling> = {}): K
     tilknyttedeBehandlingIder: [],
     åpenBehandlingId: null,
     forvaltningsmelding: null,
+    gyldigeKommandoer: [],
     ...overstyringer,
 });
 

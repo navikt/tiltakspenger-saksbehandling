@@ -4,14 +4,13 @@ import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/klage/meny/KlageMeny';
+import { SaksbehandlerKlagebehandlingKommando } from '~/lib/klage/typer/Klage';
 import {
     finnSisteGyldigeStegForKlage,
     hentSisteKlagehendelseUtfallFraKlagebehandling,
-    kanFortsetteKlagebehandling,
 } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     hentKlagebehandling,
     hentMeldekortbehandling,
@@ -20,8 +19,6 @@ import {
     hentTilbakekreving,
 } from '~/lib/sak/sakUtils';
 import { behandlingUrl, meldekortbehandlingUrl } from '~/utils/urls';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { kanSaksbehandleEllerBeslutte } from '~/lib/saksbehandler/tilganger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
@@ -67,8 +64,6 @@ type TabellProps = {
 };
 
 const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
-
     return (
         <Table>
             <Table.Header>
@@ -96,7 +91,7 @@ const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
                         saksbehandler,
                         beslutter,
                         meny,
-                    } = propsForRad(åpenBehandling, sak, innloggetSaksbehandler);
+                    } = propsForRad(åpenBehandling, sak);
 
                     return (
                         <Table.Row shadeOnHover={false} key={åpenBehandling.id}>
@@ -134,7 +129,6 @@ type ÅpenBehandlingOversiktRadProps = {
 const propsForRad = (
     åpenBehandling: ÅpenBehandling,
     sak: SakProps,
-    innloggetSaksbehandler: Saksbehandler,
 ): ÅpenBehandlingOversiktRadProps => {
     const { saksnummer } = sak;
 
@@ -243,20 +237,9 @@ const propsForRad = (
         case ÅpenBehandlingType.KLAGE: {
             const klagebehandling = hentKlagebehandling(sak, åpenBehandling.id);
 
-            const {
-                opprettet,
-                status,
-                resultat,
-                saksbehandler,
-                åpenBehandlingId: omgjøringId,
-            } = klagebehandling;
+            const { opprettet, status, resultat, saksbehandler } = klagebehandling;
 
             const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
-
-            const omgjøringsbehandling =
-                sak.rammebehandlinger.find((omgjøring) => omgjøring.id === omgjøringId) ??
-                (omgjøringId && sak.meldekortbehandlinger[omgjøringId as MeldekortbehandlingId]) ??
-                null;
 
             return {
                 typeTekst,
@@ -276,19 +259,14 @@ const propsForRad = (
                 meny: (
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
                         <InternLenkeKnapp href={finnSisteGyldigeStegForKlage(klagebehandling)}>
-                            {kanFortsetteKlagebehandling(
-                                klagebehandling,
-                                omgjøringsbehandling,
-                                innloggetSaksbehandler,
+                            {klagebehandling.gyldigeKommandoer.includes(
+                                SaksbehandlerKlagebehandlingKommando.Saksbehandle,
                             )
                                 ? 'Fortsett'
                                 : 'Se behandling'}
                         </InternLenkeKnapp>
 
-                        <KlageMeny
-                            klage={klagebehandling}
-                            omgjøringsbehandling={omgjøringsbehandling}
-                        />
+                        <KlageMeny klage={klagebehandling} />
                     </HStack>
                 ),
             };

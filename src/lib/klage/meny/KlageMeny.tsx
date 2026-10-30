@@ -10,12 +10,8 @@ import {
 } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import router from 'next/router';
-import { Klagebehandling } from '~/lib/klage/typer/Klage';
-import {
-    finnSisteGyldigeStegForKlage,
-    kanBehandleKlage,
-    kanVidereBehandleKlage,
-} from '~/lib/klage/utils/klageUtils';
+import { Klagebehandling, SaksbehandlerKlagebehandlingKommando } from '~/lib/klage/typer/Klage';
+import { finnSisteGyldigeStegForKlage } from '~/lib/klage/utils/klageUtils';
 import AvsluttBehandlingMenyvalg from '../../personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import { useSak } from '~/lib/sak/SakContext';
 import {
@@ -25,23 +21,14 @@ import {
     useSettKlagebehandlingPåVent,
     useTaKlagebehandling,
 } from '~/lib/klage/api/KlageApi';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import OvertaKlagebehandlingModal from '../modaler/overta/OvertaKlagebehandlingModal';
 import SettKlagebehandlingPåVentModal from '~/lib/klage/modaler/sett-på-vent/SettKlagebehandlingPåVentModal';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { KlageApiErrorFeilModal, ApiErrorState } from '~/lib/klage/modaler/KlageApiErrorFeilModal';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
-import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-
-const KlageMeny = (props: {
-    klage: Klagebehandling;
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>;
-}) => {
+const KlageMeny = (props: { klage: Klagebehandling }) => {
     const { setSak } = useSak();
-    const { innloggetSaksbehandler, erSaksbehandler } = useSaksbehandler();
     const [visVilOvertaModal, setVisVilOvertaModal] = React.useState(false);
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [ventemodus, setVentemodus] = React.useState<Nullable<Ventemodus>>(null);
@@ -50,17 +37,8 @@ const KlageMeny = (props: {
         feil: null,
     });
 
-    const eierInnloggetSaksbehandlerBehandlingen =
-        props.klage.saksbehandler && props.klage.saksbehandler === innloggetSaksbehandler.navIdent;
-
-    const eierIkkeInngloggetSaksbehandlerBehandlingen =
-        !eierInnloggetSaksbehandlerBehandlingen && props.klage.saksbehandler;
-
-    const ingenEierBehandling = !props.klage.saksbehandler;
-
-    const kanBehandles =
-        kanBehandleKlage(props.klage, props.omgjøringsbehandling) ||
-        kanVidereBehandleKlage(props.klage, props.omgjøringsbehandling);
+    const kan = (kommando: SaksbehandlerKlagebehandlingKommando) =>
+        props.klage.gyldigeKommandoer.includes(kommando);
 
     const taKlagebehandling = useTaKlagebehandling({
         sakId: props.klage.sakId,
@@ -111,7 +89,11 @@ const KlageMeny = (props: {
         onError: (error) => setApiError({ visFeilModal: true, feil: error }),
     });
 
-    if (!erSaksbehandler || !kanBehandles) {
+    const harMenyvalg = props.klage.gyldigeKommandoer.some(
+        (kommando) => kommando !== SaksbehandlerKlagebehandlingKommando.Saksbehandle,
+    );
+
+    if (!harMenyvalg) {
         return null;
     }
 
@@ -129,78 +111,18 @@ const KlageMeny = (props: {
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
-                    {ingenEierBehandling && (
-                        <>
-                            <ActionMenu.Item
-                                onClick={() => {
-                                    taKlagebehandling.trigger();
-                                }}
-                                icon={<PersonIcon aria-hidden />}
-                            >
-                                Tildel meg
-                            </ActionMenu.Item>
-
-                            {erBehandlingSattPåVent(props.klage) && (
-                                <>
-                                    <ActionMenu.Item
-                                        icon={<PlayIcon aria-hidden />}
-                                        onClick={() => {
-                                            gjenoppta.trigger();
-                                        }}
-                                    >
-                                        Gjenoppta
-                                    </ActionMenu.Item>
-                                    <ActionMenu.Item
-                                        icon={<PauseIcon aria-hidden />}
-                                        onClick={() => {
-                                            åpneVentemodal('endreVentestatus');
-                                        }}
-                                    >
-                                        Endre ventestatus
-                                    </ActionMenu.Item>
-                                </>
-                            )}
-                        </>
+                    {kan(SaksbehandlerKlagebehandlingKommando.Tildel) && (
+                        <ActionMenu.Item
+                            onClick={() => {
+                                taKlagebehandling.trigger();
+                            }}
+                            icon={<PersonIcon aria-hidden />}
+                        >
+                            Tildel meg
+                        </ActionMenu.Item>
                     )}
 
-                    {eierInnloggetSaksbehandlerBehandlingen && (
-                        <>
-                            <ActionMenu.Item
-                                icon={<ArrowLeftIcon aria-hidden />}
-                                onClick={() => {
-                                    leggTilbake.trigger();
-                                }}
-                            >
-                                Legg tilbake
-                            </ActionMenu.Item>
-
-                            {erBehandlingSattPåVent(props.klage) ? (
-                                <ActionMenu.Item
-                                    icon={<PlayIcon aria-hidden />}
-                                    onClick={() => {
-                                        gjenoppta.trigger();
-                                    }}
-                                >
-                                    Gjenoppta
-                                </ActionMenu.Item>
-                            ) : (
-                                <ActionMenu.Item
-                                    icon={<PauseIcon aria-hidden />}
-                                    onClick={() => {
-                                        åpneVentemodal('settPåVent');
-                                    }}
-                                >
-                                    Sett på vent
-                                </ActionMenu.Item>
-                            )}
-                            <ActionMenu.Divider />
-                            <AvsluttBehandlingMenyvalg
-                                setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
-                            />
-                        </>
-                    )}
-
-                    {eierIkkeInngloggetSaksbehandlerBehandlingen && (
+                    {kan(SaksbehandlerKlagebehandlingKommando.Overta) && (
                         <ActionMenu.Item
                             icon={<ArrowRightIcon aria-hidden />}
                             onClick={() => {
@@ -209,6 +131,59 @@ const KlageMeny = (props: {
                         >
                             Overta behandling
                         </ActionMenu.Item>
+                    )}
+
+                    {kan(SaksbehandlerKlagebehandlingKommando.Gjenoppta) && (
+                        <ActionMenu.Item
+                            icon={<PlayIcon aria-hidden />}
+                            onClick={() => {
+                                gjenoppta.trigger();
+                            }}
+                        >
+                            Gjenoppta
+                        </ActionMenu.Item>
+                    )}
+
+                    {kan(SaksbehandlerKlagebehandlingKommando.OppdatereSettPåVent) && (
+                        <ActionMenu.Item
+                            icon={<PauseIcon aria-hidden />}
+                            onClick={() => {
+                                åpneVentemodal('endreVentestatus');
+                            }}
+                        >
+                            Endre ventestatus
+                        </ActionMenu.Item>
+                    )}
+
+                    {kan(SaksbehandlerKlagebehandlingKommando.LeggTilbake) && (
+                        <ActionMenu.Item
+                            icon={<ArrowLeftIcon aria-hidden />}
+                            onClick={() => {
+                                leggTilbake.trigger();
+                            }}
+                        >
+                            Legg tilbake
+                        </ActionMenu.Item>
+                    )}
+
+                    {kan(SaksbehandlerKlagebehandlingKommando.SettPåVent) && (
+                        <ActionMenu.Item
+                            icon={<PauseIcon aria-hidden />}
+                            onClick={() => {
+                                åpneVentemodal('settPåVent');
+                            }}
+                        >
+                            Sett på vent
+                        </ActionMenu.Item>
+                    )}
+
+                    {kan(SaksbehandlerKlagebehandlingKommando.Avbryt) && (
+                        <>
+                            <ActionMenu.Divider />
+                            <AvsluttBehandlingMenyvalg
+                                setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
+                            />
+                        </>
                     )}
                 </ActionMenu.Content>
             </ActionMenu>

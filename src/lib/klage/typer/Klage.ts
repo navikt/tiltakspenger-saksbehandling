@@ -48,6 +48,18 @@ export interface Klagebehandling {
     tilknyttedeBehandlingIder: BehandlingId[];
     åpenBehandlingId: Nullable<BehandlingId>;
     forvaltningsmelding: Nullable<Forvaltningsmelding>;
+    gyldigeKommandoer: SaksbehandlerKlagebehandlingKommando[];
+}
+
+export enum SaksbehandlerKlagebehandlingKommando {
+    Saksbehandle = 'Saksbehandle',
+    Tildel = 'Tildel',
+    Overta = 'Overta',
+    LeggTilbake = 'LeggTilbake',
+    SettPåVent = 'SettPåVent',
+    OppdatereSettPåVent = 'OppdatereSettPåVent',
+    Gjenoppta = 'Gjenoppta',
+    Avbryt = 'Avbryt',
 }
 
 export interface Forvaltningsmelding {

@@ -46,25 +46,6 @@ export const kanBehandleKlage = (
     return false;
 };
 
-export const kanVidereBehandleKlage = (
-    k: Klagebehandling,
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>,
-): boolean =>
-    k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
-    (k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
-        erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring(omgjøringsbehandling));
-
-/**
- * Om innlogget saksbehandler kan gå videre med klagen, i motsetning til bare å se på den
- */
-export const kanFortsetteKlagebehandling = (
-    k: Klagebehandling,
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>,
-    innloggetSaksbehandler: Saksbehandler,
-): boolean =>
-    k.saksbehandler === innloggetSaksbehandler.navIdent &&
-    (kanBehandleKlage(k, omgjøringsbehandling) || kanVidereBehandleKlage(k, omgjøringsbehandling));
-
 export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'AVBRUTT' ||
     k.status === KlagebehandlingStatus.VEDTATT ||

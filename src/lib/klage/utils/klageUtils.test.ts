@@ -48,6 +48,7 @@ const lagKlage = (overstyr: Partial<Klagebehandling> = {}): Klagebehandling => (
     tilknyttedeBehandlingIder: [],
     åpenBehandlingId: null,
     forvaltningsmelding: null,
+    gyldigeKommandoer: [],
     ...overstyr,
 });
 

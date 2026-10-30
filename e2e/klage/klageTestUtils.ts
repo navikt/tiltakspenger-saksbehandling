@@ -2,6 +2,7 @@ import {
     KlagebehandlingResultat,
     KlagebehandlingStatus,
     KlageInnsendingskilde,
+    SaksbehandlerKlagebehandlingKommando,
 } from '~/lib/klage/typer/Klage';
 import type {
     KlageId,
@@ -78,6 +79,12 @@ const lagInitiellKlage = (): Klagebehandling => ({
     tilknyttedeBehandlingIder: [],
     åpenBehandlingId: null,
     forvaltningsmelding: null,
+    gyldigeKommandoer: [
+        SaksbehandlerKlagebehandlingKommando.Saksbehandle,
+        SaksbehandlerKlagebehandlingKommando.LeggTilbake,
+        SaksbehandlerKlagebehandlingKommando.SettPåVent,
+        SaksbehandlerKlagebehandlingKommando.Avbryt,
+    ],
 });
 
 const vedtaksperiode = { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' };
