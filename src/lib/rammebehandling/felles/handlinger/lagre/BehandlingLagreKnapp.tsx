@@ -11,7 +11,7 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 type Props = {
     behandling: Rammebehandling;
     hentVedtakDTO: () => Nullable<OppdaterBehandlingDTO>;
-    onSuccess?: () => void;
+    onSuccess?: (lagretDTO: OppdaterBehandlingDTO) => void;
     onError?: (error: FetcherError) => void;
 };
 
@@ -21,7 +21,6 @@ export const BehandlingLagreKnapp = ({ behandling, hentVedtakDTO, onSuccess, onE
         `/sak/${behandling.sakId}/behandling/${behandling.id}/oppdater`,
         'POST',
         {
-            onSuccess,
             onError,
         },
     );
@@ -42,6 +41,7 @@ export const BehandlingLagreKnapp = ({ behandling, hentVedtakDTO, onSuccess, onE
                 trigger(vedtakDto).then((behandling) => {
                     if (behandling) {
                         setBehandling(behandling);
+                        onSuccess?.(vedtakDto);
                     }
                 });
             }}

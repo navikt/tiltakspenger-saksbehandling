@@ -1,0 +1,118 @@
+import { describe, expect, test } from '@jest/globals';
+import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
+import { RevurderingInnvilgelseContext } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
+import {
+    innvilgelsesperiode,
+    periode,
+    rammevedtak,
+    revurderingInnvilgelse,
+    sak,
+    søknad,
+    søknadBarn,
+    søknadsbehandlingInnvilgelse,
+} from '~test/rammebehandling';
+
+const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
+
+const førsteHalvår = periode('2025-01-01', '2025-06-30');
+
+const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
+    resultat: RevurderingResultat.INNVILGELSE,
+    innvilgelse: {
+        harValgtPeriode: true,
+        innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
+        harBarnetillegg: false,
+        barnetilleggPerioder: [],
+    },
+    skalSendeVedtaksbrev: true,
+    skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
+    erPrioritert: false,
+    erReadonly: false,
+    kanEndreSkalJournalføreNotat: true,
+    textAreas: {
+        begrunnelse: tomtTekstfelt,
+        brevtekst: tomtTekstfelt,
+        barnetilleggBegrunnelse: tomtTekstfelt,
+        prioriteringBegrunnelse: tomtTekstfelt,
+    },
+};
+
+// Sak med to vedtatte søknadsbehandlinger, der bare den første søknaden har barn
+const sakMedToSøknadsbehandlinger = (iverksattMedBarn: string, iverksattUtenBarn: string) => {
+    const medBarn = søknadsbehandlingInnvilgelse({
+        id: 'beh_med_barn',
+        status: Rammebehandlingsstatus.VEDTATT,
+        iverksattTidspunkt: iverksattMedBarn,
+        søknad: søknad([søknadBarn('2020-05-05')]),
+    });
+    const utenBarn = søknadsbehandlingInnvilgelse({
+        id: 'beh_uten_barn',
+        status: Rammebehandlingsstatus.VEDTATT,
+        iverksattTidspunkt: iverksattUtenBarn,
+    });
+
+    return sak({
+        rammebehandlinger: [medBarn, utenBarn],
+        alleRammevedtak: [
+            rammevedtak('vedtak_1', førsteHalvår, { behandlingId: medBarn.id }),
+            rammevedtak('vedtak_2', førsteHalvår, { behandlingId: utenBarn.id }),
+        ],
+        tidslinje: {
+            elementer: [
+                {
+                    rammevedtakId: 'vedtak_2',
+                    periode: førsteHalvår,
+                    tidslinjeResultat: TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE,
+                },
+            ],
+        },
+    });
+};
+
+describe('revurderingInnvilgelseValidering', () => {
+    test('validerer barnetillegg mot søknaden fra sist iverksatte søknadsbehandling', () => {
+        const resultat = revurderingInnvilgelseValidering(
+            revurderingInnvilgelse(),
+            skjemaUtenBarnetillegg,
+            sakMedToSøknadsbehandlinger('2025-01-01T09:00:00', '2025-02-01T09:00:00'),
+        );
+
+        expect(resultat).toEqual({ errors: [], warnings: [] });
+    });
+
+    test('advarer om manglende barnetillegg når siste søknad har barn', () => {
+        const resultat = revurderingInnvilgelseValidering(
+            revurderingInnvilgelse(),
+            skjemaUtenBarnetillegg,
+            sakMedToSøknadsbehandlinger('2025-02-01T09:00:00', '2025-01-01T09:00:00'),
+        );
+
+        expect(resultat).toEqual({
+            errors: [],
+            warnings: [
+                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: 1 barn i perioden 01.01.2025 - 30.06.2025',
+            ],
+        });
+    });
+
+    test('avviser innvilgelse utenfor tiltaksdeltakelsen i revurderingen', () => {
+        const resultat = revurderingInnvilgelseValidering(
+            revurderingInnvilgelse(),
+            {
+                ...skjemaUtenBarnetillegg,
+                innvilgelse: {
+                    ...skjemaUtenBarnetillegg.innvilgelse,
+                    innvilgelsesperioder: [
+                        innvilgelsesperiode(periode('2024-12-01', '2025-06-30')),
+                    ],
+                },
+            },
+            sakMedToSøknadsbehandlinger('2025-01-01T09:00:00', '2025-02-01T09:00:00'),
+        );
+
+        expect(resultat.errors).toEqual(['Innvilgelsesperioden starter før tiltaksperioden']);
+    });
+});
