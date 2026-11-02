@@ -19,8 +19,8 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     /* Retry on CI only */
     retries: process.env.CI ? 2 : 0,
-    /* Opt out of parallel tests on CI. */
-    workers: process.env.CI ? 1 : undefined,
+    /* GHA-runnerne har 4 vCPU. Flere workers enn det ga ingen gevinst og ustabile tester i målinger begrenset til 4 kjerner. */
+    workers: process.env.CI ? 4 : undefined,
     timeout: 30000,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: 'html',
@@ -79,7 +79,8 @@ export default defineConfig({
          * gjenbrukt, og getServerSideProps ville redirecte til innlogging. Egen port (3100) gjør at
          * en lokal dev server på 3000 ikke forstyrres. */
         reuseExistingServer: false,
-        timeout: 30000,
+        /* Inkluderer next build, som kan ta over 30 sekunder på CI uten byggecache. */
+        timeout: 120_000,
         // Uten terminal (CI) starter pnpm ≥ 11.27 scriptet i en egen prosessgruppe og videresender signaler dit.
         // Playwrights standard SIGKILL treffer da bare pnpm, mens serveren overlever, holder stdout åpen og
         // gjør at testkjøringen aldri avslutter. SIGTERM blir videresendt av pnpm og stopper serveren pent.
