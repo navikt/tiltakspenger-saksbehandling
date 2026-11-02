@@ -69,7 +69,6 @@ export interface TiltaksdeltakelseFraSøknad {
     id: string;
     fraOgMed: Nullable<string>;
     tilOgMed: Nullable<string>;
-    typeKode: string;
     typeNavn: string;
 }
 

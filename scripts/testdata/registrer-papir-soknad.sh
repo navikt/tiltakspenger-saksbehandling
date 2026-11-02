@@ -44,7 +44,7 @@ build_body() {
       "eksternDeltakelseId": "${ekstern_id}",
       "deltakelseFraOgMed": "2025-04-01",
       "deltakelseTilOgMed": "2025-04-10",
-      "typeKode": "GRUPPE_AMO",
+      "tiltakskodeFraKilden": "GRUPPEAMO",
       "typeNavn": "Gruppe AMO"
     },
     "barnetilleggPdl": [],

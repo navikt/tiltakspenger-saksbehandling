@@ -136,7 +136,7 @@ test.describe('Registrere papirsøknad', () => {
                     eksternDeltakelseId: 'ekstern_1',
                     deltakelseFraOgMed: '2025-04-01',
                     deltakelseTilOgMed: '2025-06-30',
-                    typeKode: 'GRUPPE_AMO',
+                    tiltakskodeFraKilden: 'GRUPPEAMO',
                     typeNavn: 'Gruppe AMO',
                 },
                 kvp: { svar: 'NEI' },

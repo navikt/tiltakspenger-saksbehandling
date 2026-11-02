@@ -11,7 +11,7 @@ import { ÅpenPeriode } from '~/types/Periode';
  */
 export type TiltaksdeltakelseFraRegister = Omit<
     ManuellSøknadTiltak,
-    'typeKode' | 'deltakelseFraOgMed' | 'deltakelseTilOgMed'
+    'deltakelseFraOgMed' | 'deltakelseTilOgMed'
 > & {
     typeKode: string | null;
     periode: ÅpenPeriode;

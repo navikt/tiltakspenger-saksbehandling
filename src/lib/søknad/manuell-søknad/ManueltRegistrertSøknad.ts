@@ -32,7 +32,8 @@ export enum SøknadBehandlingsårsakManueltRegistrertSøknad {
 
 export type ManuellSøknadTiltak = {
     eksternDeltakelseId: string;
-    typeKode: string;
+    /** Tiltakskoden slik kilden (Arena, Komet, Team Tiltak) oppga den, f.eks. Arenas `ARBFORB`. */
+    tiltakskodeFraKilden: string;
     typeNavn: string;
     deltakelseFraOgMed?: string;
     deltakelseTilOgMed?: string;

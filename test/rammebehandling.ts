@@ -97,7 +97,6 @@ export const søknad = (barnetillegg: SøknadBarn[] = []): InnvilgbarSøknad => 
         id: 'deltakelse_1',
         fraOgMed: '2025-01-01',
         tilOgMed: '2025-06-30',
-        typeKode: 'AMO',
         typeNavn: 'Arbeidsmarkedsopplæring',
     },
     tiltaksdeltakelseperiodeDetErSøktOm: periode('2025-01-01', '2025-06-30'),

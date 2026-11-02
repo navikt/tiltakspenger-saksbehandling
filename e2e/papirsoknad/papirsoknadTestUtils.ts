@@ -19,6 +19,7 @@ export const lagTiltaksdeltakelser = (): TiltaksdeltakelseFraRegister[] => [
     {
         eksternDeltakelseId: 'ekstern_1',
         typeKode: 'GRUPPE_AMO',
+        tiltakskodeFraKilden: 'GRUPPEAMO',
         typeNavn: 'Gruppe AMO',
         visningsnavn: ikkeSladdet('Gruppe AMO hos Arrangør AS'),
         status: TiltakDeltakerstatus.DELTAR,
@@ -28,6 +29,7 @@ export const lagTiltaksdeltakelser = (): TiltaksdeltakelseFraRegister[] => [
     {
         eksternDeltakelseId: 'ekstern_lonnstilskudd',
         typeKode: null,
+        tiltakskodeFraKilden: 'MIDLONTIL',
         typeNavn: 'Lønnstilskudd',
         visningsnavn: ikkeSladdet('Lønnstilskudd hos Bedrift AS'),
         status: TiltakDeltakerstatus.DELTAR,

@@ -137,7 +137,8 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                                                         tiltak.periode.fraOgMed ?? undefined,
                                                     deltakelseTilOgMed:
                                                         tiltak.periode.tilOgMed ?? undefined,
-                                                    typeKode: tiltak.typeKode,
+                                                    tiltakskodeFraKilden:
+                                                        tiltak.tiltakskodeFraKilden,
                                                     typeNavn: tiltak.typeNavn,
                                                 }}
                                             >
