@@ -119,5 +119,5 @@ jobs:
           WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
           REPO: ${{ github.repository }}
           REPO_NAME: ${{ github.event.repository.name }}
-          AUTHOR: ${{ github.event.pusher.name }}
+          AUTHOR: ${{ github.event.pusher.name || github.event_name }}
           COMMIT_SHA: ${{ github.sha }}

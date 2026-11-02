@@ -19,6 +19,12 @@ on:
       - 'CODEOWNERS'
       - 'docker-compose/**'
       - 'LICENSE'
+  # Planlagt bygg og deploy hverdager kl. 06 norsk tid, også uten kodeendringer: henter nyeste bygg av
+  # Chainguard-baseimaget (flytende tagg, se Dockerfile) og tar med Dependabot-merger som ikke trigget workflowen selv.
+  # Går gjennom samme test-gate og concurrency-gruppe som en vanlig push.
+  schedule:
+    - cron: '0 6 * * 1-5'
+      timezone: 'Europe/Oslo'
 
 # Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
 permissions: {}
