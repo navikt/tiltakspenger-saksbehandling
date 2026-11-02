@@ -263,7 +263,7 @@ const tiltakVisningsnavn = (
     tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[],
 ): string => {
     const deltakelserMedType = tiltaksdeltakelser.filter(
-        (t) => t.typeKode === tiltaksdeltakelse.typeKode,
+        (t) => t.typeNavn === tiltaksdeltakelse.typeNavn,
     );
 
     if (deltakelserMedType.length > 1) {

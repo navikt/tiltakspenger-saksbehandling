@@ -68,7 +68,6 @@ export const tiltaksdeltakelse = (
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
-    typeKode: 'AMO',
     periode: p,
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,

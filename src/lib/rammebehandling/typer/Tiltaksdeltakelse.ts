@@ -38,7 +38,6 @@ type TiltaksdeltakelseBase = {
     eksternDeltagelseId: string;
     gjennomføringId: string | null;
     typeNavn: string;
-    typeKode: string;
     deltakelseStatus: TiltakDeltakerstatus;
     deltakelseProsent: number | null;
     antallDagerPerUke: number | null;

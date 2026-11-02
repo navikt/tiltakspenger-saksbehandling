@@ -24,7 +24,6 @@ const tiltaksdeltakelse = (id: string, periode: Periode): InnvilgbarTiltaksdelta
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
-    typeKode: 'AMO',
     periode,
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,

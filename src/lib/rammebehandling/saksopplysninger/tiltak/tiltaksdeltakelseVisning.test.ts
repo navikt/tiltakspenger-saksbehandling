@@ -14,7 +14,6 @@ const tiltak = (
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
-    typeKode: 'AMO',
     periode: { fraOgMed, tilOgMed },
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,
