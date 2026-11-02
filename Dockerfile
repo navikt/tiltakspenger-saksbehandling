@@ -1,7 +1,7 @@
 # Chainguard-image fra Navs speil: https://sikkerhet.nav.no/docs/verktoy/chainguard-dockerimages/
 # Bevisst uten digest: Chainguard backporter ikke fikser til eldre patch-versjoner, og Dependabot når ikke speilet.
 # Major-taggen gir nyeste bygg av Node 24 ved hvert image-bygg.
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:24-slim
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-slim
 
 WORKDIR /usr/app
 
