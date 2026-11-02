@@ -199,20 +199,20 @@ curl -s -X POST "$B/sak/$SAKSNR/soknad" -H "$T1" -H "$CT" -d '{
   "søknadstype":"PAPIR_SKJEMA",
   "behandlingsarsak":null,
   "svar":{
-    "tiltak":{"eksternDeltakelseId":"'"$(uuidgen)"'","deltakelseFraOgMed":"2025-04-01","deltakelseTilOgMed":"2025-04-10","typeKode":"GRUPPE_AMO","typeNavn":"Gruppe AMO"},
+    "tiltak":{"eksternDeltakelseId":"'"$(uuidgen)"'","deltakelseFraOgMed":"2025-04-01","deltakelseTilOgMed":"2025-04-10","tiltakskodeFraKilden":"GRUPPEAMO","typeNavn":"Gruppe AMO"},
     "barnetilleggPdl":[],"barnetilleggManuelle":[],
     "harSøktPåTiltak":{"svar":"JA"},"harSøktOmBarnetillegg":{"svar":"NEI"},
-    "kvp":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "intro":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "institusjon":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
+    "kvp":{"svar":"NEI","periode":null},
+    "intro":{"svar":"NEI","periode":null},
+    "institusjon":{"svar":"NEI","periode":null},
     "etterlønn":{"svar":"NEI"},
-    "gjenlevendepensjon":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
+    "gjenlevendepensjon":{"svar":"NEI","periode":null},
     "alderspensjon":{"svar":"NEI","fraOgMed":null},
-    "sykepenger":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "supplerendeStønadAlder":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "supplerendeStønadFlyktning":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "jobbsjansen":{"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "trygdOgPensjon":{"svar":"NEI","fraOgMed":null,"tilOgMed":null}
+    "sykepenger":{"svar":"NEI","periode":null},
+    "supplerendeStønadAlder":{"svar":"NEI","periode":null},
+    "supplerendeStønadFlyktning":{"svar":"NEI","periode":null},
+    "jobbsjansen":{"svar":"NEI","periode":null},
+    "trygdOgPensjon":{"svar":"NEI","periode":null}
   }
 }'
 # Svaret er en Søknadsbehandling-DTO: .id = behandlingId,

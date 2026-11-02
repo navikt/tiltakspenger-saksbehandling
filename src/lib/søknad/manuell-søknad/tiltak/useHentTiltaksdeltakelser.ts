@@ -6,27 +6,24 @@ import { SakId } from '~/lib/sak/SakTyper';
 import { ÅpenPeriode } from '~/types/Periode';
 
 /**
- * Tiltak som kan frata rett til tiltakspenger (i første omgang lønnstilskudd) har ingen typeKode.
+ * Tiltak som kan frata rett til tiltakspenger (i første omgang lønnstilskudd) har fratarRett satt.
  * De vises for saksbehandler, men kan ikke velges.
  */
 export type TiltaksdeltakelseFraRegister = Omit<
     ManuellSøknadTiltak,
     'deltakelseFraOgMed' | 'deltakelseTilOgMed'
 > & {
-    typeKode: string | null;
     periode: ÅpenPeriode;
     fratarRett: boolean;
 };
 
 export type TiltaksdeltakelseSomGirRettFraRegister = TiltaksdeltakelseFraRegister & {
-    typeKode: string;
     fratarRett: false;
 };
 
 export const girRettTilTiltakspenger = (
     tiltak: TiltaksdeltakelseFraRegister,
-): tiltak is TiltaksdeltakelseSomGirRettFraRegister =>
-    !tiltak.fratarRett && tiltak.typeKode !== null;
+): tiltak is TiltaksdeltakelseSomGirRettFraRegister => !tiltak.fratarRett;
 
 export const useHentTiltaksdeltakelser = (
     sakId: SakId,
