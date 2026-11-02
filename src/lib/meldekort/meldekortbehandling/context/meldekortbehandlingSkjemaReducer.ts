@@ -13,7 +13,6 @@ import {
     MeldeperiodeKjedeId,
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
-import { nonNullish } from '~/utils/object';
 
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingProps,
@@ -115,10 +114,13 @@ const finnMeldeperiodeIndex = (
     meldeperioder: MeldeperiodeSkjema[],
     kjedeId: MeldeperiodeKjedeId,
 ): number => {
-    return nonNullish(
-        meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId),
-        `Fant ingen meldeperiode for kjede ${kjedeId}`,
-    );
+    const index = meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId);
+
+    if (index === -1) {
+        throw Error(`Fant ingen meldeperiode for kjede ${kjedeId}`);
+    }
+
+    return index;
 };
 
 const meldeperiodeKjedeTilContext = (

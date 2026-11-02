@@ -51,17 +51,17 @@ build_body() {
     "barnetilleggManuelle": [],
     "harSøktPåTiltak": {"svar":"JA"},
     "harSøktOmBarnetillegg": {"svar":"NEI"},
-    "kvp": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "intro": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "institusjon": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
+    "kvp": {"svar":"NEI","periode":null},
+    "intro": {"svar":"NEI","periode":null},
+    "institusjon": {"svar":"NEI","periode":null},
     "etterlønn": {"svar":"NEI"},
-    "gjenlevendepensjon": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
+    "gjenlevendepensjon": {"svar":"NEI","periode":null},
     "alderspensjon": {"svar":"NEI","fraOgMed":null},
-    "sykepenger": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "supplerendeStønadAlder": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "supplerendeStønadFlyktning": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "jobbsjansen": {"svar":"NEI","fraOgMed":null,"tilOgMed":null},
-    "trygdOgPensjon": {"svar":"NEI","fraOgMed":null,"tilOgMed":null}
+    "sykepenger": {"svar":"NEI","periode":null},
+    "supplerendeStønadAlder": {"svar":"NEI","periode":null},
+    "supplerendeStønadFlyktning": {"svar":"NEI","periode":null},
+    "jobbsjansen": {"svar":"NEI","periode":null},
+    "trygdOgPensjon": {"svar":"NEI","periode":null}
   }
 }
 JSON

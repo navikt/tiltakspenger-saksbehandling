@@ -23,6 +23,8 @@ type ValiderOgHentVedtakDTO = (type: ValideringType) => {
 export type BehandlingLagringProps = {
     validerOgHentLagringDTO: ValiderOgHentVedtakDTO;
     validerVedtak: (type: ValideringType) => ValideringResultat;
+    // Skal kun kalles når backend har bekreftet lagringen, ellers regnes ulagrede endringer som lagret
+    registrerLagring: (lagretDTO: OppdaterBehandlingDTO) => void;
     isDirty: boolean;
 };
 
@@ -84,9 +86,6 @@ export const useHentBehandlingLagringProps = ({
         const harErrors = valideringResultat.errors.length > 0;
 
         const vedtakDTO = harErrors ? null : hentDTO();
-        if (vedtakDTO) {
-            setSisteLagring(vedtakDTO);
-        }
 
         return {
             valideringResultat,
@@ -115,7 +114,7 @@ export const useHentBehandlingLagringProps = ({
         updateDirtyState();
     }, [skjema, updateDirtyState]);
 
-    return { validerOgHentLagringDTO, validerVedtak, isDirty };
+    return { validerOgHentLagringDTO, validerVedtak, registrerLagring: setSisteLagring, isDirty };
 };
 
 const validerPrioritering = (

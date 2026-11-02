@@ -179,10 +179,7 @@ describe('meldekortbehandlingSkjemaReducer', () => {
         expect(nyState.meldeperioder).toEqual([stateMedToMeldeperioder.meldeperioder[1]]);
     });
 
-    // FEIL I PROD-KODEN: finnMeldeperiodeIndex sender resultatet fra findIndex til nonNullish, men findIndex
-    // gir -1 (ikke null) når kjeden mangler. Feilen kastes derfor aldri, og -1 tolkes som siste meldeperiode
-    // i atNonNull/with/toSpliced, slik at handlingen treffer feil meldeperiode i stedet for å feile.
-    test.failing.each<MeldekortbehandlingSkjemaActions>([
+    test.each<MeldekortbehandlingSkjemaActions>([
         {
             type: 'oppdaterDagStatus',
             payload: { kjedeId: kjedeIdFor(TREDJE_MANDAG), dagIndex: 0, status: FraværSyk },

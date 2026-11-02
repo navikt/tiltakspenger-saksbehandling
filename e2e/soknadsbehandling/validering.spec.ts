@@ -178,12 +178,6 @@ test.describe('Søknadsbehandling - validering', () => {
     });
 
     test('kan ikke sende til beslutning når lagringen feilet', async ({ page, msw }) => {
-        // FEIL I PROD-KODEN: `validerOgHentLagringDTO` (useHentBehandlingLagringProps.ts) setter
-        // `sisteLagring` før lagre-kallet er gjort. Feiler lagringen regnes skjemaet derfor som lagret
-        // (isDirty = false), og "Send til beslutter" blir aktiv selv om endringene aldri nådde backend.
-        // Beslutter får da en annen versjon av behandlingen enn den saksbehandler ser.
-        test.fail();
-
         const backend = lagBackend();
         msw.use(
             ...fellesHandlere(),

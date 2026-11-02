@@ -24,7 +24,7 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
 
     const [lagringResultat, setLagringResultat] = useState<BehandlingLagringResultat>('ok');
 
-    const { validerOgHentLagringDTO, validerVedtak, isDirty } = lagringProps;
+    const { validerOgHentLagringDTO, validerVedtak, registrerLagring, isDirty } = lagringProps;
 
     const validerOgHentDTO = () => {
         const { valideringResultat, vedtakDTO } = validerOgHentLagringDTO('lagring');
@@ -49,7 +49,8 @@ export const RammebehandlingSaksbehandlerHandlinger = ({ behandling, lagringProp
                 <BehandlingLagreKnapp
                     behandling={behandling}
                     hentVedtakDTO={validerOgHentDTO}
-                    onSuccess={() => {
+                    onSuccess={(lagretDTO) => {
+                        registrerLagring(lagretDTO);
                         setLagringResultat('ok');
                     }}
                     onError={(error) => {

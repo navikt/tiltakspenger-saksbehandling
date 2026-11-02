@@ -441,12 +441,6 @@ test.describe('Registrere papirsøknad', () => {
     });
 
     test('sender perioden for et ja-svar i formatet backend forventer', async ({ page, msw }) => {
-        // FEIL I PROD-KODEN: Frontend sender periodespørsmål som `{ svar, periode: { fraOgMed, tilOgMed } }`,
-        // men backend (`ManueltRegistrertSøknadBody.PeriodeSpmDTO`) forventer flatt `{ svar, fraOgMed, tilOgMed }`.
-        // Ukjente felter ignoreres av Jackson, så perioden forsvinner stille og lagres som `PeriodeSpm.Ja(null, null)`.
-        // Gjelder kvp, intro, sykepenger, institusjon, gjenlevendepensjon, supplerende stønad, trygdOgPensjon og jobbsjansen.
-        test.fail();
-
         const opptak = lagOpptak();
         msw.use(...papirsøknadHandlere({ opptak }), ...fellesHandlere());
 
@@ -465,8 +459,7 @@ test.describe('Registrere papirsøknad', () => {
         const body = opptak.opprettSøknad[0] as SøknadBody;
         expect(body.svar.kvp).toEqual({
             svar: 'JA',
-            fraOgMed: '2025-04-01',
-            tilOgMed: '2025-04-30',
+            periode: { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
         });
     });
 });
