@@ -1,6 +1,10 @@
 import { BodyShort, VStack } from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
-import { Dagpengeperiode } from '~/lib/rammebehandling/typer/Dagpengeperiode';
+import {
+    Dagpengeperiode,
+    dagpengerKildeTekst,
+    dagpengerYtelsetypeTekst,
+} from '~/lib/rammebehandling/typer/Dagpengeperiode';
 import { formaterDatotekst } from '~/utils/date';
 
 type Props = {
@@ -19,12 +23,19 @@ export const BehandlingDagpengerOpplysninger = ({ perioder }: Props) => {
 
                 return (
                     <div key={`${ytelsetype}-${kilde}-${fraOgMed}`}>
-                        <BehandlingSaksopplysning navn={'Ytelse'} verdi={ytelsetype} visVarsel />
+                        <BehandlingSaksopplysning
+                            navn={'Ytelse'}
+                            verdi={dagpengerYtelsetypeTekst[ytelsetype]}
+                            visVarsel
+                        />
                         <BehandlingSaksopplysning
                             navn={'Periode'}
                             verdi={`${formaterDatotekst(fraOgMed)} - ${tilOgMedTekst}`}
                         />
-                        <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} />
+                        <BehandlingSaksopplysning
+                            navn={'Kilde'}
+                            verdi={dagpengerKildeTekst[kilde]}
+                        />
                     </div>
                 );
             })}

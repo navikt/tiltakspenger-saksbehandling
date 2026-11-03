@@ -14,7 +14,13 @@ import { Controller, FieldErrors, useFieldArray, useForm } from 'react-hook-form
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
-import { Dagpengeperiode } from '~/lib/rammebehandling/typer/Dagpengeperiode';
+import {
+    DagpengerKilde,
+    dagpengerKildeTekst,
+    Dagpengeperiode,
+    DagpengerYtelsetype,
+    dagpengerYtelsetypeTekst,
+} from '~/lib/rammebehandling/typer/Dagpengeperiode';
 import { Dato } from '~/types/DatoTid';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
@@ -22,29 +28,11 @@ import { nonNullish } from '~/utils/object';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { resolverResultat } from '~/utils/resolverResultat';
 
-// Speiler Dagpengeperiode.Ytelsetype og Dagpengeperiode.Kilde i backend.
-const ytelsetyper = [
-    { verdi: 'ORDINÆRE_DAGPENGER', tekst: 'Ordinære dagpenger' },
-    { verdi: 'PERMITTERING', tekst: 'Dagpenger under permittering' },
-    {
-        verdi: 'PERMITTERING_FISKEINDUSTRI',
-        tekst: 'Dagpenger under permittering fra fiskeindustrien',
-    },
-] as const;
-
-const kilder = [
-    { verdi: 'ARENA', tekst: 'Arena' },
-    { verdi: 'DP_SAK', tekst: 'Ny dagpengeløsning' },
-] as const;
-
-type Ytelsetype = (typeof ytelsetyper)[number]['verdi'];
-type Kilde = (typeof kilder)[number]['verdi'];
-
 type DagpengeperiodeFormData = {
     fraOgMed: Date | undefined;
     tilOgMed: Date | undefined;
-    ytelsetype: Ytelsetype;
-    kilde: Kilde;
+    ytelsetype: DagpengerYtelsetype;
+    kilde: DagpengerKilde;
 };
 
 type SettDagpengeperioderFormData = {
@@ -57,16 +45,16 @@ type SettDagpengeperioderRequest = {
     perioder: {
         fraOgMed: Dato;
         tilOgMed: Nullable<Dato>;
-        ytelsetype: Ytelsetype;
-        kilde: Kilde;
+        ytelsetype: DagpengerYtelsetype;
+        kilde: DagpengerKilde;
     }[];
 };
 
 const nyPeriode = (): DagpengeperiodeFormData => ({
     fraOgMed: undefined,
     tilOgMed: undefined,
-    ytelsetype: 'ORDINÆRE_DAGPENGER',
-    kilde: 'ARENA',
+    ytelsetype: DagpengerYtelsetype.ORDINÆRE_DAGPENGER,
+    kilde: DagpengerKilde.ARENA,
 });
 
 // Uten maks-dato slutter årsvelgeren i datovelgeren ved utgangen av inneværende år.
@@ -213,11 +201,13 @@ const SettDagpengeperioderSkjema = ({ startSakId }: { startSakId: string }) => {
                                         name={`perioder.${index}.ytelsetype`}
                                         render={({ field }) => (
                                             <Select {...field} label="Ytelsetype" size="small">
-                                                {ytelsetyper.map(({ verdi, tekst }) => (
-                                                    <option key={verdi} value={verdi}>
-                                                        {tekst}
-                                                    </option>
-                                                ))}
+                                                {Object.values(DagpengerYtelsetype).map(
+                                                    (ytelsetype) => (
+                                                        <option key={ytelsetype} value={ytelsetype}>
+                                                            {dagpengerYtelsetypeTekst[ytelsetype]}
+                                                        </option>
+                                                    ),
+                                                )}
                                             </Select>
                                         )}
                                     />
@@ -226,9 +216,9 @@ const SettDagpengeperioderSkjema = ({ startSakId }: { startSakId: string }) => {
                                         name={`perioder.${index}.kilde`}
                                         render={({ field }) => (
                                             <Select {...field} label="Kilde" size="small">
-                                                {kilder.map(({ verdi, tekst }) => (
-                                                    <option key={verdi} value={verdi}>
-                                                        {tekst}
+                                                {Object.values(DagpengerKilde).map((kilde) => (
+                                                    <option key={kilde} value={kilde}>
+                                                        {dagpengerKildeTekst[kilde]}
                                                     </option>
                                                 ))}
                                             </Select>
