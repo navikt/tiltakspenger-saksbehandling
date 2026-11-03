@@ -311,7 +311,7 @@ curl -sf -X POST "$B/dev/dagpenger" -H "$T1" -H "$CT" \
 - `ytelsetype` (`ORDINÆRE_DAGPENGER`, `PERMITTERING`, `PERMITTERING_FISKEINDUSTRI`) og `kilde`
   (`ARENA`, `DP_SAK`) kan utelates, og er da `ORDINÆRE_DAGPENGER` og `ARENA`.
 - Kallet erstatter periodene som var satt fra før, og `"perioder":[]` fjerner dem.
-- Periodene lever bare i minnet til `LokalMain` restartes.
+- Periodene lagres i `lokal.dagpengeperioder` og overlever omstart av `LokalMain`.
 - En åpen behandling viser dem først når saksopplysningene oppdateres.
 
 ---
