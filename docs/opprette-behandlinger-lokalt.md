@@ -296,6 +296,24 @@ curl -sf -X POST "$B/dev/tiltaksdeltakelse" -H "$T1" -H "$CT" \
   -d '{"sakId":"'"$SAK_ID"'","tiltakskode":"MIDLONTIL","fraOgMed":"2025-04-01","tilOgMed":"2025-04-10"}'
 ```
 
+### G. Legge til dagpenger
+
+Lokalt svarer dp-datadeling med ingen dagpenger til du setter perioder for personen på saken.
+Periodene vises under «Dagpenger» i saksopplysningene, og automatisk behandling overlates til
+saksbehandler når de overlapper.
+
+```bash
+curl -sf -X POST "$B/dev/dagpenger" -H "$T1" -H "$CT" \
+  -d '{"sakId":"'"$SAK_ID"'","perioder":[{"fraOgMed":"2025-03-01","tilOgMed":null}]}'
+```
+
+- `tilOgMed: null` gir en løpende periode.
+- `ytelsetype` (`ORDINÆRE_DAGPENGER`, `PERMITTERING`, `PERMITTERING_FISKEINDUSTRI`) og `kilde`
+  (`ARENA`, `DP_SAK`) kan utelates, og er da `ORDINÆRE_DAGPENGER` og `ARENA`.
+- Kallet erstatter periodene som var satt fra før, og `"perioder":[]` fjerner dem.
+- Periodene lever bare i minnet til `LokalMain` restartes.
+- En åpen behandling viser dem først når saksopplysningene oppdateres.
+
 ---
 
 ## Forhåndsvise PDF-er (vedtaksbrev, meldekortbrev, klagebrev)
