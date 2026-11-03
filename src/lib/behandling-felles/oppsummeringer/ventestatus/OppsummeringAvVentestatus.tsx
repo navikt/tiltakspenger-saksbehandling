@@ -8,12 +8,13 @@ import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { Nullable } from '~/types/UtilTypes';
 
 import styles from './OppsummeringAvVentestatus.module.css';
+import { Tidspunkt } from '~/types/DatoTid';
 
 type Props = {
     ventestatus: VentestatusHendelse;
     historikk?: VentestatusHendelse[];
     /** Tidspunktet en automatisk behandling tas opp igjen. Vises adskilt fra fristen. */
-    venterTil?: Nullable<string>;
+    venterTil?: Nullable<Tidspunkt>;
     className?: string;
     size?: 'medium' | 'small';
 };

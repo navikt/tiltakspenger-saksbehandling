@@ -2,11 +2,13 @@ import { Periode } from '~/types/Periode';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { TiltakDeltakerstatus } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { JaNeiSpm, JaNeiSvar, Oppholdssted } from '../søknadTyper';
+import { Dato } from '~/types/DatoTid';
+import { Nullable } from '~/types/UtilTypes';
 
 export type ManueltRegistrertSøknad = {
     journalpostId: string;
     manueltSattSøknadsperiode?: Periode;
-    manueltSattSøknadMottattDato?: string;
+    manueltSattSøknadMottattDato?: Dato;
     manueltSattTiltak?: string;
     søknadstype?: SøknadstypeManueltRegistrertSøknad;
     overfortFraArena?: ManuellSøknadJaNeiSpm;
@@ -35,8 +37,8 @@ export type ManuellSøknadTiltak = {
     /** Tiltakskoden slik kilden (Arena, Komet, Team Tiltak) oppga den, f.eks. Arenas `ARBFORB`. */
     tiltakskodeFraKilden: string;
     typeNavn: string;
-    deltakelseFraOgMed?: string;
-    deltakelseTilOgMed?: string;
+    deltakelseFraOgMed?: Dato;
+    deltakelseTilOgMed?: Dato;
     visningsnavn: SladdbarVerdi<string>;
     status: TiltakDeltakerstatus;
 };
@@ -47,7 +49,7 @@ export type ManuellSøknadOppholdsstedSvar = Oppholdssted | 'IKKE_BESVART';
 
 export type ManuellSøknadOppholdsstedSpm = { svar?: ManuellSøknadOppholdsstedSvar };
 
-export type ManuellSøknadFraOgMedDatoSpm = { svar?: JaNeiSvar; fraOgMed?: string };
+export type ManuellSøknadFraOgMedDatoSpm = { svar?: JaNeiSvar; fraOgMed?: Dato };
 
 export type ManuellSøknadPeriodeSpm = { svar?: JaNeiSvar; periode?: Periode };
 
@@ -78,7 +80,7 @@ export type ManuellSøknadBarn = {
     fornavn?: string;
     mellomnavn?: string;
     etternavn?: string;
-    fødselsdato: string;
+    fødselsdato: Nullable<Dato>;
     fnr?: string;
     oppholdssted?: ManuellSøknadOppholdsstedSpm;
     erSøktBarnetilleggFor?: ManuellSøknadJaNeiSpm;

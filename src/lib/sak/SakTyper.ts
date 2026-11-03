@@ -18,6 +18,7 @@ import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
+import { Dato } from '~/types/DatoTid';
 
 export type SakId = `sak_${string}`;
 
@@ -26,8 +27,8 @@ export type SakProps = {
     saksnummer: Saksnummer;
     fnr: SladdbarVerdi<string>;
 
-    førsteDagSomGirRett: Nullable<string>;
-    sisteDagSomGirRett: Nullable<string>;
+    førsteDagSomGirRett: Nullable<Dato>;
+    sisteDagSomGirRett: Nullable<Dato>;
     kanSendeInnHelgForMeldekort: boolean;
 
     søknader: Søknad[];

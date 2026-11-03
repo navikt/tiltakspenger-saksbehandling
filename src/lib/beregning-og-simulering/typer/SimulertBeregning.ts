@@ -6,6 +6,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { BeregningerSummert } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { RammebehandlingId } from '../../rammebehandling/typer/Rammebehandling';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export enum SimulerertBehandlingstype {
     RAMME = 'RAMME',
@@ -16,19 +17,19 @@ type SimulertBeregningBase = {
     behandlingId: MeldekortbehandlingId | RammebehandlingId;
     behandlingstype: SimulerertBehandlingstype;
     meldeperioder: SimulertBeregningPerMeldeperiode[];
-    beregningstidspunkt: string;
+    beregningstidspunkt: Tidspunkt;
     beregning: BeregningerSummert;
-    simuleringstidspunkt: Nullable<string>;
-    simuleringsdato: Nullable<string>;
+    simuleringstidspunkt: Nullable<Tidspunkt>;
+    simuleringsdato: Nullable<Dato>;
     simuleringTotalBeløp: Nullable<number>;
     simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat;
 };
 
 type SimulertBeregningMedEndring = SimulertBeregningBase & {
-    simuleringsdato: string;
+    simuleringsdato: Dato;
     simuleringTotalBeløp: number;
-    simuleringstidspunkt: string;
+    simuleringstidspunkt: Tidspunkt;
     simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat.ENDRING;
 };
@@ -37,7 +38,7 @@ type SimulertBeregningIngenEndring = SimulertBeregningBase & {
     simuleringsdato: null;
     simuleringTotalBeløp: null;
     simulerteBeløp: null;
-    simuleringstidspunkt: string;
+    simuleringstidspunkt: Tidspunkt;
     simuleringResultat: SimuleringResultat.INGEN_ENDRING;
 };
 
@@ -62,7 +63,7 @@ export type SimulertBeregningPerMeldeperiode = {
 };
 
 export type SimulertBeregningDag = {
-    dato: string;
+    dato: Dato;
     merker: Simuleringsmerke[];
 } & (SimulertBeregningDagMedBeregning | SimulertBeregningDagUtenBeregning);
 
@@ -105,8 +106,8 @@ export type Simuleringsflagg = {
  */
 export type Simuleringsmerke = {
     type: Posteringstype;
-    periodeFraOgMed: string;
-    periodeTilOgMed: string;
+    periodeFraOgMed: Dato;
+    periodeTilOgMed: Dato;
     klassekode: string;
     beløp: Nullable<number>;
     erJustering: boolean;
@@ -119,8 +120,8 @@ export type Simuleringsmerke = {
  */
 export type Simuleringspostering = {
     type: Posteringstype;
-    periodeFraOgMed: string;
-    periodeTilOgMed: string;
+    periodeFraOgMed: Dato;
+    periodeTilOgMed: Dato;
     klassekode: string;
     beløp: number;
     erJustering: boolean;

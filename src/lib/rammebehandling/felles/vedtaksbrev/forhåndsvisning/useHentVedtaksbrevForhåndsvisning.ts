@@ -11,6 +11,7 @@ import {
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
+import { Dato } from '~/types/DatoTid';
 
 export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
@@ -39,7 +40,7 @@ export type RevurderingStansBrevForhåndsvisningDTO = {
           harValgtStansFraFørsteDagSomGirRett: true;
       }
     | {
-          stansFraOgMed: string;
+          stansFraOgMed: Dato;
           harValgtStansFraFørsteDagSomGirRett: false;
       }
 );

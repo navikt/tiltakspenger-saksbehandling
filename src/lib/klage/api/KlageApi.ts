@@ -20,6 +20,7 @@ import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFr
 import { Nullable } from '~/types/UtilTypes';
 
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Dato } from '~/types/DatoTid';
 
 export const useOpprettKlage = (args: {
     sakId: string;
@@ -110,7 +111,7 @@ export const useSettKlagebehandlingPåVent = (args: {
 }) =>
     useFetchJsonFraApi<
         SakProps,
-        { begrunnelse: string; frist: Nullable<string>; oppdaterSattPåVent: boolean }
+        { begrunnelse: string; frist: Nullable<Dato>; oppdaterSattPåVent: boolean }
     >(`/sak/${args.sakId}/klage/${args.klageId}/vent`, 'PATCH', { onSuccess: args.onSuccess });
 
 export const useGjenopptaKlagebehandling = (args: {

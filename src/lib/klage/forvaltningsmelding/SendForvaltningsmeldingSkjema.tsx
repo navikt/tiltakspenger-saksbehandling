@@ -19,6 +19,7 @@ import {
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { FetcherError } from '~/utils/fetch/fetch';
 import styles from './SendForvaltningsmeldingSkjema.module.css';
+import { Dato } from '~/types/DatoTid';
 
 const erTerminalFeil = (feil?: FetcherError) =>
     feil?.status === 404 ||
@@ -28,7 +29,7 @@ const erTerminalFeil = (feil?: FetcherError) =>
 const SendForvaltningsmeldingSkjema = (props: {
     sakId: SakId;
     klageId: KlageId;
-    innsendingsdato: string;
+    innsendingsdato: Dato;
     onSendt: (klage: Klagebehandling) => void;
 }) => {
     const [skalBekrefte, setSkalBekrefte] = useState(false);

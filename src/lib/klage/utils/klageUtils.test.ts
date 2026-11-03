@@ -8,6 +8,7 @@ import { Saksbehandler, SaksbehandlerRolle } from '~/lib/saksbehandler/Saksbehan
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { kanSendeForvaltningsmelding } from './klageUtils';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const innloggetSaksbehandler: Saksbehandler = {
     brukernavn: 'Saksbehandler',
@@ -23,12 +24,12 @@ const lagKlage = (overstyr: Partial<Klagebehandling> = {}): Klagebehandling => (
     sakId: 'sak_1',
     saksnummer: tilSaksnummer('202501011001'),
     fnr: ikkeSladdet('12345678911'),
-    opprettet: '2025-04-01T10:00:00',
-    sistEndret: '2025-04-01T10:00:00',
+    opprettet: tilTidspunkt('2025-04-01T10:00:00'),
+    sistEndret: tilTidspunkt('2025-04-01T10:00:00'),
     iverksattTidspunkt: null,
     saksbehandler: innloggetSaksbehandler.navIdent,
     klagensJournalpostId: '453827',
-    klagensJournalpostOpprettet: '2025-04-01T10:00:00',
+    klagensJournalpostOpprettet: tilTidspunkt('2025-04-01T10:00:00'),
     status: KlagebehandlingStatus.UNDER_BEHANDLING,
     resultat: null,
     avbrutt: null,
@@ -42,7 +43,7 @@ const lagKlage = (overstyr: Partial<Klagebehandling> = {}): Klagebehandling => (
         erKlagefristenOverholdt: true,
         erUnntakForKlagefrist: null,
         erKlagenSignert: true,
-        innsendingsdato: '2025-04-01',
+        innsendingsdato: tilDato('2025-04-01'),
         innsendingskilde: KlageInnsendingskilde.DIGITAL,
     },
     tilknyttedeBehandlingIder: [],
@@ -81,7 +82,7 @@ describe('kanSendeForvaltningsmelding', () => {
             ventestatus: [
                 {
                     sattPåVentAv: innloggetSaksbehandler.navIdent,
-                    tidspunkt: '2025-04-02T10:00:00',
+                    tidspunkt: tilTidspunkt('2025-04-02T10:00:00'),
                     begrunnelse: ikkeSladdet('Venter'),
                     erSattPåVent: true,
                     frist: null,
@@ -97,7 +98,7 @@ describe('kanSendeForvaltningsmelding', () => {
             forvaltningsmelding: {
                 tekster: [{ tittel: 'Svartid', tekst: ikkeSladdet('Ca. 3 måneder') }],
                 saksbehandler: innloggetSaksbehandler.navIdent,
-                sendtTidspunkt: '2025-04-03T10:00:00',
+                sendtTidspunkt: tilTidspunkt('2025-04-03T10:00:00'),
                 journalpostId: null,
                 journalføringstidspunkt: null,
                 distribusjonstidspunkt: null,

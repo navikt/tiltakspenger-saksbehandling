@@ -14,13 +14,14 @@ import {
 } from './felles';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Prioritering } from '~/lib/_felles/prioritering/prioriteringTyper';
+import { Tidspunkt } from '~/types/DatoTid';
 
 type BenkSøknadsbehandlingProps = {
     type: BenkBehandlingstype.SØKNADSBEHANDLING;
     id: RammebehandlingId;
     status: BenkBehandlingsstatus;
     søknadstype: Søknadstype;
-    kravtidspunkt: string;
+    kravtidspunkt: Tidspunkt;
     resultat: Nullable<SøknadsbehandlingResultat>;
     prioritering: Nullable<Prioritering>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];

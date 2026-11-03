@@ -7,6 +7,7 @@ import { render, screen } from '@testing-library/react';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { BenkBehandlingstype, BenkVentestatus } from '../../typer/felles';
 import { BenkTabellCelle } from './BenkTabellCelle';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const renderVentestatus = (ventestatus: BenkVentestatus) =>
     render(
@@ -24,7 +25,11 @@ const påVent: BenkVentestatus = {
 
 describe('BenkTabellCelle.Ventestatus', () => {
     test('viser frist og tidspunktet den automatiske behandlingen venter til hver for seg', () => {
-        renderVentestatus({ ...påVent, frist: '2099-05-10', venterTil: '2099-05-02T06:00:00' });
+        renderVentestatus({
+            ...påVent,
+            frist: tilDato('2099-05-10'),
+            venterTil: tilTidspunkt('2099-05-02T06:00:00'),
+        });
 
         expect(screen.getByText('Frist 10.05.2099')).toBeInTheDocument();
         expect(screen.getByText('Venter til 02.05.99 06:00')).toBeInTheDocument();
@@ -32,7 +37,7 @@ describe('BenkTabellCelle.Ventestatus', () => {
     });
 
     test('viser bare venter til når behandlingen ikke har frist', () => {
-        renderVentestatus({ ...påVent, venterTil: '2099-05-02T06:00:00' });
+        renderVentestatus({ ...påVent, venterTil: tilTidspunkt('2099-05-02T06:00:00') });
 
         expect(screen.getByText('Venter til 02.05.99 06:00')).toBeInTheDocument();
         expect(screen.queryByText(/^Frist/)).not.toBeInTheDocument();

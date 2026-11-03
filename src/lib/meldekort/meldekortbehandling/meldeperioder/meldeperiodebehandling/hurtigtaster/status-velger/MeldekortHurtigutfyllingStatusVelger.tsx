@@ -8,10 +8,11 @@ import { MeldekortHurtigutfylling } from '~/lib/meldekort/meldekortbehandling/me
 
 import style from './MeldekortHurtigutfyllingStatusVelger.module.css';
 import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     hurtigutfylling: MeldekortHurtigutfylling;
-    dato: string;
+    dato: Dato;
 };
 
 export const MeldekortHurtigutfyllingStatusVelger = ({ hurtigutfylling, dato }: Props) => {

@@ -15,10 +15,11 @@ import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysni
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { nonNullish } from '~/utils/object';
 import { ikkeSladdet } from '~test/sladdetVerdi';
+import { tilDato } from '~/types/DatoTid';
 
 const personopplysninger: Personopplysninger = {
     fnr: ikkeSladdet('12345678911'),
-    fødselsdato: ikkeSladdet('1990-01-01'),
+    fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
     fornavn: ikkeSladdet('Ola'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet('Nordmann'),
@@ -33,7 +34,7 @@ const barn = (uuid: string, overstyringer: Partial<ManuellSøknadBarn> = {}): Ma
     uuid,
     fornavn: uuid,
     etternavn: 'Nordmann',
-    fødselsdato: '2020-01-01',
+    fødselsdato: tilDato('2020-01-01'),
     ...overstyringer,
 });
 

@@ -35,6 +35,7 @@ import { KlagebehandlingResultatTag } from '~/lib/klage/tags/KlagebehandlingResu
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 import { RammebehandlingResultatTag } from '~/lib/rammebehandling/felles/resultat-tag/RammebehandlingResultatTag';
 import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
+import { Tidspunkt } from '~/types/DatoTid';
 
 type Props = {
     sak: SakProps;
@@ -118,7 +119,7 @@ type ÅpenBehandlingOversiktRadProps = {
     typeTekst: string;
     resultatTag?: React.ReactNode;
     statusTag: React.ReactNode;
-    opprettet: string;
+    opprettet: Tidspunkt;
     kravtidspunkt?: string;
     periodeTekst?: React.ReactNode;
     saksbehandler?: Nullable<string>;

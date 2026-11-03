@@ -2,7 +2,8 @@ import { Button, Dialog, LocalAlert, Select, VStack } from '@navikt/ds-react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Søknad } from '~/lib/søknad/søknadTyper';
-import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
+import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
+import { meldeperiodeKjedeIdTilPeriode } from '~/utils/periode';
 import {
     VelgOmgjøringsbehandlingFormData,
     velgOmgjøringsbehandlingFormDataTilOpprettBehandlingRequest,
@@ -242,8 +243,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
                             <option value="">-- Velg periode --</option>
                             {kjederSomKanOpprettesMeldekortbehandlingerFor.map((kjedeId) => (
                                 <option key={kjedeId} value={kjedeId}>
-                                    {formaterDatotekst(kjedeId.split('/')[0])} -{' '}
-                                    {formaterDatotekst(kjedeId.split('/')[1])}
+                                    {formaterPeriode(meldeperiodeKjedeIdTilPeriode(kjedeId))}
                                 </option>
                             ))}
                         </Select>

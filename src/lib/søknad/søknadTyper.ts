@@ -1,6 +1,7 @@
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type SøknadId = `soknad_${string}`;
 
@@ -11,7 +12,7 @@ export enum SøknadshendelseType {
 
 export interface Søknadshendelse {
     type: SøknadshendelseType;
-    tidspunkt: string;
+    tidspunkt: Tidspunkt;
     utførtAv: string;
     begrunnelse: SladdbarVerdi<Nullable<string>> | null;
 }
@@ -25,8 +26,8 @@ interface SøknadBase {
     barnetillegg: SøknadBarn[];
     søknadstype: Søknadstype;
     behandlingsarsak: Nullable<Behandlingsårsak>;
-    opprettet: string;
-    mottatt: string;
+    opprettet: Tidspunkt;
+    mottatt: Tidspunkt;
     antallVedlegg: number;
     /** Historikken over avbrytelser og gjenåpninger av søknaden, i kronologisk rekkefølge. */
     avbrutt: Søknadshendelse[];
@@ -67,8 +68,8 @@ export interface Spørsmålsbesvarelser extends SpørsmålsbesvarelserPengestøt
 
 export interface TiltaksdeltakelseFraSøknad {
     id: string;
-    fraOgMed: Nullable<string>;
-    tilOgMed: Nullable<string>;
+    fraOgMed: Nullable<Dato>;
+    tilOgMed: Nullable<Dato>;
     typeNavn: string;
 }
 
@@ -83,7 +84,7 @@ export interface SøknadBarn {
     fornavn: SladdbarVerdi<Nullable<string>>;
     mellomnavn: SladdbarVerdi<Nullable<string>>;
     etternavn: SladdbarVerdi<Nullable<string>>;
-    fødselsdato: SladdbarVerdi<string>;
+    fødselsdato: SladdbarVerdi<Dato>;
     kilde: SøknadBarnKilde;
     fnr: SladdbarVerdi<Nullable<string>>;
 }
@@ -104,7 +105,7 @@ export interface JaNeiSpm {
 export interface FraOgMedDatoSpm {
     svar: JaNeiSvar;
     /** Null når svaret ikke er JA. */
-    fraOgMed: Nullable<string>;
+    fraOgMed: Nullable<Dato>;
 }
 
 export interface PeriodeSpm {

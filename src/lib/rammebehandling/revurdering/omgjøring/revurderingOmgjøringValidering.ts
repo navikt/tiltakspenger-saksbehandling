@@ -11,6 +11,7 @@ import {
     periodiseringTotalPeriode,
     totalPeriode,
 } from '~/utils/periode';
+import { Dato } from '~/types/DatoTid';
 
 /**
  * Omgjøring benytter seg av de samme reglene som innvilgelse
@@ -93,7 +94,7 @@ export const revurderingOmgjøringValidering = (
         }
 
         // Opphøret kan gå over stans og tidligere opphør, så lenge det er innvilgelse både før og etter dem.
-        const erInnvilget = (dato: string) =>
+        const erInnvilget = (dato: Dato) =>
             sak.innvilgetTidslinje.elementer.some((element) =>
                 erDatoIPeriode(dato, element.periode),
             );

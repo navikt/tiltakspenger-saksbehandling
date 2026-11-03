@@ -1,6 +1,6 @@
 import { DatePicker, DateValidationT, useDatepicker } from '@navikt/ds-react';
 import { ComponentProps, useEffect } from 'react';
-import { DateOrString, tilDate } from '~/utils/date';
+import { DatoInput, tilDate } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 
 type MatcherProps = ComponentProps<typeof DatePicker>['disabled'];
@@ -8,11 +8,11 @@ type MatcherProps = ComponentProps<typeof DatePicker>['disabled'];
 export type DatovelgerProps = {
     onDateChange: (date: Date | undefined) => void;
     onValidate?: (validation: DateValidationT) => void;
-    defaultSelected?: DateOrString;
-    selected?: DateOrString;
-    minDate?: DateOrString;
-    maxDate?: DateOrString;
-    defaultMonth?: DateOrString;
+    defaultSelected?: DatoInput;
+    selected?: DatoInput;
+    minDate?: DatoInput;
+    maxDate?: DatoInput;
+    defaultMonth?: DatoInput;
     label?: React.ReactNode;
     dropdownCaption?: boolean;
     disabledPerioder?: Periode[];

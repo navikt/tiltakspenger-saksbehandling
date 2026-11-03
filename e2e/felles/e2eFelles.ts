@@ -4,6 +4,7 @@ import { ikkeSladdet } from '~test/sladdetVerdi';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import type { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import type { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { tilDato } from '~/types/DatoTid';
 
 /**
  * Felles oppsett for e2e-testene. Next sin testmode-proxy fanger opp alle kall serveren gjør mot
@@ -37,7 +38,7 @@ export const lagPersonopplysninger = (
     overstyringer: Partial<Personopplysninger> = {},
 ): Personopplysninger => ({
     fnr: ikkeSladdet('12345678911'),
-    fødselsdato: ikkeSladdet('1990-01-01'),
+    fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
     fornavn: ikkeSladdet('Ola'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet('Nordmann'),

@@ -6,11 +6,12 @@ import {
 } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { tilKompakteMerker, tilVisbarePosteringer } from './simuleringsmerker';
+import { tilDato } from '~/types/DatoTid';
 
 const merke = (overstyringer: Partial<Simuleringsmerke>): Simuleringsmerke => ({
     type: Posteringstype.YTELSE,
-    periodeFraOgMed: '2025-01-06',
-    periodeTilOgMed: '2025-01-06',
+    periodeFraOgMed: tilDato('2025-01-06'),
+    periodeTilOgMed: tilDato('2025-01-06'),
     klassekode: 'TPTPAFT',
     beløp: 298,
     erJustering: false,
@@ -20,8 +21,8 @@ const merke = (overstyringer: Partial<Simuleringsmerke>): Simuleringsmerke => ({
 
 const postering = (overstyringer: Partial<Simuleringspostering>): Simuleringspostering => ({
     type: Posteringstype.YTELSE,
-    periodeFraOgMed: '2025-01-06',
-    periodeTilOgMed: '2025-01-10',
+    periodeFraOgMed: tilDato('2025-01-06'),
+    periodeTilOgMed: tilDato('2025-01-10'),
     klassekode: 'TPTPAFT',
     beløp: 298,
     erJustering: false,
@@ -116,8 +117,8 @@ describe('tilVisbarePosteringer', () => {
             postering({
                 type: Posteringstype.TREKK,
                 beløp: -98,
-                periodeFraOgMed: '2025-01-13',
-                periodeTilOgMed: '2025-01-17',
+                periodeFraOgMed: tilDato('2025-01-13'),
+                periodeTilOgMed: tilDato('2025-01-17'),
             }),
             postering({ type: Posteringstype.TREKK, beløp: -237 }),
             postering({ type: Posteringstype.JUSTERING, erJustering: true, beløp: 81 }),

@@ -12,12 +12,13 @@ type Props = {
 };
 
 export const InformasjonOmBarnManuell = ({ barn, søknadsperiode }: Props) => {
-    const bleFødtITiltaksperioden = søknadsperiode
-        ? erDatoIPeriode(barn.fødselsdato, søknadsperiode)
-        : false;
-    const fyller16ITiltaksperioden = søknadsperiode
-        ? erDatoIPeriode(finn16årsdag(barn.fødselsdato), søknadsperiode)
-        : false;
+    const { fødselsdato } = barn;
+    const bleFødtITiltaksperioden =
+        fødselsdato && søknadsperiode ? erDatoIPeriode(fødselsdato, søknadsperiode) : false;
+    const fyller16ITiltaksperioden =
+        fødselsdato && søknadsperiode
+            ? erDatoIPeriode(finn16årsdag(fødselsdato), søknadsperiode)
+            : false;
     return (
         <VStack gap="space-8">
             <HStack gap="space-16">

@@ -24,6 +24,7 @@ import {
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { periode, rammevedtak, søknadsbehandlingInnvilgelse } from '~test/rammebehandling';
 import { formkrav, klagebehandling } from '~test/klage';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const gyldigSkjema = (overstyringer: Partial<FormkravFormData> = {}): FormkravFormData => ({
     journalpostId: '453827',
@@ -62,7 +63,7 @@ const meldekortvedtakMedBehandling = (id: `vedtak_${string}`): MeldekortvedtakMe
     id,
     sakId: 'sak_1',
     meldekortId: 'meldekort_1' as MeldekortbehandlingId,
-    opprettet: '2025-03-01T10:00:00',
+    opprettet: tilTidspunkt('2025-03-01T10:00:00'),
     journalpostId: null,
     // Behandlingen brukes ikke av mappingen, bare vedtakets id.
     behandling: {} as MeldekortbehandlingProps,
@@ -303,7 +304,7 @@ describe('klageTilFormkravFormData', () => {
                 erKlagefristenOverholdt: false,
                 erUnntakForKlagefrist: KlagefristUnntakSvarord.JA_AV_SÆRLIGE_GRUNNER,
                 erKlagenSignert: false,
-                innsendingsdato: '2025-04-01',
+                innsendingsdato: tilDato('2025-04-01'),
                 innsendingskilde: KlageInnsendingskilde.PAPIR_FRIHAND,
             }),
         });
@@ -338,7 +339,7 @@ describe('klageTilFormkravFormData', () => {
                 vedtakDetKlagesPå: 'vedtak_meldekort',
                 erKlagefristenOverholdt: erUnntakForKlagefrist === null,
                 erUnntakForKlagefrist,
-                innsendingsdato: '2025-02-28',
+                innsendingsdato: tilDato('2025-02-28'),
                 innsendingskilde,
             });
             const klage = klagebehandling({

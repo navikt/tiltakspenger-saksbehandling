@@ -1,5 +1,6 @@
 import { Branded, Nullable } from '~/types/UtilTypes';
 import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type BrukersMeldekortId = Branded<MeldekortId, 'brukersMeldekortId'>;
 
@@ -17,16 +18,16 @@ export enum BrukersMeldekortDagStatus {
 }
 
 export type BrukersMeldekortDagProps = {
-    dato: string;
+    dato: Dato;
     status: BrukersMeldekortDagStatus;
 };
 
 export type BrukersMeldekortProps = {
     id: BrukersMeldekortId;
-    mottatt: string;
+    mottatt: Tidspunkt;
     dager: BrukersMeldekortDagProps[];
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus;
-    behandlesAutomatiskNesteForsøk: Nullable<string>;
+    behandlesAutomatiskNesteForsøk: Nullable<Tidspunkt>;
 };
 
 export enum MeldekortBehandletAutomatiskStatus {

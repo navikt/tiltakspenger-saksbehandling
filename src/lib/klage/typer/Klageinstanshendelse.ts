@@ -1,5 +1,6 @@
 import { KlageId } from './Klage';
 import { Nullable } from '../../../types/UtilTypes';
+import { Tidspunkt } from '~/types/DatoTid';
 
 export type KlageinstanshendelseId = `klagehendelse_${string}`;
 
@@ -12,10 +13,10 @@ export enum KlageHendelsestype {
 export interface Klageinstanshendelse {
     klagehendelseId: KlageinstanshendelseId;
     klagebehandlingId: KlageId;
-    opprettet: string;
-    sistEndret: string;
+    opprettet: Tidspunkt;
+    sistEndret: Tidspunkt;
     eksternKlagehendelseId: string;
-    avsluttetTidspunkt: Nullable<string>;
+    avsluttetTidspunkt: Nullable<Tidspunkt>;
     journalpostreferanser: string[];
     hendelsestype: KlageHendelsestype;
 }
@@ -29,7 +30,7 @@ export interface OmgjøringskravbehandlingAvsluttetHendelse extends Klageinstans
 }
 
 export interface BehandlingFeilregistrertHendelse extends Klageinstanshendelse {
-    feilregistrertTidspunkt: string;
+    feilregistrertTidspunkt: Tidspunkt;
     årsak: string;
     navIdent: string;
     type: KlageHendelseFeilregistrertType;

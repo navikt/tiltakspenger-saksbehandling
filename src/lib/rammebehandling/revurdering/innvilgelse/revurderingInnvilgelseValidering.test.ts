@@ -4,6 +4,7 @@ import { RevurderingInnvilgelseContext } from '~/lib/rammebehandling/context/rev
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
+import { Tidspunkt, tilTidspunkt } from '~/types/DatoTid';
 import {
     innvilgelsesperiode,
     periode,
@@ -41,7 +42,7 @@ const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
 };
 
 // Sak med to vedtatte søknadsbehandlinger, der bare den første søknaden har barn
-const sakMedToSøknadsbehandlinger = (iverksattMedBarn: string, iverksattUtenBarn: string) => {
+const sakMedToSøknadsbehandlinger = (iverksattMedBarn: Tidspunkt, iverksattUtenBarn: Tidspunkt) => {
     const medBarn = søknadsbehandlingInnvilgelse({
         id: 'beh_med_barn',
         status: Rammebehandlingsstatus.VEDTATT,
@@ -77,7 +78,10 @@ describe('revurderingInnvilgelseValidering', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse(),
             skjemaUtenBarnetillegg,
-            sakMedToSøknadsbehandlinger('2025-01-01T09:00:00', '2025-02-01T09:00:00'),
+            sakMedToSøknadsbehandlinger(
+                tilTidspunkt('2025-01-01T09:00:00'),
+                tilTidspunkt('2025-02-01T09:00:00'),
+            ),
         );
 
         expect(resultat).toEqual({ errors: [], warnings: [] });
@@ -87,7 +91,10 @@ describe('revurderingInnvilgelseValidering', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse(),
             skjemaUtenBarnetillegg,
-            sakMedToSøknadsbehandlinger('2025-02-01T09:00:00', '2025-01-01T09:00:00'),
+            sakMedToSøknadsbehandlinger(
+                tilTidspunkt('2025-02-01T09:00:00'),
+                tilTidspunkt('2025-01-01T09:00:00'),
+            ),
         );
 
         expect(resultat).toEqual({
@@ -110,7 +117,10 @@ describe('revurderingInnvilgelseValidering', () => {
                     ],
                 },
             },
-            sakMedToSøknadsbehandlinger('2025-01-01T09:00:00', '2025-02-01T09:00:00'),
+            sakMedToSøknadsbehandlinger(
+                tilTidspunkt('2025-01-01T09:00:00'),
+                tilTidspunkt('2025-02-01T09:00:00'),
+            ),
         );
 
         expect(resultat.errors).toEqual(['Innvilgelsesperioden starter før tiltaksperioden']);

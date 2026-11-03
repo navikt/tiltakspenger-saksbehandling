@@ -4,6 +4,7 @@ import { SakId } from '~/lib/sak/SakTyper';
 import { UtbetalingId } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { BeregningKilde } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type TilbakekrevingId = `tilbakekreving_${string}`;
 
@@ -13,14 +14,14 @@ export interface TilbakekrevingBehandling {
     utbetalingId: UtbetalingId;
     beregningKilde: BeregningKilde;
     tilbakeBehandlingId: string;
-    opprettet: string;
-    sistEndret: string;
+    opprettet: Tidspunkt;
+    sistEndret: Tidspunkt;
     status: TilbakekrevingBehandlingsstatus;
     /** Lenke til behandlingen i tilbakekrevingsløsningen. Er null dersom saksbehandler mangler tilbakekrevingsrollen. */
     url: Nullable<string>;
     kravgrunnlagTotalPeriode: Periode;
     totaltFeilutbetaltBeløp: number;
-    varselSendt: Nullable<string>;
+    varselSendt: Nullable<Dato>;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
@@ -40,7 +41,7 @@ export enum TilbakekrevingBehandlingsstatus {
 
 export type TilbakekrevingVenter = {
     grunn: TilbakekrevingVentegrunn;
-    gjenopptas: string;
+    gjenopptas: Dato;
 };
 
 export enum TilbakekrevingVentegrunn {

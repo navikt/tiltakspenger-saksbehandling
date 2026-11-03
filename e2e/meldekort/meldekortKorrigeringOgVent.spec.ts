@@ -30,6 +30,7 @@ import {
     SAK_ID,
     velgIMeny,
 } from './meldekortTestUtils';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const lagGodkjentBehandling = () => {
     const id = 'meldekort_godkjent_1' as MeldekortbehandlingId;
@@ -39,14 +40,14 @@ const lagGodkjentBehandling = () => {
         status: MeldekortbehandlingStatus.GODKJENT,
         erAvsluttet: true,
         beslutter: 'Z654321',
-        godkjentTidspunkt: '2025-01-20T12:00:00',
+        godkjentTidspunkt: tilTidspunkt('2025-01-20T12:00:00'),
         utbetalingsstatus: Utbetalingsstatus.OK,
         attesteringer: [
             {
                 status: Attesteringsstatus.GODKJENT,
                 begrunnelse: ikkeSladdet(null),
                 endretAv: 'Z654321',
-                endretTidspunkt: '2025-01-20T12:00:00',
+                endretTidspunkt: tilTidspunkt('2025-01-20T12:00:00'),
             },
         ],
     });
@@ -54,7 +55,7 @@ const lagGodkjentBehandling = () => {
         id: 'vedtak_meldekort_1',
         sakId: SAK_ID,
         meldekortId: id,
-        opprettet: '2025-01-20T12:00:00',
+        opprettet: tilTidspunkt('2025-01-20T12:00:00'),
         journalpostId: null,
     };
     return { behandling, vedtak };
@@ -88,10 +89,10 @@ test.describe('Meldekortbehandling - korrigering og sett på vent', () => {
         await expect(page.getByRole('heading', { name: 'Korrigering' })).toBeVisible();
 
         // Korrigeringen starter med dagene fra det godkjente meldekortet
-        await expect(dagStatus(page, '2025-01-17')).toHaveValue(
+        await expect(dagStatus(page, tilDato('2025-01-17'))).toHaveValue(
             MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket,
         );
-        await dagStatus(page, '2025-01-17').selectOption({ label: 'Annet fravær' });
+        await dagStatus(page, tilDato('2025-01-17')).selectOption({ label: 'Annet fravær' });
         await page.getByRole('button', { name: 'Lagre og oppdater beregning' }).click();
         await expect(page.getByText(/^Sist lagret:/)).toBeVisible();
 

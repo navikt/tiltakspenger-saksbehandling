@@ -23,6 +23,7 @@ import {
     OppdaterPrioriteringDTO,
     Prioritering,
 } from '~/lib/_felles/prioritering/prioriteringTyper';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type MeldekortbehandlingId = Branded<MeldekortId, 'meldekortbehandlingId'>;
 
@@ -62,12 +63,12 @@ export enum MeldeperiodebehandlingType {
 }
 
 export type MeldekortDagProps = {
-    dato: string;
+    dato: Dato;
     status: MeldekortbehandlingDagStatus;
 };
 
 export type MeldekortDagBeregnetProps = {
-    dato: string;
+    dato: Dato;
     status: MeldekortbehandlingDagStatus;
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag?: MeldekortBeregningsdag;
@@ -94,7 +95,7 @@ export type OppdatertMeldeperiodeDTO = {
 };
 
 type OppdaterMeldekortdagDTO = {
-    dato: string;
+    dato: Dato;
     status: MeldekortbehandlingDagStatus;
 };
 
@@ -113,9 +114,9 @@ export type MeldekortbehandlingProps = {
     sakId: SakId;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
-    opprettet: string;
-    sistEndret: string;
-    godkjentTidspunkt: Nullable<string>;
+    opprettet: Tidspunkt;
+    sistEndret: Tidspunkt;
+    godkjentTidspunkt: Nullable<Tidspunkt>;
     status: MeldekortbehandlingStatus;
     erAvsluttet: boolean;
     navkontor: SladdbarVerdi<string>;
@@ -149,7 +150,7 @@ export type MeldekortbehandlingBeslutterEndringer = {
 };
 
 export type MeldekortbehandlingSkalJournalføreNotatEndring = {
-    tidspunkt: string;
+    tidspunkt: Tidspunkt;
     saksbehandler: boolean;
     beslutter: boolean;
 };

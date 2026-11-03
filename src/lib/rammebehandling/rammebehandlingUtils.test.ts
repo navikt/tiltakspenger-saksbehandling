@@ -28,6 +28,7 @@ import {
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 import { IkkeInnvilgbarSøknad } from '~/lib/søknad/søknadTyper';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 const medTiltak = <T extends Rammebehandling>(
     behandling: T,
@@ -185,7 +186,7 @@ describe('fyller18ÅrISøknadsperioden', () => {
             søknadsbehandlingInnvilgelse({
                 id,
                 status: Rammebehandlingsstatus.VEDTATT,
-                iverksattTidspunkt: '2025-01-01T09:00:00',
+                iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
                 søknad: {
                     ...søknad(),
                     tiltaksdeltakelseperiodeDetErSøktOm: periode(fraOgMed, tilOgMed),
@@ -236,7 +237,7 @@ describe('journalførNotatEndringFraBeslutter', () => {
         skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: false },
         beslutterEndringer: {
             skalJournalføreNotat: {
-                tidspunkt: '2025-01-02T09:00:00',
+                tidspunkt: tilTidspunkt('2025-01-02T09:00:00'),
                 vilkårsvurdering: null,
                 barnetillegg: { saksbehandler: true, beslutter: false },
             },

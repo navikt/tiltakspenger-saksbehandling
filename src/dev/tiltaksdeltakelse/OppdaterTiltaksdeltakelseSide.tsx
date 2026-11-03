@@ -22,6 +22,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { resolverResultat } from '~/utils/resolverResultat';
+import { Dato } from '~/types/DatoTid';
 
 type OppdaterTiltaksdeltakelseFormData = {
     eksternDeltakelseId: string;
@@ -42,8 +43,8 @@ type OppdaterTiltaksdeltakelseRequest = {
     tiltakskode: Nullable<string>;
     typeNavn: Nullable<string>;
     kilde: Nullable<Tiltakskilde>;
-    fraOgMed: Nullable<string>;
-    tilOgMed: Nullable<string>;
+    fraOgMed: Nullable<Dato>;
+    tilOgMed: Nullable<Dato>;
     status: Nullable<TiltakDeltakerstatus>;
     deltakelseProsent: Nullable<number>;
     antallDagerPerUke: Nullable<number>;

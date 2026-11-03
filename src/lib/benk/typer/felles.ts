@@ -7,6 +7,7 @@ import type { BenkRevurdering, BenkRevurderingMedTilgang } from './revurderinger
 import type { BenkMeldekort, BenkMeldekortMedTilgang } from './meldekort';
 import type { BenkKlagebehandling, BenkKlagebehandlingMedTilgang } from './klage';
 import type { BenkTilbakekreving, BenkTilbakekrevingMedTilgang } from './tilbakekreving';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 /**
  * Delt status for behandlingstypene som går gjennom "vanlig" saksbehandlingsflyt
@@ -39,9 +40,9 @@ export enum BenkBehandlingstype {
 export type BenkVentestatus = {
     erSattPåVent: boolean;
     begrunnelse: SladdbarVerdi<Nullable<string>>;
-    frist: Nullable<string>;
+    frist: Nullable<Dato>;
     /** Tidspunktet en automatisk behandling på vent tas opp igjen. Er adskilt fra fristen. */
-    venterTil: Nullable<string>;
+    venterTil: Nullable<Tidspunkt>;
 };
 
 export enum BenkTilgangsvurdering {
@@ -111,8 +112,8 @@ export type BenkBehandlingBase<T = unknown> = T & {
     sakId: SladdbarVerdi<SakId>;
     fnr: SladdbarVerdi<string>;
     saksnummer: SladdbarVerdi<Saksnummer>;
-    startet: string;
-    sistEndret: string;
+    startet: Tidspunkt;
+    sistEndret: Tidspunkt;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     erUnderkjent: boolean;

@@ -27,6 +27,7 @@ import { finn18årsdag } from '~/utils/date';
 import { erSladdet } from '~/utils/sladdetVerdi';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { Dato } from '~/types/DatoTid';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
@@ -77,7 +78,7 @@ export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling):
 
 export const finnForsteStartdatoForTiltaksdeltakelse = (
     behandling: Rammebehandling,
-): string | null => {
+): Dato | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.periode.fraOgMed != null)
         .sort((a, b) => (nonNullish(b.periode.fraOgMed) > nonNullish(a.periode.fraOgMed) ? -1 : 1));
@@ -86,7 +87,7 @@ export const finnForsteStartdatoForTiltaksdeltakelse = (
 
 export const finnSisteSluttdatoForTiltaksdeltakelse = (
     behandling: Rammebehandling,
-): string | null => {
+): Dato | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.periode.tilOgMed != null)
         .sort((a, b) => (nonNullish(a.periode.tilOgMed) > nonNullish(b.periode.tilOgMed) ? -1 : 1));

@@ -9,6 +9,7 @@ import {
     benkFellesKolonner,
     BenkBeskyttelsesfilter,
 } from './felles';
+import { Tidspunkt } from '~/types/DatoTid';
 
 /**
  * Statusene en klage kan ha i benken. Klage har ingen beslutningsflyt, men får
@@ -24,7 +25,7 @@ type BenkKlagebehandlingProps = {
     type: BenkBehandlingstype.KLAGEBEHANDLING;
     id: KlageId;
     status: BenkKlageStatus;
-    kravtidspunkt: string;
+    kravtidspunkt: Tidspunkt;
     resultat: Nullable<KlagebehandlingResultat>;
     beslutter: null;
 };

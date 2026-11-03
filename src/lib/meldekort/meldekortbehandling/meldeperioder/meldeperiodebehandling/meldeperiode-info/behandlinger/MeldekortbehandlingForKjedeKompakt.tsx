@@ -30,6 +30,7 @@ import { BeregningForMeldeperiodeKjede } from '~/lib/meldekort/meldekortbehandli
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 import style from './MeldekortbehandlingForKjedeKompakt.module.css';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     meldekortbehandlingId: MeldekortbehandlingId;
@@ -131,7 +132,7 @@ const DagDetaljer = ({
     dato,
     beregningsdag,
 }: {
-    dato: string;
+    dato: Dato;
     beregningsdag: MeldekortDagBeregnetProps['beregningsdag'];
 }) => {
     return (

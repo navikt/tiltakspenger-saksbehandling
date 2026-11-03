@@ -1,5 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Søknad, Søknadshendelse, SøknadshendelseType } from '~/lib/søknad/søknadTyper';
+import { Tidspunkt } from '~/types/DatoTid';
 
 /**
  * Gjenåpningen som ligger bak en behandling, altså den siste som skjedde før behandlingen ble
@@ -7,7 +8,7 @@ import { Søknad, Søknadshendelse, SøknadshendelseType } from '~/lib/søknad/s
  */
 export const hentGjenåpningForBehandling = (
     søknad: Søknad,
-    behandlingOpprettet: string,
+    behandlingOpprettet: Tidspunkt,
 ): Nullable<Søknadshendelse> =>
     søknad.avbrutt.findLast(
         (hendelse) =>

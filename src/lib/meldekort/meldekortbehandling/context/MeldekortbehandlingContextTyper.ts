@@ -5,9 +5,10 @@ import {
     MeldeperiodeKjedeId,
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato } from '~/types/DatoTid';
 
 export type MeldekortDagSkjema = {
-    dato: string;
+    dato: Dato;
     status: MeldekortbehandlingDagStatus;
 };
 

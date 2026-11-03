@@ -3,10 +3,11 @@ import { SakId } from '../sak/SakTyper';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { Nullable } from '~/types/UtilTypes';
+import { Dato } from '~/types/DatoTid';
 
 export type Personopplysninger = {
     fnr: SladdbarVerdi<string>;
-    fødselsdato: SladdbarVerdi<string>;
+    fødselsdato: SladdbarVerdi<Dato>;
     fornavn: SladdbarVerdi<Nullable<string>>;
     mellomnavn: SladdbarVerdi<Nullable<string>>;
     etternavn: SladdbarVerdi<Nullable<string>>;
@@ -14,7 +15,7 @@ export type Personopplysninger = {
     strengtFortrolig: boolean;
     strengtFortroligUtland: boolean;
     skjermet: boolean;
-    dødsdato: SladdbarVerdi<Nullable<string>>;
+    dødsdato: SladdbarVerdi<Nullable<Dato>>;
 };
 
 export const useHentPersonopplysninger = (sakId: SakId) => {

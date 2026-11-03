@@ -9,6 +9,7 @@ import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 import { dateTilISOTekst } from '~/utils/date';
 import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     behandlingId: RammebehandlingId;
@@ -28,14 +29,14 @@ export const RammebehandlingSettPåVent = ({
     onSuccess,
 }: Props) => {
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
-    const [frist, setFrist] = useState<Nullable<string>>(null);
+    const [frist, setFrist] = useState<Nullable<Dato>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
     const [fristValideringsfeil, setFristValideringsfeil] = useState<string | undefined>();
     const [visFristValideringsfeil, setVisFristValideringsfeil] = useState(false);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
-        { begrunnelse: string; frist: Nullable<string>; oppdaterSattPåVent: boolean }
+        { begrunnelse: string; frist: Nullable<Dato>; oppdaterSattPåVent: boolean }
     >(`/sak/${sakId}/behandling/${behandlingId}/pause`, 'POST');
 
     const settPåVent = () => {

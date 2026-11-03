@@ -20,6 +20,7 @@ import {
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { SAKSBEHANDLER_IDENT } from '../felles/e2eFelles';
 import { klageTestUtils } from '../klage/klageTestUtils';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 export const SAKSNUMMER = tilSaksnummer('202501011001');
 export const SAK_ID = 'sak_1';
@@ -31,7 +32,7 @@ export const lagÅpenSøknadsbehandling = () =>
     søknadsbehandlingIkkeValgt({
         id: 'beh_apen',
         saksbehandler: SAKSBEHANDLER_IDENT,
-        opprettet: '2025-04-01T10:00:00',
+        opprettet: tilTidspunkt('2025-04-01T10:00:00'),
         gyldigeKommandoer: [
             SaksbehandlerBehandlingKommando.Saksbehandle,
             SaksbehandlerBehandlingKommando.Avbryt,
@@ -44,7 +45,7 @@ export const lagÅpenRevurdering = () =>
         id: 'beh_revurdering',
         status: Rammebehandlingsstatus.KLAR_TIL_BEHANDLING,
         saksbehandler: null,
-        opprettet: '2025-04-02T10:00:00',
+        opprettet: tilTidspunkt('2025-04-02T10:00:00'),
         gyldigeKommandoer: [SaksbehandlerBehandlingKommando.TildelSaksbehandler],
     });
 
@@ -53,10 +54,10 @@ export const lagAvbruttSøknadsbehandling = () =>
         id: 'beh_avbrutt',
         status: Rammebehandlingsstatus.AVBRUTT,
         saksbehandler: 'Z999999',
-        opprettet: '2025-02-01T10:00:00',
+        opprettet: tilTidspunkt('2025-02-01T10:00:00'),
         avbrutt: {
             avbruttAv: 'Z999999',
-            avbruttTidspunkt: '2025-02-10T12:30:00',
+            avbruttTidspunkt: tilTidspunkt('2025-02-10T12:30:00'),
             begrunnelse: ikkeSladdet('Duplikat søknad'),
         },
     });
@@ -66,7 +67,7 @@ export const lagKlage = (): Klagebehandling => ({
     id: 'klage_apen',
     sakId: SAK_ID,
     saksnummer: SAKSNUMMER,
-    opprettet: '2025-04-03T10:00:00',
+    opprettet: tilTidspunkt('2025-04-03T10:00:00'),
 });
 
 export const lagTilbakekreving = (
@@ -77,8 +78,8 @@ export const lagTilbakekreving = (
     utbetalingId: 'utbetaling_1',
     beregningKilde: { id: 'beh_vedtatt', type: BeregningKildeType.RAMMEBEHANDLING },
     tilbakeBehandlingId: 'tilbake_1',
-    opprettet: '2025-04-04T10:00:00',
-    sistEndret: '2025-04-05T10:00:00',
+    opprettet: tilTidspunkt('2025-04-04T10:00:00'),
+    sistEndret: tilTidspunkt('2025-04-05T10:00:00'),
     status: TilbakekrevingBehandlingsstatus.TIL_BEHANDLING,
     url: null,
     kravgrunnlagTotalPeriode: periode('2025-01-06', '2025-01-19'),
@@ -104,7 +105,7 @@ export const lagMeldeperiodekjede = (): MeldeperiodekjedeProps => {
             versjon: 1,
             kjedeId,
             periode: kjedePeriode,
-            opprettet: '2025-01-05T10:00:00',
+            opprettet: tilTidspunkt('2025-01-05T10:00:00'),
             antallDager: 10,
             girRett: {},
             ingenDagerGirRett: false,

@@ -33,6 +33,7 @@ import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import style from './BenkTabellCelle.module.css';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 type MedBehandling = { behandling: BenkBehandling };
 
@@ -207,7 +208,7 @@ const begrunnelseTekst = (
     return verdi;
 };
 
-const finnTagColor = (fristDato: string): AkselColor => {
+const finnTagColor = (fristDato: Dato): AkselColor => {
     const antallDager = antallKalenderDagerUnnaDagensDato(fristDato);
 
     if (antallDager <= 0) {
@@ -219,7 +220,7 @@ const finnTagColor = (fristDato: string): AkselColor => {
     }
 };
 
-const Tidspunkt = ({ tidspunkt }: { tidspunkt: Nullable<string> }) =>
+const TidspunktCelle = ({ tidspunkt }: { tidspunkt: Nullable<Tidspunkt> }) =>
     tidspunkt ? formaterTidspunktKort(tidspunkt) : '-';
 
 /** Saksbehandler- og beslutterkolonnene deler denne - tom ident betyr at ingen har tatt behandlingen */
@@ -261,7 +262,7 @@ export const BenkTabellCelle = {
     Resultat,
     Status,
     Ventestatus,
-    Tidspunkt,
+    Tidspunkt: TidspunktCelle,
     Tildelt,
     Periode: PeriodeCelle,
     Meldeperiode,

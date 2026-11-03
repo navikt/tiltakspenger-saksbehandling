@@ -1,8 +1,9 @@
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack } from '@navikt/ds-react';
+import { Dato } from '~/types/DatoTid';
 import { Nullable } from '~/types/UtilTypes';
 
-const OppsummeringAvJournalførtKlage = (props: { journalføringsdato: Nullable<string> }) => {
+const OppsummeringAvJournalførtKlage = (props: { journalføringsdato: Nullable<Dato> }) => {
     return (
         <HStack gap="space-8">
             <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />

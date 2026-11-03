@@ -24,11 +24,12 @@ import {
     meldeperiode,
     meldeperiodekjede,
 } from '~test/meldekort';
+import { Dato } from '~/types/DatoTid';
 
 const { DeltattUtenLønnITiltaket, IkkeBesvart, IkkeTiltaksdag, IkkeRettTilTiltakspenger } =
     MeldekortbehandlingDagStatus;
 
-const sakMedKjeder = (...kjeder: { fraOgMed: string; antallDager: number }[]) =>
+const sakMedKjeder = (...kjeder: { fraOgMed: Dato; antallDager: number }[]) =>
     sak({
         meldeperiodeKjeder: kjeder.map(({ fraOgMed, antallDager }) =>
             meldeperiodekjede(fraOgMed, {
@@ -38,7 +39,7 @@ const sakMedKjeder = (...kjeder: { fraOgMed: string; antallDager: number }[]) =>
     });
 
 // Deltatt alle hverdager og ikke tiltaksdag i helgene, dvs. 10 dager med deltakelse
-const fullstendigUtfylt = (fraOgMed: string): MeldeperiodeSkjema => ({
+const fullstendigUtfylt = (fraOgMed: Dato): MeldeperiodeSkjema => ({
     kjedeId: kjedeIdFor(fraOgMed),
     dager: meldekortDager(fraOgMed, (dato) =>
         erHelg(dato) ? IkkeTiltaksdag : DeltattUtenLønnITiltaket,
@@ -46,8 +47,8 @@ const fullstendigUtfylt = (fraOgMed: string): MeldeperiodeSkjema => ({
 });
 
 const medStatuser = (
-    fraOgMed: string,
-    statusForDag: (dato: string, index: number) => MeldekortbehandlingDagStatus,
+    fraOgMed: Dato,
+    statusForDag: (dato: Dato, index: number) => MeldekortbehandlingDagStatus,
 ): MeldeperiodeSkjema => ({
     kjedeId: kjedeIdFor(fraOgMed),
     dager: meldekortDager(fraOgMed, statusForDag),

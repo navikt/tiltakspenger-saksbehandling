@@ -22,6 +22,7 @@ import {
 } from './revurderingTestUtils';
 import { omgjøringIkkeValgt, periode, tiltaksdeltakelse } from '~test/rammebehandling';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { tilDato } from '~/types/DatoTid';
 
 test.describe('Omgjøring', () => {
     test('kalenderen tillater å forlenge vedtaksperioden til neste år ved innvilgelse, men ikke ved opphør', async ({
@@ -124,7 +125,10 @@ test.describe('Omgjøring', () => {
                     fritekstTilVedtaksbrev: 'Du har ikke deltatt',
                     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
                     prioritering: null,
-                    vedtaksperiode: { fraOgMed: '2025-02-01', tilOgMed: '2025-03-31' },
+                    vedtaksperiode: {
+                        fraOgMed: tilDato('2025-02-01'),
+                        tilOgMed: tilDato('2025-03-31'),
+                    },
                     valgteHjemler: [HjemmelForOpphør.DeltarIkkePåArbeidsmarkedstiltak],
                     skalSendeVedtaksbrev: true,
                 } satisfies OppdaterOmgjøringOpphørDTO,
@@ -213,10 +217,16 @@ test.describe('Omgjøring', () => {
                     fritekstTilVedtaksbrev: 'Færre dager',
                     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
                     prioritering: null,
-                    vedtaksperiode: { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' },
+                    vedtaksperiode: {
+                        fraOgMed: tilDato('2025-01-01'),
+                        tilOgMed: tilDato('2025-03-31'),
+                    },
                     innvilgelsesperioder: [
                         {
-                            periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' },
+                            periode: {
+                                fraOgMed: tilDato('2025-01-01'),
+                                tilOgMed: tilDato('2025-03-31'),
+                            },
                             antallDagerPerMeldeperiode: 8,
                             internDeltakelseId: 'deltakelse_1',
                         },

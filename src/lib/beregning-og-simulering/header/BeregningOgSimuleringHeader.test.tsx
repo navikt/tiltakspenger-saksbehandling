@@ -19,6 +19,7 @@ import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { ANDRE_MANDAG, FØRSTE_MANDAG, kjedeIdFor, meldeperiodeDatoer } from '~test/meldekort';
+import { Dato, tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const NEGATIV_UTEN_FEILUTBETALING =
     /Beregningen viser negativt endret beløp, men simulering viser ingen feilutbetaling/;
@@ -32,7 +33,7 @@ const beregning = (før: number | null, nå: number): BeregningerSummert => ({
     barnetillegg: { før: før === null ? null : 0, nå: 0 },
 });
 
-const simulertMeldeperiode = (fraOgMed: string): SimulertBeregningPerMeldeperiode => ({
+const simulertMeldeperiode = (fraOgMed: Dato): SimulertBeregningPerMeldeperiode => ({
     kjedeId: kjedeIdFor(fraOgMed),
     dager: meldeperiodeDatoer(fraOgMed).map((dato) => ({
         dato,
@@ -65,21 +66,21 @@ const simulerteBeløp = (overstyringer: Partial<SimulerteBeløp> = {}): Simulert
 const simulertBeregning = (
     sum: BeregningerSummert,
     beløp: SimulerteBeløp | null,
-    meldeperiodeStarter: string[] = [FØRSTE_MANDAG],
+    meldeperiodeStarter: Dato[] = [FØRSTE_MANDAG],
 ): SimulertBeregning => {
     const felles = {
         behandlingId: 'meldekort_behandling_1' as MeldekortbehandlingId,
         behandlingstype: SimulerertBehandlingstype.MELDERKORT,
         meldeperioder: meldeperiodeStarter.map(simulertMeldeperiode),
-        beregningstidspunkt: '2025-02-03T10:00:00',
+        beregningstidspunkt: tilTidspunkt('2025-02-03T10:00:00'),
         beregning: sum,
     };
 
     return beløp
         ? {
               ...felles,
-              simuleringstidspunkt: '2025-02-03T10:00:01',
-              simuleringsdato: '2025-02-03',
+              simuleringstidspunkt: tilTidspunkt('2025-02-03T10:00:01'),
+              simuleringsdato: tilDato('2025-02-03'),
               simuleringTotalBeløp: beløp.nyUtbetaling,
               simulerteBeløp: beløp,
               simuleringResultat: SimuleringResultat.ENDRING,

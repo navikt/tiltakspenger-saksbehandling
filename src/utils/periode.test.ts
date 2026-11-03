@@ -27,42 +27,53 @@ import {
 } from '~/utils/periode';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato, tilDato } from '~/types/DatoTid';
 
 type MedAntall = MedPeriode<{ antall: number }>;
 
-const element = (fraOgMed: string, tilOgMed: string, antall: number): MedAntall => ({
+const element = (fraOgMed: Dato, tilOgMed: Dato, antall: number): MedAntall => ({
     antall,
     periode: { fraOgMed, tilOgMed },
 });
 
 describe('utvidPeriodisering', () => {
     test('tom periodisering gir tom liste', () => {
-        expect(utvidPeriodisering([], { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' })).toEqual(
-            [],
-        );
         expect(
-            utvidPeriodisering([], { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' }, true),
+            utvidPeriodisering([], {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-01-31'),
+            }),
+        ).toEqual([]);
+        expect(
+            utvidPeriodisering(
+                [],
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-31') },
+                true,
+            ),
         ).toEqual([]);
     });
 
     test('uten overlapp og uten flagget for nærmeste gir tom liste', () => {
-        const periodisering = [element('2025-03-01', '2025-03-31', 1)];
+        const periodisering = [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)];
 
         expect(
-            utvidPeriodisering(periodisering, { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' }),
+            utvidPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-01-31'),
+            }),
         ).toEqual([]);
     });
 
     test('perioden ligger før første element og arver verdien fra det', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
 
         expect(
             utvidPeriodisering(
                 periodisering,
-                { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' },
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-31') },
                 true,
             ),
         ).toEqual([{ antall: 1, periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' } }]);
@@ -70,14 +81,14 @@ describe('utvidPeriodisering', () => {
 
     test('perioden ligger etter siste element og arver verdien fra det', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
 
         expect(
             utvidPeriodisering(
                 periodisering,
-                { fraOgMed: '2025-07-01', tilOgMed: '2025-07-31' },
+                { fraOgMed: tilDato('2025-07-01'), tilOgMed: tilDato('2025-07-31') },
                 true,
             ),
         ).toEqual([{ antall: 2, periode: { fraOgMed: '2025-07-01', tilOgMed: '2025-07-31' } }]);
@@ -85,14 +96,14 @@ describe('utvidPeriodisering', () => {
 
     test('perioden ligger midt i et hull mellom to elementer og gir tom liste', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
 
         expect(
             utvidPeriodisering(
                 periodisering,
-                { fraOgMed: '2025-04-10', tilOgMed: '2025-04-20' },
+                { fraOgMed: tilDato('2025-04-10'), tilOgMed: tilDato('2025-04-20') },
                 true,
             ),
         ).toEqual([]);
@@ -100,14 +111,14 @@ describe('utvidPeriodisering', () => {
 
     test('perioden fyller hele hullet og tilstøter naboene uten å overlappe dem', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
 
         expect(
             utvidPeriodisering(
                 periodisering,
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
                 true,
             ),
         ).toEqual([]);
@@ -115,24 +126,30 @@ describe('utvidPeriodisering', () => {
 
     test('overlapp med ett element gir det elementet med den nye perioden', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
 
         expect(
-            utvidPeriodisering(periodisering, { fraOgMed: '2025-02-01', tilOgMed: '2025-03-15' }),
+            utvidPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-02-01'),
+                tilOgMed: tilDato('2025-03-15'),
+            }),
         ).toEqual([{ antall: 1, periode: { fraOgMed: '2025-02-01', tilOgMed: '2025-03-15' } }]);
     });
 
     test('overlapp med flere elementer utvider bare ytterkantene', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-04-01', '2025-04-30', 2),
-            element('2025-05-01', '2025-05-31', 3),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-04-01'), tilDato('2025-04-30'), 2),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 3),
         ];
 
         expect(
-            utvidPeriodisering(periodisering, { fraOgMed: '2025-02-01', tilOgMed: '2025-06-30' }),
+            utvidPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-02-01'),
+                tilOgMed: tilDato('2025-06-30'),
+            }),
         ).toEqual([
             { antall: 1, periode: { fraOgMed: '2025-02-01', tilOgMed: '2025-03-31' } },
             { antall: 2, periode: { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' } },
@@ -142,14 +159,14 @@ describe('utvidPeriodisering', () => {
 
     test('en enkelt dag i hullet gir tom liste', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
 
         expect(
             utvidPeriodisering(
                 periodisering,
-                { fraOgMed: '2025-04-15', tilOgMed: '2025-04-15' },
+                { fraOgMed: tilDato('2025-04-15'), tilOgMed: tilDato('2025-04-15') },
                 true,
             ),
         ).toEqual([]);
@@ -157,13 +174,20 @@ describe('utvidPeriodisering', () => {
 
     test('periodiseringen som sendes inn endres ikke', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
         const uendret = structuredClone(periodisering);
 
-        utvidPeriodisering(periodisering, { fraOgMed: '2025-02-01', tilOgMed: '2025-06-30' });
-        utvidPeriodisering(periodisering, { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }, true);
+        utvidPeriodisering(periodisering, {
+            fraOgMed: tilDato('2025-02-01'),
+            tilOgMed: tilDato('2025-06-30'),
+        });
+        utvidPeriodisering(
+            periodisering,
+            { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
+            true,
+        );
 
         expect(periodisering).toEqual(uendret);
     });
@@ -178,12 +202,18 @@ describe('meldeperiodeKjedeIdTilPeriode og periodeTilMeldeperiodeKjedeId', () =>
 
     test('konverterer periode til kjede-id', () => {
         expect(
-            periodeTilMeldeperiodeKjedeId({ fraOgMed: '2025-01-06', tilOgMed: '2025-01-19' }),
+            periodeTilMeldeperiodeKjedeId({
+                fraOgMed: tilDato('2025-01-06'),
+                tilOgMed: tilDato('2025-01-19'),
+            }),
         ).toBe('2025-01-06/2025-01-19');
     });
 
     test('roundtrip gir samme periode', () => {
-        const periode: Periode = { fraOgMed: '2025-12-29', tilOgMed: '2026-01-11' };
+        const periode: Periode = {
+            fraOgMed: tilDato('2025-12-29'),
+            tilOgMed: tilDato('2026-01-11'),
+        };
         expect(
             meldeperiodeKjedeIdTilPeriode(
                 periodeTilMeldeperiodeKjedeId(periode) as MeldeperiodeKjedeId,
@@ -199,15 +229,15 @@ describe('validerPeriodisering', () => {
     });
 
     test('ett element er alltid gyldig', () => {
-        const periodisering = [element('2025-03-01', '2025-03-31', 1)];
+        const periodisering = [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)];
         expect(validerPeriodisering(periodisering, false)).toBe(true);
         expect(validerPeriodisering(periodisering, true)).toBe(true);
     });
 
     test('sammenhengende perioder er gyldige uansett hull-flagg', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-04-01', '2025-04-30', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-04-01'), tilDato('2025-04-30'), 2),
         ];
         expect(validerPeriodisering(periodisering, false)).toBe(true);
         expect(validerPeriodisering(periodisering, true)).toBe(true);
@@ -215,8 +245,8 @@ describe('validerPeriodisering', () => {
 
     test('hull er ugyldig uten hull-flagg', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
         ];
         expect(validerPeriodisering(periodisering, false)).toBe(false);
         expect(validerPeriodisering(periodisering, true)).toBe(true);
@@ -224,8 +254,8 @@ describe('validerPeriodisering', () => {
 
     test('overlappende perioder er ugyldige uansett hull-flagg', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-03-15', '2025-04-15', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-03-15'), tilDato('2025-04-15'), 2),
         ];
         expect(validerPeriodisering(periodisering, false)).toBe(false);
         expect(validerPeriodisering(periodisering, true)).toBe(false);
@@ -233,8 +263,8 @@ describe('validerPeriodisering', () => {
 
     test('identiske perioder er ugyldige', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-03-01', '2025-03-31', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 2),
         ];
         expect(validerPeriodisering(periodisering, false)).toBe(false);
         expect(validerPeriodisering(periodisering, true)).toBe(false);
@@ -242,8 +272,8 @@ describe('validerPeriodisering', () => {
 
     test('feil rekkefølge er ugyldig', () => {
         const periodisering = [
-            element('2025-05-01', '2025-05-31', 1),
-            element('2025-03-01', '2025-03-31', 2),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 1),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 2),
         ];
         expect(validerPeriodisering(periodisering, false)).toBe(false);
         expect(validerPeriodisering(periodisering, true)).toBe(false);
@@ -256,15 +286,18 @@ describe('totalPeriode', () => {
     });
 
     test('én periode gir samme periode', () => {
-        const periode: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+        const periode: Periode = {
+            fraOgMed: tilDato('2025-03-01'),
+            tilOgMed: tilDato('2025-03-31'),
+        };
         expect(totalPeriode([periode])).toEqual(periode);
     });
 
     test('gir ytterpunktene for usortert input', () => {
         expect(
             totalPeriode([
-                { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+                { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
             ]),
         ).toEqual({ fraOgMed: '2025-03-01', tilOgMed: '2025-05-31' });
     });
@@ -272,9 +305,9 @@ describe('totalPeriode', () => {
     test('ytterpunktene kan komme fra ulike perioder', () => {
         expect(
             totalPeriode([
-                { fraOgMed: '2025-01-01', tilOgMed: '2025-01-10' },
-                { fraOgMed: '2025-06-01', tilOgMed: '2025-12-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-10') },
+                { fraOgMed: tilDato('2025-06-01'), tilOgMed: tilDato('2025-12-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
             ]),
         ).toEqual({ fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' });
     });
@@ -282,50 +315,77 @@ describe('totalPeriode', () => {
     test('inneholdt periode påvirker ikke totalen', () => {
         expect(
             totalPeriode([
-                { fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-12-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
             ]),
         ).toEqual({ fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' });
     });
 });
 
 describe('overlappendePeriode', () => {
-    const a: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+    const a: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
 
     test('ingen overlapp gir null', () => {
-        expect(overlappendePeriode(a, { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' })).toBe(
-            null,
-        );
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-05-01'),
+                tilOgMed: tilDato('2025-05-31'),
+            }),
+        ).toBe(null);
     });
 
     test('tilstøtende perioder overlapper ikke', () => {
-        expect(overlappendePeriode(a, { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' })).toBe(
-            null,
-        );
-        expect(overlappendePeriode(a, { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' })).toBe(
-            null,
-        );
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-04-01'),
+                tilOgMed: tilDato('2025-04-30'),
+            }),
+        ).toBe(null);
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-02-01'),
+                tilOgMed: tilDato('2025-02-28'),
+            }),
+        ).toBe(null);
     });
 
     test('delvis overlapp gir snittet', () => {
-        expect(overlappendePeriode(a, { fraOgMed: '2025-03-15', tilOgMed: '2025-04-15' })).toEqual({
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-03-15'),
+                tilOgMed: tilDato('2025-04-15'),
+            }),
+        ).toEqual({
             fraOgMed: '2025-03-15',
             tilOgMed: '2025-03-31',
         });
-        expect(overlappendePeriode(a, { fraOgMed: '2025-02-15', tilOgMed: '2025-03-15' })).toEqual({
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-02-15'),
+                tilOgMed: tilDato('2025-03-15'),
+            }),
+        ).toEqual({
             fraOgMed: '2025-03-01',
             tilOgMed: '2025-03-15',
         });
     });
 
     test('inneholdt periode gir den minste perioden', () => {
-        expect(overlappendePeriode(a, { fraOgMed: '2025-03-10', tilOgMed: '2025-03-20' })).toEqual({
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-03-10'),
+                tilOgMed: tilDato('2025-03-20'),
+            }),
+        ).toEqual({
             fraOgMed: '2025-03-10',
             tilOgMed: '2025-03-20',
         });
-        expect(overlappendePeriode(a, { fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' })).toEqual(
-            a,
-        );
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-12-31'),
+            }),
+        ).toEqual(a);
     });
 
     test('identiske perioder gir samme periode', () => {
@@ -333,7 +393,12 @@ describe('overlappendePeriode', () => {
     });
 
     test('én felles dag gir en én-dags periode', () => {
-        expect(overlappendePeriode(a, { fraOgMed: '2025-03-31', tilOgMed: '2025-04-30' })).toEqual({
+        expect(
+            overlappendePeriode(a, {
+                fraOgMed: tilDato('2025-03-31'),
+                tilOgMed: tilDato('2025-04-30'),
+            }),
+        ).toEqual({
             fraOgMed: '2025-03-31',
             tilOgMed: '2025-03-31',
         });
@@ -341,66 +406,90 @@ describe('overlappendePeriode', () => {
 });
 
 describe('erDatoIPeriode', () => {
-    const periode: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+    const periode: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
 
     test('dato før perioden er utenfor', () => {
-        expect(erDatoIPeriode('2025-02-28', periode)).toBe(false);
+        expect(erDatoIPeriode(tilDato('2025-02-28'), periode)).toBe(false);
     });
 
     test('fraOgMed er inkludert', () => {
-        expect(erDatoIPeriode('2025-03-01', periode)).toBe(true);
+        expect(erDatoIPeriode(tilDato('2025-03-01'), periode)).toBe(true);
     });
 
     test('tilOgMed er inkludert', () => {
-        expect(erDatoIPeriode('2025-03-31', periode)).toBe(true);
+        expect(erDatoIPeriode(tilDato('2025-03-31'), periode)).toBe(true);
     });
 
     test('dato i midten er inkludert', () => {
-        expect(erDatoIPeriode('2025-03-15', periode)).toBe(true);
+        expect(erDatoIPeriode(tilDato('2025-03-15'), periode)).toBe(true);
     });
 
     test('dato etter perioden er utenfor', () => {
-        expect(erDatoIPeriode('2025-04-01', periode)).toBe(false);
+        expect(erDatoIPeriode(tilDato('2025-04-01'), periode)).toBe(false);
     });
 });
 
 describe('perioderOverlapper', () => {
-    const a: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+    const a: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
 
     test('disjunkte perioder overlapper ikke', () => {
-        expect(perioderOverlapper(a, { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' })).toBe(
-            false,
-        );
-        expect(perioderOverlapper(a, { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' })).toBe(
-            false,
-        );
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-05-01'),
+                tilOgMed: tilDato('2025-05-31'),
+            }),
+        ).toBe(false);
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-01-31'),
+            }),
+        ).toBe(false);
     });
 
     test('tilstøtende perioder overlapper ikke', () => {
-        expect(perioderOverlapper(a, { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' })).toBe(
-            false,
-        );
-        expect(perioderOverlapper(a, { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' })).toBe(
-            false,
-        );
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-04-01'),
+                tilOgMed: tilDato('2025-04-30'),
+            }),
+        ).toBe(false);
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-02-01'),
+                tilOgMed: tilDato('2025-02-28'),
+            }),
+        ).toBe(false);
     });
 
     test('delvis overlapp i begge retninger', () => {
-        expect(perioderOverlapper(a, { fraOgMed: '2025-03-15', tilOgMed: '2025-04-15' })).toBe(
-            true,
-        );
-        expect(perioderOverlapper(a, { fraOgMed: '2025-02-15', tilOgMed: '2025-03-15' })).toBe(
-            true,
-        );
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-03-15'),
+                tilOgMed: tilDato('2025-04-15'),
+            }),
+        ).toBe(true);
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-02-15'),
+                tilOgMed: tilDato('2025-03-15'),
+            }),
+        ).toBe(true);
     });
 
     test('inneholdelse regnes som overlapp', () => {
-        expect(perioderOverlapper(a, { fraOgMed: '2025-03-10', tilOgMed: '2025-03-20' })).toBe(
-            true,
-        );
-        expect(perioderOverlapper(a, { fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' })).toBe(
-            true,
-        );
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-03-10'),
+                tilOgMed: tilDato('2025-03-20'),
+            }),
+        ).toBe(true);
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-12-31'),
+            }),
+        ).toBe(true);
     });
 
     test('identiske perioder overlapper', () => {
@@ -408,61 +497,84 @@ describe('perioderOverlapper', () => {
     });
 
     test('én felles dag regnes som overlapp', () => {
-        expect(perioderOverlapper(a, { fraOgMed: '2025-03-31', tilOgMed: '2025-04-30' })).toBe(
-            true,
-        );
+        expect(
+            perioderOverlapper(a, {
+                fraOgMed: tilDato('2025-03-31'),
+                tilOgMed: tilDato('2025-04-30'),
+            }),
+        ).toBe(true);
     });
 });
 
 describe('inneholderHelePerioden', () => {
-    const a: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+    const a: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
 
     test('identiske perioder inneholder hverandre', () => {
         expect(inneholderHelePerioden(a, { ...a })).toBe(true);
     });
 
     test('inneholder periode i midten', () => {
-        expect(inneholderHelePerioden(a, { fraOgMed: '2025-03-10', tilOgMed: '2025-03-20' })).toBe(
-            true,
-        );
+        expect(
+            inneholderHelePerioden(a, {
+                fraOgMed: tilDato('2025-03-10'),
+                tilOgMed: tilDato('2025-03-20'),
+            }),
+        ).toBe(true);
     });
 
     test('inneholder ikke periode som starter før', () => {
-        expect(inneholderHelePerioden(a, { fraOgMed: '2025-02-15', tilOgMed: '2025-03-15' })).toBe(
-            false,
-        );
+        expect(
+            inneholderHelePerioden(a, {
+                fraOgMed: tilDato('2025-02-15'),
+                tilOgMed: tilDato('2025-03-15'),
+            }),
+        ).toBe(false);
     });
 
     test('inneholder ikke periode som slutter etter', () => {
-        expect(inneholderHelePerioden(a, { fraOgMed: '2025-03-15', tilOgMed: '2025-04-15' })).toBe(
-            false,
-        );
+        expect(
+            inneholderHelePerioden(a, {
+                fraOgMed: tilDato('2025-03-15'),
+                tilOgMed: tilDato('2025-04-15'),
+            }),
+        ).toBe(false);
     });
 
     test('inneholder ikke større periode', () => {
-        expect(inneholderHelePerioden(a, { fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' })).toBe(
-            false,
-        );
+        expect(
+            inneholderHelePerioden(a, {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-12-31'),
+            }),
+        ).toBe(false);
     });
 
     test('inneholder ikke disjunkt periode', () => {
-        expect(inneholderHelePerioden(a, { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' })).toBe(
-            false,
-        );
+        expect(
+            inneholderHelePerioden(a, {
+                fraOgMed: tilDato('2025-05-01'),
+                tilOgMed: tilDato('2025-05-31'),
+            }),
+        ).toBe(false);
     });
 });
 
 describe('erFullstendigPeriode', () => {
     test('begge datoer satt er fullstendig', () => {
-        expect(erFullstendigPeriode({ fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' })).toBe(true);
+        expect(
+            erFullstendigPeriode({
+                fraOgMed: tilDato('2025-03-01'),
+                tilOgMed: tilDato('2025-03-31'),
+            }),
+        ).toBe(true);
     });
 
     test('mangler fraOgMed', () => {
-        expect(erFullstendigPeriode({ tilOgMed: '2025-03-31' })).toBe(false);
+        expect(erFullstendigPeriode({ tilOgMed: tilDato('2025-03-31') })).toBe(false);
     });
 
     test('mangler tilOgMed', () => {
-        expect(erFullstendigPeriode({ fraOgMed: '2025-03-01' })).toBe(false);
+        expect(erFullstendigPeriode({ fraOgMed: tilDato('2025-03-01') })).toBe(false);
     });
 
     test('tomt objekt er ikke fullstendig', () => {
@@ -471,18 +583,22 @@ describe('erFullstendigPeriode', () => {
 });
 
 describe('perioderErLike', () => {
-    const a: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+    const a: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
 
     test('identiske perioder er like', () => {
         expect(perioderErLike(a, { ...a })).toBe(true);
     });
 
     test('ulik fraOgMed', () => {
-        expect(perioderErLike(a, { fraOgMed: '2025-03-02', tilOgMed: '2025-03-31' })).toBe(false);
+        expect(
+            perioderErLike(a, { fraOgMed: tilDato('2025-03-02'), tilOgMed: tilDato('2025-03-31') }),
+        ).toBe(false);
     });
 
     test('ulik tilOgMed', () => {
-        expect(perioderErLike(a, { fraOgMed: '2025-03-01', tilOgMed: '2025-03-30' })).toBe(false);
+        expect(
+            perioderErLike(a, { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-30') }),
+        ).toBe(false);
     });
 });
 
@@ -492,16 +608,19 @@ describe('perioderErSammenhengende', () => {
     });
 
     test('én periode er sammenhengende', () => {
-        expect(perioderErSammenhengende({ fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' })).toBe(
-            true,
-        );
+        expect(
+            perioderErSammenhengende({
+                fraOgMed: tilDato('2025-03-01'),
+                tilOgMed: tilDato('2025-03-31'),
+            }),
+        ).toBe(true);
     });
 
     test('to tilstøtende perioder er sammenhengende', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
             ),
         ).toBe(true);
     });
@@ -509,8 +628,8 @@ describe('perioderErSammenhengende', () => {
     test('hull mellom perioder er ikke sammenhengende', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-02', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-02'), tilOgMed: tilDato('2025-04-30') },
             ),
         ).toBe(false);
     });
@@ -518,8 +637,8 @@ describe('perioderErSammenhengende', () => {
     test('overlappende perioder er ikke sammenhengende', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-03-31', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-03-31'), tilOgMed: tilDato('2025-04-30') },
             ),
         ).toBe(false);
     });
@@ -527,8 +646,8 @@ describe('perioderErSammenhengende', () => {
     test('feil rekkefølge er ikke sammenhengende', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
             ),
         ).toBe(false);
     });
@@ -536,9 +655,9 @@ describe('perioderErSammenhengende', () => {
     test('tre perioder i kjede er sammenhengende', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
-                { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
+                { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
             ),
         ).toBe(true);
     });
@@ -546,9 +665,9 @@ describe('perioderErSammenhengende', () => {
     test('hull i slutten av kjeden er ikke sammenhengende', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
-                { fraOgMed: '2025-05-02', tilOgMed: '2025-05-31' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
+                { fraOgMed: tilDato('2025-05-02'), tilOgMed: tilDato('2025-05-31') },
             ),
         ).toBe(false);
     });
@@ -556,8 +675,8 @@ describe('perioderErSammenhengende', () => {
     test('sammenheng over månedsskifte', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-01-15', tilOgMed: '2025-01-31' },
-                { fraOgMed: '2025-02-01', tilOgMed: '2025-02-14' },
+                { fraOgMed: tilDato('2025-01-15'), tilOgMed: tilDato('2025-01-31') },
+                { fraOgMed: tilDato('2025-02-01'), tilOgMed: tilDato('2025-02-14') },
             ),
         ).toBe(true);
     });
@@ -565,8 +684,8 @@ describe('perioderErSammenhengende', () => {
     test('sammenheng over årsskifte', () => {
         expect(
             perioderErSammenhengende(
-                { fraOgMed: '2025-12-15', tilOgMed: '2025-12-31' },
-                { fraOgMed: '2026-01-01', tilOgMed: '2026-01-14' },
+                { fraOgMed: tilDato('2025-12-15'), tilOgMed: tilDato('2025-12-31') },
+                { fraOgMed: tilDato('2026-01-01'), tilOgMed: tilDato('2026-01-14') },
             ),
         ).toBe(true);
     });
@@ -582,15 +701,19 @@ describe('periodiseringerErLike', () => {
 
     test('ulik lengde er ikke like', () => {
         expect(
-            periodiseringerErLike([element('2025-03-01', '2025-03-31', 1)], [], sammenlignAntall),
+            periodiseringerErLike(
+                [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)],
+                [],
+                sammenlignAntall,
+            ),
         ).toBe(false);
     });
 
     test('like perioder og verdier er like', () => {
         expect(
             periodiseringerErLike(
-                [element('2025-03-01', '2025-03-31', 1)],
-                [element('2025-03-01', '2025-03-31', 1)],
+                [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)],
+                [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)],
                 sammenlignAntall,
             ),
         ).toBe(true);
@@ -599,8 +722,8 @@ describe('periodiseringerErLike', () => {
     test('like perioder med ulike verdier er ikke like', () => {
         expect(
             periodiseringerErLike(
-                [element('2025-03-01', '2025-03-31', 1)],
-                [element('2025-03-01', '2025-03-31', 2)],
+                [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)],
+                [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 2)],
                 sammenlignAntall,
             ),
         ).toBe(false);
@@ -609,8 +732,8 @@ describe('periodiseringerErLike', () => {
     test('ulike perioder med like verdier er ikke like', () => {
         expect(
             periodiseringerErLike(
-                [element('2025-03-01', '2025-03-31', 1)],
-                [element('2025-04-01', '2025-04-30', 1)],
+                [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)],
+                [element(tilDato('2025-04-01'), tilDato('2025-04-30'), 1)],
                 sammenlignAntall,
             ),
         ).toBe(false);
@@ -619,8 +742,14 @@ describe('periodiseringerErLike', () => {
     test('rekkefølge har betydning', () => {
         expect(
             periodiseringerErLike(
-                [element('2025-03-01', '2025-03-31', 1), element('2025-05-01', '2025-05-31', 2)],
-                [element('2025-05-01', '2025-05-31', 2), element('2025-03-01', '2025-03-31', 1)],
+                [
+                    element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+                    element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
+                ],
+                [
+                    element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
+                    element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+                ],
                 sammenlignAntall,
             ),
         ).toBe(false);
@@ -635,8 +764,8 @@ describe('periodiseringTotalPeriode', () => {
     test('gir ytterpunktene inkludert eventuelle hull', () => {
         expect(
             periodiseringTotalPeriode([
-                element('2025-03-01', '2025-03-31', 1),
-                element('2025-05-01', '2025-05-31', 2),
+                element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+                element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
             ]),
         ).toEqual({ fraOgMed: '2025-03-01', tilOgMed: '2025-05-31' });
     });
@@ -644,55 +773,76 @@ describe('periodiseringTotalPeriode', () => {
 
 describe('krympPeriodisering', () => {
     const periodisering = [
-        element('2025-03-01', '2025-03-31', 1),
-        element('2025-05-01', '2025-05-31', 2),
-        element('2025-07-01', '2025-07-31', 3),
+        element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+        element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
+        element(tilDato('2025-07-01'), tilDato('2025-07-31'), 3),
     ];
 
     test('ingen overlapp gir tom liste', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-09-01', tilOgMed: '2025-09-30' }),
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-09-01'),
+                tilOgMed: tilDato('2025-09-30'),
+            }),
         ).toEqual([]);
     });
 
     test('krymp som dekker alt endrer ingenting', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' }),
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-01-01'),
+                tilOgMed: tilDato('2025-12-31'),
+            }),
         ).toEqual(periodisering);
     });
 
     test('krymp inni ett element gir snittet', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-03-10', tilOgMed: '2025-03-20' }),
-        ).toEqual([element('2025-03-10', '2025-03-20', 1)]);
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-03-10'),
+                tilOgMed: tilDato('2025-03-20'),
+            }),
+        ).toEqual([element(tilDato('2025-03-10'), tilDato('2025-03-20'), 1)]);
     });
 
     test('krymp over flere elementer kutter ytterkantene og fyller ikke hull', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-03-15', tilOgMed: '2025-07-15' }),
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-03-15'),
+                tilOgMed: tilDato('2025-07-15'),
+            }),
         ).toEqual([
-            element('2025-03-15', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 2),
-            element('2025-07-01', '2025-07-15', 3),
+            element(tilDato('2025-03-15'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
+            element(tilDato('2025-07-01'), tilDato('2025-07-15'), 3),
         ]);
     });
 
     test('tilstøtende krymp uten felles dager gir tom liste', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }),
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-04-01'),
+                tilOgMed: tilDato('2025-04-30'),
+            }),
         ).toEqual([]);
     });
 
     test('krymp som deler én dag med et element gir en én-dags periode', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-03-31', tilOgMed: '2025-04-15' }),
-        ).toEqual([element('2025-03-31', '2025-03-31', 1)]);
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-03-31'),
+                tilOgMed: tilDato('2025-04-15'),
+            }),
+        ).toEqual([element(tilDato('2025-03-31'), tilDato('2025-03-31'), 1)]);
     });
 
     test('krymp som bare treffer midterste element gir bare det elementet', () => {
         expect(
-            krympPeriodisering(periodisering, { fraOgMed: '2025-05-10', tilOgMed: '2025-05-20' }),
-        ).toEqual([element('2025-05-10', '2025-05-20', 2)]);
+            krympPeriodisering(periodisering, {
+                fraOgMed: tilDato('2025-05-10'),
+                tilOgMed: tilDato('2025-05-20'),
+            }),
+        ).toEqual([element(tilDato('2025-05-10'), tilDato('2025-05-20'), 2)]);
     });
 });
 
@@ -702,14 +852,18 @@ describe('finnPerioderHull', () => {
     });
 
     test('én periode gir ingen hull', () => {
-        expect(finnPerioderHull([{ fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' }])).toEqual([]);
+        expect(
+            finnPerioderHull([
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+            ]),
+        ).toEqual([]);
     });
 
     test('sammenhengende perioder gir ingen hull', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
             ]),
         ).toEqual([]);
     });
@@ -717,8 +871,8 @@ describe('finnPerioderHull', () => {
     test('finner ett hull mellom to perioder', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
             ]),
         ).toEqual([{ fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }]);
     });
@@ -726,9 +880,9 @@ describe('finnPerioderHull', () => {
     test('finner flere hull', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
             ]),
         ).toEqual([
             { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' },
@@ -739,8 +893,8 @@ describe('finnPerioderHull', () => {
     test('hull på én dag', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-02', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-02'), tilOgMed: tilDato('2025-04-30') },
             ]),
         ).toEqual([{ fraOgMed: '2025-04-01', tilOgMed: '2025-04-01' }]);
     });
@@ -748,8 +902,8 @@ describe('finnPerioderHull', () => {
     test('overlappende perioder gir ingen hull', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-03-15', tilOgMed: '2025-04-15' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-03-15'), tilOgMed: tilDato('2025-04-15') },
             ]),
         ).toEqual([]);
     });
@@ -757,8 +911,8 @@ describe('finnPerioderHull', () => {
     test('periode fullt inneholdt i en annen gir ingen hull', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-03-10', tilOgMed: '2025-03-20' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-03-10'), tilOgMed: tilDato('2025-03-20') },
             ]),
         ).toEqual([]);
     });
@@ -766,8 +920,8 @@ describe('finnPerioderHull', () => {
     test('usortert input gir likevel hull', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+                { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
             ]),
         ).toEqual([{ fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }]);
     });
@@ -775,8 +929,8 @@ describe('finnPerioderHull', () => {
     test('hull over årsskifte', () => {
         expect(
             finnPerioderHull([
-                { fraOgMed: '2025-11-01', tilOgMed: '2025-11-30' },
-                { fraOgMed: '2026-02-01', tilOgMed: '2026-02-28' },
+                { fraOgMed: tilDato('2025-11-01'), tilOgMed: tilDato('2025-11-30') },
+                { fraOgMed: tilDato('2026-02-01'), tilOgMed: tilDato('2026-02-28') },
             ]),
         ).toEqual([{ fraOgMed: '2025-12-01', tilOgMed: '2026-01-31' }]);
     });
@@ -786,8 +940,8 @@ describe('finnPeriodiseringHull', () => {
     test('finner hull i periodisering', () => {
         expect(
             finnPeriodiseringHull([
-                element('2025-03-01', '2025-03-31', 1),
-                element('2025-05-01', '2025-05-31', 2),
+                element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+                element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2),
             ]),
         ).toEqual([{ fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }]);
     });
@@ -806,39 +960,42 @@ describe('slåSammenPeriodisering', () => {
     });
 
     test('ett element forblir uendret', () => {
-        const periodisering = [element('2025-03-01', '2025-03-31', 1)];
+        const periodisering = [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)];
         expect(slåSammenPeriodisering(periodisering, sammenlignAntall)).toEqual(periodisering);
     });
 
     test('tilstøtende elementer med lik verdi slås sammen', () => {
         expect(
             slåSammenPeriodisering(
-                [element('2025-03-01', '2025-03-31', 1), element('2025-04-01', '2025-04-30', 1)],
+                [
+                    element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+                    element(tilDato('2025-04-01'), tilDato('2025-04-30'), 1),
+                ],
                 sammenlignAntall,
             ),
-        ).toEqual([element('2025-03-01', '2025-04-30', 1)]);
+        ).toEqual([element(tilDato('2025-03-01'), tilDato('2025-04-30'), 1)]);
     });
 
     test('tilstøtende elementer med ulik verdi slås ikke sammen', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-04-01', '2025-04-30', 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-04-01'), tilDato('2025-04-30'), 2),
         ];
         expect(slåSammenPeriodisering(periodisering, sammenlignAntall)).toEqual(periodisering);
     });
 
     test('elementer med hull slås ikke sammen selv med lik verdi', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-05-01', '2025-05-31', 1),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-05-01'), tilDato('2025-05-31'), 1),
         ];
         expect(slåSammenPeriodisering(periodisering, sammenlignAntall)).toEqual(periodisering);
     });
 
     test('overlappende elementer med lik verdi slås ikke sammen', () => {
         const periodisering = [
-            element('2025-03-01', '2025-03-31', 1),
-            element('2025-03-15', '2025-04-15', 1),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+            element(tilDato('2025-03-15'), tilDato('2025-04-15'), 1),
         ];
         expect(slåSammenPeriodisering(periodisering, sammenlignAntall)).toEqual(periodisering);
     });
@@ -847,13 +1004,13 @@ describe('slåSammenPeriodisering', () => {
         expect(
             slåSammenPeriodisering(
                 [
-                    element('2025-03-01', '2025-03-31', 1),
-                    element('2025-04-01', '2025-04-30', 1),
-                    element('2025-05-01', '2025-05-31', 1),
+                    element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1),
+                    element(tilDato('2025-04-01'), tilDato('2025-04-30'), 1),
+                    element(tilDato('2025-05-01'), tilDato('2025-05-31'), 1),
                 ],
                 sammenlignAntall,
             ),
-        ).toEqual([element('2025-03-01', '2025-05-31', 1)]);
+        ).toEqual([element(tilDato('2025-03-01'), tilDato('2025-05-31'), 1)]);
     });
 
     test('sammenslått element arver øvrige felter fra det siste elementet', () => {
@@ -861,12 +1018,12 @@ describe('slåSammenPeriodisering', () => {
         const a: MedNavn = {
             antall: 1,
             navn: 'første',
-            periode: { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+            periode: { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
         };
         const b: MedNavn = {
             antall: 1,
             navn: 'siste',
-            periode: { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
+            periode: { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
         };
 
         expect(slåSammenPeriodisering([a, b], (x, y) => x.antall === y.antall)).toEqual([
@@ -881,15 +1038,18 @@ describe('slåSammenPerioder', () => {
     });
 
     test('én periode forblir uendret', () => {
-        const periode: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+        const periode: Periode = {
+            fraOgMed: tilDato('2025-03-01'),
+            tilOgMed: tilDato('2025-03-31'),
+        };
         expect(slåSammenPerioder([periode])).toEqual([periode]);
     });
 
     test('tilstøtende perioder slås sammen', () => {
         expect(
             slåSammenPerioder([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
             ]),
         ).toEqual([{ fraOgMed: '2025-03-01', tilOgMed: '2025-04-30' }]);
     });
@@ -897,8 +1057,8 @@ describe('slåSammenPerioder', () => {
     test('overlappende perioder slås sammen med seneste tilOgMed', () => {
         expect(
             slåSammenPerioder([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-03-15', tilOgMed: '2025-04-15' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-03-15'), tilOgMed: tilDato('2025-04-15') },
             ]),
         ).toEqual([{ fraOgMed: '2025-03-01', tilOgMed: '2025-04-15' }]);
     });
@@ -906,16 +1066,16 @@ describe('slåSammenPerioder', () => {
     test('inneholdt periode slås sammen uten å krympe', () => {
         expect(
             slåSammenPerioder([
-                { fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-12-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
             ]),
         ).toEqual([{ fraOgMed: '2025-01-01', tilOgMed: '2025-12-31' }]);
     });
 
     test('disjunkte perioder slås ikke sammen', () => {
         const perioder: Periode[] = [
-            { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-            { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
+            { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+            { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
         ];
         expect(slåSammenPerioder(perioder)).toEqual(perioder);
     });
@@ -923,9 +1083,9 @@ describe('slåSammenPerioder', () => {
     test('usortert input sorteres og slås sammen', () => {
         expect(
             slåSammenPerioder([
-                { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
+                { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
             ]),
         ).toEqual([{ fraOgMed: '2025-03-01', tilOgMed: '2025-05-31' }]);
     });
@@ -933,9 +1093,9 @@ describe('slåSammenPerioder', () => {
     test('kjede av overlappende og tilstøtende perioder slås sammen til én', () => {
         expect(
             slåSammenPerioder([
-                { fraOgMed: '2025-01-01', tilOgMed: '2025-01-10' },
-                { fraOgMed: '2025-01-05', tilOgMed: '2025-01-15' },
-                { fraOgMed: '2025-01-16', tilOgMed: '2025-01-20' },
+                { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-10') },
+                { fraOgMed: tilDato('2025-01-05'), tilOgMed: tilDato('2025-01-15') },
+                { fraOgMed: tilDato('2025-01-16'), tilOgMed: tilDato('2025-01-20') },
             ]),
         ).toEqual([{ fraOgMed: '2025-01-01', tilOgMed: '2025-01-20' }]);
     });
@@ -943,10 +1103,10 @@ describe('slåSammenPerioder', () => {
     test('flere adskilte grupper beholdes hver for seg', () => {
         expect(
             slåSammenPerioder([
-                { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
-                { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' },
-                { fraOgMed: '2025-07-01', tilOgMed: '2025-07-31' },
-                { fraOgMed: '2025-08-01', tilOgMed: '2025-08-31' },
+                { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-04-30') },
+                { fraOgMed: tilDato('2025-07-01'), tilOgMed: tilDato('2025-07-31') },
+                { fraOgMed: tilDato('2025-08-01'), tilOgMed: tilDato('2025-08-31') },
             ]),
         ).toEqual([
             { fraOgMed: '2025-03-01', tilOgMed: '2025-04-30' },
@@ -956,8 +1116,8 @@ describe('slåSammenPerioder', () => {
 
     test('input-array endres ikke', () => {
         const perioder: Periode[] = [
-            { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' },
-            { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' },
+            { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') },
+            { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') },
         ];
         const uendret = structuredClone(perioder);
 
@@ -968,8 +1128,8 @@ describe('slåSammenPerioder', () => {
 });
 
 describe('sorterPerioder', () => {
-    const p1: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
-    const p2: Periode = { fraOgMed: '2025-05-01', tilOgMed: '2025-05-31' };
+    const p1: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
+    const p2: Periode = { fraOgMed: tilDato('2025-05-01'), tilOgMed: tilDato('2025-05-31') };
 
     test('sorterer stigende som standard', () => {
         expect([p2, p1].toSorted(sorterPerioder())).toEqual([p1, p2]);
@@ -980,7 +1140,7 @@ describe('sorterPerioder', () => {
     });
 
     test('samme fraOgMed sorteres på tilOgMed', () => {
-        const kort: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-15' };
+        const kort: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-15') };
         expect([p1, kort].toSorted(sorterPerioder())).toEqual([kort, p1]);
         expect([kort, p1].toSorted(sorterPerioder('desc'))).toEqual([p1, kort]);
     });
@@ -991,8 +1151,8 @@ describe('sorterPerioder', () => {
 });
 
 describe('sorterPeriodisering', () => {
-    const e1 = element('2025-03-01', '2025-03-31', 1);
-    const e2 = element('2025-05-01', '2025-05-31', 2);
+    const e1 = element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1);
+    const e2 = element(tilDato('2025-05-01'), tilDato('2025-05-31'), 2);
 
     test('sorterer stigende som standard', () => {
         expect([e2, e1].toSorted(sorterPeriodisering())).toEqual([e1, e2]);
@@ -1003,7 +1163,7 @@ describe('sorterPeriodisering', () => {
     });
 
     test('samme fraOgMed sorteres på tilOgMed', () => {
-        const kort = element('2025-03-01', '2025-03-15', 3);
+        const kort = element(tilDato('2025-03-01'), tilDato('2025-03-15'), 3);
         expect([e1, kort].toSorted(sorterPeriodisering())).toEqual([kort, e1]);
     });
 
@@ -1013,7 +1173,7 @@ describe('sorterPeriodisering', () => {
 });
 
 describe('oppdaterPeriode', () => {
-    const periode: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+    const periode: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
 
     test('tom oppdatering endrer ingenting', () => {
         expect(oppdaterPeriode(periode, {})).toEqual(periode);
@@ -1021,33 +1181,36 @@ describe('oppdaterPeriode', () => {
 
     test('begge felter settes direkte', () => {
         expect(
-            oppdaterPeriode(periode, { fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' }),
+            oppdaterPeriode(periode, {
+                fraOgMed: tilDato('2025-04-01'),
+                tilOgMed: tilDato('2025-04-30'),
+            }),
         ).toEqual({ fraOgMed: '2025-04-01', tilOgMed: '2025-04-30' });
     });
 
     test('ny fraOgMed innenfor perioden beholder tilOgMed', () => {
-        expect(oppdaterPeriode(periode, { fraOgMed: '2025-03-10' })).toEqual({
+        expect(oppdaterPeriode(periode, { fraOgMed: tilDato('2025-03-10') })).toEqual({
             fraOgMed: '2025-03-10',
             tilOgMed: '2025-03-31',
         });
     });
 
     test('ny fraOgMed etter tilOgMed utvider tilOgMed til å matche', () => {
-        expect(oppdaterPeriode(periode, { fraOgMed: '2025-04-15' })).toEqual({
+        expect(oppdaterPeriode(periode, { fraOgMed: tilDato('2025-04-15') })).toEqual({
             fraOgMed: '2025-04-15',
             tilOgMed: '2025-04-15',
         });
     });
 
     test('ny tilOgMed innenfor perioden beholder fraOgMed', () => {
-        expect(oppdaterPeriode(periode, { tilOgMed: '2025-03-20' })).toEqual({
+        expect(oppdaterPeriode(periode, { tilOgMed: tilDato('2025-03-20') })).toEqual({
             fraOgMed: '2025-03-01',
             tilOgMed: '2025-03-20',
         });
     });
 
     test('ny tilOgMed før fraOgMed flytter fraOgMed til å matche', () => {
-        expect(oppdaterPeriode(periode, { tilOgMed: '2025-02-15' })).toEqual({
+        expect(oppdaterPeriode(periode, { tilOgMed: tilDato('2025-02-15') })).toEqual({
             fraOgMed: '2025-02-15',
             tilOgMed: '2025-02-15',
         });
@@ -1056,13 +1219,19 @@ describe('oppdaterPeriode', () => {
 
 describe('oppdaterPartialPeriode', () => {
     test('tom oppdatering endrer ingenting', () => {
-        const periode: Partial<Periode> = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
+        const periode: Partial<Periode> = {
+            fraOgMed: tilDato('2025-03-01'),
+            tilOgMed: tilDato('2025-03-31'),
+        };
         expect(oppdaterPartialPeriode(periode, {})).toEqual(periode);
     });
 
     test('oppdaterer fullstendig periode som oppdaterPeriode', () => {
-        const periode: Partial<Periode> = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
-        expect(oppdaterPartialPeriode(periode, { fraOgMed: '2025-04-15' })).toEqual({
+        const periode: Partial<Periode> = {
+            fraOgMed: tilDato('2025-03-01'),
+            tilOgMed: tilDato('2025-03-31'),
+        };
+        expect(oppdaterPartialPeriode(periode, { fraOgMed: tilDato('2025-04-15') })).toEqual({
             fraOgMed: '2025-04-15',
             tilOgMed: '2025-04-15',
         });
@@ -1070,7 +1239,10 @@ describe('oppdaterPartialPeriode', () => {
 
     test('setter tilOgMed på periode som mangler den', () => {
         expect(
-            oppdaterPartialPeriode({ fraOgMed: '2025-03-01' }, { tilOgMed: '2025-03-31' }),
+            oppdaterPartialPeriode(
+                { fraOgMed: tilDato('2025-03-01') },
+                { tilOgMed: tilDato('2025-03-31') },
+            ),
         ).toEqual({
             fraOgMed: '2025-03-01',
             tilOgMed: '2025-03-31',
@@ -1079,7 +1251,10 @@ describe('oppdaterPartialPeriode', () => {
 
     test('setter fraOgMed på periode som mangler den', () => {
         expect(
-            oppdaterPartialPeriode({ tilOgMed: '2025-03-31' }, { fraOgMed: '2025-03-01' }),
+            oppdaterPartialPeriode(
+                { tilOgMed: tilDato('2025-03-31') },
+                { fraOgMed: tilDato('2025-03-01') },
+            ),
         ).toEqual({
             fraOgMed: '2025-03-01',
             tilOgMed: '2025-03-31',
@@ -1087,14 +1262,14 @@ describe('oppdaterPartialPeriode', () => {
     });
 
     test('tilOgMed-oppdatering alene oppretter ikke fraOgMed', () => {
-        expect(oppdaterPartialPeriode({}, { tilOgMed: '2025-03-31' })).toEqual({
+        expect(oppdaterPartialPeriode({}, { tilOgMed: tilDato('2025-03-31') })).toEqual({
             fraOgMed: undefined,
             tilOgMed: '2025-03-31',
         });
     });
 
     test('fraOgMed-oppdatering alene oppretter ikke tilOgMed', () => {
-        expect(oppdaterPartialPeriode({}, { fraOgMed: '2025-03-01' })).toEqual({
+        expect(oppdaterPartialPeriode({}, { fraOgMed: tilDato('2025-03-01') })).toEqual({
             fraOgMed: '2025-03-01',
             tilOgMed: undefined,
         });
@@ -1108,12 +1283,12 @@ describe('oppdaterPartialPeriode', () => {
     });
 
     test('perioden slutter dagen før første element og regnes som før periodiseringen', () => {
-        const periodisering = [element('2025-03-01', '2025-03-31', 1)];
+        const periodisering = [element(tilDato('2025-03-01'), tilDato('2025-03-31'), 1)];
 
         expect(
             utvidPeriodisering(
                 periodisering,
-                { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' },
+                { fraOgMed: tilDato('2025-02-01'), tilOgMed: tilDato('2025-02-28') },
                 true,
             ),
         ).toEqual([{ antall: 1, periode: { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' } }]);
@@ -1122,22 +1297,22 @@ describe('oppdaterPartialPeriode', () => {
 
 describe('oppdaterPeriodiseringUtenOverlapp', () => {
     const periodisering = [
-        element('2025-01-01', '2025-01-31', 1),
-        element('2025-02-01', '2025-02-28', 2),
-        element('2025-03-01', '2025-03-31', 3),
+        element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+        element(tilDato('2025-02-01'), tilDato('2025-02-28'), 2),
+        element(tilDato('2025-03-01'), tilDato('2025-03-31'), 3),
     ];
 
     test('endrer kun det oppdaterte elementet når det ikke overlapper andre', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-02-01', '2025-02-28', 5),
+                element(tilDato('2025-02-01'), tilDato('2025-02-28'), 5),
                 1,
             ),
         ).toEqual([
-            element('2025-01-01', '2025-01-31', 1),
-            element('2025-02-01', '2025-02-28', 5),
-            element('2025-03-01', '2025-03-31', 3),
+            element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+            element(tilDato('2025-02-01'), tilDato('2025-02-28'), 5),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 3),
         ]);
     });
 
@@ -1145,13 +1320,13 @@ describe('oppdaterPeriodiseringUtenOverlapp', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-02-01', '2025-03-10', 2),
+                element(tilDato('2025-02-01'), tilDato('2025-03-10'), 2),
                 1,
             ),
         ).toEqual([
-            element('2025-01-01', '2025-01-31', 1),
-            element('2025-02-01', '2025-03-10', 2),
-            element('2025-03-11', '2025-03-31', 3),
+            element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+            element(tilDato('2025-02-01'), tilDato('2025-03-10'), 2),
+            element(tilDato('2025-03-11'), tilDato('2025-03-31'), 3),
         ]);
     });
 
@@ -1159,13 +1334,13 @@ describe('oppdaterPeriodiseringUtenOverlapp', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-01-20', '2025-02-28', 2),
+                element(tilDato('2025-01-20'), tilDato('2025-02-28'), 2),
                 1,
             ),
         ).toEqual([
-            element('2025-01-01', '2025-01-19', 1),
-            element('2025-01-20', '2025-02-28', 2),
-            element('2025-03-01', '2025-03-31', 3),
+            element(tilDato('2025-01-01'), tilDato('2025-01-19'), 1),
+            element(tilDato('2025-01-20'), tilDato('2025-02-28'), 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 3),
         ]);
     });
 
@@ -1173,53 +1348,71 @@ describe('oppdaterPeriodiseringUtenOverlapp', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-01-01', '2025-03-15', 1),
+                element(tilDato('2025-01-01'), tilDato('2025-03-15'), 1),
                 0,
             ),
-        ).toEqual([element('2025-01-01', '2025-03-15', 1), element('2025-03-16', '2025-03-31', 3)]);
+        ).toEqual([
+            element(tilDato('2025-01-01'), tilDato('2025-03-15'), 1),
+            element(tilDato('2025-03-16'), tilDato('2025-03-31'), 3),
+        ]);
     });
 
     test('fjerner element med lik periode', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-03-01', '2025-03-31', 2),
+                element(tilDato('2025-03-01'), tilDato('2025-03-31'), 2),
                 1,
             ),
-        ).toEqual([element('2025-01-01', '2025-01-31', 1), element('2025-03-01', '2025-03-31', 2)]);
+        ).toEqual([
+            element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 2),
+        ]);
     });
 
     test('forkorter element med samme fraOgMed til etter det oppdaterte elementet', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
-                [element('2025-01-01', '2025-01-31', 1), element('2025-02-01', '2025-02-28', 2)],
-                element('2025-02-01', '2025-02-10', 1),
+                [
+                    element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+                    element(tilDato('2025-02-01'), tilDato('2025-02-28'), 2),
+                ],
+                element(tilDato('2025-02-01'), tilDato('2025-02-10'), 1),
                 0,
             ),
-        ).toEqual([element('2025-02-01', '2025-02-10', 1), element('2025-02-11', '2025-02-28', 2)]);
+        ).toEqual([
+            element(tilDato('2025-02-01'), tilDato('2025-02-10'), 1),
+            element(tilDato('2025-02-11'), tilDato('2025-02-28'), 2),
+        ]);
     });
 
     test('beholder kun delen før når det oppdaterte elementet ligger inni et annet element', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
-                [element('2025-01-01', '2025-03-31', 1), element('2025-04-01', '2025-04-30', 2)],
-                element('2025-02-01', '2025-02-28', 2),
+                [
+                    element(tilDato('2025-01-01'), tilDato('2025-03-31'), 1),
+                    element(tilDato('2025-04-01'), tilDato('2025-04-30'), 2),
+                ],
+                element(tilDato('2025-02-01'), tilDato('2025-02-28'), 2),
                 1,
             ),
-        ).toEqual([element('2025-01-01', '2025-01-31', 1), element('2025-02-01', '2025-02-28', 2)]);
+        ).toEqual([
+            element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+            element(tilDato('2025-02-01'), tilDato('2025-02-28'), 2),
+        ]);
     });
 
     test('sorterer elementet til riktig plass når perioden flyttes', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-04-01', '2025-04-30', 1),
+                element(tilDato('2025-04-01'), tilDato('2025-04-30'), 1),
                 0,
             ),
         ).toEqual([
-            element('2025-02-01', '2025-02-28', 2),
-            element('2025-03-01', '2025-03-31', 3),
-            element('2025-04-01', '2025-04-30', 1),
+            element(tilDato('2025-02-01'), tilDato('2025-02-28'), 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-31'), 3),
+            element(tilDato('2025-04-01'), tilDato('2025-04-30'), 1),
         ]);
     });
 
@@ -1227,27 +1420,35 @@ describe('oppdaterPeriodiseringUtenOverlapp', () => {
         expect(
             oppdaterPeriodiseringUtenOverlapp(
                 periodisering,
-                element('2025-03-15', '2025-04-30', 4),
+                element(tilDato('2025-03-15'), tilDato('2025-04-30'), 4),
                 periodisering.length,
             ),
         ).toEqual([
-            element('2025-01-01', '2025-01-31', 1),
-            element('2025-02-01', '2025-02-28', 2),
-            element('2025-03-01', '2025-03-14', 3),
-            element('2025-03-15', '2025-04-30', 4),
+            element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+            element(tilDato('2025-02-01'), tilDato('2025-02-28'), 2),
+            element(tilDato('2025-03-01'), tilDato('2025-03-14'), 3),
+            element(tilDato('2025-03-15'), tilDato('2025-04-30'), 4),
         ]);
     });
 
     test('legger til element i tom liste', () => {
         expect(
-            oppdaterPeriodiseringUtenOverlapp([], element('2025-01-01', '2025-01-31', 1), 0),
-        ).toEqual([element('2025-01-01', '2025-01-31', 1)]);
+            oppdaterPeriodiseringUtenOverlapp(
+                [],
+                element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1),
+                0,
+            ),
+        ).toEqual([element(tilDato('2025-01-01'), tilDato('2025-01-31'), 1)]);
     });
 
     test('endrer ikke den opprinnelige listen', () => {
         const original = structuredClone(periodisering);
 
-        oppdaterPeriodiseringUtenOverlapp(periodisering, element('2025-01-01', '2025-03-15', 1), 0);
+        oppdaterPeriodiseringUtenOverlapp(
+            periodisering,
+            element(tilDato('2025-01-01'), tilDato('2025-03-15'), 1),
+            0,
+        );
 
         expect(periodisering).toEqual(original);
     });

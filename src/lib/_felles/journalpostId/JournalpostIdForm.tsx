@@ -38,8 +38,8 @@ export const JournalpostIdForm = (props: Props) => {
     // Avledet fra valideringssvaret - vises kun når journalposten faktisk finnes og tilhører søker
     const datoOpprettet =
         shouldValidate && data?.journalpostFinnes && data?.gjelderInnsendtFnr
-            ? (data.datoOpprettet ?? '')
-            : '';
+            ? (data.datoOpprettet ?? null)
+            : null;
 
     // RHF kjører ikke `validate`-regelen på nytt når den asynkrone SWR-responsen endrer seg
     // (bare når selve feltverdien endres), så vi trigger re-validering manuelt her.
@@ -135,7 +135,7 @@ export const JournalpostIdForm = (props: Props) => {
             <div className={styles.blokk}>
                 <TextField
                     label="Opprettet (fra journalpost)"
-                    value={formaterDatotekst(datoOpprettet)}
+                    value={datoOpprettet ? formaterDatotekst(datoOpprettet) : 'ukjent'}
                     readOnly
                 />
             </div>

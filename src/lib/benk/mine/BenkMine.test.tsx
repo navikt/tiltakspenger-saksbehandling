@@ -17,6 +17,7 @@ import {
 } from '../typer/felles';
 import { BenkKlagebehandling, BenkKlageStatus } from '../typer/klage';
 import { BenkMine } from './BenkMine';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 const router = {
     query: { tab: 'MINE' },
@@ -34,9 +35,9 @@ const klage: BenkKlagebehandling = {
     sakId: sladdet,
     fnr: sladdet,
     saksnummer: sladdet,
-    startet: '2025-01-01T12:00:00',
-    sistEndret: '2025-01-02T12:00:00',
-    kravtidspunkt: '2025-01-01T12:00:00',
+    startet: tilTidspunkt('2025-01-01T12:00:00'),
+    sistEndret: tilTidspunkt('2025-01-02T12:00:00'),
+    kravtidspunkt: tilTidspunkt('2025-01-01T12:00:00'),
     saksbehandler: 'Z123456',
     beslutter: null,
     erUnderkjent: false,

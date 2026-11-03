@@ -38,6 +38,7 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
 import { meldekortbehandlingDagStatusTekst } from '~/lib/meldekort/utils/meldekortTekster';
 
 import style from './Meldeperiodebehandling.module.css';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
@@ -72,7 +73,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
 
     const meldeperiodebehandling = meldeperioder.find((it) => it.kjedeId === kjedeId);
 
-    const beregningsdagPerDato = new Map<string, MeldekortBeregningsdag>();
+    const beregningsdagPerDato = new Map<Dato, MeldekortBeregningsdag>();
     meldeperiodebehandling?.beregning?.dager.forEach((dag) => {
         if (dag.beregningsdag) {
             beregningsdagPerDato.set(dag.dato, dag.beregningsdag);
@@ -158,7 +159,7 @@ type UkeProps = {
     dager: MeldekortDagSkjema[];
     dagIndexOffset: number;
     kjedeId: MeldeperiodeKjedeId;
-    beregningsdagPerDato: Map<string, MeldekortBeregningsdag>;
+    beregningsdagPerDato: Map<Dato, MeldekortBeregningsdag>;
     erReadonly: boolean;
     valideringsfeil: MeldeperiodeSkjemaValideringsfeil | null;
     hurtigutfylling: MeldekortHurtigutfylling;

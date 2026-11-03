@@ -24,6 +24,7 @@ import {
     Rammebehandling,
     Rammebehandlingsstatus,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 // Barnet er under 16 år i hele tiltaksdeltakelsen (2025-01-01 - 2025-06-30)
 const behandlingMedBarnISøknad = søknadsbehandlingIkkeValgt({
@@ -63,7 +64,7 @@ describe('innvilgelsesperioderReducer', () => {
             expect(
                 innvilgelsesperioderReducer(
                     utenPerioderState,
-                    oppdaterInnvilgelsesperiode({ fraOgMed: '2025-01-06' }),
+                    oppdaterInnvilgelsesperiode({ fraOgMed: tilDato('2025-01-06') }),
                 ),
             ).toEqual({
                 harValgtPeriode: false,
@@ -74,13 +75,13 @@ describe('innvilgelsesperioderReducer', () => {
         test('forhåndsutfyller innvilgelsen når perioden blir fullstendig', () => {
             const delvisUtfylt = innvilgelsesperioderReducer(
                 utenPerioderState,
-                oppdaterInnvilgelsesperiode({ fraOgMed: '2025-01-06' }),
+                oppdaterInnvilgelsesperiode({ fraOgMed: tilDato('2025-01-06') }),
             );
 
             expect(
                 innvilgelsesperioderReducer(
                     delvisUtfylt,
-                    oppdaterInnvilgelsesperiode({ tilOgMed: '2025-03-31' }),
+                    oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-03-31') }),
                 ),
             ).toEqual({
                 harValgtPeriode: true,
@@ -106,7 +107,7 @@ describe('innvilgelsesperioderReducer', () => {
             expect(
                 innvilgelsesperioderReducer(
                     medPerioderState(),
-                    oppdaterInnvilgelsesperiode({ tilOgMed: '2025-02-28' }),
+                    oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-28') }),
                 ),
             ).toEqual(
                 medPerioderState({
@@ -132,7 +133,7 @@ describe('innvilgelsesperioderReducer', () => {
 
             const nyState = innvilgelsesperioderReducer(
                 state,
-                oppdaterInnvilgelsesperiode({ tilOgMed: '2025-02-15' }),
+                oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-15') }),
             );
 
             expect(nyState).toMatchObject({
@@ -153,7 +154,7 @@ describe('innvilgelsesperioderReducer', () => {
             const nyState = innvilgelsesperioderReducer(
                 state,
                 oppdaterInnvilgelsesperiode(
-                    { tilOgMed: '2025-04-30' },
+                    { tilOgMed: tilDato('2025-04-30') },
                     0,
                     behandlingUtenBarnISøknad,
                 ),
@@ -169,7 +170,7 @@ describe('innvilgelsesperioderReducer', () => {
                 søknadsbehandling: søknadsbehandlingInnvilgelse({
                     id: 'beh_vedtatt',
                     status: Rammebehandlingsstatus.VEDTATT,
-                    iverksattTidspunkt: '2025-01-01T09:00:00',
+                    iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
                     søknad: søknad([søknadBarn('2015-03-01')]),
                 }),
             });
@@ -183,7 +184,7 @@ describe('innvilgelsesperioderReducer', () => {
             const nyState = innvilgelsesperioderReducer(
                 state,
                 oppdaterInnvilgelsesperiode(
-                    { tilOgMed: '2025-05-31' },
+                    { tilOgMed: tilDato('2025-05-31') },
                     0,
                     revurderingInnvilgelse(),
                     sakMedBarnISøknad,

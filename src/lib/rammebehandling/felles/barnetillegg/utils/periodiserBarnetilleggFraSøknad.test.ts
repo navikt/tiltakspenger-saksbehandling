@@ -2,14 +2,16 @@ import { describe, expect, test } from '@jest/globals';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
 import { SøknadBarn, SøknadBarnKilde } from '~/lib/søknad/søknadTyper';
-import { sladdbarTekst } from '~/utils/sladdetVerdi';
+import { hentVerdi } from '~/utils/sladdetVerdi';
+import { nonNullish } from '~/utils/object';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
+import { tilDato } from '~/types/DatoTid';
 
-const fødselsdatoFor = (barn: SøknadBarn) => sladdbarTekst(barn.fødselsdato);
+const fødselsdatoFor = (barn: SøknadBarn) => nonNullish(hentVerdi(barn.fødselsdato));
 
 const vedtaksperiode = {
-    fraOgMed: '2024-07-01',
-    tilOgMed: '2025-06-30',
+    fraOgMed: tilDato('2024-07-01'),
+    tilOgMed: tilDato('2025-06-30'),
 };
 
 const innvilgelsesperioder = [
@@ -19,7 +21,7 @@ const innvilgelsesperioder = [
 ];
 
 const barnSomBlir16FørPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2008-06-30'),
+    fødselsdato: ikkeSladdet(tilDato('2008-06-30')),
     fornavn: ikkeSladdet('Ola'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -32,7 +34,7 @@ const barnSomBlir16FørPerioden: SøknadBarn = {
 };
 
 const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2008-06-30'),
+    fødselsdato: ikkeSladdet(tilDato('2008-06-30')),
     fornavn: ikkeSladdet('Ole'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -45,7 +47,7 @@ const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
 };
 
 const barnSomBlir16TidligIPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2008-07-15'),
+    fødselsdato: ikkeSladdet(tilDato('2008-07-15')),
     fornavn: ikkeSladdet('Kari'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -58,7 +60,7 @@ const barnSomBlir16TidligIPerioden: SøknadBarn = {
 };
 
 const barnSomBlir16MidtIPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2008-12-31'),
+    fødselsdato: ikkeSladdet(tilDato('2008-12-31')),
     fornavn: ikkeSladdet('Bob'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -71,7 +73,7 @@ const barnSomBlir16MidtIPerioden: SøknadBarn = {
 };
 
 const barnSomBlir16SentIPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2009-06-15'),
+    fødselsdato: ikkeSladdet(tilDato('2009-06-15')),
     fornavn: ikkeSladdet('Alice'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -84,7 +86,7 @@ const barnSomBlir16SentIPerioden: SøknadBarn = {
 };
 
 const barnSomErUnder16HelePerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2010-01-01'),
+    fødselsdato: ikkeSladdet(tilDato('2010-01-01')),
     fornavn: ikkeSladdet('Chuck'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -97,7 +99,7 @@ const barnSomErUnder16HelePerioden: SøknadBarn = {
 };
 
 const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2024-08-01'),
+    fødselsdato: ikkeSladdet(tilDato('2024-08-01')),
     fornavn: ikkeSladdet('Sneed'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -110,7 +112,7 @@ const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
 };
 
 const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2025-01-01'),
+    fødselsdato: ikkeSladdet(tilDato('2025-01-01')),
     fornavn: ikkeSladdet('Knoll'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),
@@ -123,7 +125,7 @@ const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
 };
 
 const barnSomBlirFødtSentIPerioden: SøknadBarn = {
-    fødselsdato: ikkeSladdet('2025-06-15'),
+    fødselsdato: ikkeSladdet(tilDato('2025-06-15')),
     fornavn: ikkeSladdet('Tott'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet(null),

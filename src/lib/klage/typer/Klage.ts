@@ -6,6 +6,7 @@ import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type KlageId = `klage_${string}`;
 
@@ -32,12 +33,12 @@ export interface Klagebehandling {
     sakId: SakId;
     saksnummer: Saksnummer;
     fnr: SladdbarVerdi<string>;
-    opprettet: string;
-    sistEndret: string;
-    iverksattTidspunkt: Nullable<string>;
+    opprettet: Tidspunkt;
+    sistEndret: Tidspunkt;
+    iverksattTidspunkt: Nullable<Tidspunkt>;
     saksbehandler: Nullable<string>;
     klagensJournalpostId: string;
-    klagensJournalpostOpprettet: string;
+    klagensJournalpostOpprettet: Tidspunkt;
     status: KlagebehandlingStatus;
     resultat: Nullable<KlagebehandlingsresultatDTO>;
     avbrutt: Nullable<KlagebehandlingAvbrutt>;
@@ -65,15 +66,15 @@ export enum SaksbehandlerKlagebehandlingKommando {
 export interface Forvaltningsmelding {
     tekster: Brevtekst[];
     saksbehandler: string;
-    sendtTidspunkt: string;
+    sendtTidspunkt: Tidspunkt;
     journalpostId: Nullable<string>;
-    journalføringstidspunkt: Nullable<string>;
-    distribusjonstidspunkt: Nullable<string>;
+    journalføringstidspunkt: Nullable<Tidspunkt>;
+    distribusjonstidspunkt: Nullable<Tidspunkt>;
 }
 
 export interface KlagebehandlingAvbrutt {
     avbruttAv: string;
-    avbruttTidspunkt: string;
+    avbruttTidspunkt: Tidspunkt;
     status: AvbrytKlagebehandlingStatus;
     begrunnelse: SladdbarVerdi<Nullable<string>>;
 }
@@ -85,7 +86,7 @@ export interface KlageFormkrav {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
-    innsendingsdato: string;
+    innsendingsdato: Dato;
     innsendingskilde: KlageInnsendingskilde;
 }
 
@@ -105,19 +106,19 @@ export interface KlagebehandlingsresultatOmgjør {
     årsak: OmgjøringÅrsak;
     begrunnelse: SladdbarVerdi<string>;
     begrunnelseFerdigstilling: SladdbarVerdi<Nullable<string>>;
-    ferdigstiltTidspunkt: Nullable<string>;
+    ferdigstiltTidspunkt: Nullable<Tidspunkt>;
 }
 
 export interface KlagebehandlingsresultatOpprettholdt {
     type: KlagebehandlingResultat.OPPRETTHOLDT;
     brevtekst: Brevtekst[];
     hjemler: Klagehjemmel[];
-    iverksattOpprettholdelseTidspunkt: Nullable<string>;
-    journalføringstidspunktInnstillingsbrev: Nullable<string>;
-    distribusjonstidspunktInnstillingsbrev: Nullable<string>;
-    oversendtKlageinstansenTidspunkt: Nullable<string>;
+    iverksattOpprettholdelseTidspunkt: Nullable<Tidspunkt>;
+    journalføringstidspunktInnstillingsbrev: Nullable<Tidspunkt>;
+    distribusjonstidspunktInnstillingsbrev: Nullable<Tidspunkt>;
+    oversendtKlageinstansenTidspunkt: Nullable<Tidspunkt>;
     klageinstanshendelser: Klageinstanshendelse[];
-    ferdigstiltTidspunkt: Nullable<string>;
+    ferdigstiltTidspunkt: Nullable<Tidspunkt>;
     journalpostIdInnstillingsbrev: Nullable<string>;
     dokumentInfoIder: Nullable<string[]>;
     begrunnelseFerdigstilling: SladdbarVerdi<Nullable<string>>;
@@ -156,7 +157,7 @@ export interface OpprettKlageRequest {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
-    innsendingsdato: string;
+    innsendingsdato: Dato;
     innsendingskilde: KlageInnsendingskilde;
 }
 
@@ -168,7 +169,7 @@ export interface OppdaterKlageFormkravRequest {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
-    innsendingsdato: string;
+    innsendingsdato: Dato;
     innsendingskilde: KlageInnsendingskilde;
 }
 

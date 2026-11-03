@@ -4,11 +4,12 @@ import { describe, expect, jest, test } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
 import { Forvaltningsmelding, Klagebehandling } from '~/lib/klage/typer/Klage';
 import KlageForvaltningsmelding from './KlageForvaltningsmelding';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 const forvaltningsmelding: Forvaltningsmelding = {
     tekster: [],
     saksbehandler: 'Z12345',
-    sendtTidspunkt: '2025-04-02T09:15:00',
+    sendtTidspunkt: tilTidspunkt('2025-04-02T09:15:00'),
     journalpostId: null,
     journalføringstidspunkt: null,
     distribusjonstidspunkt: null,
@@ -32,8 +33,8 @@ describe('KlageForvaltningsmelding når meldingen er sendt', () => {
     test('viser journalpost-ID og distribusjonstidspunkt', () => {
         renderSendt({
             journalpostId: '987654321',
-            journalføringstidspunkt: '2025-04-02T09:20:00',
-            distribusjonstidspunkt: '2025-04-02T10:30:00',
+            journalføringstidspunkt: tilTidspunkt('2025-04-02T09:20:00'),
+            distribusjonstidspunkt: tilTidspunkt('2025-04-02T10:30:00'),
         });
 
         expect(screen.getByText('Z12345')).toBeInTheDocument();

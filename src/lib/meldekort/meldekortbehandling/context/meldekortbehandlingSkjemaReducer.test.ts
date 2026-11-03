@@ -28,6 +28,7 @@ import {
     meldeperiodekjede,
     meldeperiodePeriode,
 } from '~test/meldekort';
+import { Dato } from '~/types/DatoTid';
 
 const { IkkeBesvart, IkkeRettTilTiltakspenger, DeltattUtenLønnITiltaket, FraværSyk } =
     MeldekortbehandlingDagStatus;
@@ -40,7 +41,7 @@ const state: MeldekortbehandlingSkjemaState = {
 };
 
 const meldeperiodeSkjema = (
-    fraOgMed: string,
+    fraOgMed: Dato,
     status: MeldekortbehandlingDagStatus = IkkeBesvart,
 ): MeldeperiodeSkjema => ({
     kjedeId: kjedeIdFor(fraOgMed),

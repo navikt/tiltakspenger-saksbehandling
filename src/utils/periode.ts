@@ -3,9 +3,10 @@ import { nonNullish } from '~/utils/object';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato } from '~/types/DatoTid';
 
 export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Periode => {
-    const [fraOgMed, tilOgMed] = kjedeId.split('/');
+    const [fraOgMed, tilOgMed] = kjedeId.split('/') as [Dato, Dato];
 
     return { fraOgMed, tilOgMed };
 };
@@ -61,7 +62,7 @@ export const overlappendePeriode = (periode1: Periode, periode2: Periode): Perio
         : null;
 };
 
-export const erDatoIPeriode = (dato: string, periode: Periode): boolean => {
+export const erDatoIPeriode = (dato: Dato, periode: Periode): boolean => {
     return dato >= periode.fraOgMed && dato <= periode.tilOgMed;
 };
 

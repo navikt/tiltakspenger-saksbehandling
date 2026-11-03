@@ -1,7 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
 import { getNavnMedFødselsdato } from '~/lib/søknad/manuell-søknad/barnetillegg/barnetilleggUtils';
+import { tilDato } from '~/types/DatoTid';
 
-const barn = { fornavn: 'Ola', etternavn: 'Nordmann', fødselsdato: '2020-05-05' };
+const barn = { fornavn: 'Ola', etternavn: 'Nordmann', fødselsdato: tilDato('2020-05-05') };
 
 describe('getNavnMedFødselsdato', () => {
     test('viser navn og fødselsdato', () => {
@@ -15,7 +16,7 @@ describe('getNavnMedFødselsdato', () => {
     });
 
     test('viser ukjent fødselsdato når den mangler', () => {
-        expect(getNavnMedFødselsdato({ ...barn, fødselsdato: '' }, false)).toBe(
+        expect(getNavnMedFødselsdato({ ...barn, fødselsdato: null }, false)).toBe(
             'Ola Nordmann - født ukjent',
         );
     });

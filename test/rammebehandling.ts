@@ -37,13 +37,17 @@ import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { Periode } from '~/types/Periode';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 /**
  * Byggere for testdata som etterligner rammebehandlinger og saker fra API-et.
  * Alle byggere tar imot overstyringer, slik at hver test kun trenger å sette feltene som er relevante for den.
  */
 
-export const periode = (fraOgMed: string, tilOgMed: string): Periode => ({ fraOgMed, tilOgMed });
+export const periode = (fraOgMed: string, tilOgMed: string): Periode => ({
+    fraOgMed: tilDato(fraOgMed),
+    tilOgMed: tilDato(tilOgMed),
+});
 
 export const innvilgelsesperiode = (
     p: Periode,
@@ -84,7 +88,7 @@ export const søknadBarn = (fødselsdato: string): SøknadBarn => ({
     fornavn: ikkeSladdet('Barn'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet('Barnesen'),
-    fødselsdato: ikkeSladdet(fødselsdato),
+    fødselsdato: ikkeSladdet(tilDato(fødselsdato)),
     kilde: SøknadBarnKilde.PDL,
     fnr: ikkeSladdet(null),
 });
@@ -94,16 +98,16 @@ export const søknad = (barnetillegg: SøknadBarn[] = []): InnvilgbarSøknad => 
     journalpostId: 'journalpost_1',
     tiltak: {
         id: 'deltakelse_1',
-        fraOgMed: '2025-01-01',
-        tilOgMed: '2025-06-30',
+        fraOgMed: tilDato('2025-01-01'),
+        tilOgMed: tilDato('2025-06-30'),
         typeNavn: 'Arbeidsmarkedsopplæring',
     },
     tiltaksdeltakelseperiodeDetErSøktOm: periode('2025-01-01', '2025-06-30'),
     barnetillegg,
     søknadstype: 'DIGITAL',
     behandlingsarsak: null,
-    opprettet: '2025-01-01T09:00:00',
-    mottatt: '2025-01-01T09:00:00',
+    opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+    mottatt: tilTidspunkt('2025-01-01T09:00:00'),
     antallVedlegg: 0,
     avbrutt: [],
     kanInnvilges: true,
@@ -126,21 +130,21 @@ const rammebehandlingBase = (): Omit<RammebehandlingBase, 'type' | 'resultat'> =
     saksbehandler: 'Z123456',
     beslutter: null,
     saksopplysninger: {
-        fødselsdato: ikkeSladdet('1990-01-01'),
+        fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
         tiltaksdeltagelse: [standardTiltaksdeltakelse],
         tiltaksdeltakelserSomFratarRett: [],
         periode: null,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
-        oppslagstidspunkt: '2025-01-01T09:00:00',
+        oppslagstidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
     },
     attesteringer: [],
     vedtaksperiode: null,
     fritekstTilVedtaksbrev: ikkeSladdet(null),
     begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
-    opprettet: '2025-01-01T09:00:00',
-    sistEndret: '2025-01-01T09:00:00',
+    opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+    sistEndret: tilTidspunkt('2025-01-01T09:00:00'),
     iverksattTidspunkt: null,
     ventestatus: [],
     venterTil: null,
@@ -259,8 +263,8 @@ export const rammevedtak = (
 ): Rammevedtak => ({
     id,
     behandlingId: 'beh_vedtatt',
-    opprettet: '2025-01-01T09:00:00',
-    vedtaksdato: '2025-01-01',
+    opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+    vedtaksdato: tilDato('2025-01-01'),
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     opprinneligVedtaksperiode: p,
     opprinneligInnvilgetPerioder: [p],
@@ -313,7 +317,7 @@ export const sakMedInnvilgetVedtak = (
         søknadsbehandlingInnvilgelse({
             id: 'beh_vedtatt',
             status: Rammebehandlingsstatus.VEDTATT,
-            iverksattTidspunkt: '2025-01-01T09:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             vedtaksperiode,
             innvilgelsesperioder: [innvilgelsesperiode(vedtaksperiode)],
         });

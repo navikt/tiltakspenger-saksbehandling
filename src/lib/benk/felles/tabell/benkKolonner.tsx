@@ -12,6 +12,7 @@ import { benkBehandlingHarTilgang } from '../../utils/benkRad';
 import { BenkTildelFlere } from '../tildel-flere/BenkTildelFlere';
 import { BenkKolonne } from './BenkKolonne';
 import { BenkTabellCelle } from './BenkTabellCelle';
+import { Tidspunkt } from '~/types/DatoTid';
 
 /**
  * Kolonnene som går igjen på tvers av fanene. Kolonnenavn og sortKey defineres én gang her,
@@ -49,7 +50,7 @@ const ventestatus: BenkKolonne<BenkBehandling, BenkFellesKolonne> = {
     celle: (rad) => <BenkTabellCelle.Ventestatus behandling={rad} />,
 };
 
-const kravtidspunkt: BenkKolonne<{ kravtidspunkt: string }, 'kravtidspunkt'> = {
+const kravtidspunkt: BenkKolonne<{ kravtidspunkt: Tidspunkt }, 'kravtidspunkt'> = {
     id: 'kravtidspunkt',
     tittel: 'Kravtidspunkt',
     sortKey: 'kravtidspunkt',

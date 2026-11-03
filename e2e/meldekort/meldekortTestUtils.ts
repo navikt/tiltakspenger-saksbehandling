@@ -47,6 +47,7 @@ import {
 } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import type { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
+import { Dato, Tidspunkt, tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 export const SAK_ID = 'sak_1';
 export const SAKSNUMMER = tilSaksnummer('202501011001');
@@ -66,13 +67,13 @@ export const behandlingUrl = (id: MeldekortbehandlingId) =>
     `/sak/${SAKSNUMMER}/meldekortbehandling/${id}`;
 
 /** Alle de 14 datoene i meldeperioden */
-export const DATOER: string[] = Array.from({ length: 14 }, (_, index) => {
+export const DATOER: Dato[] = Array.from({ length: 14 }, (_, index) => {
     const dato = new Date(`${KJEDE_PERIODE.fraOgMed}T12:00:00Z`);
     dato.setUTCDate(dato.getUTCDate() + index);
-    return dato.toISOString().slice(0, 10);
+    return tilDato(dato.toISOString().slice(0, 10));
 });
 
-export const erHelg = (dato: string) => {
+export const erHelg = (dato: Dato) => {
     const ukedag = new Date(`${dato}T12:00:00Z`).getUTCDay();
     return ukedag === 0 || ukedag === 6;
 };
@@ -129,7 +130,7 @@ export const lagMeldeperiodeBeregning = (
 
 export const lagSimulertBeregning = (
     beregning: MeldeperiodeBeregningProps,
-    tidspunkt: string,
+    tidspunkt: Tidspunkt,
     forrige: MeldeperiodeBeregningProps | null = null,
 ): SimulertBeregning => {
     const totalt = beregning.beløp.totalt;
@@ -182,7 +183,7 @@ export const lagKjede = (
         versjon: 1,
         kjedeId: KJEDE_ID,
         periode: KJEDE_PERIODE,
-        opprettet: '2025-01-01T09:00:00',
+        opprettet: tilTidspunkt('2025-01-01T09:00:00'),
         antallDager: MAKS_ANTALL_DAGER,
         girRett: Object.fromEntries(DATOER.map((dato) => [dato, true])),
         ingenDagerGirRett: false,
@@ -205,7 +206,7 @@ export const lagBrukersMeldekort = (
     overstyringer: Partial<BrukersMeldekortProps> = {},
 ): BrukersMeldekortProps => ({
     id: 'meldekort_bruker_1' as BrukersMeldekortId,
-    mottatt: '2025-01-20T08:00:00',
+    mottatt: tilTidspunkt('2025-01-20T08:00:00'),
     dager: DATOER.map((dato, index) => ({
         dato,
         status: erHelg(dato)
@@ -252,8 +253,8 @@ export const lagMeldekortbehandling = ({
         sakId: SAK_ID,
         saksbehandler: lagSaksbehandler().navIdent,
         beslutter: null,
-        opprettet: '2025-01-20T09:00:00',
-        sistEndret: '2025-01-20T09:00:00',
+        opprettet: tilTidspunkt('2025-01-20T09:00:00'),
+        sistEndret: tilTidspunkt('2025-01-20T09:00:00'),
         godkjentTidspunkt: null,
         status: MeldekortbehandlingStatus.UNDER_BEHANDLING,
         erAvsluttet: false,
@@ -266,7 +267,7 @@ export const lagMeldekortbehandling = ({
         meldeperioder: [meldeperiode],
         avbrutt: null,
         simulertBeregning: beregning
-            ? lagSimulertBeregning(beregning, '2025-01-20T09:00:00')
+            ? lagSimulertBeregning(beregning, tilTidspunkt('2025-01-20T09:00:00'))
             : null,
         utbetalingskontroll: null,
         kanIkkeIverksetteUtbetaling: null,
@@ -332,7 +333,7 @@ type BackendOppsett = {
 
 export type VentRequest = {
     begrunnelse: string;
-    frist: string | null;
+    frist: Dato | null;
     oppdaterSattPåVent: boolean;
 };
 
@@ -379,7 +380,7 @@ export const lagMeldekortBackend = ({
     let tidspunktTeller = 0;
     const nyttTidspunkt = () => {
         tidspunktTeller += 1;
-        return `2025-01-21T10:${String(tidspunktTeller).padStart(2, '0')}:00`;
+        return tilTidspunkt(`2025-01-21T10:${String(tidspunktTeller).padStart(2, '0')}:00`);
     };
 
     const sorterteBehandlinger = () =>
@@ -674,10 +675,10 @@ export const lagMeldekortBackend = ({
 };
 
 /** 2025-01-06 -> 06.01.2025 */
-export const formaterDato = (dato: string) => dato.split('-').toReversed().join('.');
+export const formaterDato = (dato: Dato) => dato.split('-').toReversed().join('.');
 
 /** Statusvelgeren for en dag i utfyllingen av meldeperioden */
-export const dagStatus = (page: Page, dato: string) =>
+export const dagStatus = (page: Page, dato: Dato) =>
     page
         .getByRole('row')
         .filter({ hasText: formaterDato(dato) })

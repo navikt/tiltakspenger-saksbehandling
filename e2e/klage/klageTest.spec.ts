@@ -11,6 +11,7 @@ import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/K
 import type { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { klageTestUtils } from './klageTestUtils';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 const {
     journalpostId,
@@ -90,7 +91,7 @@ test.describe('Klage', () => {
                     begrunnelseFerdigstilling: ikkeSladdet(null),
                 };
                 gjeldendeKlage.kanIverksetteVedtak = true;
-                gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-03T10:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),
@@ -99,8 +100,8 @@ test.describe('Klage', () => {
                 if (!gjeldendeKlage) return new HttpResponse(null, { status: 404 });
 
                 gjeldendeKlage.status = KlagebehandlingStatus.VEDTATT;
-                gjeldendeKlage.iverksattTidspunkt = '2025-04-04T10:00:00';
-                gjeldendeKlage.sistEndret = '2025-04-04T10:00:00';
+                gjeldendeKlage.iverksattTidspunkt = tilTidspunkt('2025-04-04T10:00:00');
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-04T10:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),
@@ -253,7 +254,7 @@ test.describe('Klage', () => {
                     dokumentInfoIder: null,
                     begrunnelseFerdigstilling: ikkeSladdet(null),
                 };
-                gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-03T10:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),
@@ -273,7 +274,7 @@ test.describe('Klage', () => {
                     })),
                 };
                 gjeldendeKlage.kanIverksetteOpprettholdelse = true;
-                gjeldendeKlage.sistEndret = '2025-04-03T11:00:00';
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-03T11:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),
@@ -286,9 +287,9 @@ test.describe('Klage', () => {
                 gjeldendeKlage.status = KlagebehandlingStatus.OPPRETTHOLDT;
                 gjeldendeKlage.resultat = {
                     ...gjeldendeKlage.resultat,
-                    iverksattOpprettholdelseTidspunkt: '2025-04-04T10:00:00',
+                    iverksattOpprettholdelseTidspunkt: tilTidspunkt('2025-04-04T10:00:00'),
                 };
-                gjeldendeKlage.sistEndret = '2025-04-04T10:00:00';
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-04T10:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),
@@ -301,9 +302,9 @@ test.describe('Klage', () => {
                 gjeldendeKlage.status = KlagebehandlingStatus.FERDIGSTILT;
                 gjeldendeKlage.resultat = {
                     ...gjeldendeKlage.resultat,
-                    ferdigstiltTidspunkt: '2025-04-08T10:00:00',
+                    ferdigstiltTidspunkt: tilTidspunkt('2025-04-08T10:00:00'),
                 };
-                gjeldendeKlage.sistEndret = '2025-04-08T10:00:00';
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-08T10:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),
@@ -506,7 +507,7 @@ test.describe('Klage', () => {
                     begrunnelseFerdigstilling: ikkeSladdet(null),
                     ferdigstiltTidspunkt: null,
                 };
-                gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';
+                gjeldendeKlage.sistEndret = tilTidspunkt('2025-04-03T10:00:00');
 
                 return HttpResponse.json(gjeldendeKlage);
             }),

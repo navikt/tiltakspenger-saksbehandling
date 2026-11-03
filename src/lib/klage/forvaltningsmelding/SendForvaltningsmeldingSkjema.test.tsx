@@ -5,6 +5,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { SakId } from '~/lib/sak/SakTyper';
 import { KlageId } from '~/lib/klage/typer/Klage';
 import SendForvaltningsmeldingSkjema from './SendForvaltningsmeldingSkjema';
+import { tilDato } from '~/types/DatoTid';
 
 const opprinneligFetch = global.fetch;
 const opprinneligConsoleError = console.error;
@@ -37,7 +38,7 @@ const renderSkjema = () => {
         <SendForvaltningsmeldingSkjema
             sakId={'sak_1' as SakId}
             klageId={'klage_1' as KlageId}
-            innsendingsdato={'2025-04-01'}
+            innsendingsdato={tilDato('2025-04-01')}
             onSendt={onSendt}
         />,
     );

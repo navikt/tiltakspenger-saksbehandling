@@ -7,10 +7,11 @@ import { Heading, VStack } from '@navikt/ds-react';
 import styles from './SpørsmålMedDatoVelger.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     spørsmålFelt: FieldPath<ManueltRegistrertSøknad>;
-    datoFelt: FieldPathByValue<ManueltRegistrertSøknad, string | undefined>;
+    datoFelt: FieldPathByValue<ManueltRegistrertSøknad, Dato | undefined>;
     legend: string;
     tittel?: string;
 };

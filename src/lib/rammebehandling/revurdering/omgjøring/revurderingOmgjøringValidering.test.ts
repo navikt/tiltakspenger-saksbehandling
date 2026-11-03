@@ -19,17 +19,18 @@ import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { Periode } from '~/types/Periode';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
-const januar: Periode = { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' };
-const februar: Periode = { fraOgMed: '2025-02-01', tilOgMed: '2025-02-28' };
-const mars: Periode = { fraOgMed: '2025-03-01', tilOgMed: '2025-03-31' };
-const førsteKvartal: Periode = { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' };
+const januar: Periode = { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-31') };
+const februar: Periode = { fraOgMed: tilDato('2025-02-01'), tilOgMed: tilDato('2025-02-28') };
+const mars: Periode = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
+const førsteKvartal: Periode = { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-03-31') };
 
 const rammevedtak = (id: VedtakId, periode: Periode): Rammevedtak => ({
     id,
     behandlingId: `beh_${id}`,
-    opprettet: '2025-01-01T09:00:00',
-    vedtaksdato: '2025-01-01',
+    opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+    vedtaksdato: tilDato('2025-01-01'),
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     opprinneligVedtaksperiode: periode,
     opprinneligInnvilgetPerioder: [periode],
@@ -90,21 +91,21 @@ const omgjøringOpphør = (omgjørVedtak: VedtakId, vedtaksperiode: Periode): Om
     saksbehandler: 'Z123456',
     beslutter: null,
     saksopplysninger: {
-        fødselsdato: ikkeSladdet('1990-01-01'),
+        fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
         tiltaksdeltagelse: [],
         tiltaksdeltakelserSomFratarRett: [],
         periode: null,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
-        oppslagstidspunkt: '2025-01-01T09:00:00',
+        oppslagstidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
     },
     attesteringer: [],
     vedtaksperiode,
     fritekstTilVedtaksbrev: ikkeSladdet(null),
     begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
-    opprettet: '2025-01-01T09:00:00',
-    sistEndret: '2025-01-01T09:00:00',
+    opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+    sistEndret: tilTidspunkt('2025-01-01T09:00:00'),
     iverksattTidspunkt: null,
     ventestatus: [],
     venterTil: null,
@@ -163,7 +164,7 @@ const opphørSkjema = (vedtaksperiode: Partial<Periode>): OmgjøringContext => (
 });
 
 describe('revurderingOmgjøringValidering', () => {
-    test.each([{}, { fraOgMed: '2025-01-01' }, { tilOgMed: '2025-01-31' }])(
+    test.each([{}, { fraOgMed: tilDato('2025-01-01') }, { tilOgMed: tilDato('2025-01-31') }])(
         'krever at hele perioden som opphøres er valgt (%o)',
         (vedtaksperiode) => {
             const validering = revurderingOmgjøringValidering(
@@ -214,7 +215,7 @@ describe('revurderingOmgjøringValidering', () => {
         const sakMedStans = sak([
             {
                 rammevedtakId: 'vedtak_1',
-                periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-02-28' },
+                periode: { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-02-28') },
                 tidslinjeResultat: TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE,
             },
             {
@@ -239,7 +240,7 @@ describe('revurderingOmgjøringValidering', () => {
         const sakMedOpphør = sak([
             {
                 rammevedtakId: 'vedtak_1',
-                periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-02-28' },
+                periode: { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-02-28') },
                 tidslinjeResultat: TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE,
             },
             {
@@ -276,7 +277,10 @@ describe('revurderingOmgjøringValidering', () => {
                     tidslinjeResultat: TidslinjeResultat.REVURDERING_INNVILGELSE,
                 },
             ]);
-            const vedtaksperiode: Periode = { fraOgMed: '2025-01-15', tilOgMed: '2025-03-15' };
+            const vedtaksperiode: Periode = {
+                fraOgMed: tilDato('2025-01-15'),
+                tilOgMed: tilDato('2025-03-15'),
+            };
 
             const validering = revurderingOmgjøringValidering(
                 omgjøringOpphør('vedtak_1', vedtaksperiode),
@@ -297,7 +301,7 @@ describe('revurderingOmgjøringValidering', () => {
             },
             {
                 rammevedtakId: 'vedtak_2',
-                periode: { fraOgMed: '2025-02-01', tilOgMed: '2025-03-31' },
+                periode: { fraOgMed: tilDato('2025-02-01'), tilOgMed: tilDato('2025-03-31') },
                 tidslinjeResultat: TidslinjeResultat.REVURDERING_INNVILGELSE,
             },
         ]);
@@ -367,25 +371,29 @@ describe('omgjøringInitialState', () => {
 
     test('forhåndsutfyller innvilgelse med perioden backend har forhåndsutfylt', () => {
         const state = omgjøringInitialState(
-            omgjøringIkkeValgt([{ fraOgMed: '2025-01-15', tilOgMed: '2025-02-15' }]),
+            omgjøringIkkeValgt([
+                { fraOgMed: tilDato('2025-01-15'), tilOgMed: tilDato('2025-02-15') },
+            ]),
             sakMedStansIMidten,
             RevurderingResultat.OMGJØRING,
         );
 
         expect(state).toMatchObject({
-            vedtaksperiode: { fraOgMed: '2025-01-15', tilOgMed: '2025-02-15' },
+            vedtaksperiode: { fraOgMed: tilDato('2025-01-15'), tilOgMed: tilDato('2025-02-15') },
         });
     });
 
     test('forhåndsutfyller opphør med de innvilgede periodene innenfor perioden backend har forhåndsutfylt', () => {
         const state = omgjøringInitialState(
-            omgjøringIkkeValgt([{ fraOgMed: '2025-01-15', tilOgMed: '2025-02-15' }]),
+            omgjøringIkkeValgt([
+                { fraOgMed: tilDato('2025-01-15'), tilOgMed: tilDato('2025-02-15') },
+            ]),
             sakMedStansIMidten,
             RevurderingResultat.OMGJØRING_OPPHØR,
         );
 
         expect(state).toMatchObject({
-            vedtaksperiode: { fraOgMed: '2025-01-15', tilOgMed: '2025-01-31' },
+            vedtaksperiode: { fraOgMed: tilDato('2025-01-15'), tilOgMed: tilDato('2025-01-31') },
         });
     });
 

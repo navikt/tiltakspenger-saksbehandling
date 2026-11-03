@@ -5,6 +5,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { HjemmelForStans, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { tilDato } from '~/types/DatoTid';
 
 const superType = BehandlingSkjemaType.RevurderingStans;
 
@@ -21,7 +22,7 @@ describe('revurderingStansReducer', () => {
             revurderingStansReducer(state, {
                 superType,
                 type: 'setStansFraDato',
-                payload: { fraDato: '2025-03-01' },
+                payload: { fraDato: tilDato('2025-03-01') },
             }),
         ).toEqual({ ...state, fraDato: '2025-03-01' });
     });

@@ -15,6 +15,7 @@ import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknads
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 import { expect } from '../felles/e2eFelles';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 export const BENK_COOKIE_NAVN = 'benkFiltersV2';
 
@@ -26,8 +27,8 @@ export const lagBenkSøknadsbehandling = (
     sakId: ikkeSladdet('sak_benk_1'),
     fnr: ikkeSladdet('12345678911'),
     saksnummer: ikkeSladdet(tilSaksnummer('202501011001')),
-    startet: '2025-01-02T10:00:00',
-    sistEndret: '2025-01-03T10:00:00',
+    startet: tilTidspunkt('2025-01-02T10:00:00'),
+    sistEndret: tilTidspunkt('2025-01-03T10:00:00'),
     saksbehandler: null,
     beslutter: null,
     erUnderkjent: false,
@@ -41,7 +42,7 @@ export const lagBenkSøknadsbehandling = (
     personmarkører: { skjermet: false, kode6: false, kode7: false },
     status: BenkBehandlingsstatus.KLAR_TIL_BEHANDLING,
     søknadstype: 'DIGITAL',
-    kravtidspunkt: '2025-01-01T08:00:00',
+    kravtidspunkt: tilTidspunkt('2025-01-01T08:00:00'),
     resultat: SøknadsbehandlingResultat.IKKE_VALGT,
     prioritering: null,
     gyldigeKommandoer: [],
@@ -73,8 +74,8 @@ export const lagBenkRevurdering = (
     sakId: ikkeSladdet('sak_benk_2'),
     fnr: ikkeSladdet('22222222222'),
     saksnummer: ikkeSladdet(tilSaksnummer('202501011002')),
-    startet: '2025-02-02T10:00:00',
-    sistEndret: '2025-02-03T10:00:00',
+    startet: tilTidspunkt('2025-02-02T10:00:00'),
+    sistEndret: tilTidspunkt('2025-02-03T10:00:00'),
     saksbehandler: null,
     beslutter: null,
     erUnderkjent: false,

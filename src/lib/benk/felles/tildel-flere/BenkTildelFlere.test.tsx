@@ -18,6 +18,7 @@ import {
 import { BenkVisningProvider, useBenkVisning } from '../filter/BenkVisningContext';
 import { BenkTildelCheckbox } from './BenkTildelCheckbox';
 import { BenkTildelFlere } from './BenkTildelFlere';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const router = {
     query: { tab: BenkTab.TILBAKEKREVING },
@@ -41,8 +42,8 @@ const tilbakekreving: BenkTilbakekreving = {
     sakId: ikkeSladdet('sak_1' as const),
     fnr: ikkeSladdet('12345678910'),
     saksnummer: ikkeSladdet('202501011001' as Saksnummer),
-    startet: '2025-01-01T12:00:00',
-    sistEndret: '2025-01-02T12:00:00',
+    startet: tilTidspunkt('2025-01-01T12:00:00'),
+    sistEndret: tilTidspunkt('2025-01-02T12:00:00'),
     saksbehandler: null,
     beslutter: null,
     erUnderkjent: false,
@@ -57,7 +58,7 @@ const tilbakekreving: BenkTilbakekreving = {
     status: BenkTilbakekrevingStatus.TIL_BEHANDLING,
     beløp: 1000,
     kilde: BenkTilbakekrevingKilde.MELDEKORT,
-    kravgrunnlagPeriode: { fraOgMed: '2025-01-01', tilOgMed: '2025-01-31' },
+    kravgrunnlagPeriode: { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-01-31') },
     url: 'https://tilbakekreving.nav.no/behandling/1',
     gyldigeKommandoer: [SaksbehandlerBehandlingKommando.TildelSaksbehandler],
 };

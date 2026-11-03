@@ -17,7 +17,7 @@ const TOM_BARN_KLADD: ManuellSøknadBarn = {
     uuid: '',
     fornavn: '',
     etternavn: '',
-    fødselsdato: '',
+    fødselsdato: null,
     erSøktBarnetilleggFor: undefined,
     oppholdssted: undefined,
     manueltRegistrertBarnAntallVedlegg: undefined,
@@ -156,7 +156,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                             const value = field.value ?? {
                                 fornavn: '',
                                 etternavn: '',
-                                fødselsdato: '',
+                                fødselsdato: null,
                                 oppholdssted: undefined,
                                 uuid: '',
                             };
@@ -186,10 +186,10 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                     />
                                     <Datovelger
                                         label="Fødselsdato"
-                                        selected={value.fødselsdato || undefined}
+                                        selected={value.fødselsdato ?? undefined}
                                         maxDate={dateTilISOTekst(dagensDato)}
                                         onDateChange={(date) => {
-                                            const iso = date ? dateTilISOTekst(date) : '';
+                                            const iso = date ? dateTilISOTekst(date) : null;
                                             field.onChange({
                                                 ...value,
                                                 fødselsdato: iso,

@@ -10,6 +10,7 @@ import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 import { dateTilISOTekst } from '~/utils/date';
 
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     meldekortId: MeldekortbehandlingId;
@@ -29,14 +30,14 @@ export const MeldekortbehandlingSettPåVent = ({
     onSuccess,
 }: Props) => {
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
-    const [frist, setFrist] = useState<Nullable<string>>(null);
+    const [frist, setFrist] = useState<Nullable<Dato>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
     const [fristValideringsfeil, setFristValideringsfeil] = useState<string | undefined>();
     const [visFristValideringsfeil, setVisFristValideringsfeil] = useState(false);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
-        { begrunnelse: string; frist: Nullable<string>; oppdaterSattPåVent: boolean }
+        { begrunnelse: string; frist: Nullable<Dato>; oppdaterSattPåVent: boolean }
     >(`/sak/${sakId}/meldekort/${meldekortId}/vent`, 'PATCH');
 
     const settPåVent = () => {

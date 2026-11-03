@@ -8,6 +8,7 @@ import { Periode } from '~/types/Periode';
 import { periodeTilMeldeperiodeKjedeId } from '~/utils/periode';
 import { MeldeperiodekjedeSide } from '~/lib/meldekort/meldeperiodekjede/MeldeperiodekjedeSide';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato } from '~/types/DatoTid';
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;
@@ -34,8 +35,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     const sak = await fetchSak(context.req, saksnummer);
 
     const periodeFraParam: Periode = {
-        fraOgMed: nonNullish(context.params).fraOgMed as string,
-        tilOgMed: nonNullish(context.params).tilOgMed as string,
+        fraOgMed: nonNullish(context.params).fraOgMed as Dato,
+        tilOgMed: nonNullish(context.params).tilOgMed as Dato,
     };
 
     const kjedeId = periodeTilMeldeperiodeKjedeId(periodeFraParam);

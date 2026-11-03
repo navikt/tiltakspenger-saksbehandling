@@ -25,6 +25,7 @@ import {
     meldekortDager,
     meldeperiodebehandling,
 } from '~test/meldekort';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 const { DeltattUtenLønnITiltaket, IkkeBesvart } = MeldekortbehandlingDagStatus;
 
@@ -157,7 +158,7 @@ describe('lagring av meldekortbehandling', () => {
     test('sender hele skjemaet ved lagring, og er lagret når backend svarer med oppdatert sak', async () => {
         const behandling = meldekortbehandling();
         const oppdatertBehandling = meldekortbehandling({
-            sistEndret: '2025-01-20T10:15:30',
+            sistEndret: tilTidspunkt('2025-01-20T10:15:30'),
             meldeperioder: [
                 meldeperiodebehandling(FØRSTE_MANDAG, {
                     dager: meldekortDager(FØRSTE_MANDAG, (_, index) =>

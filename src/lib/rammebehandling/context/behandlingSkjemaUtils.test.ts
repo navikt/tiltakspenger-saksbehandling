@@ -19,6 +19,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const tiltaksdeltakelse = (id: string, periode: Periode): InnvilgbarTiltaksdeltakelse => ({
     eksternDeltagelseId: id,
@@ -45,21 +46,21 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     saksbehandler: 'Z123456',
     beslutter: null,
     saksopplysninger: {
-        fødselsdato: ikkeSladdet('1990-01-01'),
+        fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
         tiltaksdeltagelse,
         tiltaksdeltakelserSomFratarRett: [],
         periode: null,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
-        oppslagstidspunkt: '2025-01-01T09:00:00',
+        oppslagstidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
     },
     attesteringer: [],
     vedtaksperiode: null,
     fritekstTilVedtaksbrev: ikkeSladdet(null),
     begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
-    opprettet: '2025-01-01T09:00:00',
-    sistEndret: '2025-01-01T09:00:00',
+    opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+    sistEndret: tilTidspunkt('2025-01-01T09:00:00'),
     iverksattTidspunkt: null,
     ventestatus: [],
     venterTil: null,
@@ -104,15 +105,21 @@ const sakUtenVedtak: SakProps = {
 // Saken har to tiltaksdeltakelser med et opphold mellom seg.
 const behandlingMedOppholdMellomDeltakelser = () =>
     revurdering([
-        tiltaksdeltakelse('deltakelse_1', { fraOgMed: '2025-01-01', tilOgMed: '2025-02-28' }),
-        tiltaksdeltakelse('deltakelse_2', { fraOgMed: '2025-06-01', tilOgMed: '2025-08-31' }),
+        tiltaksdeltakelse('deltakelse_1', {
+            fraOgMed: tilDato('2025-01-01'),
+            tilOgMed: tilDato('2025-02-28'),
+        }),
+        tiltaksdeltakelse('deltakelse_2', {
+            fraOgMed: tilDato('2025-06-01'),
+            tilOgMed: tilDato('2025-08-31'),
+        }),
     ]);
 
 describe('lagForhåndsutfyltInnvilgelse', () => {
     test('fyller ut innvilgelsen når en tiltaksdeltakelse overlapper perioden', () => {
         const innvilgelse = lagForhåndsutfyltInnvilgelse(
             behandlingMedOppholdMellomDeltakelser(),
-            { fraOgMed: '2025-01-06', tilOgMed: '2025-02-28' },
+            { fraOgMed: tilDato('2025-01-06'), tilOgMed: tilDato('2025-02-28') },
             sakUtenVedtak,
         );
 
@@ -120,7 +127,7 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
             harValgtPeriode: true,
             innvilgelsesperioder: [
                 {
-                    periode: { fraOgMed: '2025-01-06', tilOgMed: '2025-02-28' },
+                    periode: { fraOgMed: tilDato('2025-01-06'), tilOgMed: tilDato('2025-02-28') },
                     antallDagerPerMeldeperiode: 10,
                     internDeltakelseId: 'deltakelse_1',
                 },
@@ -131,7 +138,7 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
     });
 
     test('velger ikke tiltaksdeltakelser som ikke kan innvilges, selv om de har periode', () => {
-        const periode = { fraOgMed: '2025-01-01', tilOgMed: '2025-02-28' };
+        const periode = { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-02-28') };
         const behandling = revurdering([
             { ...tiltaksdeltakelse('ikke_innvilgbar', periode), kanInnvilges: false },
             tiltaksdeltakelse('innvilgbar', periode),

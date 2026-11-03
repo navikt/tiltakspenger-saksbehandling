@@ -27,34 +27,35 @@ import {
 import { Utbetalingsstatus } from '~/lib/_felles/utbetaling/utbetalingTyper';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Periode } from '~/types/Periode';
+import { Dato, tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 // Mandag i uke 2, 2025
-export const FØRSTE_MANDAG = '2025-01-06';
+export const FØRSTE_MANDAG = tilDato('2025-01-06');
 // Mandagen to uker senere (uke 4, 2025)
-export const ANDRE_MANDAG = '2025-01-20';
+export const ANDRE_MANDAG = tilDato('2025-01-20');
 
-export const leggTilDager = (dato: string, antall: number): string =>
-    dayjs(dato).add(antall, 'day').format('YYYY-MM-DD');
+export const leggTilDager = (dato: Dato, antall: number): Dato =>
+    tilDato(dayjs(dato).add(antall, 'day').format('YYYY-MM-DD'));
 
 /** De 14 datoene i meldeperioden som starter på `fraOgMed` (en mandag). */
-export const meldeperiodeDatoer = (fraOgMed: string): string[] =>
+export const meldeperiodeDatoer = (fraOgMed: Dato): Dato[] =>
     Array.from({ length: 14 }, (_, index) => leggTilDager(fraOgMed, index));
 
-export const meldeperiodePeriode = (fraOgMed: string): Periode => ({
+export const meldeperiodePeriode = (fraOgMed: Dato): Periode => ({
     fraOgMed,
     tilOgMed: leggTilDager(fraOgMed, 13),
 });
 
-export const kjedeIdFor = (fraOgMed: string): MeldeperiodeKjedeId =>
+export const kjedeIdFor = (fraOgMed: Dato): MeldeperiodeKjedeId =>
     `${fraOgMed}/${leggTilDager(fraOgMed, 13)}`;
 
-export const erHelg = (dato: string): boolean => [0, 6].includes(dayjs(dato).day());
+export const erHelg = (dato: Dato): boolean => [0, 6].includes(dayjs(dato).day());
 
 export const meldeperiode = (
-    fraOgMed: string,
+    fraOgMed: Dato,
     overstyringer: {
         antallDager?: number;
-        girRett?: (dato: string) => boolean;
+        girRett?: (dato: Dato) => boolean;
         versjon?: number;
     } = {},
 ): MeldeperiodeProps => {
@@ -69,7 +70,7 @@ export const meldeperiode = (
         versjon,
         kjedeId: kjedeIdFor(fraOgMed),
         periode: meldeperiodePeriode(fraOgMed),
-        opprettet: '2025-01-01T12:00:00',
+        opprettet: tilTidspunkt('2025-01-01T12:00:00'),
         antallDager,
         girRett: girRettPerDag,
         ingenDagerGirRett: Object.values(girRettPerDag).every((rett) => !rett),
@@ -77,7 +78,7 @@ export const meldeperiode = (
 };
 
 export const meldeperiodekjede = (
-    fraOgMed: string,
+    fraOgMed: Dato,
     overstyringer: Partial<MeldeperiodekjedeProps> = {},
 ): MeldeperiodekjedeProps => {
     const sisteMeldeperiode = overstyringer.sisteMeldeperiode ?? meldeperiode(fraOgMed);
@@ -99,12 +100,12 @@ export const meldeperiodekjede = (
 };
 
 export const brukersMeldekort = (
-    fraOgMed: string,
-    statusForDag: (dato: string) => BrukersMeldekortDagStatus,
+    fraOgMed: Dato,
+    statusForDag: (dato: Dato) => BrukersMeldekortDagStatus,
     overstyringer: Partial<BrukersMeldekortProps> = {},
 ): BrukersMeldekortProps => ({
     id: `meldekort_bruker_${fraOgMed}` as BrukersMeldekortId,
-    mottatt: `${leggTilDager(fraOgMed, 13)}T18:00:00`,
+    mottatt: tilTidspunkt(`${leggTilDager(fraOgMed, 13)}T18:00:00`),
     dager: meldeperiodeDatoer(fraOgMed).map((dato) => ({ dato, status: statusForDag(dato) })),
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK,
     behandlesAutomatiskNesteForsøk: null,
@@ -113,8 +114,8 @@ export const brukersMeldekort = (
 
 /** Dager for en meldeperiode der alle dagene har samme status, med mindre `statusForDag` sier noe annet. */
 export const meldekortDager = (
-    fraOgMed: string,
-    statusForDag: (dato: string, index: number) => MeldekortbehandlingDagStatus = () =>
+    fraOgMed: Dato,
+    statusForDag: (dato: Dato, index: number) => MeldekortbehandlingDagStatus = () =>
         MeldekortbehandlingDagStatus.IkkeBesvart,
 ): MeldekortDagProps[] =>
     meldeperiodeDatoer(fraOgMed).map((dato, index) => ({
@@ -123,7 +124,7 @@ export const meldekortDager = (
     }));
 
 export const meldeperiodebehandling = (
-    fraOgMed: string,
+    fraOgMed: Dato,
     overstyringer: Partial<MeldeperiodebehandlingProps> = {},
 ): MeldeperiodebehandlingProps => ({
     meldeperiodeId: `meldeperiode_${fraOgMed}_v1`,
@@ -146,8 +147,8 @@ export const meldekortbehandling = (
         sakId: 'sak_1',
         saksbehandler: 'Z123456',
         beslutter: null,
-        opprettet: '2025-01-20T09:00:00',
-        sistEndret: '2025-01-20T09:00:00',
+        opprettet: tilTidspunkt('2025-01-20T09:00:00'),
+        sistEndret: tilTidspunkt('2025-01-20T09:00:00'),
         godkjentTidspunkt: null,
         status: MeldekortbehandlingStatus.UNDER_BEHANDLING,
         erAvsluttet: false,

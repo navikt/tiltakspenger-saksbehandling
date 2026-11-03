@@ -1,17 +1,18 @@
-import {Nullable} from '~/types/UtilTypes';
-import {Periode} from '~/types/Periode';
-import {Barnetillegg, BarnetilleggPeriode} from './Barnetillegg';
-import {RammebehandlingId, Rammebehandling, RammebehandlingResultat} from './Rammebehandling';
-import {Innvilgelsesperiode} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import {VedtakType} from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Nullable } from '~/types/UtilTypes';
+import { Periode } from '~/types/Periode';
+import { Barnetillegg, BarnetilleggPeriode } from './Barnetillegg';
+import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type VedtakId = `vedtak_${string}`;
 
 export type Rammevedtak = {
     id: VedtakId;
     behandlingId: RammebehandlingId;
-    opprettet: string;
-    vedtaksdato: Nullable<string>;
+    opprettet: Tidspunkt;
+    vedtaksdato: Nullable<Dato>;
     resultat: RammebehandlingResultat;
     // Vedtaksperioden da den ble vedtatt. Er ikke sikkert den er gjeldende lenger, hvis den har blitt omgjort. Avslagsvedtak er aldri gjeldende.
     opprinneligVedtaksperiode: Periode;
@@ -62,8 +63,8 @@ export type RammevedtakKommandoOpphør = {
 // Til fremtidig bruk
 export type RammevedtakKommandoStans = {
     type: RammevedtakKommandoType.STANS;
-    tidligsteFraOgMedDato: string;
-    tvungenStansTilOgMedDato: string;
+    tidligsteFraOgMedDato: Dato;
+    tvungenStansTilOgMedDato: Dato;
 };
 
 export type RammevedtakKommando =

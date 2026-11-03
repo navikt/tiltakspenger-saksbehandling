@@ -8,6 +8,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { Omgjøringsgrad, VedtakId } from './Rammevedtak';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
+import { Dato } from '~/types/DatoTid';
 
 export enum TiltaksdeltakerEndringType {
     AVBRUTT_DELTAKELSE = 'AVBRUTT_DELTAKELSE',
@@ -23,10 +24,10 @@ export enum TiltaksdeltakerEndringType {
 export type TiltaksdeltakerEndring =
     | { type: TiltaksdeltakerEndringType.AVBRUTT_DELTAKELSE }
     | { type: TiltaksdeltakerEndringType.IKKE_AKTUELL_DELTAKELSE }
-    | { type: TiltaksdeltakerEndringType.FORLENGELSE; nySluttdato: string }
-    | { type: TiltaksdeltakerEndringType.AVKORTET; nySluttdato: string }
-    | { type: TiltaksdeltakerEndringType.ENDRET_SLUTTDATO; nySluttdato: Nullable<string> }
-    | { type: TiltaksdeltakerEndringType.ENDRET_STARTDATO; nyStartdato: Nullable<string> }
+    | { type: TiltaksdeltakerEndringType.FORLENGELSE; nySluttdato: Dato }
+    | { type: TiltaksdeltakerEndringType.AVKORTET; nySluttdato: Dato }
+    | { type: TiltaksdeltakerEndringType.ENDRET_SLUTTDATO; nySluttdato: Nullable<Dato> }
+    | { type: TiltaksdeltakerEndringType.ENDRET_STARTDATO; nyStartdato: Nullable<Dato> }
     | {
           type: TiltaksdeltakerEndringType.ENDRET_DELTAKELSESMENGDE;
           nyDeltakelsesprosent: Nullable<number>;
@@ -113,7 +114,7 @@ export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
               harValgtStansFraFørsteDagSomGirRett: true;
           }
         | {
-              stansFraOgMed: string;
+              stansFraOgMed: Dato;
               harValgtStansFraFørsteDagSomGirRett: false;
           }
     );

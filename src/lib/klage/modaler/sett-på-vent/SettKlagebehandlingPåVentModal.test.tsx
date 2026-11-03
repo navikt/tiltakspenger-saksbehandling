@@ -7,13 +7,14 @@ import { useState } from 'react';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { Nullable } from '~/types/UtilTypes';
 import SettKlagebehandlingPåVentModal from './SettKlagebehandlingPåVentModal';
+import { Dato } from '~/types/DatoTid';
 
 const DialogUtenNavigasjon = ({
     onSubmit,
     oppdater = false,
     error = null,
 }: {
-    onSubmit: (begrunnelse: string, frist: string | null) => void;
+    onSubmit: (begrunnelse: string, frist: Nullable<Dato>) => void;
     oppdater?: boolean;
     error?: Nullable<FetcherError>;
 }) => {
@@ -84,7 +85,7 @@ describe.each([
 
     test.each([
         ['01.01.2099', '2099-01-01'],
-        ['', ''],
+        ['', null],
     ])('sender begrunnelse og frist "%s"', async (fristInput, forventetFrist) => {
         const onSubmit = jest.fn();
         render(<DialogUtenNavigasjon onSubmit={onSubmit} oppdater={oppdater} />);
@@ -152,7 +153,7 @@ test.each(['', '32.13.2099'])('tillater tom frist etter startverdi "%s"', async 
     }
 
     sendInn();
-    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith('Venter på opplysninger', ''));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith('Venter på opplysninger', null));
 });
 
 test('nullstiller datovalideringen når dialogen lukkes', async () => {
@@ -168,5 +169,5 @@ test('nullstiller datovalideringen når dialogen lukkes', async () => {
     expect(screen.queryByText('Skriv inn en gyldig dato (dd.mm.åååå)')).not.toBeInTheDocument();
     fyllBegrunnelse();
     sendInn();
-    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith('Venter på opplysninger', ''));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith('Venter på opplysninger', null));
 });

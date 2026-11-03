@@ -1,5 +1,6 @@
 import { Periode } from '~/types/Periode';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export type MeldeperiodeId = `meldeperiode_${string}`;
 
@@ -8,8 +9,8 @@ export type MeldeperiodeProps = {
     versjon: number;
     kjedeId: MeldeperiodeKjedeId;
     periode: Periode;
-    opprettet: string;
+    opprettet: Tidspunkt;
     antallDager: number;
-    girRett: Record<string, boolean>;
+    girRett: Record<Dato, boolean>;
     ingenDagerGirRett: boolean;
 };

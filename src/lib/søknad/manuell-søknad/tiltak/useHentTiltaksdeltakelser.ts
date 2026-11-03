@@ -4,6 +4,7 @@ import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import { ManuellSøknadTiltak } from '~/lib/søknad/manuell-søknad/ManueltRegistrertSøknad';
 import { SakId } from '~/lib/sak/SakTyper';
 import { ÅpenPeriode } from '~/types/Periode';
+import { Dato } from '~/types/DatoTid';
 
 /**
  * Tiltak som kan frata rett til tiltakspenger (i første omgang lønnstilskudd) har fratarRett satt.
@@ -27,8 +28,8 @@ export const girRettTilTiltakspenger = (
 
 export const useHentTiltaksdeltakelser = (
     sakId: SakId,
-    fraOgMed?: string,
-    tilOgMed?: string,
+    fraOgMed?: Dato,
+    tilOgMed?: Dato,
     enabled: boolean = true,
 ) => {
     const harPeriode = !!fraOgMed && !!tilOgMed;
@@ -39,7 +40,7 @@ export const useHentTiltaksdeltakelser = (
     return { data, isLoading, error, mutate };
 };
 
-const fetcher = async (sakId: SakId, fraOgMed: string, tilOgMed: string) =>
+const fetcher = async (sakId: SakId, fraOgMed: Dato, tilOgMed: Dato) =>
     fetchJsonFraApiClientSide<TiltaksdeltakelseFraRegister[]>(
         `/sak/${sakId}/tiltaksdeltakelser?fraOgMed=${encodeURIComponent(fraOgMed)}&tilOgMed=${encodeURIComponent(tilOgMed)}`,
     );

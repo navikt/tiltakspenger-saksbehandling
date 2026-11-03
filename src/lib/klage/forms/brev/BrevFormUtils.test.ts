@@ -15,6 +15,7 @@ import { SLADDET_TEKST_DEFAULT } from '~/utils/sladdetVerdi';
 import { periode, rammevedtak } from '~test/rammebehandling';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 import { avvistResultat, formkrav, klagebehandling, opprettholdtResultat } from '~test/klage';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 type KlageMedBrev = Klagebehandling & {
     resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
@@ -24,12 +25,12 @@ const klageMedResultat = (
     resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist,
 ): KlageMedBrev =>
     klagebehandling({
-        formkrav: formkrav({ innsendingsdato: '2025-04-01' }),
+        formkrav: formkrav({ innsendingsdato: tilDato('2025-04-01') }),
         resultat,
     }) as KlageMedBrev;
 
 const påklagetVedtak = rammevedtak('vedtak_1', periode('2025-01-01', '2025-03-31'), {
-    opprettet: '2025-01-15T09:00:00',
+    opprettet: tilTidspunkt('2025-01-15T09:00:00'),
 });
 
 describe('brevFormValidation', () => {

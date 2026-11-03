@@ -5,12 +5,9 @@ import {
     TiltaksdeltakelseKilde,
     TiltakDeltakerstatus,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { Dato, tilDato } from '~/types/DatoTid';
 
-const tiltak = (
-    id: string,
-    fraOgMed: string | null,
-    tilOgMed: string | null,
-): Tiltaksdeltakelse => ({
+const tiltak = (id: string, fraOgMed: Dato | null, tilOgMed: Dato | null): Tiltaksdeltakelse => ({
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
@@ -24,14 +21,14 @@ const tiltak = (
     kanInnvilges: false,
 });
 
-const vurderingsperiode = { fraOgMed: '2025-01-01', tilOgMed: '2025-06-30' };
+const vurderingsperiode = { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-06-30') };
 
 test('sorterer nyeste tiltak øverst', () => {
     const { aktuelle } = delOppTiltaksdeltakelser(
         [
-            tiltak('a', '2025-01-01', '2025-03-31'),
-            tiltak('c', '2025-05-01', '2025-08-31'),
-            tiltak('b', '2025-03-01', '2025-06-30'),
+            tiltak('a', tilDato('2025-01-01'), tilDato('2025-03-31')),
+            tiltak('c', tilDato('2025-05-01'), tilDato('2025-08-31')),
+            tiltak('b', tilDato('2025-03-01'), tilDato('2025-06-30')),
         ],
         vurderingsperiode,
     );
@@ -42,8 +39,8 @@ test('sorterer nyeste tiltak øverst', () => {
 test('skiller ut tiltak som er avsluttet før vurderingsperioden som historikk', () => {
     const { aktuelle, historiske } = delOppTiltaksdeltakelser(
         [
-            tiltak('gammelt', '2023-01-01', '2023-12-31'),
-            tiltak('aktuelt', '2025-02-01', '2025-05-31'),
+            tiltak('gammelt', tilDato('2023-01-01'), tilDato('2023-12-31')),
+            tiltak('aktuelt', tilDato('2025-02-01'), tilDato('2025-05-31')),
         ],
         vurderingsperiode,
     );

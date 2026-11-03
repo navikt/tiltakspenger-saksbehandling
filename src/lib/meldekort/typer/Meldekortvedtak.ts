@@ -3,12 +3,13 @@ import { SakId } from '../../sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldekortbehandlingId, MeldekortbehandlingProps } from './Meldekortbehandling';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Tidspunkt } from '~/types/DatoTid';
 
 export type Meldekortvedtak = {
     id: VedtakId;
     sakId: SakId;
     meldekortId: MeldekortbehandlingId;
-    opprettet: string;
+    opprettet: Tidspunkt;
     journalpostId: Nullable<string>;
 };
 

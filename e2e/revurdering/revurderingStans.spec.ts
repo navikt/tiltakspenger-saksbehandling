@@ -7,6 +7,7 @@ import {
     type StartRevurderingDTO,
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { behandlingUrl, lagFalskBackend, personoversiktUrl } from './revurderingTestUtils';
+import { tilDato } from '~/types/DatoTid';
 
 test.describe('Revurdering til stans', () => {
     test('saksbehandler starter stans fra personoversikten, lagrer og sender til beslutning', async ({
@@ -69,7 +70,7 @@ test.describe('Revurdering til stans', () => {
                     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
                     prioritering: null,
                     valgteHjemler: [HjemmelForStans.DeltarIkkePåArbeidsmarkedstiltak],
-                    stansFraOgMed: '2025-03-01',
+                    stansFraOgMed: tilDato('2025-03-01'),
                     harValgtStansFraFørsteDagSomGirRett: false,
                     skalSendeVedtaksbrev: true,
                 } satisfies OppdaterRevurderingStansDTO,

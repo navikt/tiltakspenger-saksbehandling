@@ -23,6 +23,7 @@ import {
     lagMeldekortBackend,
     lagMeldekortbehandling,
 } from './meldekortTestUtils';
+import { tilDato } from '~/types/DatoTid';
 
 const forventetLagring = (
     dager: OppdaterMeldekortbehandlingDTO['meldeperioder'][number]['dager'],
@@ -72,18 +73,18 @@ test.describe('Meldekortbehandling - saksbehandler', () => {
         await expect(page.getByRole('heading', { name: 'Meldekort fra bruker' })).toBeVisible();
         await page.getByRole('button', { name: 'Fyll inn disse dagene' }).click();
 
-        await expect(dagStatus(page, '2025-01-06')).toHaveValue(
+        await expect(dagStatus(page, tilDato('2025-01-06'))).toHaveValue(
             MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket,
         );
         await expect(dagStatus(page, DATOER[BRUKERS_SYKEDAG_INDEX])).toHaveValue(
             MeldekortbehandlingDagStatus.FraværSyk,
         );
         // Ubesvarte helgedager hos bruker blir "ikke tiltaksdag"
-        await expect(dagStatus(page, '2025-01-11')).toHaveValue(
+        await expect(dagStatus(page, tilDato('2025-01-11'))).toHaveValue(
             MeldekortbehandlingDagStatus.IkkeTiltaksdag,
         );
 
-        await dagStatus(page, '2025-01-15').selectOption({ label: 'Annet fravær' });
+        await dagStatus(page, tilDato('2025-01-15')).selectOption({ label: 'Annet fravær' });
 
         await expect(page.getByText(/Det finnes ulagrede endringer/)).toBeVisible();
         await page.getByRole('button', { name: 'Lagre og oppdater beregning' }).click();
@@ -166,13 +167,13 @@ test.describe('Meldekortbehandling - saksbehandler', () => {
         await page.getByTitle('Syk (S)').click();
 
         // Helgen fylles ut automatisk, og utfyllingen fortsetter på mandag i uke 3
-        await expect(dagStatus(page, '2025-01-11')).toHaveValue(
+        await expect(dagStatus(page, tilDato('2025-01-11'))).toHaveValue(
             MeldekortbehandlingDagStatus.IkkeTiltaksdag,
         );
-        await expect(dagStatus(page, '2025-01-12')).toHaveValue(
+        await expect(dagStatus(page, tilDato('2025-01-12'))).toHaveValue(
             MeldekortbehandlingDagStatus.IkkeTiltaksdag,
         );
-        await expect(dagStatus(page, '2025-01-13')).toBeFocused();
+        await expect(dagStatus(page, tilDato('2025-01-13'))).toBeFocused();
 
         // Uke 3 med hurtigtaster
         for (const tast of ['d', 'd', 'd', 'b', 'd']) {

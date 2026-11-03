@@ -16,9 +16,10 @@ import {
     PRIORITERING_MANGLER_BEGRUNNELSE,
     prioriteringManglerBegrunnelse,
 } from '~/lib/_felles/prioritering/prioriteringUtils';
+import { Dato } from '~/types/DatoTid';
 
 export type MeldekortDagValideringsfeil = {
-    dato: string;
+    dato: Dato;
     feil: string;
 };
 

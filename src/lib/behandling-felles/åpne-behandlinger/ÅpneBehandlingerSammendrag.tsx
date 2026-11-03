@@ -20,6 +20,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { classNames } from '~/utils/classNames';
 
 import style from './ÅpneBehandlingerSammendrag.module.css';
+import { Tidspunkt } from '~/types/DatoTid';
 
 type Props = {
     sak: SakProps;
@@ -108,7 +109,7 @@ const ÅpenBehandlingRad = ({
 type RadProps = {
     typeTekst: string;
     statusTag: React.ReactNode;
-    opprettet: string;
+    opprettet: Tidspunkt;
     periodeTekst?: string;
     info?: string;
     lenke?: React.ReactNode;

@@ -9,6 +9,7 @@ import {
     meldekortDager,
     meldeperiode,
 } from '~test/meldekort';
+import { tilDato } from '~/types/DatoTid';
 
 const meldeperiodeMedRett = meldeperiode(FØRSTE_MANDAG);
 
@@ -99,7 +100,7 @@ describe('hentMeldekortForhåndsutfyllingFraBrukersMeldekort', () => {
             () => BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET,
         );
         meldekortMedEkstraDag.dager.push({
-            dato: '2025-01-20',
+            dato: tilDato('2025-01-20'),
             status: BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET,
         });
 

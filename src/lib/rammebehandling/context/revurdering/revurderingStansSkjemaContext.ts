@@ -7,10 +7,11 @@ import {
     useBehandlingSkjemaDispatch,
 } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { Dato } from '~/types/DatoTid';
 
 export type RevurderingStansState = {
     resultat: RevurderingResultat.STANS;
-    fraDato?: string;
+    fraDato?: Dato;
     harValgtStansFraFørsteDagSomGirRett: boolean;
     hjemlerForStans: HjemmelForStans[];
 };
@@ -18,7 +19,7 @@ export type RevurderingStansState = {
 type Actions =
     | {
           type: 'setStansFraDato';
-          payload: { fraDato: string };
+          payload: { fraDato: Dato };
       }
     | {
           type: 'setHjemlerForStans';

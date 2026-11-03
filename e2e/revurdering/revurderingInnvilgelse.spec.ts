@@ -6,6 +6,7 @@ import {
     type StartRevurderingDTO,
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { behandlingUrl, lagFalskBackend, personoversiktUrl } from './revurderingTestUtils';
+import { tilDato } from '~/types/DatoTid';
 
 test.describe('Revurdering av innvilgelse', () => {
     test('saksbehandler forlenger innvilgelsen, lagrer og sender til beslutning', async ({
@@ -72,7 +73,10 @@ test.describe('Revurdering av innvilgelse', () => {
                     prioritering: null,
                     innvilgelsesperioder: [
                         {
-                            periode: { fraOgMed: '2025-04-01', tilOgMed: '2025-06-30' },
+                            periode: {
+                                fraOgMed: tilDato('2025-04-01'),
+                                tilOgMed: tilDato('2025-06-30'),
+                            },
                             antallDagerPerMeldeperiode: 10,
                             internDeltakelseId: 'deltakelse_1',
                         },

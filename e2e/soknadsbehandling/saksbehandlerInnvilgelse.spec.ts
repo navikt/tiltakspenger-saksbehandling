@@ -16,6 +16,7 @@ import {
     personoversiktUrl,
     saksbehandlersKommandoer,
 } from './soknadsbehandlingTestUtils';
+import { tilDato } from '~/types/DatoTid';
 
 test.describe('Søknadsbehandling - innvilgelse', () => {
     test('saksbehandler innvilger søknaden, lagrer og sender til beslutning', async ({
@@ -83,7 +84,10 @@ test.describe('Søknadsbehandling - innvilgelse', () => {
                     prioritering: null,
                     innvilgelsesperioder: [
                         {
-                            periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' },
+                            periode: {
+                                fraOgMed: tilDato('2025-01-01'),
+                                tilOgMed: tilDato('2025-03-31'),
+                            },
                             antallDagerPerMeldeperiode: 8,
                             internDeltakelseId: 'deltakelse_1',
                         },

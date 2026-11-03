@@ -35,6 +35,7 @@ import type {
 } from '~/lib/klage/typer/Klageinstanshendelse';
 
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 const saksnummer = tilSaksnummer('202501011001');
 const sakId: SakId = 'sak_01ABC';
@@ -54,12 +55,12 @@ const lagInitiellKlage = (): Klagebehandling => ({
     sakId,
     saksnummer,
     fnr,
-    opprettet: '2025-04-01T10:00:00',
-    sistEndret: '2025-04-01T10:00:00',
+    opprettet: tilTidspunkt('2025-04-01T10:00:00'),
+    sistEndret: tilTidspunkt('2025-04-01T10:00:00'),
     iverksattTidspunkt: null,
     saksbehandler: navIdent,
     klagensJournalpostId: journalpostId,
-    klagensJournalpostOpprettet: '2025-04-01T10:00:00',
+    klagensJournalpostOpprettet: tilTidspunkt('2025-04-01T10:00:00'),
     status: KlagebehandlingStatus.UNDER_BEHANDLING,
     resultat: null,
     avbrutt: null,
@@ -73,7 +74,7 @@ const lagInitiellKlage = (): Klagebehandling => ({
         erKlagefristenOverholdt: true,
         erUnntakForKlagefrist: null,
         erKlagenSignert: true,
-        innsendingsdato: '2025-04-01',
+        innsendingsdato: tilDato('2025-04-01'),
         innsendingskilde: KlageInnsendingskilde.DIGITAL,
     },
     tilknyttedeBehandlingIder: [],
@@ -87,13 +88,13 @@ const lagInitiellKlage = (): Klagebehandling => ({
     ],
 });
 
-const vedtaksperiode = { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' };
+const vedtaksperiode = { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-03-31') };
 
 const lagRammevedtak = (): Rammevedtak => ({
     id: vedtakId,
     behandlingId: rammebehandlingId,
-    opprettet: '2025-03-25T10:00:00',
-    vedtaksdato: '2025-03-25',
+    opprettet: tilTidspunkt('2025-03-25T10:00:00'),
+    vedtaksdato: tilDato('2025-03-25'),
     resultat: RevurderingResultat.STANS,
     opprinneligVedtaksperiode: vedtaksperiode,
     opprinneligInnvilgetPerioder: [],
@@ -120,22 +121,22 @@ const lagRammebehandling = (): RevurderingStans => ({
     saksbehandler: navIdent,
     beslutter: beslutterIdent,
     saksopplysninger: {
-        fødselsdato: ikkeSladdet('1990-01-01'),
+        fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
         tiltaksdeltagelse: [],
         tiltaksdeltakelserSomFratarRett: [],
         periode: vedtaksperiode,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
-        oppslagstidspunkt: '2025-03-25T10:00:00',
+        oppslagstidspunkt: tilTidspunkt('2025-03-25T10:00:00'),
     },
     attesteringer: [],
     vedtaksperiode: vedtaksperiode,
     fritekstTilVedtaksbrev: ikkeSladdet(null),
     begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
-    opprettet: '2025-03-20T10:00:00',
-    sistEndret: '2025-03-25T10:00:00',
-    iverksattTidspunkt: '2025-03-25T10:00:00',
+    opprettet: tilTidspunkt('2025-03-20T10:00:00'),
+    sistEndret: tilTidspunkt('2025-03-25T10:00:00'),
+    iverksattTidspunkt: tilTidspunkt('2025-03-25T10:00:00'),
     ventestatus: [],
     venterTil: null,
     utbetaling: null,
@@ -158,7 +159,10 @@ const lagRammebehandling = (): RevurderingStans => ({
 const lagSøknad = (): Søknad => {
     const ikkeBesvartPeriodeSpm = { svar: 'IKKE_BESVART' as const, periode: vedtaksperiode };
     const ikkeBesvartJaNeiSpm = { svar: 'IKKE_BESVART' as const };
-    const ikkeBesvartFraOgMedSpm = { svar: 'IKKE_BESVART' as const, fraOgMed: '2025-01-01' };
+    const ikkeBesvartFraOgMedSpm = {
+        svar: 'IKKE_BESVART' as const,
+        fraOgMed: tilDato('2025-01-01'),
+    };
 
     return {
         id: søknadId,
@@ -168,8 +172,8 @@ const lagSøknad = (): Søknad => {
         barnetillegg: [],
         søknadstype: 'DIGITAL',
         behandlingsarsak: null,
-        opprettet: '2025-03-01T10:00:00',
-        mottatt: '2025-03-01T10:00:00',
+        opprettet: tilTidspunkt('2025-03-01T10:00:00'),
+        mottatt: tilTidspunkt('2025-03-01T10:00:00'),
         antallVedlegg: 0,
         avbrutt: [],
         kanInnvilges: false,
@@ -202,21 +206,21 @@ const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
     saksbehandler: navIdent,
     beslutter: null,
     saksopplysninger: {
-        fødselsdato: ikkeSladdet('1990-01-01'),
+        fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
         tiltaksdeltagelse: [],
         tiltaksdeltakelserSomFratarRett: [],
         periode: vedtaksperiode,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
-        oppslagstidspunkt: '2025-04-03T10:00:00',
+        oppslagstidspunkt: tilTidspunkt('2025-04-03T10:00:00'),
     },
     attesteringer: [],
     vedtaksperiode: null,
     fritekstTilVedtaksbrev: ikkeSladdet(null),
     begrunnelseVilkårsvurdering: ikkeSladdet(null),
     avbrutt: null,
-    opprettet: '2025-04-03T10:00:00',
-    sistEndret: '2025-04-03T10:00:00',
+    opprettet: tilTidspunkt('2025-04-03T10:00:00'),
+    sistEndret: tilTidspunkt('2025-04-03T10:00:00'),
     iverksattTidspunkt: null,
     ventestatus: [],
     venterTil: null,
@@ -269,7 +273,7 @@ const saksbehandler: Saksbehandler = {
 
 const personopplysninger: Personopplysninger = {
     fnr,
-    fødselsdato: ikkeSladdet('1990-01-01'),
+    fødselsdato: ikkeSladdet(tilDato('1990-01-01')),
     fornavn: ikkeSladdet('Ola'),
     mellomnavn: ikkeSladdet(null),
     etternavn: ikkeSladdet('Nordmann'),
@@ -297,10 +301,10 @@ const lagKlagebehandlingAvsluttetHendelse = (
 ): KlagebehandlingAvsluttetHendelse => ({
     klagehendelseId: klageinstanshendelseId,
     klagebehandlingId: klageId,
-    opprettet: '2025-04-07T12:00:00',
-    sistEndret: '2025-04-07T12:00:00',
+    opprettet: tilTidspunkt('2025-04-07T12:00:00'),
+    sistEndret: tilTidspunkt('2025-04-07T12:00:00'),
     eksternKlagehendelseId: 'ekstern-klagehendelse-1',
-    avsluttetTidspunkt: '2025-04-07T12:00:00',
+    avsluttetTidspunkt: tilTidspunkt('2025-04-07T12:00:00'),
     journalpostreferanser: [],
     hendelsestype: KlageHendelsestype.KLAGEBEHANDLING_AVSLUTTET,
     utfall,
@@ -321,9 +325,9 @@ const simulerSvarFraKlageinstans = (
     klage.status = KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS;
     klage.resultat = {
         ...klage.resultat,
-        journalføringstidspunktInnstillingsbrev: '2025-04-05T10:00:00',
-        distribusjonstidspunktInnstillingsbrev: '2025-04-06T10:00:00',
-        oversendtKlageinstansenTidspunkt: '2025-04-07T10:00:00',
+        journalføringstidspunktInnstillingsbrev: tilTidspunkt('2025-04-05T10:00:00'),
+        distribusjonstidspunktInnstillingsbrev: tilTidspunkt('2025-04-06T10:00:00'),
+        oversendtKlageinstansenTidspunkt: tilTidspunkt('2025-04-07T10:00:00'),
         klageinstanshendelser: [lagKlagebehandlingAvsluttetHendelse(utfall)],
     };
 };

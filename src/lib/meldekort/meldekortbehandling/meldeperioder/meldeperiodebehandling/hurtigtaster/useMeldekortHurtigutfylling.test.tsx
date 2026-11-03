@@ -4,24 +4,25 @@ import { act, renderHook } from '@testing-library/react';
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortDagSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { useMeldekortHurtigutfylling } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/hurtigtaster/useMeldekortHurtigutfylling';
+import { Dato, tilDato } from '~/types/DatoTid';
 
-const dag = (dato: string, status: MeldekortbehandlingDagStatus): MeldekortDagSkjema => ({
+const dag = (dato: Dato, status: MeldekortbehandlingDagStatus): MeldekortDagSkjema => ({
     dato,
     status,
 });
 
 const dager: MeldekortDagSkjema[] = [
-    dag('2025-01-06', MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger),
-    dag('2025-01-07', MeldekortbehandlingDagStatus.IkkeBesvart),
-    dag('2025-01-08', MeldekortbehandlingDagStatus.IkkeBesvart),
-    dag('2025-01-09', MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger),
+    dag(tilDato('2025-01-06'), MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger),
+    dag(tilDato('2025-01-07'), MeldekortbehandlingDagStatus.IkkeBesvart),
+    dag(tilDato('2025-01-08'), MeldekortbehandlingDagStatus.IkkeBesvart),
+    dag(tilDato('2025-01-09'), MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger),
 ];
 
 const dagerMedHelg: MeldekortDagSkjema[] = [
-    dag('2025-01-10', MeldekortbehandlingDagStatus.IkkeBesvart),
-    dag('2025-01-11', MeldekortbehandlingDagStatus.IkkeBesvart),
-    dag('2025-01-12', MeldekortbehandlingDagStatus.IkkeBesvart),
-    dag('2025-01-13', MeldekortbehandlingDagStatus.IkkeBesvart),
+    dag(tilDato('2025-01-10'), MeldekortbehandlingDagStatus.IkkeBesvart),
+    dag(tilDato('2025-01-11'), MeldekortbehandlingDagStatus.IkkeBesvart),
+    dag(tilDato('2025-01-12'), MeldekortbehandlingDagStatus.IkkeBesvart),
+    dag(tilDato('2025-01-13'), MeldekortbehandlingDagStatus.IkkeBesvart),
 ];
 
 let oppdaterDagStatus: jest.Mock<(dagIndex: number, status: MeldekortbehandlingDagStatus) => void>;
@@ -126,10 +127,10 @@ describe('useMeldekortHurtigutfylling', () => {
         const { result } = renderHook(() =>
             useMeldekortHurtigutfylling({
                 dager: [
-                    dag('2025-01-10', MeldekortbehandlingDagStatus.IkkeBesvart),
-                    dag('2025-01-11', MeldekortbehandlingDagStatus.IkkeTiltaksdag),
-                    dag('2025-01-12', MeldekortbehandlingDagStatus.IkkeTiltaksdag),
-                    dag('2025-01-13', MeldekortbehandlingDagStatus.IkkeBesvart),
+                    dag(tilDato('2025-01-10'), MeldekortbehandlingDagStatus.IkkeBesvart),
+                    dag(tilDato('2025-01-11'), MeldekortbehandlingDagStatus.IkkeTiltaksdag),
+                    dag(tilDato('2025-01-12'), MeldekortbehandlingDagStatus.IkkeTiltaksdag),
+                    dag(tilDato('2025-01-13'), MeldekortbehandlingDagStatus.IkkeBesvart),
                 ],
                 erReadonly: false,
                 kanFylleUtHelg: false,
@@ -148,9 +149,12 @@ describe('useMeldekortHurtigutfylling', () => {
         const { result } = renderHook(() =>
             useMeldekortHurtigutfylling({
                 dager: [
-                    dag('2025-01-10', MeldekortbehandlingDagStatus.IkkeBesvart),
-                    dag('2025-01-11', MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket),
-                    dag('2025-01-12', MeldekortbehandlingDagStatus.IkkeBesvart),
+                    dag(tilDato('2025-01-10'), MeldekortbehandlingDagStatus.IkkeBesvart),
+                    dag(
+                        tilDato('2025-01-11'),
+                        MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket,
+                    ),
+                    dag(tilDato('2025-01-12'), MeldekortbehandlingDagStatus.IkkeBesvart),
                 ],
                 erReadonly: false,
                 kanFylleUtHelg: false,
@@ -186,8 +190,8 @@ describe('useMeldekortHurtigutfylling', () => {
         const { result } = renderHook(() =>
             useMeldekortHurtigutfylling({
                 dager: [
-                    dag('2025-01-11', MeldekortbehandlingDagStatus.IkkeBesvart),
-                    dag('2025-01-12', MeldekortbehandlingDagStatus.IkkeBesvart),
+                    dag(tilDato('2025-01-11'), MeldekortbehandlingDagStatus.IkkeBesvart),
+                    dag(tilDato('2025-01-12'), MeldekortbehandlingDagStatus.IkkeBesvart),
                 ],
                 erReadonly: false,
                 kanFylleUtHelg: false,

@@ -4,6 +4,7 @@ import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertB
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Tidspunkt } from '~/types/DatoTid';
 
 export type UtbetalingId = `utbetaling_${string}`;
 
@@ -37,7 +38,7 @@ export type UtbetalingstidslinjePeriode = {
 };
 
 type UtbetalingskontrollBase = {
-    tidspunkt: string;
+    tidspunkt: Tidspunkt;
     status: UtbetalingskontrollStatus;
 };
 

@@ -18,6 +18,7 @@ import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import type { InnvilgbarSøknad, SøknadBarn, Spørsmålsbesvarelser } from '~/lib/søknad/søknadTyper';
 import type { SakId, SakProps } from '~/lib/sak/SakTyper';
 import type { Periode } from '~/types/Periode';
+import { Tidspunkt, tilTidspunkt } from '~/types/DatoTid';
 
 /**
  * Testdata og en stateful falsk backend for søknadsbehandlingsflyten. Id-ene matcher standardverdiene
@@ -146,7 +147,7 @@ const utenResultatfelter = (
 const oppdaterBehandling = (
     behandling: Søknadsbehandling,
     dto: OppdaterSøknadsbehandlingDTO,
-    sistEndret: string,
+    sistEndret: Tidspunkt,
 ): Søknadsbehandling => {
     const felles = {
         ...utenResultatfelter(behandling),
@@ -227,7 +228,7 @@ export const lagSøknadsbehandlingBackend = (
 
     const nyttTidspunkt = () => {
         antallEndringer += 1;
-        return `2025-01-02T10:${String(antallEndringer).padStart(2, '0')}:00`;
+        return tilTidspunkt(`2025-01-02T10:${String(antallEndringer).padStart(2, '0')}:00`);
     };
 
     const handlere = [

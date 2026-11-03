@@ -10,8 +10,9 @@ import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesper
 import { Periode } from '~/types/Periode';
 
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
+import { Dato, tilDato, tilTidspunkt } from '~/types/DatoTid';
 
-const barnetillegg = (fraOgMed: string, tilOgMed: string, antallBarn: number) => ({
+const barnetillegg = (fraOgMed: Dato, tilOgMed: Dato, antallBarn: number) => ({
     antallBarn,
     periode: { fraOgMed, tilOgMed },
 });
@@ -25,8 +26,8 @@ const rammevedtak = (nummer: number, barnetilleggPerioder: BarnetilleggPeriode[]
     return {
         id: `vedtak_${nummer}`,
         behandlingId: `beh_${nummer}`,
-        opprettet: '2025-01-01T09:00:00',
-        vedtaksdato: '2025-01-01',
+        opprettet: tilTidspunkt('2025-01-01T09:00:00'),
+        vedtaksdato: tilDato('2025-01-01'),
         resultat: SøknadsbehandlingResultat.INNVILGELSE,
         opprinneligVedtaksperiode: vedtaksperiode,
         opprinneligInnvilgetPerioder: [vedtaksperiode],
@@ -80,15 +81,20 @@ const innvilgelsesperiode = (periode: Periode): Innvilgelsesperiode => ({
 // Restdelen av det opprinnelige vedtaket og det nye forlengelsesvedtaket, med et hull mellom seg.
 const sakMedHullMellomToVedtak = () =>
     sakMedVedtak([
-        rammevedtak(1, [barnetillegg('2025-01-01', '2025-02-28', 2)]),
-        rammevedtak(2, [barnetillegg('2025-06-01', '2025-08-31', 2)]),
+        rammevedtak(1, [barnetillegg(tilDato('2025-01-01'), tilDato('2025-02-28'), 2)]),
+        rammevedtak(2, [barnetillegg(tilDato('2025-06-01'), tilDato('2025-08-31'), 2)]),
     ]);
 
 describe('hentBarnetilleggForhåndsutfyltForRevurdering', () => {
     test('gir ingen barnetillegg når innvilgelsesperioden ligger i hullet mellom to vedtak', () => {
         const barnetilleggPerioder = hentBarnetilleggForhåndsutfyltForRevurdering(
             sakMedHullMellomToVedtak(),
-            [innvilgelsesperiode({ fraOgMed: '2025-03-01', tilOgMed: '2025-05-31' })],
+            [
+                innvilgelsesperiode({
+                    fraOgMed: tilDato('2025-03-01'),
+                    tilOgMed: tilDato('2025-05-31'),
+                }),
+            ],
         );
 
         expect(barnetilleggPerioder).toEqual([]);
@@ -97,7 +103,12 @@ describe('hentBarnetilleggForhåndsutfyltForRevurdering', () => {
     test('arver antall barn fra det første vedtaket når innvilgelsesperioden ligger før det', () => {
         const barnetilleggPerioder = hentBarnetilleggForhåndsutfyltForRevurdering(
             sakMedHullMellomToVedtak(),
-            [innvilgelsesperiode({ fraOgMed: '2024-11-01', tilOgMed: '2024-12-31' })],
+            [
+                innvilgelsesperiode({
+                    fraOgMed: tilDato('2024-11-01'),
+                    tilOgMed: tilDato('2024-12-31'),
+                }),
+            ],
         );
 
         expect(barnetilleggPerioder).toEqual([
@@ -111,7 +122,12 @@ describe('hentBarnetilleggForhåndsutfyltForRevurdering', () => {
     test('arver antall barn fra det siste vedtaket når innvilgelsesperioden ligger etter det', () => {
         const barnetilleggPerioder = hentBarnetilleggForhåndsutfyltForRevurdering(
             sakMedHullMellomToVedtak(),
-            [innvilgelsesperiode({ fraOgMed: '2025-10-01', tilOgMed: '2025-11-30' })],
+            [
+                innvilgelsesperiode({
+                    fraOgMed: tilDato('2025-10-01'),
+                    tilOgMed: tilDato('2025-11-30'),
+                }),
+            ],
         );
 
         expect(barnetilleggPerioder).toEqual([
@@ -126,8 +142,14 @@ describe('hentBarnetilleggForhåndsutfyltForRevurdering', () => {
         const barnetilleggPerioder = hentBarnetilleggForhåndsutfyltForRevurdering(
             sakMedHullMellomToVedtak(),
             [
-                innvilgelsesperiode({ fraOgMed: '2025-01-01', tilOgMed: '2025-02-28' }),
-                innvilgelsesperiode({ fraOgMed: '2025-03-01', tilOgMed: '2025-05-31' }),
+                innvilgelsesperiode({
+                    fraOgMed: tilDato('2025-01-01'),
+                    tilOgMed: tilDato('2025-02-28'),
+                }),
+                innvilgelsesperiode({
+                    fraOgMed: tilDato('2025-03-01'),
+                    tilOgMed: tilDato('2025-05-31'),
+                }),
             ],
         );
 
@@ -142,7 +164,12 @@ describe('hentBarnetilleggForhåndsutfyltForRevurdering', () => {
     test('utvider barnetillegget til hele innvilgelsesperioden ved overlapp', () => {
         const barnetilleggPerioder = hentBarnetilleggForhåndsutfyltForRevurdering(
             sakMedHullMellomToVedtak(),
-            [innvilgelsesperiode({ fraOgMed: '2025-02-01', tilOgMed: '2025-04-30' })],
+            [
+                innvilgelsesperiode({
+                    fraOgMed: tilDato('2025-02-01'),
+                    tilOgMed: tilDato('2025-04-30'),
+                }),
+            ],
         );
 
         expect(barnetilleggPerioder).toEqual([

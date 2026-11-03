@@ -13,6 +13,7 @@ import {
     MeldeperiodeKjedeId,
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { Dato } from '~/types/DatoTid';
 
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingProps,
@@ -130,7 +131,7 @@ const meldeperiodeKjedeTilContext = (
         meldeperiodeKjede.sisteMeldeperiode.girRett,
     ).map(([dato, girRett]) => {
         return {
-            dato,
+            dato: dato as Dato,
             status: girRett
                 ? MeldekortbehandlingDagStatus.IkkeBesvart
                 : MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger,

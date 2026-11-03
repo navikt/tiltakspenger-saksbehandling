@@ -1,5 +1,6 @@
+import { Dato } from '~/types/DatoTid';
 export type ArenaTPVedtak = {
-    fraOgMed: string;
-    tilOgMed?: string;
+    fraOgMed: Dato;
+    tilOgMed?: Dato;
     rettighet: string;
 };

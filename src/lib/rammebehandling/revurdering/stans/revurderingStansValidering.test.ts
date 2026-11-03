@@ -5,6 +5,7 @@ import {
     RevurderingStansState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { HjemmelForStans, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { tilDato } from '~/types/DatoTid';
 
 const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
 
@@ -12,7 +13,7 @@ const stansSkjema = (state: Partial<RevurderingStansState>): RevurderingStansCon
     resultat: RevurderingResultat.STANS,
     harValgtStansFraFørsteDagSomGirRett: false,
     hjemlerForStans: [HjemmelForStans.Alder],
-    fraDato: '2025-02-01',
+    fraDato: tilDato('2025-02-01'),
     skalSendeVedtaksbrev: true,
     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
     erPrioritert: false,
@@ -44,8 +45,8 @@ describe('revurderingStansValidering', () => {
         });
     });
 
-    test('avviser tom fra-dato', () => {
-        expect(revurderingStansValidering(stansSkjema({ fraDato: '' })).errors).toEqual([
+    test('avviser manglende fra-dato', () => {
+        expect(revurderingStansValidering(stansSkjema({ fraDato: undefined })).errors).toEqual([
             'Du må velge en fra-dato for når tiltakspengene skal stanses.',
         ]);
     });

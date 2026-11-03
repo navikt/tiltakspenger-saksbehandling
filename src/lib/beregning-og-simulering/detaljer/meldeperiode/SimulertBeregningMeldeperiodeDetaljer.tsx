@@ -8,6 +8,7 @@ import { SimulertBeregningDagDetaljer } from '~/lib/beregning-og-simulering/deta
 import { SimuleringDetaljerMeldeperiodeHeader } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
 import { SimuleringsflaggVarsler } from '~/lib/beregning-og-simulering/flagg/SimuleringsflaggVarsler';
 import { SimuleringPosteringliste } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/posteringer/SimuleringPosteringliste';
+import { meldeperiodeKjedeIdTilPeriode } from '~/utils/periode';
 
 import style from './SimulertBeregningMeldeperiodeDetaljer.module.css';
 
@@ -35,11 +36,7 @@ export const SimulertBeregningMeldeperiodeDetaljer = ({ meldeperiode, harSimuler
 
     // Meldeperioden er alltid 14 dager fra mandag til søndag, og kjede-id-en bærer den.
     // Dagene i simuleringen kan være et kortere utsnitt (f.eks. bare dagene med posteringer), så de kan ikke brukes som periode.
-    const [kjedeFraOgMed, kjedeTilOgMed] = meldeperiode.kjedeId.split('/');
-    const periode = {
-        fraOgMed: kjedeFraOgMed ?? dager.atNonNull(0).dato,
-        tilOgMed: kjedeTilOgMed ?? dager.atNonNull(-1).dato,
-    };
+    const periode = meldeperiodeKjedeIdTilPeriode(meldeperiode.kjedeId);
 
     return (
         <section>

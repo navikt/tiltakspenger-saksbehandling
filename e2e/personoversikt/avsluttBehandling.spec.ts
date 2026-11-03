@@ -11,6 +11,7 @@ import {
     test,
 } from '../felles/e2eFelles';
 import { lagSakMedBlandetInnhold, SAKSNUMMER } from './personoversiktTestUtils';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 type AvbrytRequest = { begrunnelse: string; behandlingId: string };
 
@@ -29,7 +30,7 @@ const sakEtterAvslutning = (): SakProps => {
                       gyldigeKommandoer: [],
                       avbrutt: {
                           avbruttAv: 'Z123456',
-                          avbruttTidspunkt: '2025-04-10T08:00:00',
+                          avbruttTidspunkt: tilTidspunkt('2025-04-10T08:00:00'),
                           begrunnelse: ikkeSladdet('Søknaden er trukket'),
                       },
                   }

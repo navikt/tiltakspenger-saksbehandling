@@ -39,6 +39,7 @@ import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Klagevedtak } from '~/lib/klage/typer/Klagevedtak';
 import { ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
+import { tilTidspunkt } from '~/types/DatoTid';
 
 // Oppslagene bryr seg bare om id-ene, så resten av feltene utelates for typer uten testdatabyggere
 const delvis = <T>(verdi: Partial<T>): T => verdi as T;
@@ -56,27 +57,27 @@ describe('hentVedtatteSøknadsbehandlinger', () => {
         const førsteInnvilgelse = søknadsbehandlingInnvilgelse({
             ...vedtatt,
             id: 'beh_1',
-            iverksattTidspunkt: '2025-01-01T10:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-01-01T10:00:00'),
         });
         const avslag = søknadsbehandlingAvslag({
             ...vedtatt,
             id: 'beh_2',
-            iverksattTidspunkt: '2025-02-01T10:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-02-01T10:00:00'),
         });
         const revurdering = revurderingInnvilgelse({
             ...vedtatt,
             id: 'beh_3',
-            iverksattTidspunkt: '2025-03-01T10:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-03-01T10:00:00'),
         });
         const omgjøring = omgjøringInnvilgelse({
             ...vedtatt,
             id: 'beh_4',
-            iverksattTidspunkt: '2025-03-15T10:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-03-15T10:00:00'),
         });
         const andreInnvilgelse = søknadsbehandlingInnvilgelse({
             ...vedtatt,
             id: 'beh_5',
-            iverksattTidspunkt: '2025-04-01T10:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-04-01T10:00:00'),
         });
         const innvilgelseUnderBehandling = søknadsbehandlingInnvilgelse({ id: 'beh_6' });
 
@@ -159,11 +160,11 @@ describe('hentSøknadsbehandlingerForSøknad', () => {
     test('gir søknadsbehandlingene på søknaden, eldst først', () => {
         const nyesteBehandling = søknadsbehandlingAvslag({
             id: 'beh_ny',
-            opprettet: '2025-03-01T10:00:00',
+            opprettet: tilTidspunkt('2025-03-01T10:00:00'),
         });
         const eldsteBehandling = søknadsbehandlingInnvilgelse({
             id: 'beh_gammel',
-            opprettet: '2025-01-01T10:00:00',
+            opprettet: tilTidspunkt('2025-01-01T10:00:00'),
         });
         const annenSøknad = søknadsbehandlingInnvilgelse({
             id: 'beh_annen',

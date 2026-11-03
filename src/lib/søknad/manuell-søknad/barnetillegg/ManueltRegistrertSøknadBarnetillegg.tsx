@@ -72,7 +72,7 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
                 fornavn: hentVerdi(p.fornavn) ?? undefined,
                 mellomnavn: hentVerdi(p.mellomnavn) ?? undefined,
                 etternavn: hentVerdi(p.etternavn) ?? undefined,
-                fødselsdato: hentVerdi(p.fødselsdato) ?? '',
+                fødselsdato: hentVerdi(p.fødselsdato),
                 erSøktBarnetilleggFor: undefined,
                 fnr: hentVerdi(p.fnr) ?? undefined,
                 uuid: uuidv4(),

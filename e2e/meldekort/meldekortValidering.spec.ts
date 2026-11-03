@@ -15,6 +15,7 @@ import {
     lagMeldekortBackend,
     lagMeldekortbehandling,
 } from './meldekortTestUtils';
+import { tilDato } from '~/types/DatoTid';
 
 const FOR_MANGE_DAGER_FEIL =
     'For mange dager med deltatt eller fravær. 11 dager utfylt, 10 er maks for meldeperioden.';
@@ -31,8 +32,8 @@ test.describe('Meldekortbehandling - validering', () => {
         await page.goto(behandlingUrl(behandling.id));
         await forventOverskrift(page, 'Meldekortbehandling');
 
-        await dagStatus(page, '2025-01-06').selectOption({ label: 'Deltatt' });
-        await dagStatus(page, '2025-01-13').selectOption({ label: 'Deltatt' });
+        await dagStatus(page, tilDato('2025-01-06')).selectOption({ label: 'Deltatt' });
+        await dagStatus(page, tilDato('2025-01-13')).selectOption({ label: 'Deltatt' });
 
         // Sammenhengende ubesvarte dager grupperes i feilmeldingen
         const synligTekst = (tekst: string) => page.getByText(tekst).filter({ visible: true });
@@ -66,7 +67,7 @@ test.describe('Meldekortbehandling - validering', () => {
         await expect(page.getByText(FOR_MANGE_DAGER_FEIL)).toHaveCount(0);
 
         // 10 hverdager er allerede utfylt, og en lørdag gir én dag for mye
-        await dagStatus(page, '2025-01-11').selectOption({ label: 'Deltatt' });
+        await dagStatus(page, tilDato('2025-01-11')).selectOption({ label: 'Deltatt' });
         await expect(page.getByText(FOR_MANGE_DAGER_FEIL).filter({ visible: true })).toBeVisible();
 
         await gåTilSteg(page, /Begrunnelse, brev og innsending/);
@@ -78,7 +79,7 @@ test.describe('Meldekortbehandling - validering', () => {
 
         // Tilbakestilles dagen, er skjemaet likt det lagrede og gyldig igjen
         await gåTilSteg(page, /Meldeperioder/);
-        await dagStatus(page, '2025-01-11').selectOption({ label: 'Ikke tiltaksdag' });
+        await dagStatus(page, tilDato('2025-01-11')).selectOption({ label: 'Ikke tiltaksdag' });
         await expect(page.getByText(FOR_MANGE_DAGER_FEIL)).toHaveCount(0);
 
         await gåTilSteg(page, /Begrunnelse, brev og innsending/);
@@ -108,7 +109,7 @@ test.describe('Meldekortbehandling - validering', () => {
         await page.goto(behandlingUrl(behandling.id));
         await forventOverskrift(page, 'Meldekortbehandling');
 
-        await dagStatus(page, '2025-01-11').selectOption({ label: 'Deltatt' });
+        await dagStatus(page, tilDato('2025-01-11')).selectOption({ label: 'Deltatt' });
         await page.getByRole('button', { name: 'Lagre og oppdater beregning' }).click();
 
         await expect(

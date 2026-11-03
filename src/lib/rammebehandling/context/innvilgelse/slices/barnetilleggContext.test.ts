@@ -2,6 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import { barnetilleggPeriode, innvilgelsesperiode, periode } from '~test/rammebehandling';
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { barnetilleggReducer } from '~/lib/rammebehandling/context/innvilgelse/slices/barnetilleggContext';
+import { tilDato } from '~/types/DatoTid';
 
 const state = (
     barnetilleggPerioder: InnvilgelseMedPerioderState['barnetilleggPerioder'],
@@ -91,7 +92,7 @@ describe('barnetilleggReducer', () => {
         expect(
             barnetilleggReducer(state(toPerioder), {
                 type: 'oppdaterBarnetilleggPeriode',
-                payload: { periodeOppdatering: { tilOgMed: '2025-04-30' }, index: 0 },
+                payload: { periodeOppdatering: { tilOgMed: tilDato('2025-04-30') }, index: 0 },
             }).barnetilleggPerioder,
         ).toEqual([
             barnetilleggPeriode(1, periode('2025-01-01', '2025-04-30')),

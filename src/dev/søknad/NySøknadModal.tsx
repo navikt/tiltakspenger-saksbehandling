@@ -19,6 +19,7 @@ import { Oppholdssted } from '~/lib/søknad/søknadTyper';
 import { dateTilISOTekst } from '~/utils/date';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { personoversiktUrl } from '~/utils/urls';
+import { Dato } from '~/types/DatoTid';
 
 interface NySøknadFormData {
     fnr: string;
@@ -52,12 +53,12 @@ export const NySøknadModal = (props: { open: boolean; onClose: () => void }) =>
         {
             fnr: string | null;
             deltakelsesperiode: {
-                fraOgMed: string;
-                tilOgMed: string;
+                fraOgMed: Dato;
+                tilOgMed: Dato;
             } | null;
             barnetillegg: {
                 fnr: Nullable<string>;
-                fødselsdato: Nullable<string>;
+                fødselsdato: Nullable<Dato>;
                 fornavn: Nullable<string>;
                 etternavn: Nullable<string>;
                 oppholderSegIEØS: { svar: 'Ja' | 'Nei' };
@@ -84,7 +85,7 @@ export const NySøknadModal = (props: { open: boolean; onClose: () => void }) =>
                 values.vilHaBarn && values.barnetillegg.length > 0
                     ? values.barnetillegg.map((b) => ({
                           fnr: b.fnr || null,
-                          fødselsdato: b.fødselsdato || null,
+                          fødselsdato: (b.fødselsdato || null) as Nullable<Dato>,
                           fornavn: b.fornavn || null,
                           etternavn: b.etternavn || null,
                           oppholderSegIEØS: {

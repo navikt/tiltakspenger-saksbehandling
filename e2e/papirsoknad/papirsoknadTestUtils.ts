@@ -5,6 +5,7 @@ import type { ValiderJournalpostResponse } from '~/lib/_felles/journalpostId/use
 import { sak, søknadsbehandlingIkkeValgt } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { http, HttpResponse, lagPersonopplysninger } from '../felles/e2eFelles';
+import { tilDato } from '~/types/DatoTid';
 
 export const SAKSNUMMER = '202501011001';
 export const REGISTRER_SØKNAD_URL = `/sak/${SAKSNUMMER}/registrer-soknad`;
@@ -22,7 +23,7 @@ export const lagTiltaksdeltakelser = (): TiltaksdeltakelseFraRegister[] => [
         typeNavn: 'Gruppe AMO',
         visningsnavn: ikkeSladdet('Gruppe AMO hos Arrangør AS'),
         status: TiltakDeltakerstatus.DELTAR,
-        periode: { fraOgMed: '2025-04-01', tilOgMed: '2025-06-30' },
+        periode: { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-06-30') },
         fratarRett: false,
     },
     {
@@ -31,7 +32,7 @@ export const lagTiltaksdeltakelser = (): TiltaksdeltakelseFraRegister[] => [
         typeNavn: 'Lønnstilskudd',
         visningsnavn: ikkeSladdet('Lønnstilskudd hos Bedrift AS'),
         status: TiltakDeltakerstatus.DELTAR,
-        periode: { fraOgMed: '2025-04-01', tilOgMed: '2025-06-30' },
+        periode: { fraOgMed: tilDato('2025-04-01'), tilOgMed: tilDato('2025-06-30') },
         fratarRett: true,
     },
 ];
@@ -39,13 +40,13 @@ export const lagTiltaksdeltakelser = (): TiltaksdeltakelseFraRegister[] => [
 export const lagBarn = () => [
     lagPersonopplysninger({
         fnr: ikkeSladdet('05051512345'),
-        fødselsdato: ikkeSladdet('2015-05-05'),
+        fødselsdato: ikkeSladdet(tilDato('2015-05-05')),
         fornavn: ikkeSladdet('Kari'),
         etternavn: ikkeSladdet('Nordmann'),
     }),
     lagPersonopplysninger({
         fnr: ikkeSladdet('06061812345'),
-        fødselsdato: ikkeSladdet('2018-06-06'),
+        fødselsdato: ikkeSladdet(tilDato('2018-06-06')),
         fornavn: ikkeSladdet('Per'),
         etternavn: ikkeSladdet('Nordmann'),
     }),

@@ -15,6 +15,7 @@ import {
     lagSøknadsbehandlingBackend,
     saksbehandlersKommandoer,
 } from './soknadsbehandlingTestUtils';
+import { tilDato } from '~/types/DatoTid';
 
 const lagBackendMedBarnISøknaden = () =>
     lagSøknadsbehandlingBackend(
@@ -85,7 +86,10 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                     prioritering: null,
                     innvilgelsesperioder: [
                         {
-                            periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' },
+                            periode: {
+                                fraOgMed: tilDato('2025-01-01'),
+                                tilOgMed: tilDato('2025-03-31'),
+                            },
                             antallDagerPerMeldeperiode: 10,
                             internDeltakelseId: 'deltakelse_1',
                         },
@@ -95,7 +99,10 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                         perioder: [
                             {
                                 antallBarn: 1,
-                                periode: { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' },
+                                periode: {
+                                    fraOgMed: tilDato('2025-01-01'),
+                                    tilOgMed: tilDato('2025-03-31'),
+                                },
                             },
                         ],
                     },

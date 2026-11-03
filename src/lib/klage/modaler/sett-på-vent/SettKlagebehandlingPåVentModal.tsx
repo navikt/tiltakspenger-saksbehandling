@@ -9,20 +9,21 @@ import { dateTilISOTekst } from '~/utils/date';
 import { datovalideringsfeil } from '~/lib/_felles/datovelger/datovelgerUtils';
 
 import styles from './SettKlagebehandlingPåVentModal.module.css';
+import { Dato } from '~/types/DatoTid';
 
 const SettKlagebehandlingPåVentModal = (props: {
     åpen: boolean;
     onClose: () => void;
     oppdaterSattPåVent: boolean;
     api: {
-        trigger: (begrunnelse: string, frist: Nullable<string>) => void;
+        trigger: (begrunnelse: string, frist: Nullable<Dato>) => void;
         isMutating: boolean;
         error: Nullable<FetcherError>;
     };
 }) => {
     const fristValideringsfeil = useRef<string | undefined>(undefined);
-    const form = useForm<{ begrunnelse: string; frist: Nullable<string> }>({
-        defaultValues: { begrunnelse: '', frist: '' },
+    const form = useForm<{ begrunnelse: string; frist: Nullable<Dato> }>({
+        defaultValues: { begrunnelse: '', frist: null },
     });
     const { isSubmitted } = form.formState;
 
@@ -86,13 +87,17 @@ const SettKlagebehandlingPåVentModal = (props: {
                                             : undefined
                                     }
                                     ref={field.ref}
-                                    selected={field.value || undefined}
+                                    selected={field.value ?? undefined}
                                     error={fieldState.error?.message}
                                     className={styles.felt}
                                     onDateChange={(dato) =>
-                                        form.setValue('frist', dato ? dateTilISOTekst(dato) : '', {
-                                            shouldDirty: true,
-                                        })
+                                        form.setValue(
+                                            'frist',
+                                            dato ? dateTilISOTekst(dato) : null,
+                                            {
+                                                shouldDirty: true,
+                                            },
+                                        )
                                     }
                                     onValidate={(validering) => {
                                         fristValideringsfeil.current = datovalideringsfeil(

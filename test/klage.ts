@@ -22,6 +22,7 @@ import {
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { ikkeSladdet } from '~test/sladdetVerdi';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 export const formkrav = (overstyringer: Partial<KlageFormkrav> = {}): KlageFormkrav => ({
     vedtakDetKlagesPå: 'vedtak_1',
@@ -30,7 +31,7 @@ export const formkrav = (overstyringer: Partial<KlageFormkrav> = {}): KlageFormk
     erKlagefristenOverholdt: true,
     erUnntakForKlagefrist: null,
     erKlagenSignert: true,
-    innsendingsdato: '2025-04-01',
+    innsendingsdato: tilDato('2025-04-01'),
     innsendingskilde: KlageInnsendingskilde.DIGITAL,
     ...overstyringer,
 });
@@ -40,12 +41,12 @@ export const klagebehandling = (overstyringer: Partial<Klagebehandling> = {}): K
     sakId: 'sak_1',
     saksnummer: tilSaksnummer('202501011001'),
     fnr: ikkeSladdet('12345678911'),
-    opprettet: '2025-04-01T10:00:00',
-    sistEndret: '2025-04-01T10:00:00',
+    opprettet: tilTidspunkt('2025-04-01T10:00:00'),
+    sistEndret: tilTidspunkt('2025-04-01T10:00:00'),
     iverksattTidspunkt: null,
     saksbehandler: 'Z12345',
     klagensJournalpostId: '453827',
-    klagensJournalpostOpprettet: '2025-04-01T10:00:00',
+    klagensJournalpostOpprettet: tilTidspunkt('2025-04-01T10:00:00'),
     status: KlagebehandlingStatus.UNDER_BEHANDLING,
     resultat: null,
     avbrutt: null,
@@ -102,7 +103,7 @@ export const ventestatus = (
     overstyringer: Partial<VentestatusHendelse> = {},
 ): VentestatusHendelse => ({
     sattPåVentAv: 'Z12345',
-    tidspunkt: '2025-04-02T10:00:00',
+    tidspunkt: tilTidspunkt('2025-04-02T10:00:00'),
     begrunnelse: ikkeSladdet('Venter på dokumentasjon'),
     erSattPåVent: true,
     frist: null,
@@ -113,10 +114,10 @@ export const ventestatus = (
 const hendelseBase = (hendelsestype: KlageHendelsestype): Klageinstanshendelse => ({
     klagehendelseId: 'klagehendelse_1',
     klagebehandlingId: 'klage_1',
-    opprettet: '2025-06-01T10:00:00',
-    sistEndret: '2025-06-01T10:00:00',
+    opprettet: tilTidspunkt('2025-06-01T10:00:00'),
+    sistEndret: tilTidspunkt('2025-06-01T10:00:00'),
     eksternKlagehendelseId: 'ekstern_1',
-    avsluttetTidspunkt: '2025-06-01T10:00:00',
+    avsluttetTidspunkt: tilTidspunkt('2025-06-01T10:00:00'),
     journalpostreferanser: [],
     hendelsestype,
 });
@@ -139,7 +140,7 @@ export const behandlingFeilregistrertHendelse = (
     type: KlageHendelseFeilregistrertType,
 ): BehandlingFeilregistrertHendelse => ({
     ...hendelseBase(KlageHendelsestype.BEHANDLING_FEILREGISTRERT),
-    feilregistrertTidspunkt: '2025-06-01T10:00:00',
+    feilregistrertTidspunkt: tilTidspunkt('2025-06-01T10:00:00'),
     årsak: 'Feilregistrert hos klageinstansen',
     navIdent: 'Z99999',
     type,

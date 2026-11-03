@@ -35,6 +35,7 @@ import {
     Prioritering,
 } from '~/lib/_felles/prioritering/prioriteringTyper';
 import { TidslinjeFørOgEtter } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 
 export const RammebehandlingIdPrefix = 'beh_' as const;
 export type RammebehandlingId = `${typeof RammebehandlingIdPrefix}${string}`;
@@ -55,12 +56,12 @@ export interface RammebehandlingBase {
     fritekstTilVedtaksbrev: SladdbarVerdi<Nullable<string>>;
     begrunnelseVilkårsvurdering: SladdbarVerdi<Nullable<string>>;
     avbrutt: Nullable<Avbrutt>;
-    opprettet: string;
-    sistEndret: string;
-    iverksattTidspunkt: Nullable<string>;
+    opprettet: Tidspunkt;
+    sistEndret: Tidspunkt;
+    iverksattTidspunkt: Nullable<Tidspunkt>;
     ventestatus: VentestatusHendelse[];
     /** Tidspunktet en automatisk behandling på vent tas opp igjen. Er adskilt fra fristen i ventestatus. */
-    venterTil: Nullable<string>;
+    venterTil: Nullable<Tidspunkt>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     klagebehandlingId: Nullable<KlageId>;
@@ -191,13 +192,13 @@ export enum ManueltBehandlesGrunn {
 }
 
 export type Saksopplysninger = {
-    fødselsdato: SladdbarVerdi<string>;
+    fødselsdato: SladdbarVerdi<Dato>;
     tiltaksdeltagelse: Tiltaksdeltakelse[];
     tiltaksdeltakelserSomFratarRett: TiltaksdeltakelseSomFratarRett[];
     periode: Nullable<Periode>;
     ytelser: Ytelse[];
     tiltakspengevedtakFraArena: ArenaTPVedtak[];
-    oppslagstidspunkt: string;
+    oppslagstidspunkt: Tidspunkt;
 };
 
 export type OppdaterBehandlingDTO = OppdaterSøknadsbehandlingDTO | OppdaterRevurderingDTO;
@@ -223,7 +224,7 @@ export type RammebehandlingBeslutterEndringer = {
 
 /** Bare begrunnelsene beslutter har endret valget for, er satt. */
 export type RammebehandlingSkalJournalføreNotatEndring = {
-    tidspunkt: string;
+    tidspunkt: Tidspunkt;
     vilkårsvurdering: VilkårsvurderingSkalJournalføreNotatEndring | null;
     barnetillegg: BarnetilleggSkalJournalføreNotatEndring | null;
 };

@@ -9,6 +9,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { HjemmelForOpphør, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { Dato, tilDato } from '~/types/DatoTid';
 
 const superType = BehandlingSkjemaType.RevurderingOmgjøring;
 
@@ -40,7 +41,7 @@ const innvilgelseState: OmgjøringInnvilgelseState = {
 };
 
 const oppdaterVedtaksperiode = (
-    periodeOppdatering: Partial<{ fraOgMed: string; tilOgMed: string }>,
+    periodeOppdatering: Partial<{ fraOgMed: Dato; tilOgMed: Dato }>,
 ): OmgjøringActions => ({
     superType,
     type: 'oppdaterVedtaksperiode',
@@ -79,14 +80,14 @@ describe('omgjøringReducer', () => {
         test('fyller ut en tom vedtaksperiode gradvis', () => {
             const medFraOgMed = omgjøringReducer(
                 innvilgelseUtenPerioderState,
-                oppdaterVedtaksperiode({ fraOgMed: '2025-02-01' }),
+                oppdaterVedtaksperiode({ fraOgMed: tilDato('2025-02-01') }),
             );
 
             expect(medFraOgMed).toMatchObject({ vedtaksperiode: { fraOgMed: '2025-02-01' } });
 
             const medTilOgMed = omgjøringReducer(
                 medFraOgMed,
-                oppdaterVedtaksperiode({ tilOgMed: '2025-04-30' }),
+                oppdaterVedtaksperiode({ tilOgMed: tilDato('2025-04-30') }),
             );
 
             expect(medTilOgMed).toEqual({
@@ -97,7 +98,10 @@ describe('omgjøringReducer', () => {
 
         test('oppdaterer vedtaksperioden for opphør', () => {
             expect(
-                omgjøringReducer(opphørState, oppdaterVedtaksperiode({ tilOgMed: '2025-02-28' })),
+                omgjøringReducer(
+                    opphørState,
+                    oppdaterVedtaksperiode({ tilOgMed: tilDato('2025-02-28') }),
+                ),
             ).toEqual({ ...opphørState, vedtaksperiode: periode('2025-01-01', '2025-02-28') });
         });
 
@@ -105,7 +109,7 @@ describe('omgjøringReducer', () => {
             expect(() =>
                 omgjøringReducer(
                     ikkeValgtState,
-                    oppdaterVedtaksperiode({ fraOgMed: '2025-01-01' }),
+                    oppdaterVedtaksperiode({ fraOgMed: tilDato('2025-01-01') }),
                 ),
             ).toThrow();
         });

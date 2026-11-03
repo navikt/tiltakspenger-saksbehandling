@@ -9,8 +9,9 @@ import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { VentestatusHendelse } from '~/lib/behandling-felles/typer/Ventestatus';
 import { Attestering, Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
 import { ikkeSladdet } from '~test/sladdetVerdi';
+import { Tidspunkt, tilTidspunkt } from '~/types/DatoTid';
 
-const ventestatus = (erSattPåVent: boolean, tidspunkt: string): VentestatusHendelse => ({
+const ventestatus = (erSattPåVent: boolean, tidspunkt: Tidspunkt): VentestatusHendelse => ({
     sattPåVentAv: 'Z123456',
     tidspunkt,
     begrunnelse: ikkeSladdet('Venter på dokumentasjon'),
@@ -19,7 +20,7 @@ const ventestatus = (erSattPåVent: boolean, tidspunkt: string): VentestatusHend
     status: 'UNDER_BEHANDLING',
 });
 
-const attestering = (status: Attesteringsstatus, endretTidspunkt: string): Attestering => ({
+const attestering = (status: Attesteringsstatus, endretTidspunkt: Tidspunkt): Attestering => ({
     status,
     begrunnelse: ikkeSladdet(null),
     endretAv: 'Z654321',
@@ -48,9 +49,9 @@ describe('erBehandlingSattPåVent', () => {
         expect(
             erBehandlingSattPåVent({
                 ventestatus: [
-                    ventestatus(true, '2025-01-03T10:00:00'),
-                    ventestatus(false, '2025-01-02T10:00:00'),
-                    ventestatus(true, '2025-01-01T10:00:00'),
+                    ventestatus(true, tilTidspunkt('2025-01-03T10:00:00')),
+                    ventestatus(false, tilTidspunkt('2025-01-02T10:00:00')),
+                    ventestatus(true, tilTidspunkt('2025-01-01T10:00:00')),
                 ],
             }),
         ).toBe(true);
@@ -58,8 +59,8 @@ describe('erBehandlingSattPåVent', () => {
         expect(
             erBehandlingSattPåVent({
                 ventestatus: [
-                    ventestatus(false, '2025-01-02T10:00:00'),
-                    ventestatus(true, '2025-01-01T10:00:00'),
+                    ventestatus(false, tilTidspunkt('2025-01-02T10:00:00')),
+                    ventestatus(true, tilTidspunkt('2025-01-01T10:00:00')),
                 ],
             }),
         ).toBe(false);
@@ -76,8 +77,11 @@ describe('erBehandlingUnderkjent', () => {
         expect(
             erBehandlingUnderkjent({
                 attesteringer: [
-                    attestering(Attesteringsstatus.GODKJENT, '2025-01-01T10:00:00'),
-                    attestering(Attesteringsstatus.SENDT_TILBAKE, '2025-01-02T10:00:00'),
+                    attestering(Attesteringsstatus.GODKJENT, tilTidspunkt('2025-01-01T10:00:00')),
+                    attestering(
+                        Attesteringsstatus.SENDT_TILBAKE,
+                        tilTidspunkt('2025-01-02T10:00:00'),
+                    ),
                 ],
             }),
         ).toBe(true);
@@ -87,8 +91,11 @@ describe('erBehandlingUnderkjent', () => {
         expect(
             erBehandlingUnderkjent({
                 attesteringer: [
-                    attestering(Attesteringsstatus.SENDT_TILBAKE, '2025-01-01T10:00:00'),
-                    attestering(Attesteringsstatus.GODKJENT, '2025-01-02T10:00:00'),
+                    attestering(
+                        Attesteringsstatus.SENDT_TILBAKE,
+                        tilTidspunkt('2025-01-01T10:00:00'),
+                    ),
+                    attestering(Attesteringsstatus.GODKJENT, tilTidspunkt('2025-01-02T10:00:00')),
                 ],
             }),
         ).toBe(false);

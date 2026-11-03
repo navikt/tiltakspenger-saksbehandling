@@ -17,6 +17,7 @@ import {
     meldeperiodebehandling,
     meldeperiodekjede,
 } from '~test/meldekort';
+import { Dato, tilTidspunkt } from '~/types/DatoTid';
 
 describe('erMeldekortbehandlingGodkjent og erMeldekortbehandlingUnderAktivOmgjøring', () => {
     test.each([
@@ -36,10 +37,8 @@ describe('erMeldekortbehandlingGodkjent og erMeldekortbehandlingUnderAktivOmgjø
 });
 
 describe('finnUbehandledeMeldekort', () => {
-    const kjedeMedStatus = (
-        fraOgMed: string,
-        brukersMeldekortStatus: BrukersMeldekortKjedeStatus,
-    ) => meldeperiodekjede(fraOgMed, { brukersMeldekortStatus });
+    const kjedeMedStatus = (fraOgMed: Dato, brukersMeldekortStatus: BrukersMeldekortKjedeStatus) =>
+        meldeperiodekjede(fraOgMed, { brukersMeldekortStatus });
 
     const mandag = (uker: number) => leggTilDager(FØRSTE_MANDAG, uker * 14);
 
@@ -112,7 +111,7 @@ describe('journalførNotatEndringFraBeslutter', () => {
             skalJournalføreNotat: true,
             beslutterEndringer: {
                 skalJournalføreNotat: {
-                    tidspunkt: '2025-01-21T10:00:00',
+                    tidspunkt: tilTidspunkt('2025-01-21T10:00:00'),
                     saksbehandler: false,
                     beslutter: true,
                 },

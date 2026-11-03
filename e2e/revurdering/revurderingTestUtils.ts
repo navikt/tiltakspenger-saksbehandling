@@ -33,6 +33,7 @@ import type { SakId, SakProps } from '~/lib/sak/SakTyper';
 import type { Periode } from '~/types/Periode';
 import type { InnvilgbarSøknad, Spørsmålsbesvarelser } from '~/lib/søknad/søknadTyper';
 import { BESLUTTER_IDENT, http, HttpResponse, SAKSBEHANDLER_IDENT } from '../felles/e2eFelles';
+import { Tidspunkt, tilTidspunkt } from '~/types/DatoTid';
 
 export const SAKSNUMMER = '202501011001';
 export const SAK_ID: SakId = 'sak_1';
@@ -76,7 +77,7 @@ export const lagSak = (revurdering: Revurdering | null): SakProps => {
         søknadsbehandling: søknadsbehandlingInnvilgelse({
             id: 'beh_vedtatt',
             status: Rammebehandlingsstatus.VEDTATT,
-            iverksattTidspunkt: '2025-01-01T09:00:00',
+            iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             søknad: søknadMedSvar(),
             vedtaksperiode: VEDTAKSPERIODE,
             innvilgelsesperioder: [innvilgelsesperiode(VEDTAKSPERIODE)],
@@ -136,16 +137,25 @@ export const lagStartetRevurdering = (body: StartRevurderingDTO): Revurdering =>
 };
 
 const totalPeriode = (perioder: Periode[]): Periode => {
-    const fraOgMed = perioder.map((p) => p.fraOgMed).toSorted();
-    const tilOgMed = perioder.map((p) => p.tilOgMed).toSorted();
-    return { fraOgMed: fraOgMed.at(0) ?? '', tilOgMed: tilOgMed.at(-1) ?? '' };
+    const fraOgMed = perioder
+        .map((p) => p.fraOgMed)
+        .toSorted()
+        .at(0);
+    const tilOgMed = perioder
+        .map((p) => p.tilOgMed)
+        .toSorted()
+        .at(-1);
+    if (!fraOgMed || !tilOgMed) {
+        throw Error('Kan ikke lage totalperiode uten perioder');
+    }
+    return { fraOgMed, tilOgMed };
 };
 
 /** Speiler hvordan backenden lagrer `POST /sak/{sakId}/behandling/{id}/oppdater` for en revurdering. */
 const lagreRevurdering = (
     gjeldende: Revurdering,
     body: OppdaterBehandlingDTO,
-    sistEndret: string,
+    sistEndret: Tidspunkt,
 ): Revurdering => {
     const felles = {
         id: gjeldende.id,
@@ -257,7 +267,11 @@ export const lagFalskBackend = (initiellRevurdering: Revurdering | null = null) 
             tilstand.oppdaterBodies.push(body);
             // sistEndret må endres for at skjemaet skal lastes på nytt fra den lagrede behandlingen
             const sekund = String(tilstand.oppdaterBodies.length).padStart(2, '0');
-            tilstand.revurdering = lagreRevurdering(gjeldende, body, `2025-02-01T10:00:${sekund}`);
+            tilstand.revurdering = lagreRevurdering(
+                gjeldende,
+                body,
+                tilTidspunkt(`2025-02-01T10:00:${sekund}`),
+            );
             return HttpResponse.json(tilstand.revurdering);
         }),
         http.post('*/sak/:sakId/behandling/:behandlingId/sendtilbeslutning', ({ params }) => {
@@ -269,7 +283,7 @@ export const lagFalskBackend = (initiellRevurdering: Revurdering | null = null) 
                 ...gjeldende,
                 status: Rammebehandlingsstatus.KLAR_TIL_BESLUTNING,
                 gyldigeKommandoer: [],
-                sistEndret: '2025-02-02T10:00:00',
+                sistEndret: tilTidspunkt('2025-02-02T10:00:00'),
             };
             return HttpResponse.json(tilstand.revurdering);
         }),
@@ -288,7 +302,7 @@ export const lagFalskBackend = (initiellRevurdering: Revurdering | null = null) 
                     SaksbehandlerBehandlingKommando.Beslutte,
                     SaksbehandlerBehandlingKommando.LeggTilbakeBeslutter,
                 ],
-                sistEndret: '2025-02-03T10:00:00',
+                sistEndret: tilTidspunkt('2025-02-03T10:00:00'),
             };
             return HttpResponse.json({
                 behandlinger: [{ behandlingId: gjeldende.id, saksnummer: gjeldende.saksnummer }],
@@ -304,8 +318,8 @@ export const lagFalskBackend = (initiellRevurdering: Revurdering | null = null) 
                 ...gjeldende,
                 status: Rammebehandlingsstatus.VEDTATT,
                 gyldigeKommandoer: [],
-                iverksattTidspunkt: '2025-02-04T10:00:00',
-                sistEndret: '2025-02-04T10:00:00',
+                iverksattTidspunkt: tilTidspunkt('2025-02-04T10:00:00'),
+                sistEndret: tilTidspunkt('2025-02-04T10:00:00'),
             };
             return HttpResponse.json(tilstand.revurdering);
         }),

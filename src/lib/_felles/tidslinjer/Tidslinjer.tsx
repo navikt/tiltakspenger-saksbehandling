@@ -10,7 +10,7 @@ import {
 import { BodyShort, Button, Heading, Timeline, VStack } from '@navikt/ds-react';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
-import { formaterDatotekst, formaterPeriode } from '~/utils/date';
+import { dateTilISOTekst, formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/lib/_felles/tidslinjer/useTidslinjeDateRange';
@@ -224,8 +224,8 @@ const FaktiskeTidslinjer = ({ sak }: { sak: SakProps }) => {
             <div className={style.scroll}>
                 <BodyShort size={'small'} className={style.periode}>
                     {formaterPeriode({
-                        fraOgMed: startDate.toString(),
-                        tilOgMed: endDate.toString(),
+                        fraOgMed: dateTilISOTekst(startDate),
+                        tilOgMed: dateTilISOTekst(endDate),
                     })}
                 </BodyShort>
                 <Button

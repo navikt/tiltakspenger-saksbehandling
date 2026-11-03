@@ -18,6 +18,7 @@ import {
     søknadBarn,
     søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 // Standard tiltaksdeltakelse i testbehandlingene er 01.01.2025 - 30.06.2025
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
@@ -68,7 +69,7 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
         expect(resultat).toEqual({ errors: [], warnings: [] });
     });
 
-    test.each([{}, { fraOgMed: '2025-01-01' }, { tilOgMed: '2025-06-30' }])(
+    test.each([{}, { fraOgMed: tilDato('2025-01-01') }, { tilOgMed: tilDato('2025-06-30') }])(
         'krever en fullstendig vedtaksperiode (%o)',
         (vedtaksperiode) => {
             const resultat = revurderingOmgjøringValidering(
@@ -181,7 +182,7 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
             søknadsbehandling: søknadsbehandlingInnvilgelse({
                 id: 'beh_vedtatt',
                 status: Rammebehandlingsstatus.VEDTATT,
-                iverksattTidspunkt: '2025-01-01T09:00:00',
+                iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
                 søknad: søknad([søknadBarn('2020-05-05')]),
             }),
         });

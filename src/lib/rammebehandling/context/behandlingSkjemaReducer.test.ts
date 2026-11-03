@@ -21,6 +21,7 @@ import {
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { HjemmelForStans, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { tilDato } from '~/types/DatoTid';
 
 const ikkeValgtState: BehandlingSkjemaState = {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT,
@@ -177,13 +178,13 @@ describe('behandlingSkjemaReducer med action for feil resultat', () => {
     const omgjøringAction: BehandlingSkjemaActions = {
         superType: BehandlingSkjemaType.RevurderingOmgjøring,
         type: 'oppdaterVedtaksperiode',
-        payload: { periodeOppdatering: { fraOgMed: '2025-01-01' } },
+        payload: { periodeOppdatering: { fraOgMed: tilDato('2025-01-01') } },
     };
 
     const stansAction: BehandlingSkjemaActions = {
         superType: BehandlingSkjemaType.RevurderingStans,
         type: 'setStansFraDato',
-        payload: { fraDato: '2025-01-01' },
+        payload: { fraDato: tilDato('2025-01-01') },
     };
 
     test.each([

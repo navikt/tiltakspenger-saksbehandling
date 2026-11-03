@@ -1,6 +1,6 @@
 import { Heading, HStack, Tag } from '@navikt/ds-react';
 import { finn16årsdag, formaterSladdbarDatotekst } from '~/utils/date';
-import { hentVerdi, sladdbarTekst, sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
+import { hentVerdi, sladdbarTekstEllerNull } from '~/utils/sladdetVerdi';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { getNavnMedFødselsdato } from '~/lib/søknad/manuell-søknad/barnetillegg/barnetilleggUtils';
 import { erDatoIPeriode } from '~/utils/periode';
@@ -27,7 +27,7 @@ export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
                         {
                             fornavn: sladdbarTekstEllerNull(barn.fornavn),
                             etternavn: sladdbarTekstEllerNull(barn.etternavn),
-                            fødselsdato: sladdbarTekst(barn.fødselsdato),
+                            fødselsdato,
                         },
                         barn.fortrolig || barn.strengtFortrolig || barn.strengtFortroligUtland,
                     )}

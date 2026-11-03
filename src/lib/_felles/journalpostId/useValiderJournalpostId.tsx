@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
+import { Tidspunkt } from '~/types/DatoTid';
 
 export type ValiderJournalpostBody = {
     fnr: string;
@@ -9,7 +10,7 @@ export type ValiderJournalpostBody = {
 export type ValiderJournalpostResponse = {
     journalpostFinnes: boolean;
     gjelderInnsendtFnr?: boolean;
-    datoOpprettet?: string;
+    datoOpprettet?: Tidspunkt;
 };
 
 const fetcher = (body: ValiderJournalpostBody) =>
