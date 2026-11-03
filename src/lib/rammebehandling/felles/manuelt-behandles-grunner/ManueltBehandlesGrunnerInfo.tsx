@@ -57,6 +57,7 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     SAKSOPPLYSNING_ANDRE_YTELSER: 'Bruker mottar andre ytelser i søknadsperioden',
     SAKSOPPLYSNING_VEDTAK_I_ARENA:
         'Det finnes tiltakspengevedtak i Arena som kan overlappe med søknadsperioden',
+    SAKSOPPLYSNING_DAGPENGER: 'Bruker har dagpenger som kan overlappe med søknadsperioden',
     SAKSOPPLYSNING_MANGLER_FULLSTENDIG_PERIODE:
         'Tiltaksdeltakelsen mangler fra og med dato og/eller til og med dato',
 
@@ -105,6 +106,7 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Bruker har overlappende tiltaksdeltakelser i forlengelsesperioden',
     FORLENGELSE_ANDRE_YTELSER: 'Bruker mottar andre ytelser',
     FORLENGELSE_VEDTAK_I_ARENA: 'Det finnes tiltakspengevedtak i Arena',
+    FORLENGELSE_DAGPENGER: 'Bruker har dagpenger',
     FORLENGELSE_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for forlengelsen mangler simulering',
     FORLENGELSE_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
         'Simuleringen av forlengelsen gir feilutbetaling, som ikke støttes for forlengelse',

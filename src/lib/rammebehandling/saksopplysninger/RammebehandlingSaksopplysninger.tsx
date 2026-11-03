@@ -15,6 +15,7 @@ import {
 import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BehandlingYtelserOpplysninger } from '~/lib/rammebehandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/lib/rammebehandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
+import { BehandlingDagpengerOpplysninger } from '~/lib/rammebehandling/saksopplysninger/dagpenger/BehandlingDagpengerOpplysninger';
 import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 import { useSak } from '~/lib/sak/SakContext';
@@ -31,6 +32,7 @@ export const RammebehandlingSaksopplysninger = () => {
     const {
         ytelser,
         tiltakspengevedtakFraArena,
+        dagpenger,
         tiltaksdeltagelse,
         tiltaksdeltakelserSomFratarRett,
         fødselsdato,
@@ -82,6 +84,12 @@ export const RammebehandlingSaksopplysninger = () => {
 
             <OpplysningerSeksjon header={'Tiltakspengevedtak fra Arena'}>
                 <BehandlingTiltakspengerArenaOpplysninger vedtak={tiltakspengevedtakFraArena} />
+            </OpplysningerSeksjon>
+
+            <Separator />
+
+            <OpplysningerSeksjon header={'Dagpenger'}>
+                <BehandlingDagpengerOpplysninger perioder={dagpenger} />
             </OpplysningerSeksjon>
 
             <Separator />

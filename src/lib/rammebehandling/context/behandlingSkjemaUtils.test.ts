@@ -52,6 +52,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
         periode: null,
         ytelser: [],
         tiltakspengevedtakFraArena: [],
+        dagpenger: [],
         oppslagstidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
     },
     attesteringer: [],
