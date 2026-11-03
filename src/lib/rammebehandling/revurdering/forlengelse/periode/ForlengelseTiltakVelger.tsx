@@ -2,7 +2,7 @@ import { BodyShort, Label, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useSak } from '~/lib/sak/SakContext';
 import { formaterPeriode } from '~/utils/date';
-import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { InnvilgbarTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import {
     hentForlengelseTiltaksdeltakelse,
     useForlengelseBehandling,
@@ -11,7 +11,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 
 type Props = {
-    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[];
+    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[];
 };
 
 export const ForlengelseTiltakVelger = ({ tiltaksdeltakelser }: Props) => {
@@ -65,5 +65,5 @@ export const ForlengelseTiltakVelger = ({ tiltaksdeltakelser }: Props) => {
     );
 };
 
-const tiltakVisningsnavn = (tiltaksdeltakelse: TiltaksdeltakelseMedPeriode): string =>
+const tiltakVisningsnavn = (tiltaksdeltakelse: InnvilgbarTiltaksdeltakelse): string =>
     `${tiltaksdeltakelse.typeNavn} (${formaterPeriode(tiltaksdeltakelse.periode)})`;

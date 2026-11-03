@@ -4,7 +4,7 @@ import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { ForlengelseTiltakVelger } from '~/lib/rammebehandling/revurdering/forlengelse/periode/ForlengelseTiltakVelger';
 import {
     hentForlengelseTilOgMed,
@@ -22,7 +22,7 @@ export const ForlengelsePeriodeVelger = () => {
 
     const vedtak = hentRammevedtak(sak, behandling.forlengerRammevedtakId);
     const tilOgMed = hentForlengelseTilOgMed(skjema);
-    const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
+    const tiltaksdeltakelser = hentInnvilgbareTiltaksdeltakelser(behandling);
     const tiltaksdeltakelserSomKanForlenges = behandling.tiltaksdeltakelserSomKanForlenges
         .map((id) => tiltaksdeltakelser.find((t) => t.internDeltakelseId === id))
         .filter((t) => t !== undefined);
@@ -44,7 +44,7 @@ export const ForlengelsePeriodeVelger = () => {
                     <Datovelger
                         label={'Forleng til og med'}
                         minDate={skjema.forlengesFraOgMed}
-                        maxDate={valgtTiltaksdeltakelse?.deltagelseTilOgMed}
+                        maxDate={valgtTiltaksdeltakelse?.periode.tilOgMed}
                         defaultMonth={new Date(tilOgMed ?? skjema.forlengesFraOgMed)}
                         defaultSelected={tilOgMed}
                         selected={tilOgMed}
