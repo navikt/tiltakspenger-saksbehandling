@@ -301,6 +301,8 @@ curl -sf -X POST "$B/dev/tiltaksdeltakelse" -H "$T1" -H "$CT" \
 Lokalt svarer dp-datadeling med ingen dagpenger til du setter perioder for personen på saken.
 Periodene vises under «Dagpenger» i saksopplysningene, og automatisk behandling overlates til
 saksbehandler når de overlapper.
+Du kan også bruke skjemaet på <http://localhost:3000/dev/dagpenger> (lenket fra `/dev`), som kan
+forhåndsutfylles med `?sakId=`.
 
 ```bash
 curl -sf -X POST "$B/dev/dagpenger" -H "$T1" -H "$CT" \

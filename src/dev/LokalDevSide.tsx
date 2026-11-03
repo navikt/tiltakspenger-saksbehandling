@@ -12,6 +12,9 @@ export const LokalDevSide = () => {
                 <InternLenkeKnapp href="/dev/deltakelse" size="medium">
                     Opprett/oppdater tiltaksdeltakelse
                 </InternLenkeKnapp>
+                <InternLenkeKnapp href="/dev/dagpenger" size="medium">
+                    Sett dagpengeperioder
+                </InternLenkeKnapp>
             </HStack>
         </VStack>
     );
