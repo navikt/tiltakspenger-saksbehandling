@@ -1,5 +1,5 @@
 import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
-import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst, datoMax, datoTilDatoInputText } from '~/utils/date';
 import {
     useOmgjøringMedValgtResultatSkjema,
     useOmgjøringSkjemaDispatch,
@@ -20,6 +20,7 @@ import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetek
 import { VedtaksperiodevelgerGjeldendePerioder } from '~/lib/rammebehandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodevelgerGjeldendePerioder';
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { Periode } from '~/types/Periode';
+import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 import style from './OmgjøringVedtaksperiodeVelger.module.css';
 
@@ -50,6 +51,13 @@ export const OmgjøringVedtaksperiodeVelger = () => {
         behandling,
         vedtaksperiode,
         perioderSomKanOmgjøres,
+    );
+
+    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+    const sisteTilOgMed = datoMax(
+        periodeSomMåOmgjøresInnenfor.tilOgMed ?? new Date(),
+        tiltaksdeltakelsesperiode?.tilOgMed ?? new Date(),
+        vedtaksperiode.tilOgMed ?? new Date(),
     );
 
     const commonProps: Partial<DatovelgerProps> = {
@@ -113,7 +121,7 @@ export const OmgjøringVedtaksperiodeVelger = () => {
                     }
                     error={!vedtaksperiode.tilOgMed && 'Velg dato'}
                     minDate={periodeSomMåOmgjøresInnenfor.fraOgMed}
-                    maxDate={erOpphør ? perioderSomKanOmgjøres.at(-1)?.tilOgMed : undefined}
+                    maxDate={erOpphør ? perioderSomKanOmgjøres.at(-1)?.tilOgMed : sisteTilOgMed}
                     defaultMonth={vedtaksperiode.tilOgMed ?? vedtaksperiode.fraOgMed}
                     onDateChange={(valgtDato) => {
                         if (!valgtDato) {

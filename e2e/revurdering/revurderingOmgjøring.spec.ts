@@ -1,4 +1,10 @@
-import { expect, fellesHandlere, forventOverskrift, test } from '../felles/e2eFelles';
+import {
+    expect,
+    fellesHandlere,
+    forventOverskrift,
+    SAKSBEHANDLER_IDENT,
+    test,
+} from '../felles/e2eFelles';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     HjemmelForOpphør,
@@ -11,10 +17,56 @@ import {
     behandlingUrl,
     lagFalskBackend,
     personoversiktUrl,
+    REVURDERING_ID,
     VEDTAK_ID,
 } from './revurderingTestUtils';
+import { omgjøringIkkeValgt, periode, tiltaksdeltakelse } from '~test/rammebehandling';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 test.describe('Omgjøring', () => {
+    test('kalenderen tillater å forlenge vedtaksperioden til neste år ved innvilgelse, men ikke ved opphør', async ({
+        page,
+        msw,
+    }) => {
+        await page.clock.setFixedTime(new Date('2025-11-03T12:00:00'));
+        const behandling = omgjøringIkkeValgt({
+            id: REVURDERING_ID,
+            saksbehandler: SAKSBEHANDLER_IDENT,
+            gyldigeKommandoer: [SaksbehandlerBehandlingKommando.Saksbehandle],
+        });
+        behandling.saksopplysninger.tiltaksdeltagelse = [
+            tiltaksdeltakelse('deltakelse_1', periode('2025-01-01', '2026-03-31')),
+        ];
+        const backend = lagFalskBackend(behandling);
+        msw.use(...fellesHandlere(), ...backend.handlere);
+
+        await page.goto(behandlingUrl);
+        await forventOverskrift(page, 'Omgjøring');
+        await page.getByRole('radio', { name: 'Innvilgelse' }).check();
+        await page.getByRole('button', { name: 'Fyll inn periode' }).click();
+
+        await page
+            .getByRole('button', { name: /Åpne datovelger/ })
+            .nth(1)
+            .click();
+        const kalender = page.getByRole('dialog');
+        await kalender.getByRole('combobox', { name: /år/i }).selectOption('2026');
+        await kalender.getByRole('combobox', { name: /måned/i }).selectOption('0');
+        await kalender.getByRole('button', { name: 'torsdag 15', exact: true }).click();
+        await expect(page.getByRole('textbox', { name: 'Til og med' }).first()).toHaveValue(
+            '15.01.2026',
+        );
+
+        await page.getByRole('radio', { name: 'Opphør' }).check();
+        await page
+            .getByRole('button', { name: /Åpne datovelger/ })
+            .nth(1)
+            .click();
+        await expect(
+            kalender.getByRole('combobox', { name: /år/i }).getByRole('option', { name: '2026' }),
+        ).toHaveCount(0);
+    });
+
     test('saksbehandler omgjør et vedtak til opphør fra vedtatte behandlinger og sender til beslutning', async ({
         page,
         msw,
