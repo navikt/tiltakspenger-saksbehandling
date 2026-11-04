@@ -20,6 +20,9 @@ export const validerInnvilgelse = (
     behandling: Rammebehandling,
     skjema: BehandlingMedInnvilgelseState,
     søknad: Søknad,
+    {
+        validerBarnetillegg: skalValidereBarnetillegg = true,
+    }: { validerBarnetillegg?: boolean } = {},
 ): ValideringResultat => {
     const { innvilgelse, resultat } = skjema;
 
@@ -89,6 +92,10 @@ export const validerInnvilgelse = (
 
     if (tiltaksperiode.tilOgMed < innvilgelsesperiodeTotal.tilOgMed) {
         validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
+    }
+
+    if (!skalValidereBarnetillegg) {
+        return validering;
     }
 
     const barnetilleggValidering = validerBarnetillegg(

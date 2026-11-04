@@ -182,6 +182,21 @@ describe('validerInnvilgelse', () => {
         });
     });
 
+    test('barnetillegget valideres ikke når det ikke skal valideres', () => {
+        const resultat = validerInnvilgelse(
+            sak(),
+            søknadsbehandlingInnvilgelse(),
+            søknadsbehandlingSkjema(
+                [innvilgelsesperiode(førsteHalvår)],
+                [barnetilleggPeriode(0, førsteHalvår)],
+            ),
+            søknad(),
+            { validerBarnetillegg: false },
+        );
+
+        expect(resultat).toEqual({ errors: [], warnings: [] });
+    });
+
     describe('hull mellom innvilgelsesperiodene', () => {
         const innvilgelsesperioderMedHullIFebruar = [
             innvilgelsesperiode(januar),

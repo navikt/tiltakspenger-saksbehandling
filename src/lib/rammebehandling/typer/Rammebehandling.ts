@@ -2,6 +2,7 @@ import { ArenaTPVedtak } from './ArenaTPVedtak';
 import { Periode } from '~/types/Periode';
 import {
     Revurdering,
+    RevurderingForlengelse,
     RevurderingInnvilgelse,
     OmgjøringInnvilgelse,
     RevurderingResultat,
@@ -213,7 +214,10 @@ export type OppdaterBehandlingBaseDTO = {
 };
 
 export type RammebehandlingMedInnvilgelse =
-    SøknadsbehandlingInnvilgelse | RevurderingInnvilgelse | OmgjøringInnvilgelse;
+    | SøknadsbehandlingInnvilgelse
+    | RevurderingInnvilgelse
+    | RevurderingForlengelse
+    | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];
 

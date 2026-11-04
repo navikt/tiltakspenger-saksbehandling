@@ -2,6 +2,7 @@ import { useRevurderingBehandling } from '~/lib/rammebehandling/context/Behandli
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { RevurderingStansVedtak } from '~/lib/rammebehandling/revurdering/stans/RevurderingStansVedtak';
 import { RevurderingInnvilgelseVedtak } from '~/lib/rammebehandling/revurdering/innvilgelse/RevurderingInnvilgelseVedtak';
+import { RevurderingForlengelseVedtak } from '~/lib/rammebehandling/revurdering/forlengelse/RevurderingForlengelseVedtak';
 
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -14,6 +15,8 @@ export const RevurderingVedtak = () => {
             return <RevurderingStansVedtak />;
         case RevurderingResultat.INNVILGELSE:
             return <RevurderingInnvilgelseVedtak />;
+        case RevurderingResultat.FORLENGELSE:
+            return <RevurderingForlengelseVedtak />;
         case RevurderingResultat.OMGJØRING:
         case RevurderingResultat.OMGJØRING_OPPHØR:
         case RevurderingResultat.OMGJØRING_IKKE_VALGT:
