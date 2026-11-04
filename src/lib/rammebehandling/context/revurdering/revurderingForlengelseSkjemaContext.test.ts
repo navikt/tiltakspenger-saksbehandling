@@ -1,3 +1,4 @@
+import { tilDato } from '~/types/DatoTid';
 import { describe, expect, test } from '@jest/globals';
 import {
     barnetilleggPeriode,
@@ -62,7 +63,7 @@ const settTilOgMed = (
 ): RevurderingForlengelseActions => ({
     superType,
     type: 'settForlengelseTilOgMed',
-    payload: { tilOgMed, behandling, sak },
+    payload: { tilOgMed: tilDato(tilOgMed), behandling, sak },
 });
 
 describe('revurderingForlengelseReducer', () => {
@@ -228,7 +229,7 @@ describe('valg av tiltaksdeltakelse ved forlengelse', () => {
                 superType,
                 type: 'settForlengelseTilOgMed',
                 payload: {
-                    tilOgMed: '2025-06-30',
+                    tilOgMed: tilDato('2025-06-30'),
                     behandling: behandlingMedToTiltak,
                     sak: sakMedToTiltak,
                 },

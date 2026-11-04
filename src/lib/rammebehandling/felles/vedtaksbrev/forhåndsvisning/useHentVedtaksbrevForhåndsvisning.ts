@@ -55,7 +55,7 @@ export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
 export type RevurderingForlengelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.FORLENGELSE;
     fritekst: Nullable<string>;
-    tilOgMed: string;
+    tilOgMed: Dato;
     internDeltakelseId: string;
     // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
     barnetillegg: Nullable<BarnetilleggPeriode[]>;

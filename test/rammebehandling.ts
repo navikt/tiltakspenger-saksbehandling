@@ -232,7 +232,7 @@ export const revurderingForlengelse = (
     ...revurderingBase(),
     resultat: RevurderingResultat.FORLENGELSE,
     forlengerRammevedtakId: 'vedtak_1',
-    forlengesFraOgMed: '2025-04-01',
+    forlengesFraOgMed: tilDato('2025-04-01'),
     harEndretBarnetillegg: false,
     kanIkkeUtledeBarnetillegg: false,
     tiltaksdeltakelserSomKanForlenges: [standardTiltaksdeltakelse.internDeltakelseId],

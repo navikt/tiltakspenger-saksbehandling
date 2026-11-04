@@ -71,7 +71,7 @@ export type RammevedtakKommandoStans = {
 // Vedtaket kan forlenges fra og med denne datoen, som er dagen etter siste innvilgede dag i vedtaket.
 export type RammevedtakKommandoForleng = {
     type: RammevedtakKommandoType.FORLENG;
-    forlengesFraOgMed: string;
+    forlengesFraOgMed: Dato;
 };
 
 export type RammevedtakKommando =

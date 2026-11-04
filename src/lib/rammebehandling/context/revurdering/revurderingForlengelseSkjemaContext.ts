@@ -1,3 +1,4 @@
+import { Dato } from '~/types/DatoTid';
 import { Reducer } from 'react';
 import {
     RevurderingForlengelse,
@@ -31,7 +32,7 @@ import { useRevurderingBehandling } from '~/lib/rammebehandling/context/Behandli
 // Inntil begge er valgt, ligger valgene i den ufullstendige innvilgelsesperioden.
 export type RevurderingForlengelseState = {
     resultat: RevurderingResultat.FORLENGELSE;
-    forlengesFraOgMed: string;
+    forlengesFraOgMed: Dato;
     // Om saksbehandler har valgt barnetillegget selv.
     // Ellers utleder og lagrer backend barnetillegget fra vedtaket som forlenges hver gang behandlingen lagres.
     harEndretBarnetillegg: boolean;
@@ -42,7 +43,7 @@ type ForlengelseActions =
     | {
           type: 'settForlengelseTilOgMed';
           payload: {
-              tilOgMed: string;
+              tilOgMed: Dato;
               behandling: RevurderingForlengelse;
               sak: SakProps;
           };
@@ -188,7 +189,7 @@ export const forlengelseInitialState = (
     };
 };
 
-export const hentForlengelseTilOgMed = (state: RevurderingForlengelseState): string | undefined =>
+export const hentForlengelseTilOgMed = (state: RevurderingForlengelseState): Dato | undefined =>
     state.innvilgelse.innvilgelsesperioder.at(-1)?.periode.tilOgMed;
 
 export const hentForlengelseTiltaksdeltakelse = (
@@ -211,7 +212,7 @@ export const erLagretMedSammePeriodeOgTiltak = (
 
 const medInnvilgelsesperiode = (
     state: RevurderingForlengelseState,
-    valgt: { tilOgMed?: string; internDeltakelseId?: string },
+    valgt: { tilOgMed?: Dato; internDeltakelseId?: string },
     behandling: RevurderingForlengelse,
     sak: SakProps,
 ): RevurderingForlengelseState => {
