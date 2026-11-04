@@ -51,4 +51,5 @@ export enum SaksbehandlerBehandlingKommando {
     Gjenoppta = 'Gjenoppta',
     Avbryt = 'Avbryt',
     Gjenåpne = 'Gjenåpne',
+    KonverterRevurdering = 'KonverterRevurdering',
 }

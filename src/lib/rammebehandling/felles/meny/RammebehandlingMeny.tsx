@@ -1,8 +1,11 @@
 import { ActionMenu, Button } from '@navikt/ds-react';
-import { BulletListIcon, HourglassTopFilledIcon } from '@navikt/aksel-icons';
+import { ArrowsSquarepathIcon, BulletListIcon, HourglassTopFilledIcon } from '@navikt/aksel-icons';
 import { ComponentProps, useState } from 'react';
 import { useRouter } from 'next/router';
-import { BehandlingsmenyKallesFra } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import {
+    BehandlingsmenyKallesFra,
+    SaksbehandlerBehandlingKommando,
+} from '~/lib/behandling-felles/typer/BehandlingFelles';
 import {
     BehandlingsmenyDialog,
     behandlingsmenyKapabiliteter,
@@ -23,12 +26,19 @@ import { RammebehandlingOverta } from '~/lib/rammebehandling/felles/meny/handlin
 import { RammebehandlingAvslutt } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAvslutt';
 import { RammebehandlingGjenåpne } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingGjenåpne';
 import { useSak } from '~/lib/sak/SakContext';
+import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { behandlingUrl, personoversiktUrl } from '~/utils/urls';
 import { RammebehandlingAngre } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAngre';
 import { RammebehandlingHentTilbake } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingHentTilbake';
+import {
+    KonverterRevurderingTil,
+    konverteringsalternativer,
+    konverterRevurderingTilTekst,
+    RammebehandlingKonverter,
+} from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingKonverter';
 
 type Props = {
     behandling: Rammebehandling;
@@ -41,10 +51,12 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
     const { gyldigeKommandoer, ventestatus, attesteringer } = behandling;
 
     const { sak, setSak } = useSak();
+    const { konverterRevurderingToggle } = useFeatureToggles();
     const router = useRouter();
     const { setNotification, navigateWithNotification } = useNotification();
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
+    const [konverterTil, setKonverterTil] = useState<KonverterRevurderingTil | null>(null);
 
     const harVentestatuser = ventestatus.length > 0;
     const harAttesteringer = attesteringer.length > 0;
@@ -85,6 +97,13 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
 
     const erRevurdering = behandling.type === Rammebehandlingstype.REVURDERING;
 
+    const konverteringsvalg =
+        konverterRevurderingToggle &&
+        erRevurdering &&
+        gyldigeKommandoer.includes(SaksbehandlerBehandlingKommando.KonverterRevurdering)
+            ? konverteringsalternativer(behandling.resultat)
+            : [];
+
     const overtarFra =
         behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING
             ? (behandling.beslutter ?? 'Ukjent beslutter')
@@ -96,6 +115,28 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                 gyldigeKommandoer={gyldigeKommandoer}
                 onVelg={(dialog) => setAktivDialog(dialog)}
                 size={size}
+                egneHandlinger={
+                    konverteringsvalg.length > 0 ? (
+                        <ActionMenu.Sub>
+                            <ActionMenu.SubTrigger icon={<ArrowsSquarepathIcon aria-hidden />}>
+                                {'Endre type'}
+                            </ActionMenu.SubTrigger>
+                            <ActionMenu.SubContent>
+                                {konverteringsvalg.map((til) => (
+                                    <ActionMenu.Item
+                                        key={til}
+                                        onSelect={() => {
+                                            setKonverterTil(til);
+                                            setAktivDialog('konverter');
+                                        }}
+                                    >
+                                        {konverterRevurderingTilTekst[til]}
+                                    </ActionMenu.Item>
+                                ))}
+                            </ActionMenu.SubContent>
+                        </ActionMenu.Sub>
+                    ) : undefined
+                }
                 ekstraValg={
                     harVentestatuser || harAttesteringer ? (
                         <>
@@ -170,6 +211,19 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                     saksnummer={sak.saksnummer}
                     behandlingId={behandling.id}
                     åpen={aktivDialog === 'hentTilbake'}
+                    onClose={onClose}
+                    onSuccess={onSuccessTilBehandling}
+                />
+            )}
+
+            {konverterTil && (
+                <RammebehandlingKonverter
+                    sakId={sak.sakId}
+                    saksnummer={sak.saksnummer}
+                    behandlingId={behandling.id}
+                    til={konverterTil}
+                    alleRammevedtak={sak.alleRammevedtak}
+                    åpen={aktivDialog === 'konverter'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
                 />
@@ -263,4 +317,4 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
     );
 };
 
-type AktivDialog = BehandlingsmenyDialog | 'ventehistorikk' | 'attesteringer';
+type AktivDialog = BehandlingsmenyDialog | 'konverter' | 'ventehistorikk' | 'attesteringer';
