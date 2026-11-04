@@ -44,16 +44,7 @@ export const revurderingForlengelseValidering = (
     const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
 
     // Barnetillegget saksbehandler ikke har valgt selv, utleder backend på nytt når behandlingen lagres.
-    const skjemaSomValideres = skjema.harEndretBarnetillegg
-        ? skjema
-        : {
-              ...skjema,
-              innvilgelse: {
-                  ...skjema.innvilgelse,
-                  harBarnetillegg: false,
-                  barnetilleggPerioder: [],
-              },
-          };
-
-    return validerInnvilgelse(sak, behandling, skjemaSomValideres, sisteSøknad);
+    return validerInnvilgelse(sak, behandling, skjema, sisteSøknad, {
+        validerBarnetillegg: skjema.harEndretBarnetillegg,
+    });
 };

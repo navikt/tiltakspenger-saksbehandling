@@ -4,10 +4,10 @@ import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/Vedta
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import {
-    erLagretMedSammePeriodeOgTiltak,
     useForlengelseBehandling,
     useRevurderingForlengelseSkjema,
     useRevurderingForlengelseSkjemaDispatch,
+    visesUtledetBarnetillegg,
 } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { formaterPeriode } from '~/utils/date';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
@@ -68,7 +68,7 @@ export const ForlengelseBarnetillegg = () => {
                 </HStack>
                 <VStack gap={'space-8'}>
                     {!innvilgelse.harValgtPeriode ||
-                    !erLagretMedSammePeriodeOgTiltak(skjema, behandling) ? (
+                    !visesUtledetBarnetillegg(skjema, behandling) ? (
                         <BodyShort size={'small'} weight={'semibold'}>
                             {'Barnetillegget oppdateres når behandlingen lagres.'}
                         </BodyShort>

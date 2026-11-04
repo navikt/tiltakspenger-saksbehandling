@@ -9,10 +9,11 @@ import {
 } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import {
-    erLagretMedSammePeriodeOgTiltak,
     forlengelseInitialState,
     RevurderingForlengelseActions,
     revurderingForlengelseReducer,
+    RevurderingForlengelseState,
+    visesUtledetBarnetillegg,
 } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import {
@@ -57,6 +58,29 @@ const lagretBehandling = revurderingForlengelse({
     barnetillegg: { perioder: utledetBarnetillegg, begrunnelse: ikkeSladdet(null) },
 });
 
+// Det siste barnet fyller 16 år 15. mai, så barnetillegget slutter før forlengelsen.
+const lagretBehandlingDerBarnetilleggetSlutterFør = revurderingForlengelse({
+    ...lagretBehandling,
+    barnetillegg: {
+        perioder: [barnetilleggPeriode(1, periode('2025-04-01', '2025-05-14'))],
+        begrunnelse: ikkeSladdet(null),
+    },
+});
+
+const settHarEndretBarnetillegg = (
+    harEndretBarnetillegg: boolean,
+    behandling: RevurderingForlengelse,
+): RevurderingForlengelseActions => ({
+    superType,
+    type: 'settHarValgtBarnetillegg',
+    payload: { harEndretBarnetillegg, behandling },
+});
+
+const reduser = (
+    state: RevurderingForlengelseState,
+    ...actions: RevurderingForlengelseActions[]
+): RevurderingForlengelseState => actions.reduce(revurderingForlengelseReducer, state);
+
 const settTilOgMed = (
     tilOgMed: string,
     behandling: RevurderingForlengelse = nyBehandling,
@@ -99,7 +123,7 @@ describe('revurderingForlengelseReducer', () => {
             harBarnetillegg: true,
             barnetilleggPerioder: utledetBarnetillegg,
         });
-        expect(erLagretMedSammePeriodeOgTiltak(state, lagretBehandling)).toBe(true);
+        expect(visesUtledetBarnetillegg(state, lagretBehandling)).toBe(true);
     });
 
     test('det lagrede barnetillegget gjelder ikke lenger når til og med-datoen endres', () => {
@@ -108,7 +132,7 @@ describe('revurderingForlengelseReducer', () => {
             settTilOgMed('2025-05-31', lagretBehandling),
         );
 
-        expect(erLagretMedSammePeriodeOgTiltak(state, lagretBehandling)).toBe(false);
+        expect(visesUtledetBarnetillegg(state, lagretBehandling)).toBe(false);
     });
 
     test('det lagrede barnetillegget gjelder ikke lenger når tiltaksdeltakelsen endres', () => {
@@ -118,7 +142,7 @@ describe('revurderingForlengelseReducer', () => {
             payload: { internDeltakelseId: 'deltakelse_annen', behandling: lagretBehandling, sak },
         });
 
-        expect(erLagretMedSammePeriodeOgTiltak(state, lagretBehandling)).toBe(false);
+        expect(visesUtledetBarnetillegg(state, lagretBehandling)).toBe(false);
     });
 
     test('endring av barnetillegget markerer det som valgt av saksbehandler', () => {
@@ -179,6 +203,59 @@ describe('revurderingForlengelseReducer', () => {
         });
 
         expect(angret).toEqual(lagret);
+    });
+
+    test('det lagrede barnetillegget strekkes ikke ut når saksbehandler angrer endringen uten å ha endret perioden', () => {
+        const state = reduser(
+            forlengelseInitialState(lagretBehandlingDerBarnetilleggetSlutterFør),
+            settHarEndretBarnetillegg(true, lagretBehandlingDerBarnetilleggetSlutterFør),
+            settHarEndretBarnetillegg(false, lagretBehandlingDerBarnetilleggetSlutterFør),
+        );
+
+        expect(state.innvilgelse).toMatchObject({
+            harBarnetillegg: true,
+            barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-04-01', '2025-05-14'))],
+        });
+    });
+
+    test('det lagrede barnetillegget gjenopprettes uendret når til og med-datoen settes tilbake', () => {
+        const state = reduser(
+            forlengelseInitialState(lagretBehandling),
+            settTilOgMed('2025-04-30', lagretBehandling),
+            settTilOgMed('2025-06-30', lagretBehandling),
+        );
+
+        expect(state.innvilgelse).toMatchObject({
+            harBarnetillegg: true,
+            barnetilleggPerioder: utledetBarnetillegg,
+        });
+        expect(visesUtledetBarnetillegg(state, lagretBehandling)).toBe(true);
+    });
+
+    test('saksbehandlers valg om å ikke gi barnetillegg beholdes når til og med-datoen endres', () => {
+        const state = reduser(
+            forlengelseInitialState(lagretBehandling),
+            { superType, type: 'setHarSøktBarnetillegg', payload: { harSøkt: false } },
+            settTilOgMed('2025-05-31', lagretBehandling),
+        );
+
+        expect(state.harEndretBarnetillegg).toBe(true);
+        expect(state.innvilgelse).toMatchObject({ harBarnetillegg: false });
+    });
+
+    test('barnetillegg saksbehandler valgte da behandlingen ble lagret, vises ikke som utledet når valget angres', () => {
+        const lagretMedValgtBarnetillegg = revurderingForlengelse({
+            ...lagretBehandling,
+            harEndretBarnetillegg: true,
+        });
+
+        const state = reduser(
+            forlengelseInitialState(lagretMedValgtBarnetillegg),
+            settHarEndretBarnetillegg(false, lagretMedValgtBarnetillegg),
+        );
+
+        expect(state.harEndretBarnetillegg).toBe(false);
+        expect(visesUtledetBarnetillegg(state, lagretMedValgtBarnetillegg)).toBe(false);
     });
 
     test('innvilgelsesperioden kan ikke endres direkte', () => {
