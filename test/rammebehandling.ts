@@ -19,6 +19,8 @@ import {
     RevurderingInnvilgelse,
     RevurderingResultat,
     RevurderingStans,
+    RevurderingUbestemt,
+    TiltaksdeltakerEndringType,
 } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     InnvilgbarTiltaksdeltakelse,
@@ -238,6 +240,17 @@ export const revurderingForlengelse = (
     tiltaksdeltakelserSomKanForlenges: [standardTiltaksdeltakelse.internDeltakelseId],
     innvilgelsesperioder: null,
     barnetillegg: null,
+    ...overstyringer,
+});
+
+export const revurderingUbestemt = (
+    overstyringer: Partial<RevurderingUbestemt> = {},
+): RevurderingUbestemt => ({
+    ...revurderingBase(),
+    resultat: RevurderingResultat.UBESTEMT,
+    automatiskOpprettetGrunn: {
+        endringer: [{ type: TiltaksdeltakerEndringType.AVBRUTT_DELTAKELSE }],
+    },
     ...overstyringer,
 });
 

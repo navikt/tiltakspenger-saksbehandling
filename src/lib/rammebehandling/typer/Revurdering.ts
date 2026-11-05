@@ -105,8 +105,19 @@ export type OmgjørRammevedtak = {
 
 export type Omgjøring = OmgjøringInnvilgelse | OmgjøringOpphør | OmgjøringIkkeValgt;
 
+// Opprettet av systemet når det ikke kan utlede hvilken type revurdering en endring krever.
+// Saksbehandler må konvertere den til en annen type, eller avbryte den, før den kan behandles.
+export type RevurderingUbestemt = RevurderingBase & {
+    resultat: RevurderingResultat.UBESTEMT;
+    automatiskOpprettetGrunn: AutomatiskOpprettetGrunn;
+};
+
 export type Revurdering =
-    RevurderingStans | RevurderingInnvilgelse | RevurderingForlengelse | Omgjøring;
+    | RevurderingStans
+    | RevurderingInnvilgelse
+    | RevurderingForlengelse
+    | Omgjøring
+    | RevurderingUbestemt;
 
 export enum RevurderingResultat {
     STANS = 'STANS',
@@ -115,6 +126,7 @@ export enum RevurderingResultat {
     OMGJØRING_OPPHØR = 'OMGJØRING_OPPHØR',
     OMGJØRING_IKKE_VALGT = 'OMGJØRING_IKKE_VALGT',
     FORLENGELSE = 'FORLENGELSE',
+    UBESTEMT = 'UBESTEMT',
 }
 
 export type OmgjøringResultat =

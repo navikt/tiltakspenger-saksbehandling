@@ -4,7 +4,6 @@ type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
 const featureTogglesDefaultState = {
     forlengelseToggle: false,
-    konverterRevurderingToggle: false,
 } as const satisfies TogglesRecord;
 
 type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
@@ -21,13 +20,7 @@ export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const isLocal = !deployEnv;
 
-    return (
-        <Context.Provider
-            value={{ forlengelseToggle: !isProd, konverterRevurderingToggle: !isProd }}
-        >
-            {children}
-        </Context.Provider>
-    );
+    return <Context.Provider value={{ forlengelseToggle: !isProd }}>{children}</Context.Provider>;
 };
 
 export const useFeatureToggles = () => {

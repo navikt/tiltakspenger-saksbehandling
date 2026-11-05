@@ -22,12 +22,14 @@ import {
 import { overlappendePeriode, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { isNonNullish } from '~/utils/object';
+import { RevurderingUbestemtState } from '~/lib/rammebehandling/context/revurdering/revurderingUbestemtSkjemaContext';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
     | RevurderingForlengelseState
     | RevurderingStansState
-    | OmgjøringState;
+    | OmgjøringState
+    | RevurderingUbestemtState;
 
 export const revurderingInitialState = (
     behandling: Revurdering,
@@ -52,6 +54,10 @@ export const revurderingInitialState = (
         case RevurderingResultat.OMGJØRING_OPPHØR:
         case RevurderingResultat.OMGJØRING_IKKE_VALGT: {
             return omgjøringInitialState(behandling, sak);
+        }
+
+        case RevurderingResultat.UBESTEMT: {
+            return { resultat: RevurderingResultat.UBESTEMT };
         }
     }
 

@@ -23,6 +23,7 @@ export const revurderingResultatTekst: Record<RevurderingResultat, string> = {
     [RevurderingResultat.OMGJØRING_OPPHØR]: 'Opphør',
     [RevurderingResultat.OMGJØRING_IKKE_VALGT]: 'Ikke valgt',
     [RevurderingResultat.FORLENGELSE]: 'Forlengelse',
+    [RevurderingResultat.UBESTEMT]: 'Ubestemt',
 } as const;
 
 export const rammebehandlingResultatTekst: Record<RammebehandlingResultat, string> = {

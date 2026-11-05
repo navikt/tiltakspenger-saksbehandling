@@ -36,13 +36,15 @@ import {
     BehandlingSkjemaFellesState,
     hentBehandlingSkjemaFellesState,
 } from '~/lib/rammebehandling/context/felles/behandlingSkjemaFellesContext';
+import { RevurderingUbestemtState } from '~/lib/rammebehandling/context/revurdering/revurderingUbestemtSkjemaContext';
 
 export type BehandlingSkjemaResultatState =
     | SøknadsbehandlingState
     | RevurderingInnvilgelseState
     | RevurderingForlengelseState
     | RevurderingStansState
-    | OmgjøringState;
+    | OmgjøringState
+    | RevurderingUbestemtState;
 
 export type BehandlingSkjemaState = BehandlingSkjemaFellesState & BehandlingSkjemaResultatState;
 

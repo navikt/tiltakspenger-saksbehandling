@@ -5,6 +5,7 @@ import { RevurderingInnvilgelseVedtak } from '~/lib/rammebehandling/revurdering/
 import { RevurderingForlengelseVedtak } from '~/lib/rammebehandling/revurdering/forlengelse/RevurderingForlengelseVedtak';
 
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
+import { RevurderingUbestemtVedtak } from './ubestemt/RevurderingUbestemtVedtak';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const RevurderingVedtak = () => {
@@ -21,6 +22,8 @@ export const RevurderingVedtak = () => {
         case RevurderingResultat.OMGJØRING_OPPHØR:
         case RevurderingResultat.OMGJØRING_IKKE_VALGT:
             return <RevurderingOmgjøringVedtak />;
+        case RevurderingResultat.UBESTEMT:
+            return <RevurderingUbestemtVedtak />;
     }
 
     return (

@@ -63,7 +63,7 @@ const sendtBody = () => JSON.parse(fetchMock.mock.calls[0][1]?.body as string);
 
 describe('konverteringsalternativer', () => {
     test('tilbyr alle typer bortsett fra den revurderingen allerede har', () => {
-        expect(konverteringsalternativer(RevurderingResultat.STANS)).toEqual([
+        expect(konverteringsalternativer(RevurderingResultat.STANS, true)).toEqual([
             RevurderingResultat.INNVILGELSE,
             RevurderingResultat.FORLENGELSE,
             RevurderingResultat.OMGJØRING,
@@ -75,10 +75,27 @@ describe('konverteringsalternativer', () => {
         RevurderingResultat.OMGJØRING_OPPHØR,
         RevurderingResultat.OMGJØRING_IKKE_VALGT,
     ])('regner %s som omgjøring', (resultat) => {
-        expect(konverteringsalternativer(resultat)).toEqual([
+        expect(konverteringsalternativer(resultat, true)).toEqual([
             RevurderingResultat.STANS,
             RevurderingResultat.INNVILGELSE,
             RevurderingResultat.FORLENGELSE,
+        ]);
+    });
+
+    test('tilbyr alle typer for en ubestemt revurdering', () => {
+        expect(konverteringsalternativer(RevurderingResultat.UBESTEMT, true)).toEqual([
+            RevurderingResultat.STANS,
+            RevurderingResultat.INNVILGELSE,
+            RevurderingResultat.FORLENGELSE,
+            RevurderingResultat.OMGJØRING,
+        ]);
+    });
+
+    test('tilbyr ikke forlengelse når forlengelse er skrudd av', () => {
+        expect(konverteringsalternativer(RevurderingResultat.UBESTEMT, false)).toEqual([
+            RevurderingResultat.STANS,
+            RevurderingResultat.INNVILGELSE,
+            RevurderingResultat.OMGJØRING,
         ]);
     });
 });

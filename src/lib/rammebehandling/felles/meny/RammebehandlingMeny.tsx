@@ -51,7 +51,7 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
     const { gyldigeKommandoer, ventestatus, attesteringer } = behandling;
 
     const { sak, setSak } = useSak();
-    const { konverterRevurderingToggle } = useFeatureToggles();
+    const { forlengelseToggle } = useFeatureToggles();
     const router = useRouter();
     const { setNotification, navigateWithNotification } = useNotification();
 
@@ -98,10 +98,9 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
     const erRevurdering = behandling.type === Rammebehandlingstype.REVURDERING;
 
     const konverteringsvalg =
-        konverterRevurderingToggle &&
         erRevurdering &&
         gyldigeKommandoer.includes(SaksbehandlerBehandlingKommando.KonverterRevurdering)
-            ? konverteringsalternativer(behandling.resultat)
+            ? konverteringsalternativer(behandling.resultat, forlengelseToggle)
             : [];
 
     const overtarFra =

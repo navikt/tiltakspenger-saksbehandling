@@ -10,6 +10,7 @@ import {
     revurderingStans,
     sak,
     sakMedInnvilgetVedtak,
+    revurderingUbestemt,
 } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import {
@@ -122,6 +123,12 @@ describe('revurderingInitialState', () => {
     test('omgjøring bruker initial state for omgjøringsresultatet', () => {
         expect(revurderingInitialState(omgjøringIkkeValgt(), sak())).toEqual({
             resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT,
+        });
+    });
+
+    test('ubestemt har ingen skjemafelter', () => {
+        expect(revurderingInitialState(revurderingUbestemt(), sak())).toEqual({
+            resultat: RevurderingResultat.UBESTEMT,
         });
     });
 });

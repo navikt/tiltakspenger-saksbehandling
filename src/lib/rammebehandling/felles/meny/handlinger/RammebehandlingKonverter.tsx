@@ -30,12 +30,14 @@ export const konverterRevurderingTilTekst: Record<KonverterRevurderingTil, strin
     [RevurderingResultat.OMGJØRING]: 'Omgjøring',
 };
 
-const tilType = (resultat: RevurderingResultat): KonverterRevurderingTil => {
+const tilType = (resultat: RevurderingResultat): KonverterRevurderingTil | null => {
     switch (resultat) {
         case RevurderingResultat.OMGJØRING:
         case RevurderingResultat.OMGJØRING_OPPHØR:
         case RevurderingResultat.OMGJØRING_IKKE_VALGT:
             return RevurderingResultat.OMGJØRING;
+        case RevurderingResultat.UBESTEMT:
+            return null;
         default:
             return resultat;
     }
@@ -43,14 +45,17 @@ const tilType = (resultat: RevurderingResultat): KonverterRevurderingTil => {
 
 /**
  * Typene revurderingen kan konverteres til, altså alle bortsett fra den den allerede har.
- * Alle omgjøringsresultatene regnes som samme type.
+ * Alle omgjøringsresultatene regnes som samme type, og en ubestemt revurdering kan konverteres til alle.
+ * Forlengelse tilbys bare når forlengelse er skrudd på.
  */
 export const konverteringsalternativer = (
     resultat: RevurderingResultat,
+    medForlengelse: boolean,
 ): KonverterRevurderingTil[] => {
     const nåværende = tilType(resultat);
     return (Object.keys(konverterRevurderingTilTekst) as KonverterRevurderingTil[]).filter(
-        (type) => type !== nåværende,
+        (type) =>
+            type !== nåværende && (medForlengelse || type !== RevurderingResultat.FORLENGELSE),
     );
 };
 
