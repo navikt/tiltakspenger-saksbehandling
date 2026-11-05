@@ -34,6 +34,16 @@ export const RevurderingOmgjøringHandlinger = () => {
 };
 
 const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
+    const felles = {
+        fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
+        skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
+        prioritering: tilOppdaterPrioriteringDTO(
+            skjema.erPrioritert,
+            skjema.textAreas.prioriteringBegrunnelse.getValue(),
+        ),
+    } satisfies Partial<OppdaterOmgjøringDTO>;
+
     switch (skjema.resultat) {
         case RevurderingResultat.OMGJØRING: {
             const { innvilgelse, vedtaksperiode, textAreas } = skjema;
@@ -43,14 +53,8 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
             }
 
             return {
+                ...felles,
                 resultat: RevurderingResultat.OMGJØRING,
-                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
-                skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
-                prioritering: tilOppdaterPrioriteringDTO(
-                    skjema.erPrioritert,
-                    skjema.textAreas.prioriteringBegrunnelse.getValue(),
-                ),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 vedtaksperiode,
                 barnetillegg: innvilgelse.harBarnetillegg
@@ -67,21 +71,15 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
         }
 
         case RevurderingResultat.OMGJØRING_OPPHØR: {
-            const { vedtaksperiode, textAreas, valgteHjemler } = skjema;
+            const { vedtaksperiode, valgteHjemler } = skjema;
 
             if (!erFullstendigPeriode(vedtaksperiode)) {
                 return null;
             }
 
             return {
+                ...felles,
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,
-                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
-                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
-                skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
-                prioritering: tilOppdaterPrioriteringDTO(
-                    skjema.erPrioritert,
-                    skjema.textAreas.prioriteringBegrunnelse.getValue(),
-                ),
                 vedtaksperiode,
                 valgteHjemler,
                 skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
@@ -90,14 +88,8 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
 
         case RevurderingResultat.OMGJØRING_IKKE_VALGT: {
             return {
+                ...felles,
                 resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT,
-                fritekstTilVedtaksbrev: null,
-                begrunnelseVilkårsvurdering: null,
-                skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
-                prioritering: tilOppdaterPrioriteringDTO(
-                    skjema.erPrioritert,
-                    skjema.textAreas.prioriteringBegrunnelse.getValue(),
-                ),
             } satisfies OppdaterOmgjøringIkkeValgtDTO;
         }
     }

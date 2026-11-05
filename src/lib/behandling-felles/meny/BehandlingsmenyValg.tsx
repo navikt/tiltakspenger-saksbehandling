@@ -63,6 +63,8 @@ type Props = {
     gyldigeKommandoer: Kommando[];
     onVelg: (dialog: BehandlingsmenyDialog) => void;
     size?: ComponentProps<typeof Button>['size'];
+    /** Handlinger som bare finnes for én behandlingstype, og vises etter de felles handlingene */
+    egneHandlinger?: ReactNode;
     /** Ekstra menyvalg mellom handlingene og avslutt (f.eks. ventehistorikk og attesteringer) */
     ekstraValg?: ReactNode;
 };
@@ -71,7 +73,13 @@ type Props = {
  * Menyvalgene for en behandling, styrt av hvilke kommandoer backend har
  * regnet ut som gyldige for den innloggede saksbehandleren.
  */
-export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraValg }: Props) => {
+export const BehandlingsmenyValg = ({
+    gyldigeKommandoer,
+    onVelg,
+    size,
+    egneHandlinger,
+    ekstraValg,
+}: Props) => {
     if (gyldigeKommandoer.length === 0 && !ekstraValg) {
         return null;
     }
@@ -181,6 +189,8 @@ export const BehandlingsmenyValg = ({ gyldigeKommandoer, onVelg, size, ekstraVal
                         {'Gjenåpne behandling'}
                     </ActionMenu.Item>
                 )}
+
+                {egneHandlinger}
 
                 {ekstraValg && (
                     <>
