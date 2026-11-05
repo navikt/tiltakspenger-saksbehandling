@@ -167,7 +167,7 @@ const InnvilgelsesperiodeVelgerFull = ({
                     readOnly={readOnly}
                 />
                 <Select
-                    label={'Antall dager'}
+                    label={'Antall dager per meldeperiode'}
                     size={'small'}
                     readOnly={readOnly}
                     value={antallDagerPerMeldeperiode}
