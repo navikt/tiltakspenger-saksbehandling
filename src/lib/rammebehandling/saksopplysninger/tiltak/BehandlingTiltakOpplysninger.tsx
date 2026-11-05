@@ -4,13 +4,12 @@ import { erLukketPeriode } from '~/utils/periode';
 import {
     tiltakDeltakerstatusTekst,
     Tiltaksdeltakelse,
-    TiltaksdeltakelseKilde,
     TiltaksdeltakelseSomFratarRett,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { BodyShort, ReadMore, VStack } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
-import { delOppTiltaksdeltakelser } from './tiltaksdeltakelseVisning';
+import { delOppTiltaksdeltakelser, kildeTekst, prosentTekst } from './tiltaksdeltakelseVisning';
 import { GirIkkeRettTag } from './GirIkkeRettTag';
 
 type Props = {
@@ -179,15 +178,3 @@ const TiltakListe = ({ tiltaksdeltakelser }: { tiltaksdeltakelser: Tiltaksdeltak
         </VStack>
     );
 };
-
-const prosentTekst = (prosent: number | null) => {
-    return prosent !== null && prosent !== undefined ? `${prosent}%` : 'Ukjent';
-};
-
-const modiaTekst = 'Modia arbeidsrettet oppfølging';
-
-const kildeTekst: Record<TiltaksdeltakelseKilde, string> = {
-    [TiltaksdeltakelseKilde.ARENA]: 'Arena',
-    [TiltaksdeltakelseKilde.KOMET]: modiaTekst,
-    [TiltaksdeltakelseKilde.TEAM_TILTAK]: modiaTekst,
-} as const;

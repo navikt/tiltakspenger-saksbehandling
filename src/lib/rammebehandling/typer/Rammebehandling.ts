@@ -37,6 +37,7 @@ import {
 } from '~/lib/_felles/prioritering/prioriteringTyper';
 import { TidslinjeFørOgEtter } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { Dato, Tidspunkt } from '~/types/DatoTid';
+import { TiltakshistorikkForBehandling } from './Tiltakshistorikk';
 
 export const RammebehandlingIdPrefix = 'beh_' as const;
 export type RammebehandlingId = `${typeof RammebehandlingIdPrefix}${string}`;
@@ -77,6 +78,7 @@ export interface RammebehandlingBase {
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
     /** Null dersom behandlingen er avbrutt eller mangler vedtaksperiode. */
     tidslinjeFørOgEtter: Nullable<TidslinjeFørOgEtter>;
+    tiltakshistorikk: TiltakshistorikkForBehandling;
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

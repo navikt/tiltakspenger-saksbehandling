@@ -1,4 +1,4 @@
-import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { alderFraDato, formaterSladdbarDatotekst } from '~/utils/date';
 import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
 import { ReactNode } from 'react';
@@ -7,6 +7,7 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
+import { BehandlingTiltakshistorikk } from './tiltakshistorikk/BehandlingTiltakshistorikk';
 import OppsummeringAvAttesteringer from '~/lib/behandling-felles/attestering/OppsummeringAvAttestering';
 import {
     fyller18ÅrISøknadsperioden,
@@ -27,7 +28,7 @@ export const RammebehandlingSaksopplysninger = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const { saksopplysninger, type, attesteringer } = behandling;
+    const { saksopplysninger, type, attesteringer, tiltakshistorikk, sistEndret } = behandling;
     const {
         ytelser,
         tiltakspengevedtakFraArena,
@@ -61,6 +62,13 @@ export const RammebehandlingSaksopplysninger = () => {
                 {'Saksopplysninger'}
             </Heading>
             <BehandlingOppdaterSaksopplysninger />
+            {tiltakshistorikk.harEndringEtterSistEndret && (
+                <InlineMessage status={'warning'} size={'small'} className={style.varsel}>
+                    {
+                        'Tiltaksdeltakelsen er endret etter at behandlingen sist ble lagret. Se tiltakshistorikken.'
+                    }
+                </InlineMessage>
+            )}
 
             <Separator />
 
@@ -69,6 +77,15 @@ export const RammebehandlingSaksopplysninger = () => {
                     tiltaksdeltakelser={tiltaksdeltagelse}
                     tiltaksdeltakelserSomFratarRett={tiltaksdeltakelserSomFratarRett}
                     vurderingsperiode={saksopplysninger.periode}
+                />
+            </OpplysningerSeksjon>
+
+            <Separator />
+
+            <OpplysningerSeksjon header={'Tiltakshistorikk'}>
+                <BehandlingTiltakshistorikk
+                    tiltakshistorikk={tiltakshistorikk}
+                    sistEndret={sistEndret}
                 />
             </OpplysningerSeksjon>
 

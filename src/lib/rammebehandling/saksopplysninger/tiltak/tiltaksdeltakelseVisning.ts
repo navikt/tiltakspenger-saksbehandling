@@ -1,4 +1,7 @@
-import { Tiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import {
+    Tiltaksdeltakelse,
+    TiltaksdeltakelseKilde,
+} from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
@@ -35,3 +38,15 @@ export const delOppTiltaksdeltakelser = (
         historiske: sortert.filter((tiltak) => erHistorisk(tiltak, skillelinje)),
     };
 };
+
+export const prosentTekst = (prosent: number | null) => {
+    return prosent !== null && prosent !== undefined ? `${prosent}%` : 'Ukjent';
+};
+
+const modiaTekst = 'Modia arbeidsrettet oppfølging';
+
+export const kildeTekst: Record<TiltaksdeltakelseKilde, string> = {
+    [TiltaksdeltakelseKilde.ARENA]: 'Arena',
+    [TiltaksdeltakelseKilde.KOMET]: modiaTekst,
+    [TiltaksdeltakelseKilde.TEAM_TILTAK]: modiaTekst,
+} as const;

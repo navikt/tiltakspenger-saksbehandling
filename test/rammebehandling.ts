@@ -162,6 +162,7 @@ const rammebehandlingBase = (): Omit<RammebehandlingBase, 'type' | 'resultat'> =
     gyldigeKommandoer: [],
     manueltBehandlesGrunner: [],
     tidslinjeFørOgEtter: null,
+    tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },
 });
 
 const søknadsbehandlingBase = () => ({
