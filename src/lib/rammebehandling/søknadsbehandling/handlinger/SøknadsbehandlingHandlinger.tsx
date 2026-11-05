@@ -1,4 +1,5 @@
 import { tilSkalJournalføreNotatDTO } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
@@ -43,7 +44,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 return null;
             }
 
-            const { innvilgelsesperioder, harBarnetillegg, barnetilleggPerioder } = innvilgelse;
+            const { innvilgelsesperioder } = innvilgelse;
 
             return {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
@@ -54,15 +55,10 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                     skjema.textAreas.prioriteringBegrunnelse.getValue(),
                 ),
                 innvilgelsesperioder,
-                barnetillegg: harBarnetillegg
-                    ? {
-                          begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                          perioder: barnetilleggPerioder,
-                      }
-                    : {
-                          begrunnelse: null,
-                          perioder: [],
-                      },
+                barnetillegg: tilOppdaterBarnetilleggDTO(
+                    innvilgelse,
+                    skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+                ),
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
                 skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
             } satisfies OppdaterSøknadsbehandlingInnvilgelseDTO;

@@ -236,7 +236,7 @@ test.describe('Omgjøring', () => {
                             erReversertOpphør: false,
                         },
                     ],
-                    barnetillegg: { begrunnelse: null, perioder: [] },
+                    barnetillegg: { begrunnelse: null, barn: [] },
                     skalSendeVedtaksbrev: true,
                 } satisfies OppdaterOmgjøringInnvilgelseDTO,
             ]);

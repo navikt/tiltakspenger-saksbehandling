@@ -47,7 +47,7 @@ Selve feltet er aldri `null`: en verdi som mangler er `{ verdi: null, erSladdet:
 `SladdbarVerdi<String?>` som `SladdbarVerdi<Nullable<string>>`, ikke som `Nullable<SladdbarVerdi<string>>`.
 Vær obs på at slike felter alltid er truthy — sjekk `sladdbarTekst(...)`/`hentVerdi(...)` i stedet for feltet selv.
 
-Request-DTO-er skal aldri bruke `SladdbarVerdi` (se f.eks. `BarnetilleggDTO` og `BrevtekstDTO`). Testdata som
+Request-DTO-er skal aldri bruke `SladdbarVerdi` (se f.eks. `OppdaterBarnetilleggDTO` og `BrevtekstDTO`). Testdata som
 etterligner API-responser bygges med `ikkeSladdet(...)`/`sladdet` fra `~test/sladdetVerdi` (`test/`-katalogen er
 kun for testkode og importeres aldri fra appkoden).
 

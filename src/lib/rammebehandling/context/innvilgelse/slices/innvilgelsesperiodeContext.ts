@@ -4,20 +4,14 @@ import {
     oppdaterPartialPeriode,
     oppdaterPeriode,
     oppdaterPeriodiseringUtenOverlapp,
-    periodiseringerErLike,
-    periodiseringTotalPeriode,
-    utvidPeriodisering,
 } from '~/utils/periode';
 import { InnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
-import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { lagForhåndsutfyltInnvilgelse } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
-import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import { datoMax, datoMin, nesteDag } from '~/utils/date';
+import { datoMin, nesteDag } from '~/utils/date';
+import { tilpassBarnTilInnvilgelsesperiodene } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { hentTotalInnvilgbarPeriode } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { nonNullish } from '~/utils/object';
 
@@ -103,7 +97,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
     switch (type) {
         case 'oppdaterInnvilgelsesperiode': {
-            const { periodeOppdatering, index, behandling, sak } = payload;
+            const { periodeOppdatering, index } = payload;
 
             const innvilgelsesperiode = nonNullish(
                 state.innvilgelsesperioder.at(index),
@@ -121,18 +115,10 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                 index,
             );
 
-            const barnetilleggPerioder = periodiserBarnetillegg(
-                nyePerioder,
-                state.innvilgelsesperioder,
-                state.barnetilleggPerioder,
-                behandling,
-                sak,
-            );
-
             return {
                 ...state,
                 innvilgelsesperioder: nyePerioder,
-                barnetilleggPerioder,
+                valgteBarn: tilpassBarnTilInnvilgelsesperiodene(state.valgteBarn, nyePerioder),
             };
         }
 
@@ -142,7 +128,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                 'Skal alltid finnes minst en innvilgelsesperiode',
             );
 
-            const { behandling, sak } = payload;
+            const { behandling } = payload;
 
             const sistePeriode = sisteInnvilgelsesperiode.periode;
 
@@ -167,30 +153,24 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
             return {
                 ...state,
                 innvilgelsesperioder: nyeInnvilgelsesperioder,
-                barnetilleggPerioder: periodiserBarnetillegg(
+                valgteBarn: tilpassBarnTilInnvilgelsesperiodene(
+                    state.valgteBarn,
                     nyeInnvilgelsesperioder,
-                    state.innvilgelsesperioder,
-                    state.barnetilleggPerioder,
-                    behandling,
-                    sak,
                 ),
             };
         }
 
         case 'fjernInnvilgelsesperiode': {
-            const { index, behandling, sak } = payload;
+            const { index } = payload;
 
             const nyeInnvilgelsesperioder = state.innvilgelsesperioder.toSpliced(index, 1);
 
             return {
                 ...state,
                 innvilgelsesperioder: nyeInnvilgelsesperioder,
-                barnetilleggPerioder: periodiserBarnetillegg(
+                valgteBarn: tilpassBarnTilInnvilgelsesperiodene(
+                    state.valgteBarn,
                     nyeInnvilgelsesperioder,
-                    state.innvilgelsesperioder,
-                    state.barnetilleggPerioder,
-                    behandling,
-                    sak,
                 ),
             };
         }
@@ -226,75 +206,4 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
     }
 
     throw new Error(`Ugyldig action: ${type satisfies never}`);
-};
-
-// Barnetillegg fyller ikke nødvendigvis hele innvilgelsesperioden, men vi forsøker å tilpasse for ny periode
-// Vi har ikke alltid nok informasjon om barn til å gjøre dette perfekt, så det blir en en best-effort :|
-const periodiserBarnetillegg = (
-    nyeInnvilgelsesperioder: Innvilgelsesperiode[],
-    forrigeInnvilgelsesperioder: Innvilgelsesperiode[],
-    forrigeBarnetillegg: BarnetilleggPeriode[],
-    behandling: Rammebehandling,
-    sak: SakProps,
-) => {
-    const mestRelevanteSøknad =
-        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-            ? behandling.søknad
-            : hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
-
-    const barnetilleggFraSøknadForForrigePeriode = periodiserBarnetilleggFraSøknad(
-        mestRelevanteSøknad.barnetillegg,
-        forrigeInnvilgelsesperioder,
-    );
-
-    const harUendretPeriodisering = periodiseringerErLike(
-        barnetilleggFraSøknadForForrigePeriode,
-        forrigeBarnetillegg,
-        (a, b) => a.antallBarn === b.antallBarn,
-    );
-
-    // Dersom periodiseringen fra søknaden er lik det saksbehandler hadde valgt, setter vi bare
-    // en ny periodisering fra søknaden med den nye perioden.
-    // Samme dersom saksbehandler ikke hadde valgt noen barnetilleggsperioder
-    if (harUendretPeriodisering || forrigeBarnetillegg.length === 0) {
-        return periodiserBarnetilleggFraSøknad(
-            mestRelevanteSøknad.barnetillegg,
-            nyeInnvilgelsesperioder,
-        );
-    }
-
-    const barnetilleggFraSøknad = periodiserBarnetilleggFraSøknad(
-        mestRelevanteSøknad.barnetillegg,
-        [...nyeInnvilgelsesperioder, ...forrigeInnvilgelsesperioder],
-    );
-
-    const nyTotalperiode = periodiseringTotalPeriode(nyeInnvilgelsesperioder);
-
-    // Dersom det ikke finnes noen barn i søknaden for ny eller forrige periode, må vi anta at alle evt barn
-    // har blitt lagt til manuelt av saksbehandler
-    // Vi utvider bare eksisterende barnetillegg til ny periode
-    if (barnetilleggFraSøknad.length === 0) {
-        return utvidPeriodisering(forrigeBarnetillegg, nyTotalperiode);
-    }
-
-    const forrigeFraOgMed = forrigeBarnetillegg.atNonNull(0).periode.fraOgMed;
-    const fraOgMedFraSøknad = barnetilleggFraSøknad.atNonNull(0).periode.fraOgMed;
-
-    const forrigeTilOgMed = forrigeBarnetillegg.atNonNull(-1).periode.tilOgMed;
-    const tilOgMedFraSøknad = barnetilleggFraSøknad.atNonNull(-1).periode.tilOgMed;
-
-    // I alle andre tilfeller må saksbehandler ha gjort endringer ift den automatiske periodiseringen.
-    // Vi oppdaterer den forrige periodiseringen med ny innvilgelsesperiode, men utvider ikke utenfor periodene vi får
-    // fra søknaden, med mindre saksbehandler allerede hadde gjort nettopp det. Best-effort for å hindre at det innvilges
-    // for barn <0 år eller >16 år
-    return utvidPeriodisering(forrigeBarnetillegg, {
-        fraOgMed:
-            forrigeFraOgMed < fraOgMedFraSøknad
-                ? nyTotalperiode.fraOgMed
-                : datoMax(fraOgMedFraSøknad, nyTotalperiode.fraOgMed),
-        tilOgMed:
-            forrigeTilOgMed > tilOgMedFraSøknad
-                ? nyTotalperiode.tilOgMed
-                : datoMin(tilOgMedFraSøknad, nyTotalperiode.tilOgMed),
-    });
 };

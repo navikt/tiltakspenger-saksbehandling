@@ -1,0 +1,30 @@
+.barn {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    padding: 0.5rem 1rem;
+}
+
+.detaljer {
+    margin-left: 2rem;
+}
+
+.periodevalg {
+    margin-top: 0.5rem;
+}
+
+.radioGroup {
+    & > :global(.aksel-radio-buttons) {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+.leggTilSkjema {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    padding: 1rem;
+}
+
+.leggTilKnapp {
+    align-self: flex-start;
+}

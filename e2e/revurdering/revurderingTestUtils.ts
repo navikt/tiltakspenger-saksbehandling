@@ -1,4 +1,5 @@
 import {
+    barnetilleggFraOppdaterDTO,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
     omgjøringOpphør,
@@ -189,10 +190,10 @@ const lagreRevurdering = (
                 ...felles,
                 skalSendeVedtaksbrev: body.skalSendeVedtaksbrev,
                 innvilgelsesperioder: body.innvilgelsesperioder,
-                barnetillegg: {
-                    perioder: body.barnetillegg.perioder,
-                    begrunnelse: ikkeSladdet(body.barnetillegg.begrunnelse),
-                },
+                barnetillegg: barnetilleggFraOppdaterDTO(
+                    body.barnetillegg,
+                    body.innvilgelsesperioder.map((p) => p.periode),
+                ),
                 vedtaksperiode: totalPeriode(body.innvilgelsesperioder.map((p) => p.periode)),
             });
         case RevurderingResultat.OMGJØRING:
@@ -202,10 +203,10 @@ const lagreRevurdering = (
                 omgjørRammevedtak: omgjørHeleVedtaket(),
                 vedtaksperiode: body.vedtaksperiode,
                 innvilgelsesperioder: body.innvilgelsesperioder,
-                barnetillegg: {
-                    perioder: body.barnetillegg.perioder,
-                    begrunnelse: ikkeSladdet(body.barnetillegg.begrunnelse),
-                },
+                barnetillegg: barnetilleggFraOppdaterDTO(
+                    body.barnetillegg,
+                    body.innvilgelsesperioder.map((p) => p.periode),
+                ),
             });
         case RevurderingResultat.OMGJØRING_OPPHØR:
             return omgjøringOpphør({

@@ -1,4 +1,5 @@
 import { RevurderingForlengelseBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
@@ -42,9 +43,7 @@ const tilForhåndsvisningDTO = (
         tilOgMed: nonNullish(hentForlengelseTilOgMed(skjema)),
         internDeltakelseId: innvilgelse.innvilgelsesperioder.atNonNull(-1).internDeltakelseId,
         barnetillegg: harEndretBarnetillegg
-            ? innvilgelse.harBarnetillegg
-                ? innvilgelse.barnetilleggPerioder
-                : []
+            ? tilOppdaterBarnetilleggDTO(innvilgelse, textAreas.barnetilleggBegrunnelse.getValue())
             : null,
     };
 };

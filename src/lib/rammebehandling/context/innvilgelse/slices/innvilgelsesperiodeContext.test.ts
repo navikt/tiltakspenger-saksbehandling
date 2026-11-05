@@ -1,15 +1,11 @@
 import { describe, expect, test } from '@jest/globals';
 import {
-    barnetilleggPeriode,
     innvilgelsesperiode,
     periode,
-    revurderingInnvilgelse,
     sak,
-    sakMedInnvilgetVedtak,
     søknad,
     søknadBarn,
     søknadsbehandlingIkkeValgt,
-    søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
 import {
     InnvilgelseMedPerioderState,
@@ -20,18 +16,16 @@ import {
     innvilgelsesperioderReducer,
 } from '~/lib/rammebehandling/context/innvilgelse/slices/innvilgelsesperiodeContext';
 import { Periode } from '~/types/Periode';
-import {
-    Rammebehandling,
-    Rammebehandlingsstatus,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
-import { tilDato, tilTidspunkt } from '~/types/DatoTid';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { tilDato } from '~/types/DatoTid';
+import { hentBarnFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 
 // Barnet er under 16 år i hele tiltaksdeltakelsen (2025-01-01 - 2025-06-30)
 const behandlingMedBarnISøknad = søknadsbehandlingIkkeValgt({
     søknad: søknad([søknadBarn('2015-03-01')]),
 });
 
-const behandlingUtenBarnISøknad = søknadsbehandlingIkkeValgt();
+const barnFraSøknaden = hentBarnFraSøknad(behandlingMedBarnISøknad.søknad).atNonNull(0).barn;
 
 const utenPerioderState: InnvilgelseUtenPerioderState = {
     harValgtPeriode: false,
@@ -44,7 +38,8 @@ const medPerioderState = (
     harValgtPeriode: true,
     innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
     harBarnetillegg: true,
-    barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-01', '2025-03-31'))],
+    valgteBarn: [barnFraSøknaden],
+    manueltLagtTilBarn: [],
     ...overstyringer,
 });
 
@@ -72,7 +67,7 @@ describe('innvilgelsesperioderReducer', () => {
             });
         });
 
-        test('forhåndsutfyller innvilgelsen når perioden blir fullstendig', () => {
+        test('forhåndsutfyller innvilgelsen med barna fra søknaden når perioden blir fullstendig', () => {
             const delvisUtfylt = innvilgelsesperioderReducer(
                 utenPerioderState,
                 oppdaterInnvilgelsesperiode({ fraOgMed: tilDato('2025-01-06') }),
@@ -91,7 +86,8 @@ describe('innvilgelsesperioderReducer', () => {
                     }),
                 ],
                 harBarnetillegg: true,
-                barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-06', '2025-03-31'))],
+                valgteBarn: [barnFraSøknaden],
+                manueltLagtTilBarn: [],
             });
         });
 
@@ -107,7 +103,7 @@ describe('innvilgelsesperioderReducer', () => {
     });
 
     describe('oppdaterInnvilgelsesperiode', () => {
-        test('periodiserer barnetillegg fra søknaden på nytt når det ikke er endret av saksbehandler', () => {
+        test('beholder valgte barn med hele innvilgelsesperioden når perioden endres', () => {
             expect(
                 innvilgelsesperioderReducer(
                     medPerioderState(),
@@ -117,9 +113,6 @@ describe('innvilgelsesperioderReducer', () => {
                 medPerioderState({
                     innvilgelsesperioder: [
                         innvilgelsesperiode(periode('2025-01-01', '2025-02-28')),
-                    ],
-                    barnetilleggPerioder: [
-                        barnetilleggPeriode(1, periode('2025-01-01', '2025-02-28')),
                     ],
                 }),
             );
@@ -150,53 +143,18 @@ describe('innvilgelsesperioderReducer', () => {
             });
         });
 
-        test('utvider manuelt lagt til barnetillegg til ny periode', () => {
+        test('avgrenser overstyrt periode for et barn til den nye innvilgelsesperioden', () => {
             const state = medPerioderState({
-                barnetilleggPerioder: [barnetilleggPeriode(2, periode('2025-01-01', '2025-03-31'))],
+                valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-03-31') }],
             });
 
             const nyState = innvilgelsesperioderReducer(
                 state,
-                oppdaterInnvilgelsesperiode(
-                    { tilOgMed: tilDato('2025-04-30') },
-                    0,
-                    behandlingUtenBarnISøknad,
-                ),
+                oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-28') }),
             );
 
             expect(nyState).toMatchObject({
-                barnetilleggPerioder: [barnetilleggPeriode(2, periode('2025-01-01', '2025-04-30'))],
-            });
-        });
-
-        test('bruker søknaden fra vedtatt søknadsbehandling for revurderinger', () => {
-            const sakMedBarnISøknad = sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
-                søknadsbehandling: søknadsbehandlingInnvilgelse({
-                    id: 'beh_vedtatt',
-                    status: Rammebehandlingsstatus.VEDTATT,
-                    iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
-                    søknad: søknad([søknadBarn('2015-03-01')]),
-                }),
-            });
-
-            const state = medPerioderState({
-                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-04-30'))],
-                harBarnetillegg: false,
-                barnetilleggPerioder: [],
-            });
-
-            const nyState = innvilgelsesperioderReducer(
-                state,
-                oppdaterInnvilgelsesperiode(
-                    { tilOgMed: tilDato('2025-05-31') },
-                    0,
-                    revurderingInnvilgelse(),
-                    sakMedBarnISøknad,
-                ),
-            );
-
-            expect(nyState).toMatchObject({
-                barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-04-01', '2025-05-31'))],
+                valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-02-28') }],
             });
         });
     });
@@ -225,7 +183,6 @@ describe('innvilgelsesperioderReducer', () => {
                         antallDagerPerMeldeperiode: 8,
                     }),
                 ],
-                barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-01', '2025-06-30'))],
             }),
         );
     });
@@ -236,7 +193,7 @@ describe('innvilgelsesperioderReducer', () => {
                 innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
                 innvilgelsesperiode(periode('2025-04-01', '2025-06-30')),
             ],
-            barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-01', '2025-06-30'))],
+            valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-06-30') }],
         });
 
         expect(
@@ -244,7 +201,11 @@ describe('innvilgelsesperioderReducer', () => {
                 type: 'fjernInnvilgelsesperiode',
                 payload: { index: 1, behandling: behandlingMedBarnISøknad, sak: sak() },
             }),
-        ).toEqual(medPerioderState());
+        ).toEqual(
+            medPerioderState({
+                valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-03-31') }],
+            }),
+        );
     });
 
     test('settAntallDager endrer kun valgt periode', () => {

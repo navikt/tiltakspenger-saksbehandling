@@ -1,4 +1,5 @@
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -38,6 +39,11 @@ const tilForhåndsvisningDTO = (
         resultat: RevurderingResultat.INNVILGELSE,
         fritekst: textAreas.brevtekst.getValue(),
         innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
-        barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
+        barnetillegg: innvilgelse.harBarnetillegg
+            ? tilOppdaterBarnetilleggDTO(
+                  innvilgelse,
+                  skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+              )
+            : null,
     };
 };

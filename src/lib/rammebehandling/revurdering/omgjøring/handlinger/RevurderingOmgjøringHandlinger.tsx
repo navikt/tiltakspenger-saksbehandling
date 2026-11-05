@@ -1,4 +1,5 @@
 import { tilSkalJournalføreNotatDTO } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     OmgjøringContext,
     useOmgjøringSkjema,
@@ -57,15 +58,10 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
                 resultat: RevurderingResultat.OMGJØRING,
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 vedtaksperiode,
-                barnetillegg: innvilgelse.harBarnetillegg
-                    ? {
-                          begrunnelse: textAreas.barnetilleggBegrunnelse.getValue(),
-                          perioder: innvilgelse.barnetilleggPerioder,
-                      }
-                    : {
-                          begrunnelse: null,
-                          perioder: [],
-                      },
+                barnetillegg: tilOppdaterBarnetilleggDTO(
+                    innvilgelse,
+                    textAreas.barnetilleggBegrunnelse.getValue(),
+                ),
                 skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
             } satisfies OppdaterOmgjøringInnvilgelseDTO;
         }

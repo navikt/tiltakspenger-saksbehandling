@@ -1,5 +1,5 @@
 import { Nullable } from '~/types/UtilTypes';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { OppdaterBarnetilleggDTO } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     Avslagsgrunn,
     SøknadsbehandlingResultat,
@@ -17,7 +17,7 @@ export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     fritekst: Nullable<string>;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: Nullable<BarnetilleggPeriode[]>;
+    barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
 };
 
 export type SøknadsbehandlingAvslagBrevForhåndsvisningDTO = {
@@ -49,7 +49,7 @@ export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.INNVILGELSE;
     fritekst: Nullable<string>;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: Nullable<BarnetilleggPeriode[]>;
+    barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
 };
 
 export type RevurderingForlengelseBrevForhåndsvisningDTO = {
@@ -58,14 +58,14 @@ export type RevurderingForlengelseBrevForhåndsvisningDTO = {
     tilOgMed: Dato;
     internDeltakelseId: string;
     // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
-    barnetillegg: Nullable<BarnetilleggPeriode[]>;
+    barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
 };
 
 export type OmgjøringInnvilgelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.OMGJØRING;
     fritekst: Nullable<string>;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: Nullable<BarnetilleggPeriode[]>;
+    barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
 };
 
 export type OmgjøringOpphørBrevForhåndsvisningDTO = {

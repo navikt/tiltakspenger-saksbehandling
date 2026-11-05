@@ -11,8 +11,14 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { formaterPeriode } from '~/utils/date';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { useSak } from '~/lib/sak/SakContext';
+import { kunPerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { BarnetilleggVersjon } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { formaterBarnNavn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
+import { formaterSladdbarDatotekst } from '~/utils/date';
 
 export const ForlengelseBarnetillegg = () => {
+    const { sak } = useSak();
     const behandling = useForlengelseBehandling();
     const skjema = useRevurderingForlengelseSkjema();
     const { harEndretBarnetillegg, innvilgelse, erReadonly } = skjema;
@@ -29,6 +35,7 @@ export const ForlengelseBarnetillegg = () => {
                     payload: {
                         harEndretBarnetillegg: e.target.checked,
                         behandling,
+                        sak,
                     },
                 })
             }
@@ -37,6 +44,9 @@ export const ForlengelseBarnetillegg = () => {
         </CheckboxMedLabelTilVenstre>
     );
 
+    const utledetBarnetillegg = behandling.barnetillegg;
+    const utledetePerioderMedBarn = utledetBarnetillegg?.perioder.filter(kunPerioderMedBarn) ?? [];
+
     if (harEndretBarnetillegg) {
         return (
             <BehandlingBarnetillegg
@@ -44,11 +54,9 @@ export const ForlengelseBarnetillegg = () => {
                 varsel={
                     behandling.kanIkkeUtledeBarnetillegg && (
                         <Infokort variant={'advarsel'} size={'small'}>
+                            {'Barnetillegget kunne ikke utledes fra vedtaket som forlenges.'}
                             {
-                                'Barnetillegget kunne ikke utledes fra søknaden, så antall barn i vedtaket som forlenges er videreført uendret.'
-                            }
-                            {
-                                ' Du må vurdere barnetillegget selv, for eksempel om noen barn fyller 16 år i forlengelsen.'
+                                ' Du må vurdere barnetillegget selv, og velge hvilke barn det skal innvilges barnetillegg for.'
                             }
                         </Infokort>
                     )
@@ -72,17 +80,34 @@ export const ForlengelseBarnetillegg = () => {
                         <BodyShort size={'small'} weight={'semibold'}>
                             {'Barnetillegget oppdateres når behandlingen lagres.'}
                         </BodyShort>
-                    ) : innvilgelse.barnetilleggPerioder.length > 0 ? (
-                        <div>
-                            <BodyShort>{'Barnetillegg som videreføres:'}</BodyShort>
-                            <List>
-                                {innvilgelse.barnetilleggPerioder.map((bt) => (
-                                    <List.Item key={bt.periode.fraOgMed}>
-                                        {`${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`}
-                                    </List.Item>
-                                ))}
-                            </List>
-                        </div>
+                    ) : utledetePerioderMedBarn.length > 0 ? (
+                        <>
+                            <div>
+                                <BodyShort>{'Barnetillegg som videreføres:'}</BodyShort>
+                                <List>
+                                    {utledetePerioderMedBarn.map((bt) => (
+                                        <List.Item key={bt.periode.fraOgMed}>
+                                            {`${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`}
+                                        </List.Item>
+                                    ))}
+                                </List>
+                            </div>
+                            {utledetBarnetillegg?.versjon === BarnetilleggVersjon.V2 && (
+                                <div>
+                                    <BodyShort>{'Barn:'}</BodyShort>
+                                    <List>
+                                        {utledetBarnetillegg.barn.map((barn, index) => (
+                                            <List.Item key={index}>
+                                                {`${formaterBarnNavn(barn)} (født ${formaterSladdbarDatotekst(barn.fødselsdato)})`}
+                                                {barn.perioderMedBarnetillegg.length > 0
+                                                    ? `: ${barn.perioderMedBarnetillegg.map(formaterPeriode).join(', ')}`
+                                                    : ': Gir ikke barnetillegg i forlengelsen'}
+                                            </List.Item>
+                                        ))}
+                                    </List>
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <BodyShort size={'small'} weight={'semibold'}>
                             {'Ingen barnetillegg i forlengelsen.'}
@@ -93,10 +118,10 @@ export const ForlengelseBarnetillegg = () => {
 
             <VedtakSeksjon.Høyre>
                 <VedtakHjelpetekst>
-                    {'Barnetillegget videreføres fra vedtaket som forlenges.'}
+                    {'Barnetillegget videreføres for barna i vedtaket som forlenges.'}
                     {' Barn som fyller 16 år i forlengelsen faller bort fra og med fødselsdagen.'}
                     {
-                        ' Dersom barnetillegget er endret i forhold til søknaden, må disse endringene videreføres manuelt.'
+                        ' Er barnetillegget i vedtaket som forlenges registrert som antall barn per periode, utledes det fra søknaden. Endringer gjort i forhold til søknaden må da videreføres manuelt.'
                     }
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>

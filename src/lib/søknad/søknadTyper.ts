@@ -68,6 +68,8 @@ export interface Spørsmålsbesvarelser extends SpørsmålsbesvarelserPengestøt
 
 export interface TiltaksdeltakelseFraSøknad {
     id: string;
+    /** Samme id som `internDeltakelseId` i innvilgelsesperiodene. */
+    internDeltakelseId: string;
     fraOgMed: Nullable<Dato>;
     tilOgMed: Nullable<Dato>;
     typeNavn: string;

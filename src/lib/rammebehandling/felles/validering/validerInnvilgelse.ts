@@ -2,7 +2,7 @@ import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerBarnetillegg } from '~/lib/rammebehandling/felles/validering/validerBarnetillegg';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { Søknad } from '~/lib/søknad/søknadTyper';
+import { hentBarnFraSøknader } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     finnPeriodiseringHull,
     perioderOverlapper,
@@ -21,7 +21,6 @@ export const validerInnvilgelse = (
     sak: SakProps,
     behandling: Rammebehandling,
     skjema: BehandlingMedInnvilgelseState,
-    søknad: Søknad,
     {
         validerBarnetillegg: skalValidereBarnetillegg = true,
     }: { validerBarnetillegg?: boolean } = {},
@@ -40,7 +39,7 @@ export const validerInnvilgelse = (
         warnings: [],
     };
 
-    const { innvilgelsesperioder, barnetilleggPerioder, harBarnetillegg } = innvilgelse;
+    const { innvilgelsesperioder, valgteBarn, harBarnetillegg } = innvilgelse;
 
     if (!validerPeriodisering(innvilgelsesperioder, true)) {
         validering.errors.push('Innvilgelsesperiodene må være uten overlapp');
@@ -86,9 +85,9 @@ export const validerInnvilgelse = (
 
     const barnetilleggValidering = validerBarnetillegg(
         harBarnetillegg,
-        barnetilleggPerioder,
+        valgteBarn,
         innvilgelsesperioder,
-        søknad,
+        hentBarnFraSøknader(behandling, innvilgelsesperioder, sak),
     );
     validering.warnings.push(...barnetilleggValidering.warnings);
     validering.errors.push(...barnetilleggValidering.errors);

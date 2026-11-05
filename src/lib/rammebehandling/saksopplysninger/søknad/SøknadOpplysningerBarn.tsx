@@ -14,7 +14,10 @@ import { Søknad, SøknadBarn } from '~/lib/søknad/søknadTyper';
 import { useHentPersonopplysningerBarn } from '~/lib/søknad/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { useSak } from '~/lib/sak/SakContext';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
-import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
+import {
+    forhåndsvelgBarnFraSøknader,
+    hentBarnFraSøknad,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { Nullable } from '~/types/UtilTypes';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
@@ -226,7 +229,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
     const { rolleForBehandling } = useBehandling();
 
-    const { innvilgelsesperioder, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
+    const { innvilgelse } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {
@@ -240,23 +243,25 @@ const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
             icon={<ChevronRightDoubleIcon />}
             iconPosition={'right'}
             onClick={() => {
-                if (!harValgtPeriode) {
+                if (!innvilgelse.harValgtPeriode) {
                     return;
                 }
 
+                const { valgteBarn, innvilgelsesperioder } = innvilgelse;
+
+                const nyeBarn = forhåndsvelgBarnFraSøknader(
+                    hentBarnFraSøknad(søknad),
+                    innvilgelsesperioder,
+                ).filter((barn) => !valgteBarn.some((valgt) => valgt.key === barn.key));
+
                 dispatch({
-                    type: 'settBarnetilleggPerioder',
-                    payload: {
-                        barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
-                            søknad.barnetillegg,
-                            innvilgelsesperioder,
-                        ),
-                    },
+                    type: 'settValgteBarnetilleggBarn',
+                    payload: { barn: [...valgteBarn, ...nyeBarn] },
                 });
             }}
-            disabled={!harValgtPeriode}
+            disabled={!innvilgelse.harValgtPeriode}
         >
-            {'Periodiser barnetillegg for disse barna'}
+            {'Velg disse barna for barnetillegg'}
         </Button>
     );
 };

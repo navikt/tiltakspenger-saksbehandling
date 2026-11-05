@@ -5,7 +5,6 @@ import {
     OmgjøringInnvilgelseState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import {
@@ -16,9 +15,8 @@ import {
     sakMedInnvilgetVedtak,
     søknad,
     søknadBarn,
-    søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
-import { tilDato, tilTidspunkt } from '~/types/DatoTid';
+import { tilDato } from '~/types/DatoTid';
 
 // Standard tiltaksdeltakelse i testbehandlingene er 01.01.2025 - 30.06.2025
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
@@ -53,7 +51,8 @@ const innvilgelseSkjema = (
         harValgtPeriode: true,
         innvilgelsesperioder,
         harBarnetillegg: false,
-        barnetilleggPerioder: [],
+        valgteBarn: [],
+        manueltLagtTilBarn: [],
         ...innvilgelse,
     } as OmgjøringInnvilgelseState['innvilgelse'],
 });
@@ -177,15 +176,11 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
         });
     });
 
-    test('validerer barnetillegg mot søknaden fra siste vedtatte søknadsbehandling', () => {
-        const sakMedBarnISøknaden = sakMedInnvilgetVedtak(førsteHalvår, {
-            søknadsbehandling: søknadsbehandlingInnvilgelse({
-                id: 'beh_vedtatt',
-                status: Rammebehandlingsstatus.VEDTATT,
-                iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
-                søknad: søknad([søknadBarn('2020-05-05')]),
-            }),
-        });
+    test('validerer barnetillegg mot søknaden for tiltaksdeltakelsen det innvilges for', () => {
+        const sakMedBarnISøknaden = {
+            ...sakMedInnvilgetVedtak(førsteHalvår),
+            søknader: [søknad([søknadBarn('2020-05-05')])],
+        };
 
         const resultat = revurderingOmgjøringValidering(
             omgjøringInnvilgelse(),
@@ -196,7 +191,7 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
         expect(resultat).toEqual({
             errors: [],
             warnings: [
-                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: 1 barn i perioden 01.01.2025 - 30.06.2025',
+                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Barn fra søknaden med rett i innvilgelsesperioden: Barn Barnesen (født 05.05.2020)',
             ],
         });
     });

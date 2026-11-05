@@ -15,7 +15,8 @@ const medPerioderState: InnvilgelseMedPerioderState = {
     harValgtPeriode: true,
     innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
     harBarnetillegg: false,
-    barnetilleggPerioder: [],
+    valgteBarn: [],
+    manueltLagtTilBarn: [],
 };
 
 describe('innvilgelseReducer', () => {

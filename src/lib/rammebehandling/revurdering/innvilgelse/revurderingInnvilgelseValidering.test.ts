@@ -2,18 +2,13 @@ import { describe, expect, test } from '@jest/globals';
 import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { RevurderingInnvilgelseContext } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
-import { Tidspunkt, tilTidspunkt } from '~/types/DatoTid';
 import {
     innvilgelsesperiode,
     periode,
-    rammevedtak,
     revurderingInnvilgelse,
     sak,
     søknad,
     søknadBarn,
-    søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
 
 const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
@@ -26,7 +21,8 @@ const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
         harValgtPeriode: true,
         innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
         harBarnetillegg: false,
-        barnetilleggPerioder: [],
+        valgteBarn: [],
+        manueltLagtTilBarn: [],
     },
     skalSendeVedtaksbrev: true,
     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
@@ -41,66 +37,33 @@ const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
     },
 };
 
-// Sak med to vedtatte søknadsbehandlinger, der bare den første søknaden har barn
-const sakMedToSøknadsbehandlinger = (iverksattMedBarn: Tidspunkt, iverksattUtenBarn: Tidspunkt) => {
-    const medBarn = søknadsbehandlingInnvilgelse({
-        id: 'beh_med_barn',
-        status: Rammebehandlingsstatus.VEDTATT,
-        iverksattTidspunkt: iverksattMedBarn,
-        søknad: søknad([søknadBarn('2020-05-05')]),
-    });
-    const utenBarn = søknadsbehandlingInnvilgelse({
-        id: 'beh_uten_barn',
-        status: Rammebehandlingsstatus.VEDTATT,
-        iverksattTidspunkt: iverksattUtenBarn,
-    });
-
-    return sak({
-        rammebehandlinger: [medBarn, utenBarn],
-        alleRammevedtak: [
-            rammevedtak('vedtak_1', førsteHalvår, { behandlingId: medBarn.id }),
-            rammevedtak('vedtak_2', førsteHalvår, { behandlingId: utenBarn.id }),
-        ],
-        tidslinje: {
-            elementer: [
-                {
-                    rammevedtakId: 'vedtak_2',
-                    periode: førsteHalvår,
-                    tidslinjeResultat: TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE,
-                },
-            ],
-        },
-    });
+const søknadMedBarn = (internDeltakelseId: string) => {
+    const standard = søknad([søknadBarn('2020-05-05')]);
+    return { ...standard, tiltak: { ...standard.tiltak, internDeltakelseId } };
 };
 
 describe('revurderingInnvilgelseValidering', () => {
-    test('validerer barnetillegg mot søknaden fra sist iverksatte søknadsbehandling', () => {
+    test('validerer ikke barnetillegg mot søknader for andre tiltaksdeltakelser', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse(),
             skjemaUtenBarnetillegg,
-            sakMedToSøknadsbehandlinger(
-                tilTidspunkt('2025-01-01T09:00:00'),
-                tilTidspunkt('2025-02-01T09:00:00'),
-            ),
+            sak({ søknader: [søknadMedBarn('deltakelse_annen')] }),
         );
 
         expect(resultat).toEqual({ errors: [], warnings: [] });
     });
 
-    test('advarer om manglende barnetillegg når siste søknad har barn', () => {
+    test('advarer om manglende barnetillegg når søknaden for tiltaksdeltakelsen har barn', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse(),
             skjemaUtenBarnetillegg,
-            sakMedToSøknadsbehandlinger(
-                tilTidspunkt('2025-02-01T09:00:00'),
-                tilTidspunkt('2025-01-01T09:00:00'),
-            ),
+            sak({ søknader: [søknadMedBarn('deltakelse_1')] }),
         );
 
         expect(resultat).toEqual({
             errors: [],
             warnings: [
-                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: 1 barn i perioden 01.01.2025 - 30.06.2025',
+                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Barn fra søknaden med rett i innvilgelsesperioden: Barn Barnesen (født 05.05.2020)',
             ],
         });
     });
@@ -127,10 +90,7 @@ describe('revurderingInnvilgelseValidering', () => {
                     innvilgelsesperioder: [innvilgelsesperiode(innvilgetPeriode)],
                 },
             },
-            sakMedToSøknadsbehandlinger(
-                tilTidspunkt('2025-01-01T09:00:00'),
-                tilTidspunkt('2025-02-01T09:00:00'),
-            ),
+            sak(),
         );
 
         expect(resultat.errors).toEqual(['Kan ikke innvilge for valgt tiltaksdeltakelse']);

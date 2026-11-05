@@ -1,4 +1,5 @@
 import { tilSkalJournalføreNotatDTO } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
@@ -48,15 +49,10 @@ const tilDTO = (
             skjema.textAreas.prioriteringBegrunnelse.getValue(),
         ),
         innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
-        barnetillegg: innvilgelse.harBarnetillegg
-            ? {
-                  begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: innvilgelse.barnetilleggPerioder,
-              }
-            : {
-                  begrunnelse: null,
-                  perioder: [],
-              },
+        barnetillegg: tilOppdaterBarnetilleggDTO(
+            innvilgelse,
+            skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+        ),
         skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
     };
 };

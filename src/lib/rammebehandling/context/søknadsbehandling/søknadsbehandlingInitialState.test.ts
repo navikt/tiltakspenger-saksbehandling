@@ -1,13 +1,18 @@
 import { describe, expect, test } from '@jest/globals';
 import {
+    barnetilleggBarn,
     barnetilleggPeriode,
+    barnetilleggV1,
+    barnetilleggV2,
     innvilgelsesperiode,
     periode,
+    søknad,
+    søknadBarn,
     søknadsbehandlingAvslag,
     søknadsbehandlingIkkeValgt,
     søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
-import { ikkeSladdet } from '~test/sladdetVerdi';
+import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import {
     Avslagsgrunn,
@@ -54,7 +59,7 @@ describe('søknadsbehandlingInitialState', () => {
     });
 
     describe('innvilgelse', () => {
-        test('henter lagrede innvilgelsesperioder og barnetillegg med barn', () => {
+        test('henter lagrede innvilgelsesperioder og de lagrede barna', () => {
             const innvilgelsesperioder = [
                 innvilgelsesperiode(periode('2025-01-01', '2025-02-28')),
                 innvilgelsesperiode(periode('2025-03-01', '2025-03-31'), {
@@ -62,15 +67,16 @@ describe('søknadsbehandlingInitialState', () => {
                 }),
             ];
 
+            const overstyrtPeriode = periode('2025-01-01', '2025-01-31');
+
             const behandling = søknadsbehandlingInnvilgelse({
                 innvilgelsesperioder,
-                barnetillegg: {
-                    perioder: [
-                        barnetilleggPeriode(1, periode('2025-01-01', '2025-01-31')),
-                        barnetilleggPeriode(0, periode('2025-02-01', '2025-03-31')),
-                    ],
-                    begrunnelse: ikkeSladdet(null),
-                },
+                // Barnet fra søknaden skal ikke forhåndsvelges når barna er lagret
+                søknad: søknad([søknadBarn('2015-03-01')]),
+                barnetillegg: barnetilleggV2(
+                    [barnetilleggBarn('2020-01-01', { periode: overstyrtPeriode })],
+                    innvilgelsesperioder.map((it) => it.periode),
+                ),
             });
 
             expect(søknadsbehandlingInitialState(behandling)).toEqual({
@@ -79,8 +85,40 @@ describe('søknadsbehandlingInitialState', () => {
                     harValgtPeriode: true,
                     innvilgelsesperioder,
                     harBarnetillegg: true,
-                    barnetilleggPerioder: [
-                        barnetilleggPeriode(1, periode('2025-01-01', '2025-01-31')),
+                    valgteBarn: [skjemaBarn('2020-01-01', { periode: overstyrtPeriode })],
+                    manueltLagtTilBarn: [],
+                },
+            });
+        });
+
+        test('har ikke barnetillegg når de lagrede barna er en tom liste', () => {
+            const behandling = søknadsbehandlingInnvilgelse({
+                søknad: søknad([søknadBarn('2015-03-01')]),
+                barnetillegg: barnetilleggV2([], [periode('2025-01-01', '2025-03-31')]),
+            });
+
+            expect(søknadsbehandlingInitialState(behandling)).toMatchObject({
+                innvilgelse: { harBarnetillegg: false, valgteBarn: [] },
+            });
+        });
+
+        test('forhåndsvelger barna fra søknaden når barnetillegget er lagret som antall barn per periode', () => {
+            const behandling = søknadsbehandlingInnvilgelse({
+                søknad: søknad([søknadBarn('2015-03-01')]),
+                barnetillegg: barnetilleggV1([
+                    barnetilleggPeriode(1, periode('2025-01-01', '2025-01-31')),
+                    barnetilleggPeriode(0, periode('2025-02-01', '2025-03-31')),
+                ]),
+            });
+
+            expect(søknadsbehandlingInitialState(behandling)).toMatchObject({
+                innvilgelse: {
+                    harBarnetillegg: true,
+                    valgteBarn: [
+                        expect.objectContaining({
+                            fødselsdato: { verdi: '2015-03-01', erSladdet: false },
+                            periode: null,
+                        }),
                     ],
                 },
             });
@@ -88,16 +126,14 @@ describe('søknadsbehandlingInitialState', () => {
 
         test('har ikke barnetillegg når lagrede perioder kun har 0 barn', () => {
             const behandling = søknadsbehandlingInnvilgelse({
-                barnetillegg: {
-                    perioder: [barnetilleggPeriode(0, periode('2025-01-01', '2025-03-31'))],
-                    begrunnelse: ikkeSladdet(null),
-                },
+                søknad: søknad([søknadBarn('2015-03-01')]),
+                barnetillegg: barnetilleggV1([
+                    barnetilleggPeriode(0, periode('2025-01-01', '2025-03-31')),
+                ]),
             });
 
-            const state = søknadsbehandlingInitialState(behandling);
-
-            expect(state).toMatchObject({
-                innvilgelse: { harBarnetillegg: false, barnetilleggPerioder: [] },
+            expect(søknadsbehandlingInitialState(behandling)).toMatchObject({
+                innvilgelse: { harBarnetillegg: false, valgteBarn: [] },
             });
         });
 

@@ -1,7 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
 import {
-    barnetilleggPeriode,
     innvilgelsesperiode,
     omgjøringInnvilgelse,
     periode,
@@ -9,14 +8,14 @@ import {
     revurderingInnvilgelse,
     sak,
     sakMedInnvilgetVedtak,
-    søknad,
     søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
+import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { BarnetilleggBarnSkjema } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 
 // Standard tiltaksdeltakelse i testbehandlingene er 01.01.2025 - 30.06.2025
@@ -27,33 +26,32 @@ const førsteHalvår = periode('2025-01-01', '2025-06-30');
 
 const innvilgelse = (
     innvilgelsesperioder: Innvilgelsesperiode[],
-    barnetillegg: BarnetilleggPeriode[] = [],
+    barnetillegg: BarnetilleggBarnSkjema[] = [],
 ) => ({
     harValgtPeriode: true as const,
     innvilgelsesperioder,
     harBarnetillegg: barnetillegg.length > 0,
-    barnetilleggPerioder: barnetillegg,
+    valgteBarn: barnetillegg,
+    manueltLagtTilBarn: [],
 });
 
 const søknadsbehandlingSkjema = (
     innvilgelsesperioder: Innvilgelsesperiode[],
-    barnetillegg: BarnetilleggPeriode[] = [],
+    barnetillegg: BarnetilleggBarnSkjema[] = [],
 ): BehandlingMedInnvilgelseState => ({
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     innvilgelse: innvilgelse(innvilgelsesperioder, barnetillegg),
 });
 
+// Har fylt 16 år før innvilgelsesperiodene i testene
+const forGammeltBarn = skjemaBarn('2008-01-01');
+
 describe('validerInnvilgelse', () => {
     test('krever valgt innvilgelsesperiode før noe annet valideres', () => {
-        const resultat = validerInnvilgelse(
-            sak(),
-            søknadsbehandlingInnvilgelse(),
-            {
-                resultat: SøknadsbehandlingResultat.INNVILGELSE,
-                innvilgelse: { harValgtPeriode: false, innvilgelsesperioder: [{ periode: {} }] },
-            },
-            søknad(),
-        );
+        const resultat = validerInnvilgelse(sak(), søknadsbehandlingInnvilgelse(), {
+            resultat: SøknadsbehandlingResultat.INNVILGELSE,
+            innvilgelse: { harValgtPeriode: false, innvilgelsesperioder: [{ periode: {} }] },
+        });
 
         expect(resultat).toEqual({
             errors: ['Minst en fullstendig innvilgelsesperiode må være valgt'],
@@ -66,7 +64,6 @@ describe('validerInnvilgelse', () => {
             sak(),
             søknadsbehandlingInnvilgelse(),
             søknadsbehandlingSkjema([innvilgelsesperiode(førsteHalvår)]),
-            søknad(),
         );
 
         expect(resultat).toEqual({ errors: [], warnings: [] });
@@ -80,7 +77,6 @@ describe('validerInnvilgelse', () => {
                 innvilgelsesperiode(periode('2025-01-01', '2025-03-01')),
                 innvilgelsesperiode(marsTilJuni),
             ]),
-            søknad(),
         );
 
         expect(resultat.errors).toEqual(['Innvilgelsesperiodene må være uten overlapp']);
@@ -103,7 +99,6 @@ describe('validerInnvilgelse', () => {
             sak(),
             behandling,
             søknadsbehandlingSkjema([innvilgelsesperiode(førsteHalvår)]),
-            søknad(),
         );
 
         expect(resultat.errors).toEqual([
@@ -128,7 +123,6 @@ describe('validerInnvilgelse', () => {
             sak(),
             behandling,
             søknadsbehandlingSkjema([innvilgelsesperiode(periode('2025-01-01', '2025-05-31'))]),
-            søknad(),
         );
 
         expect(resultat.errors).toEqual([]);
@@ -139,7 +133,6 @@ describe('validerInnvilgelse', () => {
             sak(),
             søknadsbehandlingInnvilgelse(),
             søknadsbehandlingSkjema([innvilgelsesperiode(periode('2025-03-01', '2025-02-01'))]),
-            søknad(),
         );
 
         expect(resultat.errors).toEqual(['Til og med-dato må være etter fra og med-dato']);
@@ -158,19 +151,15 @@ describe('validerInnvilgelse', () => {
         const resultat = validerInnvilgelse(
             sak(),
             behandling,
-            søknadsbehandlingSkjema(
-                [innvilgelsesperiode(førsteHalvår)],
-                [barnetilleggPeriode(0, førsteHalvår)],
-            ),
-            søknad(),
+            søknadsbehandlingSkjema([innvilgelsesperiode(førsteHalvår)], [forGammeltBarn]),
         );
 
         expect(resultat).toEqual({
             errors: [
                 'Valgt tiltaksdeltakelse finnes ikke lenger i saksopplysningene',
-                'Minst en periode må ha barn når barnetillegg er valgt',
+                'Barn Barnesen (født 01.01.2008): Barnet har ikke rett til barnetillegg i innvilgelsesperioden (rett fra fødsel til fylte 16 år: 01.01.2008 - 31.12.2023)',
             ],
-            warnings: ['Det er innvilget barnetillegg uten at vi har mottatt søknad med barn'],
+            warnings: [],
         });
     });
 
@@ -178,11 +167,7 @@ describe('validerInnvilgelse', () => {
         const resultat = validerInnvilgelse(
             sak(),
             søknadsbehandlingInnvilgelse(),
-            søknadsbehandlingSkjema(
-                [innvilgelsesperiode(førsteHalvår)],
-                [barnetilleggPeriode(0, førsteHalvår)],
-            ),
-            søknad(),
+            søknadsbehandlingSkjema([innvilgelsesperiode(førsteHalvår)], [forGammeltBarn]),
             { validerBarnetillegg: false },
         );
 
@@ -200,7 +185,6 @@ describe('validerInnvilgelse', () => {
                 sak(),
                 søknadsbehandlingInnvilgelse(),
                 søknadsbehandlingSkjema(innvilgelsesperioderMedHullIFebruar),
-                søknad(),
             );
 
             expect(resultat).toEqual({ errors: [], warnings: [] });
@@ -214,7 +198,6 @@ describe('validerInnvilgelse', () => {
                     resultat: RevurderingResultat.INNVILGELSE,
                     innvilgelse: innvilgelse(innvilgelsesperioderMedHullIFebruar),
                 },
-                søknad(),
             );
 
             expect(resultat).toEqual({
@@ -234,7 +217,6 @@ describe('validerInnvilgelse', () => {
                     vedtaksperiode: førsteHalvår,
                     innvilgelse: innvilgelse(innvilgelsesperioderMedHullIFebruar),
                 },
-                søknad(),
             );
 
             expect(resultat).toEqual({
@@ -284,15 +266,10 @@ describe('validerInnvilgelse', () => {
                 },
             });
 
-            const resultat = validerInnvilgelse(
-                sakMedStansIFebruar,
-                revurderingInnvilgelse(),
-                {
-                    resultat: RevurderingResultat.INNVILGELSE,
-                    innvilgelse: innvilgelse(innvilgelsesperioderMedHullIFebruar),
-                },
-                søknad(),
-            );
+            const resultat = validerInnvilgelse(sakMedStansIFebruar, revurderingInnvilgelse(), {
+                resultat: RevurderingResultat.INNVILGELSE,
+                innvilgelse: innvilgelse(innvilgelsesperioderMedHullIFebruar),
+            });
 
             expect(resultat).toEqual({ errors: [], warnings: [] });
         });

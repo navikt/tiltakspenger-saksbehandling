@@ -6,7 +6,6 @@ import {
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { ReducerSuperAction } from '~/types/ReducerAction';
 import {
-    InnvilgelseMedPerioderState,
     InnvilgelseActions,
     innvilgelseReducer,
     InnvilgelseState,
@@ -23,8 +22,11 @@ import {
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
-import { hentLagredePerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { utvidPeriodisering } from '~/utils/periode';
+import {
+    BarnetilleggSkjemaState,
+    lagBarnetilleggSkjemaState,
+    tilpassBarnTilInnvilgelsesperiodene,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { Periode } from '~/types/Periode';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
@@ -62,6 +64,7 @@ type ForlengelseActions =
           payload: {
               harEndretBarnetillegg: boolean;
               behandling: RevurderingForlengelse;
+              sak: SakProps;
           };
       };
 
@@ -98,7 +101,7 @@ export const revurderingForlengelseReducer: Reducer<
         }
 
         case 'settHarValgtBarnetillegg': {
-            const { harEndretBarnetillegg, behandling } = action.payload;
+            const { harEndretBarnetillegg, behandling, sak } = action.payload;
             const { innvilgelse } = state;
 
             if (harEndretBarnetillegg || !innvilgelse.harValgtPeriode) {
@@ -110,21 +113,22 @@ export const revurderingForlengelseReducer: Reducer<
                 harEndretBarnetillegg,
                 innvilgelse: {
                     ...innvilgelse,
-                    ...lagretBarnetillegg(
-                        state,
+                    ...lagBarnetilleggSkjemaState(
                         behandling,
-                        innvilgelse.innvilgelsesperioder.atNonNull(0).periode,
+                        innvilgelse.innvilgelsesperioder,
+                        sak,
                     ),
                 },
             };
         }
 
         case 'setHarSøktBarnetillegg':
-        case 'addBarnetilleggPeriode':
-        case 'fjernBarnetilleggPeriode':
-        case 'oppdaterBarnetilleggAntall':
-        case 'oppdaterBarnetilleggPeriode':
-        case 'settBarnetilleggPerioder': {
+        case 'velgBarnetilleggBarn':
+        case 'settValgteBarnetilleggBarn':
+        case 'settBarnetilleggPeriodevalg':
+        case 'oppdaterBarnetilleggBarnPeriode':
+        case 'leggTilManueltBarnetilleggBarn':
+        case 'fjernManueltBarnetilleggBarn': {
             return {
                 ...state,
                 harEndretBarnetillegg: true,
@@ -146,6 +150,7 @@ export const revurderingForlengelseReducer: Reducer<
 
 export const forlengelseInitialState = (
     behandling: RevurderingForlengelse,
+    sak: SakProps,
 ): RevurderingForlengelseState => {
     const { innvilgelsesperioder, forlengesFraOgMed, harEndretBarnetillegg } = behandling;
 
@@ -173,8 +178,6 @@ export const forlengelseInitialState = (
     }
 
     // Det lagrede barnetillegget er enten valgt av saksbehandler eller utledet av backend.
-    const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
-
     return {
         resultat: RevurderingResultat.FORLENGELSE,
         forlengesFraOgMed,
@@ -182,8 +185,7 @@ export const forlengelseInitialState = (
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
-            harBarnetillegg: barnetilleggPerioder.length > 0,
-            barnetilleggPerioder,
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
         },
     };
 };
@@ -219,21 +221,6 @@ export const visesUtledetBarnetillegg = (
     !behandling.harEndretBarnetillegg &&
     erLagretMedSammePeriodeOgTiltak(state, behandling);
 
-// Det sist lagrede barnetillegget, uendret så lenge perioden og tiltaket er de samme som da det ble lagret.
-// Ellers tilpasses det valgt periode, som et utgangspunkt saksbehandler kan endre fra.
-const lagretBarnetillegg = (
-    state: RevurderingForlengelseState,
-    behandling: RevurderingForlengelse,
-    periode: Periode,
-): Pick<InnvilgelseMedPerioderState, 'harBarnetillegg' | 'barnetilleggPerioder'> => {
-    const lagret = hentLagredePerioderMedBarn(behandling) ?? [];
-    const barnetilleggPerioder = erLagretMedSammePeriodeOgTiltak(state, behandling)
-        ? lagret
-        : utvidPeriodisering(lagret, periode);
-
-    return { harBarnetillegg: barnetilleggPerioder.length > 0, barnetilleggPerioder };
-};
-
 const medInnvilgelsesperiode = (
     state: RevurderingForlengelseState,
     valgt: { tilOgMed?: Dato; internDeltakelseId?: string },
@@ -260,38 +247,37 @@ const medInnvilgelsesperiode = (
     const periode: Periode = { fraOgMed: state.forlengesFraOgMed, tilOgMed };
     const forrige = state.innvilgelse;
 
-    const medPeriode: RevurderingForlengelseState = {
-        ...state,
-        innvilgelse: {
-            harValgtPeriode: true,
-            innvilgelsesperioder: [
-                {
-                    periode,
-                    antallDagerPerMeldeperiode: hentAntallDagerPerMeldeperiode(
-                        periode,
-                        internDeltakelseId,
-                        behandling,
-                        sak,
-                    ),
-                    internDeltakelseId,
-                },
-            ],
-            harBarnetillegg: false,
-            barnetilleggPerioder: [],
+    const innvilgelsesperioder: Innvilgelsesperiode[] = [
+        {
+            periode,
+            antallDagerPerMeldeperiode: hentAntallDagerPerMeldeperiode(
+                periode,
+                internDeltakelseId,
+                behandling,
+                sak,
+            ),
+            internDeltakelseId,
         },
-    };
+    ];
 
     // Barnetillegg saksbehandler har valgt, tilpasses den nye perioden.
     // Ellers tas det alltid utgangspunkt i det lagrede, slik at en periode som endres frem og tilbake ikke mister informasjon.
-    const barnetillegg =
+    const barnetillegg: BarnetilleggSkjemaState =
         state.harEndretBarnetillegg && forrige.harValgtPeriode
             ? {
                   harBarnetillegg: forrige.harBarnetillegg,
-                  barnetilleggPerioder: utvidPeriodisering(forrige.barnetilleggPerioder, periode),
+                  valgteBarn: tilpassBarnTilInnvilgelsesperiodene(
+                      forrige.valgteBarn,
+                      innvilgelsesperioder,
+                  ),
+                  manueltLagtTilBarn: forrige.manueltLagtTilBarn,
               }
-            : lagretBarnetillegg(medPeriode, behandling, periode);
+            : lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak);
 
-    return { ...medPeriode, innvilgelse: { ...medPeriode.innvilgelse, ...barnetillegg } };
+    return {
+        ...state,
+        innvilgelse: { harValgtPeriode: true, innvilgelsesperioder, ...barnetillegg },
+    };
 };
 
 // Antall dager videreføres fra den siste perioden vedtaket som forlenges innvilget for tiltaksdeltakelsen, slik backend gjør.

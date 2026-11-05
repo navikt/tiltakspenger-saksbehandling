@@ -6,6 +6,8 @@ import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { formaterPeriode } from '~/utils/date';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { behandlingUrl } from '~/utils/urls';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 import style from './BarnetilleggTidslinje.module.css';
 
@@ -26,39 +28,49 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
         );
     }
 
-    const startDate = new Date(innvilgelsesperiode.fraOgMed);
-    const endDate = new Date(innvilgelsesperiode.tilOgMed);
-
     return (
         <div>
             <InlineMessage status={'info'} size={'small'} className={style.info}>
                 {`Gjeldende barnetillegg innenfor valgt innvilgelsesperiode (${formaterPeriode(innvilgelsesperiode)}):`}
             </InlineMessage>
-            <Timeline startDate={startDate} endDate={endDate}>
-                <Timeline.Row label={''}>
-                    {barnetillegg.map((bt) => {
-                        const { periode, antallBarn, behandlingId } = bt;
+            <AntallBarnTidslinje periode={innvilgelsesperiode} barnetillegg={barnetillegg} />
+        </div>
+    );
+};
 
-                        const start = new Date(periode.fraOgMed);
-                        const end = new Date(periode.tilOgMed);
+type AntallBarnTidslinjeProps = {
+    periode: Periode;
+    // Med behandlingId vises en lenke til behandlingen for hver periode
+    barnetillegg: Array<BarnetilleggPeriode & { behandlingId?: RammebehandlingId }>;
+};
 
-                        const harBarnetillegg = antallBarn > 0;
+export const AntallBarnTidslinje = ({ periode, barnetillegg }: AntallBarnTidslinjeProps) => {
+    const { sak } = useSak();
 
-                        return (
-                            <Timeline.Period
-                                start={start}
-                                end={end}
-                                status={harBarnetillegg ? 'success' : 'neutral'}
-                                icon={
-                                    <span className={style.ikon}>
-                                        {harBarnetillegg && <ChildEyesIcon />}
-                                        <BodyShort size={'small'}>{antallBarn}</BodyShort>
-                                    </span>
-                                }
-                                key={periode.fraOgMed}
-                            >
-                                <BodyShort size={'small'} className={style.detaljer}>
-                                    {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${formaterPeriode(periode)}`}
+    return (
+        <Timeline startDate={new Date(periode.fraOgMed)} endDate={new Date(periode.tilOgMed)}>
+            <Timeline.Row label={''}>
+                {barnetillegg.map((bt) => {
+                    const { periode, antallBarn, behandlingId } = bt;
+
+                    const harBarnetillegg = antallBarn > 0;
+
+                    return (
+                        <Timeline.Period
+                            start={new Date(periode.fraOgMed)}
+                            end={new Date(periode.tilOgMed)}
+                            status={harBarnetillegg ? 'success' : 'neutral'}
+                            icon={
+                                <span className={style.ikon}>
+                                    {harBarnetillegg && <ChildEyesIcon />}
+                                    <BodyShort size={'small'}>{antallBarn}</BodyShort>
+                                </span>
+                            }
+                            key={periode.fraOgMed}
+                        >
+                            <BodyShort size={'small'} className={style.detaljer}>
+                                {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${formaterPeriode(periode)}`}
+                                {behandlingId && (
                                     <InternLenke
                                         href={behandlingUrl({
                                             saksnummer: sak.saksnummer,
@@ -67,12 +79,12 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
                                     >
                                         {'Til behandlingen'}
                                     </InternLenke>
-                                </BodyShort>
-                            </Timeline.Period>
-                        );
-                    })}
-                </Timeline.Row>
-            </Timeline>
-        </div>
+                                )}
+                            </BodyShort>
+                        </Timeline.Period>
+                    );
+                })}
+            </Timeline.Row>
+        </Timeline>
     );
 };

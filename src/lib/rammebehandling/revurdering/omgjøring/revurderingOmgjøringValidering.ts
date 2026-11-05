@@ -3,7 +3,6 @@ import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/vali
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import {
     erDatoIPeriode,
     erFullstendigPeriode,
@@ -52,9 +51,7 @@ export const revurderingOmgjøringValidering = (
     }
 
     if (skjema.resultat === RevurderingResultat.OMGJØRING) {
-        const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
-
-        const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema, sisteSøknad);
+        const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema);
 
         validering.errors.push(...innvilgelseValidering.errors);
         validering.warnings.push(...innvilgelseValidering.warnings);

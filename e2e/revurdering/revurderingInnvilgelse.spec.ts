@@ -82,7 +82,7 @@ test.describe('Revurdering av innvilgelse', () => {
                             erReversertOpphør: false,
                         },
                     ],
-                    barnetillegg: { begrunnelse: null, perioder: [] },
+                    barnetillegg: { begrunnelse: null, barn: [] },
                     skalSendeVedtaksbrev: true,
                 } satisfies OppdaterRevurderingInnvilgelseDTO,
             ]);

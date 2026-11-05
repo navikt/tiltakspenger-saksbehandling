@@ -16,6 +16,8 @@ const feilmeldinger: Record<string, string> = {
     beslutter_og_saksbehandler_kan_ikke_være_lik:
         'Beslutter kan ikke være den samme som saksbehandler',
     støtter_ikke_barnetillegg: 'Vi støtter ikke søknader om barnetillegg',
+    ugyldig_barnetillegg:
+        'Barnetillegget er ugyldig. Sjekk at valgte perioder er innenfor innvilgelsesperioden og perioden barnet har rett til barnetillegg, og at opplysningene om barna er gyldige.',
     fant_ikke_tiltak: 'Fant ikke tiltaket bruker har søkt på',
     saksopplysningsperiode_må_være_lik:
         'Perioden til saksopplysningen er forskjellig fra vurderingsperioden',

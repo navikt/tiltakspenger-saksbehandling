@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import {
-    barnetilleggPeriode,
+    barnetilleggBarn,
+    barnetilleggV2,
     innvilgelsesperiode,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
@@ -11,8 +12,10 @@ import {
     sak,
     sakMedInnvilgetVedtak,
     revurderingUbestemt,
+    søknad,
+    søknadBarn,
 } from '~test/rammebehandling';
-import { ikkeSladdet } from '~test/sladdetVerdi';
+import { skjemaBarn } from '~test/barnetilleggSkjema';
 import {
     omgjøringInitialState,
     revurderingInitialState,
@@ -25,6 +28,7 @@ import {
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
+import { ikkeSladdet } from '~test/sladdetVerdi';
 
 const blankInnvilgelse = {
     harValgtPeriode: false,
@@ -77,10 +81,10 @@ describe('revurderingInitialState', () => {
 
             const behandling = revurderingInnvilgelse({
                 innvilgelsesperioder,
-                barnetillegg: {
-                    perioder: [barnetilleggPeriode(1, periode('2025-04-01', '2025-05-31'))],
-                    begrunnelse: ikkeSladdet(null),
-                },
+                barnetillegg: barnetilleggV2(
+                    [barnetilleggBarn('2020-01-01')],
+                    [periode('2025-04-01', '2025-05-31')],
+                ),
             });
 
             expect(revurderingInitialState(behandling, sak())).toEqual({
@@ -89,19 +93,24 @@ describe('revurderingInitialState', () => {
                     harValgtPeriode: true,
                     innvilgelsesperioder,
                     harBarnetillegg: true,
-                    barnetilleggPerioder: [
-                        barnetilleggPeriode(1, periode('2025-04-01', '2025-05-31')),
-                    ],
+                    valgteBarn: [skjemaBarn('2020-01-01')],
+                    manueltLagtTilBarn: [],
                 },
             });
         });
 
-        test('forhåndsutfyller barnetillegg fra gjeldende vedtak når behandlingen mangler barnetillegg', () => {
+        test('forhåndsvelger barna fra gjeldende vedtak når behandlingen mangler barnetillegg', () => {
+            const barnIVedtaket = barnetilleggBarn('2020-01-01', {
+                fornavn: ikkeSladdet('Vedtak'),
+                periode: periode('2025-01-01', '2025-02-28'),
+            });
+
             const sakMedBarnetillegg = sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
                 vedtak: {
-                    gjeldendeBarnetilleggPerioder: [
-                        barnetilleggPeriode(2, periode('2025-01-01', '2025-06-30')),
-                    ],
+                    barnetillegg: barnetilleggV2(
+                        [barnIVedtaket],
+                        [periode('2025-01-01', '2025-06-30')],
+                    ),
                 },
             });
 
@@ -109,11 +118,43 @@ describe('revurderingInitialState', () => {
                 innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
             });
 
-            expect(revurderingInitialState(behandling, sakMedBarnetillegg)).toMatchObject({
+            expect(
+                revurderingInitialState(behandling, {
+                    ...sakMedBarnetillegg,
+                    søknader: [søknad([søknadBarn('2015-03-01')])],
+                }),
+            ).toMatchObject({
                 innvilgelse: {
                     harBarnetillegg: true,
-                    barnetilleggPerioder: [
-                        barnetilleggPeriode(2, periode('2025-04-01', '2025-05-31')),
+                    // Barnet fra vedtaket velges med hele innvilgelsesperioden
+                    valgteBarn: [
+                        expect.objectContaining({
+                            fornavn: ikkeSladdet('Vedtak'),
+                            periode: null,
+                        }),
+                    ],
+                },
+            });
+        });
+
+        test('forhåndsvelger barna fra søknaden for tiltaksdeltakelsen når gjeldende vedtak er uten barn', () => {
+            const behandling = revurderingInnvilgelse({
+                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
+            });
+
+            expect(
+                revurderingInitialState(behandling, {
+                    ...sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30')),
+                    søknader: [søknad([søknadBarn('2015-03-01')])],
+                }),
+            ).toMatchObject({
+                innvilgelse: {
+                    harBarnetillegg: true,
+                    valgteBarn: [
+                        expect.objectContaining({
+                            fødselsdato: ikkeSladdet('2015-03-01'),
+                            periode: null,
+                        }),
                     ],
                 },
             });
@@ -141,10 +182,14 @@ describe('omgjøringInitialState', () => {
             const behandling = omgjøringInnvilgelse({
                 vedtaksperiode: periode('2025-01-01', '2025-03-31'),
                 innvilgelsesperioder,
-                barnetillegg: {
-                    perioder: [barnetilleggPeriode(1, periode('2025-02-01', '2025-03-31'))],
-                    begrunnelse: ikkeSladdet(null),
-                },
+                barnetillegg: barnetilleggV2(
+                    [
+                        barnetilleggBarn('2020-01-01', {
+                            periode: periode('2025-02-01', '2025-03-31'),
+                        }),
+                    ],
+                    [periode('2025-01-01', '2025-03-31')],
+                ),
             });
 
             expect(omgjøringInitialState(behandling, sak())).toEqual({
@@ -154,9 +199,10 @@ describe('omgjøringInitialState', () => {
                     harValgtPeriode: true,
                     innvilgelsesperioder,
                     harBarnetillegg: true,
-                    barnetilleggPerioder: [
-                        barnetilleggPeriode(1, periode('2025-02-01', '2025-03-31')),
+                    valgteBarn: [
+                        skjemaBarn('2020-01-01', { periode: periode('2025-02-01', '2025-03-31') }),
                     ],
+                    manueltLagtTilBarn: [],
                 },
             });
         });

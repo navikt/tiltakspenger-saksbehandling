@@ -1,4 +1,5 @@
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     OmgjøringBrevForhåndsvisningDTO,
     OmgjøringInnvilgelseBrevForhåndsvisningDTO,
@@ -62,7 +63,12 @@ const tilForhåndsvisningDTO = (skjema: OmgjøringContext): OmgjøringBrevForhå
                 resultat: RevurderingResultat.OMGJØRING,
                 fritekst: textAreas.brevtekst.getValue(),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
-                barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
+                barnetillegg: innvilgelse.harBarnetillegg
+                    ? tilOppdaterBarnetilleggDTO(
+                          innvilgelse,
+                          skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+                      )
+                    : null,
             } satisfies OmgjøringInnvilgelseBrevForhåndsvisningDTO;
         }
 
