@@ -101,9 +101,12 @@ export const RammebehandlingKonverter = ({
     );
     const typetekst = konverterRevurderingTilTekst[til].toLowerCase();
 
+    // En terminal feil beholdes, slik at et nytt forsøk mot en behandling som er borte eller endret ikke tilbys.
     const lukk = () => {
         setValgtVedtakId(null);
-        reset();
+        if (!terminal) {
+            reset();
+        }
         onClose();
     };
 
@@ -129,7 +132,7 @@ export const RammebehandlingKonverter = ({
                 <Dialog.Body>
                     <VStack gap={'space-16'}>
                         {
-                            'Resultatet du har fylt ut nullstilles. Begrunnelsen og fritekst til vedtaksbrevet beholdes.'
+                            'Resultatet du har fylt ut nullstilles. Begrunnelsen og fritekst til vedtaksbrevet beholdes slik de sist ble lagret, så lagre behandlingen først hvis du har endringer du vil ta vare på.'
                         }
 
                         {til === RevurderingResultat.OMGJØRING &&

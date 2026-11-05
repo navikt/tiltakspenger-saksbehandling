@@ -1,4 +1,5 @@
 /** @jest-environment jsdom */
+import { ComponentProps } from 'react';
 import '@testing-library/jest-dom/jest-globals';
 import { afterEach, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -161,4 +162,28 @@ describe('RammebehandlingKonverter', () => {
             ).not.toBeInTheDocument();
         },
     );
+
+    test('terminal feil beholdes når dialogen lukkes og åpnes igjen', async () => {
+        fetchMock.mockResolvedValue(svar(409, { melding: 'Feil', kode: 'feil' }));
+        const props = {
+            sakId: 'sak_test' as SakId,
+            saksnummer: '202501011001' as Saksnummer,
+            behandlingId: 'beh_test' as RammebehandlingId,
+            til: RevurderingResultat.STANS,
+            alleRammevedtak: [],
+            onClose: () => {},
+            onSuccess: () => {},
+        } satisfies Omit<ComponentProps<typeof RammebehandlingKonverter>, 'åpen'>;
+        const { rerender } = render(<RammebehandlingKonverter {...props} åpen={true} />);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Endre til stans' }));
+        await screen.findByRole('link', { name: 'Gå til personoversikten' });
+
+        fireEvent.click(screen.getAllByRole('button', { name: 'Lukk' }).atNonNull(-1));
+        rerender(<RammebehandlingKonverter {...props} åpen={false} />);
+        rerender(<RammebehandlingKonverter {...props} åpen={true} />);
+
+        expect(screen.getByRole('link', { name: 'Gå til personoversikten' })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Endre til stans' })).not.toBeInTheDocument();
+    });
 });

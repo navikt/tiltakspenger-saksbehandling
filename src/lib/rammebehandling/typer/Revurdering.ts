@@ -170,8 +170,6 @@ export type OppdaterOmgjøringOpphørDTO = OppdaterBehandlingBaseDTO & {
 
 export type OppdaterOmgjøringIkkeValgtDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT;
-    fritekstTilVedtaksbrev: null;
-    begrunnelseVilkårsvurdering: null;
 };
 
 export type OppdaterOmgjøringDTO =
