@@ -139,7 +139,7 @@ describe('validerBarnetillegg', () => {
             ]);
         });
 
-        test('advarer når en overstyrt periode bare dekker hullet mellom innvilgelsesperiodene', () => {
+        test('avviser en overstyrt periode som bare dekker hullet mellom innvilgelsesperiodene', () => {
             const perioderMedHull = [
                 innvilgelsesperiode(periode('2025-01-01', '2025-01-31')),
                 innvilgelsesperiode(periode('2025-03-01', '2025-03-31')),
@@ -147,10 +147,10 @@ describe('validerBarnetillegg', () => {
             const barn = { ...valgtBarnFraSøknad, periode: periode('2025-02-01', '2025-02-28') };
 
             expect(validerBarnetillegg(true, [barn], perioderMedHull, [])).toEqual({
-                errors: [],
-                warnings: [
+                errors: [
                     'Barn Barnesen (født 05.05.2020): Perioden 01.02.2025 - 28.02.2025 overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg',
                 ],
+                warnings: [],
             });
         });
 

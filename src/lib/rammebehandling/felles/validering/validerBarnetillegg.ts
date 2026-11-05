@@ -113,8 +113,8 @@ export const validerBarnetillegg = (
             effektivePerioderForBarn({ fødselsdato: barn.fødselsdato.verdi, periode }, perioder)
                 .length === 0
         ) {
-            validering.warnings.push(
-                `${beskrivelse}: Perioden ${formaterPeriode(periode)} overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg`,
+            feil(
+                `Perioden ${formaterPeriode(periode)} overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg`,
             );
         }
     });
