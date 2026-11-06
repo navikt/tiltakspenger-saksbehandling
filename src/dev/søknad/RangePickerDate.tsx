@@ -1,4 +1,5 @@
 import { DatePicker, Detail, HStack, Label, useRangeDatepicker, VStack } from '@navikt/ds-react';
+import dayjs from 'dayjs';
 
 export const RangePickerDate = (props: {
     value: { fraOgMed: Date | undefined; tilOgMed: Date | undefined };
@@ -13,6 +14,7 @@ export const RangePickerDate = (props: {
             from: props.value.fraOgMed ?? undefined,
             to: props.value.tilOgMed ?? undefined,
         },
+        toDate: dayjs().add(100, 'year').toDate(),
     });
 
     return (
