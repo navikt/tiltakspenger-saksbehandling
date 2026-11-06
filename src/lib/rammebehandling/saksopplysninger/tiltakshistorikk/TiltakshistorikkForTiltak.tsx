@@ -112,7 +112,7 @@ const TiltakshistorikkinnslagVisning = ({
         <VStack gap={'space-4'} align={'start'}>
             <HStack gap={'space-4'} align={'center'}>
                 <BodyShort size={'small'} weight={'semibold'}>
-                    {formaterTidspunktMedSekunder(innhentet)}
+                    {`Innhentet: ${formaterTidspunktMedSekunder(innhentet)}`}
                 </BodyShort>
                 {utløsteBehandlingen && (
                     <Tag data-color={'info'} variant={'outline'} size={'xsmall'}>
