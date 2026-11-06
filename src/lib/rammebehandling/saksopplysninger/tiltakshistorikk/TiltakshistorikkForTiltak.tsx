@@ -1,7 +1,7 @@
-import { BodyShort, HStack, List, ReadMore, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Dialog, HStack, List, Tag, VStack } from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { kildeTekst, prosentTekst } from '../tiltak/tiltaksdeltakelseVisning';
-import { erNyEndring, sorterNyesteFørst } from './tiltakshistorikkVisning';
+import { erNyEndring, erUtdatert, innslagForTiltak } from './tiltakshistorikkVisning';
 import {
     Tiltakshistorikkinnslag,
     TiltakshistorikkForBehandling,
@@ -12,44 +12,81 @@ import { formaterDatotekst, formaterTidspunktMedSekunder } from '~/utils/date';
 import { Tidspunkt } from '~/types/DatoTid';
 import { ÅpenPeriode } from '~/types/Periode';
 
-const ANTALL_SYNLIGE = 3;
-
 type Props = {
+    internDeltakelseId: string;
+    typeNavn: string;
     tiltakshistorikk: TiltakshistorikkForBehandling;
     sistEndret: Tidspunkt;
+    oppslagstidspunkt: Tidspunkt;
 };
 
-export const BehandlingTiltakshistorikk = ({ tiltakshistorikk, sistEndret }: Props) => {
-    const { innslag, harEndringEtterSistEndret } = tiltakshistorikk;
+/**
+ * Knapp som åpner tiltakshistorikken for tiltaket i en modal.
+ * Er saksopplysningene utdaterte for tiltaket, vises også det nyeste innslaget.
+ */
+export const TiltakshistorikkForTiltak = ({
+    internDeltakelseId,
+    typeNavn,
+    tiltakshistorikk,
+    sistEndret,
+    oppslagstidspunkt,
+}: Props) => {
+    const innslag = innslagForTiltak(tiltakshistorikk.innslag, internDeltakelseId);
 
     if (innslag.length === 0) {
-        return (
-            <BodyShort size={'small'}>
-                {'Ingen endringer i tiltaksdeltakelsene er registrert for behandlingen'}
-            </BodyShort>
-        );
+        return null;
     }
 
-    const sortert = sorterNyesteFørst(innslag);
-    const synlige = sortert.slice(0, ANTALL_SYNLIGE);
-    const eldre = sortert.slice(ANTALL_SYNLIGE);
-
-    const visInnslag = (innslag: Tiltakshistorikkinnslag) => (
-        <TiltakshistorikkinnslagVisning
-            key={innslag.id}
-            innslag={innslag}
-            erNy={harEndringEtterSistEndret && erNyEndring(innslag, sistEndret)}
-        />
-    );
+    const [nyeste] = innslag;
+    const erNy = (innslag: Tiltakshistorikkinnslag) =>
+        tiltakshistorikk.harEndringEtterSistEndret && erNyEndring(innslag, sistEndret);
 
     return (
-        <VStack gap={'space-12'}>
-            {synlige.map(visInnslag)}
-            {eldre.length > 0 && (
-                <ReadMore size={'small'} header={`Eldre endringer (${eldre.length})`}>
-                    <VStack gap={'space-12'}>{eldre.map(visInnslag)}</VStack>
-                </ReadMore>
+        <VStack gap={'space-8'} align={'start'}>
+            {erUtdatert(innslag, oppslagstidspunkt) && (
+                <Box
+                    background={'warning-soft'}
+                    borderColor={'warning-subtle'}
+                    borderWidth={'1'}
+                    borderRadius={'8'}
+                    padding={'space-8'}
+                >
+                    <VStack gap={'space-4'}>
+                        <BodyShort size={'small'} weight={'semibold'}>
+                            {'Tiltaksdeltakelsen er endret etter at saksopplysningene ble hentet'}
+                        </BodyShort>
+                        <TiltakshistorikkinnslagVisning innslag={nyeste} erNy={erNy(nyeste)} />
+                    </VStack>
+                </Box>
             )}
+            <Dialog>
+                <Dialog.Trigger>
+                    <Button size={'xsmall'} variant={'secondary'} type={'button'}>
+                        {`Vis tiltakshistorikk (${innslag.length})`}
+                    </Button>
+                </Dialog.Trigger>
+                <Dialog.Popup>
+                    <Dialog.Header>
+                        <Dialog.Title>{`Tiltakshistorikk for ${typeNavn}`}</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Body>
+                        <VStack gap={'space-16'}>
+                            {innslag.map((it) => (
+                                <TiltakshistorikkinnslagVisning
+                                    key={it.id}
+                                    innslag={it}
+                                    erNy={erNy(it)}
+                                />
+                            ))}
+                        </VStack>
+                    </Dialog.Body>
+                    <Dialog.Footer>
+                        <Dialog.CloseTrigger>
+                            <Button variant={'secondary'}>{'Lukk'}</Button>
+                        </Dialog.CloseTrigger>
+                    </Dialog.Footer>
+                </Dialog.Popup>
+            </Dialog>
         </VStack>
     );
 };

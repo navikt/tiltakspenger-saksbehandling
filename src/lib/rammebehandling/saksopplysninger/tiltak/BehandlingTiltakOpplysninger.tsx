@@ -11,23 +11,35 @@ import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { delOppTiltaksdeltakelser, kildeTekst, prosentTekst } from './tiltaksdeltakelseVisning';
 import { GirIkkeRettTag } from './GirIkkeRettTag';
+import { TiltakshistorikkForTiltak } from '../tiltakshistorikk/TiltakshistorikkForTiltak';
+import { TiltakshistorikkForBehandling } from '~/lib/rammebehandling/typer/Tiltakshistorikk';
+import { Tidspunkt } from '~/types/DatoTid';
+
+type Historikk = {
+    tiltakshistorikk: TiltakshistorikkForBehandling;
+    sistEndret: Tidspunkt;
+    oppslagstidspunkt: Tidspunkt;
+};
 
 type Props = {
     tiltaksdeltakelser: Tiltaksdeltakelse[];
     tiltaksdeltakelserSomFratarRett: TiltaksdeltakelseSomFratarRett[];
     vurderingsperiode: Nullable<Periode>;
+    historikk: Historikk;
 };
 
 export const BehandlingTiltakOpplysninger = ({
     tiltaksdeltakelser,
     tiltaksdeltakelserSomFratarRett,
     vurderingsperiode,
+    historikk,
 }: Props) => {
     return (
         <VStack gap="space-16">
             <TiltakSomGirRett
                 tiltaksdeltakelser={tiltaksdeltakelser}
                 vurderingsperiode={vurderingsperiode}
+                historikk={historikk}
             />
             {tiltaksdeltakelserSomFratarRett.length > 0 && (
                 <TiltakSomFratarRettListe tiltaksdeltakelser={tiltaksdeltakelserSomFratarRett} />
@@ -39,7 +51,8 @@ export const BehandlingTiltakOpplysninger = ({
 const TiltakSomGirRett = ({
     tiltaksdeltakelser,
     vurderingsperiode,
-}: Pick<Props, 'tiltaksdeltakelser' | 'vurderingsperiode'>) => {
+    historikk,
+}: Pick<Props, 'tiltaksdeltakelser' | 'vurderingsperiode' | 'historikk'>) => {
     if (tiltaksdeltakelser.length === 0) {
         return <BodyShort size={'small'}>{'Ingen relevante tiltaksdeltakelser'}</BodyShort>;
     }
@@ -52,13 +65,13 @@ const TiltakSomGirRett = ({
     return (
         <VStack gap={'space-8'}>
             {aktuelle.length > 0 ? (
-                <TiltakListe tiltaksdeltakelser={aktuelle} />
+                <TiltakListe tiltaksdeltakelser={aktuelle} historikk={historikk} />
             ) : (
                 <BodyShort size={'small'}>{'Ingen aktuelle tiltaksdeltakelser'}</BodyShort>
             )}
             {historiske.length > 0 && (
                 <ReadMore size={'small'} header={`Tidligere tiltak (${historiske.length})`}>
-                    <TiltakListe tiltaksdeltakelser={historiske} />
+                    <TiltakListe tiltaksdeltakelser={historiske} historikk={historikk} />
                 </ReadMore>
             )}
         </VStack>
@@ -122,7 +135,13 @@ const TiltakSomFratarRettListe = ({
     );
 };
 
-const TiltakListe = ({ tiltaksdeltakelser }: { tiltaksdeltakelser: Tiltaksdeltakelse[] }) => {
+const TiltakListe = ({
+    tiltaksdeltakelser,
+    historikk,
+}: {
+    tiltaksdeltakelser: Tiltaksdeltakelse[];
+    historikk: Historikk;
+}) => {
     return (
         <VStack gap="space-12">
             {tiltaksdeltakelser.map((tiltak) => {
@@ -136,43 +155,51 @@ const TiltakListe = ({ tiltaksdeltakelser }: { tiltaksdeltakelser: Tiltaksdeltak
                     gjennomføringId,
                     gjennomforingsprosent,
                     eksternDeltagelseId,
+                    internDeltakelseId,
                 } = tiltak;
 
                 return (
-                    <div key={eksternDeltagelseId}>
-                        <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
-                        {erLukketPeriode(periode) && (
+                    <VStack key={eksternDeltagelseId} gap={'space-8'} align={'start'}>
+                        <div>
+                            <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
+                            {erLukketPeriode(periode) && (
+                                <BehandlingSaksopplysning
+                                    navn={'Periode'}
+                                    verdi={formaterPeriode(periode)}
+                                />
+                            )}
                             <BehandlingSaksopplysning
-                                navn={'Periode'}
-                                verdi={formaterPeriode(periode)}
+                                navn={'Registerkilde'}
+                                verdi={kildeTekst[kilde]}
                             />
-                        )}
-                        <BehandlingSaksopplysning
-                            navn={'Registerkilde'}
-                            verdi={kildeTekst[kilde]}
+                            <BehandlingSaksopplysning navn={'Status'} verdi={deltakelseStatus} />
+                            <BehandlingSaksopplysning
+                                navn={'Antall dager i uka'}
+                                verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
+                            />
+                            <BehandlingSaksopplysning
+                                navn={'Deltakelsesprosent'}
+                                verdi={prosentTekst(deltakelseProsent)}
+                            />
+                            <BehandlingSaksopplysning
+                                navn={'Gjennomføringsprosent'}
+                                verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
+                            />
+                            <BehandlingSaksopplysning
+                                navn={'Gjennomføring-id'}
+                                verdi={gjennomføringId ?? 'Ukjent'}
+                            />
+                            <BehandlingSaksopplysning
+                                navn={'Deltakelse-id'}
+                                verdi={eksternDeltagelseId ?? 'Ukjent'}
+                            />
+                        </div>
+                        <TiltakshistorikkForTiltak
+                            internDeltakelseId={internDeltakelseId}
+                            typeNavn={typeNavn}
+                            {...historikk}
                         />
-                        <BehandlingSaksopplysning navn={'Status'} verdi={deltakelseStatus} />
-                        <BehandlingSaksopplysning
-                            navn={'Antall dager i uka'}
-                            verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
-                        />
-                        <BehandlingSaksopplysning
-                            navn={'Deltakelsesprosent'}
-                            verdi={prosentTekst(deltakelseProsent)}
-                        />
-                        <BehandlingSaksopplysning
-                            navn={'Gjennomføringsprosent'}
-                            verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
-                        />
-                        <BehandlingSaksopplysning
-                            navn={'Gjennomføring-id'}
-                            verdi={gjennomføringId ?? 'Ukjent'}
-                        />
-                        <BehandlingSaksopplysning
-                            navn={'Deltakelse-id'}
-                            verdi={eksternDeltagelseId ?? 'Ukjent'}
-                        />
-                    </div>
+                    </VStack>
                 );
             })}
         </VStack>

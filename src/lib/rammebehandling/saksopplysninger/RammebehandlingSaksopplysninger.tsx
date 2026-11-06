@@ -7,7 +7,6 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
-import { BehandlingTiltakshistorikk } from './tiltakshistorikk/BehandlingTiltakshistorikk';
 import OppsummeringAvAttesteringer from '~/lib/behandling-felles/attestering/OppsummeringAvAttestering';
 import {
     fyller18ÅrISøknadsperioden,
@@ -62,30 +61,26 @@ export const RammebehandlingSaksopplysninger = () => {
                 {'Saksopplysninger'}
             </Heading>
             <BehandlingOppdaterSaksopplysninger />
-            {tiltakshistorikk.harEndringEtterSistEndret && (
-                <InlineMessage status={'warning'} size={'small'} className={style.varsel}>
-                    {
-                        'Tiltaksdeltakelsen er endret etter at behandlingen sist ble lagret. Se tiltakshistorikken.'
-                    }
-                </InlineMessage>
-            )}
 
             <Separator />
 
+            {tiltakshistorikk.harEndringEtterSistEndret && (
+                <InlineMessage status={'warning'} size={'small'} className={style.varsel}>
+                    {
+                        'Tiltaksdeltakelsen er endret etter at behandlingen sist ble lagret. Se tiltakshistorikken for tiltaket.'
+                    }
+                </InlineMessage>
+            )}
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 <BehandlingTiltakOpplysninger
                     tiltaksdeltakelser={tiltaksdeltagelse}
                     tiltaksdeltakelserSomFratarRett={tiltaksdeltakelserSomFratarRett}
                     vurderingsperiode={saksopplysninger.periode}
-                />
-            </OpplysningerSeksjon>
-
-            <Separator />
-
-            <OpplysningerSeksjon header={'Tiltakshistorikk'}>
-                <BehandlingTiltakshistorikk
-                    tiltakshistorikk={tiltakshistorikk}
-                    sistEndret={sistEndret}
+                    historikk={{
+                        tiltakshistorikk,
+                        sistEndret,
+                        oppslagstidspunkt: saksopplysninger.oppslagstidspunkt,
+                    }}
                 />
             </OpplysningerSeksjon>
 
