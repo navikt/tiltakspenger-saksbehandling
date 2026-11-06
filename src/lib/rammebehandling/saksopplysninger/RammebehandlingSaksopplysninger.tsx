@@ -27,7 +27,7 @@ export const RammebehandlingSaksopplysninger = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const { saksopplysninger, type, attesteringer } = behandling;
+    const { saksopplysninger, type, attesteringer, tiltakshistorikk, sistEndret } = behandling;
     const {
         ytelser,
         tiltakspengevedtakFraArena,
@@ -69,6 +69,11 @@ export const RammebehandlingSaksopplysninger = () => {
                     tiltaksdeltakelser={tiltaksdeltagelse}
                     tiltaksdeltakelserSomFratarRett={tiltaksdeltakelserSomFratarRett}
                     vurderingsperiode={saksopplysninger.periode}
+                    historikk={{
+                        tiltakshistorikk,
+                        sistEndret,
+                        oppslagstidspunkt: saksopplysninger.oppslagstidspunkt,
+                    }}
                 />
             </OpplysningerSeksjon>
 

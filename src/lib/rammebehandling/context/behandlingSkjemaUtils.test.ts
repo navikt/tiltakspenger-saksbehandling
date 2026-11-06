@@ -74,6 +74,7 @@ const revurdering = (tiltaksdeltagelse: Tiltaksdeltakelse[]): RevurderingInnvilg
     prioritering: null,
     gyldigeKommandoer: [],
     tidslinjeFørOgEtter: null,
+    tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
     innvilgelsesperioder: null,
