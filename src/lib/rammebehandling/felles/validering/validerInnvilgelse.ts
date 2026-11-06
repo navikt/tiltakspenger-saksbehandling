@@ -64,16 +64,7 @@ export const validerInnvilgelse = (
         }
     }
 
-    const tiltaksdeltakelserValidering = validerTiltaksdeltakelser(
-        behandling,
-        innvilgelsesperioder,
-    );
-    validering.errors.push(...tiltaksdeltakelserValidering.errors);
-    validering.warnings.push(...tiltaksdeltakelserValidering.warnings);
-
-    const tiltaksperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
-
-    if (!tiltaksperiode) {
+    if (!hentHeleTiltaksdeltakelsesperioden(behandling)) {
         validering.errors.push(
             'Fant ingen tiltaksdeltakelser som kan innvilges i saksopplysningene.',
         );
@@ -86,13 +77,13 @@ export const validerInnvilgelse = (
         validering.errors.push('Til og med-dato må være etter fra og med-dato');
     }
 
-    if (tiltaksperiode.fraOgMed > innvilgelsesperiodeTotal.fraOgMed) {
-        validering.errors.push('Innvilgelsesperioden starter før tiltaksperioden');
-    }
-
-    if (tiltaksperiode.tilOgMed < innvilgelsesperiodeTotal.tilOgMed) {
-        validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
-    }
+    // Validerer hver innvilgelsesperiode mot sin valgte tiltaksdeltakelse, som også dekker hele tiltaksperioden
+    const tiltaksdeltakelserValidering = validerTiltaksdeltakelser(
+        behandling,
+        innvilgelsesperioder,
+    );
+    validering.errors.push(...tiltaksdeltakelserValidering.errors);
+    validering.warnings.push(...tiltaksdeltakelserValidering.warnings);
 
     if (!skalValidereBarnetillegg) {
         return validering;

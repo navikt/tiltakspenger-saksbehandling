@@ -4,7 +4,10 @@ import {
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { hentInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
+import {
+    hentInnvilgbareTiltaksdeltakelser,
+    rammebehandlingMedInnvilgelseEllerNull,
+} from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
@@ -26,6 +29,7 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { erFullstendigPeriode, inneholderHelePerioden } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { classNames } from '~/utils/classNames';
+import { harUgyldigeInnvilgelsesperioder } from '~/lib/rammebehandling/felles/validering/validerTiltaksdeltakelser';
 
 import style from './InnvilgelsesperioderVelger.module.css';
 
@@ -58,6 +62,12 @@ export const InnvilgelsesperioderVelger = () => {
                 <Heading size={'small'} level={'2'} spacing={true}>
                     {'Innvilgelsesperioder'}
                 </Heading>
+                {!erReadonly && innvilgelse.harValgtPeriode && (
+                    <TiltaksdeltakelsenErEndretVarsel
+                        behandling={behandling}
+                        innvilgelsesperioder={innvilgelse.innvilgelsesperioder}
+                    />
+                )}
                 {harValgtPeriode ? (
                     <VStack gap={'space-12'} align={'start'}>
                         <VedtaksperioderUtenInnvilgelseVarsel>
@@ -155,7 +165,19 @@ const InnvilgelsesperiodeVelgerFull = ({
         periode,
     );
 
-    const harFeil = !harValgtGyldigTiltak || harValgtUgyldigPeriodeForOmgjøring;
+    const valgtTiltaksdeltakelse = tiltaksdeltakelser.find(
+        (tiltak) => tiltak.internDeltakelseId === internDeltakelseId,
+    );
+
+    const harValgtPeriodeUtenforTiltaksdeltakelsen =
+        valgtTiltaksdeltakelse !== undefined &&
+        erFullstendigPeriode(periode) &&
+        !inneholderHelePerioden(valgtTiltaksdeltakelse.periode, periode);
+
+    const harFeil =
+        !harValgtGyldigTiltak ||
+        harValgtUgyldigPeriodeForOmgjøring ||
+        harValgtPeriodeUtenforTiltaksdeltakelsen;
 
     return (
         <VStack gap={'space-8'} className={classNames(harFeil && style.feilOmriss)}>
@@ -249,12 +271,47 @@ const InnvilgelsesperiodeVelgerFull = ({
                 </InlineMessage>
             )}
 
+            {valgtTiltaksdeltakelse && harValgtPeriodeUtenforTiltaksdeltakelsen && (
+                <InlineMessage status={'error'} size={'small'}>
+                    {`Innvilgelsesperioden må være innenfor tiltaksdeltakelsens periode (${formaterPeriode(valgtTiltaksdeltakelse.periode)})`}
+                </InlineMessage>
+            )}
+
             {harValgtUgyldigPeriodeForOmgjøring && (
                 <InlineMessage status={'error'} size={'small'}>
                     {'Innvilgelsesperioden må være innenfor valgt vedtaksperiode'}
                 </InlineMessage>
             )}
         </VStack>
+    );
+};
+
+// Innvilgelsen nullstilles ikke når tiltaksdeltakelsen endres, så saksbehandler må rette den selv.
+// Varselet forsvinner når innvilgelsesperiodene i skjemaet er rettet, selv om de ikke er lagret ennå.
+const TiltaksdeltakelsenErEndretVarsel = ({
+    behandling,
+    innvilgelsesperioder,
+}: {
+    behandling: Rammebehandling;
+    innvilgelsesperioder: Innvilgelsesperiode[];
+}) => {
+    const lagredeInnvilgelsesperioder =
+        rammebehandlingMedInnvilgelseEllerNull(behandling)?.innvilgelsesperioder ?? [];
+
+    const skalVises =
+        harUgyldigeInnvilgelsesperioder(behandling, lagredeInnvilgelsesperioder) &&
+        harUgyldigeInnvilgelsesperioder(behandling, innvilgelsesperioder);
+
+    if (!skalVises) {
+        return null;
+    }
+
+    return (
+        <Infokort variant={'advarsel'} size={'small'} className={style.endretVarsel}>
+            {
+                'Tiltaksdeltakelsen er endret, og innvilgelsen passer ikke lenger med saksopplysningene. Se tiltakshistorikken under saksopplysninger, og rett innvilgelsesperiodene før behandlingen sendes til beslutning.'
+            }
+        </Infokort>
     );
 };
 

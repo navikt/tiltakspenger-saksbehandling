@@ -105,7 +105,9 @@ describe('validerInnvilgelse', () => {
             søknad(),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperioden starter før tiltaksperioden']);
+        expect(resultat.errors).toEqual([
+            'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
+        ]);
     });
 
     test('avviser en innvilgelse som slutter etter tiltaksdeltakelsen', () => {
@@ -116,7 +118,9 @@ describe('validerInnvilgelse', () => {
             søknad(),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperioden slutter etter tiltaksperioden']);
+        expect(resultat.errors).toEqual([
+            'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
+        ]);
     });
 
     test('avviser en innvilgelsesperiode der til og med-dato er før fra og med-dato', () => {

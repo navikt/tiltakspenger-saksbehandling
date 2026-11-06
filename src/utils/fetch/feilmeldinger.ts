@@ -33,6 +33,8 @@ const feilmeldinger: Record<string, string> = {
         'Det er allerede sendt en forvaltningsmelding for denne klagebehandlingen',
     forvaltningsmelding_mangler_tekst:
         'Forvaltningsmeldingen må ha minst ett avsnitt, og tittel og tekst kan ikke være tomme',
+    innvilgelsen_passer_ikke_med_tiltaksdeltakelsene:
+        'Innvilgelsen passer ikke med tiltaksdeltakelsene i saksopplysningene. Tiltaksdeltakelsen kan ha blitt endret, se tiltakshistorikken og rett innvilgelsesperiodene.',
 } as const;
 
 export const finnFetchFeilmelding = (error?: JsonError): string => {

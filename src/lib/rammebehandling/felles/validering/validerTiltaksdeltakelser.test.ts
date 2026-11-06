@@ -25,17 +25,18 @@ const behandlingMedTiltak = (...tiltaksdeltagelse: Tiltaksdeltakelse[]) => {
 };
 
 describe('validerTiltaksdeltakelser', () => {
-    test('validerer ikke valgt tiltaksdeltakelse når det bare finnes ett tiltak som kan innvilges', () => {
+    test('validerer valgt tiltaksdeltakelse også når det bare finnes ett tiltak som kan innvilges', () => {
         const behandling = behandlingMedTiltak(tiltakA, ikkeInnvilgbartTiltak);
 
-        // Totalperioden mot tiltaket valideres i validerInnvilgelse
         const resultat = validerTiltaksdeltakelser(behandling, [
-            innvilgelsesperiode(periode('2024-12-01', '2025-12-31'), {
-                internDeltakelseId: 'finnes_ikke',
+            innvilgelsesperiode(periode('2025-01-01', '2025-04-30'), {
+                internDeltakelseId: 'tiltak_a',
             }),
         ]);
 
-        expect(resultat).toEqual({ errors: [], warnings: [] });
+        expect(resultat.errors).toEqual([
+            'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
+        ]);
     });
 
     test('godtar innvilgelsesperioder som er nøyaktig innenfor hver sin valgte tiltaksdeltakelse', () => {
@@ -100,7 +101,7 @@ describe('validerTiltaksdeltakelser', () => {
         ]);
 
         expect(resultat.errors).toEqual([
-            'Valgt tiltaksdeltakelse finnes ikke i saksopplysningene, skal ikke kunne skje!',
+            'Valgt tiltaksdeltakelse finnes ikke lenger i saksopplysningene',
         ]);
     });
 
@@ -135,7 +136,7 @@ describe('validerTiltaksdeltakelser', () => {
 
         expect(resultat.errors).toEqual([
             'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
-            'Valgt tiltaksdeltakelse finnes ikke i saksopplysningene, skal ikke kunne skje!',
+            'Valgt tiltaksdeltakelse finnes ikke lenger i saksopplysningene',
         ]);
     });
 });

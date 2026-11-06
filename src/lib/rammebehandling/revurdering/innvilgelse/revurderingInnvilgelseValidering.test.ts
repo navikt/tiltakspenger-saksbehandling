@@ -123,6 +123,8 @@ describe('revurderingInnvilgelseValidering', () => {
             ),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperioden starter før tiltaksperioden']);
+        expect(resultat.errors).toEqual([
+            'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
+        ]);
     });
 });
