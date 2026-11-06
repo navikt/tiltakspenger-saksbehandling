@@ -111,9 +111,6 @@ const TiltakshistorikkinnslagVisning = ({
     return (
         <VStack gap={'space-4'} align={'start'}>
             <HStack gap={'space-4'} align={'center'}>
-                <BodyShort size={'small'} weight={'semibold'}>
-                    {`Innhentet: ${formaterTidspunktMedSekunder(innhentet)}`}
-                </BodyShort>
                 {utløsteBehandlingen && (
                     <Tag data-color={'info'} variant={'outline'} size={'xsmall'}>
                         {'Utløste behandlingen'}
@@ -126,6 +123,10 @@ const TiltakshistorikkinnslagVisning = ({
                 )}
             </HStack>
             <div>
+                <BehandlingSaksopplysning
+                    navn={'Innhentet'}
+                    verdi={formaterTidspunktMedSekunder(innhentet)}
+                />
                 <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
                 <BehandlingSaksopplysning navn={'Periode'} verdi={periodeTekst(periode)} />
                 <BehandlingSaksopplysning
