@@ -96,6 +96,7 @@ test('viser det nyeste innslaget under tiltaket når saksopplysningene er utdate
             lagInnslag('eldre', '2025-04-01T10:00:00'),
             lagInnslag('nyeste', '2025-05-02T10:00:00', {
                 periode: { fraOgMed: '2025-04-01' as Dato, tilOgMed: '2025-06-30' as Dato },
+                gjennomforingsprosent: 60,
             }),
         ],
     });
@@ -104,6 +105,7 @@ test('viser det nyeste innslaget under tiltaket når saksopplysningene er utdate
     expect(screen.getByText('01.04.2025 - 30.06.2025')).toBeInTheDocument();
     expect(screen.queryByText('01.04.2025 - Ukjent')).not.toBeInTheDocument();
     expect(screen.getAllByText('Ny endring')).toHaveLength(1);
+    expect(screen.getByText('60%')).toBeInTheDocument();
 });
 
 test('viser registerkilde og deltakelse-id kun på innslag der de er endret fra forrige innslag', () => {

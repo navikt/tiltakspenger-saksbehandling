@@ -113,6 +113,7 @@ const TiltakshistorikkinnslagVisning = ({
         kildestatus,
         antallDagerPerUke,
         deltakelseProsent,
+        gjennomforingsprosent,
         kilde,
         eksternDeltagelseId,
         endringer,
@@ -153,6 +154,10 @@ const TiltakshistorikkinnslagVisning = ({
                 <BehandlingSaksopplysning
                     navn={'Deltakelsesprosent'}
                     verdi={prosentTekst(deltakelseProsent)}
+                />
+                <BehandlingSaksopplysning
+                    navn={'Gjennomføringsprosent'}
+                    verdi={prosentTekst(gjennomforingsprosent)}
                 />
                 {forrige && forrige.kilde !== kilde && (
                     <BehandlingSaksopplysning navn={'Registerkilde'} verdi={kildeTekst[kilde]} />
