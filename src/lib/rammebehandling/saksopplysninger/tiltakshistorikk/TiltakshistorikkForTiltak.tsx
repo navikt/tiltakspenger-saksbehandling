@@ -39,7 +39,7 @@ export const TiltakshistorikkForTiltak = ({
         return null;
     }
 
-    const [nyeste] = innslag;
+    const [nyeste, førNyeste] = innslag;
     const erNy = (innslag: Tiltakshistorikkinnslag) =>
         tiltakshistorikk.harEndringEtterSistEndret && erNyEndring(innslag, sistEndret);
 
@@ -51,7 +51,11 @@ export const TiltakshistorikkForTiltak = ({
                         <BodyShort size={'small'} weight={'semibold'}>
                             {'Tiltaksdeltakelsen er endret etter at saksopplysningene ble hentet'}
                         </BodyShort>
-                        <TiltakshistorikkinnslagVisning innslag={nyeste} erNy={erNy(nyeste)} />
+                        <TiltakshistorikkinnslagVisning
+                            innslag={nyeste}
+                            forrige={førNyeste}
+                            erNy={erNy(nyeste)}
+                        />
                     </VStack>
                 </Box>
             )}
@@ -67,10 +71,11 @@ export const TiltakshistorikkForTiltak = ({
                     </Dialog.Header>
                     <Dialog.Body>
                         <VStack gap={'space-16'}>
-                            {innslag.map((it) => (
+                            {innslag.map((it, index) => (
                                 <TiltakshistorikkinnslagVisning
                                     key={it.id}
                                     innslag={it}
+                                    forrige={innslag[index + 1]}
                                     erNy={erNy(it)}
                                 />
                             ))}
@@ -87,11 +92,17 @@ export const TiltakshistorikkForTiltak = ({
     );
 };
 
+/**
+ * Registerkilde og deltakelse-id er som regel like for alle innslag for deltakelsen, men kan endres når deltakelsen flyttes ut av Arena.
+ * De vises derfor kun når de er endret fra det forrige innslaget.
+ */
 const TiltakshistorikkinnslagVisning = ({
     innslag,
+    forrige,
     erNy,
 }: {
     innslag: Tiltakshistorikkinnslag;
+    forrige: Tiltakshistorikkinnslag | undefined;
     erNy: boolean;
 }) => {
     const {
@@ -143,8 +154,12 @@ const TiltakshistorikkinnslagVisning = ({
                     navn={'Deltakelsesprosent'}
                     verdi={prosentTekst(deltakelseProsent)}
                 />
-                <BehandlingSaksopplysning navn={'Registerkilde'} verdi={kildeTekst[kilde]} />
-                <BehandlingSaksopplysning navn={'Deltakelse-id'} verdi={eksternDeltagelseId} />
+                {forrige && forrige.kilde !== kilde && (
+                    <BehandlingSaksopplysning navn={'Registerkilde'} verdi={kildeTekst[kilde]} />
+                )}
+                {forrige && forrige.eksternDeltagelseId !== eksternDeltagelseId && (
+                    <BehandlingSaksopplysning navn={'Deltakelse-id'} verdi={eksternDeltagelseId} />
+                )}
             </div>
             {endringer.length > 0 && (
                 <div>

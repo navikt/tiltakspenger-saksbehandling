@@ -105,3 +105,28 @@ test('viser det nyeste innslaget under tiltaket når saksopplysningene er utdate
     expect(screen.queryByText('01.04.2025 - Ukjent')).not.toBeInTheDocument();
     expect(screen.getAllByText('Ny endring')).toHaveLength(1);
 });
+
+test('viser registerkilde og deltakelse-id kun på innslag der de er endret fra forrige innslag', () => {
+    renderForTiltak({
+        harEndringEtterSistEndret: false,
+        innslag: [
+            lagInnslag('arena', '2025-03-01T10:00:00', {
+                kilde: TiltaksdeltakelseKilde.ARENA,
+                eksternDeltagelseId: 'TA123',
+            }),
+            lagInnslag('arena-igjen', '2025-03-15T10:00:00', {
+                kilde: TiltaksdeltakelseKilde.ARENA,
+                eksternDeltagelseId: 'TA123',
+            }),
+            lagInnslag('komet', '2025-04-01T10:00:00'),
+            lagInnslag('komet-igjen', '2025-04-15T10:00:00'),
+        ],
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Vis tiltakshistorikk (4)' }));
+
+    expect(screen.getAllByText('Registerkilde:')).toHaveLength(1);
+    expect(screen.getAllByText('Deltakelse-id:')).toHaveLength(1);
+    expect(screen.getByText('ekstern')).toBeInTheDocument();
+    expect(screen.queryByText('TA123')).not.toBeInTheDocument();
+});
