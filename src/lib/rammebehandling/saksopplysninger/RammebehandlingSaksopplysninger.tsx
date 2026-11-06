@@ -1,4 +1,4 @@
-import { BodyShort, Heading, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { alderFraDato, formaterSladdbarDatotekst } from '~/utils/date';
 import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
 import { ReactNode } from 'react';
@@ -64,13 +64,6 @@ export const RammebehandlingSaksopplysninger = () => {
 
             <Separator />
 
-            {tiltakshistorikk.harEndringEtterSistEndret && (
-                <InlineMessage status={'warning'} size={'small'} className={style.varsel}>
-                    {
-                        'Tiltaksdeltakelsen er endret etter at behandlingen sist ble lagret. Se tiltakshistorikken for tiltaket.'
-                    }
-                </InlineMessage>
-            )}
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 <BehandlingTiltakOpplysninger
                     tiltaksdeltakelser={tiltaksdeltagelse}

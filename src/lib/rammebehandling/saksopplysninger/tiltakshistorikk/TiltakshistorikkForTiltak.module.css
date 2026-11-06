@@ -1,0 +1,10 @@
+.container {
+    align-self: stretch;
+}
+
+/* Fyller ut til kanten av kolonnen, som har 2rem padding (se RammebehandlingSaksopplysninger.module.css) */
+.utdatert {
+    align-self: stretch;
+    margin-inline: -2rem;
+    padding-inline: 2rem;
+}

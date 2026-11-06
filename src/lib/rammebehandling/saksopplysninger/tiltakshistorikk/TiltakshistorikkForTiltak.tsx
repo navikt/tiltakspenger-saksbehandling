@@ -12,6 +12,8 @@ import { formaterDatotekst, formaterTidspunktMedSekunder } from '~/utils/date';
 import { Tidspunkt } from '~/types/DatoTid';
 import { ÅpenPeriode } from '~/types/Periode';
 
+import style from './TiltakshistorikkForTiltak.module.css';
+
 type Props = {
     internDeltakelseId: string;
     typeNavn: string;
@@ -42,15 +44,9 @@ export const TiltakshistorikkForTiltak = ({
         tiltakshistorikk.harEndringEtterSistEndret && erNyEndring(innslag, sistEndret);
 
     return (
-        <VStack gap={'space-8'} align={'start'}>
+        <VStack gap={'space-8'} align={'start'} className={style.container}>
             {erUtdatert(innslag, oppslagstidspunkt) && (
-                <Box
-                    background={'warning-soft'}
-                    borderColor={'warning-subtle'}
-                    borderWidth={'1'}
-                    borderRadius={'8'}
-                    padding={'space-8'}
-                >
+                <Box background={'warning-soft'} className={style.utdatert}>
                     <VStack gap={'space-4'}>
                         <BodyShort size={'small'} weight={'semibold'}>
                             {'Tiltaksdeltakelsen er endret etter at saksopplysningene ble hentet'}
@@ -61,7 +57,7 @@ export const TiltakshistorikkForTiltak = ({
             )}
             <Dialog>
                 <Dialog.Trigger>
-                    <Button size={'xsmall'} variant={'secondary'} type={'button'}>
+                    <Button size={'xsmall'} variant={'tertiary'} type={'button'}>
                         {`Vis tiltakshistorikk (${innslag.length})`}
                     </Button>
                 </Dialog.Trigger>
