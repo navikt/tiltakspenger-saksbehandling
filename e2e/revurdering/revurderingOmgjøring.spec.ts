@@ -35,8 +35,12 @@ test.describe('Omgjøring', () => {
             saksbehandler: SAKSBEHANDLER_IDENT,
             gyldigeKommandoer: [SaksbehandlerBehandlingKommando.Saksbehandle],
         });
+        const deltakelsesperiode = periode('2025-01-01', '2026-03-31');
         behandling.saksopplysninger.tiltaksdeltagelse = [
-            tiltaksdeltakelse('deltakelse_1', periode('2025-01-01', '2026-03-31')),
+            tiltaksdeltakelse('deltakelse_1', deltakelsesperiode),
+        ];
+        behandling.innvilgbarePerioder = [
+            { internDeltakelseId: 'deltakelse_1', periode: deltakelsesperiode },
         ];
         const backend = lagFalskBackend(behandling);
         msw.use(...fellesHandlere(), ...backend.handlere);
