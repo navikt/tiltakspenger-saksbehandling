@@ -296,9 +296,8 @@ const TiltaksdeltakelsenErEndretVarsel = ({
 
     return (
         <Infokort variant={'advarsel'} size={'small'} className={style.endretVarsel}>
-            {
-                'Tiltaksdeltakelsen er endret, og innvilgelsen passer ikke lenger med saksopplysningene. Se tiltakshistorikken under saksopplysninger, og rett innvilgelsesperiodene før behandlingen sendes til beslutning.'
-            }
+            {'Tiltaksdeltakelsen er endret, og innvilgelsen passer ikke lenger med saksopplysningene. ' +
+                'Se tiltakshistorikken under saksopplysninger, og rett innvilgelsesperiodene før behandlingen sendes til beslutning.'}
         </Infokort>
     );
 };
