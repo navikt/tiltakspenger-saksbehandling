@@ -298,7 +298,7 @@ const TiltaksdeltakelsenErEndretVarsel = ({
 
     return (
         <Infokort variant={'advarsel'} size={'small'} className={style.endretVarsel}>
-            {'Tiltaksdeltakelsen er endret, og valgte innvilgelsesperioder er ikke lengre gyldige.'}
+            {'Tiltaksdeltakelsen er endret, og valgte innvilgelsesperioder er ikke lenger gyldige.'}
         </Infokort>
     );
 };
