@@ -11,15 +11,12 @@ import {
     sakMedInnvilgetVedtak,
     søknad,
     søknadsbehandlingInnvilgelse,
-    tiltaksdeltakelse,
 } from '~test/rammebehandling';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { Tiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 
 // Standard tiltaksdeltakelse i testbehandlingene er 01.01.2025 - 30.06.2025
@@ -44,14 +41,6 @@ const søknadsbehandlingSkjema = (
 ): BehandlingMedInnvilgelseState => ({
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     innvilgelse: innvilgelse(innvilgelsesperioder, barnetillegg),
-});
-
-const medTiltak = <T extends Rammebehandling>(
-    behandling: T,
-    ...tiltaksdeltagelse: Tiltaksdeltakelse[]
-): T => ({
-    ...behandling,
-    saksopplysninger: { ...behandling.saksopplysninger, tiltaksdeltagelse },
 });
 
 describe('validerInnvilgelse', () => {
@@ -97,26 +86,52 @@ describe('validerInnvilgelse', () => {
         expect(resultat.errors).toEqual(['Innvilgelsesperiodene må være uten overlapp']);
     });
 
-    test('avviser en innvilgelse som starter før tiltaksdeltakelsen', () => {
+    test('avviser en lagret innvilgelsesperiode som backend har validert at ikke passer med tiltaksdeltakelsen', () => {
+        const behandling = søknadsbehandlingInnvilgelse({
+            innvilgelsesperioder: [
+                {
+                    ...innvilgelsesperiode(førsteHalvår),
+                    ugyldigTiltaksdeltakelse: {
+                        type: 'DEKKER_IKKE_PERIODEN',
+                        deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
+                    },
+                },
+            ],
+        });
+
         const resultat = validerInnvilgelse(
             sak(),
-            søknadsbehandlingInnvilgelse(),
-            søknadsbehandlingSkjema([innvilgelsesperiode(periode('2024-12-31', '2025-06-30'))]),
+            behandling,
+            søknadsbehandlingSkjema([innvilgelsesperiode(førsteHalvår)]),
             søknad(),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperioden starter før tiltaksperioden']);
+        expect(resultat.errors).toEqual([
+            'Innvilgelsesperioden må være innenfor tiltaksdeltakelsens periode (01.01.2025 - 31.05.2025)',
+        ]);
     });
 
-    test('avviser en innvilgelse som slutter etter tiltaksdeltakelsen', () => {
+    test('godtar en innvilgelsesperiode som er endret etter lagring, siden backend validerer den ved neste lagring', () => {
+        const behandling = søknadsbehandlingInnvilgelse({
+            innvilgelsesperioder: [
+                {
+                    ...innvilgelsesperiode(førsteHalvår),
+                    ugyldigTiltaksdeltakelse: {
+                        type: 'DEKKER_IKKE_PERIODEN',
+                        deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
+                    },
+                },
+            ],
+        });
+
         const resultat = validerInnvilgelse(
             sak(),
-            søknadsbehandlingInnvilgelse(),
-            søknadsbehandlingSkjema([innvilgelsesperiode(periode('2025-01-01', '2025-07-01'))]),
+            behandling,
+            søknadsbehandlingSkjema([innvilgelsesperiode(periode('2025-01-01', '2025-05-31'))]),
             søknad(),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperioden slutter etter tiltaksperioden']);
+        expect(resultat.errors).toEqual([]);
     });
 
     test('avviser en innvilgelsesperiode der til og med-dato er før fra og med-dato', () => {
@@ -130,44 +145,21 @@ describe('validerInnvilgelse', () => {
         expect(resultat.errors).toEqual(['Til og med-dato må være etter fra og med-dato']);
     });
 
-    test('avviser innvilgelse uten tiltaksdeltakelser som kan innvilges, og stopper videre validering', () => {
-        const behandling = medTiltak(søknadsbehandlingInnvilgelse(), {
-            ...tiltaksdeltakelse('deltakelse_1', førsteHalvår),
-            kanInnvilges: false,
-        });
-
-        const resultat = validerInnvilgelse(
-            sak(),
-            behandling,
-            // Barnetillegg uten perioder ville ellers gitt en egen feil
-            {
-                resultat: SøknadsbehandlingResultat.INNVILGELSE,
-                innvilgelse: {
-                    ...innvilgelse([innvilgelsesperiode(førsteHalvår)]),
-                    harBarnetillegg: true,
-                },
-            },
-            søknad(),
-        );
-
-        expect(resultat).toEqual({
-            errors: ['Fant ingen tiltaksdeltakelser som kan innvilges i saksopplysningene.'],
-            warnings: [],
-        });
-    });
-
     test('tar med feil fra både valgte tiltaksdeltakelser og barnetillegg', () => {
-        const behandling = medTiltak(
-            søknadsbehandlingInnvilgelse(),
-            tiltaksdeltakelse('tiltak_a', periode('2025-01-01', '2025-03-31')),
-            tiltaksdeltakelse('tiltak_b', periode('2025-04-01', '2025-06-30')),
-        );
+        const behandling = søknadsbehandlingInnvilgelse({
+            innvilgelsesperioder: [
+                {
+                    ...innvilgelsesperiode(førsteHalvår),
+                    ugyldigTiltaksdeltakelse: { type: 'FINNES_IKKE', deltakelsesperiode: null },
+                },
+            ],
+        });
 
         const resultat = validerInnvilgelse(
             sak(),
             behandling,
             søknadsbehandlingSkjema(
-                [innvilgelsesperiode(førsteHalvår, { internDeltakelseId: 'tiltak_a' })],
+                [innvilgelsesperiode(førsteHalvår)],
                 [barnetilleggPeriode(0, førsteHalvår)],
             ),
             søknad(),
@@ -175,7 +167,7 @@ describe('validerInnvilgelse', () => {
 
         expect(resultat).toEqual({
             errors: [
-                'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
+                'Valgt tiltaksdeltakelse finnes ikke lenger i saksopplysningene',
                 'Minst en periode må ha barn når barnetillegg er valgt',
             ],
             warnings: ['Det er innvilget barnetillegg uten at vi har mottatt søknad med barn'],

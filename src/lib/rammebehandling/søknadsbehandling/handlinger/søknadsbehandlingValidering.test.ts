@@ -98,7 +98,7 @@ describe('søknadsbehandlingValidering', () => {
         );
 
         expect(valider('tilBeslutning')).toEqual({
-            errors: ['Innvilgelsesperioden slutter etter tiltaksperioden'],
+            errors: [],
             warnings: [
                 'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: 1 barn i perioden 01.01.2025 - 31.07.2025',
             ],

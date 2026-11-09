@@ -26,6 +26,10 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { erFullstendigPeriode, inneholderHelePerioden } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { classNames } from '~/utils/classNames';
+import {
+    finnUgyldigTiltaksdeltakelse,
+    ugyldigTiltaksdeltakelseTekst,
+} from '~/lib/rammebehandling/felles/innvilgelsesperiode/ugyldigTiltaksdeltakelse';
 
 import style from './InnvilgelsesperioderVelger.module.css';
 
@@ -54,10 +58,18 @@ export const InnvilgelsesperioderVelger = () => {
 
     return (
         <VedtakSeksjon>
-            <VedtakSeksjon.FullBredde>
+            <VedtakSeksjon.Venstre>
                 <Heading size={'small'} level={'2'} spacing={true}>
                     {'Innvilgelsesperioder'}
                 </Heading>
+                {!erReadonly && innvilgelse.harValgtPeriode && (
+                    <TiltaksdeltakelsenErEndretVarsel
+                        behandling={behandling}
+                        innvilgelsesperioder={innvilgelse.innvilgelsesperioder}
+                    />
+                )}
+            </VedtakSeksjon.Venstre>
+            <VedtakSeksjon.FullBredde>
                 {harValgtPeriode ? (
                     <VStack gap={'space-12'} align={'start'}>
                         <VedtaksperioderUtenInnvilgelseVarsel>
@@ -155,7 +167,12 @@ const InnvilgelsesperiodeVelgerFull = ({
         periode,
     );
 
-    const harFeil = !harValgtGyldigTiltak || harValgtUgyldigPeriodeForOmgjøring;
+    const ugyldigTiltaksdeltakelse = finnUgyldigTiltaksdeltakelse(behandling, innvilgelsesperiode);
+
+    const harFeil =
+        !harValgtGyldigTiltak ||
+        harValgtUgyldigPeriodeForOmgjøring ||
+        ugyldigTiltaksdeltakelse !== null;
 
     return (
         <VStack gap={'space-8'} className={classNames(harFeil && style.feilOmriss)}>
@@ -243,10 +260,16 @@ const InnvilgelsesperiodeVelgerFull = ({
                 )}
             </HStack>
 
-            {!harValgtGyldigTiltak && (
+            {ugyldigTiltaksdeltakelse ? (
                 <InlineMessage status={'error'} size={'small'}>
-                    {'Kan ikke innvilge for dette tiltaket'}
+                    {ugyldigTiltaksdeltakelseTekst(ugyldigTiltaksdeltakelse)}
                 </InlineMessage>
+            ) : (
+                !harValgtGyldigTiltak && (
+                    <InlineMessage status={'error'} size={'small'}>
+                        {'Kan ikke innvilge for dette tiltaket'}
+                    </InlineMessage>
+                )
             )}
 
             {harValgtUgyldigPeriodeForOmgjøring && (
@@ -255,6 +278,28 @@ const InnvilgelsesperiodeVelgerFull = ({
                 </InlineMessage>
             )}
         </VStack>
+    );
+};
+
+const TiltaksdeltakelsenErEndretVarsel = ({
+    behandling,
+    innvilgelsesperioder,
+}: {
+    behandling: Rammebehandling;
+    innvilgelsesperioder: Innvilgelsesperiode[];
+}) => {
+    const skalVises = innvilgelsesperioder.some(
+        (it) => finnUgyldigTiltaksdeltakelse(behandling, it) !== null,
+    );
+
+    if (!skalVises) {
+        return null;
+    }
+
+    return (
+        <Infokort variant={'advarsel'} size={'small'} className={style.endretVarsel}>
+            {'Tiltaksdeltakelsen er endret, og valgte innvilgelsesperioder er ikke lenger gyldige.'}
+        </Infokort>
     );
 };
 

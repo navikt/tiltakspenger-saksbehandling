@@ -105,16 +105,26 @@ describe('revurderingInnvilgelseValidering', () => {
         });
     });
 
-    test('avviser innvilgelse utenfor tiltaksdeltakelsen i revurderingen', () => {
+    test('avviser en lagret innvilgelse som backend har validert at ikke passer med tiltaksdeltakelsen', () => {
+        const innvilgetPeriode = periode('2025-01-01', '2025-06-30');
+
         const resultat = revurderingInnvilgelseValidering(
-            revurderingInnvilgelse(),
+            revurderingInnvilgelse({
+                innvilgelsesperioder: [
+                    {
+                        ...innvilgelsesperiode(innvilgetPeriode),
+                        ugyldigTiltaksdeltakelse: {
+                            type: 'KAN_IKKE_INNVILGES',
+                            deltakelsesperiode: null,
+                        },
+                    },
+                ],
+            }),
             {
                 ...skjemaUtenBarnetillegg,
                 innvilgelse: {
                     ...skjemaUtenBarnetillegg.innvilgelse,
-                    innvilgelsesperioder: [
-                        innvilgelsesperiode(periode('2024-12-01', '2025-06-30')),
-                    ],
+                    innvilgelsesperioder: [innvilgelsesperiode(innvilgetPeriode)],
                 },
             },
             sakMedToSøknadsbehandlinger(
@@ -123,6 +133,6 @@ describe('revurderingInnvilgelseValidering', () => {
             ),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperioden starter før tiltaksperioden']);
+        expect(resultat.errors).toEqual(['Kan ikke innvilge for valgt tiltaksdeltakelse']);
     });
 });

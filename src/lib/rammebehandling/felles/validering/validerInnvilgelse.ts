@@ -1,6 +1,5 @@
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerBarnetillegg } from '~/lib/rammebehandling/felles/validering/validerBarnetillegg';
-import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/lib/søknad/søknadTyper';
@@ -10,7 +9,10 @@ import {
     periodiseringTotalPeriode,
     validerPeriodisering,
 } from '~/utils/periode';
-import { validerTiltaksdeltakelser } from '~/lib/rammebehandling/felles/validering/validerTiltaksdeltakelser';
+import {
+    finnUgyldigTiltaksdeltakelse,
+    ugyldigTiltaksdeltakelseTekst,
+} from '~/lib/rammebehandling/felles/innvilgelsesperiode/ugyldigTiltaksdeltakelse';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { finnGjeldendeInnvilgelserIPeriode } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -64,35 +66,19 @@ export const validerInnvilgelse = (
         }
     }
 
-    const tiltaksdeltakelserValidering = validerTiltaksdeltakelser(
-        behandling,
-        innvilgelsesperioder,
-    );
-    validering.errors.push(...tiltaksdeltakelserValidering.errors);
-    validering.warnings.push(...tiltaksdeltakelserValidering.warnings);
-
-    const tiltaksperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
-
-    if (!tiltaksperiode) {
-        validering.errors.push(
-            'Fant ingen tiltaksdeltakelser som kan innvilges i saksopplysningene.',
-        );
-        return validering;
-    }
-
     const innvilgelsesperiodeTotal = periodiseringTotalPeriode(innvilgelsesperioder);
 
     if (innvilgelsesperiodeTotal.fraOgMed > innvilgelsesperiodeTotal.tilOgMed) {
         validering.errors.push('Til og med-dato må være etter fra og med-dato');
     }
 
-    if (tiltaksperiode.fraOgMed > innvilgelsesperiodeTotal.fraOgMed) {
-        validering.errors.push('Innvilgelsesperioden starter før tiltaksperioden');
-    }
+    innvilgelsesperioder.forEach((it) => {
+        const ugyldigTiltaksdeltakelse = finnUgyldigTiltaksdeltakelse(behandling, it);
 
-    if (tiltaksperiode.tilOgMed < innvilgelsesperiodeTotal.tilOgMed) {
-        validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
-    }
+        if (ugyldigTiltaksdeltakelse) {
+            validering.errors.push(ugyldigTiltaksdeltakelseTekst(ugyldigTiltaksdeltakelse));
+        }
+    });
 
     if (!skalValidereBarnetillegg) {
         return validering;

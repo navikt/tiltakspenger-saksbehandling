@@ -6,7 +6,10 @@ import {
 } from './Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { Omgjøringsgrad, VedtakId } from './Rammevedtak';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    Innvilgelsesperiode,
+    LagretInnvilgelsesperiode,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import { Dato } from '~/types/DatoTid';
 
@@ -54,7 +57,7 @@ export type RevurderingStans = RevurderingBase & {
 
 export type RevurderingInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.INNVILGELSE;
-    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
 };
 
@@ -70,14 +73,14 @@ export type RevurderingForlengelse = RevurderingBase & {
     kanIkkeUtledeBarnetillegg: boolean;
     // Intern-id til tiltaksdeltakelsene vedtaket kan forlenges for. Deltakelsen fra slutten av vedtaket kommer først.
     tiltaksdeltakelserSomKanForlenges: string[];
-    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
 };
 
 export type OmgjøringInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING;
     vedtaksperiode: Periode;
-    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
     omgjørRammevedtak: OmgjørRammevedtak[];
     skalSendeVedtaksbrev: boolean;
