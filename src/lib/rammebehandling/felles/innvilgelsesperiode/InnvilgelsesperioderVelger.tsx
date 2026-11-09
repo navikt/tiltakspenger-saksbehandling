@@ -58,7 +58,7 @@ export const InnvilgelsesperioderVelger = () => {
 
     return (
         <VedtakSeksjon>
-            <VedtakSeksjon.FullBredde>
+            <VedtakSeksjon.Venstre>
                 <Heading size={'small'} level={'2'} spacing={true}>
                     {'Innvilgelsesperioder'}
                 </Heading>
@@ -68,6 +68,8 @@ export const InnvilgelsesperioderVelger = () => {
                         innvilgelsesperioder={innvilgelse.innvilgelsesperioder}
                     />
                 )}
+            </VedtakSeksjon.Venstre>
+            <VedtakSeksjon.FullBredde>
                 {harValgtPeriode ? (
                     <VStack gap={'space-12'} align={'start'}>
                         <VedtaksperioderUtenInnvilgelseVarsel>
@@ -296,8 +298,7 @@ const TiltaksdeltakelsenErEndretVarsel = ({
 
     return (
         <Infokort variant={'advarsel'} size={'small'} className={style.endretVarsel}>
-            {'Tiltaksdeltakelsen er endret, og innvilgelsen passer ikke lenger med saksopplysningene. ' +
-                'Se tiltakshistorikken under saksopplysninger, og rett innvilgelsesperiodene før behandlingen sendes til beslutning.'}
+            {'Tiltaksdeltakelsen er endret, og valgte innvilgelsesperioder er ikke lengre gyldige.'}
         </Infokort>
     );
 };
