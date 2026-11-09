@@ -62,12 +62,12 @@ export const TiltakshistorikkForTiltak = ({
             <Dialog>
                 <Dialog.Trigger>
                     <Button size={'xsmall'} variant={'tertiary'} type={'button'}>
-                        {`Vis tiltakshistorikk (${innslag.length})`}
+                        {`Vis endringshistorikk (${innslag.length})`}
                     </Button>
                 </Dialog.Trigger>
                 <Dialog.Popup>
                     <Dialog.Header>
-                        <Dialog.Title>{`Tiltakshistorikk for ${typeNavn}`}</Dialog.Title>
+                        <Dialog.Title>{`Endringshistorikk for ${typeNavn}`}</Dialog.Title>
                     </Dialog.Header>
                     <Dialog.Body>
                         <VStack gap={'space-16'}>

@@ -6,7 +6,7 @@ import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseSomFratarRett,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { BodyShort, ReadMore, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, ReadMore, VStack } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { delOppTiltaksdeltakelser, kildeTekst, prosentTekst } from './tiltaksdeltakelseVisning';
@@ -14,6 +14,7 @@ import { GirIkkeRettTag } from './GirIkkeRettTag';
 import { TiltakshistorikkForTiltak } from '../tiltakshistorikk/TiltakshistorikkForTiltak';
 import { TiltakshistorikkForBehandling } from '~/lib/rammebehandling/typer/Tiltakshistorikk';
 import { Tidspunkt } from '~/types/DatoTid';
+import { useCtrlHoldesInne } from '~/utils/useCtrlHoldesInne';
 
 type Historikk = {
     tiltakshistorikk: TiltakshistorikkForBehandling;
@@ -83,6 +84,8 @@ const TiltakSomFratarRettListe = ({
 }: {
     tiltaksdeltakelser: TiltaksdeltakelseSomFratarRett[];
 }) => {
+    const visIder = useCtrlHoldesInne();
+
     return (
         <VStack gap={'space-12'}>
             {tiltaksdeltakelser.map((tiltak) => {
@@ -98,9 +101,9 @@ const TiltakSomFratarRettListe = ({
 
                 return (
                     <VStack key={eksternDeltakelseId} gap={'space-4'} align={'start'}>
+                        <TiltakHeader typeNavn={typeNavn} />
                         <GirIkkeRettTag />
                         <div>
-                            <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
                                 verdi={
@@ -123,10 +126,12 @@ const TiltakSomFratarRettListe = ({
                                 navn={'Deltakelsesprosent'}
                                 verdi={prosentTekst(deltakelseProsent)}
                             />
-                            <BehandlingSaksopplysning
-                                navn={'Deltakelse-id'}
-                                verdi={eksternDeltakelseId}
-                            />
+                            {visIder && (
+                                <BehandlingSaksopplysning
+                                    navn={'Deltakelse-id'}
+                                    verdi={eksternDeltakelseId}
+                                />
+                            )}
                         </div>
                     </VStack>
                 );
@@ -142,6 +147,8 @@ const TiltakListe = ({
     tiltaksdeltakelser: Tiltaksdeltakelse[];
     historikk: Historikk;
 }) => {
+    const visIder = useCtrlHoldesInne();
+
     return (
         <VStack gap="space-12">
             {tiltaksdeltakelser.map((tiltak) => {
@@ -160,8 +167,13 @@ const TiltakListe = ({
 
                 return (
                     <VStack key={eksternDeltagelseId} gap={'space-8'} align={'start'}>
+                        <TiltakHeader typeNavn={typeNavn} />
+                        <TiltakshistorikkForTiltak
+                            internDeltakelseId={internDeltakelseId}
+                            typeNavn={typeNavn}
+                            {...historikk}
+                        />
                         <div>
-                            <BehandlingSaksopplysning navn={'Type'} verdi={typeNavn} />
                             {erLukketPeriode(periode) && (
                                 <BehandlingSaksopplysning
                                     navn={'Periode'}
@@ -185,23 +197,28 @@ const TiltakListe = ({
                                 navn={'Gjennomføringsprosent'}
                                 verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
                             />
-                            <BehandlingSaksopplysning
-                                navn={'Gjennomføring-id'}
-                                verdi={gjennomføringId ?? 'Ukjent'}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Deltakelse-id'}
-                                verdi={eksternDeltagelseId ?? 'Ukjent'}
-                            />
+                            {visIder && (
+                                <>
+                                    <BehandlingSaksopplysning
+                                        navn={'Gjennomføring-id'}
+                                        verdi={gjennomføringId ?? 'Ukjent'}
+                                    />
+                                    <BehandlingSaksopplysning
+                                        navn={'Deltakelse-id'}
+                                        verdi={eksternDeltagelseId ?? 'Ukjent'}
+                                    />
+                                </>
+                            )}
                         </div>
-                        <TiltakshistorikkForTiltak
-                            internDeltakelseId={internDeltakelseId}
-                            typeNavn={typeNavn}
-                            {...historikk}
-                        />
                     </VStack>
                 );
             })}
         </VStack>
     );
 };
+
+const TiltakHeader = ({ typeNavn }: { typeNavn: string }) => (
+    <Heading size={'xsmall'} level={'4'}>
+        {typeNavn}
+    </Heading>
+);

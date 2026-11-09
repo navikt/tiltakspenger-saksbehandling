@@ -80,9 +80,9 @@ test('viser historikken for tiltaket kun i modalen når saksopplysningene er opp
     expect(screen.queryByText(utdatertTekst)).not.toBeInTheDocument();
     expect(screen.queryByText('Utløste behandlingen')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Vis tiltakshistorikk (2)' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Vis endringshistorikk (2)' }));
 
-    expect(screen.getByText('Tiltakshistorikk for Arbeidsmarkedsopplæring')).toBeInTheDocument();
+    expect(screen.getByText('Endringshistorikk for Arbeidsmarkedsopplæring')).toBeInTheDocument();
     expect(screen.getAllByText('Utløste behandlingen')).toHaveLength(1);
     expect(screen.getByText('Deltakelsen er avbrutt')).toBeInTheDocument();
     expect(screen.getAllByText('01.04.2025 - Ukjent')).toHaveLength(2);
@@ -125,7 +125,7 @@ test('viser registerkilde og deltakelse-id kun på innslag der de er endret fra 
         ],
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Vis tiltakshistorikk (4)' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Vis endringshistorikk (4)' }));
 
     expect(screen.getAllByText('Registerkilde:')).toHaveLength(1);
     expect(screen.getAllByText('Deltakelse-id:')).toHaveLength(1);

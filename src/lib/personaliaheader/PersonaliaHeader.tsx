@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren } from 'react';
 import { BodyShort, CopyButton, HStack, Skeleton, Spacer, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonopplysninger';
@@ -9,6 +9,7 @@ import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { personoversiktUrl } from '~/utils/urls';
 import { sladdbarTekst } from '~/utils/sladdetVerdi';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
+import { useCtrlHoldesInne } from '~/utils/useCtrlHoldesInne';
 
 import styles from './PersonaliaHeader.module.css';
 
@@ -28,22 +29,9 @@ export const PersonaliaHeader = ({
 }: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
 
-    const [visSakId, setVisSakId] = useState(false);
+    const visSakId = useCtrlHoldesInne();
 
     const idSomVises = visSakId ? sakId : saksnummer;
-
-    useEffect(() => {
-        const listener = (e: KeyboardEvent) => {
-            setVisSakId(e.ctrlKey || e.metaKey);
-        };
-
-        window.addEventListener('keyup', listener);
-        window.addEventListener('keydown', listener);
-        return () => {
-            window.removeEventListener('keyup', listener);
-            window.removeEventListener('keydown', listener);
-        };
-    }, []);
 
     return (
         <HStack gap="space-12" align="center" className={styles.personaliaHeader}>
