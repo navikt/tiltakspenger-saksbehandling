@@ -8,7 +8,7 @@ import { useRevurderingInnvilgelseSkjema } from '~/lib/rammebehandling/context/r
 import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
-import { harInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { harInnvilgbarePerioder } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RevurderingAutomatiskOpprettetGrunn } from '~/lib/rammebehandling/revurdering/felles/automatisk-opprettet-grunn/RevurderingAutomatiskOpprettetGrunn';
 import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
@@ -17,7 +17,7 @@ export const RevurderingInnvilgelseVedtak = () => {
     const { behandling, klagebehandling } = useRevurderingBehandling();
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
 
-    const kanInnvilges = harInnvilgbareTiltaksdeltakelser(behandling);
+    const kanInnvilges = harInnvilgbarePerioder(behandling);
 
     const { automatiskOpprettetGrunn, manueltBehandlesGrunner } = behandling;
 

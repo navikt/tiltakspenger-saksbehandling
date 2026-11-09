@@ -1,7 +1,7 @@
 import { Periode } from '~/types/Periode';
 import { nonNullish } from '~/utils/object';
 import {
-    InnvilgbarTiltaksdeltakelse,
+    InnvilgbarTiltaksperiode,
     Tiltaksdeltakelse,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { erDatoIPeriode, perioderOverlapper, totalPeriode } from '~/utils/periode';
@@ -50,29 +50,43 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
 export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdeltakelse[] =>
     behandling.saksopplysninger.tiltaksdeltagelse ?? [];
 
-export const hentInnvilgbareTiltaksdeltakelser = (
+/**
+ * Periodene det kan innvilges for, slik backend har avgjort dem.
+ * Typenavn og antall dager per uke hentes fra tiltaksdeltakelsen i saksopplysningene, og er bare visningsinformasjon.
+ */
+export const hentInnvilgbarePerioder = (
     behandling: Rammebehandling,
-): InnvilgbarTiltaksdeltakelse[] =>
-    hentTiltaksdeltakelser(behandling).filter(
-        (t): t is InnvilgbarTiltaksdeltakelse => t.kanInnvilges,
-    );
+): InnvilgbarTiltaksperiode[] => {
+    const tiltaksdeltakelser = hentTiltaksdeltakelser(behandling);
 
-export const harInnvilgbareTiltaksdeltakelser = (behandling: Rammebehandling): boolean =>
-    hentTiltaksdeltakelser(behandling).some((t) => t.kanInnvilges);
+    return behandling.innvilgbarePerioder.map(({ internDeltakelseId, periode }) => {
+        const tiltaksdeltakelse = tiltaksdeltakelser.find(
+            (t) => t.internDeltakelseId === internDeltakelseId,
+        );
 
-export const deltarPåFlereInnvilgbareTiltak = (behandling: Rammebehandling): boolean =>
-    hentInnvilgbareTiltaksdeltakelser(behandling).length > 1;
+        return {
+            internDeltakelseId,
+            periode,
+            typeNavn: tiltaksdeltakelse?.typeNavn ?? `Tiltak med id ${internDeltakelseId}`,
+            antallDagerPerUke: tiltaksdeltakelse?.antallDagerPerUke ?? null,
+        };
+    });
+};
 
-export const hentInnvilgbareTiltaksdeltakelserFraPeriode = (
+export const harInnvilgbarePerioder = (behandling: Rammebehandling): boolean =>
+    behandling.innvilgbarePerioder.length > 0;
+
+export const kanInnvilgeForFlereTiltak = (behandling: Rammebehandling): boolean =>
+    new Set(behandling.innvilgbarePerioder.map((it) => it.internDeltakelseId)).size > 1;
+
+export const hentInnvilgbarePerioderSomOverlapper = (
     behandling: Rammebehandling,
     periode: Periode,
-): InnvilgbarTiltaksdeltakelse[] =>
-    hentInnvilgbareTiltaksdeltakelser(behandling).filter((td) =>
-        perioderOverlapper(periode, td.periode),
-    );
+): InnvilgbarTiltaksperiode[] =>
+    hentInnvilgbarePerioder(behandling).filter((it) => perioderOverlapper(periode, it.periode));
 
-export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling): Periode | null => {
-    const perioder = hentInnvilgbareTiltaksdeltakelser(behandling).map((td) => td.periode);
+export const hentTotalInnvilgbarPeriode = (behandling: Rammebehandling): Periode | null => {
+    const perioder = behandling.innvilgbarePerioder.map((it) => it.periode);
     return perioder.length > 0 ? totalPeriode(perioder) : null;
 };
 

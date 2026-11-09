@@ -62,6 +62,23 @@ export type IkkeInnvilgbarTiltaksdeltakelse = TiltaksdeltakelseBase & {
 export type Tiltaksdeltakelse = InnvilgbarTiltaksdeltakelse | IkkeInnvilgbarTiltaksdeltakelse;
 
 /**
+ * En periode det kan innvilges for, med tiltaksdeltakelsen det kan innvilges for.
+ * Perioder for ulike tiltaksdeltakelser kan overlappe.
+ */
+export type InnvilgbarPeriode = {
+    internDeltakelseId: string;
+    periode: Periode;
+};
+
+/**
+ * En innvilgbar periode fra backend, med visningsinformasjon om tiltaksdeltakelsen fra saksopplysningene.
+ */
+export type InnvilgbarTiltaksperiode = InnvilgbarPeriode & {
+    typeNavn: string;
+    antallDagerPerUke: number | null;
+};
+
+/**
  * Tiltak som er registrert på bruker, og som kan frata rett til tiltakspenger (i første omgang lønnstilskudd).
  * Vises kun som informasjon til saksbehandler.
  */

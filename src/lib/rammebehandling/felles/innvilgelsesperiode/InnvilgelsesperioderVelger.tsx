@@ -4,7 +4,7 @@ import {
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { hentInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentInnvilgbarePerioder } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
@@ -12,7 +12,7 @@ import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { InnvilgbarTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { InnvilgbarTiltaksperiode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -46,9 +46,9 @@ export const InnvilgelsesperioderVelger = () => {
         throw Error('Minst en innvilgelsesperiode skal alltid finnes!');
     }
 
-    const tiltaksdeltakelser = hentInnvilgbareTiltaksdeltakelser(behandling);
+    const innvilgbarePerioder = hentInnvilgbarePerioder(behandling);
 
-    if (tiltaksdeltakelser.length === 0) {
+    if (innvilgbarePerioder.length === 0) {
         return (
             <Infokort variant={'feil'} size={'small'}>
                 {'Ingen tiltaksdeltakelser i saksopplysningene kan innvilges'}
@@ -81,7 +81,7 @@ export const InnvilgelsesperioderVelger = () => {
                                         <InnvilgelsesperiodeVelgerFull
                                             innvilgelsesperioder={innvilgelsesperioder}
                                             index={index}
-                                            tiltaksdeltakelser={tiltaksdeltakelser}
+                                            innvilgbarePerioder={innvilgbarePerioder}
                                             behandling={behandling}
                                             sak={sak}
                                             readOnly={erReadonly}
@@ -123,7 +123,7 @@ export const InnvilgelsesperioderVelger = () => {
                     <HStack gap={'space-12'}>
                         <InnvilgelsesperiodeDatovelgere
                             periode={innvilgelsesperioder.atNonNull(0).periode}
-                            tiltaksdeltakelser={tiltaksdeltakelser}
+                            innvilgbarePerioder={innvilgbarePerioder}
                             index={0}
                             readOnly={erReadonly}
                         />
@@ -136,7 +136,7 @@ export const InnvilgelsesperioderVelger = () => {
 
 type VelgerFullProps = {
     innvilgelsesperioder: Innvilgelsesperiode[];
-    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[];
+    innvilgbarePerioder: InnvilgbarTiltaksperiode[];
     behandling: Rammebehandling;
     sak: SakProps;
     index: number;
@@ -145,7 +145,7 @@ type VelgerFullProps = {
 
 const InnvilgelsesperiodeVelgerFull = ({
     innvilgelsesperioder,
-    tiltaksdeltakelser,
+    innvilgbarePerioder,
     behandling,
     sak,
     index,
@@ -158,7 +158,7 @@ const InnvilgelsesperiodeVelgerFull = ({
 
     const { periode, antallDagerPerMeldeperiode, internDeltakelseId } = innvilgelsesperiode;
 
-    const harValgtGyldigTiltak = tiltaksdeltakelser.some(
+    const harValgtGyldigTiltak = innvilgbarePerioder.some(
         (tiltak) => tiltak.internDeltakelseId === internDeltakelseId,
     );
 
@@ -179,7 +179,7 @@ const InnvilgelsesperiodeVelgerFull = ({
             <HStack gap={'space-12'} align={'end'}>
                 <InnvilgelsesperiodeDatovelgere
                     periode={periode}
-                    tiltaksdeltakelser={tiltaksdeltakelser}
+                    innvilgbarePerioder={innvilgbarePerioder}
                     index={index}
                     readOnly={readOnly}
                 />
@@ -210,7 +210,9 @@ const InnvilgelsesperiodeVelgerFull = ({
                 <Select
                     label={'Tiltak'}
                     size={'small'}
-                    readOnly={readOnly || (tiltaksdeltakelser.length === 1 && harValgtGyldigTiltak)}
+                    readOnly={
+                        readOnly || (innvilgbarePerioder.length === 1 && harValgtGyldigTiltak)
+                    }
                     value={internDeltakelseId}
                     onChange={(event) =>
                         dispatch({
@@ -227,12 +229,12 @@ const InnvilgelsesperiodeVelgerFull = ({
                             disabled={true}
                         >{`Ugyldig tiltak med id: ${internDeltakelseId}`}</option>
                     )}
-                    {tiltaksdeltakelser.map((tiltak) => {
+                    {innvilgbarePerioder.map((tiltak) => {
                         const { internDeltakelseId } = tiltak;
 
                         return (
                             <option value={internDeltakelseId} key={internDeltakelseId}>
-                                {tiltakVisningsnavn(tiltak, tiltaksdeltakelser)}
+                                {tiltakVisningsnavn(tiltak, innvilgbarePerioder)}
                             </option>
                         );
                     })}
@@ -304,17 +306,17 @@ const TiltaksdeltakelsenErEndretVarsel = ({
 };
 
 const tiltakVisningsnavn = (
-    tiltaksdeltakelse: InnvilgbarTiltaksdeltakelse,
-    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[],
+    innvilgbarPeriode: InnvilgbarTiltaksperiode,
+    innvilgbarePerioder: InnvilgbarTiltaksperiode[],
 ): string => {
-    const deltakelserMedType = tiltaksdeltakelser.filter(
-        (t) => t.typeNavn === tiltaksdeltakelse.typeNavn,
+    const perioderMedType = innvilgbarePerioder.filter(
+        (t) => t.typeNavn === innvilgbarPeriode.typeNavn,
     );
 
-    if (deltakelserMedType.length > 1) {
-        return `${tiltaksdeltakelse.typeNavn} (${formaterPeriode(tiltaksdeltakelse.periode)})`;
+    if (perioderMedType.length > 1) {
+        return `${innvilgbarPeriode.typeNavn} (${formaterPeriode(innvilgbarPeriode.periode)})`;
     } else {
-        return tiltaksdeltakelse.typeNavn;
+        return innvilgbarPeriode.typeNavn;
     }
 };
 

@@ -2,7 +2,7 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
-import { harInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { harInnvilgbarePerioder } from '~/lib/rammebehandling/rammebehandlingUtils';
 import {
     useOmgjøringMedValgtResultatSkjema,
     useOmgjøringSkjema,
@@ -61,7 +61,7 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
     const { behandling } = useRevurderingOmgjøring();
     const { vedtaksperiode } = useOmgjøringMedValgtResultatSkjema();
 
-    const kanInnvilges = harInnvilgbareTiltaksdeltakelser(behandling);
+    const kanInnvilges = harInnvilgbarePerioder(behandling);
 
     if (!kanInnvilges) {
         return (

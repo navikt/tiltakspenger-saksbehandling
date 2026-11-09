@@ -4,19 +4,19 @@ import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
-import { InnvilgbarTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import { InnvilgbarPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { finnPeriodiseringHull, periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {
     periode: Partial<Periode>;
-    tiltaksdeltakelser: InnvilgbarTiltaksdeltakelse[];
+    innvilgbarePerioder: InnvilgbarPeriode[];
     index: number;
     readOnly: boolean;
 };
 
 export const InnvilgelsesperiodeDatovelgere = ({
     periode,
-    tiltaksdeltakelser,
+    innvilgbarePerioder,
     index,
     readOnly,
 }: Props) => {
@@ -25,19 +25,19 @@ export const InnvilgelsesperiodeDatovelgere = ({
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
-    const tiltaksdeltakelsesperiode = periodiseringTotalPeriode(tiltaksdeltakelser);
-    const tiltaksdeltakelserHull = finnPeriodiseringHull(tiltaksdeltakelser);
+    const totalInnvilgbarPeriode = periodiseringTotalPeriode(innvilgbarePerioder);
+    const hullMellomInnvilgbarePerioder = finnPeriodiseringHull(innvilgbarePerioder);
 
-    const defaultDato = datoMin(new Date(), tiltaksdeltakelsesperiode.tilOgMed);
+    const defaultDato = datoMin(new Date(), totalInnvilgbarPeriode.tilOgMed);
 
     const commonProps: Partial<DatovelgerProps> = {
-        minDate: tiltaksdeltakelsesperiode.fraOgMed,
-        maxDate: tiltaksdeltakelsesperiode.tilOgMed,
+        minDate: totalInnvilgbarPeriode.fraOgMed,
+        maxDate: totalInnvilgbarPeriode.tilOgMed,
         defaultMonth: defaultDato,
         readOnly,
         size: 'small',
         dropdownCaption: true,
-        disabledPerioder: tiltaksdeltakelserHull,
+        disabledPerioder: hullMellomInnvilgbarePerioder,
     };
 
     return (

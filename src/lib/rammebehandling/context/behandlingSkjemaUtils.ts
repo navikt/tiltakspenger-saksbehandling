@@ -2,7 +2,7 @@ import {
     erOmgjøringResultat,
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
-    hentInnvilgbareTiltaksdeltakelserFraPeriode,
+    hentInnvilgbarePerioderSomOverlapper,
 } from '~/lib/rammebehandling/rammebehandlingUtils';
 import {
     InnvilgelseMedPerioderState,
@@ -81,7 +81,7 @@ export const lagForhåndsutfyltInnvilgelse = (
     førsteInnvilgelsesperiode: Periode,
     sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const tiltak = hentInnvilgbareTiltaksdeltakelserFraPeriode(
+    const innvilgbarePerioder = hentInnvilgbarePerioderSomOverlapper(
         behandling,
         førsteInnvilgelsesperiode,
     );
@@ -93,9 +93,9 @@ export const lagForhåndsutfyltInnvilgelse = (
                 behandling,
                 førsteInnvilgelsesperiode,
             ),
-            internDeltakelseId: tiltak.atNonNull(
+            internDeltakelseId: innvilgbarePerioder.atNonNull(
                 0,
-                'Fant ingen tiltaksdeltakelse som det kan innvilges for i valgt periode',
+                'Fant ingen periode som kan innvilges i valgt periode',
             ).internDeltakelseId,
         },
     ];
@@ -114,15 +114,15 @@ export const lagForhåndsutfyltInnvilgelse = (
     };
 };
 
-// Henter det høyeste antall dager for en tiltaksdeltakelse fra saksopplysninger, eller default
+// Henter det høyeste antall dager blant tiltaksdeltakelsene som kan innvilges i perioden, eller default
 // antall dager dersom ingen tiltak har satt antall dager
 export const antallDagerPerMeldeperiodeForPeriode = (
     behandling: Rammebehandling,
     periode: Periode,
 ): number => {
-    const dagerPerUke = hentInnvilgbareTiltaksdeltakelserFraPeriode(behandling, periode).reduce(
-        (acc, td) => {
-            const { antallDagerPerUke } = td;
+    const dagerPerUke = hentInnvilgbarePerioderSomOverlapper(behandling, periode).reduce(
+        (acc, it) => {
+            const { antallDagerPerUke } = it;
 
             return antallDagerPerUke ? Math.max(antallDagerPerUke, acc) : acc;
         },

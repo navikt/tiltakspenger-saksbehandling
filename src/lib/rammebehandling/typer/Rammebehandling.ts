@@ -14,7 +14,11 @@ import {
     SøknadsbehandlingResultat,
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
-import { Tiltaksdeltakelse, TiltaksdeltakelseSomFratarRett } from './Tiltaksdeltakelse';
+import {
+    InnvilgbarPeriode,
+    Tiltaksdeltakelse,
+    TiltaksdeltakelseSomFratarRett,
+} from './Tiltaksdeltakelse';
 import {
     BehandlingUtbetalingProps,
     Utbetalingskontroll,
@@ -79,6 +83,7 @@ export interface RammebehandlingBase {
     /** Null dersom behandlingen er avbrutt eller mangler vedtaksperiode. */
     tidslinjeFørOgEtter: Nullable<TidslinjeFørOgEtter>;
     tiltakshistorikk: TiltakshistorikkForBehandling;
+    innvilgbarePerioder: InnvilgbarPeriode[];
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

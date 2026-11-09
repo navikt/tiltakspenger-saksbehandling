@@ -20,7 +20,7 @@ import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetek
 import { VedtaksperiodevelgerGjeldendePerioder } from '~/lib/rammebehandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodevelgerGjeldendePerioder';
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { Periode } from '~/types/Periode';
-import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentTotalInnvilgbarPeriode } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 import style from './OmgjøringVedtaksperiodeVelger.module.css';
 
@@ -53,10 +53,10 @@ export const OmgjøringVedtaksperiodeVelger = () => {
         perioderSomKanOmgjøres,
     );
 
-    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+    const totalInnvilgbarPeriode = hentTotalInnvilgbarPeriode(behandling);
     const sisteTilOgMed = datoMax(
         periodeSomMåOmgjøresInnenfor.tilOgMed ?? new Date(),
-        tiltaksdeltakelsesperiode?.tilOgMed ?? new Date(),
+        totalInnvilgbarPeriode?.tilOgMed ?? new Date(),
         vedtaksperiode.tilOgMed ?? new Date(),
     );
 

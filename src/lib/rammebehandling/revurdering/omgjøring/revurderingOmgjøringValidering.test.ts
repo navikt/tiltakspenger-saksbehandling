@@ -122,6 +122,7 @@ const omgjøringOpphør = (omgjørVedtak: VedtakId, vedtaksperiode: Periode): Om
     beslutterEndringer: { skalJournalføreNotat: null },
     tidslinjeFørOgEtter: null,
     tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },
+    innvilgbarePerioder: [],
     valgteHjemler: [HjemmelForOpphør.DeltarIkkePåArbeidsmarkedstiltak],
     omgjørRammevedtak: [
         { vedtakId: omgjørVedtak, periode: vedtaksperiode, omgjøringsgrad: Omgjøringsgrad.HELT },

@@ -18,7 +18,7 @@ import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
-import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentTotalInnvilgbarPeriode } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { nonNullish } from '~/utils/object';
 
 export type InnvilgelsesperioderActions =
@@ -145,11 +145,9 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
             const sistePeriode = sisteInnvilgelsesperiode.periode;
 
-            const tiltaksdeltakelsesperiode = nonNullish(
-                hentHeleTiltaksdeltakelsesperioden(behandling),
-            );
+            const totalInnvilgbarPeriode = nonNullish(hentTotalInnvilgbarPeriode(behandling));
 
-            const nyTilOgMed = tiltaksdeltakelsesperiode.tilOgMed;
+            const nyTilOgMed = totalInnvilgbarPeriode.tilOgMed;
 
             const nyInnvilgelsesperiode = {
                 ...sisteInnvilgelsesperiode,

@@ -2,9 +2,11 @@ import { describe, expect, test } from '@jest/globals';
 import {
     erRammebehandlingInnvilgelseResultat,
     fyller18ÅrISøknadsperioden,
-    hentHeleTiltaksdeltakelsesperioden,
-    hentInnvilgbareTiltaksdeltakelserFraPeriode,
+    hentInnvilgbarePerioder,
+    hentInnvilgbarePerioderSomOverlapper,
     hentTiltaksperiode,
+    hentTotalInnvilgbarPeriode,
+    kanInnvilgeForFlereTiltak,
     journalførNotatEndringFraBeslutter,
 } from '~/lib/rammebehandling/rammebehandlingUtils';
 import {
@@ -14,7 +16,10 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { Tiltaksdeltakelse } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
+import {
+    InnvilgbarPeriode,
+    Tiltaksdeltakelse,
+} from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import {
     periode,
     rammevedtak,
@@ -75,42 +80,86 @@ describe('hentTiltaksperiode', () => {
     });
 });
 
-describe('innvilgbare tiltaksdeltakelser', () => {
-    const behandling = medTiltak(
-        søknadsbehandlingIkkeValgt(),
-        tiltaksdeltakelse('jan', periode('2025-01-01', '2025-01-31')),
-        ikkeInnvilgbar('feb', '2025-02-01', '2025-02-28'),
-        tiltaksdeltakelse('mar', periode('2025-03-01', '2025-03-31')),
+describe('innvilgbare perioder', () => {
+    const innvilgbarPeriode = (
+        internDeltakelseId: string,
+        fraOgMed: string,
+        tilOgMed: string,
+    ): InnvilgbarPeriode => ({ internDeltakelseId, periode: periode(fraOgMed, tilOgMed) });
+
+    const medInnvilgbarePerioder = <T extends Rammebehandling>(
+        behandling: T,
+        ...innvilgbarePerioder: InnvilgbarPeriode[]
+    ): T => ({ ...behandling, innvilgbarePerioder });
+
+    // Saksopplysningene har en deltakelse som backend ikke har gitt innvilgbare perioder for.
+    const behandling = medInnvilgbarePerioder(
+        medTiltak(
+            søknadsbehandlingIkkeValgt(),
+            tiltaksdeltakelse('jan', periode('2025-01-01', '2025-01-31'), 3),
+            tiltaksdeltakelse('feb', periode('2025-02-01', '2025-02-28')),
+            tiltaksdeltakelse('mar', periode('2025-03-01', '2025-03-31')),
+        ),
+        innvilgbarPeriode('jan', '2025-01-01', '2025-01-31'),
+        innvilgbarPeriode('mar', '2025-03-01', '2025-03-31'),
     );
 
-    test('hele tiltaksdeltakelsesperioden tar bare med deltakelser som kan innvilges', () => {
-        expect(
-            hentHeleTiltaksdeltakelsesperioden(
-                medTiltak(
-                    behandling,
-                    ikkeInnvilgbar('des', '2024-12-01', '2024-12-31'),
-                    tiltaksdeltakelse('jan', periode('2025-01-01', '2025-01-31')),
-                    tiltaksdeltakelse('mar', periode('2025-03-01', '2025-03-31')),
-                ),
-            ),
-        ).toEqual(periode('2025-01-01', '2025-03-31'));
+    test('bruker bare periodene fra backend, med visningsinformasjon fra saksopplysningene', () => {
+        expect(hentInnvilgbarePerioder(behandling)).toEqual([
+            {
+                internDeltakelseId: 'jan',
+                periode: periode('2025-01-01', '2025-01-31'),
+                typeNavn: 'Arbeidsmarkedsopplæring',
+                antallDagerPerUke: 3,
+            },
+            {
+                internDeltakelseId: 'mar',
+                periode: periode('2025-03-01', '2025-03-31'),
+                typeNavn: 'Arbeidsmarkedsopplæring',
+                antallDagerPerUke: null,
+            },
+        ]);
     });
 
-    test('hele tiltaksdeltakelsesperioden er null uten innvilgbare deltakelser', () => {
-        expect(
-            hentHeleTiltaksdeltakelsesperioden(
-                medTiltak(behandling, ikkeInnvilgbar('feb', '2025-02-01', '2025-02-28')),
-            ),
-        ).toBeNull();
+    test('viser id-en når tiltaksdeltakelsen mangler i saksopplysningene', () => {
+        const utenSaksopplysning = medInnvilgbarePerioder(
+            medTiltak(søknadsbehandlingIkkeValgt()),
+            innvilgbarPeriode('borte', '2025-01-01', '2025-01-31'),
+        );
+
+        expect(hentInnvilgbarePerioder(utenSaksopplysning)[0]?.typeNavn).toBe(
+            'Tiltak med id borte',
+        );
     });
 
-    test('henter innvilgbare deltakelser som overlapper perioden, også på periodegrensene', () => {
-        const deltakelser = hentInnvilgbareTiltaksdeltakelserFraPeriode(
+    test('total innvilgbar periode går fra første til siste innvilgbare periode', () => {
+        expect(hentTotalInnvilgbarPeriode(behandling)).toEqual(periode('2025-01-01', '2025-03-31'));
+    });
+
+    test('total innvilgbar periode er null uten innvilgbare perioder', () => {
+        expect(hentTotalInnvilgbarPeriode(medInnvilgbarePerioder(behandling))).toBeNull();
+    });
+
+    test('henter innvilgbare perioder som overlapper perioden, også på periodegrensene', () => {
+        const perioder = hentInnvilgbarePerioderSomOverlapper(
             behandling,
             periode('2025-01-31', '2025-03-01'),
         );
 
-        expect(deltakelser.map((d) => d.internDeltakelseId)).toEqual(['jan', 'mar']);
+        expect(perioder.map((it) => it.internDeltakelseId)).toEqual(['jan', 'mar']);
+    });
+
+    test('kan innvilge for flere tiltak bare når periodene gjelder ulike tiltaksdeltakelser', () => {
+        expect(kanInnvilgeForFlereTiltak(behandling)).toBe(true);
+        expect(
+            kanInnvilgeForFlereTiltak(
+                medInnvilgbarePerioder(
+                    behandling,
+                    innvilgbarPeriode('jan', '2025-01-01', '2025-01-15'),
+                    innvilgbarPeriode('jan', '2025-01-20', '2025-01-31'),
+                ),
+            ),
+        ).toBe(false);
     });
 });
 

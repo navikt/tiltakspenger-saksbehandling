@@ -163,6 +163,12 @@ const rammebehandlingBase = (): Omit<RammebehandlingBase, 'type' | 'resultat'> =
     manueltBehandlesGrunner: [],
     tidslinjeFørOgEtter: null,
     tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },
+    innvilgbarePerioder: [
+        {
+            internDeltakelseId: standardTiltaksdeltakelse.internDeltakelseId,
+            periode: standardTiltaksdeltakelse.periode,
+        },
+    ],
 });
 
 const søknadsbehandlingBase = () => ({
