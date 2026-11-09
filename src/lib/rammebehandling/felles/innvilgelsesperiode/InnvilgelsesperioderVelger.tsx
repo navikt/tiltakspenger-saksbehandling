@@ -4,10 +4,7 @@ import {
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import {
-    hentInnvilgbareTiltaksdeltakelser,
-    rammebehandlingMedInnvilgelseEllerNull,
-} from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentInnvilgbareTiltaksdeltakelser } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
@@ -29,7 +26,10 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { erFullstendigPeriode, inneholderHelePerioden } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { classNames } from '~/utils/classNames';
-import { harUgyldigeInnvilgelsesperioder } from '~/lib/rammebehandling/felles/validering/validerTiltaksdeltakelser';
+import {
+    finnUgyldigTiltaksdeltakelse,
+    ugyldigTiltaksdeltakelseTekst,
+} from '~/lib/rammebehandling/felles/innvilgelsesperiode/ugyldigTiltaksdeltakelse';
 
 import style from './InnvilgelsesperioderVelger.module.css';
 
@@ -165,19 +165,12 @@ const InnvilgelsesperiodeVelgerFull = ({
         periode,
     );
 
-    const valgtTiltaksdeltakelse = tiltaksdeltakelser.find(
-        (tiltak) => tiltak.internDeltakelseId === internDeltakelseId,
-    );
-
-    const harValgtPeriodeUtenforTiltaksdeltakelsen =
-        valgtTiltaksdeltakelse !== undefined &&
-        erFullstendigPeriode(periode) &&
-        !inneholderHelePerioden(valgtTiltaksdeltakelse.periode, periode);
+    const ugyldigTiltaksdeltakelse = finnUgyldigTiltaksdeltakelse(behandling, innvilgelsesperiode);
 
     const harFeil =
         !harValgtGyldigTiltak ||
         harValgtUgyldigPeriodeForOmgjøring ||
-        harValgtPeriodeUtenforTiltaksdeltakelsen;
+        ugyldigTiltaksdeltakelse !== null;
 
     return (
         <VStack gap={'space-8'} className={classNames(harFeil && style.feilOmriss)}>
@@ -265,16 +258,16 @@ const InnvilgelsesperiodeVelgerFull = ({
                 )}
             </HStack>
 
-            {!harValgtGyldigTiltak && (
+            {ugyldigTiltaksdeltakelse ? (
                 <InlineMessage status={'error'} size={'small'}>
-                    {'Kan ikke innvilge for dette tiltaket'}
+                    {ugyldigTiltaksdeltakelseTekst(ugyldigTiltaksdeltakelse)}
                 </InlineMessage>
-            )}
-
-            {valgtTiltaksdeltakelse && harValgtPeriodeUtenforTiltaksdeltakelsen && (
-                <InlineMessage status={'error'} size={'small'}>
-                    {`Innvilgelsesperioden må være innenfor tiltaksdeltakelsens periode (${formaterPeriode(valgtTiltaksdeltakelse.periode)})`}
-                </InlineMessage>
+            ) : (
+                !harValgtGyldigTiltak && (
+                    <InlineMessage status={'error'} size={'small'}>
+                        {'Kan ikke innvilge for dette tiltaket'}
+                    </InlineMessage>
+                )
             )}
 
             {harValgtUgyldigPeriodeForOmgjøring && (
@@ -286,8 +279,6 @@ const InnvilgelsesperiodeVelgerFull = ({
     );
 };
 
-// Innvilgelsen nullstilles ikke når tiltaksdeltakelsen endres, så saksbehandler må rette den selv.
-// Varselet forsvinner når innvilgelsesperiodene i skjemaet er rettet, selv om de ikke er lagret ennå.
 const TiltaksdeltakelsenErEndretVarsel = ({
     behandling,
     innvilgelsesperioder,
@@ -295,12 +286,9 @@ const TiltaksdeltakelsenErEndretVarsel = ({
     behandling: Rammebehandling;
     innvilgelsesperioder: Innvilgelsesperiode[];
 }) => {
-    const lagredeInnvilgelsesperioder =
-        rammebehandlingMedInnvilgelseEllerNull(behandling)?.innvilgelsesperioder ?? [];
-
-    const skalVises =
-        harUgyldigeInnvilgelsesperioder(behandling, lagredeInnvilgelsesperioder) &&
-        harUgyldigeInnvilgelsesperioder(behandling, innvilgelsesperioder);
+    const skalVises = innvilgelsesperioder.some(
+        (it) => finnUgyldigTiltaksdeltakelse(behandling, it) !== null,
+    );
 
     if (!skalVises) {
         return null;

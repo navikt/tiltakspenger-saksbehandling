@@ -5,7 +5,10 @@ import {
     RammebehandlingBase,
 } from './Rammebehandling';
 import { InnvilgbarSøknad, Søknad } from '~/lib/søknad/søknadTyper';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    Innvilgelsesperiode,
+    LagretInnvilgelsesperiode,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 type SøknadsbehandlingBase = RammebehandlingBase & {
     type: Rammebehandlingstype.SØKNADSBEHANDLING;
@@ -21,7 +24,7 @@ export type SøknadsbehandlingIkkeValgt = SøknadsbehandlingBase & {
 
 export type SøknadsbehandlingInnvilgelse = SøknadsbehandlingBase & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: LagretInnvilgelsesperiode[];
     barnetillegg: Barnetillegg;
     søknad: InnvilgbarSøknad;
 };
