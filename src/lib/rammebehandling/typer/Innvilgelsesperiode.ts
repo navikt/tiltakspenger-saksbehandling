@@ -5,12 +5,15 @@ export type Innvilgelsesperiode = {
     periode: Periode;
     antallDagerPerMeldeperiode: number;
     internDeltakelseId: string;
+    /** Reversert opphør: innvilges på nytt uten gyldig tiltaksdeltakelse i saksopplysningene. */
+    erReversertOpphør?: boolean;
 };
 
 export type InnvilgelsesperiodePartial = {
     periode: Partial<Periode>;
     antallDagerPerMeldeperiode?: number;
     internDeltakelseId?: string;
+    erReversertOpphør?: boolean;
 };
 
 // Valgt tiltaksdeltakelse passer ikke med innvilgelsesperioden, f.eks. fordi deltakelsen er endret etter at innvilgelsen ble lagret

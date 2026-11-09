@@ -92,6 +92,7 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                             },
                             antallDagerPerMeldeperiode: 10,
                             internDeltakelseId: 'deltakelse_1',
+                            erReversertOpphør: false,
                         },
                     ],
                     barnetillegg: {

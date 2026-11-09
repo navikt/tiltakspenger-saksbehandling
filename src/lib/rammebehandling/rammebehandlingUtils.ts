@@ -28,6 +28,7 @@ import { erSladdet } from '~/utils/sladdetVerdi';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Dato } from '~/types/DatoTid';
+import { hentPerioderForReversertOpphør } from '~/lib/rammebehandling/felles/innvilgelsesperiode/reversertOpphør/reversertOpphørUtils';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
@@ -73,8 +74,10 @@ export const hentInnvilgbarePerioder = (
     });
 };
 
+/** Inkluderer perioder som kan innvilges som reversert opphør. */
 export const harInnvilgbarePerioder = (behandling: Rammebehandling): boolean =>
-    behandling.innvilgbarePerioder.length > 0;
+    behandling.innvilgbarePerioder.length > 0 ||
+    hentPerioderForReversertOpphør(behandling).length > 0;
 
 export const kanInnvilgeForFlereTiltak = (behandling: Rammebehandling): boolean =>
     new Set(behandling.innvilgbarePerioder.map((it) => it.internDeltakelseId)).size > 1;
@@ -85,8 +88,12 @@ export const hentInnvilgbarePerioderSomOverlapper = (
 ): InnvilgbarTiltaksperiode[] =>
     hentInnvilgbarePerioder(behandling).filter((it) => perioderOverlapper(periode, it.periode));
 
+/** Inkluderer perioder som kan innvilges som reversert opphør. */
 export const hentTotalInnvilgbarPeriode = (behandling: Rammebehandling): Periode | null => {
-    const perioder = behandling.innvilgbarePerioder.map((it) => it.periode);
+    const perioder = [
+        ...behandling.innvilgbarePerioder,
+        ...hentPerioderForReversertOpphør(behandling),
+    ].map((it) => it.periode);
     return perioder.length > 0 ? totalPeriode(perioder) : null;
 };
 

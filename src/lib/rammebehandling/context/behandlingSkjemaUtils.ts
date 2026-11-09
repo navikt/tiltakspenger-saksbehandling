@@ -24,6 +24,8 @@ import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
+import { nonNullish } from '~/utils/object';
+import { hentPerioderForReversertOpphørSomOverlapper } from '~/lib/rammebehandling/felles/innvilgelsesperiode/reversertOpphør/reversertOpphørUtils';
 
 export const ANTALL_DAGER_DEFAULT = 10;
 
@@ -81,9 +83,19 @@ export const lagForhåndsutfyltInnvilgelse = (
     førsteInnvilgelsesperiode: Periode,
     sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const innvilgbarePerioder = hentInnvilgbarePerioderSomOverlapper(
+    const innvilgbarPeriode = hentInnvilgbarePerioderSomOverlapper(
         behandling,
         førsteInnvilgelsesperiode,
+    ).at(0);
+
+    // Reversert opphør velges bare automatisk når ingen gyldig tiltaksdeltakelse overlapper perioden
+    const periodeForReversertOpphør = innvilgbarPeriode
+        ? undefined
+        : hentPerioderForReversertOpphørSomOverlapper(behandling, førsteInnvilgelsesperiode).at(0);
+
+    const valgtPeriode = nonNullish(
+        innvilgbarPeriode ?? periodeForReversertOpphør,
+        'Fant ingen periode som kan innvilges i valgt periode',
     );
 
     const innvilgelsesperioder: Innvilgelsesperiode[] = [
@@ -93,10 +105,8 @@ export const lagForhåndsutfyltInnvilgelse = (
                 behandling,
                 førsteInnvilgelsesperiode,
             ),
-            internDeltakelseId: innvilgbarePerioder.atNonNull(
-                0,
-                'Fant ingen periode som kan innvilges i valgt periode',
-            ).internDeltakelseId,
+            internDeltakelseId: valgtPeriode.internDeltakelseId,
+            erReversertOpphør: periodeForReversertOpphør !== undefined,
         },
     ];
 

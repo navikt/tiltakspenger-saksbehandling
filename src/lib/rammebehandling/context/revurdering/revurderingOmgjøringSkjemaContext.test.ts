@@ -141,7 +141,7 @@ describe('omgjøringReducer', () => {
         const action: OmgjøringActions = {
             superType,
             type: 'settTiltaksdeltakelse',
-            payload: { internDeltakelseId: 'deltakelse_2', index: 0 },
+            payload: { internDeltakelseId: 'deltakelse_2', erReversertOpphør: false, index: 0 },
         };
 
         test('oppdaterer innvilgelsen', () => {

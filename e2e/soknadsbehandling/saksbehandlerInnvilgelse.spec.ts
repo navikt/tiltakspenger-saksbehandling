@@ -90,6 +90,7 @@ test.describe('Søknadsbehandling - innvilgelse', () => {
                             },
                             antallDagerPerMeldeperiode: 8,
                             internDeltakelseId: 'deltakelse_1',
+                            erReversertOpphør: false,
                         },
                     ],
                     barnetillegg: { begrunnelse: null, perioder: [] },

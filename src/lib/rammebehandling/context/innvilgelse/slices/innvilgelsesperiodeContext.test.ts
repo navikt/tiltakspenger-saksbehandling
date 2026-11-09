@@ -85,7 +85,11 @@ describe('innvilgelsesperioderReducer', () => {
                 ),
             ).toEqual({
                 harValgtPeriode: true,
-                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-06', '2025-03-31'))],
+                innvilgelsesperioder: [
+                    innvilgelsesperiode(periode('2025-01-06', '2025-03-31'), {
+                        erReversertOpphør: false,
+                    }),
+                ],
                 harBarnetillegg: true,
                 barnetilleggPerioder: [barnetilleggPeriode(1, periode('2025-01-06', '2025-03-31'))],
             });
@@ -268,11 +272,25 @@ describe('innvilgelsesperioderReducer', () => {
         expect(
             innvilgelsesperioderReducer(medPerioderState(), {
                 type: 'settTiltaksdeltakelse',
-                payload: { internDeltakelseId: 'deltakelse_2', index: 0 },
+                payload: { internDeltakelseId: 'deltakelse_2', erReversertOpphør: false, index: 0 },
             }).innvilgelsesperioder,
         ).toEqual([
             innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
                 internDeltakelseId: 'deltakelse_2',
+                erReversertOpphør: false,
+            }),
+        ]);
+    });
+
+    test('settTiltaksdeltakelse markerer perioden som reversert opphør', () => {
+        expect(
+            innvilgelsesperioderReducer(medPerioderState(), {
+                type: 'settTiltaksdeltakelse',
+                payload: { internDeltakelseId: 'deltakelse_1', erReversertOpphør: true, index: 0 },
+            }).innvilgelsesperioder,
+        ).toEqual([
+            innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
+                erReversertOpphør: true,
             }),
         ]);
     });

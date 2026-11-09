@@ -233,6 +233,7 @@ test.describe('Omgjøring', () => {
                             },
                             antallDagerPerMeldeperiode: 8,
                             internDeltakelseId: 'deltakelse_1',
+                            erReversertOpphør: false,
                         },
                     ],
                     barnetillegg: { begrunnelse: null, perioder: [] },
@@ -249,5 +250,100 @@ test.describe('Omgjøring', () => {
         await expect(page).toHaveURL(personoversiktUrl, { timeout: 30_000 });
         await expect(page.getByText('Vedtaket er sendt til beslutning.')).toBeVisible();
         expect(backend.tilstand.antallSendTilBeslutning).toBe(1);
+    });
+
+    test('saksbehandler innvilger en tidligere opphørt periode på nytt som reversert opphør', async ({
+        page,
+        msw,
+    }) => {
+        // Tiltaksdeltakelsen er forkortet til februar, men mars var innvilget før den ble opphørt
+        const behandling = omgjøringIkkeValgt({
+            id: REVURDERING_ID,
+            saksbehandler: SAKSBEHANDLER_IDENT,
+            gyldigeKommandoer: [SaksbehandlerBehandlingKommando.Saksbehandle],
+        });
+        const deltakelsesperiode = periode('2025-01-01', '2025-02-28');
+        behandling.saksopplysninger.tiltaksdeltagelse = [
+            tiltaksdeltakelse('deltakelse_1', deltakelsesperiode),
+        ];
+        behandling.innvilgbarePerioder = [
+            { internDeltakelseId: 'deltakelse_1', periode: deltakelsesperiode },
+        ];
+        behandling.perioderForReversertOpphør = [
+            {
+                internDeltakelseId: 'deltakelse_1',
+                periode: periode('2025-03-01', '2025-03-31'),
+                typeNavn: 'Arbeidsmarkedsopplæring',
+            },
+        ];
+        const backend = lagFalskBackend(behandling);
+        msw.use(...fellesHandlere(), ...backend.handlere);
+
+        await page.goto(behandlingUrl);
+        await forventOverskrift(page, 'Omgjøring');
+        await page.getByRole('radio', { name: 'Innvilgelse' }).check();
+        await page.getByRole('button', { name: 'Fyll inn periode' }).click();
+
+        // 1. Første periode innvilges for den gyldige tiltaksdeltakelsen
+        const fraOgMed = page.getByRole('textbox', { name: 'Fra og med' });
+        const tilOgMed = page.getByRole('textbox', { name: 'Til og med' });
+        await fraOgMed.nth(1).fill('01.01.2025');
+        await tilOgMed.nth(1).fill('28.02.2025');
+        await expect(page.getByLabel('Tiltak')).toHaveValue('deltakelse_1');
+        await expect(page.getByText(/^Reversert opphør –/)).toHaveCount(0);
+
+        // 2. Legg til mars som reversert opphør
+        await page.getByRole('button', { name: 'Ny periode' }).click();
+        await page
+            .getByLabel('Tiltak')
+            .nth(1)
+            .selectOption({ label: 'Reversert opphør: Arbeidsmarkedsopplæring' });
+        await fraOgMed.nth(2).fill('01.03.2025');
+        await tilOgMed.nth(2).fill('31.03.2025');
+        await expect(
+            page.getByText('Reversert opphør – ingen gyldig tiltaksdeltakelse'),
+        ).toBeVisible();
+
+        await page
+            .getByRole('textbox', { name: 'Begrunnelse vilkårsvurdering' })
+            .fill('Opphøret i mars var feil');
+        await page.getByRole('textbox', { name: 'Tekst til vedtaksbrev' }).fill('Du får mars');
+
+        // 3. Lagre
+        await page.getByRole('button', { name: 'Lagre', exact: true }).click();
+
+        await expect
+            .poll(() => backend.tilstand.oppdaterBodies.at(0))
+            .toMatchObject({
+                resultat: RevurderingResultat.OMGJØRING,
+                vedtaksperiode: {
+                    fraOgMed: tilDato('2025-01-01'),
+                    tilOgMed: tilDato('2025-03-31'),
+                },
+                innvilgelsesperioder: [
+                    {
+                        periode: {
+                            fraOgMed: tilDato('2025-01-01'),
+                            tilOgMed: tilDato('2025-02-28'),
+                        },
+                        antallDagerPerMeldeperiode: 10,
+                        internDeltakelseId: 'deltakelse_1',
+                        erReversertOpphør: false,
+                    },
+                    {
+                        periode: {
+                            fraOgMed: tilDato('2025-03-01'),
+                            tilOgMed: tilDato('2025-03-31'),
+                        },
+                        antallDagerPerMeldeperiode: 10,
+                        internDeltakelseId: 'deltakelse_1',
+                        erReversertOpphør: true,
+                    },
+                ],
+            } satisfies Partial<OppdaterOmgjøringInnvilgelseDTO>);
+        await expect(page.getByText('Behandlingen er lagret')).toBeVisible();
+        await expect(
+            page.getByText('Reversert opphør – ingen gyldig tiltaksdeltakelse'),
+        ).toBeVisible();
     });
 });

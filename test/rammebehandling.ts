@@ -212,6 +212,7 @@ const revurderingBase = () => ({
     ...rammebehandlingBase(),
     type: Rammebehandlingstype.REVURDERING as const,
     automatiskOpprettetGrunn: null,
+    perioderForReversertOpphør: [],
 });
 
 export const revurderingStans = (

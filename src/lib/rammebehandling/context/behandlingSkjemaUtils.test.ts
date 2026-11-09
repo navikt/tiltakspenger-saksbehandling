@@ -82,6 +82,7 @@ const revurdering = (
     innvilgbarePerioder,
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
+    perioderForReversertOpphør: [],
     innvilgelsesperioder: null,
     barnetillegg: null,
 });
@@ -142,6 +143,7 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
                     periode: { fraOgMed: tilDato('2025-01-06'), tilOgMed: tilDato('2025-02-28') },
                     antallDagerPerMeldeperiode: 10,
                     internDeltakelseId: 'deltakelse_1',
+                    erReversertOpphør: false,
                 },
             ],
             harBarnetillegg: false,
@@ -162,5 +164,39 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
         const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode, sakUtenVedtak);
 
         expect(innvilgelse.innvilgelsesperioder[0]?.internDeltakelseId).toBe('innvilgbar');
+    });
+
+    test('velger reversert opphør når ingen gyldig tiltaksdeltakelse overlapper perioden', () => {
+        const mars = { fraOgMed: tilDato('2025-03-01'), tilOgMed: tilDato('2025-03-31') };
+        const behandling = {
+            ...behandlingMedOppholdMellomDeltakelser(),
+            perioderForReversertOpphør: [
+                { internDeltakelseId: 'deltakelse_1', periode: mars, typeNavn: 'AMO' },
+            ],
+        };
+
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, mars, sakUtenVedtak);
+
+        expect(innvilgelse.innvilgelsesperioder[0]).toMatchObject({
+            internDeltakelseId: 'deltakelse_1',
+            erReversertOpphør: true,
+        });
+    });
+
+    test('foretrekker gyldig tiltaksdeltakelse framfor reversert opphør når begge overlapper perioden', () => {
+        const periode = { fraOgMed: tilDato('2025-02-01'), tilOgMed: tilDato('2025-02-28') };
+        const behandling = {
+            ...behandlingMedOppholdMellomDeltakelser(),
+            perioderForReversertOpphør: [
+                { internDeltakelseId: 'deltakelse_3', periode, typeNavn: 'AMO' },
+            ],
+        };
+
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode, sakUtenVedtak);
+
+        expect(innvilgelse.innvilgelsesperioder[0]).toMatchObject({
+            internDeltakelseId: 'deltakelse_1',
+            erReversertOpphør: false,
+        });
     });
 });
