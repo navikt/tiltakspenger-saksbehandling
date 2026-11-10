@@ -9,17 +9,19 @@ import { formaterPeriode } from '~/utils/date';
 
 // Tiltaksdeltakelsen valideres av backend for de lagrede innvilgelsesperiodene.
 // Perioder som er endret i skjemaet, valideres først når de lagres.
+// Endres bare valget av reversert opphør, er perioden også endret, siden reversert opphør ikke valideres mot tiltaksdeltakelsen.
 export const finnUgyldigTiltaksdeltakelse = (
     behandling: Rammebehandling,
     innvilgelsesperiode: InnvilgelsesperiodePartial,
 ): Nullable<UgyldigTiltaksdeltakelse> => {
-    const { periode, internDeltakelseId } = innvilgelsesperiode;
+    const { periode, internDeltakelseId, erReversertOpphør = false } = innvilgelsesperiode;
 
     const lagret = rammebehandlingMedInnvilgelseEllerNull(behandling)?.innvilgelsesperioder?.find(
         (it) =>
             it.internDeltakelseId === internDeltakelseId &&
             it.periode.fraOgMed === periode.fraOgMed &&
-            it.periode.tilOgMed === periode.tilOgMed,
+            it.periode.tilOgMed === periode.tilOgMed &&
+            (it.erReversertOpphør ?? false) === erReversertOpphør,
     );
 
     return lagret?.ugyldigTiltaksdeltakelse ?? null;
