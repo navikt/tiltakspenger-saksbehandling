@@ -33,7 +33,7 @@ jobs:
           persist-credentials: false
       # pnpm-versjonen leses fra packageManager-feltet i package.json.
       - name: Set up pnpm
-        uses: pnpm/action-setup@v6.0.9
+        uses: pnpm/action-setup@v6.1.1
       - name: Set up Node
         uses: actions/setup-node@v7.0.0
         with:
