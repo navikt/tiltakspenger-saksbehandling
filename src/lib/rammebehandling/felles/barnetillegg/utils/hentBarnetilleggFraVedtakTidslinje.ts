@@ -1,6 +1,7 @@
-import { krympPeriodisering, sorterPeriodisering } from '~/utils/periode';
+import { krympPeriodisering, slåSammenPeriodisering, sorterPeriodisering } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
+    barnetilleggForInnvilgelsesperiodene,
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
@@ -43,3 +44,20 @@ export const barnetilleggKrympetTilPeriode = (
         periode,
     );
 };
+
+/** Gjeldende barnetillegg fra tidligere vedtak innenfor perioden, med 0 barn der det er innvilget uten barnetillegg. */
+export const gjeldendeBarnetilleggIPeriode = (
+    sak: SakProps,
+    periode: Periode,
+): BarnetilleggMedBehandlingId[] =>
+    slåSammenPeriodisering(
+        krympPeriodisering(sak.innvilgetTidslinje.elementer, periode).flatMap((element) => {
+            const vedtak = hentRammevedtak(sak, element.rammevedtakId);
+
+            return barnetilleggForInnvilgelsesperiodene(
+                krympPeriodisering(vedtak.gjeldendeBarnetilleggPerioder, element.periode),
+                [element.periode],
+            ).map((bt) => ({ ...bt, behandlingId: vedtak.behandlingId }));
+        }),
+        (a, b) => a.antallBarn === b.antallBarn && a.behandlingId === b.behandlingId,
+    );

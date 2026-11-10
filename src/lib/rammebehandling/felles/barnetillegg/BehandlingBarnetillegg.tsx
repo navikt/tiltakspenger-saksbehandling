@@ -3,11 +3,9 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BodyShort, Heading, HStack, List, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { ReactNode } from 'react';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
+import { BarnetilleggTidslinje } from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 import {
-    AntallBarnTidslinje,
-    BarnetilleggTidslinje,
-} from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
-import {
+    barnetilleggForInnvilgelsesperiodene,
     harSøktBarnetillegg,
     kunPerioderMedBarn,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
@@ -49,9 +47,15 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
     // Barnetillegg lagret som antall barn per periode kan ikke vises med barn, og vises som det er når det ikke kan endres
     const visesSomV1 = erLagretSomV1 && erReadonly;
 
-    const barnetilleggFraValgteBarn = periodiserBarnetilleggFraBarn(
-        valgteBarn,
-        innvilgelsesperioder.map((it) => it.periode),
+    const innvilgetePerioder = innvilgelsesperioder.map((it) => it.periode);
+
+    const barnetilleggEtter = barnetilleggForInnvilgelsesperiodene(
+        !harBarnetillegg
+            ? []
+            : visesSomV1
+              ? lagretBarnetillegg.perioder
+              : periodiserBarnetilleggFraBarn(valgteBarn, innvilgetePerioder),
+        innvilgetePerioder,
     );
 
     return (
@@ -92,27 +96,10 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                         )}
                 </VStack>
 
-                <VStack gap={'space-16'}>
-                    <BarnetilleggTidslinje innvilgelsesperiode={innvilgelseTotalPeriode} />
-
-                    {harBarnetillegg &&
-                        !visesSomV1 &&
-                        (barnetilleggFraValgteBarn.length > 0 ? (
-                            <VStack gap={'space-8'}>
-                                <BodyShort size={'small'} weight={'semibold'}>
-                                    {'Barnetillegg som innvilges, utledet fra valgte barn:'}
-                                </BodyShort>
-                                <AntallBarnTidslinje
-                                    periode={innvilgelseTotalPeriode}
-                                    barnetillegg={barnetilleggFraValgteBarn}
-                                />
-                            </VStack>
-                        ) : (
-                            <BodyShort size={'small'}>
-                                {'Valgte barn gir ikke barnetillegg i innvilgelsesperioden.'}
-                            </BodyShort>
-                        ))}
-                </VStack>
+                <BarnetilleggTidslinje
+                    periode={innvilgelseTotalPeriode}
+                    etter={barnetilleggEtter}
+                />
 
                 {lagretBarnetillegg && erLagretSomV1 && (
                     <Infokort variant={'info'} size={'small'}>
