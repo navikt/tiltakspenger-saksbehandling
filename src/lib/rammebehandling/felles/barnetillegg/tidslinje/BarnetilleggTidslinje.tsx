@@ -23,7 +23,7 @@ type Props = {
 };
 
 /**
- * Viser barnetillegget innenfor valgt periode før og etter iverksetting av behandlingen.
+ * Viser barnetillegget innenfor valgte innvilgelsesperioder før og etter iverksetting av behandlingen.
  * Før er gjeldende barnetillegg fra tidligere vedtak.
  * Innvilgede perioder uten barnetillegg vises med 0 barn.
  */
@@ -35,7 +35,7 @@ export const BarnetilleggTidslinje = ({ periode, etter }: Props) => {
     return (
         <div className={style.wrapper}>
             <Heading size={'xsmall'} level={'4'} className={style.header}>
-                {'Tilstand for barnetillegg innenfor valgt periode'}
+                {'Tilstand for barnetillegg innenfor valgte innvilgelsesperioder'}
             </Heading>
             <Timeline startDate={new Date(periode.fraOgMed)} endDate={new Date(periode.tilOgMed)}>
                 <Timeline.Row label={'Før'}>
@@ -48,7 +48,9 @@ export const BarnetilleggTidslinje = ({ periode, etter }: Props) => {
             <div className={style.bunn}>
                 {!før.some(kunPerioderMedBarn) ? (
                     <BodyShort size={'small'}>
-                        {'Ingen tidligere vedtak om barnetillegg innenfor valgt periode.'}
+                        {
+                            'Ingen tidligere vedtak om barnetillegg innenfor valgte innvilgelsesperioder.'
+                        }
                     </BodyShort>
                 ) : (
                     <span />
