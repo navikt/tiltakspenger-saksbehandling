@@ -29,7 +29,7 @@ export const ReversertOpphørMelding = ({ behandling, innvilgelsesperiode }: Pro
 
         return (
             <InlineMessage status={'error'} size={'small'}>
-                {`Et reversert opphør må være innenfor perioden som tidligere er innvilget og senere opphørt eller stanset (${perioder})`}
+                {`Et reversert opphør må være innenfor en periode som tidligere har vært innvilget (${perioder})`}
             </InlineMessage>
         );
     }
@@ -37,7 +37,7 @@ export const ReversertOpphørMelding = ({ behandling, innvilgelsesperiode }: Pro
     return (
         <InlineMessage status={'warning'} size={'small'}>
             {
-                'Perioden innvilges på nytt uten gyldig tiltaksdeltakelse i saksopplysningene. Tiltaksdeltakelsen fra den opprinnelige innvilgelsen brukes.'
+                'Perioden har ikke lenger en gyldig tiltaksdeltakelse. Tiltaket fra den opprinnelige innvilgelsen brukes.'
             }
         </InlineMessage>
     );

@@ -23,6 +23,18 @@ export const hentPerioderForReversertOpphørSomOverlapper = (
         perioderOverlapper(it.periode, periode),
     );
 
+/**
+ * Perioder for reversert opphør som overlapper vedtaksperioden.
+ * Er vedtaksperioden ikke valgt ennå, kan ingen perioder reverseres.
+ */
+export const hentPerioderForReversertOpphørIVedtaksperioden = (
+    behandling: Rammebehandling,
+    vedtaksperiode: Partial<Periode>,
+): PeriodeForReversertOpphør[] =>
+    erFullstendigPeriode(vedtaksperiode)
+        ? hentPerioderForReversertOpphørSomOverlapper(behandling, vedtaksperiode)
+        : [];
+
 export const hentPerioderForReversertOpphørForDeltakelse = (
     behandling: Rammebehandling,
     internDeltakelseId: string | undefined,

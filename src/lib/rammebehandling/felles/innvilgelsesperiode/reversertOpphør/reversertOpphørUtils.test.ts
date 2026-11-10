@@ -8,11 +8,13 @@ import {
 import {
     erInnenforPeriodeForReversertOpphør,
     hentPerioderForReversertOpphør,
+    hentPerioderForReversertOpphørIVedtaksperioden,
 } from '~/lib/rammebehandling/felles/innvilgelsesperiode/reversertOpphør/reversertOpphørUtils';
 import {
     harInnvilgbarePerioder,
     hentTotalInnvilgbarPeriode,
 } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { tilDato } from '~/types/DatoTid';
 
 const mars = periode('2025-03-01', '2025-03-31');
 
@@ -48,6 +50,28 @@ describe('reversert opphør', () => {
                 internDeltakelseId: 'deltakelse_2',
             }),
         ).toBe(false);
+    });
+
+    test('bare perioder for reversert opphør som overlapper vedtaksperioden kan velges', () => {
+        const behandling = omgjøringMedReversertOpphørIMars;
+
+        expect(
+            hentPerioderForReversertOpphørIVedtaksperioden(
+                behandling,
+                periode('2025-03-15', '2025-04-30'),
+            ),
+        ).toEqual(behandling.perioderForReversertOpphør);
+        expect(
+            hentPerioderForReversertOpphørIVedtaksperioden(
+                behandling,
+                periode('2025-01-01', '2025-02-28'),
+            ),
+        ).toEqual([]);
+        expect(
+            hentPerioderForReversertOpphørIVedtaksperioden(behandling, {
+                fraOgMed: tilDato('2025-01-01'),
+            }),
+        ).toEqual([]);
     });
 
     test('perioder for reversert opphør kan innvilges selv uten gyldige tiltaksdeltakelser', () => {

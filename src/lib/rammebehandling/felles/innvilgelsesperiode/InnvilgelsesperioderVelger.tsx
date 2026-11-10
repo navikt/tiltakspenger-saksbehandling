@@ -35,6 +35,7 @@ import { PeriodeForReversertOpphør } from '~/lib/rammebehandling/typer/Reverser
 import {
     erInnenforPeriodeForReversertOpphør,
     hentPerioderForReversertOpphør,
+    hentPerioderForReversertOpphørIVedtaksperioden,
 } from '~/lib/rammebehandling/felles/innvilgelsesperiode/reversertOpphør/reversertOpphørUtils';
 import {
     ReversertOpphørMelding,
@@ -188,7 +189,13 @@ const InnvilgelsesperiodeVelgerFull = ({
         harValgtGyldigTiltak &&
         !erInnenforPeriodeForReversertOpphør(behandling, innvilgelsesperiode);
 
-    const antallTiltaksvalg = innvilgbarePerioder.length + perioderForReversertOpphør.length;
+    const reversertOpphørValg = hentReversertOpphørValg(
+        skjemaContext,
+        behandling,
+        innvilgelsesperiode,
+    );
+
+    const antallTiltaksvalg = innvilgbarePerioder.length + reversertOpphørValg.length;
 
     const harValgtUgyldigPeriodeForOmgjøring = harValgtUtenforVedtaksperiodeForOmgjøring(
         skjemaContext,
@@ -276,16 +283,14 @@ const InnvilgelsesperiodeVelgerFull = ({
                             </option>
                         );
                     })}
-                    {unikePerioderForReversertOpphørPerDeltakelse(perioderForReversertOpphør).map(
-                        ({ internDeltakelseId, typeNavn }) => (
-                            <option
-                                value={`${REVERSERT_OPPHØR_PREFIX}${internDeltakelseId}`}
-                                key={`${REVERSERT_OPPHØR_PREFIX}${internDeltakelseId}`}
-                            >
-                                {`Reversert opphør: ${typeNavn}`}
-                            </option>
-                        ),
-                    )}
+                    {reversertOpphørValg.map(({ internDeltakelseId, typeNavn }) => (
+                        <option
+                            value={`${REVERSERT_OPPHØR_PREFIX}${internDeltakelseId}`}
+                            key={`${REVERSERT_OPPHØR_PREFIX}${internDeltakelseId}`}
+                        >
+                            {`Reversert opphør: ${typeNavn}`}
+                        </option>
+                    ))}
                 </Select>
 
                 {innvilgelsesperioder.length > 1 && !readOnly && (
@@ -375,15 +380,36 @@ const tiltakVisningsnavn = (
     }
 };
 
-// En tiltaksdeltakelse kan ha flere perioder for reversert opphør, men vises som ett valg
-const unikePerioderForReversertOpphørPerDeltakelse = (
-    perioderForReversertOpphør: PeriodeForReversertOpphør[],
-): PeriodeForReversertOpphør[] =>
-    perioderForReversertOpphør.filter(
+/**
+ * Reversert opphør kan bare velges for tiltaksdeltakelser med perioder som kan reverseres innenfor den valgte vedtaksperioden.
+ * Et reversert opphør som allerede er valgt, beholdes som valg, slik at nedtrekkslisten fortsatt viser det.
+ * En tiltaksdeltakelse kan ha flere perioder for reversert opphør, men vises som ett valg.
+ */
+const hentReversertOpphørValg = (
+    skjemaContext: BehandlingInnvilgelseContext,
+    behandling: Rammebehandling,
+    innvilgelsesperiode: Innvilgelsesperiode,
+): PeriodeForReversertOpphør[] => {
+    const iVedtaksperioden =
+        skjemaContext.resultat === RevurderingResultat.OMGJØRING
+            ? hentPerioderForReversertOpphørIVedtaksperioden(
+                  behandling,
+                  skjemaContext.vedtaksperiode,
+              )
+            : [];
+
+    const valgt = innvilgelsesperiode.erReversertOpphør
+        ? hentPerioderForReversertOpphør(behandling).filter(
+              (it) => it.internDeltakelseId === innvilgelsesperiode.internDeltakelseId,
+          )
+        : [];
+
+    return [...iVedtaksperioden, ...valgt].filter(
         (it, index, array) =>
             array.findIndex((annen) => annen.internDeltakelseId === it.internDeltakelseId) ===
             index,
     );
+};
 
 const harValgtUtenforVedtaksperiodeForOmgjøring = (
     skjemaContext: BehandlingInnvilgelseContext,

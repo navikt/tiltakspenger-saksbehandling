@@ -284,15 +284,28 @@ test.describe('Omgjøring', () => {
         await page.getByRole('radio', { name: 'Innvilgelse' }).check();
         await page.getByRole('button', { name: 'Fyll inn periode' }).click();
 
-        // 1. Første periode innvilges for den gyldige tiltaksdeltakelsen
         const fraOgMed = page.getByRole('textbox', { name: 'Fra og med' });
         const tilOgMed = page.getByRole('textbox', { name: 'Til og med' });
+        const reversertOpphørValg = page
+            .getByLabel('Tiltak')
+            .getByRole('option', { name: 'Reversert opphør: Arbeidsmarkedsopplæring' });
+
+        // 1. Første periode innvilges for den gyldige tiltaksdeltakelsen
         await fraOgMed.nth(1).fill('01.01.2025');
         await tilOgMed.nth(1).fill('28.02.2025');
         await expect(page.getByLabel('Tiltak')).toHaveValue('deltakelse_1');
         await expect(page.getByText(/^Reversert opphør –/)).toHaveCount(0);
 
-        // 2. Legg til mars som reversert opphør
+        // 2. Reversert opphør kan bare velges når vedtaksperioden inkluderer den opphørte perioden
+        await expect(reversertOpphørValg).toHaveCount(1);
+        await tilOgMed.first().fill('28.02.2025');
+        await tilOgMed.first().blur();
+        await expect(reversertOpphørValg).toHaveCount(0);
+        await tilOgMed.first().fill('31.03.2025');
+        await tilOgMed.first().blur();
+        await expect(reversertOpphørValg).toHaveCount(1);
+
+        // 3. Legg til mars som reversert opphør
         await page.getByRole('button', { name: 'Ny periode' }).click();
         await page
             .getByLabel('Tiltak')
@@ -309,7 +322,7 @@ test.describe('Omgjøring', () => {
             .fill('Opphøret i mars var feil');
         await page.getByRole('textbox', { name: 'Tekst til vedtaksbrev' }).fill('Du får mars');
 
-        // 3. Lagre
+        // 4. Lagre
         await page.getByRole('button', { name: 'Lagre', exact: true }).click();
 
         await expect
