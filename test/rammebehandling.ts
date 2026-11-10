@@ -489,6 +489,8 @@ export const sakMedInnvilgetVedtak = (
     overstyringer: {
         vedtak?: Partial<Rammevedtak>;
         søknadsbehandling?: SøknadsbehandlingInnvilgelse;
+        // Søknaden som er innvilget, når søknadsbehandlingen ikke er overstyrt
+        søknad?: InnvilgbarSøknad;
     } = {},
 ): SakProps => {
     const vedtattBehandling =
@@ -499,6 +501,7 @@ export const sakMedInnvilgetVedtak = (
             iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             vedtaksperiode,
             innvilgelsesperioder: [innvilgelsesperiode(vedtaksperiode)],
+            ...(overstyringer.søknad && { søknad: overstyringer.søknad }),
         });
 
     const vedtak = rammevedtak('vedtak_1', vedtaksperiode, {

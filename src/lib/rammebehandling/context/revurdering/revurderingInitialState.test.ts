@@ -106,6 +106,7 @@ describe('revurderingInitialState', () => {
             });
 
             const sakMedBarnetillegg = sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
+                søknad: søknad([søknadBarn('2015-03-01')]),
                 vedtak: {
                     barnetillegg: barnetilleggV2(
                         [barnIVedtaket],
@@ -118,12 +119,7 @@ describe('revurderingInitialState', () => {
                 innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
             });
 
-            expect(
-                revurderingInitialState(behandling, {
-                    ...sakMedBarnetillegg,
-                    søknader: [søknad([søknadBarn('2015-03-01')])],
-                }),
-            ).toMatchObject({
+            expect(revurderingInitialState(behandling, sakMedBarnetillegg)).toMatchObject({
                 innvilgelse: {
                     harBarnetillegg: true,
                     // Barnet fra vedtaket velges med hele innvilgelsesperioden
@@ -137,16 +133,18 @@ describe('revurderingInitialState', () => {
             });
         });
 
-        test('forhåndsvelger barna fra søknaden for tiltaksdeltakelsen når gjeldende vedtak er uten barn', () => {
+        test('forhåndsvelger barna fra den innvilgede søknaden for tiltaksdeltakelsen når gjeldende vedtak er uten barn', () => {
             const behandling = revurderingInnvilgelse({
                 innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
             });
 
             expect(
-                revurderingInitialState(behandling, {
-                    ...sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30')),
-                    søknader: [søknad([søknadBarn('2015-03-01')])],
-                }),
+                revurderingInitialState(
+                    behandling,
+                    sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
+                        søknad: søknad([søknadBarn('2015-03-01')]),
+                    }),
+                ),
             ).toMatchObject({
                 innvilgelse: {
                     harBarnetillegg: true,

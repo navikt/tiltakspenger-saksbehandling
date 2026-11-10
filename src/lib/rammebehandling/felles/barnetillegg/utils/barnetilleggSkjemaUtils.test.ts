@@ -8,15 +8,21 @@ import {
     barnetilleggV2,
     innvilgelsesperiode,
     periode,
+    rammevedtak,
     revurderingInnvilgelse,
     sakMedInnvilgetVedtak,
     søknad,
     søknadBarn,
+    søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { tilTidspunkt } from '~/types/DatoTid';
-import { Søknad, SøknadBarn, SøknadId } from '~/lib/søknad/søknadTyper';
+import { InnvilgbarSøknad, SøknadBarn, SøknadId } from '~/lib/søknad/søknadTyper';
+import {
+    RammebehandlingId,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
 
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
@@ -27,7 +33,7 @@ const søknadFor = (
     internDeltakelseId: string,
     mottatt: string,
     barn: SøknadBarn[],
-): Søknad => {
+): InnvilgbarSøknad => {
     const standard = søknad(barn);
 
     return {
@@ -63,27 +69,78 @@ const barnFraVedtaket = barnetilleggBarn('2016-01-01', {
     søknadId: 'soknad_vedtak',
 });
 
+// Nyere søknad for samme tiltak som ikke er innvilget ennå, og som ikke skal brukes
+const ikkeInnvilgetSøknad = søknadFor(
+    'soknad_ikke_innvilget',
+    'deltakelse_1',
+    '2025-04-01T09:00:00',
+    [søknadBarn('2019-01-01')],
+);
+
+const vedtattSøknadsbehandling = (
+    id: RammebehandlingId,
+    søknad: InnvilgbarSøknad,
+    iverksatt: string,
+    internDeltakelseId: string,
+) =>
+    søknadsbehandlingInnvilgelse({
+        id,
+        status: Rammebehandlingsstatus.VEDTATT,
+        søknad,
+        iverksattTidspunkt: tilTidspunkt(iverksatt),
+        vedtaksperiode: førsteHalvår,
+        innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår, { internDeltakelseId })],
+    });
+
+const behandlingEldre = vedtattSøknadsbehandling(
+    'beh_eldre',
+    eldreSøknad,
+    '2025-01-05T09:00:00',
+    'deltakelse_1',
+);
+const behandlingNyere = vedtattSøknadsbehandling(
+    'beh_nyere',
+    nyereSøknad,
+    '2025-02-05T09:00:00',
+    'deltakelse_1',
+);
+const behandlingAnnetTiltak = vedtattSøknadsbehandling(
+    'beh_annet',
+    søknadForAnnetTiltak,
+    '2025-03-05T09:00:00',
+    'deltakelse_2',
+);
+
+const sakMedVedtakForNyesteSøknad = sakMedInnvilgetVedtak(førsteHalvår, {
+    søknadsbehandling: behandlingNyere,
+    vedtak: {
+        barnetillegg: barnetilleggV2(
+            [
+                // Barnet finnes også i søknadene, og skal bare vises én gang
+                barnetilleggBarn('2015-03-01', {
+                    søknadId: 'soknad_eldre',
+                    periode: periode('2025-01-01', '2025-01-31'),
+                }),
+                barnFraVedtaket,
+            ],
+            [førsteHalvår],
+        ),
+    },
+});
+
 const sak = {
-    ...sakMedInnvilgetVedtak(førsteHalvår, {
-        vedtak: {
-            barnetillegg: barnetilleggV2(
-                [
-                    // Barnet finnes også i søknadene, og skal bare vises én gang
-                    barnetilleggBarn('2015-03-01', {
-                        søknadId: 'soknad_eldre',
-                        periode: periode('2025-01-01', '2025-01-31'),
-                    }),
-                    barnFraVedtaket,
-                ],
-                [førsteHalvår],
-            ),
-        },
-    }),
-    søknader: [eldreSøknad, søknadForAnnetTiltak, nyereSøknad],
+    ...sakMedVedtakForNyesteSøknad,
+    søknader: [eldreSøknad, søknadForAnnetTiltak, nyereSøknad, ikkeInnvilgetSøknad],
+    rammebehandlinger: [behandlingEldre, behandlingAnnetTiltak, behandlingNyere],
+    alleRammevedtak: [
+        rammevedtak('vedtak_eldre', førsteHalvår, { behandlingId: behandlingEldre.id }),
+        rammevedtak('vedtak_annet', førsteHalvår, { behandlingId: behandlingAnnetTiltak.id }),
+        ...sakMedVedtakForNyesteSøknad.alleRammevedtak,
+    ],
 };
 
 describe('hentBarnFraSøknader', () => {
-    test('henter barna fra søknadene for tiltaksdeltakelsene det innvilges for, én gang per barn fra den nyeste søknaden', () => {
+    test('henter barna fra de innvilgede søknadene for tiltaksdeltakelsene det innvilges for, én gang per barn fra den nyeste', () => {
         const barn = hentBarnFraSøknader(revurderingInnvilgelse(), innvilgelsesperioder, sak).map(
             (it) => it.barn,
         );
@@ -101,7 +158,13 @@ describe('hentBarnFraSøknader', () => {
         ]);
     });
 
-    test('gir ingen barn når ingen søknad gjelder tiltaksdeltakelsen det innvilges for', () => {
+    test('bruker ikke søknader som ikke er innvilget', () => {
+        const barn = hentBarnFraSøknader(revurderingInnvilgelse(), innvilgelsesperioder, sak);
+
+        expect(barn.map((it) => it.barn.søknadId)).not.toContain('soknad_ikke_innvilget');
+    });
+
+    test('gir ingen barn når ingen innvilget søknad gjelder tiltaksdeltakelsen det innvilges for', () => {
         expect(
             hentBarnFraSøknader(
                 revurderingInnvilgelse(),

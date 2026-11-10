@@ -13,7 +13,7 @@ import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandli
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Nullable } from '~/types/UtilTypes';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
-import { hentRammevedtak } from '~/lib/sak/sakUtils';
+import { hentRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { erSladdet } from '~/utils/sladdetVerdi';
 import { overlappendePeriode, totalPeriode } from '~/utils/periode';
@@ -69,24 +69,30 @@ export const hentBarnFraSøknad = (søknad: Søknad): BarnFraSøknad[] =>
         },
     }));
 
-/** Søknadene for tiltaksdeltakelsene det innvilges for, nyeste først. */
-export const hentSøknaderForTiltaksdeltakelsene = (
+/**
+ * Søknadene fra innvilgede søknadsbehandlinger av tiltaksdeltakelsene det innvilges for, nyeste vedtak først.
+ * Søknader som ikke er innvilget ennå, behandles i sin egen søknadsbehandling.
+ */
+export const hentInnvilgedeSøknaderForTiltaksdeltakelsene = (
     sak: SakProps,
     innvilgelsesperioder: Innvilgelsesperiode[],
 ): Søknad[] => {
     const internDeltakelseIder = new Set(innvilgelsesperioder.map((it) => it.internDeltakelseId));
 
-    return sak.søknader
-        .filter(
-            (søknad) => søknad.tiltak && internDeltakelseIder.has(søknad.tiltak.internDeltakelseId),
+    return hentVedtatteSøknadsbehandlinger(sak)
+        .filter((behandling) =>
+            behandling.innvilgelsesperioder.some((it) =>
+                internDeltakelseIder.has(it.internDeltakelseId),
+            ),
         )
-        .toSorted((a, b) => (a.mottatt > b.mottatt ? -1 : a.mottatt < b.mottatt ? 1 : 0));
+        .map((behandling) => behandling.søknad)
+        .filter(removeDuplicatesFilter((a, b) => a.id === b.id));
 };
 
 /**
  * Barna fra søknaden(e) for innvilgelsen. For søknadsbehandlinger er dette søknaden som behandles,
- * ellers søknadene for tiltaksdeltakelsene det innvilges for. Barn som finnes i flere søknader tas med én gang,
- * fra den nyeste søknaden.
+ * ellers søknadene fra innvilgede søknadsbehandlinger av tiltaksdeltakelsene det innvilges for.
+ * Barn som finnes i flere søknader tas med én gang, fra den nyeste innvilgede søknaden.
  */
 export const hentBarnFraSøknader = (
     behandling: Rammebehandling,
@@ -96,7 +102,7 @@ export const hentBarnFraSøknader = (
     const søknader =
         behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
             ? [behandling.søknad]
-            : hentSøknaderForTiltaksdeltakelsene(sak, innvilgelsesperioder);
+            : hentInnvilgedeSøknaderForTiltaksdeltakelsene(sak, innvilgelsesperioder);
 
     return søknader.flatMap(hentBarnFraSøknad).filter(finnesIkkeFraFør);
 };

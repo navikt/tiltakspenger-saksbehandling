@@ -7,9 +7,12 @@ import {
     periode,
     revurderingInnvilgelse,
     sak,
+    sakMedInnvilgetVedtak,
     søknad,
     søknadBarn,
+    søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
 
@@ -37,27 +40,32 @@ const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
     },
 };
 
-const søknadMedBarn = (internDeltakelseId: string) => {
-    const standard = søknad([søknadBarn('2020-05-05')]);
-    return { ...standard, tiltak: { ...standard.tiltak, internDeltakelseId } };
-};
+const sakMedInnvilgetSøknadMedBarn = (internDeltakelseId: string) =>
+    sakMedInnvilgetVedtak(førsteHalvår, {
+        søknadsbehandling: søknadsbehandlingInnvilgelse({
+            id: 'beh_vedtatt',
+            status: Rammebehandlingsstatus.VEDTATT,
+            søknad: søknad([søknadBarn('2020-05-05')]),
+            innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår, { internDeltakelseId })],
+        }),
+    });
 
 describe('revurderingInnvilgelseValidering', () => {
-    test('validerer ikke barnetillegg mot søknader for andre tiltaksdeltakelser', () => {
+    test('validerer ikke barnetillegg mot innvilgede søknader for andre tiltaksdeltakelser', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse(),
             skjemaUtenBarnetillegg,
-            sak({ søknader: [søknadMedBarn('deltakelse_annen')] }),
+            sakMedInnvilgetSøknadMedBarn('deltakelse_annen'),
         );
 
         expect(resultat).toEqual({ errors: [], warnings: [] });
     });
 
-    test('advarer om manglende barnetillegg når søknaden for tiltaksdeltakelsen har barn', () => {
+    test('advarer om manglende barnetillegg når den innvilgede søknaden for tiltaksdeltakelsen har barn', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse(),
             skjemaUtenBarnetillegg,
-            sak({ søknader: [søknadMedBarn('deltakelse_1')] }),
+            sakMedInnvilgetSøknadMedBarn('deltakelse_1'),
         );
 
         expect(resultat).toEqual({

@@ -230,6 +230,7 @@ describe('validerInnvilgelse', () => {
                 gjeldendeInnvilgetPerioder: [januar, marsTilJuni],
             });
             const sakMedStansIFebruar = sak({
+                rammebehandlinger: [søknadsbehandlingInnvilgelse({ id: vedtak.behandlingId })],
                 alleRammevedtak: [vedtak],
                 tidslinje: {
                     elementer: [

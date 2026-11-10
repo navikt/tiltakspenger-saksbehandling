@@ -176,11 +176,10 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
         });
     });
 
-    test('validerer barnetillegg mot søknaden for tiltaksdeltakelsen det innvilges for', () => {
-        const sakMedBarnISøknaden = {
-            ...sakMedInnvilgetVedtak(førsteHalvår),
-            søknader: [søknad([søknadBarn('2020-05-05')])],
-        };
+    test('validerer barnetillegg mot den innvilgede søknaden for tiltaksdeltakelsen det innvilges for', () => {
+        const sakMedBarnISøknaden = sakMedInnvilgetVedtak(førsteHalvår, {
+            søknad: søknad([søknadBarn('2020-05-05')]),
+        });
 
         const resultat = revurderingOmgjøringValidering(
             omgjøringInnvilgelse(),
