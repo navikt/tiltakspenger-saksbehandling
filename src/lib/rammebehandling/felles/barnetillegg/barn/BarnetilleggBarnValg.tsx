@@ -108,20 +108,26 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
             </HStack>
 
             <VStack gap={'space-8'} className={style.detaljer}>
-                <BodyShort size={'small'}>
-                    {`Fødselsdato: ${formaterSladdbarDatotekst(fødselsdato)}${formaterSladdbarVerdi(fødselsdato, (dato) => ` (${alderFraDato(dato)} år)`, '', '')}`}
-                </BodyShort>
-                <BodyShort size={'small'}>
-                    {`Fødselsnummer: ${sladdbarTekst(fnr) || 'Ikke oppgitt'}`}
-                </BodyShort>
+                <Opplysning
+                    navn={'Fødselsdato'}
+                    verdi={`${formaterSladdbarDatotekst(fødselsdato)}${formaterSladdbarVerdi(fødselsdato, (dato) => ` (${alderFraDato(dato)} år)`, '', '')}`}
+                />
+                <Opplysning navn={'Fødselsnummer'} verdi={sladdbarTekst(fnr) || 'Ikke oppgitt'} />
 
-                {søknadsopplysninger && (
-                    <BodyShort size={'small'}>
-                        {søknadsopplysninger.oppholdssted
-                            ? `Oppholdssted: ${oppholdsstedTekst[søknadsopplysninger.oppholdssted]}`
-                            : `Oppholder seg i Norge/EØS: ${formaterSøknadsspørsmålSvar(søknadsopplysninger.oppholderSegIEØSSpm.svar)}`}
-                    </BodyShort>
-                )}
+                {søknadsopplysninger &&
+                    (søknadsopplysninger.oppholdssted ? (
+                        <Opplysning
+                            navn={'Oppholdssted'}
+                            verdi={oppholdsstedTekst[søknadsopplysninger.oppholdssted]}
+                        />
+                    ) : (
+                        <Opplysning
+                            navn={'Oppholder seg i Norge/EØS'}
+                            verdi={formaterSøknadsspørsmålSvar(
+                                søknadsopplysninger.oppholderSegIEØSSpm.svar,
+                            )}
+                        />
+                    ))}
 
                 {oppholderSegUtenforEØS && (
                     <InlineMessage status={'warning'} size={'small'}>
@@ -158,6 +164,14 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
         </div>
     );
 };
+
+// Samme formatering som saksopplysningene, med verdien i fet skrift
+const Opplysning = ({ navn, verdi }: { navn: string; verdi: string }) => (
+    <BodyShort size={'small'}>
+        {`${navn}: `}
+        <strong>{verdi}</strong>
+    </BodyShort>
+);
 
 const RettMerknad = ({
     fødselsdato,
@@ -280,9 +294,10 @@ const ValgtPeriode = ({
             )}
 
             {effektivePerioder.length > 0 ? (
-                <BodyShort size={'small'}>
-                    {`Gir barnetillegg i perioden: ${effektivePerioder.map(formaterPeriode).join(', ')}`}
-                </BodyShort>
+                <Opplysning
+                    navn={'Gir barnetillegg i perioden'}
+                    verdi={effektivePerioder.map(formaterPeriode).join(', ')}
+                />
             ) : (
                 <InlineMessage status={'error'} size={'small'}>
                     {'Barnet gir ikke barnetillegg i innvilgelsesperioden med valgt periode.'}
