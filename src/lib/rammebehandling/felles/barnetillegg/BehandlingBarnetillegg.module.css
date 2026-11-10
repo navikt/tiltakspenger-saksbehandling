@@ -1,16 +1,6 @@
 .radioGroup {
-    margin-top: 1rem;
-
     & > :global(.aksel-radio-buttons) {
         display: flex;
         gap: 2rem;
     }
-}
-
-.pølseSeksjon {
-    margin-bottom: 0.5rem;
-}
-
-.infoboks {
-    margin-top: 1rem;
 }

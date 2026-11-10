@@ -1,4 +1,4 @@
-import { BodyShort, VStack } from '@navikt/ds-react';
+import { BodyShort, HGrid, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingInnvilgelseMedPerioderSkjema } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
@@ -14,7 +14,7 @@ export const BarnetilleggBarnListe = () => {
     const kandidater = hentBarnetilleggKandidater(behandling, innvilgelse, sak);
 
     return (
-        <VStack gap={'space-12'}>
+        <VStack gap={'space-16'}>
             <BodyShort size={'small'} weight={'semibold'}>
                 {erReadonly ? 'Barn' : 'Velg barna det skal innvilges barnetillegg for'}
             </BodyShort>
@@ -26,9 +26,13 @@ export const BarnetilleggBarnListe = () => {
                 </BodyShort>
             )}
 
-            {kandidater.map((kandidat) => (
-                <BarnetilleggBarnValg kandidat={kandidat} key={kandidat.barn.key} />
-            ))}
+            {kandidater.length > 0 && (
+                <HGrid columns={{ xs: 1, md: 2 }} gap={'space-16'}>
+                    {kandidater.map((kandidat) => (
+                        <BarnetilleggBarnValg kandidat={kandidat} key={kandidat.barn.key} />
+                    ))}
+                </HGrid>
+            )}
 
             {!erReadonly && (
                 <LeggTilBarnetilleggBarn

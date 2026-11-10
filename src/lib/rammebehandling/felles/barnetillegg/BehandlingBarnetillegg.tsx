@@ -55,9 +55,9 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
     );
 
     return (
-        <>
-            <VedtakSeksjon>
-                <VedtakSeksjon.Venstre>
+        <VedtakSeksjon>
+            <VedtakSeksjon.FullBredde gap={'space-24'}>
+                <VStack gap={'space-8'}>
                     <HStack justify={'space-between'} align={'center'}>
                         <Heading level={'3'} size={'small'}>
                             {'Barnetillegg'}
@@ -65,42 +65,37 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                         {headerHandling}
                     </HStack>
                     {varsel}
-                </VedtakSeksjon.Venstre>
-
-                <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
                     <BarnetilleggTidslinje innvilgelsesperiode={innvilgelseTotalPeriode} />
-                </VedtakSeksjon.FullBredde>
+                </VStack>
 
                 {lagretBarnetillegg && erLagretSomV1 && (
-                    <VedtakSeksjon.Venstre>
-                        <Infokort variant={'info'} size={'small'}>
-                            <VStack gap={'space-8'}>
+                    <Infokort variant={'info'} size={'small'}>
+                        <VStack gap={'space-8'}>
+                            <BodyShort size={'small'}>
+                                {visesSomV1
+                                    ? 'Barnetillegget er registrert som antall barn per periode, uten informasjon om hvilke barn det gjelder:'
+                                    : 'Barnetillegget ble tidligere registrert som antall barn per periode. Nå må du velge hvilke barn det skal innvilges barnetillegg for. Tidligere registrert:'}
+                            </BodyShort>
+                            {lagretBarnetillegg.perioder.some(kunPerioderMedBarn) ? (
+                                <List size={'small'}>
+                                    {lagretBarnetillegg.perioder
+                                        .filter(kunPerioderMedBarn)
+                                        .map((bt) => (
+                                            <List.Item key={bt.periode.fraOgMed}>
+                                                {`${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`}
+                                            </List.Item>
+                                        ))}
+                                </List>
+                            ) : (
                                 <BodyShort size={'small'}>
-                                    {visesSomV1
-                                        ? 'Barnetillegget er registrert som antall barn per periode, uten informasjon om hvilke barn det gjelder:'
-                                        : 'Barnetillegget ble tidligere registrert som antall barn per periode. Nå må du velge hvilke barn det skal innvilges barnetillegg for. Tidligere registrert:'}
+                                    {'Det var ikke registrert barnetillegg.'}
                                 </BodyShort>
-                                {lagretBarnetillegg.perioder.some(kunPerioderMedBarn) ? (
-                                    <List size={'small'}>
-                                        {lagretBarnetillegg.perioder
-                                            .filter(kunPerioderMedBarn)
-                                            .map((bt) => (
-                                                <List.Item key={bt.periode.fraOgMed}>
-                                                    {`${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`}
-                                                </List.Item>
-                                            ))}
-                                    </List>
-                                ) : (
-                                    <BodyShort size={'small'}>
-                                        {'Det var ikke registrert barnetillegg.'}
-                                    </BodyShort>
-                                )}
-                            </VStack>
-                        </Infokort>
-                    </VedtakSeksjon.Venstre>
+                            )}
+                        </VStack>
+                    </Infokort>
                 )}
 
-                <VedtakSeksjon.Venstre>
+                <VStack gap={'space-12'}>
                     <RadioGroup
                         legend={'Skal det innvilges barnetillegg?'}
                         size={'small'}
@@ -119,26 +114,16 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                     </RadioGroup>
                     {!harBarnetillegg &&
                         harSøktBarnetillegg(innvilgelseTotalPeriode, behandling, sak) && (
-                            <Infokort variant={'info'} className={style.infoboks} size={'small'}>
+                            <Infokort variant={'info'} size={'small'}>
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
                             </Infokort>
                         )}
-                </VedtakSeksjon.Venstre>
-            </VedtakSeksjon>
+                </VStack>
 
-            {harBarnetillegg && visesSomV1 && (
-                <VedtakSeksjon>
-                    <BarnetilleggBegrunnelse />
-                </VedtakSeksjon>
-            )}
-
-            {harBarnetillegg && !visesSomV1 && (
-                <VedtakSeksjon>
-                    <VedtakSeksjon.Venstre>
+                {harBarnetillegg && !visesSomV1 && (
+                    <>
                         <BarnetilleggBarnListe />
-                    </VedtakSeksjon.Venstre>
 
-                    <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
                         {barnetilleggFraValgteBarn.length > 0 ? (
                             <VStack gap={'space-8'}>
                                 <BodyShort size={'small'} weight={'semibold'}>
@@ -154,11 +139,11 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                                 {'Valgte barn gir ikke barnetillegg i innvilgelsesperioden.'}
                             </BodyShort>
                         )}
-                    </VedtakSeksjon.FullBredde>
+                    </>
+                )}
+            </VedtakSeksjon.FullBredde>
 
-                    <BarnetilleggBegrunnelse />
-                </VedtakSeksjon>
-            )}
-        </>
+            {harBarnetillegg && <BarnetilleggBegrunnelse />}
+        </VedtakSeksjon>
     );
 };

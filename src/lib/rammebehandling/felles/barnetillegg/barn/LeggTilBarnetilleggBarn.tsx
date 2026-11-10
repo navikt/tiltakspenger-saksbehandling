@@ -112,11 +112,11 @@ export const LeggTilBarnetilleggBarn = ({ eksisterendeKeys }: Props) => {
     };
 
     return (
-        <VStack gap={'space-12'} className={style.leggTilSkjema}>
+        <VStack gap={'space-16'} className={style.leggTilSkjema}>
             <Heading level={'4'} size={'xsmall'}>
                 {'Legg til barn'}
             </Heading>
-            <HStack gap={'space-12'} align={'start'}>
+            <HStack gap={'space-16'} align={'start'}>
                 <TextField
                     label={'Fornavn'}
                     size={'small'}
@@ -138,7 +138,7 @@ export const LeggTilBarnetilleggBarn = ({ eksisterendeKeys }: Props) => {
                     onChange={(event) => oppdater({ etternavn: event.target.value })}
                 />
             </HStack>
-            <HStack gap={'space-12'} align={'start'}>
+            <HStack gap={'space-16'} align={'start'}>
                 <Datovelger
                     label={'Fødselsdato'}
                     size={'small'}

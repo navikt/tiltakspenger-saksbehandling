@@ -107,7 +107,7 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
                 )}
             </HStack>
 
-            <VStack gap={'space-4'} className={style.detaljer}>
+            <VStack gap={'space-8'} className={style.detaljer}>
                 <BodyShort size={'small'}>
                     {`Fødselsdato: ${formaterSladdbarDatotekst(fødselsdato)}${formaterSladdbarVerdi(fødselsdato, (dato) => ` (${alderFraDato(dato)} år)`, '', '')}`}
                 </BodyShort>
@@ -226,7 +226,7 @@ const ValgtPeriode = ({
         });
 
     return (
-        <VStack gap={'space-8'} className={style.periodevalg}>
+        <VStack gap={'space-12'} className={style.periodevalg}>
             <RadioGroup
                 legend={'Periode med barnetillegg'}
                 size={'small'}
@@ -245,7 +245,7 @@ const ValgtPeriode = ({
             </RadioGroup>
 
             {periode && (
-                <HStack gap={'space-12'} align={'end'}>
+                <HStack gap={'space-16'} align={'end'}>
                     <Datovelger
                         label={'Fra og med'}
                         size={'small'}

@@ -1,15 +1,16 @@
 .barn {
     border: 1px solid var(--ax-border-neutral-subtle);
     border-radius: var(--ax-radius-8);
-    padding: 0.5rem 1rem;
+    padding: 1rem 1.25rem;
 }
 
 .detaljer {
+    margin-top: 0.25rem;
     margin-left: 2rem;
 }
 
 .periodevalg {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
 }
 
 .radioGroup {
@@ -22,7 +23,7 @@
 .leggTilSkjema {
     border: 1px solid var(--ax-border-neutral-subtle);
     border-radius: var(--ax-radius-8);
-    padding: 1rem;
+    padding: 1rem 1.25rem;
 }
 
 .leggTilKnapp {
