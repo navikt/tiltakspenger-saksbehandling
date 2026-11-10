@@ -119,6 +119,7 @@ const omgjøringOpphør = (omgjørVedtak: VedtakId, vedtaksperiode: Periode): Om
     gyldigeKommandoer: [],
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
+    perioderForReversertOpphør: [],
     beslutterEndringer: { skalJournalføreNotat: null },
     tidslinjeFørOgEtter: null,
     tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },

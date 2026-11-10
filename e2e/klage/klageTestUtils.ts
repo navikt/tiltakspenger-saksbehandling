@@ -153,6 +153,7 @@ const lagRammebehandling = (): RevurderingStans => ({
     innvilgbarePerioder: [],
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
+    perioderForReversertOpphør: [],
     valgtHjemmelHarIkkeRettighet: null,
     harValgtStansFraFørsteDagSomGirRett: null,
     harValgtStansTilSisteDagSomGirRett: null,

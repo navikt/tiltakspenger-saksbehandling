@@ -12,6 +12,7 @@ import {
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import { Dato } from '~/types/DatoTid';
+import { PeriodeForReversertOpphør } from '~/lib/rammebehandling/typer/ReversertOpphør';
 
 export enum TiltaksdeltakerEndringType {
     AVBRUTT_DELTAKELSE = 'AVBRUTT_DELTAKELSE',
@@ -46,6 +47,8 @@ type RevurderingBase = RammebehandlingBase & {
     type: Rammebehandlingstype.REVURDERING;
     resultat: RevurderingResultat;
     automatiskOpprettetGrunn: Nullable<AutomatiskOpprettetGrunn>;
+    /** Er bare utfylt for omgjøringer. */
+    perioderForReversertOpphør: PeriodeForReversertOpphør[];
 };
 
 export type RevurderingStans = RevurderingBase & {

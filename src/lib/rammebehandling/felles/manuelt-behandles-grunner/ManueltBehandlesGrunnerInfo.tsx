@@ -71,6 +71,8 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Alle innvilgede dager for tiltaksdeltakelsen etter sluttdatoen er allerede utbetalt',
     STANS_ANDRE_DELTAKELSER_INNVILGET_ETTER_SLUTTDATO:
         'Bruker har andre tiltaksdeltakelser som er innvilget etter sluttdatoen',
+    STANS_REVERSERT_OPPHOR_ETTER_SLUTTDATO:
+        'Saken har perioder innvilget som reversert opphør (uten gyldig tiltaksdeltakelse) etter sluttdatoen',
     STANS_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for stansen mangler simulering',
     STANS_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
         'Simuleringen av stansen gir feilutbetaling, som ikke støttes for stans',
@@ -135,6 +137,8 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
     OMGJORING_ANDRE_ENDRINGER_I_TILTAKSDELTAKELSENE:
         'Tiltaksdeltakelsene i vedtaket har andre endringer enn ny sluttdato',
+    OMGJORING_HAR_REVERSERT_OPPHOR:
+        'Vedtaket har perioder innvilget som reversert opphør (uten gyldig tiltaksdeltakelse)',
     OMGJORING_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for omgjøringen mangler simulering',
     OMGJORING_UTBETALING_STOTTER_IKKE_FEILUTBETALING:
         'Simuleringen av omgjøringen gir feilutbetaling, som må vurderes av saksbehandler',

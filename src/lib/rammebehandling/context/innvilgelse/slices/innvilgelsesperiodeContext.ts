@@ -42,6 +42,7 @@ export type InnvilgelsesperioderActions =
           type: 'settTiltaksdeltakelse';
           payload: {
               internDeltakelseId: string;
+              erReversertOpphør: boolean;
               index: number;
           };
       }
@@ -209,7 +210,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         }
 
         case 'settTiltaksdeltakelse': {
-            const { index, internDeltakelseId } = payload;
+            const { index, internDeltakelseId, erReversertOpphør } = payload;
 
             const innvilgelsesperiode = state.innvilgelsesperioder.atNonNull(index);
 
@@ -218,6 +219,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                 innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
                     ...innvilgelsesperiode,
                     internDeltakelseId: internDeltakelseId,
+                    erReversertOpphør,
                 }),
             };
         }

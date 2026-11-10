@@ -167,6 +167,9 @@ const lagreRevurdering = (
         fritekstTilVedtaksbrev: ikkeSladdet(body.fritekstTilVedtaksbrev),
         skalJournalføreNotat: body.skalJournalføreNotat,
         sistEndret,
+        saksopplysninger: gjeldende.saksopplysninger,
+        innvilgbarePerioder: gjeldende.innvilgbarePerioder,
+        perioderForReversertOpphør: gjeldende.perioderForReversertOpphør,
     };
 
     switch (body.resultat) {
