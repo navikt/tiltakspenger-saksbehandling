@@ -65,7 +65,53 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                         {headerHandling}
                     </HStack>
                     {varsel}
+                </VStack>
+
+                <VStack gap={'space-12'}>
+                    <RadioGroup
+                        legend={'Skal det innvilges barnetillegg?'}
+                        size={'small'}
+                        className={style.radioGroup}
+                        value={harBarnetillegg}
+                        readOnly={erReadonly}
+                        onChange={(harSøkt: boolean) => {
+                            dispatch({
+                                type: 'setHarSøktBarnetillegg',
+                                payload: { harSøkt },
+                            });
+                        }}
+                    >
+                        <Radio value={true}>{'Ja'}</Radio>
+                        <Radio value={false}>{'Nei'}</Radio>
+                    </RadioGroup>
+                    {!harBarnetillegg &&
+                        harSøktBarnetillegg(innvilgelseTotalPeriode, behandling, sak) && (
+                            <Infokort variant={'info'} size={'small'}>
+                                Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
+                            </Infokort>
+                        )}
+                </VStack>
+
+                <VStack gap={'space-16'}>
                     <BarnetilleggTidslinje innvilgelsesperiode={innvilgelseTotalPeriode} />
+
+                    {harBarnetillegg &&
+                        !visesSomV1 &&
+                        (barnetilleggFraValgteBarn.length > 0 ? (
+                            <VStack gap={'space-8'}>
+                                <BodyShort size={'small'} weight={'semibold'}>
+                                    {'Barnetillegg som innvilges, utledet fra valgte barn:'}
+                                </BodyShort>
+                                <AntallBarnTidslinje
+                                    periode={innvilgelseTotalPeriode}
+                                    barnetillegg={barnetilleggFraValgteBarn}
+                                />
+                            </VStack>
+                        ) : (
+                            <BodyShort size={'small'}>
+                                {'Valgte barn gir ikke barnetillegg i innvilgelsesperioden.'}
+                            </BodyShort>
+                        ))}
                 </VStack>
 
                 {lagretBarnetillegg && erLagretSomV1 && (
@@ -95,52 +141,7 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                     </Infokort>
                 )}
 
-                <VStack gap={'space-12'}>
-                    <RadioGroup
-                        legend={'Skal det innvilges barnetillegg?'}
-                        size={'small'}
-                        className={style.radioGroup}
-                        value={harBarnetillegg}
-                        readOnly={erReadonly}
-                        onChange={(harSøkt: boolean) => {
-                            dispatch({
-                                type: 'setHarSøktBarnetillegg',
-                                payload: { harSøkt },
-                            });
-                        }}
-                    >
-                        <Radio value={true}>{'Ja'}</Radio>
-                        <Radio value={false}>{'Nei'}</Radio>
-                    </RadioGroup>
-                    {!harBarnetillegg &&
-                        harSøktBarnetillegg(innvilgelseTotalPeriode, behandling, sak) && (
-                            <Infokort variant={'info'} size={'small'}>
-                                Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
-                            </Infokort>
-                        )}
-                </VStack>
-
-                {harBarnetillegg && !visesSomV1 && (
-                    <>
-                        <BarnetilleggBarnListe />
-
-                        {barnetilleggFraValgteBarn.length > 0 ? (
-                            <VStack gap={'space-8'}>
-                                <BodyShort size={'small'} weight={'semibold'}>
-                                    {'Barnetillegg som innvilges, utledet fra valgte barn:'}
-                                </BodyShort>
-                                <AntallBarnTidslinje
-                                    periode={innvilgelseTotalPeriode}
-                                    barnetillegg={barnetilleggFraValgteBarn}
-                                />
-                            </VStack>
-                        ) : (
-                            <BodyShort size={'small'}>
-                                {'Valgte barn gir ikke barnetillegg i innvilgelsesperioden.'}
-                            </BodyShort>
-                        )}
-                    </>
-                )}
+                {harBarnetillegg && !visesSomV1 && <BarnetilleggBarnListe />}
             </VedtakSeksjon.FullBredde>
 
             {harBarnetillegg && <BarnetilleggBegrunnelse />}
