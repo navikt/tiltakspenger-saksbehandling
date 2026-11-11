@@ -2,7 +2,7 @@ import {
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
     omgjøringOpphør,
-    innvilgelsesperiode,
+    lagretInnvilgelsesperiode,
     periode,
     revurderingInnvilgelse,
     revurderingStans,
@@ -80,7 +80,7 @@ export const lagSak = (revurdering: Revurdering | null): SakProps => {
             iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             søknad: søknadMedSvar(),
             vedtaksperiode: VEDTAKSPERIODE,
-            innvilgelsesperioder: [innvilgelsesperiode(VEDTAKSPERIODE)],
+            innvilgelsesperioder: [lagretInnvilgelsesperiode(VEDTAKSPERIODE)],
         }),
         vedtak: {
             gyldigeKommandoer: {

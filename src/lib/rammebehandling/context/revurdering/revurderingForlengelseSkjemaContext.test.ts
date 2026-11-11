@@ -6,6 +6,7 @@ import {
     periode,
     revurderingForlengelse,
     sakMedInnvilgetVedtak,
+    lagretInnvilgelsesperiode,
 } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import {
@@ -29,7 +30,7 @@ const forlengelsesperiode = periode('2025-04-01', '2025-06-30');
 const sak = sakMedInnvilgetVedtak(vedtaksperiode, {
     vedtak: {
         innvilgelsesperioder: [
-            innvilgelsesperiode(vedtaksperiode, {
+            lagretInnvilgelsesperiode(vedtaksperiode, {
                 antallDagerPerMeldeperiode: 6,
                 internDeltakelseId: 'deltakelse_vedtak',
             }),
@@ -50,7 +51,7 @@ const utledetBarnetillegg = [
 
 const lagretBehandling = revurderingForlengelse({
     innvilgelsesperioder: [
-        innvilgelsesperiode(forlengelsesperiode, {
+        lagretInnvilgelsesperiode(forlengelsesperiode, {
             antallDagerPerMeldeperiode: 6,
             internDeltakelseId: 'deltakelse_vedtak',
         }),
@@ -273,15 +274,15 @@ describe('valg av tiltaksdeltakelse ved forlengelse', () => {
     const sakMedToTiltak = sakMedInnvilgetVedtak(vedtaksperiode, {
         vedtak: {
             innvilgelsesperioder: [
-                innvilgelsesperiode(periode('2025-01-01', '2025-01-31'), {
+                lagretInnvilgelsesperiode(periode('2025-01-01', '2025-01-31'), {
                     antallDagerPerMeldeperiode: 4,
                     internDeltakelseId: 'deltakelse_tidlig',
                 }),
-                innvilgelsesperiode(periode('2025-02-01', '2025-02-28'), {
+                lagretInnvilgelsesperiode(periode('2025-02-01', '2025-02-28'), {
                     antallDagerPerMeldeperiode: 8,
                     internDeltakelseId: 'deltakelse_vedtak',
                 }),
-                innvilgelsesperiode(periode('2025-03-01', '2025-03-31'), {
+                lagretInnvilgelsesperiode(periode('2025-03-01', '2025-03-31'), {
                     antallDagerPerMeldeperiode: 6,
                     internDeltakelseId: 'deltakelse_tidlig',
                 }),

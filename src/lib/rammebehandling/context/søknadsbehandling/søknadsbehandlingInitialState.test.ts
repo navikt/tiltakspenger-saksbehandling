@@ -6,6 +6,7 @@ import {
     søknadsbehandlingAvslag,
     søknadsbehandlingIkkeValgt,
     søknadsbehandlingInnvilgelse,
+    somLagretInnvilgelsesperiode,
 } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
@@ -63,7 +64,9 @@ describe('søknadsbehandlingInitialState', () => {
             ];
 
             const behandling = søknadsbehandlingInnvilgelse({
-                innvilgelsesperioder,
+                innvilgelsesperioder: innvilgelsesperioder.map((it) =>
+                    somLagretInnvilgelsesperiode(it),
+                ),
                 barnetillegg: {
                     perioder: [
                         barnetilleggPeriode(1, periode('2025-01-01', '2025-01-31')),

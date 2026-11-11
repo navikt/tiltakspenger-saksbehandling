@@ -14,6 +14,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/lib/sak/SakContext';
 import { tilOppdaterPrioriteringDTO } from '~/lib/_felles/prioritering/prioriteringUtils';
+import { tilInnvilgelsesperioderDTO } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const RevurderingInnvilgelseHandlinger = () => {
     const { behandling } = useRevurderingBehandling();
@@ -47,7 +48,7 @@ const tilDTO = (
             skjema.erPrioritert,
             skjema.textAreas.prioriteringBegrunnelse.getValue(),
         ),
-        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+        innvilgelsesperioder: tilInnvilgelsesperioderDTO(innvilgelse.innvilgelsesperioder),
         barnetillegg: innvilgelse.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),

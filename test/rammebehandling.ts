@@ -37,7 +37,13 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    Innvilgelsesperiode,
+    InnvilgelsesperiodeDTO,
+    LagretInnvilgelsesperiode,
+    UgyldigTiltaksdeltakelse,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { tilInnvilgelsesperiodeDTO } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { Periode } from '~/types/Periode';
 import { tilDato, tilTidspunkt } from '~/types/DatoTid';
@@ -61,6 +67,43 @@ export const innvilgelsesperiode = (
     internDeltakelseId: 'deltakelse_1',
     ...overstyringer,
 });
+
+// Innvilgelsesperioden slik den sendes til backend
+export const innvilgelsesperiodeDTO = (
+    p: Periode,
+    overstyringer: Partial<Innvilgelsesperiode> = {},
+): InnvilgelsesperiodeDTO => tilInnvilgelsesperiodeDTO(innvilgelsesperiode(p, overstyringer));
+
+// Innvilgelsesperioden slik backend returnerer den, med én tiltaksdeltakelse
+export const somLagretInnvilgelsesperiode = (
+    {
+        periode,
+        internDeltakelseId,
+        antallDagerPerMeldeperiode,
+        erReversertOpphør,
+    }: Innvilgelsesperiode,
+    ugyldigTiltaksdeltakelse?: UgyldigTiltaksdeltakelse,
+): LagretInnvilgelsesperiode => ({
+    periode,
+    tiltaksdeltakelser: [
+        {
+            internDeltakelseId,
+            antallDagerPerMeldeperiode,
+            ...(ugyldigTiltaksdeltakelse && { ugyldigTiltaksdeltakelse }),
+        },
+    ],
+    ...(erReversertOpphør !== undefined && { erReversertOpphør }),
+});
+
+export const lagretInnvilgelsesperiode = (
+    p: Periode,
+    overstyringer: Partial<Innvilgelsesperiode> & {
+        ugyldigTiltaksdeltakelse?: UgyldigTiltaksdeltakelse;
+    } = {},
+): LagretInnvilgelsesperiode => {
+    const { ugyldigTiltaksdeltakelse, ...resten } = overstyringer;
+    return somLagretInnvilgelsesperiode(innvilgelsesperiode(p, resten), ugyldigTiltaksdeltakelse);
+};
 
 export const barnetilleggPeriode = (antallBarn: number, p: Periode): BarnetilleggPeriode => ({
     antallBarn,
@@ -203,7 +246,7 @@ export const søknadsbehandlingInnvilgelse = (
     ...søknadsbehandlingBase(),
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     vedtaksperiode: periode('2025-01-01', '2025-03-31'),
-    innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+    innvilgelsesperioder: [lagretInnvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
     barnetillegg: { perioder: [], begrunnelse: ikkeSladdet(null) },
     ...overstyringer,
 });
@@ -356,7 +399,7 @@ export const sakMedInnvilgetVedtak = (
             status: Rammebehandlingsstatus.VEDTATT,
             iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             vedtaksperiode,
-            innvilgelsesperioder: [innvilgelsesperiode(vedtaksperiode)],
+            innvilgelsesperioder: [lagretInnvilgelsesperiode(vedtaksperiode)],
         });
 
     const vedtak = rammevedtak('vedtak_1', vedtaksperiode, {

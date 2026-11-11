@@ -7,7 +7,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { Omgjøringsgrad, VedtakId } from './Rammevedtak';
 import {
-    Innvilgelsesperiode,
+    InnvilgelsesperiodeDTO,
     LagretInnvilgelsesperiode,
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
@@ -157,7 +157,7 @@ export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
 
 export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.INNVILGELSE;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: InnvilgelsesperiodeDTO[];
     barnetillegg: BarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };
@@ -173,7 +173,7 @@ export type OppdaterRevurderingForlengelseDTO = OppdaterBehandlingBaseDTO & {
 
 export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: InnvilgelsesperiodeDTO[];
     barnetillegg: BarnetilleggDTO;
     vedtaksperiode: Periode;
     skalSendeVedtaksbrev: boolean;

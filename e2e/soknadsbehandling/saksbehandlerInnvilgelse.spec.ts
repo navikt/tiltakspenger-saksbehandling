@@ -88,8 +88,12 @@ test.describe('Søknadsbehandling - innvilgelse', () => {
                                 fraOgMed: tilDato('2025-01-01'),
                                 tilOgMed: tilDato('2025-03-31'),
                             },
-                            antallDagerPerMeldeperiode: 8,
-                            internDeltakelseId: 'deltakelse_1',
+                            tiltaksdeltakelser: [
+                                {
+                                    internDeltakelseId: 'deltakelse_1',
+                                    antallDagerPerMeldeperiode: 8,
+                                },
+                            ],
                             erReversertOpphør: false,
                         },
                     ],

@@ -9,7 +9,11 @@ import {
     test,
 } from '../felles/e2eFelles';
 import type { Page } from '@playwright/test';
-import { innvilgelsesperiode, periode, søknadsbehandlingInnvilgelse } from '~test/rammebehandling';
+import {
+    lagretInnvilgelsesperiode,
+    periode,
+    søknadsbehandlingInnvilgelse,
+} from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -32,7 +36,7 @@ const innvilgelseSendtTilBeslutning = (
         status: Rammebehandlingsstatus.KLAR_TIL_BESLUTNING,
         saksbehandler: SAKSBEHANDLER_IDENT,
         beslutter: null,
-        innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+        innvilgelsesperioder: [lagretInnvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
         begrunnelseVilkårsvurdering: ikkeSladdet('Bruker oppfyller vilkårene.'),
         fritekstTilVedtaksbrev: ikkeSladdet('Du får tiltakspenger.'),
         // Beslutteren kan bare ta behandlingen før den er tildelt

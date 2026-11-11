@@ -6,7 +6,7 @@ import {
 } from './Rammebehandling';
 import { InnvilgbarSøknad, Søknad } from '~/lib/søknad/søknadTyper';
 import {
-    Innvilgelsesperiode,
+    InnvilgelsesperiodeDTO,
     LagretInnvilgelsesperiode,
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
@@ -45,7 +45,7 @@ export enum SøknadsbehandlingResultat {
 
 export type OppdaterSøknadsbehandlingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: InnvilgelsesperiodeDTO[];
     barnetillegg: BarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };

@@ -23,6 +23,7 @@ import { overlappendePeriode, periodiseringTotalPeriode, totalPeriode } from '~/
 import { Periode } from '~/types/Periode';
 import { isNonNullish } from '~/utils/object';
 import { RevurderingUbestemtState } from '~/lib/rammebehandling/context/revurdering/revurderingUbestemtSkjemaContext';
+import { fraLagredeInnvilgelsesperioder } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -78,9 +79,7 @@ const innvilgelseInitialState = (
     behandling: RevurderingInnvilgelse,
     sak: SakProps,
 ): RevurderingInnvilgelseState => {
-    const { innvilgelsesperioder } = behandling;
-
-    if (!innvilgelsesperioder) {
+    if (!behandling.innvilgelsesperioder) {
         return {
             resultat: RevurderingResultat.INNVILGELSE,
             innvilgelse: {
@@ -94,6 +93,7 @@ const innvilgelseInitialState = (
         };
     }
 
+    const innvilgelsesperioder = fraLagredeInnvilgelsesperioder(behandling.innvilgelsesperioder);
     const barnetilleggPerioder = hentBarnetilleggForRevurdering(
         behandling,
         innvilgelsesperioder,
@@ -159,9 +159,9 @@ const omgjøringInnvilgelseInitialState = (
         };
     }
 
-    const { innvilgelsesperioder, vedtaksperiode } = behandling;
+    const { vedtaksperiode } = behandling;
 
-    if (!innvilgelsesperioder) {
+    if (!behandling.innvilgelsesperioder) {
         return {
             resultat: RevurderingResultat.OMGJØRING,
             vedtaksperiode,
@@ -176,6 +176,7 @@ const omgjøringInnvilgelseInitialState = (
         };
     }
 
+    const innvilgelsesperioder = fraLagredeInnvilgelsesperioder(behandling.innvilgelsesperioder);
     const barnetilleggPerioder = hentBarnetilleggForRevurdering(
         behandling,
         innvilgelsesperioder,

@@ -6,7 +6,11 @@ import {
     forventOverskrift,
     test,
 } from '../felles/e2eFelles';
-import { innvilgelsesperiode, periode, søknadsbehandlingInnvilgelse } from '~test/rammebehandling';
+import {
+    lagretInnvilgelsesperiode,
+    periode,
+    søknadsbehandlingInnvilgelse,
+} from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import {
@@ -24,7 +28,9 @@ test.describe('Søknadsbehandling - tildelt en annen saksbehandler', () => {
             søknadsbehandlingInnvilgelse({
                 søknad: lagSøknad(),
                 saksbehandler: ANNEN_SAKSBEHANDLER,
-                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+                innvilgelsesperioder: [
+                    lagretInnvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+                ],
                 begrunnelseVilkårsvurdering: ikkeSladdet('Vurdert av en annen saksbehandler.'),
                 fritekstTilVedtaksbrev: ikkeSladdet('Du får tiltakspenger.'),
                 // Backend gir bare mulighet til å overta behandlingen

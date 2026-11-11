@@ -90,8 +90,12 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                                 fraOgMed: tilDato('2025-01-01'),
                                 tilOgMed: tilDato('2025-03-31'),
                             },
-                            antallDagerPerMeldeperiode: 10,
-                            internDeltakelseId: 'deltakelse_1',
+                            tiltaksdeltakelser: [
+                                {
+                                    internDeltakelseId: 'deltakelse_1',
+                                    antallDagerPerMeldeperiode: 10,
+                                },
+                            ],
                             erReversertOpphør: false,
                         },
                     ],

@@ -18,13 +18,15 @@ export const finnUgyldigTiltaksdeltakelse = (
 
     const lagret = rammebehandlingMedInnvilgelseEllerNull(behandling)?.innvilgelsesperioder?.find(
         (it) =>
-            it.internDeltakelseId === internDeltakelseId &&
             it.periode.fraOgMed === periode.fraOgMed &&
             it.periode.tilOgMed === periode.tilOgMed &&
             (it.erReversertOpphør ?? false) === erReversertOpphør,
     );
 
-    return lagret?.ugyldigTiltaksdeltakelse ?? null;
+    return (
+        lagret?.tiltaksdeltakelser.find((it) => it.internDeltakelseId === internDeltakelseId)
+            ?.ugyldigTiltaksdeltakelse ?? null
+    );
 };
 
 export const ugyldigTiltaksdeltakelseTekst = (ugyldig: UgyldigTiltaksdeltakelse): string => {

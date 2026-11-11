@@ -2,6 +2,7 @@ import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { TimelinePeriodProps } from '@navikt/ds-react';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { minOgMax, NumberRange } from '~/utils/tall';
+import { antallDagerPerMeldeperiodeTotalt } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const erTidslinjeElementInnvilgelse = (r: TidslinjeResultat): boolean => {
     switch (r) {
@@ -46,7 +47,7 @@ export const tellAntallDagerFraVedtak = (vedtak: Rammevedtak): NumberRange => {
         return TOMT_ANTALL;
     }
 
-    const antallDager = vedtak.innvilgelsesperioder.map((it) => it.antallDagerPerMeldeperiode);
+    const antallDager = vedtak.innvilgelsesperioder.map(antallDagerPerMeldeperiodeTotalt);
 
     return antallDager.length > 0 ? minOgMax(antallDager) : TOMT_ANTALL;
 };

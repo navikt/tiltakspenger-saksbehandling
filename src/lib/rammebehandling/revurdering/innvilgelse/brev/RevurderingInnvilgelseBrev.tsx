@@ -9,6 +9,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
+import { tilInnvilgelsesperioderDTO } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling } = useRevurderingBehandling();
@@ -37,7 +38,7 @@ const tilForhåndsvisningDTO = (
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         fritekst: textAreas.brevtekst.getValue(),
-        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+        innvilgelsesperioder: tilInnvilgelsesperioderDTO(innvilgelse.innvilgelsesperioder),
         barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
     };
 };

@@ -2,7 +2,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { Barnetillegg, BarnetilleggPeriode } from './Barnetillegg';
 import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { LagretInnvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Dato, Tidspunkt } from '~/types/DatoTid';
 
@@ -24,7 +24,7 @@ export type Rammevedtak = {
     gjeldendeInnvilgetPerioder: Periode[];
     saksbehandler: string;
     beslutter: string;
-    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
     // Barnetilleggsperiodene som fortsatt er gjeldende i vedtaket for sakens nå-tilstand

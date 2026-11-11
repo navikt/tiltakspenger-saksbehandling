@@ -231,8 +231,12 @@ test.describe('Omgjøring', () => {
                                 fraOgMed: tilDato('2025-01-01'),
                                 tilOgMed: tilDato('2025-03-31'),
                             },
-                            antallDagerPerMeldeperiode: 8,
-                            internDeltakelseId: 'deltakelse_1',
+                            tiltaksdeltakelser: [
+                                {
+                                    internDeltakelseId: 'deltakelse_1',
+                                    antallDagerPerMeldeperiode: 8,
+                                },
+                            ],
                             erReversertOpphør: false,
                         },
                     ],
@@ -339,8 +343,12 @@ test.describe('Omgjøring', () => {
                             fraOgMed: tilDato('2025-01-01'),
                             tilOgMed: tilDato('2025-02-28'),
                         },
-                        antallDagerPerMeldeperiode: 10,
-                        internDeltakelseId: 'deltakelse_1',
+                        tiltaksdeltakelser: [
+                            {
+                                internDeltakelseId: 'deltakelse_1',
+                                antallDagerPerMeldeperiode: 10,
+                            },
+                        ],
                         erReversertOpphør: false,
                     },
                     {
@@ -348,8 +356,12 @@ test.describe('Omgjøring', () => {
                             fraOgMed: tilDato('2025-03-01'),
                             tilOgMed: tilDato('2025-03-31'),
                         },
-                        antallDagerPerMeldeperiode: 10,
-                        internDeltakelseId: 'deltakelse_1',
+                        tiltaksdeltakelser: [
+                            {
+                                internDeltakelseId: 'deltakelse_1',
+                                antallDagerPerMeldeperiode: 10,
+                            },
+                        ],
                         erReversertOpphør: true,
                     },
                 ],

@@ -14,6 +14,7 @@ import {
     søknad,
     søknadBarn,
     søknadsbehandlingInnvilgelse,
+    lagretInnvilgelsesperiode,
 } from '~test/rammebehandling';
 
 const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
@@ -111,13 +112,12 @@ describe('revurderingInnvilgelseValidering', () => {
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse({
                 innvilgelsesperioder: [
-                    {
-                        ...innvilgelsesperiode(innvilgetPeriode),
+                    lagretInnvilgelsesperiode(innvilgetPeriode, {
                         ugyldigTiltaksdeltakelse: {
                             type: 'KAN_IKKE_INNVILGES',
                             deltakelsesperiode: null,
                         },
-                    },
+                    }),
                 ],
             }),
             {

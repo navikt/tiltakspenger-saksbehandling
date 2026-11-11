@@ -11,6 +11,8 @@ import {
     sak,
     sakMedInnvilgetVedtak,
     revurderingUbestemt,
+    somLagretInnvilgelsesperiode,
+    lagretInnvilgelsesperiode,
 } from '~test/rammebehandling';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import {
@@ -76,7 +78,9 @@ describe('revurderingInitialState', () => {
             const innvilgelsesperioder = [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))];
 
             const behandling = revurderingInnvilgelse({
-                innvilgelsesperioder,
+                innvilgelsesperioder: innvilgelsesperioder.map((it) =>
+                    somLagretInnvilgelsesperiode(it),
+                ),
                 barnetillegg: {
                     perioder: [barnetilleggPeriode(1, periode('2025-04-01', '2025-05-31'))],
                     begrunnelse: ikkeSladdet(null),
@@ -106,7 +110,9 @@ describe('revurderingInitialState', () => {
             });
 
             const behandling = revurderingInnvilgelse({
-                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
+                innvilgelsesperioder: [
+                    lagretInnvilgelsesperiode(periode('2025-04-01', '2025-05-31')),
+                ],
             });
 
             expect(revurderingInitialState(behandling, sakMedBarnetillegg)).toMatchObject({
@@ -140,7 +146,9 @@ describe('omgjøringInitialState', () => {
 
             const behandling = omgjøringInnvilgelse({
                 vedtaksperiode: periode('2025-01-01', '2025-03-31'),
-                innvilgelsesperioder,
+                innvilgelsesperioder: innvilgelsesperioder.map((it) =>
+                    somLagretInnvilgelsesperiode(it),
+                ),
                 barnetillegg: {
                     perioder: [barnetilleggPeriode(1, periode('2025-02-01', '2025-03-31'))],
                     begrunnelse: ikkeSladdet(null),

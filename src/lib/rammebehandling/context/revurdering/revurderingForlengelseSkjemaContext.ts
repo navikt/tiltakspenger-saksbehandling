@@ -21,7 +21,9 @@ import {
     BehandlingSkjemaType,
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { LagretInnvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { fraLagredeInnvilgelsesperioder } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
+import { Nullable } from '~/types/UtilTypes';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { hentLagredePerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { utvidPeriodisering } from '~/utils/periode';
@@ -181,7 +183,7 @@ export const forlengelseInitialState = (
         harEndretBarnetillegg,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder,
+            innvilgelsesperioder: fraLagredeInnvilgelsesperioder(innvilgelsesperioder),
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
         },
@@ -205,7 +207,9 @@ const erLagretMedSammePeriodeOgTiltak = (
     return (
         tilOgMed !== undefined &&
         tilOgMed === lagret?.periode.tilOgMed &&
-        hentForlengelseTiltaksdeltakelse(state) === lagret.internDeltakelseId
+        lagret.tiltaksdeltakelser.some(
+            (it) => it.internDeltakelseId === hentForlengelseTiltaksdeltakelse(state),
+        )
     );
 };
 
@@ -301,16 +305,20 @@ const hentAntallDagerPerMeldeperiode = (
     behandling: RevurderingForlengelse,
     sak: SakProps,
 ): number => {
-    const erValgtTiltak = (innvilgelsesperiode: Innvilgelsesperiode) =>
-        innvilgelsesperiode.internDeltakelseId === internDeltakelseId;
-
-    const mal =
-        hentRammevedtak(sak, behandling.forlengerRammevedtakId)
-            .innvilgelsesperioder?.filter(erValgtTiltak)
-            .at(-1) ?? behandling.innvilgelsesperioder?.filter(erValgtTiltak).at(-1);
+    const antallDagerForValgtTiltak = (
+        innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>,
+    ): number | undefined =>
+        innvilgelsesperioder
+            ?.flatMap((it) => it.tiltaksdeltakelser)
+            .filter((it) => it.internDeltakelseId === internDeltakelseId)
+            .at(-1)?.antallDagerPerMeldeperiode;
 
     return (
-        mal?.antallDagerPerMeldeperiode ?? antallDagerPerMeldeperiodeForPeriode(behandling, periode)
+        antallDagerForValgtTiltak(
+            hentRammevedtak(sak, behandling.forlengerRammevedtakId).innvilgelsesperioder,
+        ) ??
+        antallDagerForValgtTiltak(behandling.innvilgelsesperioder) ??
+        antallDagerPerMeldeperiodeForPeriode(behandling, periode)
     );
 };
 

@@ -9,14 +9,14 @@ import {
     HjemmelForStans,
     RevurderingResultat,
 } from '~/lib/rammebehandling/typer/Revurdering';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { InnvilgelsesperiodeDTO } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import { Dato } from '~/types/DatoTid';
 
 export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     fritekst: Nullable<string>;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: InnvilgelsesperiodeDTO[];
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
@@ -48,7 +48,7 @@ export type RevurderingStansBrevForhåndsvisningDTO = {
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.INNVILGELSE;
     fritekst: Nullable<string>;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: InnvilgelsesperiodeDTO[];
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
@@ -64,7 +64,7 @@ export type RevurderingForlengelseBrevForhåndsvisningDTO = {
 export type OmgjøringInnvilgelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.OMGJØRING;
     fritekst: Nullable<string>;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: InnvilgelsesperiodeDTO[];
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 

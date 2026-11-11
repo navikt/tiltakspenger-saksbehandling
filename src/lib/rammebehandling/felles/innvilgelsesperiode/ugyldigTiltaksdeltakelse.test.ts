@@ -1,5 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
-import { innvilgelsesperiode, omgjøringInnvilgelse, periode } from '~test/rammebehandling';
+import {
+    innvilgelsesperiode,
+    omgjøringInnvilgelse,
+    periode,
+    lagretInnvilgelsesperiode,
+} from '~test/rammebehandling';
 import { finnUgyldigTiltaksdeltakelse } from '~/lib/rammebehandling/felles/innvilgelsesperiode/ugyldigTiltaksdeltakelse';
 import { UgyldigTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
@@ -12,10 +17,10 @@ const ugyldig: UgyldigTiltaksdeltakelse = {
 
 const behandling = omgjøringInnvilgelse({
     innvilgelsesperioder: [
-        {
-            ...innvilgelsesperiode(mars, { erReversertOpphør: false }),
+        lagretInnvilgelsesperiode(mars, {
+            erReversertOpphør: false,
             ugyldigTiltaksdeltakelse: ugyldig,
-        },
+        }),
     ],
 });
 

@@ -14,6 +14,7 @@ import {
     SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO,
 } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { useSak } from '~/lib/sak/SakContext';
+import { tilInnvilgelsesperioderDTO } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const SøknadsbehandlingBrev = () => {
     const { sak } = useSak();
@@ -54,7 +55,7 @@ const tilForhåndsvisningDTO = (
             return {
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
                 fritekst: skjema.textAreas.brevtekst.getValue(),
-                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+                innvilgelsesperioder: tilInnvilgelsesperioderDTO(innvilgelse.innvilgelsesperioder),
                 barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
             } satisfies SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO;
         }

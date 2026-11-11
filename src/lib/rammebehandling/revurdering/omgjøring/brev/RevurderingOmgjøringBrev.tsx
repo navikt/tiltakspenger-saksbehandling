@@ -14,6 +14,7 @@ import {
 import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
 import { erFullstendigPeriode } from '~/utils/periode';
+import { tilInnvilgelsesperioderDTO } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const RevurderingOmgjøringBrev = () => {
     const { sak } = useSak();
@@ -61,7 +62,7 @@ const tilForhåndsvisningDTO = (skjema: OmgjøringContext): OmgjøringBrevForhå
             return {
                 resultat: RevurderingResultat.OMGJØRING,
                 fritekst: textAreas.brevtekst.getValue(),
-                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+                innvilgelsesperioder: tilInnvilgelsesperioderDTO(innvilgelse.innvilgelsesperioder),
                 barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
             } satisfies OmgjøringInnvilgelseBrevForhåndsvisningDTO;
         }

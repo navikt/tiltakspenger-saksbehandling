@@ -7,9 +7,9 @@ import {
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import {
     barnetilleggPeriode,
-    innvilgelsesperiode,
     periode,
     rammevedtak,
+    lagretInnvilgelsesperiode,
 } from '~test/rammebehandling';
 
 const vedtaksperiode = periode('2025-01-01', '2025-06-30');
@@ -55,16 +55,41 @@ describe('tellAntallDagerFraVedtak', () => {
     test('gir spennet i antall dager per meldeperiode over innvilgelsesperiodene', () => {
         const vedtak = rammevedtak('vedtak_1', vedtaksperiode, {
             innvilgelsesperioder: [
-                innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
+                lagretInnvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
                     antallDagerPerMeldeperiode: 6,
                 }),
-                innvilgelsesperiode(periode('2025-04-01', '2025-06-30'), {
+                lagretInnvilgelsesperiode(periode('2025-04-01', '2025-06-30'), {
                     antallDagerPerMeldeperiode: 10,
                 }),
             ],
         });
 
         expect(tellAntallDagerFraVedtak(vedtak)).toEqual({ min: 6, max: 10 });
+    });
+
+    test('summerer dagene for tiltaksdeltakelsene i samme periode, begrenset til 14', () => {
+        const toTiltak = (antallDager: [number, number]) => ({
+            periode: vedtaksperiode,
+            tiltaksdeltakelser: [
+                { internDeltakelseId: 'deltakelse_1', antallDagerPerMeldeperiode: antallDager[0] },
+                { internDeltakelseId: 'deltakelse_2', antallDagerPerMeldeperiode: antallDager[1] },
+            ],
+        });
+
+        expect(
+            tellAntallDagerFraVedtak(
+                rammevedtak('vedtak_1', vedtaksperiode, {
+                    innvilgelsesperioder: [toTiltak([6, 4])],
+                }),
+            ),
+        ).toEqual({ min: 10, max: 10 });
+        expect(
+            tellAntallDagerFraVedtak(
+                rammevedtak('vedtak_1', vedtaksperiode, {
+                    innvilgelsesperioder: [toTiltak([10, 10])],
+                }),
+            ),
+        ).toEqual({ min: 14, max: 14 });
     });
 
     test('vedtak uten innvilgelsesperioder (f.eks. stans) gir 0', () => {

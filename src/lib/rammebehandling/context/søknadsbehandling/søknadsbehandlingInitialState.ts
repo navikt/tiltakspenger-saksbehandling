@@ -9,6 +9,7 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { fraLagredeInnvilgelsesperioder } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -60,7 +61,7 @@ const innvilgelseInitialState = (
         resultat: SøknadsbehandlingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder: behandling.innvilgelsesperioder,
+            innvilgelsesperioder: fraLagredeInnvilgelsesperioder(behandling.innvilgelsesperioder),
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
         },

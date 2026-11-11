@@ -11,6 +11,7 @@ import {
     sakMedInnvilgetVedtak,
     søknad,
     søknadsbehandlingInnvilgelse,
+    lagretInnvilgelsesperiode,
 } from '~test/rammebehandling';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -89,13 +90,12 @@ describe('validerInnvilgelse', () => {
     test('avviser en lagret innvilgelsesperiode som backend har validert at ikke passer med tiltaksdeltakelsen', () => {
         const behandling = søknadsbehandlingInnvilgelse({
             innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode(førsteHalvår),
+                lagretInnvilgelsesperiode(førsteHalvår, {
                     ugyldigTiltaksdeltakelse: {
                         type: 'DEKKER_IKKE_PERIODEN',
                         deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
                     },
-                },
+                }),
             ],
         });
 
@@ -114,13 +114,12 @@ describe('validerInnvilgelse', () => {
     test('godtar en innvilgelsesperiode som er endret etter lagring, siden backend validerer den ved neste lagring', () => {
         const behandling = søknadsbehandlingInnvilgelse({
             innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode(førsteHalvår),
+                lagretInnvilgelsesperiode(førsteHalvår, {
                     ugyldigTiltaksdeltakelse: {
                         type: 'DEKKER_IKKE_PERIODEN',
                         deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
                     },
-                },
+                }),
             ],
         });
 
@@ -148,10 +147,9 @@ describe('validerInnvilgelse', () => {
     test('tar med feil fra både valgte tiltaksdeltakelser og barnetillegg', () => {
         const behandling = søknadsbehandlingInnvilgelse({
             innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode(førsteHalvår),
+                lagretInnvilgelsesperiode(førsteHalvår, {
                     ugyldigTiltaksdeltakelse: { type: 'FINNES_IKKE', deltakelsesperiode: null },
-                },
+                }),
             ],
         });
 

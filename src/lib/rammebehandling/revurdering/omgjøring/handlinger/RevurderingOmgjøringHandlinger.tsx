@@ -18,6 +18,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 import { tilOppdaterPrioriteringDTO } from '~/lib/_felles/prioritering/prioriteringUtils';
 import { erFullstendigPeriode } from '~/utils/periode';
+import { tilInnvilgelsesperioderDTO } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelsesperiodeDTO';
 
 export const RevurderingOmgjøringHandlinger = () => {
     const { sak } = useSak();
@@ -55,7 +56,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
             return {
                 ...felles,
                 resultat: RevurderingResultat.OMGJØRING,
-                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+                innvilgelsesperioder: tilInnvilgelsesperioderDTO(innvilgelse.innvilgelsesperioder),
                 vedtaksperiode,
                 barnetillegg: innvilgelse.harBarnetillegg
                     ? {
