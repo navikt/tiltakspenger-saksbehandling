@@ -2,9 +2,12 @@ import { describe, expect, test } from '@jest/globals';
 import {
     hentBarnetilleggKandidater,
     hentBarnFraSøknader,
+    tilForhåndsvisningBarnetilleggDTO,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     barnetilleggBarn,
+    barnetilleggPeriode,
+    barnetilleggV1,
     barnetilleggV2,
     innvilgelsesperiode,
     periode,
@@ -258,5 +261,49 @@ describe('hentBarnetilleggKandidater', () => {
                 fraSøknad: false,
             },
         ]);
+    });
+
+    test('viser samme barn én gang når det er valgt med fnr og finnes uten fnr i søknaden', () => {
+        const søknadsbehandling = søknadsbehandlingInnvilgelse({
+            innvilgelsesperioder,
+            søknad: søknad([søknadBarn('2015-03-01')]),
+        });
+        const valgtMedFnr = skjemaBarn('2015-03-01', {
+            fnr: ikkeSladdet('01031512345'),
+            kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
+            søknadId: null,
+        });
+
+        const kandidater = hentBarnetilleggKandidater(
+            søknadsbehandling,
+            { innvilgelsesperioder, valgteBarn: [valgtMedFnr], manueltLagtTilBarn: [] },
+            sak,
+        );
+
+        expect(kandidater).toHaveLength(1);
+        expect(kandidater[0]).toMatchObject({ barn: valgtMedFnr, erValgt: true });
+        expect(kandidater[0].søknadsopplysninger).not.toBeNull();
+    });
+});
+
+describe('tilForhåndsvisningBarnetilleggDTO', () => {
+    const behandling = søknadsbehandlingInnvilgelse({
+        barnetillegg: barnetilleggV1([barnetilleggPeriode(1, førsteHalvår)]),
+    });
+    const innvilgelse = { harBarnetillegg: true, valgteBarn: [skjemaBarn('2020-01-01')] };
+
+    test('sender lagrede perioder med antall barn når behandlingen ikke kan endres', () => {
+        expect(
+            tilForhåndsvisningBarnetilleggDTO(behandling, innvilgelse, true, 'Begrunnelse'),
+        ).toEqual({
+            perioder: [barnetilleggPeriode(1, førsteHalvår)],
+            begrunnelse: 'Begrunnelse',
+        });
+    });
+
+    test('sender valgte barn når behandlingen kan endres', () => {
+        expect(
+            tilForhåndsvisningBarnetilleggDTO(behandling, innvilgelse, false, null),
+        ).toMatchObject({ barn: [{ fødselsdato: '2020-01-01' }], begrunnelse: null });
     });
 });

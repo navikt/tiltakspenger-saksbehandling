@@ -3,7 +3,12 @@ import { Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { v4 as uuidv4 } from 'uuid';
 import { useBehandlingInnvilgelseSkjemaDispatch } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { tilBarnetilleggBarnSkjema } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
+import {
+    BarnetilleggBarnSkjema,
+    erSammeBarn,
+    tilBarnetilleggBarnSkjema,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { Dato } from '~/types/DatoTid';
@@ -33,10 +38,10 @@ const TOMT_SKJEMA: Felter = {
 
 type Props = {
     // Barn som allerede finnes i listen, og ikke kan legges til på nytt
-    eksisterendeKeys: string[];
+    eksisterendeBarn: BarnetilleggBarnSkjema[];
 };
 
-export const LeggTilBarnetilleggBarn = ({ eksisterendeKeys }: Props) => {
+export const LeggTilBarnetilleggBarn = ({ eksisterendeBarn }: Props) => {
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const [visSkjema, setVisSkjema] = useState(false);
@@ -100,10 +105,12 @@ export const LeggTilBarnetilleggBarn = ({ eksisterendeKeys }: Props) => {
             uuidv4(),
         );
 
-        if (eksisterendeKeys.includes(barn.key)) {
-            setFeil({
-                [felter.fnr.trim() ? 'fnr' : 'fornavn']: 'Barnet finnes allerede i listen',
-            });
+        const eksisterende = eksisterendeBarn.find((it) => erSammeBarn(it, barn));
+
+        if (eksisterende) {
+            const erLiktFnr = !!hentVerdi(barn.fnr) && !!hentVerdi(eksisterende.fnr);
+
+            setFeil({ [erLiktFnr ? 'fnr' : 'fornavn']: 'Barnet finnes allerede i listen' });
             return;
         }
 

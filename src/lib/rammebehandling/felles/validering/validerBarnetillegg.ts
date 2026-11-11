@@ -6,6 +6,7 @@ import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg'
 import {
     BarnetilleggBarnSkjema,
     effektivePerioderForBarn,
+    erSammeBarn,
     formaterBarnNavn,
     harRettIInnvilgelsesperiodene,
     rettTilBarnetilleggPeriode,
@@ -119,16 +120,12 @@ export const validerBarnetillegg = (
         }
     });
 
-    const fnrListe = valgteBarn
-        .map((barn) => hentVerdi(barn.fnr)?.trim())
-        .filter((fnr): fnr is string => !!fnr);
-
-    if (new Set(fnrListe).size !== fnrListe.length) {
-        validering.errors.push('Samme fødselsnummer kan ikke være valgt for flere barn');
+    if (valgteBarn.some((a, i) => valgteBarn.some((b, j) => j > i && erSammeBarn(a, b)))) {
+        validering.errors.push('Samme barn kan ikke være valgt flere ganger');
     }
 
     const ikkeValgteBarnFraSøknad = barnFraSøknadMedRett.filter(
-        (it) => !valgteBarn.some((barn) => barn.key === it.barn.key),
+        (it) => !valgteBarn.some((barn) => erSammeBarn(barn, it.barn)),
     );
 
     if (ikkeValgteBarnFraSøknad.length > 0) {
@@ -140,7 +137,7 @@ export const validerBarnetillegg = (
     const valgteBarnUtenforEØS = barnFraSøknader.filter(
         (it) =>
             it.opplysninger.oppholderSegIEØSSpm.svar !== 'JA' &&
-            valgteBarn.some((barn) => barn.key === it.barn.key),
+            valgteBarn.some((barn) => erSammeBarn(barn, it.barn)),
     );
 
     if (valgteBarnUtenforEØS.length > 0) {

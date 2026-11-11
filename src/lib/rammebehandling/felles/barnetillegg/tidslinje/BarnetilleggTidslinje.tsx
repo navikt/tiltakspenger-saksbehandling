@@ -2,7 +2,8 @@ import { BodyShort, Heading, Timeline, VStack } from '@navikt/ds-react';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
-import { gjeldendeBarnetilleggIPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { barnetilleggFørBehandlingIPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { kunPerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { formaterPeriode } from '~/utils/date';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
@@ -24,13 +25,14 @@ type Props = {
 
 /**
  * Viser barnetillegget innenfor valgte innvilgelsesperioder før og etter iverksetting av behandlingen.
- * Før er gjeldende barnetillegg fra tidligere vedtak.
+ * Før er barnetillegget fra vedtakene som gjaldt før behandlingen.
  * Innvilgede perioder uten barnetillegg vises med 0 barn.
  */
 export const BarnetilleggTidslinje = ({ periode, etter }: Props) => {
     const { sak } = useSak();
+    const { behandling } = useBehandling();
 
-    const før = gjeldendeBarnetilleggIPeriode(sak, periode);
+    const før = barnetilleggFørBehandlingIPeriode(sak, behandling, periode);
 
     return (
         <div className={style.wrapper}>

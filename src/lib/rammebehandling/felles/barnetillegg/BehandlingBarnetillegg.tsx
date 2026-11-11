@@ -19,7 +19,10 @@ import { periodiseringTotalPeriode } from '~/utils/periode';
 import { formaterPeriode } from '~/utils/date';
 import { BarnetilleggBarnListe } from '~/lib/rammebehandling/felles/barnetillegg/barn/BarnetilleggBarnListe';
 import { periodiserBarnetilleggFraBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
-import { hentLagretBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import {
+    hentLagretBarnetillegg,
+    hentLagretV1SomIkkeKanEndres,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { BarnetilleggVersjon } from '~/lib/rammebehandling/typer/Barnetillegg';
 
 import style from './BehandlingBarnetillegg.module.css';
@@ -44,15 +47,15 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
 
     const lagretBarnetillegg = hentLagretBarnetillegg(behandling);
     const erLagretSomV1 = lagretBarnetillegg?.versjon === BarnetilleggVersjon.V1;
-    // Barnetillegg lagret som antall barn per periode kan ikke vises med barn, og vises som det er når det ikke kan endres
-    const visesSomV1 = erLagretSomV1 && erReadonly;
+    const visesSomV1 = hentLagretV1SomIkkeKanEndres(behandling, erReadonly) !== null;
 
     const innvilgetePerioder = innvilgelsesperioder.map((it) => it.periode);
 
+    // Når behandlingen ikke kan endres vises de lagrede periodene, som også teller med barn med sladdede opplysninger
     const barnetilleggEtter = barnetilleggForInnvilgelsesperiodene(
         !harBarnetillegg
             ? []
-            : visesSomV1
+            : erReadonly && lagretBarnetillegg
               ? lagretBarnetillegg.perioder
               : periodiserBarnetilleggFraBarn(valgteBarn, innvilgetePerioder),
         innvilgetePerioder,

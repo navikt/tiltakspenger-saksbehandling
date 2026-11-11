@@ -161,8 +161,23 @@ describe('validerBarnetillegg', () => {
 
             expect(valider([valgtBarnFraSøknad, medFnr, sammeFnr, ugyldigFnr]).errors).toEqual([
                 'Barn Barnesen (født 01.01.2022): Fødselsnummer må være 11 siffer',
-                'Samme fødselsnummer kan ikke være valgt for flere barn',
+                'Samme barn kan ikke være valgt flere ganger',
             ]);
+        });
+
+        test('avviser samme barn valgt både med og uten fnr', () => {
+            const sammeBarnMedFnr = {
+                ...manueltBarn,
+                fornavn: valgtBarnFraSøknad.fornavn,
+                fødselsdato: valgtBarnFraSøknad.fødselsdato,
+                fnr: ikkeSladdet('05052012345'),
+                key: 'fnr:05052012345',
+            };
+
+            expect(valider([valgtBarnFraSøknad, sammeBarnMedFnr])).toEqual({
+                errors: ['Samme barn kan ikke være valgt flere ganger'],
+                warnings: [],
+            });
         });
 
         test('krever fornavn og etternavn for barn lagt til av saksbehandler, og søknad for barn fra søknad', () => {

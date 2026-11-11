@@ -1,5 +1,6 @@
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
-import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { tilForhåndsvisningBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     OmgjøringBrevForhåndsvisningDTO,
     OmgjøringInnvilgelseBrevForhåndsvisningDTO,
@@ -27,13 +28,16 @@ export const RevurderingOmgjøringBrev = () => {
         <RammebehandlingVedtaksbrev
             tittel={`Vedtaksbrev for ${resultat === RevurderingResultat.OMGJØRING ? 'revurdering av innvilgelse' : 'opphør'}`}
             validering={revurderingOmgjøringValidering(behandling, skjema, sak)}
-            hentDto={() => tilForhåndsvisningDTO(skjema)}
+            hentDto={() => tilForhåndsvisningDTO(behandling, skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
         />
     );
 };
 
-const tilForhåndsvisningDTO = (skjema: OmgjøringContext): OmgjøringBrevForhåndsvisningDTO => {
+const tilForhåndsvisningDTO = (
+    behandling: Rammebehandling,
+    skjema: OmgjøringContext,
+): OmgjøringBrevForhåndsvisningDTO => {
     const { resultat, textAreas } = skjema;
 
     switch (resultat) {
@@ -64,8 +68,10 @@ const tilForhåndsvisningDTO = (skjema: OmgjøringContext): OmgjøringBrevForhå
                 fritekst: textAreas.brevtekst.getValue(),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 barnetillegg: innvilgelse.harBarnetillegg
-                    ? tilOppdaterBarnetilleggDTO(
+                    ? tilForhåndsvisningBarnetilleggDTO(
+                          behandling,
                           innvilgelse,
+                          skjema.erReadonly,
                           skjema.textAreas.barnetilleggBegrunnelse.getValue(),
                       )
                     : null,

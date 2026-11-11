@@ -1,3 +1,4 @@
+import { erSammeBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
@@ -252,7 +253,7 @@ const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
                 const nyeBarn = forhåndsvelgBarnFraSøknader(
                     hentBarnFraSøknad(søknad),
                     innvilgelsesperioder,
-                ).filter((barn) => !valgteBarn.some((valgt) => valgt.key === barn.key));
+                ).filter((barn) => !valgteBarn.some((valgt) => erSammeBarn(valgt, barn)));
 
                 dispatch({
                     type: 'settValgteBarnetilleggBarn',

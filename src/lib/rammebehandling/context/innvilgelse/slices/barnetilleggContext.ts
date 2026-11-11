@@ -4,6 +4,7 @@ import { Periode } from '~/types/Periode';
 import { oppdaterPeriode, periodiseringTotalPeriode } from '~/utils/periode';
 import {
     BarnetilleggBarnSkjema,
+    erSammeBarn,
     gyldigPeriodeForBarn,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 
@@ -88,8 +89,8 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
             const { barn } = payload;
 
             if (
-                state.manueltLagtTilBarn.some((it) => it.key === barn.key) ||
-                state.valgteBarn.some((it) => it.key === barn.key)
+                state.manueltLagtTilBarn.some((it) => erSammeBarn(it, barn)) ||
+                state.valgteBarn.some((it) => erSammeBarn(it, barn))
             ) {
                 throw Error('Barnet er allerede lagt til');
             }

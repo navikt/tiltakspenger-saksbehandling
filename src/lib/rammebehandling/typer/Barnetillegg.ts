@@ -75,3 +75,12 @@ export type OppdaterBarnetilleggDTO = {
     barn: OppdaterBarnetilleggBarnDTO[];
     begrunnelse: Nullable<string>;
 };
+
+/** Barnetillegg lagret som antall barn per periode (V1), som forhåndsvises som det er når behandlingen ikke kan endres. */
+export type ForhåndsvisningBarnetilleggV1DTO = {
+    perioder: BarnetilleggPeriode[];
+    begrunnelse: Nullable<string>;
+};
+
+export type ForhåndsvisningBarnetilleggDTO =
+    OppdaterBarnetilleggDTO | ForhåndsvisningBarnetilleggV1DTO;

@@ -378,6 +378,45 @@ describe('ulagrede endringer', () => {
     });
 });
 
+describe('barnetillegg lagret som antall barn per periode', () => {
+    const behandlingMedV1 = søknadsbehandlingInnvilgelse({
+        ...saksbehandle,
+        søknad: søknad([søknadBarn('2020-05-05')]),
+        barnetillegg: barnetilleggV1([barnetilleggPeriode(1, førsteKvartal)]),
+    });
+
+    test('må lagres med de forhåndsvalgte barna før sending til beslutter', async () => {
+        svar(200, {
+            ...behandlingMedV1,
+            barnetillegg: barnetilleggV2([barnetilleggBarn('2020-05-05')], [førsteKvartal]),
+        });
+
+        renderHandlinger(behandlingMedV1, SøknadsbehandlingHandlinger);
+
+        expect(
+            screen.getByText('Endringer må lagres før behandlingen kan sendes til beslutter'),
+        ).toBeInTheDocument();
+        expect(sendTilBeslutterKnapp()).toBeDisabled();
+
+        lagre();
+
+        await waitFor(() => expect(sendTilBeslutterKnapp()).toBeEnabled());
+        expect(screen.getByText('Behandlingen er lagret')).toBeInTheDocument();
+    });
+
+    test('regnes som lagret uten barnetillegg', () => {
+        renderHandlinger(
+            søknadsbehandlingInnvilgelse({
+                ...saksbehandle,
+                barnetillegg: barnetilleggV1([barnetilleggPeriode(0, førsteKvartal)]),
+            }),
+            SøknadsbehandlingHandlinger,
+        );
+
+        expect(screen.getByText('Behandlingen er lagret')).toBeInTheDocument();
+    });
+});
+
 describe('sending til beslutter', () => {
     test('krever valgt resultat', () => {
         renderHandlinger(søknadsbehandlingIkkeValgt(saksbehandle), SøknadsbehandlingHandlinger);

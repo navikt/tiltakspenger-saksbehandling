@@ -36,7 +36,7 @@ export const BarnetilleggBarnListe = () => {
 
             {!erReadonly && (
                 <LeggTilBarnetilleggBarn
-                    eksisterendeKeys={kandidater.map((kandidat) => kandidat.barn.key)}
+                    eksisterendeBarn={kandidater.map((kandidat) => kandidat.barn)}
                 />
             )}
         </VStack>

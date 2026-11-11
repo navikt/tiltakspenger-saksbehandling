@@ -41,19 +41,48 @@ export const lagBarnKey = (barn: BarnIdentitet, reserveKey: string): string => {
         return `fnr:${fnr}`;
     }
 
-    if (
-        erSladdet(barn.fnr) ||
-        erSladdet(barn.fødselsdato) ||
-        erSladdet(barn.fornavn) ||
-        erSladdet(barn.mellomnavn) ||
-        erSladdet(barn.etternavn)
-    ) {
+    if (harSladdetIdentitet(barn)) {
         return `sladdet:${reserveKey}`;
     }
 
+    return lagNavnOgFødselsdatoKey(barn);
+};
+
+const harSladdetIdentitet = (barn: BarnIdentitet): boolean =>
+    erSladdet(barn.fnr) ||
+    erSladdet(barn.fødselsdato) ||
+    erSladdet(barn.fornavn) ||
+    erSladdet(barn.mellomnavn) ||
+    erSladdet(barn.etternavn);
+
+const lagNavnOgFødselsdatoKey = (barn: BarnIdentitet): string => {
     const navn = [barn.fornavn, barn.mellomnavn, barn.etternavn].map(normaliser).join('|');
 
-    return `navn:${barn.fødselsdato.verdi}:${navn}`;
+    return `navn:${hentVerdi(barn.fødselsdato)}:${navn}`;
+};
+
+/**
+ * Om to barn er samme barn, slik backend vurderer det.
+ * Har begge barna fnr, er de samme barn når fnr er likt. Ellers sammenlignes fødselsdato og navn.
+ * Samme barn kan dermed ha ulik `key`, f.eks. når det er oppgitt uten fnr i søknaden og lagt til med fnr av saksbehandler.
+ */
+export const erSammeBarn = (a: BarnetilleggBarnSkjema, b: BarnetilleggBarnSkjema): boolean => {
+    const fnrA = hentVerdi(a.fnr)?.trim();
+    const fnrB = hentVerdi(b.fnr)?.trim();
+
+    if (fnrA && fnrB) {
+        return fnrA === fnrB;
+    }
+
+    if (a.key === b.key) {
+        return true;
+    }
+
+    if (harSladdetIdentitet(a) || harSladdetIdentitet(b)) {
+        return false;
+    }
+
+    return lagNavnOgFødselsdatoKey(a) === lagNavnOgFødselsdatoKey(b);
 };
 
 export const tilBarnetilleggBarnSkjema = (

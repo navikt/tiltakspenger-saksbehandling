@@ -1,6 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
 import {
+    barnetilleggPeriode,
+    barnetilleggV1,
     innvilgelsesperiode,
     omgjøringInnvilgelse,
     periode,
@@ -172,6 +174,29 @@ describe('validerInnvilgelse', () => {
         );
 
         expect(resultat).toEqual({ errors: [], warnings: [] });
+    });
+
+    test('barnetillegg lagret som antall barn per periode valideres ikke når behandlingen ikke kan endres', () => {
+        const behandling = søknadsbehandlingInnvilgelse({
+            barnetillegg: barnetilleggV1([barnetilleggPeriode(1, førsteHalvår)]),
+        });
+        // Søknaden har ingen barn, så ingen barn er forhåndsvalgt
+        const skjema = {
+            ...søknadsbehandlingSkjema([innvilgelsesperiode(førsteHalvår)]),
+            innvilgelse: {
+                ...innvilgelse([innvilgelsesperiode(førsteHalvår)]),
+                harBarnetillegg: true,
+            },
+        };
+
+        expect(validerInnvilgelse(sak(), behandling, { ...skjema, erReadonly: true })).toEqual({
+            errors: [],
+            warnings: [],
+        });
+        expect(validerInnvilgelse(sak(), behandling, { ...skjema, erReadonly: false })).toEqual({
+            errors: ['Velg minst ett barn eller svar nei på om det skal innvilges barnetillegg'],
+            warnings: [],
+        });
     });
 
     describe('hull mellom innvilgelsesperiodene', () => {

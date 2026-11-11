@@ -5,7 +5,11 @@ import {
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandling,
+    RammebehandlingId,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { Periode } from '~/types/Periode';
@@ -46,7 +50,7 @@ export const barnetilleggKrympetTilPeriode = (
 };
 
 /** Gjeldende barnetillegg fra tidligere vedtak innenfor perioden, med 0 barn der det er innvilget uten barnetillegg. */
-export const gjeldendeBarnetilleggIPeriode = (
+const gjeldendeBarnetilleggIPeriode = (
     sak: SakProps,
     periode: Periode,
 ): BarnetilleggMedBehandlingId[] =>
@@ -61,3 +65,37 @@ export const gjeldendeBarnetilleggIPeriode = (
         }),
         (a, b) => a.antallBarn === b.antallBarn && a.behandlingId === b.behandlingId,
     );
+
+/**
+ * Barnetillegget innenfor perioden før behandlingen, med 0 barn der det er innvilget uten barnetillegg.
+ * Gjeldende vedtak inkluderer vedtaket til en vedtatt behandling, så da brukes tidslinjen før vedtaket fra backend.
+ */
+export const barnetilleggFørBehandlingIPeriode = (
+    sak: SakProps,
+    behandling: Rammebehandling,
+    periode: Periode,
+): BarnetilleggMedBehandlingId[] => {
+    const { tidslinjeFørOgEtter } = behandling;
+
+    if (behandling.status !== Rammebehandlingsstatus.VEDTATT || !tidslinjeFørOgEtter) {
+        return gjeldendeBarnetilleggIPeriode(sak, periode);
+    }
+
+    // Antall barn er kun satt for innvilgelser, og perioder som er stanset eller opphørt gir ikke barnetillegg
+    const før = tidslinjeFørOgEtter.før.flatMap((element): BarnetilleggMedBehandlingId[] =>
+        element.antallBarn === null
+            ? []
+            : [
+                  {
+                      periode: element.periode,
+                      antallBarn: element.antallBarn,
+                      behandlingId: element.behandlingId,
+                  },
+              ],
+    );
+
+    return slåSammenPeriodisering(
+        krympPeriodisering(før, periode),
+        (a, b) => a.antallBarn === b.antallBarn && a.behandlingId === b.behandlingId,
+    );
+};

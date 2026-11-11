@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import {
     effektivePerioderForBarn,
+    erSammeBarn,
     gyldigPeriodeForBarn,
     lagBarnKey,
     periodiserAntallBarn,
@@ -9,6 +10,7 @@ import {
 import { barnetilleggBarn, barnetilleggPeriode, periode } from '~test/rammebehandling';
 import { tilDato } from '~/types/DatoTid';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
+import { skjemaBarn } from '~test/barnetilleggSkjema';
 
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
 
@@ -136,5 +138,29 @@ describe('lagBarnKey', () => {
         expect(lagBarnKey(barnetilleggBarn('2020-01-01', { fornavn: sladdet }), 'reserve')).toBe(
             'sladdet:reserve',
         );
+    });
+});
+
+describe('erSammeBarn', () => {
+    const utenFnr = skjemaBarn('2020-01-01');
+    const medFnr = skjemaBarn('2020-01-01', {
+        fnr: ikkeSladdet('01012012345'),
+        fornavn: ikkeSladdet(' BARN '),
+    });
+
+    test('er samme barn når bare ett av barna har fnr, og fødselsdato og navn er like', () => {
+        expect(utenFnr.key).not.toBe(medFnr.key);
+        expect(erSammeBarn(utenFnr, medFnr)).toBe(true);
+        expect(erSammeBarn(utenFnr, skjemaBarn('2020-01-02'))).toBe(false);
+    });
+
+    test('sammenligner bare fnr når begge barna har fnr', () => {
+        const annetFnr = skjemaBarn('2020-01-01', { fnr: ikkeSladdet('01012054321') });
+
+        expect(erSammeBarn(medFnr, annetFnr)).toBe(false);
+    });
+
+    test('er ikke samme barn når identiteten er sladdet', () => {
+        expect(erSammeBarn(utenFnr, skjemaBarn('2020-01-01', { fnr: sladdet }))).toBe(false);
     });
 });

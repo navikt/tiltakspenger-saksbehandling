@@ -1,8 +1,10 @@
 import {
     Barnetillegg,
     BarnetilleggBarnKilde,
+    BarnetilleggV1,
     BarnetilleggVersjon,
     BarnMedBarnetillegg,
+    ForhåndsvisningBarnetilleggDTO,
     OppdaterBarnetilleggBarnDTO,
     OppdaterBarnetilleggDTO,
 } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -19,6 +21,7 @@ import { erSladdet, hentVerdi } from '~/utils/sladdetVerdi';
 import { overlappendePeriode, totalPeriode } from '~/utils/periode';
 import {
     BarnetilleggBarnSkjema,
+    erSammeBarn,
     harRettIInnvilgelsesperiodene,
     tilBarnetilleggBarnSkjema,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
@@ -44,8 +47,8 @@ export type BarnetilleggKandidat = {
     kanFjernes: boolean;
 };
 
-const finnesIkkeFraFør = removeDuplicatesFilter<{ barn: BarnetilleggBarnSkjema }>(
-    (a, b) => a.barn.key === b.barn.key,
+const finnesIkkeFraFør = removeDuplicatesFilter<{ barn: BarnetilleggBarnSkjema }>((a, b) =>
+    erSammeBarn(a.barn, b.barn),
 );
 
 export const hentBarnFraSøknad = (søknad: Søknad): BarnFraSøknad[] =>
@@ -110,10 +113,62 @@ export const hentBarnFraSøknader = (
 const tilSkjemaBarn = (barn: BarnMedBarnetillegg[], kilde: string): BarnetilleggBarnSkjema[] =>
     barn
         .map((it, index) => tilBarnetilleggBarnSkjema(it, `${kilde}:${index}`))
-        .filter(removeDuplicatesFilter((a, b) => a.key === b.key));
+        .filter(removeDuplicatesFilter(erSammeBarn));
 
 export const hentLagretBarnetillegg = (behandling: Rammebehandling): Nullable<Barnetillegg> =>
     rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg ?? null;
+
+/**
+ * Barnetillegget lagret som antall barn per periode (V1), dersom behandlingen ikke kan endres.
+ * Det kan ikke vises med barn, og vises og forhåndsvises derfor som det er lagret.
+ */
+export const hentLagretV1SomIkkeKanEndres = (
+    behandling: Rammebehandling,
+    erReadonly: boolean,
+): Nullable<BarnetilleggV1> => {
+    const lagret = hentLagretBarnetillegg(behandling);
+
+    return erReadonly && lagret?.versjon === BarnetilleggVersjon.V1 ? lagret : null;
+};
+
+/**
+ * Barnetillegg lagret som antall barn per periode (V1) med barn, forhåndsvelger barn i skjemaet når behandlingen kan endres.
+ * Skjemaet viser da noe annet enn det som er lagret, og må lagres før behandlingen sendes til beslutning.
+ */
+export const harUlagretBarnetilleggFraV1 = (
+    behandling: Rammebehandling,
+    erReadonly: boolean,
+): boolean => {
+    const lagret = hentLagretBarnetillegg(behandling);
+
+    return (
+        !erReadonly &&
+        lagret?.versjon === BarnetilleggVersjon.V1 &&
+        lagret.perioder.some(kunPerioderMedBarn)
+    );
+};
+
+/**
+ * Barnetillegget som sendes til forhåndsvisning av brev.
+ * Lagret V1 som ikke kan endres sendes som antall barn per periode, siden barna i skjemaet bare er forhåndsvalgt.
+ */
+export const tilForhåndsvisningBarnetilleggDTO = (
+    behandling: Rammebehandling,
+    innvilgelse: Pick<InnvilgelseMedPerioderState, 'harBarnetillegg' | 'valgteBarn'>,
+    erReadonly: boolean,
+    begrunnelse: Nullable<string>,
+): ForhåndsvisningBarnetilleggDTO => {
+    const lagretV1 = hentLagretV1SomIkkeKanEndres(behandling, erReadonly);
+
+    if (lagretV1) {
+        return {
+            perioder: innvilgelse.harBarnetillegg ? lagretV1.perioder : [],
+            begrunnelse: innvilgelse.harBarnetillegg ? begrunnelse : null,
+        };
+    }
+
+    return tilOppdaterBarnetilleggDTO(innvilgelse, begrunnelse);
+};
 
 /** Barna som er lagret på behandlingen, dersom barnetillegget er lagret med barn (V2). */
 export const hentLagredeBarn = (
@@ -140,7 +195,7 @@ export const hentBarnFraGjeldendeVedtak = (sak: SakProps): BarnetilleggBarnSkjem
                 : [],
         )
         .map((barn) => ({ ...barn, periode: null }))
-        .filter(removeDuplicatesFilter((a, b) => a.key === b.key));
+        .filter(removeDuplicatesFilter(erSammeBarn));
 
 /**
  * Barna saksbehandler kan velge å gi barnetillegg for, i en fast rekkefølge:
@@ -174,13 +229,13 @@ export const hentBarnetilleggKandidater = (
         .filter(finnesIkkeFraFør);
 
     return alleBarn.toSorted(eldsteFørst).map(({ barn }) => {
-        const valgtBarn = valgteBarn.find((it) => it.key === barn.key);
+        const valgtBarn = valgteBarn.find((it) => erSammeBarn(it, barn));
 
         return {
             barn: valgtBarn ?? barn,
             erValgt: !!valgtBarn,
             søknadsopplysninger:
-                barnFraSøknader.find((it) => it.barn.key === barn.key)?.opplysninger ?? null,
+                barnFraSøknader.find((it) => erSammeBarn(it.barn, barn))?.opplysninger ?? null,
             kanFjernes: manueltLagtTilBarn.some((it) => it.key === barn.key),
         };
     });
