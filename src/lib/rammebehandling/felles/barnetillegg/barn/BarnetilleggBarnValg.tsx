@@ -62,54 +62,54 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
         søknadsopplysninger && søknadsopplysninger.oppholderSegIEØSSpm.svar !== 'JA';
 
     return (
-        <div className={style.barn}>
-            <HStack justify={'space-between'} align={'start'} wrap={false}>
-                <Checkbox
-                    size={'small'}
-                    checked={erValgt}
-                    readOnly={erReadonly}
-                    disabled={!erValgt && harSladdetFødselsdato}
-                    onChange={(event) =>
-                        dispatch({
-                            type: 'velgBarnetilleggBarn',
-                            payload: { barn, valgt: event.target.checked },
-                        })
-                    }
-                >
-                    <HStack gap={'space-8'} align={'center'}>
-                        <span>{navn}</span>
-                        <Tag
-                            size={'xsmall'}
-                            variant={'outline'}
-                            data-color={erBarnFraSaksbehandler(barn) ? 'neutral' : 'info'}
-                        >
-                            {erBarnFraSaksbehandler(barn)
-                                ? 'Lagt til av saksbehandler'
-                                : 'Fra søknad'}
-                        </Tag>
-                    </HStack>
-                </Checkbox>
-
-                {kanFjernes && !erReadonly && (
-                    <Button
-                        type={'button'}
-                        variant={'tertiary'}
-                        size={'xsmall'}
-                        icon={<TrashIcon aria-hidden />}
-                        onClick={() =>
+        <HGrid columns={{ xs: 1, md: 2 }} gap={'space-24'} className={style.barn}>
+            <VStack gap={'space-8'}>
+                <HStack justify={'space-between'} align={'start'} wrap={false}>
+                    <Checkbox
+                        size={'small'}
+                        checked={erValgt}
+                        readOnly={erReadonly}
+                        disabled={!erValgt && harSladdetFødselsdato}
+                        onChange={(event) =>
                             dispatch({
-                                type: 'fjernManueltBarnetilleggBarn',
-                                payload: { key: barn.key },
+                                type: 'velgBarnetilleggBarn',
+                                payload: { barn, valgt: event.target.checked },
                             })
                         }
                     >
-                        {'Fjern'}
-                    </Button>
-                )}
-            </HStack>
+                        <HStack gap={'space-8'} align={'center'}>
+                            <span>{navn}</span>
+                            <Tag
+                                size={'xsmall'}
+                                variant={'outline'}
+                                data-color={erBarnFraSaksbehandler(barn) ? 'neutral' : 'info'}
+                            >
+                                {erBarnFraSaksbehandler(barn)
+                                    ? 'Lagt til av saksbehandler'
+                                    : 'Fra søknad'}
+                            </Tag>
+                        </HStack>
+                    </Checkbox>
 
-            <HGrid columns={{ xs: 1, md: 2 }} gap={'space-24'} className={style.detaljer}>
-                <VStack gap={'space-8'}>
+                    {kanFjernes && !erReadonly && (
+                        <Button
+                            type={'button'}
+                            variant={'tertiary'}
+                            size={'xsmall'}
+                            icon={<TrashIcon aria-hidden />}
+                            onClick={() =>
+                                dispatch({
+                                    type: 'fjernManueltBarnetilleggBarn',
+                                    payload: { key: barn.key },
+                                })
+                            }
+                        >
+                            {'Fjern'}
+                        </Button>
+                    )}
+                </HStack>
+
+                <VStack gap={'space-8'} className={style.detaljer}>
                     <Opplysning
                         navn={'Fødselsdato'}
                         verdi={`${formaterSladdbarDatotekst(fødselsdato)}${formaterSladdbarVerdi(fødselsdato, (dato) => ` (${alderFraDato(dato)} år)`, '', '')}`}
@@ -157,16 +157,16 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
                         )
                     )}
                 </VStack>
+            </VStack>
 
-                {erValgt && !harSladdetFødselsdato && innvilgelsesperioder.length > 0 && (
-                    <ValgtPeriode
-                        barn={barn}
-                        innvilgelsesperioder={innvilgelsesperioder}
-                        erReadonly={erReadonly}
-                    />
-                )}
-            </HGrid>
-        </div>
+            {erValgt && !harSladdetFødselsdato && innvilgelsesperioder.length > 0 && (
+                <ValgtPeriode
+                    barn={barn}
+                    innvilgelsesperioder={innvilgelsesperioder}
+                    erReadonly={erReadonly}
+                />
+            )}
+        </HGrid>
     );
 };
 
