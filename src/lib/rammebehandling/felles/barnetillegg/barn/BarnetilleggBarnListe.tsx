@@ -1,4 +1,4 @@
-import { BodyShort, HGrid, VStack } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingInnvilgelseMedPerioderSkjema } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
@@ -27,11 +27,11 @@ export const BarnetilleggBarnListe = () => {
             )}
 
             {kandidater.length > 0 && (
-                <HGrid columns={{ xs: 1, md: 2 }} gap={'space-16'}>
+                <VStack gap={'space-16'}>
                     {kandidater.map((kandidat) => (
                         <BarnetilleggBarnValg kandidat={kandidat} key={kandidat.barn.key} />
                     ))}
-                </HGrid>
+                </VStack>
             )}
 
             {!erReadonly && (

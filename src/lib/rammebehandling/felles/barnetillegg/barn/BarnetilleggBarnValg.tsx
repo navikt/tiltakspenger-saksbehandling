@@ -2,6 +2,7 @@ import {
     BodyShort,
     Button,
     Checkbox,
+    HGrid,
     HStack,
     InlineMessage,
     Radio,
@@ -107,60 +108,64 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
                 )}
             </HStack>
 
-            <VStack gap={'space-8'} className={style.detaljer}>
-                <Opplysning
-                    navn={'Fødselsdato'}
-                    verdi={`${formaterSladdbarDatotekst(fødselsdato)}${formaterSladdbarVerdi(fødselsdato, (dato) => ` (${alderFraDato(dato)} år)`, '', '')}`}
-                />
-                <Opplysning navn={'Fødselsnummer'} verdi={sladdbarTekst(fnr) || 'Ikke oppgitt'} />
+            <HGrid columns={{ xs: 1, md: 2 }} gap={'space-24'} className={style.detaljer}>
+                <VStack gap={'space-8'}>
+                    <Opplysning
+                        navn={'Fødselsdato'}
+                        verdi={`${formaterSladdbarDatotekst(fødselsdato)}${formaterSladdbarVerdi(fødselsdato, (dato) => ` (${alderFraDato(dato)} år)`, '', '')}`}
+                    />
+                    <Opplysning
+                        navn={'Fødselsnummer'}
+                        verdi={sladdbarTekst(fnr) || 'Ikke oppgitt'}
+                    />
 
-                {søknadsopplysninger &&
-                    (søknadsopplysninger.oppholdssted ? (
-                        <Opplysning
-                            navn={'Oppholdssted'}
-                            verdi={oppholdsstedTekst[søknadsopplysninger.oppholdssted]}
-                        />
+                    {søknadsopplysninger &&
+                        (søknadsopplysninger.oppholdssted ? (
+                            <Opplysning
+                                navn={'Oppholdssted'}
+                                verdi={oppholdsstedTekst[søknadsopplysninger.oppholdssted]}
+                            />
+                        ) : (
+                            <Opplysning
+                                navn={'Oppholder seg i Norge/EØS'}
+                                verdi={formaterSøknadsspørsmålSvar(
+                                    søknadsopplysninger.oppholderSegIEØSSpm.svar,
+                                )}
+                            />
+                        ))}
+
+                    {oppholderSegUtenforEØS && (
+                        <InlineMessage status={'warning'} size={'small'}>
+                            {
+                                'Barnet oppholder seg ikke i Norge eller et annet EØS-land ifølge søknaden.'
+                            }
+                        </InlineMessage>
+                    )}
+
+                    {harSladdetFødselsdato ? (
+                        <InlineMessage status={'warning'} size={'small'}>
+                            {
+                                'Fødselsdatoen er sladdet, så barnetillegget for barnet kan ikke vurderes.'
+                            }
+                        </InlineMessage>
                     ) : (
-                        <Opplysning
-                            navn={'Oppholder seg i Norge/EØS'}
-                            verdi={formaterSøknadsspørsmålSvar(
-                                søknadsopplysninger.oppholderSegIEØSSpm.svar,
-                            )}
-                        />
-                    ))}
-
-                {oppholderSegUtenforEØS && (
-                    <InlineMessage status={'warning'} size={'small'}>
-                        {
-                            'Barnet oppholder seg ikke i Norge eller et annet EØS-land ifølge søknaden.'
-                        }
-                    </InlineMessage>
-                )}
-
-                {harSladdetFødselsdato ? (
-                    <InlineMessage status={'warning'} size={'small'}>
-                        {
-                            'Fødselsdatoen er sladdet, så barnetillegget for barnet kan ikke vurderes.'
-                        }
-                    </InlineMessage>
-                ) : (
-                    innvilgelsesperioder.length > 0 && (
-                        <>
+                        innvilgelsesperioder.length > 0 && (
                             <RettMerknad
                                 fødselsdato={fødselsdato.verdi}
                                 innvilgelsesperioder={innvilgelsesperioder}
                             />
-                            {erValgt && (
-                                <ValgtPeriode
-                                    barn={barn}
-                                    innvilgelsesperioder={innvilgelsesperioder}
-                                    erReadonly={erReadonly}
-                                />
-                            )}
-                        </>
-                    )
+                        )
+                    )}
+                </VStack>
+
+                {erValgt && !harSladdetFødselsdato && innvilgelsesperioder.length > 0 && (
+                    <ValgtPeriode
+                        barn={barn}
+                        innvilgelsesperioder={innvilgelsesperioder}
+                        erReadonly={erReadonly}
+                    />
                 )}
-            </VStack>
+            </HGrid>
         </div>
     );
 };
@@ -240,7 +245,7 @@ const ValgtPeriode = ({
         });
 
     return (
-        <VStack gap={'space-12'} className={style.periodevalg}>
+        <VStack gap={'space-12'}>
             <RadioGroup
                 legend={'Periode med barnetillegg'}
                 size={'small'}
