@@ -74,6 +74,11 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                     {varsel}
                 </VStack>
 
+                <BarnetilleggTidslinje
+                    periode={innvilgelseTotalPeriode}
+                    etter={barnetilleggEtter}
+                />
+
                 <VStack gap={'space-12'}>
                     <RadioGroup
                         legend={'Skal det innvilges barnetillegg?'}
@@ -98,11 +103,6 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                             </Infokort>
                         )}
                 </VStack>
-
-                <BarnetilleggTidslinje
-                    periode={innvilgelseTotalPeriode}
-                    etter={barnetilleggEtter}
-                />
 
                 {lagretBarnetillegg && erLagretSomV1 && (
                     <Infokort variant={'info'} size={'small'}>
