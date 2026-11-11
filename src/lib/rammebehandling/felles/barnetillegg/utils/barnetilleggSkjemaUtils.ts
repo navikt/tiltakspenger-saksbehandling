@@ -15,7 +15,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { hentRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { removeDuplicatesFilter } from '~/utils/array';
-import { erSladdet } from '~/utils/sladdetVerdi';
+import { erSladdet, hentVerdi } from '~/utils/sladdetVerdi';
 import { overlappendePeriode, totalPeriode } from '~/utils/periode';
 import {
     BarnetilleggBarnSkjema,
@@ -173,7 +173,7 @@ export const hentBarnetilleggKandidater = (
         .map((barn) => ({ barn }))
         .filter(finnesIkkeFraFør);
 
-    return alleBarn.map(({ barn }) => {
+    return alleBarn.toSorted(eldsteFørst).map(({ barn }) => {
         const valgtBarn = valgteBarn.find((it) => it.key === barn.key);
 
         return {
@@ -184,6 +184,21 @@ export const hentBarnetilleggKandidater = (
             kanFjernes: manueltLagtTilBarn.some((it) => it.key === barn.key),
         };
     });
+};
+
+/** Sorterer eldste barn først, og barn med sladdet fødselsdato sist */
+const eldsteFørst = (
+    a: { barn: BarnetilleggBarnSkjema },
+    b: { barn: BarnetilleggBarnSkjema },
+): number => {
+    const fødselsdatoA = hentVerdi(a.barn.fødselsdato);
+    const fødselsdatoB = hentVerdi(b.barn.fødselsdato);
+
+    if (!fødselsdatoA || !fødselsdatoB) {
+        return Number(!fødselsdatoA) - Number(!fødselsdatoB);
+    }
+
+    return fødselsdatoA.localeCompare(fødselsdatoB);
 };
 
 /** Barna fra søknaden(e) som oppholder seg i EØS og har rett i innvilgelsesperiodene */

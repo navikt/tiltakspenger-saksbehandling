@@ -16,7 +16,7 @@ import {
     søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
-import { ikkeSladdet } from '~test/sladdetVerdi';
+import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 import { tilTidspunkt } from '~/types/DatoTid';
 import { InnvilgbarSøknad, SøknadBarn, SøknadId } from '~/lib/søknad/søknadTyper';
 import {
@@ -176,8 +176,12 @@ describe('hentBarnFraSøknader', () => {
 });
 
 describe('hentBarnetilleggKandidater', () => {
-    test('viser lagrede barn, barn fra søknadene, fra gjeldende vedtak og lagt til av saksbehandler, uten duplikater', () => {
+    test('viser lagrede barn, barn fra søknadene, fra gjeldende vedtak og lagt til av saksbehandler, uten duplikater, med eldste først', () => {
         const lagretBarn = barnetilleggBarn('2017-01-01', { fornavn: ikkeSladdet('Lagret') });
+        const lagretBarnMedSladdetFødselsdato = barnetilleggBarn('2010-01-01', {
+            fornavn: ikkeSladdet('Sladdet'),
+            fødselsdato: sladdet,
+        });
 
         const manueltBarn = skjemaBarn('2024-01-01', {
             fornavn: ikkeSladdet('Manuelt'),
@@ -192,7 +196,10 @@ describe('hentBarnetilleggKandidater', () => {
 
         const behandling = revurderingInnvilgelse({
             innvilgelsesperioder,
-            barnetillegg: barnetilleggV2([lagretBarn], [førsteHalvår]),
+            barnetillegg: barnetilleggV2(
+                [lagretBarnMedSladdetFødselsdato, lagretBarn],
+                [førsteHalvår],
+            ),
         });
 
         const kandidater = hentBarnetilleggKandidater(
@@ -215,14 +222,6 @@ describe('hentBarnetilleggKandidater', () => {
             })),
         ).toEqual([
             {
-                fornavn: 'Lagret',
-                periode: null,
-                erValgt: false,
-                kanFjernes: false,
-                fraSøknad: false,
-            },
-            { fornavn: 'Nytt', periode: null, erValgt: false, kanFjernes: false, fraSøknad: true },
-            {
                 fornavn: 'Barn',
                 periode: periode('2025-02-01', '2025-03-31'),
                 erValgt: true,
@@ -237,10 +236,25 @@ describe('hentBarnetilleggKandidater', () => {
                 fraSøknad: false,
             },
             {
+                fornavn: 'Lagret',
+                periode: null,
+                erValgt: false,
+                kanFjernes: false,
+                fraSøknad: false,
+            },
+            { fornavn: 'Nytt', periode: null, erValgt: false, kanFjernes: false, fraSøknad: true },
+            {
                 fornavn: 'Manuelt',
                 periode: null,
                 erValgt: true,
                 kanFjernes: true,
+                fraSøknad: false,
+            },
+            {
+                fornavn: 'Sladdet',
+                periode: null,
+                erValgt: false,
+                kanFjernes: false,
                 fraSøknad: false,
             },
         ]);
