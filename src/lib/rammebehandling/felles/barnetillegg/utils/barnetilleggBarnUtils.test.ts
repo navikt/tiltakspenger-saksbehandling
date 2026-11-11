@@ -17,7 +17,7 @@ const førsteHalvår = periode('2025-01-01', '2025-06-30');
 describe('effektivePerioderForBarn', () => {
     test('gir hele innvilgelsesperioden for et barn med rett i hele perioden', () => {
         expect(
-            effektivePerioderForBarn({ fødselsdato: tilDato('2015-01-01'), periode: null }, [
+            effektivePerioderForBarn({ fødselsdato: tilDato('2015-01-01'), perioder: null }, [
                 førsteHalvår,
             ]),
         ).toEqual([førsteHalvår]);
@@ -25,13 +25,13 @@ describe('effektivePerioderForBarn', () => {
 
     test('gir barnetillegg fra fødselsdatoen til dagen før barnet fyller 16 år', () => {
         expect(
-            effektivePerioderForBarn({ fødselsdato: tilDato('2025-03-10'), periode: null }, [
+            effektivePerioderForBarn({ fødselsdato: tilDato('2025-03-10'), perioder: null }, [
                 førsteHalvår,
             ]),
         ).toEqual([periode('2025-03-10', '2025-06-30')]);
 
         expect(
-            effektivePerioderForBarn({ fødselsdato: tilDato('2009-03-10'), periode: null }, [
+            effektivePerioderForBarn({ fødselsdato: tilDato('2009-03-10'), perioder: null }, [
                 førsteHalvår,
             ]),
         ).toEqual([periode('2025-01-01', '2025-03-09')]);
@@ -47,16 +47,35 @@ describe('effektivePerioderForBarn', () => {
             effektivePerioderForBarn(
                 {
                     fødselsdato: tilDato('2009-05-15'),
-                    periode: periode('2025-01-15', '2025-12-31'),
+                    perioder: [periode('2025-01-15', '2025-12-31')],
                 },
                 innvilgelsesperioderMedHull,
             ),
         ).toEqual([periode('2025-01-15', '2025-01-31'), periode('2025-03-01', '2025-05-14')]);
     });
 
+    test('gir sorterte perioder for flere valgte perioder', () => {
+        expect(
+            effektivePerioderForBarn(
+                {
+                    fødselsdato: tilDato('2015-01-01'),
+                    perioder: [
+                        periode('2025-05-01', '2025-05-31'),
+                        periode('2025-01-15', '2025-02-15'),
+                    ],
+                },
+                [periode('2025-01-01', '2025-01-31'), periode('2025-02-10', '2025-06-30')],
+            ),
+        ).toEqual([
+            periode('2025-01-15', '2025-01-31'),
+            periode('2025-02-10', '2025-02-15'),
+            periode('2025-05-01', '2025-05-31'),
+        ]);
+    });
+
     test('gir ingen perioder når barnet ikke har rett i innvilgelsesperioden', () => {
         expect(
-            effektivePerioderForBarn({ fødselsdato: tilDato('2008-01-01'), periode: null }, [
+            effektivePerioderForBarn({ fødselsdato: tilDato('2008-01-01'), perioder: null }, [
                 førsteHalvår,
             ]),
         ).toEqual([]);
@@ -88,7 +107,7 @@ describe('periodiserBarnetilleggFraBarn', () => {
                     barnetilleggBarn('2015-01-01'),
                     barnetilleggBarn('2009-05-15'),
                     barnetilleggBarn('2020-01-01', {
-                        periode: periode('2025-06-01', '2025-06-30'),
+                        perioder: [periode('2025-06-01', '2025-06-30')],
                     }),
                     barnetilleggBarn('2020-01-01', { fødselsdato: sladdet }),
                 ],

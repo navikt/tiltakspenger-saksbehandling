@@ -74,7 +74,7 @@ describe('søknadsbehandlingInitialState', () => {
                 // Barnet fra søknaden skal ikke forhåndsvelges når barna er lagret
                 søknad: søknad([søknadBarn('2015-03-01')]),
                 barnetillegg: barnetilleggV2(
-                    [barnetilleggBarn('2020-01-01', { periode: overstyrtPeriode })],
+                    [barnetilleggBarn('2020-01-01', { perioder: [overstyrtPeriode] })],
                     innvilgelsesperioder.map((it) => it.periode),
                 ),
             });
@@ -85,7 +85,7 @@ describe('søknadsbehandlingInitialState', () => {
                     harValgtPeriode: true,
                     innvilgelsesperioder,
                     harBarnetillegg: true,
-                    valgteBarn: [skjemaBarn('2020-01-01', { periode: overstyrtPeriode })],
+                    valgteBarn: [skjemaBarn('2020-01-01', { perioder: [overstyrtPeriode] })],
                     manueltLagtTilBarn: [],
                 },
             });
@@ -117,7 +117,7 @@ describe('søknadsbehandlingInitialState', () => {
                     valgteBarn: [
                         expect.objectContaining({
                             fødselsdato: { verdi: '2015-03-01', erSladdet: false },
-                            periode: null,
+                            perioder: null,
                         }),
                     ],
                 },

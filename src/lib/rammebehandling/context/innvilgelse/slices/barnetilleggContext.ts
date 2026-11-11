@@ -1,7 +1,12 @@
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Periode } from '~/types/Periode';
-import { oppdaterPeriode, periodiseringTotalPeriode } from '~/utils/periode';
+import {
+    oppdaterPeriode,
+    oppdaterPeriodiseringUtenOverlapp,
+    periodiseringTotalPeriode,
+} from '~/utils/periode';
+import { datoMin, nesteDag } from '~/utils/date';
 import {
     BarnetilleggBarnSkjema,
     erSammeBarn,
@@ -27,7 +32,15 @@ export type BarnetilleggActions =
       }
     | {
           type: 'oppdaterBarnetilleggBarnPeriode';
-          payload: { key: string; periodeOppdatering: Partial<Periode> };
+          payload: { key: string; index: number; periodeOppdatering: Partial<Periode> };
+      }
+    | {
+          type: 'leggTilBarnetilleggBarnPeriode';
+          payload: { key: string };
+      }
+    | {
+          type: 'fjernBarnetilleggBarnPeriode';
+          payload: { key: string; index: number };
       }
     | {
           type: 'leggTilManueltBarnetilleggBarn';
@@ -69,20 +82,52 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
 
             return oppdaterValgtBarn(state, key, (barn) => ({
                 ...barn,
-                periode: heleInnvilgelsesperioden ? null : standardPeriode(state, barn),
+                perioder: heleInnvilgelsesperioden ? null : [standardPeriode(state, barn)],
             }));
         }
 
         case 'oppdaterBarnetilleggBarnPeriode': {
-            const { key, periodeOppdatering } = payload;
+            const { key, index, periodeOppdatering } = payload;
 
-            return oppdaterValgtBarn(state, key, (barn) => ({
-                ...barn,
-                periode: oppdaterPeriode(
-                    barn.periode ?? standardPeriode(state, barn),
-                    periodeOppdatering,
-                ),
-            }));
+            return oppdaterValgtBarn(state, key, (barn) => {
+                const perioder = barn.perioder ?? [standardPeriode(state, barn)];
+                const periode = oppdaterPeriode(perioder.atNonNull(index), periodeOppdatering);
+
+                return {
+                    ...barn,
+                    perioder: oppdaterPerioderUtenOverlapp(perioder, periode, index),
+                };
+            });
+        }
+
+        case 'leggTilBarnetilleggBarnPeriode': {
+            const { key } = payload;
+
+            return oppdaterValgtBarn(state, key, (barn) => {
+                const { tilOgMed } = standardPeriode(state, barn);
+                const perioder = barn.perioder ?? [standardPeriode(state, barn)];
+                const nyPeriode = {
+                    fraOgMed: datoMin(nesteDag(perioder.atNonNull(-1).tilOgMed), tilOgMed),
+                    tilOgMed,
+                };
+
+                return {
+                    ...barn,
+                    perioder: oppdaterPerioderUtenOverlapp(perioder, nyPeriode, perioder.length),
+                };
+            });
+        }
+
+        case 'fjernBarnetilleggBarnPeriode': {
+            const { key, index } = payload;
+
+            return oppdaterValgtBarn(state, key, (barn) => {
+                if (!barn.perioder || barn.perioder.length <= 1) {
+                    throw Error('Barnet må ha minst én valgt periode');
+                }
+
+                return { ...barn, perioder: barn.perioder.toSpliced(index, 1) };
+            });
         }
 
         case 'leggTilManueltBarnetilleggBarn': {
@@ -130,6 +175,18 @@ const oppdaterValgtBarn = (
         valgteBarn: state.valgteBarn.with(index, oppdater(state.valgteBarn.atNonNull(index))),
     };
 };
+
+// Endrer eller legger til perioden på index, og justerer de andre periodene slik at de ikke overlapper, som for innvilgelsesperiodene
+const oppdaterPerioderUtenOverlapp = (
+    perioder: Periode[],
+    periode: Periode,
+    index: number,
+): Periode[] =>
+    oppdaterPeriodiseringUtenOverlapp(
+        perioder.map((it) => ({ periode: it })),
+        { periode },
+        index,
+    ).map((it) => it.periode);
 
 // Perioden barnet har rett innenfor innvilgelsen, eller hele innvilgelsen dersom barnet ikke har rett i den
 const standardPeriode = (

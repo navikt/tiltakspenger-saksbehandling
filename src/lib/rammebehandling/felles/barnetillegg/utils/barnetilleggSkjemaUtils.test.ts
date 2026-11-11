@@ -122,7 +122,7 @@ const sakMedVedtakForNyesteSøknad = sakMedInnvilgetVedtak(førsteHalvår, {
                 // Barnet finnes også i søknadene, og skal bare vises én gang
                 barnetilleggBarn('2015-03-01', {
                     søknadId: 'soknad_eldre',
-                    periode: periode('2025-01-01', '2025-01-31'),
+                    perioder: [periode('2025-01-01', '2025-01-31')],
                 }),
                 barnFraVedtaket,
             ],
@@ -194,7 +194,7 @@ describe('hentBarnetilleggKandidater', () => {
 
         const valgtBarnFraSøknad = {
             ...skjemaBarn('2015-03-01', { søknadId: 'soknad_nyere' }),
-            periode: periode('2025-02-01', '2025-03-31'),
+            perioder: [periode('2025-02-01', '2025-03-31')],
         };
 
         const behandling = revurderingInnvilgelse({
@@ -218,7 +218,7 @@ describe('hentBarnetilleggKandidater', () => {
         expect(
             kandidater.map(({ barn, erValgt, kanFjernes, søknadsopplysninger }) => ({
                 fornavn: barn.fornavn.verdi,
-                periode: barn.periode,
+                perioder: barn.perioder,
                 erValgt,
                 kanFjernes,
                 fraSøknad: søknadsopplysninger !== null,
@@ -226,36 +226,36 @@ describe('hentBarnetilleggKandidater', () => {
         ).toEqual([
             {
                 fornavn: 'Barn',
-                periode: periode('2025-02-01', '2025-03-31'),
+                perioder: [periode('2025-02-01', '2025-03-31')],
                 erValgt: true,
                 kanFjernes: false,
                 fraSøknad: true,
             },
             {
                 fornavn: 'Vedtak',
-                periode: null,
+                perioder: null,
                 erValgt: false,
                 kanFjernes: false,
                 fraSøknad: false,
             },
             {
                 fornavn: 'Lagret',
-                periode: null,
+                perioder: null,
                 erValgt: false,
                 kanFjernes: false,
                 fraSøknad: false,
             },
-            { fornavn: 'Nytt', periode: null, erValgt: false, kanFjernes: false, fraSøknad: true },
+            { fornavn: 'Nytt', perioder: null, erValgt: false, kanFjernes: false, fraSøknad: true },
             {
                 fornavn: 'Manuelt',
-                periode: null,
+                perioder: null,
                 erValgt: true,
                 kanFjernes: true,
                 fraSøknad: false,
             },
             {
                 fornavn: 'Sladdet',
-                periode: null,
+                perioder: null,
                 erValgt: false,
                 kanFjernes: false,
                 fraSøknad: false,

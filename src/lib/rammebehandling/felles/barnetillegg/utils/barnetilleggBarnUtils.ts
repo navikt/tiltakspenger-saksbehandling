@@ -7,7 +7,7 @@ import { Periode } from '~/types/Periode';
 import { Dato } from '~/types/DatoTid';
 import { Nullable } from '~/types/UtilTypes';
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
-import { erDatoIPeriode, overlappendePeriode, totalPeriode } from '~/utils/periode';
+import { erDatoIPeriode, overlappendePeriode, sorterPerioder, totalPeriode } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { isNonNullish } from '~/utils/object';
 import { erSladdet, hentVerdi, sladdbarTekst } from '~/utils/sladdetVerdi';
@@ -101,7 +101,7 @@ export const tilBarnetilleggBarnSkjema = (
     fødselsdato: barn.fødselsdato,
     kilde: barn.kilde,
     søknadId: barn.søknadId,
-    periode: barn.periode,
+    perioder: barn.perioder,
     key: lagBarnKey(barn, reserveKey),
 });
 
@@ -126,33 +126,36 @@ export const rettTilBarnetilleggPeriode = (fødselsdato: Dato): Periode => ({
 });
 
 /**
- * Periodene barnet gir barnetillegg for: den valgte perioden (eller hele innvilgelsesperioden),
+ * Periodene barnet gir barnetillegg for: de valgte periodene (eller hele innvilgelsesperioden),
  * avgrenset til perioden barnet har rett og til innvilgelsesperiodene.
  */
 export const effektivePerioderForBarn = (
-    barn: { fødselsdato: Dato; periode: Nullable<Periode> },
+    barn: { fødselsdato: Dato; perioder: Nullable<Periode[]> },
     innvilgelsesperioder: Periode[],
 ): Periode[] => {
     if (innvilgelsesperioder.length === 0) {
         return [];
     }
 
-    const basis = barn.periode ?? totalPeriode(innvilgelsesperioder);
-    const basisMedRett = overlappendePeriode(basis, rettTilBarnetilleggPeriode(barn.fødselsdato));
+    const rett = rettTilBarnetilleggPeriode(barn.fødselsdato);
+    const sorterteInnvilgelsesperioder = innvilgelsesperioder.toSorted(sorterPerioder());
 
-    if (!basisMedRett) {
-        return [];
-    }
-
-    return innvilgelsesperioder
-        .toSorted((a, b) => (a.fraOgMed < b.fraOgMed ? -1 : 1))
-        .map((innvilgelsesperiode) => overlappendePeriode(basisMedRett, innvilgelsesperiode))
-        .filter(isNonNullish);
+    return (barn.perioder ?? [totalPeriode(innvilgelsesperioder)])
+        .map((periode) => overlappendePeriode(periode, rett))
+        .filter(isNonNullish)
+        .flatMap((periodeMedRett) =>
+            sorterteInnvilgelsesperioder
+                .map((innvilgelsesperiode) =>
+                    overlappendePeriode(periodeMedRett, innvilgelsesperiode),
+                )
+                .filter(isNonNullish),
+        )
+        .toSorted(sorterPerioder());
 };
 
 /** Effektive perioder for et barn i skjemaet. Barn med sladdet fødselsdato kan ikke periodiseres. */
 export const effektivePerioderForSkjemaBarn = (
-    barn: Pick<BarnetilleggBarn, 'fødselsdato' | 'periode'>,
+    barn: Pick<BarnetilleggBarn, 'fødselsdato' | 'perioder'>,
     innvilgelsesperioder: Periode[],
 ): Periode[] => {
     if (erSladdet(barn.fødselsdato)) {
@@ -160,7 +163,7 @@ export const effektivePerioderForSkjemaBarn = (
     }
 
     return effektivePerioderForBarn(
-        { fødselsdato: barn.fødselsdato.verdi, periode: barn.periode },
+        { fødselsdato: barn.fødselsdato.verdi, perioder: barn.perioder },
         innvilgelsesperioder,
     );
 };
@@ -192,7 +195,7 @@ export const periodiserAntallBarn = (perioderPerBarn: Periode[][]): Barnetillegg
 
 /** Antall barn per periode for de valgte barna. Tilsvarer periodiseringen backenden gjør. */
 export const periodiserBarnetilleggFraBarn = (
-    barn: Array<Pick<BarnetilleggBarn, 'fødselsdato' | 'periode'>>,
+    barn: Array<Pick<BarnetilleggBarn, 'fødselsdato' | 'perioder'>>,
     innvilgelsesperioder: Periode[],
 ): BarnetilleggPeriode[] =>
     periodiserAntallBarn(
@@ -205,7 +208,7 @@ export const harRettIInnvilgelsesperiodene = (
     innvilgelsesperioder: Periode[],
 ): boolean =>
     effektivePerioderForSkjemaBarn(
-        { fødselsdato: barn.fødselsdato, periode: null },
+        { fødselsdato: barn.fødselsdato, perioder: null },
         innvilgelsesperioder,
     ).length > 0;
 

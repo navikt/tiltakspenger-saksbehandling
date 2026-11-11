@@ -195,7 +195,7 @@ describe('lagring av søknadsbehandling', () => {
                         fødselsdato: '2020-05-05',
                         kilde: 'SØKNAD',
                         søknadId: 'soknad_1',
-                        periode: null,
+                        perioder: null,
                     },
                 ],
             },

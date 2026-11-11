@@ -110,13 +110,17 @@ describe('validerBarnetillegg', () => {
         });
 
         test('godtar en overstyrt periode som slutter dagen før barnet fyller 16 år', () => {
-            const barn = skjemaBarn('2009-03-01', { periode: periode('2025-01-01', '2025-02-28') });
+            const barn = skjemaBarn('2009-03-01', {
+                perioder: [periode('2025-01-01', '2025-02-28')],
+            });
 
             expect(valider([valgtBarnFraSøknad, barn]).errors).toEqual([]);
         });
 
         test('avviser en overstyrt periode utenfor perioden barnet har rett', () => {
-            const barn = skjemaBarn('2009-03-01', { periode: periode('2025-01-01', '2025-03-01') });
+            const barn = skjemaBarn('2009-03-01', {
+                perioder: [periode('2025-01-01', '2025-03-01')],
+            });
 
             expect(valider([valgtBarnFraSøknad, barn]).errors).toEqual([
                 'Barn Barnesen (født 01.03.2009): Perioden 01.01.2025 - 01.03.2025 må være innenfor perioden barnet har rett til barnetillegg (01.03.2009 - 28.02.2025)',
@@ -124,7 +128,7 @@ describe('validerBarnetillegg', () => {
         });
 
         test('avviser en overstyrt periode utenfor innvilgelsesperioden', () => {
-            const barn = { ...valgtBarnFraSøknad, periode: periode('2025-02-01', '2025-04-30') };
+            const barn = { ...valgtBarnFraSøknad, perioder: [periode('2025-02-01', '2025-04-30')] };
 
             expect(valider([barn]).errors).toEqual([
                 'Barn Barnesen (født 05.05.2020): Perioden 01.02.2025 - 30.04.2025 må være innenfor innvilgelsesperioden 01.01.2025 - 31.03.2025',
@@ -132,10 +136,49 @@ describe('validerBarnetillegg', () => {
         });
 
         test('avviser en overstyrt periode der til og med er før fra og med', () => {
-            const barn = { ...valgtBarnFraSøknad, periode: periode('2025-02-01', '2025-01-31') };
+            const barn = { ...valgtBarnFraSøknad, perioder: [periode('2025-02-01', '2025-01-31')] };
 
             expect(valider([barn]).errors).toEqual([
-                'Barn Barnesen (født 05.05.2020): Til og med-dato må være etter fra og med-dato',
+                'Barn Barnesen (født 05.05.2020): Perioden 01.02.2025 - 31.01.2025: Til og med-dato må være etter fra og med-dato',
+            ]);
+        });
+
+        test('godtar flere perioder for et barn, og avviser feil i hver av dem', () => {
+            const gyldig = {
+                ...valgtBarnFraSøknad,
+                perioder: [
+                    periode('2025-01-01', '2025-01-31'),
+                    periode('2025-03-01', '2025-03-31'),
+                ],
+            };
+            expect(valider([gyldig]).errors).toEqual([]);
+
+            const andreUtenfor = {
+                ...valgtBarnFraSøknad,
+                perioder: [
+                    periode('2025-01-01', '2025-01-31'),
+                    periode('2025-03-01', '2025-04-30'),
+                ],
+            };
+            expect(valider([andreUtenfor]).errors).toEqual([
+                'Barn Barnesen (født 05.05.2020): Perioden 01.03.2025 - 30.04.2025 må være innenfor innvilgelsesperioden 01.01.2025 - 31.03.2025',
+            ]);
+        });
+
+        test('avviser overlappende perioder og en tom liste med perioder', () => {
+            const overlappende = {
+                ...valgtBarnFraSøknad,
+                perioder: [
+                    periode('2025-01-01', '2025-02-15'),
+                    periode('2025-02-01', '2025-03-31'),
+                ],
+            };
+            expect(valider([overlappende]).errors).toEqual([
+                'Barn Barnesen (født 05.05.2020): Periodene kan ikke overlappe hverandre',
+            ]);
+
+            expect(valider([{ ...valgtBarnFraSøknad, perioder: [] }]).errors).toEqual([
+                'Barn Barnesen (født 05.05.2020): Minst én periode må velges',
             ]);
         });
 
@@ -144,7 +187,7 @@ describe('validerBarnetillegg', () => {
                 innvilgelsesperiode(periode('2025-01-01', '2025-01-31')),
                 innvilgelsesperiode(periode('2025-03-01', '2025-03-31')),
             ];
-            const barn = { ...valgtBarnFraSøknad, periode: periode('2025-02-01', '2025-02-28') };
+            const barn = { ...valgtBarnFraSøknad, perioder: [periode('2025-02-01', '2025-02-28')] };
 
             expect(validerBarnetillegg(true, [barn], perioderMedHull, [])).toEqual({
                 errors: [

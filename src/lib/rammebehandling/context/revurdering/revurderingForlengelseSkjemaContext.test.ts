@@ -124,7 +124,7 @@ describe('revurderingForlengelseReducer', () => {
             vedtak: {
                 innvilgelsesperioder: vedtakInnvilgelsesperioder,
                 barnetillegg: barnetilleggV2(
-                    [{ ...yngsteBarn, periode: periode('2025-02-01', '2025-03-31') }],
+                    [{ ...yngsteBarn, perioder: [periode('2025-02-01', '2025-03-31')] }],
                     [vedtaksperiode],
                 ),
             },
@@ -210,7 +210,7 @@ describe('revurderingForlengelseReducer', () => {
             ],
             valgteBarn: [
                 skjemaBarn('2009-05-15'),
-                skjemaBarn('2020-01-01', { periode: periode('2025-04-01', '2025-05-31') }),
+                skjemaBarn('2020-01-01', { perioder: [periode('2025-04-01', '2025-05-31')] }),
             ],
         });
     });
@@ -229,7 +229,7 @@ describe('revurderingForlengelseReducer', () => {
 
     test('lagret periode for et barn beholdes når saksbehandler angrer endringen uten å ha endret perioden', () => {
         const overstyrtPeriode = periode('2025-04-01', '2025-04-30');
-        const behandling = lagretForlengelse([{ ...yngsteBarn, periode: overstyrtPeriode }]);
+        const behandling = lagretForlengelse([{ ...yngsteBarn, perioder: [overstyrtPeriode] }]);
 
         const state = reduser(
             forlengelseInitialState(behandling, sak),
@@ -239,7 +239,7 @@ describe('revurderingForlengelseReducer', () => {
 
         expect(state.innvilgelse).toMatchObject({
             harBarnetillegg: true,
-            valgteBarn: [skjemaBarn('2020-01-01', { periode: overstyrtPeriode })],
+            valgteBarn: [skjemaBarn('2020-01-01', { perioder: [overstyrtPeriode] })],
         });
     });
 

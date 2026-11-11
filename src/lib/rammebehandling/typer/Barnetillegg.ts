@@ -31,8 +31,9 @@ export type BarnetilleggBarn = {
     kilde: BarnetilleggBarnKilde;
     // Søknaden barnet er hentet fra. Er alltid satt når kilden er søknad, og ellers null.
     søknadId: Nullable<SøknadId>;
+    // Periodene saksbehandler har valgt, sortert og uten overlapp.
     // Null betyr hele innvilgelsesperioden, avkortet for perioden barnet har rett til barnetillegg.
-    periode: Nullable<Periode>;
+    perioder: Nullable<Periode[]>;
 };
 
 export type BarnMedBarnetillegg = BarnetilleggBarn & {
@@ -67,7 +68,8 @@ export type OppdaterBarnetilleggBarnDTO = {
     fødselsdato: Dato;
     kilde: BarnetilleggBarnKilde;
     søknadId: Nullable<SøknadId>;
-    periode: Nullable<Periode>;
+    // Null betyr hele innvilgelsesperioden. Er periodene valgt, må det være minst én.
+    perioder: Nullable<Periode[]>;
 };
 
 /** Sendes til backenden, og har derfor aldri sladdede verdier. Ingen barnetillegg sendes som en tom liste med barn. */

@@ -10,7 +10,7 @@ import {
     Tag,
     VStack,
 } from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
@@ -234,15 +234,9 @@ const ValgtPeriode = ({
 }) => {
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
-    const { periode, key } = barn;
+    const { perioder, key } = barn;
     const gyldigPeriode = gyldigPeriodeForBarn(barn, innvilgelsesperioder);
     const effektivePerioder = effektivePerioderForSkjemaBarn(barn, innvilgelsesperioder);
-
-    const oppdaterPeriode = (periodeOppdatering: Partial<Periode>) =>
-        dispatch({
-            type: 'oppdaterBarnetilleggBarnPeriode',
-            payload: { key, periodeOppdatering },
-        });
 
     return (
         <VStack gap={'space-12'}>
@@ -250,7 +244,7 @@ const ValgtPeriode = ({
                 legend={'Periode med barnetillegg'}
                 size={'small'}
                 className={style.radioGroup}
-                value={periode === null}
+                value={perioder === null}
                 readOnly={erReadonly}
                 onChange={(heleInnvilgelsesperioden: boolean) =>
                     dispatch({
@@ -260,52 +254,110 @@ const ValgtPeriode = ({
                 }
             >
                 <Radio value={true}>{'Hele innvilgelsesperioden'}</Radio>
-                <Radio value={false}>{'Velg periode'}</Radio>
+                <Radio value={false}>{'Velg perioder'}</Radio>
             </RadioGroup>
 
-            {periode && (
-                <HStack gap={'space-16'} align={'end'}>
-                    <Datovelger
-                        label={'Fra og med'}
-                        size={'small'}
-                        dropdownCaption={true}
-                        readOnly={erReadonly}
-                        minDate={gyldigPeriode?.fraOgMed}
-                        maxDate={gyldigPeriode?.tilOgMed}
-                        selected={periode.fraOgMed}
-                        value={datoTilDatoInputText(periode.fraOgMed)}
-                        onDateChange={(dato) => {
-                            if (dato) {
-                                oppdaterPeriode({ fraOgMed: dateTilISOTekst(dato) });
+            {perioder && (
+                <VStack gap={'space-8'}>
+                    {perioder.map((periode, index) => (
+                        <HStack key={index} gap={'space-16'} align={'end'}>
+                            <Datovelger
+                                label={'Fra og med'}
+                                size={'small'}
+                                dropdownCaption={true}
+                                readOnly={erReadonly}
+                                minDate={gyldigPeriode?.fraOgMed}
+                                maxDate={gyldigPeriode?.tilOgMed}
+                                selected={periode.fraOgMed}
+                                value={datoTilDatoInputText(periode.fraOgMed)}
+                                onDateChange={(dato) => {
+                                    if (dato) {
+                                        dispatch({
+                                            type: 'oppdaterBarnetilleggBarnPeriode',
+                                            payload: {
+                                                key,
+                                                index,
+                                                periodeOppdatering: {
+                                                    fraOgMed: dateTilISOTekst(dato),
+                                                },
+                                            },
+                                        });
+                                    }
+                                }}
+                            />
+                            <Datovelger
+                                label={'Til og med'}
+                                size={'small'}
+                                dropdownCaption={true}
+                                readOnly={erReadonly}
+                                minDate={gyldigPeriode?.fraOgMed}
+                                maxDate={gyldigPeriode?.tilOgMed}
+                                selected={periode.tilOgMed}
+                                value={datoTilDatoInputText(periode.tilOgMed)}
+                                onDateChange={(dato) => {
+                                    if (dato) {
+                                        dispatch({
+                                            type: 'oppdaterBarnetilleggBarnPeriode',
+                                            payload: {
+                                                key,
+                                                index,
+                                                periodeOppdatering: {
+                                                    tilOgMed: dateTilISOTekst(dato),
+                                                },
+                                            },
+                                        });
+                                    }
+                                }}
+                            />
+                            {!erReadonly && perioder.length > 1 && (
+                                <Button
+                                    type={'button'}
+                                    variant={'tertiary'}
+                                    size={'small'}
+                                    icon={<TrashIcon title={'Fjern periode'} />}
+                                    onClick={() =>
+                                        dispatch({
+                                            type: 'fjernBarnetilleggBarnPeriode',
+                                            payload: { key, index },
+                                        })
+                                    }
+                                />
+                            )}
+                        </HStack>
+                    ))}
+
+                    {!erReadonly && (
+                        <Button
+                            type={'button'}
+                            variant={'secondary'}
+                            size={'small'}
+                            icon={<PlusIcon aria-hidden />}
+                            className={style.leggTilKnapp}
+                            onClick={() =>
+                                dispatch({
+                                    type: 'leggTilBarnetilleggBarnPeriode',
+                                    payload: { key },
+                                })
                             }
-                        }}
-                    />
-                    <Datovelger
-                        label={'Til og med'}
-                        size={'small'}
-                        dropdownCaption={true}
-                        readOnly={erReadonly}
-                        minDate={gyldigPeriode?.fraOgMed}
-                        maxDate={gyldigPeriode?.tilOgMed}
-                        selected={periode.tilOgMed}
-                        value={datoTilDatoInputText(periode.tilOgMed)}
-                        onDateChange={(dato) => {
-                            if (dato) {
-                                oppdaterPeriode({ tilOgMed: dateTilISOTekst(dato) });
-                            }
-                        }}
-                    />
-                </HStack>
+                        >
+                            {'Legg til periode'}
+                        </Button>
+                    )}
+                </VStack>
             )}
 
             {effektivePerioder.length > 0 ? (
                 <Opplysning
-                    navn={'Gir barnetillegg i perioden'}
+                    navn={
+                        effektivePerioder.length > 1
+                            ? 'Gir barnetillegg i periodene'
+                            : 'Gir barnetillegg i perioden'
+                    }
                     verdi={effektivePerioder.map(formaterPeriode).join(', ')}
                 />
             ) : (
                 <InlineMessage status={'error'} size={'small'}>
-                    {'Barnet gir ikke barnetillegg i innvilgelsesperioden med valgt periode.'}
+                    {'Barnet gir ikke barnetillegg i innvilgelsesperioden med valgte perioder.'}
                 </InlineMessage>
             )}
         </VStack>

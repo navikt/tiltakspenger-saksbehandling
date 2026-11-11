@@ -100,7 +100,7 @@ export const LeggTilBarnetilleggBarn = ({ eksisterendeBarn }: Props) => {
                 fødselsdato: { erSladdet: false, verdi: felter.fødselsdato },
                 kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
                 søknadId: null,
-                periode: null,
+                perioder: null,
             },
             uuidv4(),
         );

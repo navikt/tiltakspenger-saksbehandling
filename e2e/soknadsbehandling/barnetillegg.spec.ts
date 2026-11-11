@@ -107,7 +107,7 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                                 fødselsdato: tilDato('2015-05-01'),
                                 kilde: BarnetilleggBarnKilde.SØKNAD,
                                 søknadId: 'soknad_1',
-                                periode: null,
+                                perioder: null,
                             },
                         ],
                     },
@@ -163,7 +163,7 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
         expect(backend.kall.sendTilBeslutning).toBe(1);
     });
 
-    test('saksbehandler kan legge til et barn og velge en egen periode for barnet', async ({
+    test('saksbehandler kan legge til et barn og velge egne perioder for barnet', async ({
         page,
         msw,
     }) => {
@@ -194,11 +194,21 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
         await page
             .getByRole('radiogroup', { name: 'Periode med barnetillegg' })
             .nth(1)
-            .getByRole('radio', { name: 'Velg periode' })
+            .getByRole('radio', { name: 'Velg perioder' })
             .check();
         await page.getByRole('textbox', { name: 'Fra og med' }).nth(1).fill('01.03.2025');
         await expect(
             page.getByText('Gir barnetillegg i perioden: 01.03.2025 - 31.03.2025'),
+        ).toBeVisible();
+
+        // Barnet kan få flere perioder med opphold mellom
+        await page.getByRole('textbox', { name: 'Til og med' }).nth(1).fill('10.03.2025');
+        await page.getByRole('button', { name: 'Legg til periode' }).click();
+        await page.getByRole('textbox', { name: 'Fra og med' }).nth(2).fill('20.03.2025');
+        await expect(
+            page.getByText(
+                'Gir barnetillegg i periodene: 01.03.2025 - 10.03.2025, 20.03.2025 - 31.03.2025',
+            ),
         ).toBeVisible();
 
         await page.getByRole('button', { name: 'Lagre' }).click();
@@ -210,7 +220,7 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                     {
                         fornavn: 'Barn',
                         kilde: BarnetilleggBarnKilde.SØKNAD,
-                        periode: null,
+                        perioder: null,
                     },
                     {
                         fnr: '05022512345',
@@ -220,10 +230,16 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                         fødselsdato: tilDato('2025-02-15'),
                         kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
                         søknadId: null,
-                        periode: {
-                            fraOgMed: tilDato('2025-03-01'),
-                            tilOgMed: tilDato('2025-03-31'),
-                        },
+                        perioder: [
+                            {
+                                fraOgMed: tilDato('2025-03-01'),
+                                tilOgMed: tilDato('2025-03-10'),
+                            },
+                            {
+                                fraOgMed: tilDato('2025-03-20'),
+                                tilOgMed: tilDato('2025-03-31'),
+                            },
+                        ],
                     },
                 ],
             },

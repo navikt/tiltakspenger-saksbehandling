@@ -18,6 +18,7 @@ import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/ra
 import { hentRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { erSladdet, hentVerdi } from '~/utils/sladdetVerdi';
+import { isNonNullish } from '~/utils/object';
 import { overlappendePeriode, totalPeriode } from '~/utils/periode';
 import {
     BarnetilleggBarnSkjema,
@@ -62,7 +63,7 @@ export const hentBarnFraSøknad = (søknad: Søknad): BarnFraSøknad[] =>
                 fødselsdato: barn.fødselsdato,
                 kilde: BarnetilleggBarnKilde.SØKNAD,
                 søknadId: søknad.id,
-                periode: null,
+                perioder: null,
             },
             `${søknad.id}:${index}`,
         ),
@@ -181,7 +182,7 @@ export const hentLagredeBarn = (
 
 /**
  * Barna fra gjeldende vedtak med barnetillegg lagret med barn (V2), nyeste vedtak først.
- * Perioden saksbehandler valgte i vedtaket gjelder ikke for denne innvilgelsen, så barna får hele innvilgelsesperioden.
+ * Periodene saksbehandler valgte i vedtaket gjelder ikke for denne innvilgelsen, så barna får hele innvilgelsesperioden.
  */
 export const hentBarnFraGjeldendeVedtak = (sak: SakProps): BarnetilleggBarnSkjema[] =>
     sak.innvilgetTidslinje.elementer
@@ -194,7 +195,7 @@ export const hentBarnFraGjeldendeVedtak = (sak: SakProps): BarnetilleggBarnSkjem
                 ? tilSkjemaBarn(vedtak.barnetillegg.barn, vedtak.id)
                 : [],
         )
-        .map((barn) => ({ ...barn, periode: null }))
+        .map((barn) => ({ ...barn, perioder: null }))
         .filter(removeDuplicatesFilter(erSammeBarn));
 
 /**
@@ -361,7 +362,8 @@ const lagSkjemaState = (
 
 /**
  * Tilpasser valgte perioder til nye innvilgelsesperioder.
- * En valgt periode som ikke overlapper innvilgelsesperiodene lenger, erstattes med hele innvilgelsesperioden.
+ * Valgte perioder som ikke overlapper innvilgelsesperiodene lenger, fjernes.
+ * Overlapper ingen av dem, får barnet hele innvilgelsesperioden.
  */
 export const tilpassBarnTilInnvilgelsesperiodene = (
     barn: BarnetilleggBarnSkjema[],
@@ -373,9 +375,17 @@ export const tilpassBarnTilInnvilgelsesperiodene = (
 
     const total = totalPeriode(innvilgelsesperioder.map((it) => it.periode));
 
-    return barn.map((it) =>
-        it.periode ? { ...it, periode: overlappendePeriode(it.periode, total) } : it,
-    );
+    return barn.map((it) => {
+        if (!it.perioder) {
+            return it;
+        }
+
+        const perioder = it.perioder
+            .map((periode) => overlappendePeriode(periode, total))
+            .filter(isNonNullish);
+
+        return { ...it, perioder: perioder.length > 0 ? perioder : null };
+    });
 };
 
 /**
@@ -404,7 +414,7 @@ export const tilOppdaterBarnetilleggDTO = (
                           fødselsdato: barn.fødselsdato.verdi,
                           kilde: barn.kilde,
                           søknadId: barn.søknadId,
-                          periode: barn.periode,
+                          perioder: barn.perioder,
                       },
                   ],
         ),

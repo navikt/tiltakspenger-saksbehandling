@@ -102,7 +102,7 @@ describe('revurderingInitialState', () => {
         test('forhåndsvelger barna fra gjeldende vedtak når behandlingen mangler barnetillegg', () => {
             const barnIVedtaket = barnetilleggBarn('2020-01-01', {
                 fornavn: ikkeSladdet('Vedtak'),
-                periode: periode('2025-01-01', '2025-02-28'),
+                perioder: [periode('2025-01-01', '2025-02-28')],
             });
 
             const sakMedBarnetillegg = sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
@@ -126,7 +126,7 @@ describe('revurderingInitialState', () => {
                     valgteBarn: [
                         expect.objectContaining({
                             fornavn: ikkeSladdet('Vedtak'),
-                            periode: null,
+                            perioder: null,
                         }),
                     ],
                 },
@@ -151,7 +151,7 @@ describe('revurderingInitialState', () => {
                     valgteBarn: [
                         expect.objectContaining({
                             fødselsdato: ikkeSladdet('2015-03-01'),
-                            periode: null,
+                            perioder: null,
                         }),
                     ],
                 },
@@ -183,7 +183,7 @@ describe('omgjøringInitialState', () => {
                 barnetillegg: barnetilleggV2(
                     [
                         barnetilleggBarn('2020-01-01', {
-                            periode: periode('2025-02-01', '2025-03-31'),
+                            perioder: [periode('2025-02-01', '2025-03-31')],
                         }),
                     ],
                     [periode('2025-01-01', '2025-03-31')],
@@ -198,7 +198,9 @@ describe('omgjøringInitialState', () => {
                     innvilgelsesperioder,
                     harBarnetillegg: true,
                     valgteBarn: [
-                        skjemaBarn('2020-01-01', { periode: periode('2025-02-01', '2025-03-31') }),
+                        skjemaBarn('2020-01-01', {
+                            perioder: [periode('2025-02-01', '2025-03-31')],
+                        }),
                     ],
                     manueltLagtTilBarn: [],
                 },

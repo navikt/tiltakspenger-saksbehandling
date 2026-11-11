@@ -1,5 +1,5 @@
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import { inneholderHelePerioden, totalPeriode } from '~/utils/periode';
+import { inneholderHelePerioden, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -82,7 +82,7 @@ export const validerBarnetillegg = (
 
         const rett = rettTilBarnetilleggPeriode(barn.fødselsdato.verdi);
 
-        if (barn.periode === null) {
+        if (barn.perioder === null) {
             if (!harRettIInnvilgelsesperiodene(barn, perioder)) {
                 feil(
                     `Barnet har ikke rett til barnetillegg i innvilgelsesperioden (rett fra fødsel til fylte 16 år: ${formaterPeriode(rett)})`,
@@ -91,32 +91,50 @@ export const validerBarnetillegg = (
             return;
         }
 
-        const { periode } = barn;
+        const valgtePerioder = barn.perioder;
+        const fødselsdato = barn.fødselsdato.verdi;
 
-        if (periode.fraOgMed > periode.tilOgMed) {
-            feil('Til og med-dato må være etter fra og med-dato');
+        if (valgtePerioder.length === 0) {
+            feil('Minst én periode må velges');
             return;
         }
 
-        if (!inneholderHelePerioden(totalInnvilgelsesperiode, periode)) {
-            feil(
-                `Perioden ${formaterPeriode(periode)} må være innenfor innvilgelsesperioden ${formaterPeriode(totalInnvilgelsesperiode)}`,
-            );
-        }
+        valgtePerioder.forEach((periode) => {
+            if (periode.fraOgMed > periode.tilOgMed) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)}: Til og med-dato må være etter fra og med-dato`,
+                );
+                return;
+            }
 
-        if (!inneholderHelePerioden(rett, periode)) {
-            feil(
-                `Perioden ${formaterPeriode(periode)} må være innenfor perioden barnet har rett til barnetillegg (${formaterPeriode(rett)})`,
-            );
-        }
+            if (!inneholderHelePerioden(totalInnvilgelsesperiode, periode)) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)} må være innenfor innvilgelsesperioden ${formaterPeriode(totalInnvilgelsesperiode)}`,
+                );
+            }
+
+            if (!inneholderHelePerioden(rett, periode)) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)} må være innenfor perioden barnet har rett til barnetillegg (${formaterPeriode(rett)})`,
+                );
+            }
+
+            if (
+                effektivePerioderForBarn({ fødselsdato, perioder: [periode] }, perioder).length ===
+                0
+            ) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)} overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg`,
+                );
+            }
+        });
 
         if (
-            effektivePerioderForBarn({ fødselsdato: barn.fødselsdato.verdi, periode }, perioder)
-                .length === 0
+            valgtePerioder.some((a, i) =>
+                valgtePerioder.some((b, j) => j > i && perioderOverlapper(a, b)),
+            )
         ) {
-            feil(
-                `Perioden ${formaterPeriode(periode)} overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg`,
-            );
+            feil('Periodene kan ikke overlappe hverandre');
         }
     });
 

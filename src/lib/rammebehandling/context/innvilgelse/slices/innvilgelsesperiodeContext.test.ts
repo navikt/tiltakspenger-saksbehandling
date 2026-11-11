@@ -145,7 +145,9 @@ describe('innvilgelsesperioderReducer', () => {
 
         test('avgrenser overstyrt periode for et barn til den nye innvilgelsesperioden', () => {
             const state = medPerioderState({
-                valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-03-31') }],
+                valgteBarn: [
+                    { ...barnFraSøknaden, perioder: [periode('2025-02-01', '2025-03-31')] },
+                ],
             });
 
             const nyState = innvilgelsesperioderReducer(
@@ -154,7 +156,41 @@ describe('innvilgelsesperioderReducer', () => {
             );
 
             expect(nyState).toMatchObject({
-                valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-02-28') }],
+                valgteBarn: [
+                    { ...barnFraSøknaden, perioder: [periode('2025-02-01', '2025-02-28')] },
+                ],
+            });
+        });
+
+        test('fjerner perioder for et barn som havner utenfor den nye innvilgelsesperioden', () => {
+            const state = medPerioderState({
+                valgteBarn: [
+                    {
+                        ...barnFraSøknaden,
+                        perioder: [
+                            periode('2025-01-01', '2025-01-31'),
+                            periode('2025-02-15', '2025-03-15'),
+                            periode('2025-04-01', '2025-04-30'),
+                        ],
+                    },
+                ],
+            });
+
+            const nyState = innvilgelsesperioderReducer(
+                state,
+                oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-28') }),
+            );
+
+            expect(nyState).toMatchObject({
+                valgteBarn: [
+                    {
+                        ...barnFraSøknaden,
+                        perioder: [
+                            periode('2025-01-01', '2025-01-31'),
+                            periode('2025-02-15', '2025-02-28'),
+                        ],
+                    },
+                ],
             });
         });
     });
@@ -193,7 +229,7 @@ describe('innvilgelsesperioderReducer', () => {
                 innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
                 innvilgelsesperiode(periode('2025-04-01', '2025-06-30')),
             ],
-            valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-06-30') }],
+            valgteBarn: [{ ...barnFraSøknaden, perioder: [periode('2025-02-01', '2025-06-30')] }],
         });
 
         expect(
@@ -203,7 +239,9 @@ describe('innvilgelsesperioderReducer', () => {
             }),
         ).toEqual(
             medPerioderState({
-                valgteBarn: [{ ...barnFraSøknaden, periode: periode('2025-02-01', '2025-03-31') }],
+                valgteBarn: [
+                    { ...barnFraSøknaden, perioder: [periode('2025-02-01', '2025-03-31')] },
+                ],
             }),
         );
     });

@@ -127,6 +127,8 @@ export const revurderingForlengelseReducer: Reducer<
         case 'settValgteBarnetilleggBarn':
         case 'settBarnetilleggPeriodevalg':
         case 'oppdaterBarnetilleggBarnPeriode':
+        case 'leggTilBarnetilleggBarnPeriode':
+        case 'fjernBarnetilleggBarnPeriode':
         case 'leggTilManueltBarnetilleggBarn':
         case 'fjernManueltBarnetilleggBarn': {
             return {

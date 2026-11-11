@@ -94,7 +94,7 @@ export const barnetilleggBarn = (
     fødselsdato: ikkeSladdet(tilDato(fødselsdato)),
     kilde: BarnetilleggBarnKilde.SØKNAD,
     søknadId: 'soknad_1',
-    periode: null,
+    perioder: null,
     ...overstyringer,
 });
 
@@ -123,11 +123,12 @@ const perioderMedBarnetillegg = (barn: BarnetilleggBarn, innvilgelsesperioder: P
 
     const sorterte = innvilgelsesperioder.toSorted((a, b) => (a.fraOgMed < b.fraOgMed ? -1 : 1));
     const total = { fraOgMed: sorterte[0].fraOgMed, tilOgMed: sorterte.at(-1)!.tilOgMed };
-    const basis = overlapp(barn.periode ?? total, rett);
-
-    return basis
-        ? sorterte.map((it) => overlapp(basis, it)).filter((it): it is Periode => it !== null)
-        : [];
+    return (barn.perioder ?? [total])
+        .map((valgt) => overlapp(valgt, rett))
+        .filter((it): it is Periode => it !== null)
+        .flatMap((basis) => sorterte.map((it) => overlapp(basis, it)))
+        .filter((it): it is Periode => it !== null)
+        .toSorted((a, b) => (a.fraOgMed < b.fraOgMed ? -1 : 1));
 };
 
 const periodiserAntallBarn = (perioderPerBarn: Periode[][]): BarnetilleggPeriode[] => {
@@ -201,7 +202,7 @@ export const barnetilleggFraOppdaterDTO = (
             fødselsdato: ikkeSladdet(barn.fødselsdato),
             kilde: barn.kilde,
             søknadId: barn.søknadId,
-            periode: barn.periode,
+            perioder: barn.perioder,
         })),
         innvilgelsesperioder,
     ),

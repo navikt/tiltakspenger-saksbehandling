@@ -121,6 +121,8 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
         case 'settValgteBarnetilleggBarn':
         case 'settBarnetilleggPeriodevalg':
         case 'oppdaterBarnetilleggBarnPeriode':
+        case 'leggTilBarnetilleggBarnPeriode':
+        case 'fjernBarnetilleggBarnPeriode':
         case 'leggTilManueltBarnetilleggBarn':
         case 'fjernManueltBarnetilleggBarn': {
             if (resultat !== RevurderingResultat.OMGJØRING) {
