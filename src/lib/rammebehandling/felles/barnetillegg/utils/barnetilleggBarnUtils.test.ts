@@ -154,10 +154,33 @@ describe('erSammeBarn', () => {
         expect(erSammeBarn(utenFnr, skjemaBarn('2020-01-02'))).toBe(false);
     });
 
-    test('sammenligner bare fnr når begge barna har fnr', () => {
+    test('er samme barn med ulikt fnr når fødselsdato og navn er like', () => {
         const annetFnr = skjemaBarn('2020-01-01', { fnr: ikkeSladdet('01012054321') });
 
-        expect(erSammeBarn(medFnr, annetFnr)).toBe(false);
+        expect(erSammeBarn(medFnr, annetFnr)).toBe(true);
+        expect(
+            erSammeBarn(annetFnr, skjemaBarn('2020-01-02', { fnr: ikkeSladdet('02012012345') })),
+        ).toBe(false);
+        expect(
+            erSammeBarn(
+                annetFnr,
+                skjemaBarn('2020-01-01', {
+                    fnr: ikkeSladdet('01012012345'),
+                    fornavn: ikkeSladdet('Kari'),
+                }),
+            ),
+        ).toBe(false);
+    });
+
+    test('er ikke samme barn med ulikt fnr når navnet mangler', () => {
+        const utenNavn = { fornavn: ikkeSladdet(null), etternavn: ikkeSladdet(null) };
+
+        expect(
+            erSammeBarn(
+                skjemaBarn('2020-01-01', { ...utenNavn, fnr: ikkeSladdet('01012012345') }),
+                skjemaBarn('2020-01-01', { ...utenNavn, fnr: ikkeSladdet('01012054321') }),
+            ),
+        ).toBe(false);
     });
 
     test('er ikke samme barn når identiteten er sladdet', () => {

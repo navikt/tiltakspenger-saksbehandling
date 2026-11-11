@@ -63,15 +63,16 @@ const lagNavnOgFødselsdatoKey = (barn: BarnIdentitet): string => {
 
 /**
  * Om to barn er samme barn, slik backend vurderer det.
- * Har begge barna fnr, er de samme barn når fnr er likt. Ellers sammenlignes fødselsdato og navn.
+ * Barna er samme barn når fnr er likt, eller når fødselsdato og navn er like.
+ * Det siste gjelder også når barna har ulikt fnr, men da må de ha fornavn og etternavn, så f.eks. tvillinger uten navn ikke regnes som samme barn.
  * Samme barn kan dermed ha ulik `key`, f.eks. når det er oppgitt uten fnr i søknaden og lagt til med fnr av saksbehandler.
  */
 export const erSammeBarn = (a: BarnetilleggBarnSkjema, b: BarnetilleggBarnSkjema): boolean => {
     const fnrA = hentVerdi(a.fnr)?.trim();
     const fnrB = hentVerdi(b.fnr)?.trim();
 
-    if (fnrA && fnrB) {
-        return fnrA === fnrB;
+    if (fnrA && fnrA === fnrB) {
+        return true;
     }
 
     if (a.key === b.key) {
@@ -82,7 +83,11 @@ export const erSammeBarn = (a: BarnetilleggBarnSkjema, b: BarnetilleggBarnSkjema
         return false;
     }
 
-    return lagNavnOgFødselsdatoKey(a) === lagNavnOgFødselsdatoKey(b);
+    if (lagNavnOgFødselsdatoKey(a) !== lagNavnOgFødselsdatoKey(b)) {
+        return false;
+    }
+
+    return !fnrA || !fnrB || (!!normaliser(a.fornavn) && !!normaliser(a.etternavn));
 };
 
 export const tilBarnetilleggBarnSkjema = (
