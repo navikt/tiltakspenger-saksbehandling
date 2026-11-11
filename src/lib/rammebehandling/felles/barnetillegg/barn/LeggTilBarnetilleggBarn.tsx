@@ -154,9 +154,10 @@ export const LeggTilBarnetilleggBarn = ({ eksisterendeKeys }: Props) => {
                     label={'Fødselsnummer (valgfritt)'}
                     size={'small'}
                     inputMode={'numeric'}
+                    autoComplete={'off'}
                     value={felter.fnr}
                     error={feil.fnr}
-                    onChange={(event) => oppdater({ fnr: event.target.value })}
+                    onChange={(event) => oppdater({ fnr: kunSiffer(event.target.value) })}
                 />
             </HStack>
             <HStack gap={'space-12'}>
@@ -170,6 +171,9 @@ export const LeggTilBarnetilleggBarn = ({ eksisterendeKeys }: Props) => {
         </VStack>
     );
 };
+
+// Beholdes som tekst slik at ledende 0 ikke forsvinner.
+const kunSiffer = (verdi: string): string => verdi.replace(/\D/g, '').slice(0, 11);
 
 const validerFelter = (felter: Felter): Feil => {
     const feil: Feil = {};
