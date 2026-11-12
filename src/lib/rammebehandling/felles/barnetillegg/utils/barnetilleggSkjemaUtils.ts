@@ -22,6 +22,7 @@ import { isNonNullish } from '~/utils/object';
 import { overlappendePeriode, totalPeriode } from '~/utils/periode';
 import {
     BarnetilleggBarnSkjema,
+    erBarnFraSaksbehandler,
     erSammeBarn,
     harRettIInnvilgelsesperiodene,
     tilBarnetilleggBarnSkjema,
@@ -44,7 +45,7 @@ export type BarnetilleggKandidat = {
     erValgt: boolean;
     // Opplysninger om barnet fra søknaden, dersom barnet finnes i en av søknadene
     søknadsopplysninger: Nullable<BarnFraSøknad['opplysninger']>;
-    // Barn saksbehandler har lagt til i denne behandlingen, og som ikke er lagret ennå
+    // Barn saksbehandler har lagt til i denne behandlingen, og som ikke finnes i søknadene eller gjeldende vedtak
     kanFjernes: boolean;
 };
 
@@ -199,8 +200,9 @@ export const hentBarnFraGjeldendeVedtak = (sak: SakProps): BarnetilleggBarnSkjem
         .filter(removeDuplicatesFilter(erSammeBarn));
 
 /**
- * Barna saksbehandler kan velge å gi barnetillegg for, i en fast rekkefølge:
- * lagrede barn, barn fra søknadene, barn fra gjeldende vedtak, og barn lagt til av saksbehandler.
+ * Barna saksbehandler kan velge å gi barnetillegg for, sortert med eldste først.
+ * Det er lagrede barn, barn fra søknadene, barn fra gjeldende vedtak, og barn lagt til av saksbehandler.
+ * Lagrede barn lagt til av saksbehandler er med i [manueltLagtTilBarn] til de fjernes.
  * Valgte barn vises med valgene saksbehandler har gjort.
  */
 export const hentBarnetilleggKandidater = (
@@ -220,7 +222,7 @@ export const hentBarnetilleggKandidater = (
             : hentBarnFraGjeldendeVedtak(sak);
 
     const alleBarn = [
-        ...(hentLagredeBarn(behandling) ?? []),
+        ...(hentLagredeBarn(behandling) ?? []).filter((barn) => !erBarnFraSaksbehandler(barn)),
         ...barnFraSøknader.map((it) => it.barn),
         ...barnFraVedtak,
         ...manueltLagtTilBarn,
@@ -237,7 +239,10 @@ export const hentBarnetilleggKandidater = (
             erValgt: !!valgtBarn,
             søknadsopplysninger:
                 barnFraSøknader.find((it) => erSammeBarn(it.barn, barn))?.opplysninger ?? null,
-            kanFjernes: manueltLagtTilBarn.some((it) => it.key === barn.key),
+            kanFjernes:
+                manueltLagtTilBarn.some((it) => it.key === barn.key) &&
+                !barnFraSøknader.some((it) => erSammeBarn(it.barn, barn)) &&
+                !barnFraVedtak.some((it) => erSammeBarn(it, barn)),
         };
     });
 };
@@ -301,8 +306,9 @@ export const hentForhåndsvalgteBarn = (
 
 /**
  * Barnetillegget i skjemaet ved oppstart, eller når innvilgelsesperioden velges.
- * Lagrede barn brukes som de er. Er barnetillegget lagret som antall barn per periode (V1),
- * eller ikke lagret, forhåndsvelges barn. For V1 beholdes svaret på om det skal være barnetillegg.
+ * Lagrede barn brukes som de er, og de som er lagt til av saksbehandler kan fjernes igjen.
+ * Er barnetillegget lagret som antall barn per periode (V1), eller ikke lagret, forhåndsvelges barn.
+ * For V1 beholdes svaret på om det skal være barnetillegg.
  */
 export const lagBarnetilleggSkjemaState = (
     behandling: Rammebehandling,
@@ -338,7 +344,11 @@ const lagSkjemaState = (
             innvilgelsesperioder,
         );
 
-        return { harBarnetillegg: valgteBarn.length > 0, valgteBarn, manueltLagtTilBarn: [] };
+        return {
+            harBarnetillegg: valgteBarn.length > 0,
+            valgteBarn,
+            manueltLagtTilBarn: valgteBarn.filter(erBarnFraSaksbehandler),
+        };
     }
 
     const forhåndsvalgteBarn = hentForhåndsvalgte();

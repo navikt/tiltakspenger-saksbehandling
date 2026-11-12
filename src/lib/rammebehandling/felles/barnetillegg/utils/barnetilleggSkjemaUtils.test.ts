@@ -2,6 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import {
     hentBarnetilleggKandidater,
     hentBarnFraSøknader,
+    lagBarnetilleggSkjemaState,
     tilForhåndsvisningBarnetilleggDTO,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
@@ -27,6 +28,7 @@ import {
     Rammebehandlingsstatus,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { nonNullish } from '~/utils/object';
 
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
 const innvilgelsesperioder = [innvilgelsesperiode(førsteHalvår)];
@@ -283,6 +285,58 @@ describe('hentBarnetilleggKandidater', () => {
         expect(kandidater).toHaveLength(1);
         expect(kandidater[0]).toMatchObject({ barn: valgtMedFnr, erValgt: true });
         expect(kandidater[0].søknadsopplysninger).not.toBeNull();
+    });
+});
+
+describe('lagrede barn lagt til av saksbehandler', () => {
+    const lagtTilAvSaksbehandler = barnetilleggBarn('2023-01-01', {
+        fornavn: ikkeSladdet('Lagt til'),
+        kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
+        søknadId: null,
+    });
+    // Samme barn som i gjeldende vedtak, og vil vises derfra selv om det fjernes
+    const ogsåIVedtaket = {
+        ...barnFraVedtaket,
+        kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
+        søknadId: null,
+    };
+
+    const behandling = revurderingInnvilgelse({
+        innvilgelsesperioder,
+        barnetillegg: barnetilleggV2([lagtTilAvSaksbehandler, ogsåIVedtaket], [førsteHalvår]),
+    });
+
+    const state = lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak);
+    const kandidater = () =>
+        hentBarnetilleggKandidater(behandling, { innvilgelsesperioder, ...state }, sak);
+
+    test('kan fjernes, med mindre barnet også finnes i søknadene eller gjeldende vedtak', () => {
+        expect(
+            kandidater()
+                .filter((it) => it.erValgt)
+                .map((it) => ({ fornavn: it.barn.fornavn.verdi, kanFjernes: it.kanFjernes })),
+        ).toEqual([
+            { fornavn: 'Vedtak', kanFjernes: false },
+            { fornavn: 'Lagt til', kanFjernes: true },
+        ]);
+    });
+
+    test('vises ikke når det er fjernet', () => {
+        const fjernet = nonNullish(
+            kandidater().find((it) => it.barn.fornavn.verdi === 'Lagt til'),
+        ).barn;
+        const etterFjerning = hentBarnetilleggKandidater(
+            behandling,
+            {
+                innvilgelsesperioder,
+                valgteBarn: state.valgteBarn.filter((it) => it.key !== fjernet.key),
+                manueltLagtTilBarn: state.manueltLagtTilBarn.filter((it) => it.key !== fjernet.key),
+            },
+            sak,
+        );
+
+        expect(etterFjerning.map((it) => it.barn.fornavn.verdi)).not.toContain('Lagt til');
+        expect(etterFjerning.map((it) => it.barn.fornavn.verdi)).toContain('Vedtak');
     });
 });
 
