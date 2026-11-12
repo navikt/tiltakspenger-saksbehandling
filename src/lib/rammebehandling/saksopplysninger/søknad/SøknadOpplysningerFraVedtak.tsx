@@ -7,7 +7,6 @@ import { behandlingUrl } from '~/utils/urls';
 import { useState } from 'react';
 import { formaterTidspunkt } from '~/utils/date';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { erRammebehandlingMedInnvilgelse } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 
 type Props = {
@@ -55,9 +54,6 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
                     <OppsummeringAvSøknad
                         tiltaksperiode={saksopplysninger.periode}
                         søknad={valgtBehandling.søknad}
-                        visBarnetilleggPeriodiseringKnapp={erRammebehandlingMedInnvilgelse(
-                            behandling,
-                        )}
                     />
                 </VStack>
             )}

@@ -15,14 +15,9 @@ type Props = {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
     tiltaksperiode: Nullable<Periode>;
     søknad: Søknad;
-    visBarnetilleggPeriodiseringKnapp?: boolean;
 };
 
-export const OppsummeringAvSøknad = ({
-    søknad,
-    tiltaksperiode,
-    visBarnetilleggPeriodiseringKnapp,
-}: Props) => {
+export const OppsummeringAvSøknad = ({ søknad, tiltaksperiode }: Props) => {
     const { gosysUrl } = useConfig();
 
     const {
@@ -97,11 +92,7 @@ export const OppsummeringAvSøknad = ({
 
             <SøknadOpplysningerSvar pengestøtter={søknad.svar} />
 
-            <SøknadOpplysningerBarn
-                tiltaksperiode={tiltaksperiode}
-                søknad={søknad}
-                visBarnetilleggPeriodiseringKnapp={visBarnetilleggPeriodiseringKnapp}
-            />
+            <SøknadOpplysningerBarn tiltaksperiode={tiltaksperiode} søknad={søknad} />
 
             <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
             {antallVedlegg > 0 && (

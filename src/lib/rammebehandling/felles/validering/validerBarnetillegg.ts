@@ -1,114 +1,179 @@
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import {
-    totalPeriode,
-    perioderErLike,
-    periodiseringerErLike,
-    periodiseringTotalPeriode,
-    validerPeriodisering,
-    slåSammenPeriodisering,
-    inneholderHelePerioden,
-} from '~/utils/periode';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { formaterPeriode } from '~/utils/date';
-import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import { Søknad } from '~/lib/søknad/søknadTyper';
+import { inneholderHelePerioden, perioderOverlapper, totalPeriode } from '~/utils/periode';
+import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
+import {
+    BarnetilleggBarnSkjema,
+    effektivePerioderForBarn,
+    erSammeBarn,
+    formaterBarnNavn,
+    harRettIInnvilgelsesperiodene,
+    rettTilBarnetilleggPeriode,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
+import { BarnFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { erSladdet, hentVerdi } from '~/utils/sladdetVerdi';
 
+const FNR_REGEX = /^\d{11}$/;
+
+/**
+ * Speiler valideringen backend gjør av barnetillegget, i tillegg til advarsler om avvik fra søknaden(e).
+ * `barnFraSøknader` er barna fra søknadene for tiltaksdeltakelsene det innvilges for.
+ */
 export const validerBarnetillegg = (
     harBarnetillegg: boolean,
-    barnetilleggPerioder: BarnetilleggPeriode[],
+    valgteBarn: BarnetilleggBarnSkjema[],
     innvilgelsesperioder: Innvilgelsesperiode[],
-    søknad: Søknad,
+    barnFraSøknader: BarnFraSøknad[],
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
         warnings: [],
     };
 
-    const periodiseringFraSøknad = periodiserBarnetilleggFraSøknad(
-        søknad.barnetillegg,
-        innvilgelsesperioder,
+    const perioder = innvilgelsesperioder.map((it) => it.periode);
+
+    const barnFraSøknadMedRett = barnFraSøknader.filter(
+        (it) =>
+            it.opplysninger.oppholderSegIEØSSpm.svar === 'JA' &&
+            harRettIInnvilgelsesperiodene(it.barn, perioder),
     );
 
     if (!harBarnetillegg) {
-        if (periodiseringFraSøknad.length > 0) {
+        if (barnFraSøknadMedRett.length > 0) {
             validering.warnings.push(
-                `Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
+                `Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Barn fra søknaden med rett i innvilgelsesperioden: ${barnFraSøknadMedRett.map((it) => beskrivBarn(it.barn)).join(', ')}`,
             );
         }
         return validering;
     }
 
-    const perioder = barnetilleggPerioder.map((bt) => bt.periode);
-
-    if (perioder.length === 0) {
-        validering.errors.push('Minst en periode må spesifiseres når barnetillegg skal innvilges');
+    if (valgteBarn.length === 0) {
+        validering.errors.push(
+            'Velg minst ett barn eller svar nei på om det skal innvilges barnetillegg',
+        );
         return validering;
     }
 
-    const totalInnvilgelsesperiode = periodiseringTotalPeriode(innvilgelsesperioder);
+    const totalInnvilgelsesperiode = totalPeriode(perioder);
 
-    // Disse valideringene er ikke nødvendigvis presise, ettersom søknaden ikke alltid har
-    // fullstendig informasjon om brukerens barn
-    if (
-        !periodiseringerErLike(
-            periodiseringFraSøknad,
-            barnetilleggPerioder,
-            (p1, p2) => p1.antallBarn === p2.antallBarn,
-        )
-    ) {
-        const totalBarnetilleggPeriode = totalPeriode(perioder);
+    valgteBarn.forEach((barn) => {
+        const beskrivelse = beskrivBarn(barn);
+        const feil = (melding: string) => validering.errors.push(`${beskrivelse}: ${melding}`);
 
-        // Dersom søknaden ikke hadde barn, kan vi ikke vite noe om alder på evt barn som saksbehandler har lagt inn.
-        // Vi viser en standard warning dersom barnetillegget saksbehandler har valgt ikke fyller hele innvilgelsesperioden
-        if (søknad.barnetillegg.length === 0) {
-            if (!perioderErLike(totalInnvilgelsesperiode, totalBarnetilleggPeriode)) {
-                validering.warnings.push(
-                    `Den totale perioden for barnetillegg (${formaterPeriode(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${formaterPeriode(totalInnvilgelsesperiode)})`,
+        if (erSladdet(barn.fødselsdato)) {
+            feil('Barnet har sladdede opplysninger, og kan ikke velges');
+            return;
+        }
+
+        const fnr = hentVerdi(barn.fnr)?.trim();
+
+        if (fnr && !FNR_REGEX.test(fnr)) {
+            feil('Fødselsnummer må være 11 siffer');
+        }
+
+        if (barn.kilde === BarnetilleggBarnKilde.SAKSBEHANDLER) {
+            if (!hentVerdi(barn.fornavn)?.trim() || !hentVerdi(barn.etternavn)?.trim()) {
+                feil('Fornavn og etternavn må fylles ut');
+            }
+        } else if (!barn.søknadId) {
+            feil('Barnet mangler søknaden det er hentet fra');
+        }
+
+        const rett = rettTilBarnetilleggPeriode(barn.fødselsdato.verdi);
+
+        if (barn.perioder === null) {
+            if (!harRettIInnvilgelsesperiodene(barn, perioder)) {
+                feil(
+                    `Barnet har ikke rett til barnetillegg i innvilgelsesperioden (rett fra fødsel til fylte 16 år: ${formaterPeriode(rett)})`,
                 );
             }
-            validering.warnings.push(
-                'Det er innvilget barnetillegg uten at vi har mottatt søknad med barn',
-            );
-        } else {
-            validering.warnings.push(
-                `Innvilget barnetillegg stemmer ikke med barn fra siste søknad - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
-            );
+            return;
         }
+
+        const valgtePerioder = barn.perioder;
+        const fødselsdato = barn.fødselsdato.verdi;
+
+        if (valgtePerioder.length === 0) {
+            feil('Minst én periode må velges');
+            return;
+        }
+
+        valgtePerioder.forEach((periode) => {
+            if (periode.fraOgMed > periode.tilOgMed) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)}: Til og med-dato må være etter fra og med-dato`,
+                );
+                return;
+            }
+
+            if (!inneholderHelePerioden(totalInnvilgelsesperiode, periode)) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)} må være innenfor innvilgelsesperioden ${formaterPeriode(totalInnvilgelsesperiode)}`,
+                );
+            }
+
+            if (!inneholderHelePerioden(rett, periode)) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)} må være innenfor perioden barnet har rett til barnetillegg (${formaterPeriode(rett)})`,
+                );
+            }
+
+            if (
+                effektivePerioderForBarn({ fødselsdato, perioder: [periode] }, perioder).length ===
+                0
+            ) {
+                feil(
+                    `Perioden ${formaterPeriode(periode)} overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg`,
+                );
+            }
+        });
+
+        if (
+            valgtePerioder.some((a, i) =>
+                valgtePerioder.some((b, j) => j > i && perioderOverlapper(a, b)),
+            )
+        ) {
+            feil('Periodene kan ikke overlappe hverandre');
+        }
+    });
+
+    if (valgteBarn.some((a, i) => valgteBarn.some((b, j) => j > i && erSammeBarn(a, b)))) {
+        validering.errors.push('Samme barn kan ikke være valgt flere ganger');
     }
 
-    if (!validerPeriodisering(barnetilleggPerioder, true)) {
-        validering.errors.push('Periodene for barnetillegg kan ikke ha overlapp');
-    }
-
-    const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
-
-    if (perioderErUtenBarn) {
-        validering.errors.push('Minst en periode må ha barn når barnetillegg er valgt');
-    }
-
-    const sammenhengendeInnvilgelsesperioder = slåSammenPeriodisering(
-        innvilgelsesperioder,
-        () => true,
+    const ikkeValgteBarnFraSøknad = barnFraSøknadMedRett.filter(
+        (it) => !valgteBarn.some((barn) => erSammeBarn(barn, it.barn)),
     );
 
-    const alleBarnetilleggErInnenforInnvilgelsen = barnetilleggPerioder.every((bt) =>
-        sammenhengendeInnvilgelsesperioder.some((ip) =>
-            inneholderHelePerioden(ip.periode, bt.periode),
-        ),
+    if (ikkeValgteBarnFraSøknad.length > 0) {
+        validering.warnings.push(
+            `Barn fra søknaden med rett i innvilgelsesperioden er ikke valgt: ${ikkeValgteBarnFraSøknad.map((it) => beskrivBarn(it.barn)).join(', ')}`,
+        );
+    }
+
+    const valgteBarnUtenforEØS = barnFraSøknader.filter(
+        (it) =>
+            it.opplysninger.oppholderSegIEØSSpm.svar !== 'JA' &&
+            valgteBarn.some((barn) => erSammeBarn(barn, it.barn)),
     );
 
-    if (!alleBarnetilleggErInnenforInnvilgelsen) {
-        validering.errors.push(
-            'Alle barnetilleggsperiodene må være innenfor en innvilgelsesperiode',
+    if (valgteBarnUtenforEØS.length > 0) {
+        validering.warnings.push(
+            `Valgte barn oppholder seg ikke i Norge eller et annet EØS-land ifølge søknaden: ${valgteBarnUtenforEØS.map((it) => beskrivBarn(it.barn)).join(', ')}`,
         );
     }
 
     return validering;
 };
 
-const formatterPeriodisering = (btPeriodisering: BarnetilleggPeriode[]) => {
-    return btPeriodisering
-        .map((bt) => `${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`)
-        .join(', ');
+const beskrivBarn = (barn: BarnetilleggBarnSkjema): string => {
+    const navn = formaterBarnNavn(barn);
+    const fødselsdato = hentVerdi(barn.fødselsdato);
+
+    if (!fødselsdato) {
+        return navn || 'Barn';
+    }
+
+    return `${navn || 'Barn'} (født ${formaterDatotekst(fødselsdato)})`;
 };

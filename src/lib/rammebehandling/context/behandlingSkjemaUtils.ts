@@ -20,8 +20,7 @@ import { Rammebehandling, SkalJournalføreNotat } from '~/lib/rammebehandling/ty
 import { BehandlingSkjemaContext } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { hentBarnetilleggForBehandling } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { lagBarnetilleggSkjemaState } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { nonNullish } from '~/utils/object';
@@ -110,17 +109,10 @@ export const lagForhåndsutfyltInnvilgelse = (
         },
     ];
 
-    const barnetilleggPerioder: BarnetilleggPeriode[] = hentBarnetilleggForBehandling(
-        behandling,
-        innvilgelsesperioder,
-        sak,
-    );
-
     return {
         harValgtPeriode: true,
         innvilgelsesperioder,
-        harBarnetillegg: barnetilleggPerioder.length > 0,
-        barnetilleggPerioder,
+        ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
     };
 };
 

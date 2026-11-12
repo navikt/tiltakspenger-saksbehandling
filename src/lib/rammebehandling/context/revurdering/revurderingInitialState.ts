@@ -8,7 +8,7 @@ import {
 } from '~/lib/rammebehandling/typer/Revurdering';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { RevurderingStansState } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
-import { hentBarnetilleggForRevurdering } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { lagBarnetilleggSkjemaState } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     OmgjøringInnvilgelseState,
     OmgjøringOpphørState,
@@ -47,7 +47,7 @@ export const revurderingInitialState = (
         }
 
         case RevurderingResultat.FORLENGELSE: {
-            return forlengelseInitialState(behandling);
+            return forlengelseInitialState(behandling, sak);
         }
 
         case RevurderingResultat.OMGJØRING:
@@ -94,19 +94,12 @@ const innvilgelseInitialState = (
         };
     }
 
-    const barnetilleggPerioder = hentBarnetilleggForRevurdering(
-        behandling,
-        innvilgelsesperioder,
-        sak,
-    );
-
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
-            harBarnetillegg: barnetilleggPerioder.length > 0,
-            barnetilleggPerioder,
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
         },
     };
 };
@@ -176,20 +169,13 @@ const omgjøringInnvilgelseInitialState = (
         };
     }
 
-    const barnetilleggPerioder = hentBarnetilleggForRevurdering(
-        behandling,
-        innvilgelsesperioder,
-        sak,
-    );
-
     return {
         resultat: RevurderingResultat.OMGJØRING,
         vedtaksperiode,
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
-            harBarnetillegg: barnetilleggPerioder.length > 0,
-            barnetilleggPerioder,
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
         },
     };
 };

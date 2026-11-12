@@ -1,15 +1,28 @@
+.wrapper {
+    & :global(.aksel-timeline__axislabels) {
+        overflow: hidden;
+    }
+}
+
+.header {
+    margin-bottom: 0.5rem;
+}
+
 .ikon {
     display: flex;
     align-items: center;
     gap: 0.25rem;
 }
 
-.detaljer {
+.bunn {
+    margin-top: 0.5rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--ax-space-12);
 
-.info {
-    margin: 1rem 0;
+    .periode {
+        margin-right: 0.5rem;
+        font-weight: bold;
+    }
 }

@@ -26,7 +26,10 @@ import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/B
 import { Avslagsgrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { HjemmelForOpphør, HjemmelForStans } from '~/lib/rammebehandling/typer/Revurdering';
 import {
+    barnetilleggBarn,
     barnetilleggPeriode,
+    barnetilleggV1,
+    barnetilleggV2,
     innvilgelsesperiode,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
@@ -158,7 +161,7 @@ describe('lagring av søknadsbehandling', () => {
             ...saksbehandle,
             søknad: søknad([søknadBarn('2020-05-05')]),
             barnetillegg: {
-                perioder: [barnetilleggPeriode(1, førsteKvartal)],
+                ...barnetilleggV2([barnetilleggBarn('2020-05-05')], [førsteKvartal]),
                 begrunnelse: ikkeSladdet('Lagret begrunnelse for barnetillegg'),
             },
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
@@ -183,7 +186,18 @@ describe('lagring av søknadsbehandling', () => {
             innvilgelsesperioder: [innvilgelsesperiode(førsteKvartal)],
             barnetillegg: {
                 begrunnelse: 'Lagret begrunnelse for barnetillegg',
-                perioder: [barnetilleggPeriode(1, førsteKvartal)],
+                barn: [
+                    {
+                        fnr: null,
+                        fornavn: 'Barn',
+                        mellomnavn: null,
+                        etternavn: 'Barnesen',
+                        fødselsdato: '2020-05-05',
+                        kilde: 'SØKNAD',
+                        søknadId: 'soknad_1',
+                        perioder: null,
+                    },
+                ],
             },
             skalSendeVedtaksbrev: true,
         });
@@ -194,7 +208,7 @@ describe('lagring av søknadsbehandling', () => {
             ...saksbehandle,
             barnetillegg: {
                 // Perioder uten barn regnes ikke som innvilget barnetillegg
-                perioder: [barnetilleggPeriode(0, førsteKvartal)],
+                ...barnetilleggV1([barnetilleggPeriode(0, førsteKvartal)]),
                 begrunnelse: ikkeSladdet('Gammel begrunnelse'),
             },
             skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: true },
@@ -206,7 +220,7 @@ describe('lagring av søknadsbehandling', () => {
 
         await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
         expect(sendtBody()).toMatchObject({
-            barnetillegg: { begrunnelse: null, perioder: [] },
+            barnetillegg: { begrunnelse: null, barn: [] },
             skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
         });
     });
@@ -364,6 +378,45 @@ describe('ulagrede endringer', () => {
     });
 });
 
+describe('barnetillegg lagret som antall barn per periode', () => {
+    const behandlingMedV1 = søknadsbehandlingInnvilgelse({
+        ...saksbehandle,
+        søknad: søknad([søknadBarn('2020-05-05')]),
+        barnetillegg: barnetilleggV1([barnetilleggPeriode(1, førsteKvartal)]),
+    });
+
+    test('må lagres med de forhåndsvalgte barna før sending til beslutter', async () => {
+        svar(200, {
+            ...behandlingMedV1,
+            barnetillegg: barnetilleggV2([barnetilleggBarn('2020-05-05')], [førsteKvartal]),
+        });
+
+        renderHandlinger(behandlingMedV1, SøknadsbehandlingHandlinger);
+
+        expect(
+            screen.getByText('Endringer må lagres før behandlingen kan sendes til beslutter'),
+        ).toBeInTheDocument();
+        expect(sendTilBeslutterKnapp()).toBeDisabled();
+
+        lagre();
+
+        await waitFor(() => expect(sendTilBeslutterKnapp()).toBeEnabled());
+        expect(screen.getByText('Behandlingen er lagret')).toBeInTheDocument();
+    });
+
+    test('regnes som lagret uten barnetillegg', () => {
+        renderHandlinger(
+            søknadsbehandlingInnvilgelse({
+                ...saksbehandle,
+                barnetillegg: barnetilleggV1([barnetilleggPeriode(0, førsteKvartal)]),
+            }),
+            SøknadsbehandlingHandlinger,
+        );
+
+        expect(screen.getByText('Behandlingen er lagret')).toBeInTheDocument();
+    });
+});
+
 describe('sending til beslutter', () => {
     test('krever valgt resultat', () => {
         renderHandlinger(søknadsbehandlingIkkeValgt(saksbehandle), SøknadsbehandlingHandlinger);
@@ -396,10 +449,7 @@ describe('sending til beslutter', () => {
         const behandling = søknadsbehandlingInnvilgelse({
             ...saksbehandle,
             søknad: søknad([søknadBarn('2020-05-05')]),
-            barnetillegg: {
-                perioder: [barnetilleggPeriode(1, førsteKvartal)],
-                begrunnelse: ikkeSladdet(null),
-            },
+            barnetillegg: barnetilleggV2([barnetilleggBarn('2020-05-05')], [førsteKvartal]),
             begrunnelseVilkårsvurdering: ikkeSladdet('Vilkårene er oppfylt'),
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
         });
@@ -489,7 +539,7 @@ describe('lagring av revurdering', () => {
             ...saksbehandle,
             vedtaksperiode: førsteHalvår,
             innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
-            barnetillegg: { perioder: [], begrunnelse: ikkeSladdet(null) },
+            barnetillegg: barnetilleggV2([], [førsteHalvår]),
         });
         svar(200, behandling);
 
@@ -505,7 +555,7 @@ describe('lagring av revurdering', () => {
             skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
             prioritering: null,
             innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
-            barnetillegg: { begrunnelse: null, perioder: [] },
+            barnetillegg: { begrunnelse: null, barn: [] },
             skalSendeVedtaksbrev: true,
         });
     });
@@ -515,7 +565,7 @@ describe('lagring av revurdering', () => {
             ...saksbehandle,
             vedtaksperiode: førsteHalvår,
             innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
-            barnetillegg: { perioder: [], begrunnelse: ikkeSladdet(null) },
+            barnetillegg: barnetilleggV2([], [førsteHalvår]),
         });
         svar(200, behandling);
 
@@ -531,7 +581,7 @@ describe('lagring av revurdering', () => {
             prioritering: null,
             innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
             vedtaksperiode: førsteHalvår,
-            barnetillegg: { begrunnelse: null, perioder: [] },
+            barnetillegg: { begrunnelse: null, barn: [] },
             skalSendeVedtaksbrev: true,
         });
     });

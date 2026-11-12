@@ -1,4 +1,4 @@
-import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Loader, VStack } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import {
@@ -13,18 +13,8 @@ import { Periode } from '~/types/Periode';
 import { Søknad, SøknadBarn } from '~/lib/søknad/søknadTyper';
 import { useHentPersonopplysningerBarn } from '~/lib/søknad/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { useSak } from '~/lib/sak/SakContext';
-import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
-import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { Nullable } from '~/types/UtilTypes';
-import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import {
-    useBehandlingInnvilgelseSkjema,
-    useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { erRammebehandlingInnvilgelseResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 import style from './SøknadOpplysningerBarn.module.css';
 import { formaterSøknadsspørsmålSvar, oppholdsstedTekst } from '~/lib/søknad/søknadTekster';
@@ -32,14 +22,9 @@ import { formaterSøknadsspørsmålSvar, oppholdsstedTekst } from '~/lib/søknad
 type Props = {
     tiltaksperiode: Nullable<Periode>;
     søknad: Søknad;
-    visBarnetilleggPeriodiseringKnapp?: boolean;
 };
 
-export const SøknadOpplysningerBarn = ({
-    tiltaksperiode,
-    søknad,
-    visBarnetilleggPeriodiseringKnapp,
-}: Props) => {
+export const SøknadOpplysningerBarn = ({ tiltaksperiode, søknad }: Props) => {
     const getBarnetilleggTekst = () => {
         if (søknad.svar.harSøktOmBarnetillegg.svar === 'JA') {
             return (
@@ -55,11 +40,7 @@ export const SøknadOpplysningerBarn = ({
         <div className={style.wrapper}>
             <BodyShort spacing={true}>{'Barn:'}</BodyShort>
             {søknad.barnetillegg.length > 0 ? (
-                <MedBarn
-                    tiltaksperiode={tiltaksperiode}
-                    søknad={søknad}
-                    visBarnetilleggPeriodiseringKnapp={visBarnetilleggPeriodiseringKnapp}
-                />
+                <MedBarn tiltaksperiode={tiltaksperiode} søknad={søknad} />
             ) : (
                 <BehandlingSaksopplysning
                     navn="Har søkt om barnetillegg"
@@ -74,10 +55,8 @@ export const SøknadOpplysningerBarn = ({
     );
 };
 
-const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }: Props) => {
+const MedBarn = ({ tiltaksperiode, søknad }: Props) => {
     const { sak } = useSak();
-
-    const { resultat } = useBehandlingSkjema();
 
     const personopplysningerBarn = useHentPersonopplysningerBarn(
         sak.sakId,
@@ -117,10 +96,6 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                         />
                     );
                 })}
-            {visBarnetilleggPeriodiseringKnapp &&
-                erRammebehandlingInnvilgelseResultat(resultat) && (
-                    <PeriodiserBarnetilleggKnapp søknad={søknad} />
-                )}
         </VStack>
     );
 };
@@ -220,43 +195,5 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
                 />
             )}
         </div>
-    );
-};
-
-const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
-    const { rolleForBehandling } = useBehandling();
-
-    const { innvilgelsesperioder, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
-    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
-
-    if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {
-        return null;
-    }
-
-    return (
-        <Button
-            variant={'tertiary'}
-            size={'small'}
-            icon={<ChevronRightDoubleIcon />}
-            iconPosition={'right'}
-            onClick={() => {
-                if (!harValgtPeriode) {
-                    return;
-                }
-
-                dispatch({
-                    type: 'settBarnetilleggPerioder',
-                    payload: {
-                        barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
-                            søknad.barnetillegg,
-                            innvilgelsesperioder,
-                        ),
-                    },
-                });
-            }}
-            disabled={!harValgtPeriode}
-        >
-            {'Periodiser barnetillegg for disse barna'}
-        </Button>
     );
 };

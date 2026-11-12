@@ -1,4 +1,6 @@
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { RevurderingForlengelseBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
+import { tilForhåndsvisningBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
@@ -21,13 +23,14 @@ export const RevurderingForlengelseBrev = () => {
         <RammebehandlingVedtaksbrev
             tittel={'Vedtaksbrev for forlengelse'}
             validering={revurderingForlengelseValidering(behandling, skjema, sak)}
-            hentDto={() => tilForhåndsvisningDTO(skjema)}
+            hentDto={() => tilForhåndsvisningDTO(behandling, skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
         />
     );
 };
 
 const tilForhåndsvisningDTO = (
+    behandling: Rammebehandling,
     skjema: RevurderingForlengelseContext,
 ): RevurderingForlengelseBrevForhåndsvisningDTO => {
     const { innvilgelse, textAreas, harEndretBarnetillegg } = skjema;
@@ -42,9 +45,12 @@ const tilForhåndsvisningDTO = (
         tilOgMed: nonNullish(hentForlengelseTilOgMed(skjema)),
         internDeltakelseId: innvilgelse.innvilgelsesperioder.atNonNull(-1).internDeltakelseId,
         barnetillegg: harEndretBarnetillegg
-            ? innvilgelse.harBarnetillegg
-                ? innvilgelse.barnetilleggPerioder
-                : []
+            ? tilForhåndsvisningBarnetilleggDTO(
+                  behandling,
+                  innvilgelse,
+                  skjema.erReadonly,
+                  textAreas.barnetilleggBegrunnelse.getValue(),
+              )
             : null,
     };
 };

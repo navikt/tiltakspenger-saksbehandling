@@ -1,5 +1,3 @@
-import { nesteDag } from '~/utils/date';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Periode } from '~/types/Periode';
@@ -8,6 +6,12 @@ import {
     oppdaterPeriodiseringUtenOverlapp,
     periodiseringTotalPeriode,
 } from '~/utils/periode';
+import { datoMin, nesteDag } from '~/utils/date';
+import {
+    BarnetilleggBarnSkjema,
+    erSammeBarn,
+    gyldigPeriodeForBarn,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 
 export type BarnetilleggActions =
     | {
@@ -15,24 +19,32 @@ export type BarnetilleggActions =
           payload: { harSøkt: boolean };
       }
     | {
-          type: 'addBarnetilleggPeriode';
-          payload: { antallBarn: number };
+          type: 'velgBarnetilleggBarn';
+          payload: { barn: BarnetilleggBarnSkjema; valgt: boolean };
       }
     | {
-          type: 'fjernBarnetilleggPeriode';
-          payload: { index: number };
+          type: 'settBarnetilleggPeriodevalg';
+          payload: { key: string; heleInnvilgelsesperioden: boolean };
       }
     | {
-          type: 'oppdaterBarnetilleggAntall';
-          payload: { antall: number; index: number };
+          type: 'oppdaterBarnetilleggBarnPeriode';
+          payload: { key: string; index: number; periodeOppdatering: Partial<Periode> };
       }
     | {
-          type: 'oppdaterBarnetilleggPeriode';
-          payload: { periodeOppdatering: Partial<Periode>; index: number };
+          type: 'leggTilBarnetilleggBarnPeriode';
+          payload: { key: string };
       }
     | {
-          type: 'settBarnetilleggPerioder';
-          payload: { barnetilleggPerioder: BarnetilleggPeriode[] };
+          type: 'fjernBarnetilleggBarnPeriode';
+          payload: { key: string; index: number };
+      }
+    | {
+          type: 'leggTilManueltBarnetilleggBarn';
+          payload: { barn: BarnetilleggBarnSkjema };
+      }
+    | {
+          type: 'fjernManueltBarnetilleggBarn';
+          payload: { key: string };
       };
 
 export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, BarnetilleggActions> = (
@@ -46,92 +58,130 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
             return { ...state, harBarnetillegg: payload.harSøkt };
         }
 
-        case 'addBarnetilleggPeriode': {
-            const { antallBarn } = payload;
-            const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
+        case 'velgBarnetilleggBarn': {
+            const { barn, valgt } = payload;
+            const utenBarnet = state.valgteBarn.filter((it) => it.key !== barn.key);
 
-            if (!forrigeBarnetillegg) {
+            return { ...state, valgteBarn: valgt ? [...utenBarnet, barn] : utenBarnet };
+        }
+
+        case 'settBarnetilleggPeriodevalg': {
+            const { key, heleInnvilgelsesperioden } = payload;
+
+            return oppdaterValgtBarn(state, key, (barn) => ({
+                ...barn,
+                perioder: heleInnvilgelsesperioden ? null : [standardPeriode(state, barn)],
+            }));
+        }
+
+        case 'oppdaterBarnetilleggBarnPeriode': {
+            const { key, index, periodeOppdatering } = payload;
+
+            return oppdaterValgtBarn(state, key, (barn) => {
+                const perioder = barn.perioder ?? [standardPeriode(state, barn)];
+                const periode = oppdaterPeriode(perioder.atNonNull(index), periodeOppdatering);
+
                 return {
-                    ...state,
-                    barnetilleggPerioder: [
-                        {
-                            antallBarn,
-                            periode: periodiseringTotalPeriode(state.innvilgelsesperioder),
-                        },
-                    ],
+                    ...barn,
+                    perioder: oppdaterPerioderUtenOverlapp(perioder, periode, index),
                 };
+            });
+        }
+
+        case 'leggTilBarnetilleggBarnPeriode': {
+            const { key } = payload;
+
+            return oppdaterValgtBarn(state, key, (barn) => {
+                const { tilOgMed } = standardPeriode(state, barn);
+                const perioder = barn.perioder ?? [standardPeriode(state, barn)];
+                const nyPeriode = {
+                    fraOgMed: datoMin(nesteDag(perioder.atNonNull(-1).tilOgMed), tilOgMed),
+                    tilOgMed,
+                };
+
+                return {
+                    ...barn,
+                    perioder: oppdaterPerioderUtenOverlapp(perioder, nyPeriode, perioder.length),
+                };
+            });
+        }
+
+        case 'fjernBarnetilleggBarnPeriode': {
+            const { key, index } = payload;
+
+            return oppdaterValgtBarn(state, key, (barn) => {
+                if (!barn.perioder || barn.perioder.length <= 1) {
+                    throw Error('Barnet må ha minst én valgt periode');
+                }
+
+                return { ...barn, perioder: barn.perioder.toSpliced(index, 1) };
+            });
+        }
+
+        case 'leggTilManueltBarnetilleggBarn': {
+            const { barn } = payload;
+
+            if (
+                state.manueltLagtTilBarn.some((it) => erSammeBarn(it, barn)) ||
+                state.valgteBarn.some((it) => erSammeBarn(it, barn))
+            ) {
+                throw Error('Barnet er allerede lagt til');
             }
 
-            const sisteInnvilgelsesperiode = state.innvilgelsesperioder.atNonNull(-1).periode;
-
-            const nyBarnetilleggperiode: BarnetilleggPeriode = {
-                antallBarn,
-                periode: {
-                    fraOgMed:
-                        sisteInnvilgelsesperiode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
-                            ? nesteDag(forrigeBarnetillegg.periode.tilOgMed)
-                            : sisteInnvilgelsesperiode.tilOgMed,
-                    tilOgMed: sisteInnvilgelsesperiode.tilOgMed,
-                },
-            };
-
             return {
                 ...state,
-                barnetilleggPerioder: oppdaterPeriodiseringUtenOverlapp(
-                    state.barnetilleggPerioder,
-                    nyBarnetilleggperiode,
-                    state.barnetilleggPerioder.length,
-                ),
+                manueltLagtTilBarn: [...state.manueltLagtTilBarn, barn],
+                valgteBarn: [...state.valgteBarn, barn],
             };
         }
 
-        case 'fjernBarnetilleggPeriode': {
-            return {
-                ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder.toSpliced(payload.index, 1),
-            };
-        }
-
-        case 'settBarnetilleggPerioder': {
-            return {
-                ...state,
-                barnetilleggPerioder: payload.barnetilleggPerioder,
-                harBarnetillegg: payload.barnetilleggPerioder.length > 0,
-            };
-        }
-
-        case 'oppdaterBarnetilleggAntall': {
-            const { index, antall } = payload;
-
-            const barnetilleggPeriode = state.barnetilleggPerioder.atNonNull(index);
+        case 'fjernManueltBarnetilleggBarn': {
+            const { key } = payload;
 
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder.with(index, {
-                    ...barnetilleggPeriode,
-                    antallBarn: antall,
-                }),
-            };
-        }
-
-        case 'oppdaterBarnetilleggPeriode': {
-            const { index, periodeOppdatering } = payload;
-
-            const barnetilleggPeriode = state.barnetilleggPerioder.atNonNull(index);
-
-            const oppdatertPeriode = {
-                ...barnetilleggPeriode,
-                periode: oppdaterPeriode(barnetilleggPeriode.periode, periodeOppdatering),
-            };
-
-            return {
-                ...state,
-                barnetilleggPerioder: oppdaterPeriodiseringUtenOverlapp(
-                    state.barnetilleggPerioder,
-                    oppdatertPeriode,
-                    index,
-                ),
+                manueltLagtTilBarn: state.manueltLagtTilBarn.filter((it) => it.key !== key),
+                valgteBarn: state.valgteBarn.filter((it) => it.key !== key),
             };
         }
     }
 };
+
+const oppdaterValgtBarn = (
+    state: InnvilgelseMedPerioderState,
+    key: string,
+    oppdater: (barn: BarnetilleggBarnSkjema) => BarnetilleggBarnSkjema,
+): InnvilgelseMedPerioderState => {
+    const index = state.valgteBarn.findIndex((it) => it.key === key);
+
+    if (index === -1) {
+        throw Error(`Fant ikke valgt barn med key ${key}`);
+    }
+
+    return {
+        ...state,
+        valgteBarn: state.valgteBarn.with(index, oppdater(state.valgteBarn.atNonNull(index))),
+    };
+};
+
+// Endrer eller legger til perioden på index, og justerer de andre periodene slik at de ikke overlapper, som for innvilgelsesperiodene
+const oppdaterPerioderUtenOverlapp = (
+    perioder: Periode[],
+    periode: Periode,
+    index: number,
+): Periode[] =>
+    oppdaterPeriodiseringUtenOverlapp(
+        perioder.map((it) => ({ periode: it })),
+        { periode },
+        index,
+    ).map((it) => it.periode);
+
+// Perioden barnet har rett innenfor innvilgelsen, eller hele innvilgelsen dersom barnet ikke har rett i den
+const standardPeriode = (
+    state: InnvilgelseMedPerioderState,
+    barn: BarnetilleggBarnSkjema,
+): Periode =>
+    gyldigPeriodeForBarn(
+        barn,
+        state.innvilgelsesperioder.map((it) => it.periode),
+    ) ?? periodiseringTotalPeriode(state.innvilgelsesperioder);

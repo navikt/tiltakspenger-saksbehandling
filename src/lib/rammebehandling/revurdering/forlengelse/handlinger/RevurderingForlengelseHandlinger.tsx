@@ -1,4 +1,5 @@
 import { tilSkalJournalføreNotatDTO } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { RammebehandlingHandlinger } from '~/lib/rammebehandling/felles/handlinger/RammebehandlingHandlinger';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/handlinger/lagre/useHentBehandlingLagringProps';
 import {
@@ -53,12 +54,10 @@ const tilDTO = (
         ),
         // Null betyr at backend utleder barnetillegget fra vedtaket som forlenges.
         barnetillegg: harEndretBarnetillegg
-            ? {
-                  begrunnelse: innvilgelse.harBarnetillegg
-                      ? skjema.textAreas.barnetilleggBegrunnelse.getValue()
-                      : null,
-                  perioder: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : [],
-              }
+            ? tilOppdaterBarnetilleggDTO(
+                  innvilgelse,
+                  skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+              )
             : null,
         skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
     };

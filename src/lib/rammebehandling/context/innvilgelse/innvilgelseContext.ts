@@ -20,7 +20,7 @@ import {
     erRammebehandlingInnvilgelseContext,
     erRammebehandlingInnvilgelseMedPerioderContext,
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { BarnetilleggBarnSkjema } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import {
     Innvilgelsesperiode,
     InnvilgelsesperiodePartial,
@@ -39,7 +39,10 @@ export type InnvilgelseMedPerioderState = {
     harValgtPeriode: true;
     innvilgelsesperioder: Innvilgelsesperiode[];
     harBarnetillegg: boolean;
-    barnetilleggPerioder: BarnetilleggPeriode[];
+    // Barna saksbehandler har valgt å gi barnetillegg for
+    valgteBarn: BarnetilleggBarnSkjema[];
+    // Barn saksbehandler har lagt til i skjemaet, slik at de kan velges igjen etter at de er valgt bort
+    manueltLagtTilBarn: BarnetilleggBarnSkjema[];
 };
 
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
@@ -79,11 +82,13 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
 
     switch (type) {
         case 'setHarSøktBarnetillegg':
-        case 'addBarnetilleggPeriode':
-        case 'fjernBarnetilleggPeriode':
-        case 'oppdaterBarnetilleggAntall':
-        case 'oppdaterBarnetilleggPeriode':
-        case 'settBarnetilleggPerioder': {
+        case 'velgBarnetilleggBarn':
+        case 'settBarnetilleggPeriodevalg':
+        case 'oppdaterBarnetilleggBarnPeriode':
+        case 'leggTilBarnetilleggBarnPeriode':
+        case 'fjernBarnetilleggBarnPeriode':
+        case 'leggTilManueltBarnetilleggBarn':
+        case 'fjernManueltBarnetilleggBarn': {
             return barnetilleggReducer(state, action);
         }
     }

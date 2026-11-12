@@ -1,6 +1,12 @@
 import { http, HttpResponse } from '../felles/e2eFelles';
 import { ikkeSladdet } from '~test/sladdetVerdi';
-import { periode, rammevedtak, sak, søknad } from '~test/rammebehandling';
+import {
+    barnetilleggFraOppdaterDTO,
+    periode,
+    rammevedtak,
+    sak,
+    søknad,
+} from '~test/rammebehandling';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -168,10 +174,10 @@ const oppdaterBehandling = (
                 søknad: behandling.søknad as InnvilgbarSøknad,
                 vedtaksperiode: totalPeriode(dto.innvilgelsesperioder.map((p) => p.periode)),
                 innvilgelsesperioder: dto.innvilgelsesperioder,
-                barnetillegg: {
-                    perioder: dto.barnetillegg.perioder,
-                    begrunnelse: ikkeSladdet(dto.barnetillegg.begrunnelse),
-                },
+                barnetillegg: barnetilleggFraOppdaterDTO(
+                    dto.barnetillegg,
+                    dto.innvilgelsesperioder.map((p) => p.periode),
+                ),
                 skalSendeVedtaksbrev: dto.skalSendeVedtaksbrev,
             };
         case SøknadsbehandlingResultat.AVSLAG:

@@ -147,7 +147,8 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
                 },
             ],
             harBarnetillegg: false,
-            barnetilleggPerioder: [],
+            valgteBarn: [],
+            manueltLagtTilBarn: [],
         });
     });
 

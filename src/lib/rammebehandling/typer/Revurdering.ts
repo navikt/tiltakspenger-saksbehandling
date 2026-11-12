@@ -1,4 +1,4 @@
-import { Barnetillegg, BarnetilleggDTO } from './Barnetillegg';
+import { Barnetillegg, OppdaterBarnetilleggDTO } from './Barnetillegg';
 import {
     Rammebehandlingstype,
     OppdaterBehandlingBaseDTO,
@@ -158,7 +158,7 @@ export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
 export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: BarnetilleggDTO;
+    barnetillegg: OppdaterBarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };
 
@@ -167,14 +167,14 @@ export type OppdaterRevurderingForlengelseDTO = OppdaterBehandlingBaseDTO & {
     tilOgMed: Dato;
     internDeltakelseId: string;
     // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
-    barnetillegg: Nullable<BarnetilleggDTO>;
+    barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
     skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: BarnetilleggDTO;
+    barnetillegg: OppdaterBarnetilleggDTO;
     vedtaksperiode: Periode;
     skalSendeVedtaksbrev: boolean;
 };

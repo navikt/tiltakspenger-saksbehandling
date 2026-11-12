@@ -38,9 +38,17 @@ import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
-import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import {
+    BarnetilleggBarn,
+    BarnetilleggBarnKilde,
+    BarnetilleggPeriode,
+    BarnetilleggV1,
+    BarnetilleggV2,
+    BarnetilleggVersjon,
+    OppdaterBarnetilleggDTO,
+} from '~/lib/rammebehandling/typer/Barnetillegg';
 import { Periode } from '~/types/Periode';
-import { tilDato, tilTidspunkt } from '~/types/DatoTid';
+import { Dato, tilDato, tilTidspunkt } from '~/types/DatoTid';
 
 /**
  * Byggere for testdata som etterligner rammebehandlinger og saker fra API-et.
@@ -65,6 +73,140 @@ export const innvilgelsesperiode = (
 export const barnetilleggPeriode = (antallBarn: number, p: Periode): BarnetilleggPeriode => ({
     antallBarn,
     periode: p,
+});
+
+export const barnetilleggV1 = (perioder: BarnetilleggPeriode[] = []): BarnetilleggV1 => ({
+    versjon: BarnetilleggVersjon.V1,
+    perioder,
+    begrunnelse: ikkeSladdet(null),
+    barn: null,
+});
+
+// Et barn valgt for barnetillegg, med hele innvilgelsesperioden
+export const barnetilleggBarn = (
+    fødselsdato: string,
+    overstyringer: Partial<BarnetilleggBarn> = {},
+): BarnetilleggBarn => ({
+    fnr: ikkeSladdet(null),
+    fornavn: ikkeSladdet('Barn'),
+    mellomnavn: ikkeSladdet(null),
+    etternavn: ikkeSladdet('Barnesen'),
+    fødselsdato: ikkeSladdet(tilDato(fødselsdato)),
+    kilde: BarnetilleggBarnKilde.SØKNAD,
+    søknadId: 'soknad_1',
+    perioder: null,
+    ...overstyringer,
+});
+
+// Periodiseringen backend gjør av barnetillegget, uavhengig av appens egen implementasjon.
+// Fixturene brukes også av e2e-testene, og kan derfor ikke importere app-kode som bruker dayjs.
+const leggTilDager = (dato: Dato, dager: number): Dato => {
+    const dag = new Date(`${dato}T00:00:00Z`);
+    dag.setUTCDate(dag.getUTCDate() + dager);
+    return tilDato(dag.toISOString().slice(0, 10));
+};
+
+const overlapp = (a: Periode, b: Periode): Periode | null => {
+    const fraOgMed = a.fraOgMed > b.fraOgMed ? a.fraOgMed : b.fraOgMed;
+    const tilOgMed = a.tilOgMed < b.tilOgMed ? a.tilOgMed : b.tilOgMed;
+    return fraOgMed <= tilOgMed ? { fraOgMed, tilOgMed } : null;
+};
+
+const perioderMedBarnetillegg = (barn: BarnetilleggBarn, innvilgelsesperioder: Periode[]) => {
+    if (barn.fødselsdato.erSladdet || innvilgelsesperioder.length === 0) {
+        return [];
+    }
+
+    const fødselsdato = barn.fødselsdato.verdi;
+    const sekstenårsdag = tilDato(`${Number(fødselsdato.slice(0, 4)) + 16}${fødselsdato.slice(4)}`);
+    const rett = { fraOgMed: fødselsdato, tilOgMed: leggTilDager(sekstenårsdag, -1) };
+
+    const sorterte = innvilgelsesperioder.toSorted((a, b) => (a.fraOgMed < b.fraOgMed ? -1 : 1));
+    const total = { fraOgMed: sorterte[0].fraOgMed, tilOgMed: sorterte.at(-1)!.tilOgMed };
+    return (barn.perioder ?? [total])
+        .map((valgt) => overlapp(valgt, rett))
+        .filter((it): it is Periode => it !== null)
+        .flatMap((basis) => sorterte.map((it) => overlapp(basis, it)))
+        .filter((it): it is Periode => it !== null)
+        .toSorted((a, b) => (a.fraOgMed < b.fraOgMed ? -1 : 1));
+};
+
+const periodiserAntallBarn = (perioderPerBarn: Periode[][]): BarnetilleggPeriode[] => {
+    const alle = perioderPerBarn.flat();
+
+    if (alle.length === 0) {
+        return [];
+    }
+
+    const fraOgMed = alle.map((it) => it.fraOgMed).toSorted()[0];
+    const tilOgMed = alle
+        .map((it) => it.tilOgMed)
+        .toSorted()
+        .at(-1)!;
+
+    const resultat: BarnetilleggPeriode[] = [];
+
+    for (let dag = fraOgMed; dag <= tilOgMed; dag = leggTilDager(dag, 1)) {
+        const antallBarn = perioderPerBarn.filter((perioder) =>
+            perioder.some((it) => it.fraOgMed <= dag && dag <= it.tilOgMed),
+        ).length;
+
+        const forrige = resultat.at(-1);
+
+        if (antallBarn === 0) {
+            continue;
+        }
+
+        if (
+            forrige?.antallBarn === antallBarn &&
+            leggTilDager(forrige.periode.tilOgMed, 1) === dag
+        ) {
+            forrige.periode = { ...forrige.periode, tilOgMed: dag };
+        } else {
+            resultat.push({ antallBarn, periode: { fraOgMed: dag, tilOgMed: dag } });
+        }
+    }
+
+    return resultat;
+};
+
+// Barnetillegg med barn, med perioder utledet slik backend gjør det
+export const barnetilleggV2 = (
+    barn: BarnetilleggBarn[],
+    innvilgelsesperioder: Periode[],
+): BarnetilleggV2 => {
+    const barnMedPerioder = barn.map((it) => ({
+        ...it,
+        perioderMedBarnetillegg: perioderMedBarnetillegg(it, innvilgelsesperioder),
+    }));
+
+    return {
+        versjon: BarnetilleggVersjon.V2,
+        perioder: periodiserAntallBarn(barnMedPerioder.map((it) => it.perioderMedBarnetillegg)),
+        begrunnelse: ikkeSladdet(null),
+        barn: barnMedPerioder,
+    };
+};
+
+// Barnetillegget backend lagrer fra barnetillegget som sendes inn
+export const barnetilleggFraOppdaterDTO = (
+    dto: OppdaterBarnetilleggDTO,
+    innvilgelsesperioder: Periode[],
+): BarnetilleggV2 => ({
+    ...barnetilleggV2(
+        dto.barn.map((barn) => ({
+            fnr: ikkeSladdet(barn.fnr),
+            fornavn: ikkeSladdet(barn.fornavn),
+            mellomnavn: ikkeSladdet(barn.mellomnavn),
+            etternavn: ikkeSladdet(barn.etternavn),
+            fødselsdato: ikkeSladdet(barn.fødselsdato),
+            kilde: barn.kilde,
+            søknadId: barn.søknadId,
+            perioder: barn.perioder,
+        })),
+        innvilgelsesperioder,
+    ),
+    begrunnelse: ikkeSladdet(dto.begrunnelse),
 });
 
 export const tiltaksdeltakelse = (
@@ -101,6 +243,7 @@ export const søknad = (barnetillegg: SøknadBarn[] = []): InnvilgbarSøknad => 
     journalpostId: 'journalpost_1',
     tiltak: {
         id: 'deltakelse_1',
+        internDeltakelseId: 'deltakelse_1',
         fraOgMed: tilDato('2025-01-01'),
         tilOgMed: tilDato('2025-06-30'),
         typeNavn: 'Arbeidsmarkedsopplæring',
@@ -204,7 +347,7 @@ export const søknadsbehandlingInnvilgelse = (
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     vedtaksperiode: periode('2025-01-01', '2025-03-31'),
     innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
-    barnetillegg: { perioder: [], begrunnelse: ikkeSladdet(null) },
+    barnetillegg: barnetilleggV2([], [periode('2025-01-01', '2025-03-31')]),
     ...overstyringer,
 });
 
@@ -347,6 +490,8 @@ export const sakMedInnvilgetVedtak = (
     overstyringer: {
         vedtak?: Partial<Rammevedtak>;
         søknadsbehandling?: SøknadsbehandlingInnvilgelse;
+        // Søknaden som er innvilget, når søknadsbehandlingen ikke er overstyrt
+        søknad?: InnvilgbarSøknad;
     } = {},
 ): SakProps => {
     const vedtattBehandling =
@@ -357,6 +502,7 @@ export const sakMedInnvilgetVedtak = (
             iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             vedtaksperiode,
             innvilgelsesperioder: [innvilgelsesperiode(vedtaksperiode)],
+            ...(overstyringer.søknad && { søknad: overstyringer.søknad }),
         });
 
     const vedtak = rammevedtak('vedtak_1', vedtaksperiode, {

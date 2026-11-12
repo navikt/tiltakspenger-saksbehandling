@@ -92,7 +92,8 @@ describe('søknadsbehandlingValidering', () => {
                         innvilgelsesperiode(periode('2025-01-01', '2025-07-31')),
                     ],
                     harBarnetillegg: false,
-                    barnetilleggPerioder: [],
+                    valgteBarn: [],
+                    manueltLagtTilBarn: [],
                 },
             }),
         );
@@ -100,7 +101,7 @@ describe('søknadsbehandlingValidering', () => {
         expect(valider('tilBeslutning')).toEqual({
             errors: [],
             warnings: [
-                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: 1 barn i perioden 01.01.2025 - 31.07.2025',
+                'Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Barn fra søknaden med rett i innvilgelsesperioden: Barn Barnesen (født 05.05.2020)',
             ],
         });
     });

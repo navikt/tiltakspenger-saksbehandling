@@ -14,6 +14,8 @@ import {
     prioriteringManglerBegrunnelse,
 } from '~/lib/_felles/prioritering/prioriteringUtils';
 import { skalJournalføreBarnetilleggNotat } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
+import { harUlagretBarnetilleggFraV1 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
@@ -39,12 +41,18 @@ export const useHentBehandlingLagringProps = ({
     validerSkjema,
     hentDTO,
 }: Props): BehandlingLagringProps => {
+    const { behandling } = useBehandling();
     const [sisteLagring, setSisteLagring] = useState<OppdaterBehandlingDTO | null>(hentDTO());
     const [isDirty, setIsDirty] = useState(false);
 
     const updateDirtyState = useCallback(() => {
-        setIsDirty(!isEqualJson(hentDTO(), sisteLagring));
-    }, [hentDTO, sisteLagring]);
+        const dto = hentDTO();
+        setIsDirty(
+            !isEqualJson(dto, sisteLagring) ||
+                (sendesMedBarnetillegg(dto) &&
+                    harUlagretBarnetilleggFraV1(behandling, skjema.erReadonly)),
+        );
+    }, [hentDTO, sisteLagring, behandling, skjema.erReadonly]);
 
     const validerVedtak: ValideringFunc = (type) => {
         const valideringResultat = validerPrioritering(skjema, validerSkjema(type));
@@ -116,6 +124,9 @@ export const useHentBehandlingLagringProps = ({
 
     return { validerOgHentLagringDTO, validerVedtak, registrerLagring: setSisteLagring, isDirty };
 };
+
+const sendesMedBarnetillegg = (dto: Nullable<OppdaterBehandlingDTO>): boolean =>
+    dto !== null && 'barnetillegg' in dto && dto.barnetillegg !== null;
 
 const validerPrioritering = (
     skjema: BehandlingSkjemaContext,

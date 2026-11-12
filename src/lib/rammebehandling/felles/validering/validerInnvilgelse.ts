@@ -2,7 +2,10 @@ import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerBarnetillegg } from '~/lib/rammebehandling/felles/validering/validerBarnetillegg';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { Søknad } from '~/lib/søknad/søknadTyper';
+import {
+    hentBarnFraSøknader,
+    hentLagretV1SomIkkeKanEndres,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     finnPeriodiseringHull,
     perioderOverlapper,
@@ -20,8 +23,7 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 export const validerInnvilgelse = (
     sak: SakProps,
     behandling: Rammebehandling,
-    skjema: BehandlingMedInnvilgelseState,
-    søknad: Søknad,
+    skjema: BehandlingMedInnvilgelseState & { erReadonly?: boolean },
     {
         validerBarnetillegg: skalValidereBarnetillegg = true,
     }: { validerBarnetillegg?: boolean } = {},
@@ -40,7 +42,7 @@ export const validerInnvilgelse = (
         warnings: [],
     };
 
-    const { innvilgelsesperioder, barnetilleggPerioder, harBarnetillegg } = innvilgelse;
+    const { innvilgelsesperioder, valgteBarn, harBarnetillegg } = innvilgelse;
 
     if (!validerPeriodisering(innvilgelsesperioder, true)) {
         validering.errors.push('Innvilgelsesperiodene må være uten overlapp');
@@ -80,15 +82,19 @@ export const validerInnvilgelse = (
         }
     });
 
-    if (!skalValidereBarnetillegg) {
+    // Barnetillegg lagret som antall barn per periode (V1) vises og forhåndsvises som det er lagret når behandlingen ikke kan endres
+    if (
+        !skalValidereBarnetillegg ||
+        hentLagretV1SomIkkeKanEndres(behandling, skjema.erReadonly ?? false)
+    ) {
         return validering;
     }
 
     const barnetilleggValidering = validerBarnetillegg(
         harBarnetillegg,
-        barnetilleggPerioder,
+        valgteBarn,
         innvilgelsesperioder,
-        søknad,
+        hentBarnFraSøknader(behandling, innvilgelsesperioder, sak),
     );
     validering.warnings.push(...barnetilleggValidering.warnings);
     validering.errors.push(...barnetilleggValidering.errors);

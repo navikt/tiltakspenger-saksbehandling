@@ -3,7 +3,6 @@ import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/vali
 import { Revurdering } from '~/lib/rammebehandling/typer/Revurdering';
 import { RevurderingInnvilgelseContext } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 
 export const revurderingInnvilgelseValidering = (
     behandling: Revurdering,
@@ -15,9 +14,7 @@ export const revurderingInnvilgelseValidering = (
         warnings: [],
     };
 
-    const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).atNonNull(0).søknad;
-
-    const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema, sisteSøknad);
+    const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema);
 
     validering.errors.push(...innvilgelseValidering.errors);
     validering.warnings.push(...innvilgelseValidering.warnings);

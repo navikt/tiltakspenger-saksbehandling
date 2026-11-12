@@ -1,0 +1,26 @@
+.barn {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    padding: 1rem 1.25rem;
+}
+
+.detaljer {
+    margin-left: 2rem;
+}
+
+.radioGroup {
+    & > :global(.aksel-radio-buttons) {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+.leggTilSkjema {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    padding: 1rem 1.25rem;
+}
+
+.leggTilKnapp {
+    align-self: flex-start;
+}

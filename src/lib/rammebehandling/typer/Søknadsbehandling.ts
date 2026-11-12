@@ -1,4 +1,4 @@
-import { Barnetillegg, BarnetilleggDTO } from './Barnetillegg';
+import { Barnetillegg, OppdaterBarnetilleggDTO } from './Barnetillegg';
 import {
     Rammebehandlingstype,
     OppdaterBehandlingBaseDTO,
@@ -46,7 +46,7 @@ export enum SøknadsbehandlingResultat {
 export type OppdaterSøknadsbehandlingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg: BarnetilleggDTO;
+    barnetillegg: OppdaterBarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };
 

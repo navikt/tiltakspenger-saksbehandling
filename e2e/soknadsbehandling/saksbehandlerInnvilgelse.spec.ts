@@ -93,7 +93,7 @@ test.describe('Søknadsbehandling - innvilgelse', () => {
                             erReversertOpphør: false,
                         },
                     ],
-                    barnetillegg: { begrunnelse: null, perioder: [] },
+                    barnetillegg: { begrunnelse: null, barn: [] },
                     skalSendeVedtaksbrev: true,
                 },
             ] satisfies OppdaterSøknadsbehandlingDTO[]);
