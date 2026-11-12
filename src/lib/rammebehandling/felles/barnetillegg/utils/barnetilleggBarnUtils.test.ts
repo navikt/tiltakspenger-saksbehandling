@@ -73,6 +73,34 @@ describe('effektivePerioderForBarn', () => {
         ]);
     });
 
+    test('slår sammen tilstøtende perioder, også når innvilgelsesperiodene er delt opp', () => {
+        const innvilgelsesperioder = [
+            periode('2025-01-01', '2025-01-31'),
+            periode('2025-02-01', '2025-03-31'),
+            periode('2025-05-01', '2025-06-30'),
+        ];
+
+        expect(
+            effektivePerioderForBarn(
+                { fødselsdato: tilDato('2015-01-01'), perioder: null },
+                innvilgelsesperioder,
+            ),
+        ).toEqual([periode('2025-01-01', '2025-03-31'), periode('2025-05-01', '2025-06-30')]);
+
+        expect(
+            effektivePerioderForBarn(
+                {
+                    fødselsdato: tilDato('2015-01-01'),
+                    perioder: [
+                        periode('2025-01-15', '2025-01-20'),
+                        periode('2025-01-21', '2025-02-10'),
+                    ],
+                },
+                innvilgelsesperioder,
+            ),
+        ).toEqual([periode('2025-01-15', '2025-02-10')]);
+    });
+
     test('gir ingen perioder når barnet ikke har rett i innvilgelsesperioden', () => {
         expect(
             effektivePerioderForBarn({ fødselsdato: tilDato('2008-01-01'), perioder: null }, [

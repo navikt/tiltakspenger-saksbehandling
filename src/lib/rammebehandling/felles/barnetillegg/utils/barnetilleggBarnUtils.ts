@@ -7,7 +7,12 @@ import { Periode } from '~/types/Periode';
 import { Dato } from '~/types/DatoTid';
 import { Nullable } from '~/types/UtilTypes';
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
-import { erDatoIPeriode, overlappendePeriode, sorterPerioder, totalPeriode } from '~/utils/periode';
+import {
+    erDatoIPeriode,
+    overlappendePeriode,
+    slåSammenPerioder,
+    totalPeriode,
+} from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { isNonNullish } from '~/utils/object';
 import { erSladdet, hentVerdi, sladdbarTekst } from '~/utils/sladdetVerdi';
@@ -128,6 +133,7 @@ export const rettTilBarnetilleggPeriode = (fødselsdato: Dato): Periode => ({
 /**
  * Periodene barnet gir barnetillegg for: de valgte periodene (eller hele innvilgelsesperioden),
  * avgrenset til perioden barnet har rett og til innvilgelsesperiodene.
+ * Periodene er sortert, og tilstøtende perioder er slått sammen, slik backenden gjør.
  */
 export const effektivePerioderForBarn = (
     barn: { fødselsdato: Dato; perioder: Nullable<Periode[]> },
@@ -138,19 +144,19 @@ export const effektivePerioderForBarn = (
     }
 
     const rett = rettTilBarnetilleggPeriode(barn.fødselsdato);
-    const sorterteInnvilgelsesperioder = innvilgelsesperioder.toSorted(sorterPerioder());
 
-    return (barn.perioder ?? [totalPeriode(innvilgelsesperioder)])
-        .map((periode) => overlappendePeriode(periode, rett))
-        .filter(isNonNullish)
-        .flatMap((periodeMedRett) =>
-            sorterteInnvilgelsesperioder
-                .map((innvilgelsesperiode) =>
-                    overlappendePeriode(periodeMedRett, innvilgelsesperiode),
-                )
-                .filter(isNonNullish),
-        )
-        .toSorted(sorterPerioder());
+    return slåSammenPerioder(
+        (barn.perioder ?? [totalPeriode(innvilgelsesperioder)])
+            .map((periode) => overlappendePeriode(periode, rett))
+            .filter(isNonNullish)
+            .flatMap((periodeMedRett) =>
+                innvilgelsesperioder
+                    .map((innvilgelsesperiode) =>
+                        overlappendePeriode(periodeMedRett, innvilgelsesperiode),
+                    )
+                    .filter(isNonNullish),
+            ),
+    );
 };
 
 /** Effektive perioder for et barn i skjemaet. Barn med sladdet fødselsdato kan ikke periodiseres. */
