@@ -64,21 +64,6 @@ describe('barnetilleggReducer', () => {
         });
     });
 
-    test('settValgteBarnetilleggBarn erstatter barna og setter om det er barnetillegg', () => {
-        const utenBarn = barnetilleggReducer(state([barn]), {
-            type: 'settValgteBarnetilleggBarn',
-            payload: { barn: [] },
-        });
-        expect(utenBarn).toMatchObject({ harBarnetillegg: false, valgteBarn: [] });
-
-        expect(
-            barnetilleggReducer(utenBarn, {
-                type: 'settValgteBarnetilleggBarn',
-                payload: { barn: [annetBarn] },
-            }),
-        ).toMatchObject({ harBarnetillegg: true, valgteBarn: [annetBarn] });
-    });
-
     describe('settBarnetilleggPeriodevalg', () => {
         test('velger perioden barnet har rett innenfor innvilgelsen når perioden skal overstyres', () => {
             expect(

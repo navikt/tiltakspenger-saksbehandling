@@ -83,7 +83,6 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     switch (type) {
         case 'setHarSøktBarnetillegg':
         case 'velgBarnetilleggBarn':
-        case 'settValgteBarnetilleggBarn':
         case 'settBarnetilleggPeriodevalg':
         case 'oppdaterBarnetilleggBarnPeriode':
         case 'leggTilBarnetilleggBarnPeriode':

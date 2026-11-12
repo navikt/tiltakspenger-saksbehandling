@@ -89,7 +89,6 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         case 'settAntallDager':
         case 'setHarSøktBarnetillegg':
         case 'velgBarnetilleggBarn':
-        case 'settValgteBarnetilleggBarn':
         case 'settBarnetilleggPeriodevalg':
         case 'oppdaterBarnetilleggBarnPeriode':
         case 'leggTilBarnetilleggBarnPeriode':

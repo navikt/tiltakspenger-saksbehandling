@@ -23,10 +23,6 @@ export type BarnetilleggActions =
           payload: { barn: BarnetilleggBarnSkjema; valgt: boolean };
       }
     | {
-          type: 'settValgteBarnetilleggBarn';
-          payload: { barn: BarnetilleggBarnSkjema[] };
-      }
-    | {
           type: 'settBarnetilleggPeriodevalg';
           payload: { key: string; heleInnvilgelsesperioden: boolean };
       }
@@ -67,14 +63,6 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
             const utenBarnet = state.valgteBarn.filter((it) => it.key !== barn.key);
 
             return { ...state, valgteBarn: valgt ? [...utenBarnet, barn] : utenBarnet };
-        }
-
-        case 'settValgteBarnetilleggBarn': {
-            return {
-                ...state,
-                valgteBarn: payload.barn,
-                harBarnetillegg: payload.barn.length > 0,
-            };
         }
 
         case 'settBarnetilleggPeriodevalg': {
