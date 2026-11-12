@@ -84,12 +84,6 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                                     'Barnetillegget gis for hele innvilgelsesperioden, og avkortes automatisk for barn som blir født eller fyller 16 år i perioden. Du kan også velge egne perioder for hvert barn.'
                                 }
                             </BodyLong>
-                            {lagretBarnetillegg && erLagretSomV1 && (
-                                <TidligereRegistrertBarnetillegg
-                                    perioder={lagretBarnetillegg.perioder}
-                                    visesSomV1={visesSomV1}
-                                />
-                            )}
                         </VStack>
                     </Infokort>
                 </VStack>
@@ -122,6 +116,12 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
                             </Infokort>
                         )}
+                    {lagretBarnetillegg && erLagretSomV1 && (
+                        <TidligereRegistrertBarnetillegg
+                            perioder={lagretBarnetillegg.perioder}
+                            visesSomV1={visesSomV1}
+                        />
+                    )}
                 </VStack>
 
                 {harBarnetillegg && !visesSomV1 && <BarnetilleggBarnListe />}
@@ -138,22 +138,24 @@ type TidligereRegistrertProps = {
 };
 
 const TidligereRegistrertBarnetillegg = ({ perioder, visesSomV1 }: TidligereRegistrertProps) => (
-    <>
-        <BodyLong size={'small'}>
-            {visesSomV1
-                ? 'Denne behandlingen er registrert som antall barn per periode, uten informasjon om hvilke barn det gjelder:'
-                : 'Denne behandlingen ble registrert som antall barn per periode, så du må velge barna på nytt. Tidligere registrert:'}
-        </BodyLong>
-        {perioder.some(kunPerioderMedBarn) ? (
-            <List size={'small'}>
-                {perioder.filter(kunPerioderMedBarn).map((bt) => (
-                    <List.Item key={bt.periode.fraOgMed}>
-                        {`${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`}
-                    </List.Item>
-                ))}
-            </List>
-        ) : (
-            <BodyLong size={'small'}>{'Det var ikke registrert barnetillegg.'}</BodyLong>
-        )}
-    </>
+    <Infokort variant={'info'} size={'small'}>
+        <VStack gap={'space-8'}>
+            <BodyLong size={'small'}>
+                {visesSomV1
+                    ? 'Denne behandlingen er registrert som antall barn per periode, uten informasjon om hvilke barn det gjelder:'
+                    : 'Denne behandlingen ble registrert som antall barn per periode, så du må velge barna på nytt. Tidligere registrert:'}
+            </BodyLong>
+            {perioder.some(kunPerioderMedBarn) ? (
+                <List size={'small'}>
+                    {perioder.filter(kunPerioderMedBarn).map((bt) => (
+                        <List.Item key={bt.periode.fraOgMed}>
+                            {`${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`}
+                        </List.Item>
+                    ))}
+                </List>
+            ) : (
+                <BodyLong size={'small'}>{'Det var ikke registrert barnetillegg.'}</BodyLong>
+            )}
+        </VStack>
+    </Infokort>
 );
