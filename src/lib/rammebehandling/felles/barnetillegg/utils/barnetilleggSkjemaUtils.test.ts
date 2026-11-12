@@ -286,6 +286,29 @@ describe('hentBarnetilleggKandidater', () => {
         expect(kandidater[0]).toMatchObject({ barn: valgtMedFnr, erValgt: true });
         expect(kandidater[0].søknadsopplysninger).not.toBeNull();
     });
+
+    test('viser bare de valgte barna når behandlingen er avsluttet', () => {
+        const valgtBarn = barnetilleggBarn('2015-03-01', { søknadId: 'soknad_nyere' });
+        const behandling = revurderingInnvilgelse({
+            status: Rammebehandlingsstatus.VEDTATT,
+            innvilgelsesperioder,
+            barnetillegg: barnetilleggV2([valgtBarn], [førsteHalvår]),
+        });
+        const state = lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak);
+
+        const kandidater = hentBarnetilleggKandidater(
+            behandling,
+            { innvilgelsesperioder, ...state },
+            sak,
+        );
+
+        expect(kandidater).toEqual([
+            expect.objectContaining({
+                barn: expect.objectContaining({ fødselsdato: ikkeSladdet('2015-03-01') }),
+                erValgt: true,
+            }),
+        ]);
+    });
 });
 
 describe('lagrede barn lagt til av saksbehandler', () => {

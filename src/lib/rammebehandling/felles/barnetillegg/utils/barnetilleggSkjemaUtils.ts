@@ -14,7 +14,10 @@ import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typ
 import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Nullable } from '~/types/UtilTypes';
-import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
+import {
+    erAvsluttet,
+    rammebehandlingMedInnvilgelseEllerNull,
+} from '~/lib/rammebehandling/rammebehandlingUtils';
 import { hentRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { erSladdet, hentVerdi } from '~/utils/sladdetVerdi';
@@ -204,6 +207,8 @@ export const hentBarnFraGjeldendeVedtak = (sak: SakProps): BarnetilleggBarnSkjem
  * Det er lagrede barn, barn fra søknadene, barn fra gjeldende vedtak, og barn lagt til av saksbehandler.
  * Lagrede barn lagt til av saksbehandler er med i [manueltLagtTilBarn] til de fjernes.
  * Valgte barn vises med valgene saksbehandler har gjort.
+ * For avsluttede behandlinger vises bare de valgte barna.
+ * Søknadene og vedtakene hentes fra saken slik den er nå, og ville kunnet vise barn som ikke var aktuelle da behandlingen ble avsluttet.
  */
 export const hentBarnetilleggKandidater = (
     behandling: Rammebehandling,
@@ -221,13 +226,19 @@ export const hentBarnetilleggKandidater = (
             ? []
             : hentBarnFraGjeldendeVedtak(sak);
 
-    const alleBarn = [
-        ...(hentLagredeBarn(behandling) ?? []).filter((barn) => !erBarnFraSaksbehandler(barn)),
-        ...barnFraSøknader.map((it) => it.barn),
-        ...barnFraVedtak,
-        ...manueltLagtTilBarn,
-        ...valgteBarn,
-    ]
+    const alleBarn = (
+        erAvsluttet(behandling)
+            ? valgteBarn
+            : [
+                  ...(hentLagredeBarn(behandling) ?? []).filter(
+                      (barn) => !erBarnFraSaksbehandler(barn),
+                  ),
+                  ...barnFraSøknader.map((it) => it.barn),
+                  ...barnFraVedtak,
+                  ...manueltLagtTilBarn,
+                  ...valgteBarn,
+              ]
+    )
         .map((barn) => ({ barn }))
         .filter(finnesIkkeFraFør);
 

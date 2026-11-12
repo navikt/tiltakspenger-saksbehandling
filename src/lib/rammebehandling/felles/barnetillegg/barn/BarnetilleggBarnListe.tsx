@@ -1,6 +1,7 @@
 import { BodyShort, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useBehandlingInnvilgelseMedPerioderSkjema } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { hentBarnetilleggKandidater } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { BarnetilleggBarnValg } from '~/lib/rammebehandling/felles/barnetillegg/barn/BarnetilleggBarnValg';
@@ -16,7 +17,11 @@ export const BarnetilleggBarnListe = () => {
     return (
         <VStack gap={'space-16'}>
             <BodyShort size={'small'} weight={'semibold'}>
-                {erReadonly ? 'Barn' : 'Velg barna det skal innvilges barnetillegg for'}
+                {behandling.status === Rammebehandlingsstatus.VEDTATT
+                    ? 'Barn det er innvilget barnetillegg for'
+                    : erReadonly
+                      ? 'Barn'
+                      : 'Velg barna det skal innvilges barnetillegg for'}
             </BodyShort>
 
             {kandidater.length === 0 && (
