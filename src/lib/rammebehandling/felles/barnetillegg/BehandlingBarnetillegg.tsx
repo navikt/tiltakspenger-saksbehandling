@@ -1,6 +1,6 @@
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { BodyShort, Heading, HStack, List, Radio, RadioGroup, VStack } from '@navikt/ds-react';
+import { BodyLong, Heading, HStack, List, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { ReactNode } from 'react';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BarnetilleggTidslinje } from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
@@ -74,16 +74,16 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                     {varsel}
                     <Infokort variant={'info'} size={'small'}>
                         <VStack gap={'space-8'}>
-                            <BodyShort size={'small'}>
+                            <BodyLong size={'small'}>
                                 {
                                     'Nytt: Du velger nå hvilke barn det innvilges barnetillegg for, i stedet for å registrere antall barn per periode. Barna hentes fra søknaden og tidligere vedtak, og du kan legge til barn selv.'
                                 }
-                            </BodyShort>
-                            <BodyShort size={'small'}>
+                            </BodyLong>
+                            <BodyLong size={'small'}>
                                 {
                                     'Barnetillegget gis for hele innvilgelsesperioden, og avkortes automatisk for barn som blir født eller fyller 16 år i perioden. Du kan også velge egne perioder for hvert barn.'
                                 }
-                            </BodyShort>
+                            </BodyLong>
                             {lagretBarnetillegg && erLagretSomV1 && (
                                 <TidligereRegistrertBarnetillegg
                                     perioder={lagretBarnetillegg.perioder}
@@ -139,11 +139,11 @@ type TidligereRegistrertProps = {
 
 const TidligereRegistrertBarnetillegg = ({ perioder, visesSomV1 }: TidligereRegistrertProps) => (
     <>
-        <BodyShort size={'small'}>
+        <BodyLong size={'small'}>
             {visesSomV1
                 ? 'Denne behandlingen er registrert som antall barn per periode, uten informasjon om hvilke barn det gjelder:'
                 : 'Denne behandlingen ble registrert som antall barn per periode, så du må velge barna på nytt. Tidligere registrert:'}
-        </BodyShort>
+        </BodyLong>
         {perioder.some(kunPerioderMedBarn) ? (
             <List size={'small'}>
                 {perioder.filter(kunPerioderMedBarn).map((bt) => (
@@ -153,7 +153,7 @@ const TidligereRegistrertBarnetillegg = ({ perioder, visesSomV1 }: TidligereRegi
                 ))}
             </List>
         ) : (
-            <BodyShort size={'small'}>{'Det var ikke registrert barnetillegg.'}</BodyShort>
+            <BodyLong size={'small'}>{'Det var ikke registrert barnetillegg.'}</BodyLong>
         )}
     </>
 );
