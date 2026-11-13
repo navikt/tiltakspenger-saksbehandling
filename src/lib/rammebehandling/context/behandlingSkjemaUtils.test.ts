@@ -16,7 +16,6 @@ import {
     TiltaksdeltakelseKilde,
     TiltakDeltakerstatus,
 } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
@@ -81,34 +80,13 @@ const revurdering = (
     tidslinjeFørOgEtter: null,
     tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },
     innvilgbarePerioder,
+    barnetilleggKandidater: [],
     manueltBehandlesGrunner: [],
     automatiskOpprettetGrunn: null,
     perioderForReversertOpphør: [],
     innvilgelsesperioder: null,
     barnetillegg: null,
 });
-
-const sakUtenVedtak: SakProps = {
-    sakId: 'sak_1',
-    saksnummer: tilSaksnummer('202501011001'),
-    fnr: ikkeSladdet('12345678911'),
-    førsteDagSomGirRett: null,
-    sisteDagSomGirRett: null,
-    kanSendeInnHelgForMeldekort: false,
-    søknader: [],
-    åpneBehandlinger: [],
-    rammebehandlinger: [],
-    klagebehandlinger: [],
-    tilbakekrevinger: [],
-    alleRammevedtak: [],
-    alleKlagevedtak: [],
-    meldekortvedtak: [],
-    meldekortbehandlinger: {},
-    meldeperiodeKjeder: [],
-    tidslinje: { elementer: [] },
-    innvilgetTidslinje: { elementer: [] },
-    utbetalingstidslinje: [],
-};
 
 // Saken har to tiltaksdeltakelser med et opphold mellom seg.
 const behandlingMedOppholdMellomDeltakelser = () => {
@@ -131,11 +109,10 @@ const behandlingMedOppholdMellomDeltakelser = () => {
 
 describe('lagForhåndsutfyltInnvilgelse', () => {
     test('fyller ut innvilgelsen når en tiltaksdeltakelse overlapper perioden', () => {
-        const innvilgelse = lagForhåndsutfyltInnvilgelse(
-            behandlingMedOppholdMellomDeltakelser(),
-            { fraOgMed: tilDato('2025-01-06'), tilOgMed: tilDato('2025-02-28') },
-            sakUtenVedtak,
-        );
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandlingMedOppholdMellomDeltakelser(), {
+            fraOgMed: tilDato('2025-01-06'),
+            tilOgMed: tilDato('2025-02-28'),
+        });
 
         expect(innvilgelse).toEqual({
             harValgtPeriode: true,
@@ -163,7 +140,7 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
             [{ internDeltakelseId: 'innvilgbar', periode }],
         );
 
-        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode, sakUtenVedtak);
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode);
 
         expect(innvilgelse.innvilgelsesperioder[0]?.internDeltakelseId).toBe('innvilgbar');
     });
@@ -177,7 +154,7 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
             ],
         };
 
-        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, mars, sakUtenVedtak);
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, mars);
 
         expect(innvilgelse.innvilgelsesperioder[0]).toMatchObject({
             internDeltakelseId: 'deltakelse_1',
@@ -194,7 +171,7 @@ describe('lagForhåndsutfyltInnvilgelse', () => {
             ],
         };
 
-        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode, sakUtenVedtak);
+        const innvilgelse = lagForhåndsutfyltInnvilgelse(behandling, periode);
 
         expect(innvilgelse.innvilgelsesperioder[0]).toMatchObject({
             internDeltakelseId: 'deltakelse_1',

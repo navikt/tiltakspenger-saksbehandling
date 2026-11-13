@@ -2,6 +2,7 @@ import { tilDato } from '~/types/DatoTid';
 import { describe, expect, test } from '@jest/globals';
 import {
     barnetilleggBarn,
+    barnetilleggKandidat,
     barnetilleggV2,
     innvilgelsesperiode,
     periode,
@@ -69,7 +70,7 @@ const settHarEndretBarnetillegg = (
 ): RevurderingForlengelseActions => ({
     superType,
     type: 'settHarValgtBarnetillegg',
-    payload: { harEndretBarnetillegg, behandling, sak },
+    payload: { harEndretBarnetillegg, behandling },
 });
 
 const fjernYngsteBarn: RevurderingForlengelseActions = {
@@ -96,7 +97,7 @@ const settTilOgMed = (
 describe('revurderingForlengelseReducer', () => {
     test('til og med-dato gir én innvilgelsesperiode fra forlengelsen starter, med antall dager og deltakelse fra vedtaket', () => {
         const state = revurderingForlengelseReducer(
-            forlengelseInitialState(nyBehandling, sak),
+            forlengelseInitialState(nyBehandling),
             settTilOgMed('2025-06-30'),
         );
 
@@ -120,19 +121,20 @@ describe('revurderingForlengelseReducer', () => {
     });
 
     test('barna fra vedtaket som forlenges forhåndsvelges med hele innvilgelsesperioden', () => {
-        const sakMedBarn = sakMedInnvilgetVedtak(vedtaksperiode, {
-            vedtak: {
-                innvilgelsesperioder: vedtakInnvilgelsesperioder,
-                barnetillegg: barnetilleggV2(
-                    [{ ...yngsteBarn, perioder: [periode('2025-02-01', '2025-03-31')] }],
-                    [vedtaksperiode],
-                ),
-            },
+        // Backend gir barna fra vedtaket uten periodene som ble valgt der
+        const behandling = revurderingForlengelse({
+            tiltaksdeltakelserSomKanForlenges: ['deltakelse_vedtak'],
+            barnetilleggKandidater: [
+                barnetilleggKandidat('2020-01-01', {
+                    søknadsopplysninger: null,
+                    fraGjeldendeVedtak: true,
+                }),
+            ],
         });
 
         const state = revurderingForlengelseReducer(
-            forlengelseInitialState(nyBehandling, sakMedBarn),
-            settTilOgMed('2025-06-30', nyBehandling, sakMedBarn),
+            forlengelseInitialState(behandling),
+            settTilOgMed('2025-06-30', behandling, sak),
         );
 
         expect(state.innvilgelse).toMatchObject({
@@ -142,7 +144,7 @@ describe('revurderingForlengelseReducer', () => {
     });
 
     test('barnetillegget backend har lagret brukes i skjemaet', () => {
-        const state = forlengelseInitialState(lagretBehandling, sak);
+        const state = forlengelseInitialState(lagretBehandling);
 
         expect(state.harEndretBarnetillegg).toBe(false);
         expect(state.innvilgelse).toMatchObject({
@@ -154,7 +156,7 @@ describe('revurderingForlengelseReducer', () => {
 
     test('det lagrede barnetillegget gjelder ikke lenger når til og med-datoen endres', () => {
         const state = revurderingForlengelseReducer(
-            forlengelseInitialState(lagretBehandling, sak),
+            forlengelseInitialState(lagretBehandling),
             settTilOgMed('2025-05-31', lagretBehandling),
         );
 
@@ -162,25 +164,22 @@ describe('revurderingForlengelseReducer', () => {
     });
 
     test('det lagrede barnetillegget gjelder ikke lenger når tiltaksdeltakelsen endres', () => {
-        const state = revurderingForlengelseReducer(
-            forlengelseInitialState(lagretBehandling, sak),
-            {
-                superType,
-                type: 'settForlengelseTiltaksdeltakelse',
-                payload: {
-                    internDeltakelseId: 'deltakelse_annen',
-                    behandling: lagretBehandling,
-                    sak,
-                },
+        const state = revurderingForlengelseReducer(forlengelseInitialState(lagretBehandling), {
+            superType,
+            type: 'settForlengelseTiltaksdeltakelse',
+            payload: {
+                internDeltakelseId: 'deltakelse_annen',
+                behandling: lagretBehandling,
+                sak,
             },
-        );
+        });
 
         expect(visesUtledetBarnetillegg(state, lagretBehandling)).toBe(false);
     });
 
     test('endring av barnetillegget markerer det som valgt av saksbehandler', () => {
         const state = revurderingForlengelseReducer(
-            forlengelseInitialState(lagretBehandling, sak),
+            forlengelseInitialState(lagretBehandling),
             fjernYngsteBarn,
         );
 
@@ -189,7 +188,7 @@ describe('revurderingForlengelseReducer', () => {
     });
 
     test('valgt periode for et barn tilpasses ny til og med-dato', () => {
-        const medValgtPeriode = reduser(forlengelseInitialState(lagretBehandling, sak), {
+        const medValgtPeriode = reduser(forlengelseInitialState(lagretBehandling), {
             superType,
             type: 'settBarnetilleggPeriodevalg',
             payload: { key: skjemaBarn('2020-01-01').key, heleInnvilgelsesperioden: false },
@@ -216,7 +215,7 @@ describe('revurderingForlengelseReducer', () => {
     });
 
     test('når saksbehandler angrer valget av barnetillegg, brukes det lagrede barnetillegget igjen', () => {
-        const lagret = forlengelseInitialState(lagretBehandling, sak);
+        const lagret = forlengelseInitialState(lagretBehandling);
 
         const angret = reduser(
             lagret,
@@ -232,7 +231,7 @@ describe('revurderingForlengelseReducer', () => {
         const behandling = lagretForlengelse([{ ...yngsteBarn, perioder: [overstyrtPeriode] }]);
 
         const state = reduser(
-            forlengelseInitialState(behandling, sak),
+            forlengelseInitialState(behandling),
             settHarEndretBarnetillegg(true, behandling),
             settHarEndretBarnetillegg(false, behandling),
         );
@@ -245,7 +244,7 @@ describe('revurderingForlengelseReducer', () => {
 
     test('det lagrede barnetillegget gjenopprettes uendret når til og med-datoen settes tilbake', () => {
         const state = reduser(
-            forlengelseInitialState(lagretBehandling, sak),
+            forlengelseInitialState(lagretBehandling),
             settTilOgMed('2025-04-30', lagretBehandling),
             settTilOgMed('2025-06-30', lagretBehandling),
         );
@@ -259,7 +258,7 @@ describe('revurderingForlengelseReducer', () => {
 
     test('saksbehandlers valg om å ikke gi barnetillegg beholdes når til og med-datoen endres', () => {
         const state = reduser(
-            forlengelseInitialState(lagretBehandling, sak),
+            forlengelseInitialState(lagretBehandling),
             { superType, type: 'setHarSøktBarnetillegg', payload: { harSøkt: false } },
             settTilOgMed('2025-05-31', lagretBehandling),
         );
@@ -275,7 +274,7 @@ describe('revurderingForlengelseReducer', () => {
         });
 
         const state = reduser(
-            forlengelseInitialState(lagretMedValgtBarnetillegg, sak),
+            forlengelseInitialState(lagretMedValgtBarnetillegg),
             settHarEndretBarnetillegg(false, lagretMedValgtBarnetillegg),
         );
 
@@ -285,7 +284,7 @@ describe('revurderingForlengelseReducer', () => {
 
     test('innvilgelsesperioden kan ikke endres direkte', () => {
         expect(() =>
-            revurderingForlengelseReducer(forlengelseInitialState(lagretBehandling, sak), {
+            revurderingForlengelseReducer(forlengelseInitialState(lagretBehandling), {
                 superType,
                 type: 'settAntallDager',
                 payload: { antallDager: 2, index: 0 },
@@ -319,14 +318,14 @@ describe('valg av tiltaksdeltakelse ved forlengelse', () => {
     });
 
     test('tiltaket er forhåndsvalgt når vedtaket bare kan forlenges for ett tiltak', () => {
-        expect(forlengelseInitialState(nyBehandling, sak).innvilgelse.innvilgelsesperioder).toEqual(
-            [{ periode: { fraOgMed: '2025-04-01' }, internDeltakelseId: 'deltakelse_vedtak' }],
-        );
+        expect(forlengelseInitialState(nyBehandling).innvilgelse.innvilgelsesperioder).toEqual([
+            { periode: { fraOgMed: '2025-04-01' }, internDeltakelseId: 'deltakelse_vedtak' },
+        ]);
     });
 
     test('perioden er ikke valgt før både til og med-dato og tiltak er valgt', () => {
         const medTilOgMed = revurderingForlengelseReducer(
-            forlengelseInitialState(behandlingMedToTiltak, sakMedToTiltak),
+            forlengelseInitialState(behandlingMedToTiltak),
             {
                 superType,
                 type: 'settForlengelseTilOgMed',

@@ -1,23 +1,19 @@
 import {
     Barnetillegg,
-    BarnetilleggBarnKilde,
+    BarnetilleggKandidatDTO,
     BarnetilleggV1,
     BarnetilleggVersjon,
     BarnMedBarnetillegg,
     OppdaterBarnetilleggBarnDTO,
     OppdaterBarnetilleggDTO,
 } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { Søknad, SøknadBarn } from '~/lib/søknad/søknadTyper';
-import { SakProps } from '~/lib/sak/SakTyper';
-import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     erAvsluttet,
     rammebehandlingMedInnvilgelseEllerNull,
 } from '~/lib/rammebehandling/rammebehandlingUtils';
-import { hentRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { erSladdet, hentVerdi } from '~/utils/sladdetVerdi';
 import { isNonNullish } from '~/utils/object';
@@ -39,80 +35,61 @@ export type BarnetilleggSkjemaState = Pick<
 
 export type BarnFraSøknad = {
     barn: BarnetilleggBarnSkjema;
-    opplysninger: Pick<SøknadBarn, 'oppholderSegIEØSSpm' | 'oppholdssted'>;
+    opplysninger: NonNullable<BarnetilleggKandidatDTO['søknadsopplysninger']>;
 };
 
 export type BarnetilleggKandidat = {
     barn: BarnetilleggBarnSkjema;
     erValgt: boolean;
     // Opplysninger om barnet fra søknaden, dersom barnet finnes i en av søknadene
-    søknadsopplysninger: Nullable<BarnFraSøknad['opplysninger']>;
+    søknadsopplysninger: BarnetilleggKandidatDTO['søknadsopplysninger'];
     // Barn saksbehandler har lagt til i denne behandlingen, og som ikke finnes i søknadene eller gjeldende vedtak
     kanFjernes: boolean;
+};
+
+type AktuellKandidat = Pick<
+    BarnetilleggKandidatDTO,
+    'søknadsopplysninger' | 'fraGjeldendeVedtak'
+> & {
+    barn: BarnetilleggBarnSkjema;
 };
 
 const finnesIkkeFraFør = removeDuplicatesFilter<{ barn: BarnetilleggBarnSkjema }>((a, b) =>
     erSammeBarn(a.barn, b.barn),
 );
 
-export const hentBarnFraSøknad = (søknad: Søknad): BarnFraSøknad[] =>
-    søknad.barnetillegg.map((barn, index) => ({
-        barn: tilBarnetilleggBarnSkjema(
-            {
-                fnr: barn.fnr,
-                fornavn: barn.fornavn,
-                mellomnavn: barn.mellomnavn,
-                etternavn: barn.etternavn,
-                fødselsdato: barn.fødselsdato,
-                kilde: BarnetilleggBarnKilde.SØKNAD,
-                søknadId: søknad.id,
-                perioder: null,
-            },
-            `${søknad.id}:${index}`,
-        ),
-        opplysninger: {
-            oppholderSegIEØSSpm: barn.oppholderSegIEØSSpm,
-            oppholdssted: barn.oppholdssted,
-        },
-    }));
-
 /**
- * Søknadene fra innvilgede søknadsbehandlinger av tiltaksdeltakelsene det innvilges for, nyeste vedtak først.
- * Søknader som ikke er innvilget ennå, behandles i sin egen søknadsbehandling.
+ * Kandidatene fra backend som er aktuelle for tiltaksdeltakelsene det innvilges for, med hele innvilgelsesperioden.
+ * Barn fra søknader i revurderinger er bare aktuelle når søknaden er innvilget for en av tiltaksdeltakelsene.
  */
-export const hentInnvilgedeSøknaderForTiltaksdeltakelsene = (
-    sak: SakProps,
+const hentAktuelleKandidater = (
+    behandling: Rammebehandling,
     innvilgelsesperioder: Innvilgelsesperiode[],
-): Søknad[] => {
+): AktuellKandidat[] => {
     const internDeltakelseIder = new Set(innvilgelsesperioder.map((it) => it.internDeltakelseId));
 
-    return hentVedtatteSøknadsbehandlinger(sak)
-        .filter((behandling) =>
-            behandling.innvilgelsesperioder.some((it) =>
-                internDeltakelseIder.has(it.internDeltakelseId),
-            ),
+    return behandling.barnetilleggKandidater
+        .filter(
+            (it) =>
+                it.internDeltakelseIder === null ||
+                it.internDeltakelseIder.some((id) => internDeltakelseIder.has(id)),
         )
-        .map((behandling) => behandling.søknad)
-        .filter(removeDuplicatesFilter((a, b) => a.id === b.id));
+        .map((it, index) => ({
+            barn: tilBarnetilleggBarnSkjema({ ...it, perioder: null }, `kandidat:${index}`),
+            søknadsopplysninger: it.søknadsopplysninger,
+            fraGjeldendeVedtak: it.fraGjeldendeVedtak,
+        }));
 };
 
-/**
- * Barna fra søknaden(e) for innvilgelsen. For søknadsbehandlinger er dette søknaden som behandles,
- * ellers søknadene fra innvilgede søknadsbehandlinger av tiltaksdeltakelsene det innvilges for.
- * Barn som finnes i flere søknader tas med én gang, fra den nyeste innvilgede søknaden.
- */
+/** Barna fra søknaden(e) som er aktuelle for tiltaksdeltakelsene det innvilges for. */
 export const hentBarnFraSøknader = (
     behandling: Rammebehandling,
     innvilgelsesperioder: Innvilgelsesperiode[],
-    sak: SakProps,
-): BarnFraSøknad[] => {
-    const søknader =
-        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-            ? [behandling.søknad]
-            : hentInnvilgedeSøknaderForTiltaksdeltakelsene(sak, innvilgelsesperioder);
-
-    return søknader.flatMap(hentBarnFraSøknad).filter(finnesIkkeFraFør);
-};
+): BarnFraSøknad[] =>
+    hentAktuelleKandidater(behandling, innvilgelsesperioder).flatMap(
+        ({ barn, søknadsopplysninger }) =>
+            søknadsopplysninger ? [{ barn, opplysninger: søknadsopplysninger }] : [],
+    );
 
 const tilSkjemaBarn = (barn: BarnMedBarnetillegg[], kilde: string): BarnetilleggBarnSkjema[] =>
     barn
@@ -163,30 +140,12 @@ export const hentLagredeBarn = (
 };
 
 /**
- * Barna fra gjeldende vedtak med barnetillegg lagret med barn (V2), nyeste vedtak først.
- * Periodene saksbehandler valgte i vedtaket gjelder ikke for denne innvilgelsen, så barna får hele innvilgelsesperioden.
- */
-export const hentBarnFraGjeldendeVedtak = (sak: SakProps): BarnetilleggBarnSkjema[] =>
-    sak.innvilgetTidslinje.elementer
-        .map((it) => it.rammevedtakId)
-        .filter(removeDuplicatesFilter())
-        .map((vedtakId) => hentRammevedtak(sak, vedtakId))
-        .toSorted((a, b) => (a.opprettet > b.opprettet ? -1 : a.opprettet < b.opprettet ? 1 : 0))
-        .flatMap((vedtak) =>
-            vedtak.barnetillegg?.versjon === BarnetilleggVersjon.V2
-                ? tilSkjemaBarn(vedtak.barnetillegg.barn, vedtak.id)
-                : [],
-        )
-        .map((barn) => ({ ...barn, perioder: null }))
-        .filter(removeDuplicatesFilter(erSammeBarn));
-
-/**
  * Barna saksbehandler kan velge å gi barnetillegg for, sortert med eldste først.
- * Det er lagrede barn, barn fra søknadene, barn fra gjeldende vedtak, og barn lagt til av saksbehandler.
+ * Det er de aktuelle kandidatene fra backend, og barn lagt til av saksbehandler.
  * Lagrede barn lagt til av saksbehandler er med i [manueltLagtTilBarn] til de fjernes.
  * Valgte barn vises med valgene saksbehandler har gjort.
  * For avsluttede behandlinger vises bare de valgte barna.
- * Søknadene og vedtakene hentes fra saken slik den er nå, og ville kunnet vise barn som ikke var aktuelle da behandlingen ble avsluttet.
+ * Kandidatene utledes fra saken slik den er nå, og ville kunnet vise barn som ikke var aktuelle da behandlingen ble avsluttet.
  */
 export const hentBarnetilleggKandidater = (
     behandling: Rammebehandling,
@@ -194,44 +153,28 @@ export const hentBarnetilleggKandidater = (
         InnvilgelseMedPerioderState,
         'innvilgelsesperioder' | 'valgteBarn' | 'manueltLagtTilBarn'
     >,
-    sak: SakProps,
 ): BarnetilleggKandidat[] => {
     const { innvilgelsesperioder, valgteBarn, manueltLagtTilBarn } = innvilgelse;
 
-    const barnFraSøknader = hentBarnFraSøknader(behandling, innvilgelsesperioder, sak);
-    const barnFraVedtak =
-        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-            ? []
-            : hentBarnFraGjeldendeVedtak(sak);
+    const aktuelleKandidater = hentAktuelleKandidater(behandling, innvilgelsesperioder);
 
     const alleBarn = (
         erAvsluttet(behandling)
             ? valgteBarn
-            : [
-                  ...(hentLagredeBarn(behandling) ?? []).filter(
-                      (barn) => !erBarnFraSaksbehandler(barn),
-                  ),
-                  ...barnFraSøknader.map((it) => it.barn),
-                  ...barnFraVedtak,
-                  ...manueltLagtTilBarn,
-                  ...valgteBarn,
-              ]
+            : [...aktuelleKandidater.map((it) => it.barn), ...manueltLagtTilBarn, ...valgteBarn]
     )
         .map((barn) => ({ barn }))
         .filter(finnesIkkeFraFør);
 
     return alleBarn.toSorted(eldsteFørst).map(({ barn }) => {
         const valgtBarn = valgteBarn.find((it) => erSammeBarn(it, barn));
+        const kandidat = aktuelleKandidater.find((it) => erSammeBarn(it.barn, barn));
 
         return {
             barn: valgtBarn ?? barn,
             erValgt: !!valgtBarn,
-            søknadsopplysninger:
-                barnFraSøknader.find((it) => erSammeBarn(it.barn, barn))?.opplysninger ?? null,
-            kanFjernes:
-                manueltLagtTilBarn.some((it) => it.key === barn.key) &&
-                !barnFraSøknader.some((it) => erSammeBarn(it.barn, barn)) &&
-                !barnFraVedtak.some((it) => erSammeBarn(it, barn)),
+            søknadsopplysninger: kandidat?.søknadsopplysninger ?? null,
+            kanFjernes: manueltLagtTilBarn.some((it) => it.key === barn.key) && !kandidat,
         };
     });
 };
@@ -251,16 +194,6 @@ const eldsteFørst = (
     return fødselsdatoA.localeCompare(fødselsdatoB);
 };
 
-/** Barna fra søknaden(e) som oppholder seg i EØS og har rett i innvilgelsesperiodene */
-export const forhåndsvelgBarnFraSøknader = (
-    barnFraSøknader: BarnFraSøknad[],
-    innvilgelsesperioder: Innvilgelsesperiode[],
-): BarnetilleggBarnSkjema[] =>
-    barnFraSøknader
-        .filter((it) => it.opplysninger.oppholderSegIEØSSpm.svar === 'JA')
-        .map((it) => it.barn)
-        .filter((barn) => harRett(barn, innvilgelsesperioder));
-
 const harRett = (barn: BarnetilleggBarnSkjema, innvilgelsesperioder: Innvilgelsesperiode[]) =>
     harRettIInnvilgelsesperiodene(
         barn,
@@ -275,22 +208,20 @@ const harRett = (barn: BarnetilleggBarnSkjema, innvilgelsesperioder: Innvilgelse
 export const hentForhåndsvalgteBarn = (
     behandling: Rammebehandling,
     innvilgelsesperioder: Innvilgelsesperiode[],
-    sak: SakProps,
 ): BarnetilleggBarnSkjema[] => {
-    if (behandling.type !== Rammebehandlingstype.SØKNADSBEHANDLING) {
-        const barnFraVedtak = hentBarnFraGjeldendeVedtak(sak).filter((barn) =>
-            harRett(barn, innvilgelsesperioder),
-        );
-
-        if (barnFraVedtak.length > 0) {
-            return barnFraVedtak;
-        }
-    }
-
-    return forhåndsvelgBarnFraSøknader(
-        hentBarnFraSøknader(behandling, innvilgelsesperioder, sak),
-        innvilgelsesperioder,
+    const kandidaterMedRett = hentAktuelleKandidater(behandling, innvilgelsesperioder).filter(
+        (it) => harRett(it.barn, innvilgelsesperioder),
     );
+
+    const barnFraVedtak = kandidaterMedRett.filter((it) => it.fraGjeldendeVedtak);
+
+    return (
+        barnFraVedtak.length > 0
+            ? barnFraVedtak
+            : kandidaterMedRett.filter(
+                  (it) => it.søknadsopplysninger?.oppholderSegIEØSSpm.svar === 'JA',
+              )
+    ).map((it) => it.barn);
 };
 
 /**
@@ -302,28 +233,6 @@ export const hentForhåndsvalgteBarn = (
 export const lagBarnetilleggSkjemaState = (
     behandling: Rammebehandling,
     innvilgelsesperioder: Innvilgelsesperiode[],
-    sak: SakProps,
-): BarnetilleggSkjemaState =>
-    lagSkjemaState(behandling, innvilgelsesperioder, () =>
-        hentForhåndsvalgteBarn(behandling, innvilgelsesperioder, sak),
-    );
-
-// Søknadsbehandlinger henter barna kun fra søknaden som behandles, og trenger derfor ikke saken.
-export const lagBarnetilleggSkjemaStateForSøknadsbehandling = (
-    behandling: Søknadsbehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
-): BarnetilleggSkjemaState =>
-    lagSkjemaState(behandling, innvilgelsesperioder, () =>
-        forhåndsvelgBarnFraSøknader(
-            hentBarnFraSøknad(behandling.søknad).filter(finnesIkkeFraFør),
-            innvilgelsesperioder,
-        ),
-    );
-
-const lagSkjemaState = (
-    behandling: Rammebehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
-    hentForhåndsvalgte: () => BarnetilleggBarnSkjema[],
 ): BarnetilleggSkjemaState => {
     const lagret = hentLagretBarnetillegg(behandling);
 
@@ -340,7 +249,7 @@ const lagSkjemaState = (
         };
     }
 
-    const forhåndsvalgteBarn = hentForhåndsvalgte();
+    const forhåndsvalgteBarn = hentForhåndsvalgteBarn(behandling, innvilgelsesperioder);
 
     if (lagret) {
         const harBarnetillegg = lagret.perioder.some(kunPerioderMedBarn);

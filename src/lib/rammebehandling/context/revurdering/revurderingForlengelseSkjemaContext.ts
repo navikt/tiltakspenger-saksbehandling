@@ -64,7 +64,6 @@ type ForlengelseActions =
           payload: {
               harEndretBarnetillegg: boolean;
               behandling: RevurderingForlengelse;
-              sak: SakProps;
           };
       };
 
@@ -101,7 +100,7 @@ export const revurderingForlengelseReducer: Reducer<
         }
 
         case 'settHarValgtBarnetillegg': {
-            const { harEndretBarnetillegg, behandling, sak } = action.payload;
+            const { harEndretBarnetillegg, behandling } = action.payload;
             const { innvilgelse } = state;
 
             if (harEndretBarnetillegg || !innvilgelse.harValgtPeriode) {
@@ -113,11 +112,7 @@ export const revurderingForlengelseReducer: Reducer<
                 harEndretBarnetillegg,
                 innvilgelse: {
                     ...innvilgelse,
-                    ...lagBarnetilleggSkjemaState(
-                        behandling,
-                        innvilgelse.innvilgelsesperioder,
-                        sak,
-                    ),
+                    ...lagBarnetilleggSkjemaState(behandling, innvilgelse.innvilgelsesperioder),
                 },
             };
         }
@@ -151,7 +146,6 @@ export const revurderingForlengelseReducer: Reducer<
 
 export const forlengelseInitialState = (
     behandling: RevurderingForlengelse,
-    sak: SakProps,
 ): RevurderingForlengelseState => {
     const { innvilgelsesperioder, forlengesFraOgMed, harEndretBarnetillegg } = behandling;
 
@@ -186,7 +180,7 @@ export const forlengelseInitialState = (
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
         },
     };
 };
@@ -273,7 +267,7 @@ const medInnvilgelsesperiode = (
                   ),
                   manueltLagtTilBarn: forrige.manueltLagtTilBarn,
               }
-            : lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak);
+            : lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder);
 
     return {
         ...state,

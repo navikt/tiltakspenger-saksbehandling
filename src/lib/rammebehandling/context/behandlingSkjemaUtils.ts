@@ -80,7 +80,6 @@ export enum BehandlingSkjemaType {
 export const lagForhåndsutfyltInnvilgelse = (
     behandling: Rammebehandling,
     førsteInnvilgelsesperiode: Periode,
-    sak: SakProps,
 ): InnvilgelseMedPerioderState => {
     const innvilgbarPeriode = hentInnvilgbarePerioderSomOverlapper(
         behandling,
@@ -112,7 +111,7 @@ export const lagForhåndsutfyltInnvilgelse = (
     return {
         harValgtPeriode: true,
         innvilgelsesperioder,
-        ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
+        ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
     };
 };
 

@@ -8,13 +8,12 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import {
+    barnetilleggKandidat,
     innvilgelsesperiode,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
     periode,
     sakMedInnvilgetVedtak,
-    søknad,
-    søknadBarn,
 } from '~test/rammebehandling';
 import { tilDato } from '~/types/DatoTid';
 
@@ -177,14 +176,15 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
     });
 
     test('validerer barnetillegg mot den innvilgede søknaden for tiltaksdeltakelsen det innvilges for', () => {
-        const sakMedBarnISøknaden = sakMedInnvilgetVedtak(førsteHalvår, {
-            søknad: søknad([søknadBarn('2020-05-05')]),
-        });
-
         const resultat = revurderingOmgjøringValidering(
-            omgjøringInnvilgelse(),
+            omgjøringInnvilgelse({
+                barnetilleggKandidater: [
+                    barnetilleggKandidat('2020-05-05', { internDeltakelseIder: ['deltakelse_1'] }),
+                    barnetilleggKandidat('2018-01-01', { internDeltakelseIder: ['deltakelse_2'] }),
+                ],
+            }),
             innvilgelseSkjema(førsteHalvår, [innvilgelsesperiode(førsteHalvår)]),
-            sakMedBarnISøknaden,
+            sakMedInnvilgetVedtak(førsteHalvår),
         );
 
         expect(resultat).toEqual({
