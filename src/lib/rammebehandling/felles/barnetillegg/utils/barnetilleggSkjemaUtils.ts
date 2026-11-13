@@ -4,7 +4,6 @@ import {
     BarnetilleggV1,
     BarnetilleggVersjon,
     BarnMedBarnetillegg,
-    ForhåndsvisningBarnetilleggDTO,
     OppdaterBarnetilleggBarnDTO,
     OppdaterBarnetilleggDTO,
 } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -125,7 +124,8 @@ export const hentLagretBarnetillegg = (behandling: Rammebehandling): Nullable<Ba
 
 /**
  * Barnetillegget lagret som antall barn per periode (V1), dersom behandlingen ikke kan endres.
- * Det kan ikke vises med barn, og vises og forhåndsvises derfor som det er lagret.
+ * Det kan ikke vises med barn, og vises derfor som det er lagret.
+ * Backend forhåndsviser brevet med det lagrede barnetillegget når behandlingen ikke kan endres.
  */
 export const hentLagretV1SomIkkeKanEndres = (
     behandling: Rammebehandling,
@@ -151,28 +151,6 @@ export const harUlagretBarnetilleggFraV1 = (
         lagret?.versjon === BarnetilleggVersjon.V1 &&
         lagret.perioder.some(kunPerioderMedBarn)
     );
-};
-
-/**
- * Barnetillegget som sendes til forhåndsvisning av brev.
- * Lagret V1 som ikke kan endres sendes som antall barn per periode, siden barna i skjemaet bare er forhåndsvalgt.
- */
-export const tilForhåndsvisningBarnetilleggDTO = (
-    behandling: Rammebehandling,
-    innvilgelse: Pick<InnvilgelseMedPerioderState, 'harBarnetillegg' | 'valgteBarn'>,
-    erReadonly: boolean,
-    begrunnelse: Nullable<string>,
-): ForhåndsvisningBarnetilleggDTO => {
-    const lagretV1 = hentLagretV1SomIkkeKanEndres(behandling, erReadonly);
-
-    if (lagretV1) {
-        return {
-            perioder: innvilgelse.harBarnetillegg ? lagretV1.perioder : [],
-            begrunnelse: innvilgelse.harBarnetillegg ? begrunnelse : null,
-        };
-    }
-
-    return tilOppdaterBarnetilleggDTO(innvilgelse, begrunnelse);
 };
 
 /** Barna som er lagret på behandlingen, dersom barnetillegget er lagret med barn (V2). */

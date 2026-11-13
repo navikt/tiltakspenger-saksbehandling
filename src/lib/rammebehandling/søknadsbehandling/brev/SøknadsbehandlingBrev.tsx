@@ -1,6 +1,6 @@
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { tilForhåndsvisningBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { søknadsbehandlingValidering } from '~/lib/rammebehandling/søknadsbehandling/handlinger/søknadsbehandlingValidering';
 import { BodyLong } from '@navikt/ds-react';
@@ -59,10 +59,8 @@ const tilForhåndsvisningDTO = (
                 fritekst: skjema.textAreas.brevtekst.getValue(),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 barnetillegg: innvilgelse.harBarnetillegg
-                    ? tilForhåndsvisningBarnetilleggDTO(
-                          behandling,
+                    ? tilOppdaterBarnetilleggDTO(
                           innvilgelse,
-                          skjema.erReadonly,
                           skjema.textAreas.barnetilleggBegrunnelse.getValue(),
                       )
                     : null,

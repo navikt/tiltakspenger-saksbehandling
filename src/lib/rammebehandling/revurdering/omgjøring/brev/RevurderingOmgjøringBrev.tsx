@@ -1,6 +1,6 @@
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
-import { tilForhåndsvisningBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     OmgjøringBrevForhåndsvisningDTO,
     OmgjøringInnvilgelseBrevForhåndsvisningDTO,
@@ -68,10 +68,8 @@ const tilForhåndsvisningDTO = (
                 fritekst: textAreas.brevtekst.getValue(),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 barnetillegg: innvilgelse.harBarnetillegg
-                    ? tilForhåndsvisningBarnetilleggDTO(
-                          behandling,
+                    ? tilOppdaterBarnetilleggDTO(
                           innvilgelse,
-                          skjema.erReadonly,
                           skjema.textAreas.barnetilleggBegrunnelse.getValue(),
                       )
                     : null,

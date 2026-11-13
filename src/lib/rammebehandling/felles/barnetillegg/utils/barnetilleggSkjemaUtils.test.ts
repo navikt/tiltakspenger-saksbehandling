@@ -3,12 +3,9 @@ import {
     hentBarnetilleggKandidater,
     hentBarnFraSøknader,
     lagBarnetilleggSkjemaState,
-    tilForhåndsvisningBarnetilleggDTO,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     barnetilleggBarn,
-    barnetilleggPeriode,
-    barnetilleggV1,
     barnetilleggV2,
     innvilgelsesperiode,
     periode,
@@ -360,27 +357,5 @@ describe('lagrede barn lagt til av saksbehandler', () => {
 
         expect(etterFjerning.map((it) => it.barn.fornavn.verdi)).not.toContain('Lagt til');
         expect(etterFjerning.map((it) => it.barn.fornavn.verdi)).toContain('Vedtak');
-    });
-});
-
-describe('tilForhåndsvisningBarnetilleggDTO', () => {
-    const behandling = søknadsbehandlingInnvilgelse({
-        barnetillegg: barnetilleggV1([barnetilleggPeriode(1, førsteHalvår)]),
-    });
-    const innvilgelse = { harBarnetillegg: true, valgteBarn: [skjemaBarn('2020-01-01')] };
-
-    test('sender lagrede perioder med antall barn når behandlingen ikke kan endres', () => {
-        expect(
-            tilForhåndsvisningBarnetilleggDTO(behandling, innvilgelse, true, 'Begrunnelse'),
-        ).toEqual({
-            perioder: [barnetilleggPeriode(1, førsteHalvår)],
-            begrunnelse: 'Begrunnelse',
-        });
-    });
-
-    test('sender valgte barn når behandlingen kan endres', () => {
-        expect(
-            tilForhåndsvisningBarnetilleggDTO(behandling, innvilgelse, false, null),
-        ).toMatchObject({ barn: [{ fødselsdato: '2020-01-01' }], begrunnelse: null });
     });
 });
