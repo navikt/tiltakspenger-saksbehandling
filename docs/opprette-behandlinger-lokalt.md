@@ -288,7 +288,8 @@ Slik legger du ett til en sak lokalt:
     overlapper behandlingen. La ekstern ID være tom, så genereres den.
     Fyll eventuelt inn **Tittel** (f.eks. «Midlertidig lønnstilskudd hos Arbeidsgiver AS»)
     for å få hele tiltaksnavnet i saksopplysningene. Tittelen kan også settes på deltakelser
-    som gir rett.
+    som gir rett. Tittelen lagres ikke i behandlingen, men slås opp når saksopplysningene vises,
+    så en endret tittel på en eksisterende deltakelse vises når siden lastes på nytt.
 16. Oppdater saksopplysningene i behandlingen. Lønnstilskuddet vises med merket «Gir ikke
     rett til tiltakspenger».
 

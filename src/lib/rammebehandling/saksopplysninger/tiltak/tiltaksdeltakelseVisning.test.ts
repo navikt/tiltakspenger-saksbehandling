@@ -1,6 +1,6 @@
-import { ikkeSladdet } from '~test/sladdetVerdi';
-import { expect, test } from '@jest/globals';
-import { delOppTiltaksdeltakelser } from './tiltaksdeltakelseVisning';
+import { describe, expect, test } from '@jest/globals';
+import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
+import { delOppTiltaksdeltakelser, tiltaksnavnTekst } from './tiltaksdeltakelseVisning';
 import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
@@ -12,7 +12,6 @@ const tiltak = (id: string, fraOgMed: Dato | null, tilOgMed: Dato | null): Tilta
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
-    tittel: ikkeSladdet('Arbeidsmarkedsopplæring hos Arrangør AS'),
     periode: { fraOgMed, tilOgMed },
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,
@@ -59,4 +58,38 @@ test('tiltak uten sluttdato regnes alltid som aktuelt', () => {
 
     expect(aktuelle).toHaveLength(1);
     expect(historiske).toHaveLength(0);
+});
+
+describe('tiltaksnavnTekst', () => {
+    const oppslag = {
+        tiltaksdata: [
+            {
+                eksternDeltakelseId: 'a',
+                internDeltakelseId: 'a',
+                tittel: ikkeSladdet('Kurs hos A'),
+            },
+            { eksternDeltakelseId: 'b', internDeltakelseId: null, tittel: ikkeSladdet(null) },
+            { eksternDeltakelseId: 'c', internDeltakelseId: 'c', tittel: sladdet },
+        ],
+        isLoading: false,
+        error: undefined,
+    };
+
+    test('viser tittelen til deltakelsen', () => {
+        expect(tiltaksnavnTekst(oppslag, 'a')).toBe('Kurs hos A');
+    });
+
+    test('viser ukjent når deltakelsen mangler tittel eller ikke finnes', () => {
+        expect(tiltaksnavnTekst(oppslag, 'b')).toBe('Ukjent');
+        expect(tiltaksnavnTekst(oppslag, 'x')).toBe('Ukjent');
+    });
+
+    test('viser sladdet tittel som sladdet', () => {
+        expect(tiltaksnavnTekst(oppslag, 'c')).toBe('[Sladdet]');
+    });
+
+    test('viser at tittelen hentes eller ikke kunne hentes', () => {
+        expect(tiltaksnavnTekst({ ...oppslag, isLoading: true }, 'a')).toBe('Henter...');
+        expect(tiltaksnavnTekst({ ...oppslag, error: new Error() }, 'a')).toBe('<henting feilet>');
+    });
 });

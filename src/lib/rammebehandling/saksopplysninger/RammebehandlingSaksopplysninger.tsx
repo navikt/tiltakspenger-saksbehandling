@@ -66,6 +66,8 @@ export const RammebehandlingSaksopplysninger = () => {
 
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 <BehandlingTiltakOpplysninger
+                    sakId={behandling.sakId}
+                    behandlingId={behandling.id}
                     tiltaksdeltakelser={tiltaksdeltagelse}
                     tiltaksdeltakelserSomFratarRett={tiltaksdeltakelserSomFratarRett}
                     vurderingsperiode={saksopplysninger.periode}

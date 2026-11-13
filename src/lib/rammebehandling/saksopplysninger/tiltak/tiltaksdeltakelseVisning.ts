@@ -5,6 +5,8 @@ import {
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
+import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
+import { TiltaksdataOppslag } from './useHentTiltaksdata';
 
 const sorterNyesteFørst = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
     const aDato = a.periode.fraOgMed ?? a.periode.tilOgMed;
@@ -50,3 +52,25 @@ export const kildeTekst: Record<TiltaksdeltakelseKilde, string> = {
     [TiltaksdeltakelseKilde.KOMET]: modiaTekst,
     [TiltaksdeltakelseKilde.TEAM_TILTAK]: modiaTekst,
 } as const;
+
+/**
+ * Hele tiltaksnavnet til deltakelsen, slik det er slått opp i kilden.
+ * Vises som ukjent når deltakelsen ikke har noen tittel, f.eks. ved adressebeskyttelse.
+ */
+export const tiltaksnavnTekst = (
+    oppslag: TiltaksdataOppslag,
+    eksternDeltakelseId: string,
+): string => {
+    if (oppslag.isLoading) {
+        return 'Henter...';
+    }
+    if (oppslag.error) {
+        return '<henting feilet>';
+    }
+    const tiltaksdata = oppslag.tiltaksdata?.find(
+        (data) => data.eksternDeltakelseId === eksternDeltakelseId,
+    );
+    return tiltaksdata
+        ? formaterSladdbarVerdi(tiltaksdata.tittel, (tittel) => tittel, 'Ukjent')
+        : 'Ukjent';
+};

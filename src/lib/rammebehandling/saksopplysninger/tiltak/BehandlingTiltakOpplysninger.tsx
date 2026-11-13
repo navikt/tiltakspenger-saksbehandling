@@ -9,7 +9,12 @@ import {
 import { BodyShort, Heading, ReadMore, VStack } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
-import { delOppTiltaksdeltakelser, kildeTekst, prosentTekst } from './tiltaksdeltakelseVisning';
+import {
+    delOppTiltaksdeltakelser,
+    kildeTekst,
+    prosentTekst,
+    tiltaksnavnTekst,
+} from './tiltaksdeltakelseVisning';
 import { GirIkkeRettTag } from './GirIkkeRettTag';
 import { TiltakshistorikkForTiltak } from '../tiltakshistorikk/TiltakshistorikkForTiltak';
 import { TiltakshistorikkForBehandling } from '~/lib/rammebehandling/typer/Tiltakshistorikk';
@@ -17,8 +22,9 @@ import { Tidspunkt } from '~/types/DatoTid';
 import { useCtrlHoldesInne } from '~/utils/useCtrlHoldesInne';
 import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
-import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
-import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { SakId } from '~/lib/sak/SakTyper';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { useHentTiltaksdata } from './useHentTiltaksdata';
 
 import style from './BehandlingTiltakOpplysninger.module.css';
 
@@ -28,7 +34,14 @@ type Historikk = {
     oppslagstidspunkt: Tidspunkt;
 };
 
+/**
+ * Slår opp hele tiltaksnavnet til en deltakelse, gitt den eksterne id-en.
+ */
+type HentTiltaksnavn = (eksternDeltakelseId: string) => string;
+
 type Props = {
+    sakId: SakId;
+    behandlingId: RammebehandlingId;
     tiltaksdeltakelser: Tiltaksdeltakelse[];
     tiltaksdeltakelserSomFratarRett: TiltaksdeltakelseSomFratarRett[];
     vurderingsperiode: Nullable<Periode>;
@@ -36,20 +49,30 @@ type Props = {
 };
 
 export const BehandlingTiltakOpplysninger = ({
+    sakId,
+    behandlingId,
     tiltaksdeltakelser,
     tiltaksdeltakelserSomFratarRett,
     vurderingsperiode,
     historikk,
 }: Props) => {
+    const tiltaksdataOppslag = useHentTiltaksdata(sakId, behandlingId, historikk.oppslagstidspunkt);
+    const tiltaksnavn: HentTiltaksnavn = (eksternDeltakelseId) =>
+        tiltaksnavnTekst(tiltaksdataOppslag, eksternDeltakelseId);
+
     return (
         <VStack gap="space-16">
             <TiltakSomGirRett
                 tiltaksdeltakelser={tiltaksdeltakelser}
                 vurderingsperiode={vurderingsperiode}
                 historikk={historikk}
+                tiltaksnavn={tiltaksnavn}
             />
             {tiltaksdeltakelserSomFratarRett.length > 0 && (
-                <TiltakSomFratarRettListe tiltaksdeltakelser={tiltaksdeltakelserSomFratarRett} />
+                <TiltakSomFratarRettListe
+                    tiltaksdeltakelser={tiltaksdeltakelserSomFratarRett}
+                    tiltaksnavn={tiltaksnavn}
+                />
             )}
         </VStack>
     );
@@ -59,7 +82,10 @@ const TiltakSomGirRett = ({
     tiltaksdeltakelser,
     vurderingsperiode,
     historikk,
-}: Pick<Props, 'tiltaksdeltakelser' | 'vurderingsperiode' | 'historikk'>) => {
+    tiltaksnavn,
+}: Pick<Props, 'tiltaksdeltakelser' | 'vurderingsperiode' | 'historikk'> & {
+    tiltaksnavn: HentTiltaksnavn;
+}) => {
     if (tiltaksdeltakelser.length === 0) {
         return <BodyShort size={'small'}>{'Ingen relevante tiltaksdeltakelser'}</BodyShort>;
     }
@@ -72,13 +98,21 @@ const TiltakSomGirRett = ({
     return (
         <VStack gap={'space-8'}>
             {aktuelle.length > 0 ? (
-                <TiltakListe tiltaksdeltakelser={aktuelle} historikk={historikk} />
+                <TiltakListe
+                    tiltaksdeltakelser={aktuelle}
+                    historikk={historikk}
+                    tiltaksnavn={tiltaksnavn}
+                />
             ) : (
                 <BodyShort size={'small'}>{'Ingen aktuelle tiltaksdeltakelser'}</BodyShort>
             )}
             {historiske.length > 0 && (
                 <ReadMore size={'small'} header={`Tidligere tiltak (${historiske.length})`}>
-                    <TiltakListe tiltaksdeltakelser={historiske} historikk={historikk} />
+                    <TiltakListe
+                        tiltaksdeltakelser={historiske}
+                        historikk={historikk}
+                        tiltaksnavn={tiltaksnavn}
+                    />
                 </ReadMore>
             )}
         </VStack>
@@ -87,8 +121,10 @@ const TiltakSomGirRett = ({
 
 const TiltakSomFratarRettListe = ({
     tiltaksdeltakelser,
+    tiltaksnavn,
 }: {
     tiltaksdeltakelser: TiltaksdeltakelseSomFratarRett[];
+    tiltaksnavn: HentTiltaksnavn;
 }) => {
     const visIder = useCtrlHoldesInne();
 
@@ -98,7 +134,6 @@ const TiltakSomFratarRettListe = ({
                 const {
                     eksternDeltakelseId,
                     typeNavn,
-                    tittel,
                     periode,
                     deltakelseStatus,
                     deltakelseProsent,
@@ -118,7 +153,10 @@ const TiltakSomFratarRettListe = ({
                             <TiltakHeader typeNavn={typeNavn} />
                             <GirIkkeRettTag />
                             <div>
-                                <Tiltaksnavn tittel={tittel} />
+                                <BehandlingSaksopplysning
+                                    navn={'Tiltaksnavn'}
+                                    verdi={tiltaksnavn(eksternDeltakelseId)}
+                                />
                                 <BehandlingSaksopplysning
                                     navn={'Periode'}
                                     verdi={
@@ -155,9 +193,11 @@ const TiltakSomFratarRettListe = ({
 const TiltakListe = ({
     tiltaksdeltakelser,
     historikk,
+    tiltaksnavn,
 }: {
     tiltaksdeltakelser: Tiltaksdeltakelse[];
     historikk: Historikk;
+    tiltaksnavn: HentTiltaksnavn;
 }) => {
     const visIder = useCtrlHoldesInne();
 
@@ -170,7 +210,6 @@ const TiltakListe = ({
                     deltakelseStatus,
                     periode,
                     typeNavn,
-                    tittel,
                     kilde,
                     gjennomføringId,
                     gjennomforingsprosent,
@@ -200,7 +239,10 @@ const TiltakListe = ({
                                 {...historikk}
                             />
                             <div>
-                                <Tiltaksnavn tittel={tittel} />
+                                <BehandlingSaksopplysning
+                                    navn={'Tiltaksnavn'}
+                                    verdi={tiltaksnavn(eksternDeltagelseId)}
+                                />
                                 {erLukketPeriode(periode) && (
                                     <BehandlingSaksopplysning
                                         navn={'Periode'}
@@ -240,17 +282,6 @@ const TiltakHeader = ({ typeNavn }: { typeNavn: string }) => (
     <Heading size={'xsmall'} level={'4'}>
         {typeNavn}
     </Heading>
-);
-
-/**
- * Hele tiltaksnavnet, typisk "Tiltakstype hos Arrangør".
- * Vises som ukjent når deltakelsen ikke har noen tittel, f.eks. ved adressebeskyttelse.
- */
-const Tiltaksnavn = ({ tittel }: { tittel: SladdbarVerdi<Nullable<string>> }) => (
-    <BehandlingSaksopplysning
-        navn={'Tiltaksnavn'}
-        verdi={formaterSladdbarVerdi(tittel, (tekst) => tekst, 'Ukjent')}
-    />
 );
 
 /**
