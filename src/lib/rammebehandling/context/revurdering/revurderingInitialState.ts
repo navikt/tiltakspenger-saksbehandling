@@ -1,3 +1,4 @@
+import { tilInnvilgelsesperioderSkjema } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
 import {
     Omgjøring,
     OmgjøringResultat,
@@ -84,21 +85,19 @@ const innvilgelseInitialState = (
             resultat: RevurderingResultat.INNVILGELSE,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [
-                    {
-                        periode: {},
-                    },
-                ],
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
             },
         };
     }
+
+    const skjemaperioder = tilInnvilgelsesperioderSkjema(innvilgelsesperioder);
 
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
+            innvilgelsesperioder: skjemaperioder,
+            ...lagBarnetilleggSkjemaState(behandling, skjemaperioder),
         },
     };
 };
@@ -139,11 +138,7 @@ const omgjøringInnvilgelseInitialState = (behandling: Omgjøring): OmgjøringIn
             vedtaksperiode,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [
-                    {
-                        periode: {},
-                    },
-                ],
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
             },
         };
     }
@@ -156,22 +151,20 @@ const omgjøringInnvilgelseInitialState = (behandling: Omgjøring): OmgjøringIn
             vedtaksperiode,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [
-                    {
-                        periode: {},
-                    },
-                ],
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
             },
         };
     }
+
+    const skjemaperioder = tilInnvilgelsesperioderSkjema(innvilgelsesperioder);
 
     return {
         resultat: RevurderingResultat.OMGJØRING,
         vedtaksperiode,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
+            innvilgelsesperioder: skjemaperioder,
+            ...lagBarnetilleggSkjemaState(behandling, skjemaperioder),
         },
     };
 };

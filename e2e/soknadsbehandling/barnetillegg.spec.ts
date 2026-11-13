@@ -34,8 +34,11 @@ const velgInnvilgelseForFørsteKvartal = async (page: Page) => {
     ).toBeVisible({ timeout: SIDELAST_TIMEOUT });
 
     await page.getByRole('radio', { name: 'Innvilgelse' }).check();
-    await page.getByRole('textbox', { name: 'Fra og med' }).fill('01.01.2025');
-    await page.getByRole('textbox', { name: 'Til og med' }).fill('31.03.2025');
+
+    // Det eneste tiltaket er forhåndsvalgt med søknadsperioden
+    const tiltak = page.getByRole('group', { name: 'Arbeidsmarkedsopplæring' });
+    await expect(tiltak.getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2025');
+    await tiltak.getByRole('textbox', { name: 'Til og med' }).fill('31.03.2025');
 
     await expect(page.getByRole('heading', { name: 'Barnetillegg', exact: true })).toBeVisible();
 };
@@ -85,17 +88,31 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                     fritekstTilVedtaksbrev: 'Du får barnetillegg for ett barn.',
                     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: true },
                     prioritering: null,
-                    innvilgelsesperioder: [
-                        {
-                            periode: {
-                                fraOgMed: tilDato('2025-01-01'),
-                                tilOgMed: tilDato('2025-03-31'),
+                    innvilgelsesperioder: {
+                        tiltak: [
+                            {
+                                internDeltakelseId: 'deltakelse_1',
+                                erReversertOpphør: false,
+                                perioder: [
+                                    {
+                                        periode: {
+                                            fraOgMed: tilDato('2025-01-01'),
+                                            tilOgMed: tilDato('2025-03-31'),
+                                        },
+                                    },
+                                ],
                             },
-                            antallDagerPerMeldeperiode: 10,
-                            internDeltakelseId: 'deltakelse_1',
-                            erReversertOpphør: false,
-                        },
-                    ],
+                        ],
+                        antallDagerPerMeldeperiode: [
+                            {
+                                periode: {
+                                    fraOgMed: tilDato('2025-01-01'),
+                                    tilOgMed: tilDato('2025-03-31'),
+                                },
+                                antallDagerPerMeldeperiode: 10,
+                            },
+                        ],
+                    },
                     barnetillegg: {
                         begrunnelse: 'Bruker forsørger ett barn under 16 år.',
                         barn: [
@@ -203,7 +220,8 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
 
         // Barnet kan få flere perioder med opphold mellom
         await page.getByRole('textbox', { name: 'Til og med' }).nth(1).fill('10.03.2025');
-        await page.getByRole('button', { name: 'Legg til periode' }).click();
+        // Den første knappen hører til tiltaket
+        await page.getByRole('button', { name: 'Legg til periode' }).nth(1).click();
         await page.getByRole('textbox', { name: 'Fra og med' }).nth(2).fill('20.03.2025');
         await expect(
             page.getByText(

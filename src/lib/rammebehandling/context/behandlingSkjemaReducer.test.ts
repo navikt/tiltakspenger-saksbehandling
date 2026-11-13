@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import {
     innvilgelsesperiode,
+    innvilgelsesperioder,
     omgjøringIkkeValgt,
     periode,
     revurderingStans,
@@ -100,7 +101,9 @@ const revurderingInnvilgelseState: BehandlingSkjemaState = {
     resultat: RevurderingResultat.INNVILGELSE,
     innvilgelse: {
         harValgtPeriode: true,
-        innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+        innvilgelsesperioder: innvilgelsesperioder([
+            innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+        ]),
         harBarnetillegg: false,
         valgteBarn: [],
         manueltLagtTilBarn: [],
@@ -134,11 +137,10 @@ describe('behandlingSkjemaReducer for revurderinger', () => {
             ...revurderingInnvilgelseState,
             innvilgelse: {
                 ...revurderingInnvilgelseState.innvilgelse,
-                innvilgelsesperioder: [
-                    innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                        antallDagerPerMeldeperiode: 8,
-                    }),
-                ],
+                innvilgelsesperioder: innvilgelsesperioder(
+                    [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+                    8,
+                ),
             },
         });
     });

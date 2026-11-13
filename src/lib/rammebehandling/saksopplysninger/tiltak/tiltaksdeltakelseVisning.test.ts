@@ -28,17 +28,18 @@ const tiltak = (id: string, fraOgMed: Dato | null, tilOgMed: Dato | null): Tilta
 
 const vurderingsperiode = { fraOgMed: tilDato('2025-01-01'), tilOgMed: tilDato('2025-06-30') };
 
-test('sorterer nyeste tiltak øverst', () => {
+test('sorterer tiltakene stigende etter fra og med-dato, med tiltak uten fra og med-dato sist', () => {
     const { aktuelle } = delOppTiltaksdeltakelser(
         [
             tiltak('a', tilDato('2025-01-01'), tilDato('2025-03-31')),
             tiltak('c', tilDato('2025-05-01'), tilDato('2025-08-31')),
+            tiltak('uten-fom', null, tilDato('2025-06-30')),
             tiltak('b', tilDato('2025-03-01'), tilDato('2025-06-30')),
         ],
         vurderingsperiode,
     );
 
-    expect(aktuelle.map((t) => t.eksternDeltagelseId)).toEqual(['c', 'b', 'a']);
+    expect(aktuelle.map((t) => t.eksternDeltagelseId)).toEqual(['a', 'b', 'c', 'uten-fom']);
 });
 
 test('skiller ut tiltak som er avsluttet før vurderingsperioden som historikk', () => {

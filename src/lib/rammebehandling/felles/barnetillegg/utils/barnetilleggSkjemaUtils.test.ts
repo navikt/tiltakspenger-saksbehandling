@@ -9,6 +9,7 @@ import {
     barnetilleggKandidat,
     barnetilleggV2,
     innvilgelsesperiode,
+    innvilgelsesperioder as lagInnvilgelsesperioder,
     periode,
     revurderingInnvilgelse,
     søknad,
@@ -22,7 +23,7 @@ import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg'
 import { nonNullish } from '~/utils/object';
 
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
-const innvilgelsesperioder = [innvilgelsesperiode(førsteHalvår)];
+const innvilgelsesperioder = lagInnvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]);
 
 // Kandidatene backend gir for en revurdering der det tidligere er innvilget for to tiltaksdeltakelser
 const kandidatFraSøknad = barnetilleggKandidat('2015-03-01', {
@@ -81,9 +82,9 @@ describe('hentBarnFraSøknader', () => {
         const kandidat = barnetilleggKandidat('2015-03-01');
 
         expect(
-            hentBarnFraSøknader(revurderingInnvilgelse({ barnetilleggKandidater: [kandidat] }), [
-                innvilgelsesperiode(førsteHalvår, { internDeltakelseId: 'deltakelse_3' }),
-            ]),
+            hentBarnFraSøknader(revurderingInnvilgelse({ barnetilleggKandidater: [kandidat] }), {
+                tiltak: [innvilgelsesperiode(førsteHalvår, { internDeltakelseId: 'deltakelse_3' })],
+            }),
         ).toHaveLength(1);
     });
 });

@@ -1,3 +1,4 @@
+import { hentInnvilgedePerioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { BodyShort, InlineMessage } from '@navikt/ds-react';
 import { nonNullish } from '~/utils/object';
 import { forrigeDag, nesteDag, formaterPeriode } from '~/utils/date';
@@ -49,8 +50,9 @@ export const VedtaksperioderUtenInnvilgelseVarsel = ({ children }: PropsWithChil
         return children;
     }
 
-    const førsteInnvilgelsesperiode = innvilgelse.innvilgelsesperioder.atNonNull(0);
-    const sisteInnvilgelsesperiode = innvilgelse.innvilgelsesperioder.atNonNull(-1);
+    const innvilgedePerioder = hentInnvilgedePerioder(innvilgelse.innvilgelsesperioder);
+    const førsteInnvilgelsesperiode = innvilgedePerioder.atNonNull(0);
+    const sisteInnvilgelsesperiode = innvilgedePerioder.atNonNull(-1);
 
     return (
         <>

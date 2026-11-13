@@ -46,7 +46,9 @@ export const tellAntallDagerFraVedtak = (vedtak: Rammevedtak): NumberRange => {
         return TOMT_ANTALL;
     }
 
-    const antallDager = vedtak.innvilgelsesperioder.map((it) => it.antallDagerPerMeldeperiode);
+    const antallDager = vedtak.innvilgelsesperioder.antallDagerPerMeldeperiode.map(
+        (it) => it.antallDagerPerMeldeperiode,
+    );
 
     return antallDager.length > 0 ? minOgMax(antallDager) : TOMT_ANTALL;
 };

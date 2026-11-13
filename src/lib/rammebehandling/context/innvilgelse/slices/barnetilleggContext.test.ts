@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { innvilgelsesperiode, periode } from '~test/rammebehandling';
+import { innvilgelsesperiode, innvilgelsesperioder, periode } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { barnetilleggReducer } from '~/lib/rammebehandling/context/innvilgelse/slices/barnetilleggContext';
@@ -11,10 +11,10 @@ const state = (
     manueltLagtTilBarn: InnvilgelseMedPerioderState['manueltLagtTilBarn'] = [],
 ): InnvilgelseMedPerioderState => ({
     harValgtPeriode: true,
-    innvilgelsesperioder: [
+    innvilgelsesperioder: innvilgelsesperioder([
         innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
         innvilgelsesperiode(periode('2025-04-01', '2025-06-30')),
-    ],
+    ]),
     harBarnetillegg: valgteBarn.length > 0,
     valgteBarn,
     manueltLagtTilBarn,

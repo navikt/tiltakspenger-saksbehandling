@@ -4,6 +4,7 @@ import {
     barnetilleggKandidat,
     barnetilleggV2,
     innvilgelsesperiode,
+    innvilgelsesperioder,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
     omgjøringOpphør,
@@ -30,7 +31,7 @@ import { ikkeSladdet } from '~test/sladdetVerdi';
 
 const blankInnvilgelse = {
     harValgtPeriode: false,
-    innvilgelsesperioder: [{ periode: {} }],
+    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
 };
 
 const omgjørVedtak: OmgjørRammevedtak = {
@@ -75,10 +76,12 @@ describe('revurderingInitialState', () => {
         });
 
         test('henter lagrede innvilgelsesperioder og barnetillegg', () => {
-            const innvilgelsesperioder = [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))];
+            const lagrede = innvilgelsesperioder([
+                innvilgelsesperiode(periode('2025-04-01', '2025-05-31')),
+            ]);
 
             const behandling = revurderingInnvilgelse({
-                innvilgelsesperioder,
+                innvilgelsesperioder: lagrede,
                 barnetillegg: barnetilleggV2(
                     [barnetilleggBarn('2020-01-01')],
                     [periode('2025-04-01', '2025-05-31')],
@@ -89,7 +92,7 @@ describe('revurderingInitialState', () => {
                 resultat: RevurderingResultat.INNVILGELSE,
                 innvilgelse: {
                     harValgtPeriode: true,
-                    innvilgelsesperioder,
+                    innvilgelsesperioder: lagrede,
                     harBarnetillegg: true,
                     valgteBarn: [skjemaBarn('2020-01-01')],
                     manueltLagtTilBarn: [],
@@ -99,7 +102,9 @@ describe('revurderingInitialState', () => {
 
         test('forhåndsvelger barna fra gjeldende vedtak når behandlingen mangler barnetillegg', () => {
             const behandling = revurderingInnvilgelse({
-                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
+                innvilgelsesperioder: innvilgelsesperioder([
+                    innvilgelsesperiode(periode('2025-04-01', '2025-05-31')),
+                ]),
                 barnetilleggKandidater: [
                     barnetilleggKandidat('2015-03-01', { internDeltakelseIder: ['deltakelse_1'] }),
                     barnetilleggKandidat('2020-01-01', {
@@ -125,7 +130,9 @@ describe('revurderingInitialState', () => {
 
         test('forhåndsvelger barna fra søknadene for tiltaksdeltakelsen når gjeldende vedtak er uten barn', () => {
             const behandling = revurderingInnvilgelse({
-                innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
+                innvilgelsesperioder: innvilgelsesperioder([
+                    innvilgelsesperiode(periode('2025-04-01', '2025-05-31')),
+                ]),
                 barnetilleggKandidater: [
                     barnetilleggKandidat('2015-03-01', { internDeltakelseIder: ['deltakelse_1'] }),
                     barnetilleggKandidat('2018-01-01', { internDeltakelseIder: ['deltakelse_2'] }),
@@ -162,11 +169,13 @@ describe('revurderingInitialState', () => {
 describe('omgjøringInitialState', () => {
     describe('innvilgelse', () => {
         test('henter lagret vedtaksperiode, innvilgelsesperioder og barnetillegg', () => {
-            const innvilgelsesperioder = [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))];
+            const lagrede = innvilgelsesperioder([
+                innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+            ]);
 
             const behandling = omgjøringInnvilgelse({
                 vedtaksperiode: periode('2025-01-01', '2025-03-31'),
-                innvilgelsesperioder,
+                innvilgelsesperioder: lagrede,
                 barnetillegg: barnetilleggV2(
                     [
                         barnetilleggBarn('2020-01-01', {
@@ -182,7 +191,7 @@ describe('omgjøringInitialState', () => {
                 vedtaksperiode: periode('2025-01-01', '2025-03-31'),
                 innvilgelse: {
                     harValgtPeriode: true,
-                    innvilgelsesperioder,
+                    innvilgelsesperioder: lagrede,
                     harBarnetillegg: true,
                     valgteBarn: [
                         skjemaBarn('2020-01-01', {

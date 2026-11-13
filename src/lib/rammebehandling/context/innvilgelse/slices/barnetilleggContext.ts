@@ -1,3 +1,4 @@
+import { hentInnvilgedePerioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Periode } from '~/types/Periode';
@@ -180,8 +181,13 @@ const oppdaterPerioderUtenOverlapp = (
 const standardPeriode = (
     state: InnvilgelseMedPerioderState,
     barn: BarnetilleggBarnSkjema,
-): Periode =>
-    gyldigPeriodeForBarn(
-        barn,
-        state.innvilgelsesperioder.map((it) => it.periode),
-    ) ?? periodiseringTotalPeriode(state.innvilgelsesperioder);
+): Periode => {
+    const innvilgedePerioder = hentInnvilgedePerioder(state.innvilgelsesperioder);
+
+    return (
+        gyldigPeriodeForBarn(
+            barn,
+            innvilgedePerioder.map((it) => it.periode),
+        ) ?? periodiseringTotalPeriode(innvilgedePerioder)
+    );
+};

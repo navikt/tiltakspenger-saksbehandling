@@ -6,6 +6,7 @@ import {
 } from '~/lib/_felles/tidslinjer/tidslinjerUtils';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import {
+    antallDager,
     barnetilleggPeriode,
     innvilgelsesperiode,
     periode,
@@ -54,14 +55,13 @@ describe('tellAntallBarnFraVedtak', () => {
 describe('tellAntallDagerFraVedtak', () => {
     test('gir spennet i antall dager per meldeperiode over innvilgelsesperiodene', () => {
         const vedtak = rammevedtak('vedtak_1', vedtaksperiode, {
-            innvilgelsesperioder: [
-                innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                    antallDagerPerMeldeperiode: 6,
-                }),
-                innvilgelsesperiode(periode('2025-04-01', '2025-06-30'), {
-                    antallDagerPerMeldeperiode: 10,
-                }),
-            ],
+            innvilgelsesperioder: {
+                tiltak: [innvilgelsesperiode(vedtaksperiode)],
+                antallDagerPerMeldeperiode: [
+                    antallDager(periode('2025-01-01', '2025-03-31'), 6),
+                    antallDager(periode('2025-04-01', '2025-06-30'), 10),
+                ],
+            },
         });
 
         expect(tellAntallDagerFraVedtak(vedtak)).toEqual({ min: 6, max: 10 });
@@ -75,7 +75,9 @@ describe('tellAntallDagerFraVedtak', () => {
         ).toEqual({ min: 0, max: 0 });
         expect(
             tellAntallDagerFraVedtak(
-                rammevedtak('vedtak_1', vedtaksperiode, { innvilgelsesperioder: [] }),
+                rammevedtak('vedtak_1', vedtaksperiode, {
+                    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
+                }),
             ),
         ).toEqual({ min: 0, max: 0 });
     });

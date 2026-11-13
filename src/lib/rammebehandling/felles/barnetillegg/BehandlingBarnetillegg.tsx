@@ -1,3 +1,4 @@
+import { hentInnvilgedePerioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BodyLong, Heading, HStack, List, Radio, RadioGroup, VStack } from '@navikt/ds-react';
@@ -41,7 +42,9 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
     const { harBarnetillegg, innvilgelsesperioder, valgteBarn } = innvilgelse;
 
-    const innvilgelseTotalPeriode = periodiseringTotalPeriode(innvilgelsesperioder);
+    const innvilgelseTotalPeriode = periodiseringTotalPeriode(
+        hentInnvilgedePerioder(innvilgelsesperioder),
+    );
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -49,7 +52,7 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
     const erLagretSomV1 = lagretBarnetillegg?.versjon === BarnetilleggVersjon.V1;
     const visesSomV1 = hentLagretV1SomIkkeKanEndres(behandling, erReadonly) !== null;
 
-    const innvilgetePerioder = innvilgelsesperioder.map((it) => it.periode);
+    const innvilgetePerioder = hentInnvilgedePerioder(innvilgelsesperioder).map((it) => it.periode);
 
     // Når behandlingen ikke kan endres vises de lagrede periodene, som også teller med barn med sladdede opplysninger
     const barnetilleggEtter = barnetilleggForInnvilgelsesperiodene(

@@ -1,10 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import {
-    innvilgelsesperiode,
-    omgjøringInnvilgelse,
-    periode,
-    søknadsbehandlingInnvilgelse,
-} from '~test/rammebehandling';
+import { omgjøringInnvilgelse, periode, søknadsbehandlingInnvilgelse } from '~test/rammebehandling';
 import {
     erInnenforPeriodeForReversertOpphør,
     hentPerioderForReversertOpphør,
@@ -31,24 +26,26 @@ describe('reversert opphør', () => {
     });
 
     test('perioden må være innenfor en periode for reversert opphør for samme tiltaksdeltakelse', () => {
-        const innenfor = innvilgelsesperiode(periode('2025-03-10', '2025-03-20'), {
-            erReversertOpphør: true,
-        });
-
         expect(
-            erInnenforPeriodeForReversertOpphør(omgjøringMedReversertOpphørIMars, innenfor),
+            erInnenforPeriodeForReversertOpphør(
+                omgjøringMedReversertOpphørIMars,
+                'deltakelse_1',
+                periode('2025-03-10', '2025-03-20'),
+            ),
         ).toBe(true);
         expect(
-            erInnenforPeriodeForReversertOpphør(omgjøringMedReversertOpphørIMars, {
-                ...innenfor,
-                periode: periode('2025-02-20', '2025-03-20'),
-            }),
+            erInnenforPeriodeForReversertOpphør(
+                omgjøringMedReversertOpphørIMars,
+                'deltakelse_1',
+                periode('2025-02-20', '2025-03-20'),
+            ),
         ).toBe(false);
         expect(
-            erInnenforPeriodeForReversertOpphør(omgjøringMedReversertOpphørIMars, {
-                ...innenfor,
-                internDeltakelseId: 'deltakelse_2',
-            }),
+            erInnenforPeriodeForReversertOpphør(
+                omgjøringMedReversertOpphørIMars,
+                'deltakelse_2',
+                periode('2025-03-10', '2025-03-20'),
+            ),
         ).toBe(false);
     });
 

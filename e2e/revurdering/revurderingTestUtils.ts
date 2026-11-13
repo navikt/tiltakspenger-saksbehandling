@@ -4,6 +4,8 @@ import {
     omgjøringInnvilgelse,
     omgjøringOpphør,
     innvilgelsesperiode,
+    innvilgelsesperioder,
+    innvilgedePerioderFraDTO,
     periode,
     revurderingInnvilgelse,
     revurderingStans,
@@ -81,7 +83,7 @@ export const lagSak = (revurdering: Revurdering | null): SakProps => {
             iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             søknad: søknadMedSvar(),
             vedtaksperiode: VEDTAKSPERIODE,
-            innvilgelsesperioder: [innvilgelsesperiode(VEDTAKSPERIODE)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(VEDTAKSPERIODE)]),
         }),
         vedtak: {
             gyldigeKommandoer: {
@@ -192,9 +194,9 @@ const lagreRevurdering = (
                 innvilgelsesperioder: body.innvilgelsesperioder,
                 barnetillegg: barnetilleggFraOppdaterDTO(
                     body.barnetillegg,
-                    body.innvilgelsesperioder.map((p) => p.periode),
+                    innvilgedePerioderFraDTO(body.innvilgelsesperioder),
                 ),
-                vedtaksperiode: totalPeriode(body.innvilgelsesperioder.map((p) => p.periode)),
+                vedtaksperiode: totalPeriode(innvilgedePerioderFraDTO(body.innvilgelsesperioder)),
             });
         case RevurderingResultat.OMGJØRING:
             return omgjøringInnvilgelse({
@@ -205,7 +207,7 @@ const lagreRevurdering = (
                 innvilgelsesperioder: body.innvilgelsesperioder,
                 barnetillegg: barnetilleggFraOppdaterDTO(
                     body.barnetillegg,
-                    body.innvilgelsesperioder.map((p) => p.periode),
+                    innvilgedePerioderFraDTO(body.innvilgelsesperioder),
                 ),
             });
         case RevurderingResultat.OMGJØRING_OPPHØR:

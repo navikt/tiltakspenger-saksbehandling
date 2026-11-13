@@ -1,5 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
-import { innvilgelsesperiode, periode, søknadsbehandlingAvslag } from '~test/rammebehandling';
+import {
+    innvilgelsesperiode,
+    innvilgelsesperioder,
+    periode,
+    søknadsbehandlingAvslag,
+} from '~test/rammebehandling';
 import {
     SøknadsbehandlingActions,
     SøknadsbehandlingAvslagState,
@@ -26,14 +31,19 @@ const avslagState: SøknadsbehandlingAvslagState = {
 
 const innvilgelseUtenPerioderState: SøknadsbehandlingInnvilgelseState = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
-    innvilgelse: { harValgtPeriode: false, innvilgelsesperioder: [{ periode: {} }] },
+    innvilgelse: {
+        harValgtPeriode: false,
+        innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
+    },
 };
 
 const innvilgelseState: SøknadsbehandlingInnvilgelseState = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     innvilgelse: {
         harValgtPeriode: true,
-        innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+        innvilgelsesperioder: innvilgelsesperioder([
+            innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+        ]),
         harBarnetillegg: false,
         valgteBarn: [],
         manueltLagtTilBarn: [],
@@ -98,7 +108,11 @@ describe('søknadsbehandlingReducer', () => {
             const nyState = søknadsbehandlingReducer(innvilgelseState, action);
 
             expect(nyState).toMatchObject({
-                innvilgelse: { innvilgelsesperioder: [{ antallDagerPerMeldeperiode: 8 }] },
+                innvilgelse: {
+                    innvilgelsesperioder: {
+                        antallDagerPerMeldeperiode: [{ antallDagerPerMeldeperiode: 8 }],
+                    },
+                },
             });
         });
 

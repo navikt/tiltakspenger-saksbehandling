@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { innvilgelsesperiode, omgjøringInnvilgelse, periode } from '~test/rammebehandling';
+import { omgjøringInnvilgelse, periode } from '~test/rammebehandling';
 import { finnUgyldigTiltaksdeltakelse } from '~/lib/rammebehandling/felles/innvilgelsesperiode/ugyldigTiltaksdeltakelse';
 import { UgyldigTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
@@ -11,12 +11,16 @@ const ugyldig: UgyldigTiltaksdeltakelse = {
 };
 
 const behandling = omgjøringInnvilgelse({
-    innvilgelsesperioder: [
-        {
-            ...innvilgelsesperiode(mars, { erReversertOpphør: false }),
-            ugyldigTiltaksdeltakelse: ugyldig,
-        },
-    ],
+    innvilgelsesperioder: {
+        tiltak: [
+            {
+                internDeltakelseId: 'deltakelse_1',
+                erReversertOpphør: false,
+                perioder: [{ periode: mars, ugyldigTiltaksdeltakelse: ugyldig }],
+            },
+        ],
+        antallDagerPerMeldeperiode: [{ periode: mars, antallDagerPerMeldeperiode: 10 }],
+    },
 });
 
 describe('finnUgyldigTiltaksdeltakelse', () => {
@@ -24,16 +28,28 @@ describe('finnUgyldigTiltaksdeltakelse', () => {
         expect(
             finnUgyldigTiltaksdeltakelse(
                 behandling,
-                innvilgelsesperiode(mars, { erReversertOpphør: false }),
+                { internDeltakelseId: 'deltakelse_1', erReversertOpphør: false },
+                mars,
             ),
         ).toEqual(ugyldig);
+    });
+
+    test('gir ingen feil når perioden er endret', () => {
+        expect(
+            finnUgyldigTiltaksdeltakelse(
+                behandling,
+                { internDeltakelseId: 'deltakelse_1', erReversertOpphør: false },
+                periode('2025-03-01', '2025-03-15'),
+            ),
+        ).toBeNull();
     });
 
     test('gir ingen feil når bare valget av reversert opphør er endret', () => {
         expect(
             finnUgyldigTiltaksdeltakelse(
                 behandling,
-                innvilgelsesperiode(mars, { erReversertOpphør: true }),
+                { internDeltakelseId: 'deltakelse_1', erReversertOpphør: true },
+                mars,
             ),
         ).toBeNull();
     });

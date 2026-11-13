@@ -18,6 +18,7 @@ import {
     behandlingssideUrl,
     lagSøknad,
     lagSøknadsbehandlingBackend,
+    medJobbklubb,
     saksbehandlersKommandoer,
 } from './soknadsbehandlingTestUtils';
 
@@ -86,33 +87,56 @@ test.describe('Søknadsbehandling - validering', () => {
         });
     });
 
-    test('lagrer ikke en innvilgelse uten fullstendig innvilgelsesperiode', async ({
-        page,
-        msw,
-    }) => {
-        const backend = lagBackend();
+    test('lagrer ikke en innvilgelse uten valgt tiltak', async ({ page, msw }) => {
+        // Med flere tiltak er ingen valgt på forhånd
+        const backend = lagSøknadsbehandlingBackend(
+            medJobbklubb(
+                søknadsbehandlingIkkeValgt({
+                    søknad: lagSøknad(),
+                    gyldigeKommandoer: saksbehandlersKommandoer,
+                }),
+            ),
+            BESLUTTER_IDENT,
+        );
         msw.use(...fellesHandlere(), ...backend.handlere);
 
         await åpneBehandlingen(page);
 
         await page.getByRole('radio', { name: 'Innvilgelse' }).check();
-        await page.getByRole('textbox', { name: 'Fra og med' }).fill('01.02.2025');
-        await expect(page.getByText('Velg dato')).toBeVisible();
+        await expect(
+            page.getByRole('checkbox', { name: 'Arbeidsmarkedsopplæring' }),
+        ).not.toBeChecked();
+        await expect(page.getByRole('checkbox', { name: 'Jobbklubb' })).not.toBeChecked();
+        await expect(page.getByRole('textbox', { name: 'Fra og med' })).toHaveCount(0);
 
         await page.getByRole('button', { name: 'Lagre' }).click();
 
-        await forventFeil(page, 'Minst en fullstendig innvilgelsesperiode må være valgt');
+        await forventFeil(page, 'Minst ett tiltak med en innvilgelsesperiode må være valgt');
         await expect(page.getByRole('button', { name: 'Send til beslutter' })).toBeDisabled();
 
-        // Når perioden er fullstendig lagres den, og det er det eneste lagre-kallet backend har fått
-        await page.getByRole('textbox', { name: 'Til og med' }).first().fill('30.04.2025');
+        // Når et tiltak er valgt lagres det, og det er det eneste lagre-kallet backend har fått
+        await page.getByRole('checkbox', { name: 'Jobbklubb' }).check();
         await page.getByRole('button', { name: 'Lagre' }).click();
 
         await expect(page.getByRole('heading', { name: 'Feil i behandlingen' })).toHaveCount(0);
         await expect.poll(() => backend.kall.oppdater).toHaveLength(1);
         expect(backend.kall.oppdater[0]).toMatchObject({
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
-            innvilgelsesperioder: [{ periode: { fraOgMed: '2025-02-01', tilOgMed: '2025-04-30' } }],
+            innvilgelsesperioder: {
+                tiltak: [
+                    {
+                        internDeltakelseId: 'deltakelse_2',
+                        perioder: [{ periode: { fraOgMed: '2025-03-01', tilOgMed: '2025-06-30' } }],
+                    },
+                ],
+                // Forhåndsutfylt fra antall dager per uke i deltakelsen
+                antallDagerPerMeldeperiode: [
+                    {
+                        periode: { fraOgMed: '2025-03-01', tilOgMed: '2025-06-30' },
+                        antallDagerPerMeldeperiode: 4,
+                    },
+                ],
+            },
         });
     });
 

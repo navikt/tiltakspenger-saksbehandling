@@ -1,3 +1,4 @@
+import { hentInnvilgedePerioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
 import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
@@ -58,7 +59,7 @@ export const revurderingOmgjøringValidering = (
 
         if (skjema.innvilgelse.harValgtPeriode) {
             const innvilgelsesperiodeTotal = periodiseringTotalPeriode(
-                skjema.innvilgelse.innvilgelsesperioder,
+                hentInnvilgedePerioder(skjema.innvilgelse.innvilgelsesperioder),
             );
 
             const gjeldendePeriodeTotal = totalPeriode(

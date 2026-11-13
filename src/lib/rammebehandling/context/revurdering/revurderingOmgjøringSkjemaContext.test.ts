@@ -1,5 +1,11 @@
 import { describe, expect, test } from '@jest/globals';
-import { innvilgelsesperiode, omgjøringOpphør, periode, sak } from '~test/rammebehandling';
+import {
+    innvilgelsesperiode,
+    innvilgelsesperioder,
+    omgjøringOpphør,
+    periode,
+    sak,
+} from '~test/rammebehandling';
 import {
     OmgjøringActions,
     OmgjøringIkkeValgtState,
@@ -26,7 +32,10 @@ const opphørState: OmgjøringOpphørState = {
 const innvilgelseUtenPerioderState: OmgjøringInnvilgelseState = {
     resultat: RevurderingResultat.OMGJØRING,
     vedtaksperiode: {},
-    innvilgelse: { harValgtPeriode: false, innvilgelsesperioder: [{ periode: {} }] },
+    innvilgelse: {
+        harValgtPeriode: false,
+        innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
+    },
 };
 
 const innvilgelseState: OmgjøringInnvilgelseState = {
@@ -34,7 +43,9 @@ const innvilgelseState: OmgjøringInnvilgelseState = {
     vedtaksperiode: periode('2025-01-01', '2025-03-31'),
     innvilgelse: {
         harValgtPeriode: true,
-        innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+        innvilgelsesperioder: innvilgelsesperioder([
+            innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+        ]),
         harBarnetillegg: false,
         valgteBarn: [],
         manueltLagtTilBarn: [],
@@ -141,13 +152,17 @@ describe('omgjøringReducer', () => {
     describe('innvilgelse-actions', () => {
         const action: OmgjøringActions = {
             superType,
-            type: 'settTiltaksdeltakelse',
-            payload: { internDeltakelseId: 'deltakelse_2', erReversertOpphør: false, index: 0 },
+            type: 'settAntallDager',
+            payload: { antallDager: 8, index: 0 },
         };
 
         test('oppdaterer innvilgelsen', () => {
             expect(omgjøringReducer(innvilgelseState, action)).toMatchObject({
-                innvilgelse: { innvilgelsesperioder: [{ internDeltakelseId: 'deltakelse_2' }] },
+                innvilgelse: {
+                    innvilgelsesperioder: {
+                        antallDagerPerMeldeperiode: [{ antallDagerPerMeldeperiode: 8 }],
+                    },
+                },
             });
         });
 

@@ -7,8 +7,8 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { Omgjøringsgrad, VedtakId } from './Rammevedtak';
 import {
-    Innvilgelsesperiode,
-    LagretInnvilgelsesperiode,
+    Innvilgelsesperioder,
+    LagredeInnvilgelsesperioder,
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import { Dato } from '~/types/DatoTid';
@@ -60,7 +60,7 @@ export type RevurderingStans = RevurderingBase & {
 
 export type RevurderingInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.INNVILGELSE;
-    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagredeInnvilgelsesperioder>;
     barnetillegg: Nullable<Barnetillegg>;
 };
 
@@ -76,14 +76,14 @@ export type RevurderingForlengelse = RevurderingBase & {
     kanIkkeUtledeBarnetillegg: boolean;
     // Intern-id til tiltaksdeltakelsene vedtaket kan forlenges for. Deltakelsen fra slutten av vedtaket kommer først.
     tiltaksdeltakelserSomKanForlenges: string[];
-    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagredeInnvilgelsesperioder>;
     barnetillegg: Nullable<Barnetillegg>;
 };
 
 export type OmgjøringInnvilgelse = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING;
     vedtaksperiode: Periode;
-    innvilgelsesperioder: Nullable<LagretInnvilgelsesperiode[]>;
+    innvilgelsesperioder: Nullable<LagredeInnvilgelsesperioder>;
     barnetillegg: Nullable<Barnetillegg>;
     omgjørRammevedtak: OmgjørRammevedtak[];
     skalSendeVedtaksbrev: boolean;
@@ -157,7 +157,7 @@ export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
 
 export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.INNVILGELSE;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: Innvilgelsesperioder;
     barnetillegg: OppdaterBarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };
@@ -173,7 +173,7 @@ export type OppdaterRevurderingForlengelseDTO = OppdaterBehandlingBaseDTO & {
 
 export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: Innvilgelsesperioder;
     barnetillegg: OppdaterBarnetilleggDTO;
     vedtaksperiode: Periode;
     skalSendeVedtaksbrev: boolean;

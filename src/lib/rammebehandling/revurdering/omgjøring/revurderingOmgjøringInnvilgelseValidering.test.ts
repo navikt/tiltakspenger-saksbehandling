@@ -5,11 +5,12 @@ import {
     OmgjøringInnvilgelseState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { InnvilgelseForTiltak } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import {
     barnetilleggKandidat,
     innvilgelsesperiode,
+    innvilgelsesperioder,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
     periode,
@@ -40,7 +41,7 @@ const skjemaBase = {
 
 const innvilgelseSkjema = (
     vedtaksperiode: Partial<Periode>,
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    tiltak: InnvilgelseForTiltak[],
     innvilgelse: Partial<OmgjøringInnvilgelseState['innvilgelse']> = {},
 ): OmgjøringContext => ({
     ...skjemaBase,
@@ -48,7 +49,7 @@ const innvilgelseSkjema = (
     vedtaksperiode,
     innvilgelse: {
         harValgtPeriode: true,
-        innvilgelsesperioder,
+        innvilgelsesperioder: innvilgelsesperioder(tiltak),
         harBarnetillegg: false,
         valgteBarn: [],
         manueltLagtTilBarn: [],
@@ -195,20 +196,23 @@ describe('revurderingOmgjøringValidering - innvilgelse', () => {
         });
     });
 
-    test('krever valgt innvilgelsesperiode, uten å sjekke vedtaksperiodens grenser', () => {
+    test('krever valgt tiltak med innvilgelsesperiode, uten å sjekke vedtaksperiodens grenser', () => {
         const resultat = revurderingOmgjøringValidering(
             omgjøringInnvilgelse(),
             {
                 ...skjemaBase,
                 resultat: RevurderingResultat.OMGJØRING,
                 vedtaksperiode: førsteHalvår,
-                innvilgelse: { harValgtPeriode: false, innvilgelsesperioder: [{ periode: {} }] },
+                innvilgelse: {
+                    harValgtPeriode: false,
+                    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
+                },
             },
             sakMedInnvilgetVedtak(februarTilJuni),
         );
 
         expect(resultat).toEqual({
-            errors: ['Minst en fullstendig innvilgelsesperiode må være valgt'],
+            errors: ['Minst ett tiltak med en innvilgelsesperiode må være valgt'],
             warnings: [],
         });
     });

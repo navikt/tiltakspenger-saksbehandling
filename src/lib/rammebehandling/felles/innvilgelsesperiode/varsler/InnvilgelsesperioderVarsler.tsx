@@ -1,17 +1,13 @@
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { Innvilgelsesperioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { VStack } from '@navikt/ds-react';
 import { removeDuplicatesFilter } from '~/utils/array';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { kanInnvilgeForFlereTiltak } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 type Props = {
-    innvilgelsesperioder: Innvilgelsesperiode[];
-    behandling: Rammebehandling;
+    innvilgelsesperioder: Innvilgelsesperioder;
 };
 
-export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder, behandling }: Props) => {
-    const antallDagerPerMeldeperiode = innvilgelsesperioder
+export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder }: Props) => {
+    const antallDagerPerMeldeperiode = innvilgelsesperioder.antallDagerPerMeldeperiode
         .map((it) => it.antallDagerPerMeldeperiode)
         .filter(removeDuplicatesFilter());
 
@@ -20,28 +16,14 @@ export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder, behandling }
         antallDagerPerMeldeperiode[0] > 10 ||
         erOddetall(antallDagerPerMeldeperiode[0]);
 
-    const harFlereTiltak = kanInnvilgeForFlereTiltak(behandling);
-
-    if (!antallDagerSettesIkkeAutomatiskIBrev && !harFlereTiltak) {
+    if (!antallDagerSettesIkkeAutomatiskIBrev) {
         return null;
     }
 
     return (
-        <VStack gap={'space-4'}>
-            {antallDagerSettesIkkeAutomatiskIBrev && (
-                <Infokort variant={'info'} size={'small'}>
-                    {
-                        'Husk å oppgi antall dager per uke det innvilges tiltakspenger for i vedtaksbrevet.'
-                    }
-                </Infokort>
-            )}
-            {harFlereTiltak && (
-                <Infokort variant={'info'} size={'small'}>
-                    {`Flere tiltak registrert på bruker. Det du velger brukes
-                     for regnskapsføring og statistikk, og påvirker ikke vedtaket.`}
-                </Infokort>
-            )}
-        </VStack>
+        <Infokort variant={'info'} size={'small'}>
+            {'Husk å oppgi antall dager per uke det innvilges tiltakspenger for i vedtaksbrevet.'}
+        </Infokort>
     );
 };
 

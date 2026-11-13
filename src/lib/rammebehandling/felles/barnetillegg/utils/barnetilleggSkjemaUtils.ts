@@ -8,7 +8,10 @@ import {
     OppdaterBarnetilleggDTO,
 } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    hentInnvilgedePerioder,
+    Innvilgelsesperioder,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     erAvsluttet,
@@ -54,6 +57,8 @@ type AktuellKandidat = Pick<
     barn: BarnetilleggBarnSkjema;
 };
 
+type TiltakIInnvilgelsen = Pick<Innvilgelsesperioder, 'tiltak'>;
+
 const finnesIkkeFraFør = removeDuplicatesFilter<{ barn: BarnetilleggBarnSkjema }>((a, b) =>
     erSammeBarn(a.barn, b.barn),
 );
@@ -64,9 +69,11 @@ const finnesIkkeFraFør = removeDuplicatesFilter<{ barn: BarnetilleggBarnSkjema 
  */
 const hentAktuelleKandidater = (
     behandling: Rammebehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    innvilgelsesperioder: TiltakIInnvilgelsen,
 ): AktuellKandidat[] => {
-    const internDeltakelseIder = new Set(innvilgelsesperioder.map((it) => it.internDeltakelseId));
+    const internDeltakelseIder = new Set(
+        innvilgelsesperioder.tiltak.map((it) => it.internDeltakelseId),
+    );
 
     return behandling.barnetilleggKandidater
         .filter(
@@ -84,7 +91,7 @@ const hentAktuelleKandidater = (
 /** Barna fra søknaden(e) som er aktuelle for tiltaksdeltakelsene det innvilges for. */
 export const hentBarnFraSøknader = (
     behandling: Rammebehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    innvilgelsesperioder: TiltakIInnvilgelsen,
 ): BarnFraSøknad[] =>
     hentAktuelleKandidater(behandling, innvilgelsesperioder).flatMap(
         ({ barn, søknadsopplysninger }) =>
@@ -194,10 +201,10 @@ const eldsteFørst = (
     return fødselsdatoA.localeCompare(fødselsdatoB);
 };
 
-const harRett = (barn: BarnetilleggBarnSkjema, innvilgelsesperioder: Innvilgelsesperiode[]) =>
+const harRett = (barn: BarnetilleggBarnSkjema, innvilgelsesperioder: TiltakIInnvilgelsen) =>
     harRettIInnvilgelsesperiodene(
         barn,
-        innvilgelsesperioder.map((it) => it.periode),
+        hentInnvilgedePerioder(innvilgelsesperioder).map((it) => it.periode),
     );
 
 /**
@@ -207,7 +214,7 @@ const harRett = (barn: BarnetilleggBarnSkjema, innvilgelsesperioder: Innvilgelse
  */
 export const hentForhåndsvalgteBarn = (
     behandling: Rammebehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    innvilgelsesperioder: TiltakIInnvilgelsen,
 ): BarnetilleggBarnSkjema[] => {
     const kandidaterMedRett = hentAktuelleKandidater(behandling, innvilgelsesperioder).filter(
         (it) => harRett(it.barn, innvilgelsesperioder),
@@ -232,7 +239,7 @@ export const hentForhåndsvalgteBarn = (
  */
 export const lagBarnetilleggSkjemaState = (
     behandling: Rammebehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    innvilgelsesperioder: TiltakIInnvilgelsen,
 ): BarnetilleggSkjemaState => {
     const lagret = hentLagretBarnetillegg(behandling);
 
@@ -275,13 +282,15 @@ export const lagBarnetilleggSkjemaState = (
  */
 export const tilpassBarnTilInnvilgelsesperiodene = (
     barn: BarnetilleggBarnSkjema[],
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    innvilgelsesperioder: TiltakIInnvilgelsen,
 ): BarnetilleggBarnSkjema[] => {
-    if (innvilgelsesperioder.length === 0) {
+    const innvilgedePerioder = hentInnvilgedePerioder(innvilgelsesperioder);
+
+    if (innvilgedePerioder.length === 0) {
         return barn;
     }
 
-    const total = totalPeriode(innvilgelsesperioder.map((it) => it.periode));
+    const total = totalPeriode(innvilgedePerioder.map((it) => it.periode));
 
     return barn.map((it) => {
         if (!it.perioder) {

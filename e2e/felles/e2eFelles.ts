@@ -66,4 +66,6 @@ export const fellesHandlere = (
 export const SIDELAST_TIMEOUT = 60_000;
 
 export const forventOverskrift = async (page: Page, navn: string) =>
-    expect(page.getByRole('heading', { name: navn })).toBeVisible({ timeout: SIDELAST_TIMEOUT });
+    expect(page.getByRole('heading', { name: navn, exact: true })).toBeVisible({
+        timeout: SIDELAST_TIMEOUT,
+    });
