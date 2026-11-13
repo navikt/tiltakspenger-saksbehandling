@@ -286,6 +286,9 @@ Slik legger du ett til en sak lokalt:
 14. Gå til **Opprett/oppdater tiltaksdeltakelse** på `/dev` (eller `/dev/deltakelse`).
 15. Fyll inn **Sak-ID**, velg et lønnstilskudd under **Tiltakstype** og sett datoer som
     overlapper behandlingen. La ekstern ID være tom, så genereres den.
+    Fyll eventuelt inn **Tittel** (f.eks. «Midlertidig lønnstilskudd hos Arbeidsgiver AS»)
+    for å få hele tiltaksnavnet i saksopplysningene. Tittelen kan også settes på deltakelser
+    som gir rett.
 16. Oppdater saksopplysningene i behandlingen. Lønnstilskuddet vises med merket «Gir ikke
     rett til tiltakspenger».
 
@@ -293,7 +296,7 @@ Det samme med curl:
 
 ```bash
 curl -sf -X POST "$B/dev/tiltaksdeltakelse" -H "$T1" -H "$CT" \
-  -d '{"sakId":"'"$SAK_ID"'","tiltakskode":"MIDLONTIL","fraOgMed":"2025-04-01","tilOgMed":"2025-04-10"}'
+  -d '{"sakId":"'"$SAK_ID"'","tiltakskode":"MIDLONTIL","tittel":"Midlertidig lønnstilskudd hos Arbeidsgiver AS","fraOgMed":"2025-04-01","tilOgMed":"2025-04-10"}'
 ```
 
 ---

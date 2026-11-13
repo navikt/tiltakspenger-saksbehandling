@@ -217,6 +217,7 @@ export const tiltaksdeltakelse = (
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
+    tittel: ikkeSladdet('Arbeidsmarkedsopplæring hos Arrangør AS'),
     periode: p,
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,

@@ -15,6 +15,8 @@ import { TiltakshistorikkForTiltak } from '../tiltakshistorikk/TiltakshistorikkF
 import { TiltakshistorikkForBehandling } from '~/lib/rammebehandling/typer/Tiltakshistorikk';
 import { Tidspunkt } from '~/types/DatoTid';
 import { useCtrlHoldesInne } from '~/utils/useCtrlHoldesInne';
+import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
 
 type Historikk = {
     tiltakshistorikk: TiltakshistorikkForBehandling;
@@ -92,6 +94,7 @@ const TiltakSomFratarRettListe = ({
                 const {
                     eksternDeltakelseId,
                     typeNavn,
+                    tittel,
                     periode,
                     deltakelseStatus,
                     deltakelseProsent,
@@ -104,6 +107,7 @@ const TiltakSomFratarRettListe = ({
                         <TiltakHeader typeNavn={typeNavn} />
                         <GirIkkeRettTag />
                         <div>
+                            <Tiltaksnavn tittel={tittel} />
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
                                 verdi={
@@ -158,6 +162,7 @@ const TiltakListe = ({
                     deltakelseStatus,
                     periode,
                     typeNavn,
+                    tittel,
                     kilde,
                     gjennomføringId,
                     gjennomforingsprosent,
@@ -174,6 +179,7 @@ const TiltakListe = ({
                             {...historikk}
                         />
                         <div>
+                            <Tiltaksnavn tittel={tittel} />
                             {erLukketPeriode(periode) && (
                                 <BehandlingSaksopplysning
                                     navn={'Periode'}
@@ -221,4 +227,15 @@ const TiltakHeader = ({ typeNavn }: { typeNavn: string }) => (
     <Heading size={'xsmall'} level={'4'}>
         {typeNavn}
     </Heading>
+);
+
+/**
+ * Hele tiltaksnavnet, typisk "Tiltakstype hos Arrangør".
+ * Vises som ukjent når deltakelsen ikke har noen tittel, f.eks. ved adressebeskyttelse.
+ */
+const Tiltaksnavn = ({ tittel }: { tittel: SladdbarVerdi<Nullable<string>> }) => (
+    <BehandlingSaksopplysning
+        navn={'Tiltaksnavn'}
+        verdi={formaterSladdbarVerdi(tittel, (tekst) => tekst, 'Ukjent')}
+    />
 );

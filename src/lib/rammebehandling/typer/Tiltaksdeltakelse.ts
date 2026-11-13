@@ -1,4 +1,6 @@
 import { Periode, ÅpenPeriode } from '~/types/Periode';
+import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { Nullable } from '~/types/UtilTypes';
 
 export enum TiltaksdeltakelseKilde {
     KOMET = 'Komet',
@@ -38,6 +40,11 @@ type TiltaksdeltakelseBase = {
     eksternDeltagelseId: string;
     gjennomføringId: string | null;
     typeNavn: string;
+    /**
+     * Hele tiltaksnavnet, typisk "Tiltakstype hos Arrangør".
+     * Er null når bruker har adressebeskyttelse eller kilden ikke har noen tittel.
+     */
+    tittel: SladdbarVerdi<Nullable<string>>;
     deltakelseStatus: TiltakDeltakerstatus;
     deltakelseProsent: number | null;
     antallDagerPerUke: number | null;
@@ -85,6 +92,11 @@ export type InnvilgbarTiltaksperiode = InnvilgbarPeriode & {
 export type TiltaksdeltakelseSomFratarRett = {
     eksternDeltakelseId: string;
     typeNavn: string;
+    /**
+     * Hele tiltaksnavnet, typisk "Tiltakstype hos Arrangør".
+     * Er null når bruker har adressebeskyttelse eller kilden ikke har noen tittel.
+     */
+    tittel: SladdbarVerdi<Nullable<string>>;
     tiltakskodeFraKilden: string;
     periode: ÅpenPeriode;
     deltakelseStatus: TiltakDeltakerstatus;

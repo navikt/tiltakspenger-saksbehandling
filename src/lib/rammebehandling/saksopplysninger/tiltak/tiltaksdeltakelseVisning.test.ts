@@ -1,3 +1,4 @@
+import { ikkeSladdet } from '~test/sladdetVerdi';
 import { expect, test } from '@jest/globals';
 import { delOppTiltaksdeltakelser } from './tiltaksdeltakelseVisning';
 import {
@@ -11,6 +12,7 @@ const tiltak = (id: string, fraOgMed: Dato | null, tilOgMed: Dato | null): Tilta
     eksternDeltagelseId: id,
     gjennomføringId: null,
     typeNavn: 'Arbeidsmarkedsopplæring',
+    tittel: ikkeSladdet('Arbeidsmarkedsopplæring hos Arrangør AS'),
     periode: { fraOgMed, tilOgMed },
     deltakelseStatus: TiltakDeltakerstatus.DELTAR,
     deltakelseProsent: null,

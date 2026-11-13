@@ -29,6 +29,7 @@ type OppdaterTiltaksdeltakelseFormData = {
     sakId: string;
     tiltakskode: string;
     typeNavn: string;
+    tittel: string;
     kilde: Tiltakskilde | '';
     fraOgMed: Date | undefined;
     tilOgMed: Date | undefined;
@@ -42,6 +43,7 @@ type OppdaterTiltaksdeltakelseRequest = {
     sakId: Nullable<string>;
     tiltakskode: Nullable<string>;
     typeNavn: Nullable<string>;
+    tittel: Nullable<string>;
     kilde: Nullable<Tiltakskilde>;
     fraOgMed: Nullable<Dato>;
     tilOgMed: Nullable<Dato>;
@@ -87,6 +89,7 @@ const startverdierFraRoute = (query: NextRouter['query']): OppdaterTiltaksdeltak
     sakId: førsteVerdi(query.sakId) ?? '',
     tiltakskode: førsteVerdi(query.tiltakskode) ?? '',
     typeNavn: førsteVerdi(query.typeNavn) ?? '',
+    tittel: førsteVerdi(query.tittel) ?? '',
     kilde: tilKilde(query.kilde),
     fraOgMed: tilDato(query.fraOgMed),
     tilOgMed: tilDato(query.tilOgMed),
@@ -125,7 +128,7 @@ const erUtenforIntervall = (tall: Nullable<number>, min: number, maks: number) =
     tall !== null && (Number.isNaN(tall) || tall < min || tall > maks);
 
 /**
- * Route: /dev/deltakelse/[id]?sakId=&tiltakskode=&typeNavn=&kilde=&fraOgMed=&tilOgMed=&status=&deltakelseProsent=&antallDagerPerUke=
+ * Route: /dev/deltakelse/[id]?sakId=&tiltakskode=&typeNavn=&tittel=&kilde=&fraOgMed=&tilOgMed=&status=&deltakelseProsent=&antallDagerPerUke=
  * Alle deler er valgfrie, og brukes til å forhåndsutfylle skjemaet.
  */
 export const OppdaterTiltaksdeltakelseSide = () => {
@@ -192,6 +195,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
             sakId: tilTekst(values.sakId),
             tiltakskode: values.tiltakskode || null,
             typeNavn: tilTekst(values.typeNavn),
+            tittel: tilTekst(values.tittel),
             kilde: values.kilde || null,
             fraOgMed: values.fraOgMed ? dateTilISOTekst(values.fraOgMed) : null,
             tilOgMed: values.tilOgMed ? dateTilISOTekst(values.tilOgMed) : null,
@@ -231,7 +235,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                     <BodyShort size="small">
                         Skjemaet kan forhåndsutfylles via URL-en:{' '}
                         <code>
-                            /dev/deltakelse/[id]?sakId=&amp;tiltakskode=MIDLONTIL&amp;kilde=Arena&amp;typeNavn=&amp;fraOgMed=YYYY-MM-DD&amp;tilOgMed=YYYY-MM-DD&amp;status=Deltar&amp;deltakelseProsent=100&amp;antallDagerPerUke=5
+                            /dev/deltakelse/[id]?sakId=&amp;tiltakskode=MIDLONTIL&amp;kilde=Arena&amp;typeNavn=&amp;tittel=&amp;fraOgMed=YYYY-MM-DD&amp;tilOgMed=YYYY-MM-DD&amp;status=Deltar&amp;deltakelseProsent=100&amp;antallDagerPerUke=5
                         </code>
                     </BodyShort>
                     <Controller
@@ -324,6 +328,19 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                             )}
                         />
                     </HStack>
+                    <Controller
+                        control={form.control}
+                        name={'tittel'}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                error={fieldState.error?.message}
+                                label="Tittel"
+                                description="Hele tiltaksnavnet, f.eks. «Arbeidsmarkedsoppfølging gruppe hos Arrangør AS». Tomt beholder dagens tittel, og en ny deltakelse får ingen."
+                                size="small"
+                            />
+                        )}
+                    />
                     <HStack gap="space-16">
                         <Controller
                             control={form.control}
