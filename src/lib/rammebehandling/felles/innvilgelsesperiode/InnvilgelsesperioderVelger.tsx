@@ -5,7 +5,6 @@ import {
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { hentInnvilgbarePerioder } from '~/lib/rammebehandling/rammebehandlingUtils';
-import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
@@ -16,7 +15,6 @@ import { InnvilgbarTiltaksperiode } from '~/lib/rammebehandling/typer/Tiltaksdel
 import { formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { SakProps } from '~/lib/sak/SakTyper';
 import { Fragment } from 'react';
 import {
     InnvilgelseHullVarsel,
@@ -48,7 +46,6 @@ import style from './InnvilgelsesperioderVelger.module.css';
 const REVERSERT_OPPHØR_PREFIX = 'reversert-opphor:';
 
 export const InnvilgelsesperioderVelger = () => {
-    const { sak } = useSak();
     const { behandling } = useBehandling();
 
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseSkjema();
@@ -102,7 +99,6 @@ export const InnvilgelsesperioderVelger = () => {
                                             innvilgbarePerioder={innvilgbarePerioder}
                                             perioderForReversertOpphør={perioderForReversertOpphør}
                                             behandling={behandling}
-                                            sak={sak}
                                             readOnly={erReadonly}
                                         />
                                         <InnvilgelseHullVarsel
@@ -123,7 +119,6 @@ export const InnvilgelsesperioderVelger = () => {
                                     dispatch({
                                         type: 'leggTilInnvilgelsesperiode',
                                         payload: {
-                                            sak,
                                             behandling,
                                         },
                                     });
@@ -158,7 +153,6 @@ type VelgerFullProps = {
     innvilgbarePerioder: InnvilgbarTiltaksperiode[];
     perioderForReversertOpphør: PeriodeForReversertOpphør[];
     behandling: Rammebehandling;
-    sak: SakProps;
     index: number;
     readOnly: boolean;
 };
@@ -168,7 +162,6 @@ const InnvilgelsesperiodeVelgerFull = ({
     innvilgbarePerioder,
     perioderForReversertOpphør,
     behandling,
-    sak,
     index,
     readOnly,
 }: VelgerFullProps) => {
@@ -305,7 +298,6 @@ const InnvilgelsesperiodeVelgerFull = ({
                                 payload: {
                                     index,
                                     behandling,
-                                    sak,
                                 },
                             });
                         }}

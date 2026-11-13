@@ -2,7 +2,6 @@ import { describe, expect, test } from '@jest/globals';
 import {
     innvilgelsesperiode,
     periode,
-    sak,
     søknad,
     søknadBarn,
     søknadsbehandlingIkkeValgt,
@@ -18,14 +17,14 @@ import {
 import { Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { tilDato } from '~/types/DatoTid';
-import { hentBarnFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { hentBarnFraSøknader } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 
 // Barnet er under 16 år i hele tiltaksdeltakelsen (2025-01-01 - 2025-06-30)
 const behandlingMedBarnISøknad = søknadsbehandlingIkkeValgt({
     søknad: søknad([søknadBarn('2015-03-01')]),
 });
 
-const barnFraSøknaden = hentBarnFraSøknad(behandlingMedBarnISøknad.søknad).atNonNull(0).barn;
+const barnFraSøknaden = hentBarnFraSøknader(behandlingMedBarnISøknad, []).atNonNull(0).barn;
 
 const utenPerioderState: InnvilgelseUtenPerioderState = {
     harValgtPeriode: false,
@@ -47,10 +46,9 @@ const oppdaterInnvilgelsesperiode = (
     periodeOppdatering: Partial<Periode>,
     index: number = 0,
     behandling: Rammebehandling = behandlingMedBarnISøknad,
-    sakProps = sak(),
 ): InnvilgelsesperioderActions => ({
     type: 'oppdaterInnvilgelsesperiode',
-    payload: { periodeOppdatering, index, behandling, sak: sakProps },
+    payload: { periodeOppdatering, index, behandling },
 });
 
 describe('innvilgelsesperioderReducer', () => {
@@ -95,7 +93,7 @@ describe('innvilgelsesperioderReducer', () => {
             { type: 'settAntallDager', payload: { antallDager: 8, index: 0 } },
             {
                 type: 'leggTilInnvilgelsesperiode',
-                payload: { behandling: behandlingMedBarnISøknad, sak: sak() },
+                payload: { behandling: behandlingMedBarnISøknad },
             },
         ])('kaster feil for $type', (action) => {
             expect(() => innvilgelsesperioderReducer(utenPerioderState, action)).toThrow();
@@ -207,7 +205,7 @@ describe('innvilgelsesperioderReducer', () => {
         expect(
             innvilgelsesperioderReducer(state, {
                 type: 'leggTilInnvilgelsesperiode',
-                payload: { behandling: behandlingMedBarnISøknad, sak: sak() },
+                payload: { behandling: behandlingMedBarnISøknad },
             }),
         ).toEqual(
             medPerioderState({
@@ -235,7 +233,7 @@ describe('innvilgelsesperioderReducer', () => {
         expect(
             innvilgelsesperioderReducer(state, {
                 type: 'fjernInnvilgelsesperiode',
-                payload: { index: 1, behandling: behandlingMedBarnISøknad, sak: sak() },
+                payload: { index: 1, behandling: behandlingMedBarnISøknad },
             }),
         ).toEqual(
             medPerioderState({

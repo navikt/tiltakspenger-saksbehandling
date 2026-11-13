@@ -3,16 +3,12 @@ import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurder
 import { RevurderingInnvilgelseContext } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
+    barnetilleggKandidat,
     innvilgelsesperiode,
     periode,
     revurderingInnvilgelse,
     sak,
-    sakMedInnvilgetVedtak,
-    søknad,
-    søknadBarn,
-    søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 const tomtTekstfelt = { ref: { current: null }, getValue: () => null };
 
@@ -40,22 +36,20 @@ const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
     },
 };
 
-const sakMedInnvilgetSøknadMedBarn = (internDeltakelseId: string) =>
-    sakMedInnvilgetVedtak(førsteHalvår, {
-        søknadsbehandling: søknadsbehandlingInnvilgelse({
-            id: 'beh_vedtatt',
-            status: Rammebehandlingsstatus.VEDTATT,
-            søknad: søknad([søknadBarn('2020-05-05')]),
-            innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår, { internDeltakelseId })],
-        }),
+// Backend gir barna fra søknaden med tiltaksdeltakelsen søknaden er innvilget for
+const revurderingMedBarnFraSøknad = (internDeltakelseId: string) =>
+    revurderingInnvilgelse({
+        barnetilleggKandidater: [
+            barnetilleggKandidat('2020-05-05', { internDeltakelseIder: [internDeltakelseId] }),
+        ],
     });
 
 describe('revurderingInnvilgelseValidering', () => {
     test('validerer ikke barnetillegg mot innvilgede søknader for andre tiltaksdeltakelser', () => {
         const resultat = revurderingInnvilgelseValidering(
-            revurderingInnvilgelse(),
+            revurderingMedBarnFraSøknad('deltakelse_annen'),
             skjemaUtenBarnetillegg,
-            sakMedInnvilgetSøknadMedBarn('deltakelse_annen'),
+            sak(),
         );
 
         expect(resultat).toEqual({ errors: [], warnings: [] });
@@ -63,9 +57,9 @@ describe('revurderingInnvilgelseValidering', () => {
 
     test('advarer om manglende barnetillegg når den innvilgede søknaden for tiltaksdeltakelsen har barn', () => {
         const resultat = revurderingInnvilgelseValidering(
-            revurderingInnvilgelse(),
+            revurderingMedBarnFraSøknad('deltakelse_1'),
             skjemaUtenBarnetillegg,
-            sakMedInnvilgetSøknadMedBarn('deltakelse_1'),
+            sak(),
         );
 
         expect(resultat).toEqual({

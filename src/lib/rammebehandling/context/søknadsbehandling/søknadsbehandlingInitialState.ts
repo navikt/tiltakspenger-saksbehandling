@@ -2,7 +2,7 @@ import {
     Søknadsbehandling,
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
-import { lagBarnetilleggSkjemaStateForSøknadsbehandling } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { lagBarnetilleggSkjemaState } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     SøknadsbehandlingAvslagState,
     SøknadsbehandlingIkkeValgtState,
@@ -59,10 +59,7 @@ const innvilgelseInitialState = (
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder: behandling.innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaStateForSøknadsbehandling(
-                behandling,
-                behandling.innvilgelsesperioder,
-            ),
+            ...lagBarnetilleggSkjemaState(behandling, behandling.innvilgelsesperioder),
         },
     };
 };

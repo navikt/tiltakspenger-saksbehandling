@@ -30,6 +30,7 @@ import {
 import {
     InnvilgbarSøknad,
     Spørsmålsbesvarelser,
+    Søknad,
     SøknadBarn,
     SøknadBarnKilde,
 } from '~/lib/søknad/søknadTyper';
@@ -41,6 +42,7 @@ import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesper
 import {
     BarnetilleggBarn,
     BarnetilleggBarnKilde,
+    BarnetilleggKandidatDTO,
     BarnetilleggPeriode,
     BarnetilleggV1,
     BarnetilleggV2,
@@ -209,6 +211,48 @@ export const barnetilleggFraOppdaterDTO = (
     begrunnelse: ikkeSladdet(dto.begrunnelse),
 });
 
+// Et barn backend foreslår at saksbehandler kan velge å gi barnetillegg for
+export const barnetilleggKandidat = (
+    fødselsdato: string,
+    overstyringer: Partial<BarnetilleggKandidatDTO> = {},
+): BarnetilleggKandidatDTO => {
+    const barn = barnetilleggBarn(fødselsdato);
+
+    return {
+        fnr: barn.fnr,
+        fornavn: barn.fornavn,
+        mellomnavn: barn.mellomnavn,
+        etternavn: barn.etternavn,
+        fødselsdato: barn.fødselsdato,
+        kilde: barn.kilde,
+        søknadId: barn.søknadId,
+        søknadsopplysninger: { oppholderSegIEØSSpm: { svar: 'JA' }, oppholdssted: 'NORGE' },
+        internDeltakelseIder: null,
+        fraGjeldendeVedtak: false,
+        ...overstyringer,
+    };
+};
+
+// Kandidatene backend utleder fra søknaden i en søknadsbehandling
+export const barnetilleggKandidaterFraSøknad = (søknad: Søknad): BarnetilleggKandidatDTO[] =>
+    søknad.barnetillegg
+        .map((barn) => ({
+            fnr: barn.fnr,
+            fornavn: barn.fornavn,
+            mellomnavn: barn.mellomnavn,
+            etternavn: barn.etternavn,
+            fødselsdato: barn.fødselsdato,
+            kilde: BarnetilleggBarnKilde.SØKNAD,
+            søknadId: søknad.id,
+            søknadsopplysninger: {
+                oppholderSegIEØSSpm: barn.oppholderSegIEØSSpm,
+                oppholdssted: barn.oppholdssted,
+            },
+            internDeltakelseIder: null,
+            fraGjeldendeVedtak: false,
+        }))
+        .toSorted((a, b) => (a.fødselsdato.verdi ?? '').localeCompare(b.fødselsdato.verdi ?? ''));
+
 export const tiltaksdeltakelse = (
     id: string,
     p: Periode,
@@ -313,6 +357,17 @@ const rammebehandlingBase = (): Omit<RammebehandlingBase, 'type' | 'resultat'> =
             periode: standardTiltaksdeltakelse.periode,
         },
     ],
+    barnetilleggKandidater: [],
+});
+
+// Backend utleder kandidatene for barnetillegg i en søknadsbehandling fra søknaden som behandles
+const medKandidaterFraSøknad = <T extends { søknad: Søknad }>(
+    behandling: T,
+    overstyringer: Partial<RammebehandlingBase>,
+): T => ({
+    ...behandling,
+    barnetilleggKandidater:
+        overstyringer.barnetilleggKandidater ?? barnetilleggKandidaterFraSøknad(behandling.søknad),
 });
 
 const søknadsbehandlingBase = () => ({
@@ -325,32 +380,44 @@ const søknadsbehandlingBase = () => ({
 
 export const søknadsbehandlingIkkeValgt = (
     overstyringer: Partial<SøknadsbehandlingIkkeValgt> = {},
-): SøknadsbehandlingIkkeValgt => ({
-    ...søknadsbehandlingBase(),
-    resultat: SøknadsbehandlingResultat.IKKE_VALGT,
-    ...overstyringer,
-});
+): SøknadsbehandlingIkkeValgt =>
+    medKandidaterFraSøknad(
+        {
+            ...søknadsbehandlingBase(),
+            resultat: SøknadsbehandlingResultat.IKKE_VALGT,
+            ...overstyringer,
+        },
+        overstyringer,
+    );
 
 export const søknadsbehandlingAvslag = (
     overstyringer: Partial<SøknadsbehandlingAvslag> = {},
-): SøknadsbehandlingAvslag => ({
-    ...søknadsbehandlingBase(),
-    resultat: SøknadsbehandlingResultat.AVSLAG,
-    vedtaksperiode: periode('2025-01-01', '2025-06-30'),
-    avslagsgrunner: [Avslagsgrunn.Alder],
-    ...overstyringer,
-});
+): SøknadsbehandlingAvslag =>
+    medKandidaterFraSøknad(
+        {
+            ...søknadsbehandlingBase(),
+            resultat: SøknadsbehandlingResultat.AVSLAG,
+            vedtaksperiode: periode('2025-01-01', '2025-06-30'),
+            avslagsgrunner: [Avslagsgrunn.Alder],
+            ...overstyringer,
+        },
+        overstyringer,
+    );
 
 export const søknadsbehandlingInnvilgelse = (
     overstyringer: Partial<SøknadsbehandlingInnvilgelse> = {},
-): SøknadsbehandlingInnvilgelse => ({
-    ...søknadsbehandlingBase(),
-    resultat: SøknadsbehandlingResultat.INNVILGELSE,
-    vedtaksperiode: periode('2025-01-01', '2025-03-31'),
-    innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
-    barnetillegg: barnetilleggV2([], [periode('2025-01-01', '2025-03-31')]),
-    ...overstyringer,
-});
+): SøknadsbehandlingInnvilgelse =>
+    medKandidaterFraSøknad(
+        {
+            ...søknadsbehandlingBase(),
+            resultat: SøknadsbehandlingResultat.INNVILGELSE,
+            vedtaksperiode: periode('2025-01-01', '2025-03-31'),
+            innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+            barnetillegg: barnetilleggV2([], [periode('2025-01-01', '2025-03-31')]),
+            ...overstyringer,
+        },
+        overstyringer,
+    );
 
 const revurderingBase = () => ({
     ...rammebehandlingBase(),

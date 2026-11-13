@@ -1,6 +1,6 @@
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { RevurderingForlengelseBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { tilForhåndsvisningBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
@@ -45,12 +45,7 @@ const tilForhåndsvisningDTO = (
         tilOgMed: nonNullish(hentForlengelseTilOgMed(skjema)),
         internDeltakelseId: innvilgelse.innvilgelsesperioder.atNonNull(-1).internDeltakelseId,
         barnetillegg: harEndretBarnetillegg
-            ? tilForhåndsvisningBarnetilleggDTO(
-                  behandling,
-                  innvilgelse,
-                  skjema.erReadonly,
-                  textAreas.barnetilleggBegrunnelse.getValue(),
-              )
+            ? tilOppdaterBarnetilleggDTO(innvilgelse, textAreas.barnetilleggBegrunnelse.getValue())
             : null,
     };
 };

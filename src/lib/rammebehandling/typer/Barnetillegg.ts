@@ -2,7 +2,7 @@ import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
 import { Dato } from '~/types/DatoTid';
-import { SøknadId } from '~/lib/søknad/søknadTyper';
+import { SøknadBarn, SøknadId } from '~/lib/søknad/søknadTyper';
 
 export type BarnetilleggPeriode = {
     antallBarn: number;
@@ -78,11 +78,16 @@ export type OppdaterBarnetilleggDTO = {
     begrunnelse: Nullable<string>;
 };
 
-/** Barnetillegg lagret som antall barn per periode (V1), som forhåndsvises som det er når behandlingen ikke kan endres. */
-export type ForhåndsvisningBarnetilleggV1DTO = {
-    perioder: BarnetilleggPeriode[];
-    begrunnelse: Nullable<string>;
+/**
+ * Et barn saksbehandler kan velge å gi barnetillegg for, utledet av backend fra lagret barnetillegg, søknadene og gjeldende vedtak.
+ * Har ingen valgte perioder, så et valgt barn får barnetillegg for hele innvilgelsesperioden.
+ */
+export type BarnetilleggKandidatDTO = Omit<BarnetilleggBarn, 'perioder'> & {
+    // Opplysningene om barnet fra den nyeste søknaden barnet finnes i, eller null om barnet ikke finnes i en søknad.
+    søknadsopplysninger: Nullable<Pick<SøknadBarn, 'oppholderSegIEØSSpm' | 'oppholdssted'>>;
+    // Barnet er bare aktuelt når det innvilges for en av disse tiltaksdeltakelsene.
+    // Null når barnet er aktuelt uansett hvilke tiltaksdeltakelser det innvilges for.
+    internDeltakelseIder: Nullable<string[]>;
+    // Barnet gir barnetillegg i et gjeldende vedtak.
+    fraGjeldendeVedtak: boolean;
 };
-
-export type ForhåndsvisningBarnetilleggDTO =
-    OppdaterBarnetilleggDTO | ForhåndsvisningBarnetilleggV1DTO;

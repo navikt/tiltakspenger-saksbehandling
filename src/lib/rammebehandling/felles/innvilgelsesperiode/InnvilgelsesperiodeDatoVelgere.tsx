@@ -1,5 +1,4 @@
 import { useBehandlingInnvilgelseSkjemaDispatch } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { useSak } from '~/lib/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
@@ -20,7 +19,6 @@ export const InnvilgelsesperiodeDatovelgere = ({
     index,
     readOnly,
 }: Props) => {
-    const { sak } = useSak();
     const { behandling } = useBehandling();
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
@@ -59,7 +57,6 @@ export const InnvilgelsesperiodeDatovelgere = ({
                             periodeOppdatering: { fraOgMed: dateTilISOTekst(valgtDato) },
                             index,
                             behandling,
-                            sak,
                         },
                     });
                 }}
@@ -82,7 +79,6 @@ export const InnvilgelsesperiodeDatovelgere = ({
                             periodeOppdatering: { tilOgMed: dateTilISOTekst(valgtDato) },
                             index,
                             behandling,
-                            sak,
                         },
                     });
                 }}

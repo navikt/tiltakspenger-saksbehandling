@@ -1,5 +1,6 @@
 import { ArenaTPVedtak } from './ArenaTPVedtak';
 import { Periode } from '~/types/Periode';
+import { BarnetilleggKandidatDTO } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     Revurdering,
     RevurderingForlengelse,
@@ -84,6 +85,8 @@ export interface RammebehandlingBase {
     tidslinjeFørOgEtter: Nullable<TidslinjeFørOgEtter>;
     tiltakshistorikk: TiltakshistorikkForBehandling;
     innvilgbarePerioder: InnvilgbarPeriode[];
+    /** Barna saksbehandler kan velge å gi barnetillegg for, sortert med eldste først. */
+    barnetilleggKandidater: BarnetilleggKandidatDTO[];
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

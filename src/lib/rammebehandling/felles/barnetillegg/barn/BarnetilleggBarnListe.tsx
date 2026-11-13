@@ -1,5 +1,4 @@
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { useSak } from '~/lib/sak/SakContext';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useBehandlingInnvilgelseMedPerioderSkjema } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
@@ -8,11 +7,10 @@ import { BarnetilleggBarnValg } from '~/lib/rammebehandling/felles/barnetillegg/
 import { LeggTilBarnetilleggBarn } from '~/lib/rammebehandling/felles/barnetillegg/barn/LeggTilBarnetilleggBarn';
 
 export const BarnetilleggBarnListe = () => {
-    const { sak } = useSak();
     const { behandling } = useBehandling();
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
 
-    const kandidater = hentBarnetilleggKandidater(behandling, innvilgelse, sak);
+    const kandidater = hentBarnetilleggKandidater(behandling, innvilgelse);
 
     return (
         <VStack gap={'space-16'}>

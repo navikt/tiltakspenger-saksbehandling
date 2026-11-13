@@ -8,7 +8,6 @@ import {
 import { InnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { SakProps } from '~/lib/sak/SakTyper';
 import { lagForhåndsutfyltInnvilgelse } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { datoMin, nesteDag } from '~/utils/date';
 import { tilpassBarnTilInnvilgelsesperiodene } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
@@ -22,7 +21,6 @@ export type InnvilgelsesperioderActions =
               periodeOppdatering: Partial<Periode>;
               index: number;
               behandling: Rammebehandling;
-              sak: SakProps;
           };
       }
     | {
@@ -44,7 +42,6 @@ export type InnvilgelsesperioderActions =
           type: 'leggTilInnvilgelsesperiode';
           payload: {
               behandling: Rammebehandling;
-              sak: SakProps;
           };
       }
     | {
@@ -52,7 +49,6 @@ export type InnvilgelsesperioderActions =
           payload: {
               index: number;
               behandling: Rammebehandling;
-              sak: SakProps;
           };
       };
 
@@ -76,12 +72,12 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
             'Innvilgelsesperiode mangler',
         );
 
-        const { periodeOppdatering, behandling, sak } = payload;
+        const { periodeOppdatering, behandling } = payload;
 
         const nyPeriode = oppdaterPartialPeriode(innvilgelsesperiode.periode, periodeOppdatering);
 
         if (erFullstendigPeriode(nyPeriode)) {
-            return lagForhåndsutfyltInnvilgelse(behandling, nyPeriode, sak);
+            return lagForhåndsutfyltInnvilgelse(behandling, nyPeriode);
         }
 
         return {

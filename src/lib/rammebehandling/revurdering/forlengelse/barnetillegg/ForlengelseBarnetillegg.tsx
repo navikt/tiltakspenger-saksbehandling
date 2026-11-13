@@ -11,14 +11,12 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { formaterPeriode } from '~/utils/date';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useSak } from '~/lib/sak/SakContext';
 import { kunPerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { BarnetilleggVersjon } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { formaterBarnNavn } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { formaterSladdbarDatotekst } from '~/utils/date';
 
 export const ForlengelseBarnetillegg = () => {
-    const { sak } = useSak();
     const behandling = useForlengelseBehandling();
     const skjema = useRevurderingForlengelseSkjema();
     const { harEndretBarnetillegg, innvilgelse, erReadonly } = skjema;
@@ -35,7 +33,6 @@ export const ForlengelseBarnetillegg = () => {
                     payload: {
                         harEndretBarnetillegg: e.target.checked,
                         behandling,
-                        sak,
                     },
                 })
             }

@@ -94,7 +94,7 @@ export const validerInnvilgelse = (
         harBarnetillegg,
         valgteBarn,
         innvilgelsesperioder,
-        hentBarnFraSøknader(behandling, innvilgelsesperioder, sak),
+        hentBarnFraSøknader(behandling, innvilgelsesperioder),
     );
     validering.warnings.push(...barnetilleggValidering.warnings);
     validering.errors.push(...barnetilleggValidering.errors);

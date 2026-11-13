@@ -39,7 +39,7 @@ export const revurderingInitialState = (
 
     switch (resultat) {
         case RevurderingResultat.INNVILGELSE: {
-            return innvilgelseInitialState(behandling, sak);
+            return innvilgelseInitialState(behandling);
         }
 
         case RevurderingResultat.STANS: {
@@ -47,7 +47,7 @@ export const revurderingInitialState = (
         }
 
         case RevurderingResultat.FORLENGELSE: {
-            return forlengelseInitialState(behandling, sak);
+            return forlengelseInitialState(behandling);
         }
 
         case RevurderingResultat.OMGJØRING:
@@ -76,7 +76,6 @@ const stansInitialState = (behandling: RevurderingStans): RevurderingStansState 
 
 const innvilgelseInitialState = (
     behandling: RevurderingInnvilgelse,
-    sak: SakProps,
 ): RevurderingInnvilgelseState => {
     const { innvilgelsesperioder } = behandling;
 
@@ -99,7 +98,7 @@ const innvilgelseInitialState = (
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
         },
     };
 };
@@ -119,7 +118,7 @@ export const omgjøringInitialState = (
         }
 
         case RevurderingResultat.OMGJØRING: {
-            return omgjøringInnvilgelseInitialState(behandling, sak);
+            return omgjøringInnvilgelseInitialState(behandling);
         }
 
         case RevurderingResultat.OMGJØRING_OPPHØR: {
@@ -130,10 +129,7 @@ export const omgjøringInitialState = (
     throw new Error(`Ukjent omgjøring resultat: ${resultat satisfies never}`);
 };
 
-const omgjøringInnvilgelseInitialState = (
-    behandling: Omgjøring,
-    sak: SakProps,
-): OmgjøringInnvilgelseState => {
+const omgjøringInnvilgelseInitialState = (behandling: Omgjøring): OmgjøringInnvilgelseState => {
     if (behandling.resultat !== RevurderingResultat.OMGJØRING) {
         const vedtaksperiode: Partial<Periode> =
             behandling.vedtaksperiode ?? forhåndsutfyltOmgjøringsperiode(behandling) ?? {};
@@ -175,7 +171,7 @@ const omgjøringInnvilgelseInitialState = (
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak),
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
         },
     };
 };

@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import {
     barnetilleggBarn,
+    barnetilleggKandidat,
     barnetilleggV2,
     innvilgelsesperiode,
     omgjøringIkkeValgt,
@@ -10,10 +11,7 @@ import {
     revurderingInnvilgelse,
     revurderingStans,
     sak,
-    sakMedInnvilgetVedtak,
     revurderingUbestemt,
-    søknad,
-    søknadBarn,
 } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import {
@@ -100,29 +98,21 @@ describe('revurderingInitialState', () => {
         });
 
         test('forhåndsvelger barna fra gjeldende vedtak når behandlingen mangler barnetillegg', () => {
-            const barnIVedtaket = barnetilleggBarn('2020-01-01', {
-                fornavn: ikkeSladdet('Vedtak'),
-                perioder: [periode('2025-01-01', '2025-02-28')],
-            });
-
-            const sakMedBarnetillegg = sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
-                søknad: søknad([søknadBarn('2015-03-01')]),
-                vedtak: {
-                    barnetillegg: barnetilleggV2(
-                        [barnIVedtaket],
-                        [periode('2025-01-01', '2025-06-30')],
-                    ),
-                },
-            });
-
             const behandling = revurderingInnvilgelse({
                 innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
+                barnetilleggKandidater: [
+                    barnetilleggKandidat('2015-03-01', { internDeltakelseIder: ['deltakelse_1'] }),
+                    barnetilleggKandidat('2020-01-01', {
+                        fornavn: ikkeSladdet('Vedtak'),
+                        søknadsopplysninger: null,
+                        fraGjeldendeVedtak: true,
+                    }),
+                ],
             });
 
-            expect(revurderingInitialState(behandling, sakMedBarnetillegg)).toMatchObject({
+            expect(revurderingInitialState(behandling, sak())).toMatchObject({
                 innvilgelse: {
                     harBarnetillegg: true,
-                    // Barnet fra vedtaket velges med hele innvilgelsesperioden
                     valgteBarn: [
                         expect.objectContaining({
                             fornavn: ikkeSladdet('Vedtak'),
@@ -133,19 +123,16 @@ describe('revurderingInitialState', () => {
             });
         });
 
-        test('forhåndsvelger barna fra den innvilgede søknaden for tiltaksdeltakelsen når gjeldende vedtak er uten barn', () => {
+        test('forhåndsvelger barna fra søknadene for tiltaksdeltakelsen når gjeldende vedtak er uten barn', () => {
             const behandling = revurderingInnvilgelse({
                 innvilgelsesperioder: [innvilgelsesperiode(periode('2025-04-01', '2025-05-31'))],
+                barnetilleggKandidater: [
+                    barnetilleggKandidat('2015-03-01', { internDeltakelseIder: ['deltakelse_1'] }),
+                    barnetilleggKandidat('2018-01-01', { internDeltakelseIder: ['deltakelse_2'] }),
+                ],
             });
 
-            expect(
-                revurderingInitialState(
-                    behandling,
-                    sakMedInnvilgetVedtak(periode('2025-01-01', '2025-06-30'), {
-                        søknad: søknad([søknadBarn('2015-03-01')]),
-                    }),
-                ),
-            ).toMatchObject({
+            expect(revurderingInitialState(behandling, sak())).toMatchObject({
                 innvilgelse: {
                     harBarnetillegg: true,
                     valgteBarn: [

@@ -3,191 +3,93 @@ import {
     hentBarnetilleggKandidater,
     hentBarnFraSøknader,
     lagBarnetilleggSkjemaState,
-    tilForhåndsvisningBarnetilleggDTO,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import {
     barnetilleggBarn,
-    barnetilleggPeriode,
-    barnetilleggV1,
+    barnetilleggKandidat,
     barnetilleggV2,
     innvilgelsesperiode,
     periode,
-    rammevedtak,
     revurderingInnvilgelse,
-    sakMedInnvilgetVedtak,
     søknad,
     søknadBarn,
     søknadsbehandlingInnvilgelse,
 } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
-import { tilTidspunkt } from '~/types/DatoTid';
-import { InnvilgbarSøknad, SøknadBarn, SøknadId } from '~/lib/søknad/søknadTyper';
-import {
-    RammebehandlingId,
-    Rammebehandlingsstatus,
-} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { nonNullish } from '~/utils/object';
 
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
 const innvilgelsesperioder = [innvilgelsesperiode(førsteHalvår)];
 
-const søknadFor = (
-    id: SøknadId,
-    internDeltakelseId: string,
-    mottatt: string,
-    barn: SøknadBarn[],
-): InnvilgbarSøknad => {
-    const standard = søknad(barn);
-
-    return {
-        ...standard,
-        id,
-        mottatt: tilTidspunkt(mottatt),
-        tiltak: { ...standard.tiltak, internDeltakelseId },
-    };
-};
-
-const barnMedFnr = (navn: string): SøknadBarn => ({
-    ...søknadBarn('2020-01-01'),
-    fornavn: ikkeSladdet(navn),
-    fnr: ikkeSladdet('01012012345'),
+// Kandidatene backend gir for en revurdering der det tidligere er innvilget for to tiltaksdeltakelser
+const kandidatFraSøknad = barnetilleggKandidat('2015-03-01', {
+    søknadId: 'soknad_nyere',
+    internDeltakelseIder: ['deltakelse_1'],
 });
-
-const eldreSøknad = søknadFor('soknad_eldre', 'deltakelse_1', '2025-01-01T09:00:00', [
-    søknadBarn('2015-03-01'),
-    barnMedFnr('Gammelt'),
-]);
-
-const nyereSøknad = søknadFor('soknad_nyere', 'deltakelse_1', '2025-02-01T09:00:00', [
-    barnMedFnr('Nytt'),
-    søknadBarn('2015-03-01'),
-]);
-
-const søknadForAnnetTiltak = søknadFor('soknad_annet', 'deltakelse_2', '2025-03-01T09:00:00', [
-    søknadBarn('2018-01-01'),
-]);
-
-const barnFraVedtaket = barnetilleggBarn('2016-01-01', {
+const kandidatFraSøknadForAnnetTiltak = barnetilleggKandidat('2018-01-01', {
+    fornavn: ikkeSladdet('Annet tiltak'),
+    søknadId: 'soknad_annet',
+    internDeltakelseIder: ['deltakelse_2'],
+});
+const kandidatFraVedtaket = barnetilleggKandidat('2016-01-01', {
     fornavn: ikkeSladdet('Vedtak'),
     søknadId: 'soknad_vedtak',
+    søknadsopplysninger: null,
+    fraGjeldendeVedtak: true,
+});
+const kandidatSomErLagret = barnetilleggKandidat('2017-01-01', {
+    fornavn: ikkeSladdet('Lagret'),
+    søknadsopplysninger: null,
+});
+const kandidatMedSladdetFødselsdato = barnetilleggKandidat('2010-01-01', {
+    fornavn: ikkeSladdet('Sladdet'),
+    fødselsdato: sladdet,
+    søknadsopplysninger: null,
 });
 
-// Nyere søknad for samme tiltak som ikke er innvilget ennå, og som ikke skal brukes
-const ikkeInnvilgetSøknad = søknadFor(
-    'soknad_ikke_innvilget',
-    'deltakelse_1',
-    '2025-04-01T09:00:00',
-    [søknadBarn('2019-01-01')],
-);
-
-const vedtattSøknadsbehandling = (
-    id: RammebehandlingId,
-    søknad: InnvilgbarSøknad,
-    iverksatt: string,
-    internDeltakelseId: string,
-) =>
-    søknadsbehandlingInnvilgelse({
-        id,
-        status: Rammebehandlingsstatus.VEDTATT,
-        søknad,
-        iverksattTidspunkt: tilTidspunkt(iverksatt),
-        vedtaksperiode: førsteHalvår,
-        innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår, { internDeltakelseId })],
-    });
-
-const behandlingEldre = vedtattSøknadsbehandling(
-    'beh_eldre',
-    eldreSøknad,
-    '2025-01-05T09:00:00',
-    'deltakelse_1',
-);
-const behandlingNyere = vedtattSøknadsbehandling(
-    'beh_nyere',
-    nyereSøknad,
-    '2025-02-05T09:00:00',
-    'deltakelse_1',
-);
-const behandlingAnnetTiltak = vedtattSøknadsbehandling(
-    'beh_annet',
-    søknadForAnnetTiltak,
-    '2025-03-05T09:00:00',
-    'deltakelse_2',
-);
-
-const sakMedVedtakForNyesteSøknad = sakMedInnvilgetVedtak(førsteHalvår, {
-    søknadsbehandling: behandlingNyere,
-    vedtak: {
-        barnetillegg: barnetilleggV2(
-            [
-                // Barnet finnes også i søknadene, og skal bare vises én gang
-                barnetilleggBarn('2015-03-01', {
-                    søknadId: 'soknad_eldre',
-                    perioder: [periode('2025-01-01', '2025-01-31')],
-                }),
-                barnFraVedtaket,
-            ],
-            [førsteHalvår],
-        ),
-    },
-});
-
-const sak = {
-    ...sakMedVedtakForNyesteSøknad,
-    søknader: [eldreSøknad, søknadForAnnetTiltak, nyereSøknad, ikkeInnvilgetSøknad],
-    rammebehandlinger: [behandlingEldre, behandlingAnnetTiltak, behandlingNyere],
-    alleRammevedtak: [
-        rammevedtak('vedtak_eldre', førsteHalvår, { behandlingId: behandlingEldre.id }),
-        rammevedtak('vedtak_annet', førsteHalvår, { behandlingId: behandlingAnnetTiltak.id }),
-        ...sakMedVedtakForNyesteSøknad.alleRammevedtak,
-    ],
-};
+const alleKandidater = [
+    kandidatMedSladdetFødselsdato,
+    kandidatFraSøknad,
+    kandidatFraVedtaket,
+    kandidatSomErLagret,
+    kandidatFraSøknadForAnnetTiltak,
+];
 
 describe('hentBarnFraSøknader', () => {
-    test('henter barna fra de innvilgede søknadene for tiltaksdeltakelsene det innvilges for, én gang per barn fra den nyeste', () => {
-        const barn = hentBarnFraSøknader(revurderingInnvilgelse(), innvilgelsesperioder, sak).map(
-            (it) => it.barn,
+    test('gir kandidatene fra søknadene som er aktuelle for tiltaksdeltakelsene det innvilges for', () => {
+        const barn = hentBarnFraSøknader(
+            revurderingInnvilgelse({ barnetilleggKandidater: alleKandidater }),
+            innvilgelsesperioder,
         );
 
         expect(barn).toEqual([
-            expect.objectContaining({
-                fornavn: ikkeSladdet('Nytt'),
-                fnr: ikkeSladdet('01012012345'),
-                søknadId: 'soknad_nyere',
-            }),
-            expect.objectContaining({
-                fødselsdato: ikkeSladdet('2015-03-01'),
-                søknadId: 'soknad_nyere',
-            }),
+            {
+                barn: expect.objectContaining({
+                    fødselsdato: ikkeSladdet('2015-03-01'),
+                    søknadId: 'soknad_nyere',
+                    perioder: null,
+                }),
+                opplysninger: kandidatFraSøknad.søknadsopplysninger,
+            },
         ]);
     });
 
-    test('bruker ikke søknader som ikke er innvilget', () => {
-        const barn = hentBarnFraSøknader(revurderingInnvilgelse(), innvilgelsesperioder, sak);
+    test('gir kandidater uten tiltaksdeltakelser uansett hva det innvilges for', () => {
+        const kandidat = barnetilleggKandidat('2015-03-01');
 
-        expect(barn.map((it) => it.barn.søknadId)).not.toContain('soknad_ikke_innvilget');
-    });
-
-    test('gir ingen barn når ingen innvilget søknad gjelder tiltaksdeltakelsen det innvilges for', () => {
         expect(
-            hentBarnFraSøknader(
-                revurderingInnvilgelse(),
-                [innvilgelsesperiode(førsteHalvår, { internDeltakelseId: 'deltakelse_3' })],
-                sak,
-            ),
-        ).toEqual([]);
+            hentBarnFraSøknader(revurderingInnvilgelse({ barnetilleggKandidater: [kandidat] }), [
+                innvilgelsesperiode(førsteHalvår, { internDeltakelseId: 'deltakelse_3' }),
+            ]),
+        ).toHaveLength(1);
     });
 });
 
 describe('hentBarnetilleggKandidater', () => {
-    test('viser lagrede barn, barn fra søknadene, fra gjeldende vedtak og lagt til av saksbehandler, uten duplikater, med eldste først', () => {
-        const lagretBarn = barnetilleggBarn('2017-01-01', { fornavn: ikkeSladdet('Lagret') });
-        const lagretBarnMedSladdetFødselsdato = barnetilleggBarn('2010-01-01', {
-            fornavn: ikkeSladdet('Sladdet'),
-            fødselsdato: sladdet,
-        });
-
+    test('viser de aktuelle kandidatene og barn lagt til av saksbehandler, uten duplikater, med eldste først', () => {
         const manueltBarn = skjemaBarn('2024-01-01', {
             fornavn: ikkeSladdet('Manuelt'),
             kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
@@ -201,21 +103,14 @@ describe('hentBarnetilleggKandidater', () => {
 
         const behandling = revurderingInnvilgelse({
             innvilgelsesperioder,
-            barnetillegg: barnetilleggV2(
-                [lagretBarnMedSladdetFødselsdato, lagretBarn],
-                [førsteHalvår],
-            ),
+            barnetilleggKandidater: alleKandidater,
         });
 
-        const kandidater = hentBarnetilleggKandidater(
-            behandling,
-            {
-                innvilgelsesperioder,
-                valgteBarn: [valgtBarnFraSøknad, manueltBarn],
-                manueltLagtTilBarn: [manueltBarn],
-            },
-            sak,
-        );
+        const kandidater = hentBarnetilleggKandidater(behandling, {
+            innvilgelsesperioder,
+            valgteBarn: [valgtBarnFraSøknad, manueltBarn],
+            manueltLagtTilBarn: [manueltBarn],
+        });
 
         expect(
             kandidater.map(({ barn, erValgt, kanFjernes, søknadsopplysninger }) => ({
@@ -247,7 +142,6 @@ describe('hentBarnetilleggKandidater', () => {
                 kanFjernes: false,
                 fraSøknad: false,
             },
-            { fornavn: 'Nytt', perioder: null, erValgt: false, kanFjernes: false, fraSøknad: true },
             {
                 fornavn: 'Manuelt',
                 perioder: null,
@@ -276,11 +170,11 @@ describe('hentBarnetilleggKandidater', () => {
             søknadId: null,
         });
 
-        const kandidater = hentBarnetilleggKandidater(
-            søknadsbehandling,
-            { innvilgelsesperioder, valgteBarn: [valgtMedFnr], manueltLagtTilBarn: [] },
-            sak,
-        );
+        const kandidater = hentBarnetilleggKandidater(søknadsbehandling, {
+            innvilgelsesperioder,
+            valgteBarn: [valgtMedFnr],
+            manueltLagtTilBarn: [],
+        });
 
         expect(kandidater).toHaveLength(1);
         expect(kandidater[0]).toMatchObject({ barn: valgtMedFnr, erValgt: true });
@@ -294,13 +188,12 @@ describe('hentBarnetilleggKandidater', () => {
             innvilgelsesperioder,
             barnetillegg: barnetilleggV2([valgtBarn], [førsteHalvår]),
         });
-        const state = lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak);
+        const state = lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder);
 
-        const kandidater = hentBarnetilleggKandidater(
-            behandling,
-            { innvilgelsesperioder, ...state },
-            sak,
-        );
+        const kandidater = hentBarnetilleggKandidater(behandling, {
+            innvilgelsesperioder,
+            ...state,
+        });
 
         expect(kandidater).toEqual([
             expect.objectContaining({
@@ -318,20 +211,30 @@ describe('lagrede barn lagt til av saksbehandler', () => {
         søknadId: null,
     });
     // Samme barn som i gjeldende vedtak, og vil vises derfra selv om det fjernes
-    const ogsåIVedtaket = {
-        ...barnFraVedtaket,
+    const ogsåIVedtaket = barnetilleggBarn('2016-01-01', {
+        fornavn: ikkeSladdet('Vedtak'),
         kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
         søknadId: null,
-    };
+    });
 
+    // Backend gir ikke lagrede barn lagt til av saksbehandler som kandidater, men gir barna fra gjeldende vedtak
     const behandling = revurderingInnvilgelse({
         innvilgelsesperioder,
         barnetillegg: barnetilleggV2([lagtTilAvSaksbehandler, ogsåIVedtaket], [førsteHalvår]),
+        barnetilleggKandidater: [
+            barnetilleggKandidat('2016-01-01', {
+                fornavn: ikkeSladdet('Vedtak'),
+                kilde: BarnetilleggBarnKilde.SAKSBEHANDLER,
+                søknadId: null,
+                søknadsopplysninger: null,
+                fraGjeldendeVedtak: true,
+            }),
+        ],
     });
 
-    const state = lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder, sak);
+    const state = lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder);
     const kandidater = () =>
-        hentBarnetilleggKandidater(behandling, { innvilgelsesperioder, ...state }, sak);
+        hentBarnetilleggKandidater(behandling, { innvilgelsesperioder, ...state });
 
     test('kan fjernes, med mindre barnet også finnes i søknadene eller gjeldende vedtak', () => {
         expect(
@@ -348,39 +251,13 @@ describe('lagrede barn lagt til av saksbehandler', () => {
         const fjernet = nonNullish(
             kandidater().find((it) => it.barn.fornavn.verdi === 'Lagt til'),
         ).barn;
-        const etterFjerning = hentBarnetilleggKandidater(
-            behandling,
-            {
-                innvilgelsesperioder,
-                valgteBarn: state.valgteBarn.filter((it) => it.key !== fjernet.key),
-                manueltLagtTilBarn: state.manueltLagtTilBarn.filter((it) => it.key !== fjernet.key),
-            },
-            sak,
-        );
+        const etterFjerning = hentBarnetilleggKandidater(behandling, {
+            innvilgelsesperioder,
+            valgteBarn: state.valgteBarn.filter((it) => it.key !== fjernet.key),
+            manueltLagtTilBarn: state.manueltLagtTilBarn.filter((it) => it.key !== fjernet.key),
+        });
 
         expect(etterFjerning.map((it) => it.barn.fornavn.verdi)).not.toContain('Lagt til');
         expect(etterFjerning.map((it) => it.barn.fornavn.verdi)).toContain('Vedtak');
-    });
-});
-
-describe('tilForhåndsvisningBarnetilleggDTO', () => {
-    const behandling = søknadsbehandlingInnvilgelse({
-        barnetillegg: barnetilleggV1([barnetilleggPeriode(1, førsteHalvår)]),
-    });
-    const innvilgelse = { harBarnetillegg: true, valgteBarn: [skjemaBarn('2020-01-01')] };
-
-    test('sender lagrede perioder med antall barn når behandlingen ikke kan endres', () => {
-        expect(
-            tilForhåndsvisningBarnetilleggDTO(behandling, innvilgelse, true, 'Begrunnelse'),
-        ).toEqual({
-            perioder: [barnetilleggPeriode(1, førsteHalvår)],
-            begrunnelse: 'Begrunnelse',
-        });
-    });
-
-    test('sender valgte barn når behandlingen kan endres', () => {
-        expect(
-            tilForhåndsvisningBarnetilleggDTO(behandling, innvilgelse, false, null),
-        ).toMatchObject({ barn: [{ fødselsdato: '2020-01-01' }], begrunnelse: null });
     });
 });

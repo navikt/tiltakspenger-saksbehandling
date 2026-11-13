@@ -1,14 +1,24 @@
 import { describe, expect, test } from '@jest/globals';
 import { tilDato } from '~/types/DatoTid';
 import { validerBarnetillegg } from '~/lib/rammebehandling/felles/validering/validerBarnetillegg';
-import { innvilgelsesperiode, periode, søknad, søknadBarn } from '~test/rammebehandling';
+import {
+    innvilgelsesperiode,
+    periode,
+    søknad,
+    søknadBarn,
+    søknadsbehandlingIkkeValgt,
+} from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
-import { hentBarnFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { hentBarnFraSøknader } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { Søknad } from '~/lib/søknad/søknadTyper';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
 
 const førsteKvartal = periode('2025-01-01', '2025-03-31');
 const innvilgelsesperioder = [innvilgelsesperiode(førsteKvartal)];
+
+const hentBarnFraSøknad = (søknad: Søknad) =>
+    hentBarnFraSøknader(søknadsbehandlingIkkeValgt({ søknad }), innvilgelsesperioder);
 
 // Barnet er under 16 år i hele førsteKvartal
 const barnFraSøknad = hentBarnFraSøknad(søknad([søknadBarn('2020-05-05')]));

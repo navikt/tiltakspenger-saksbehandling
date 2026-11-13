@@ -124,6 +124,7 @@ const omgjøringOpphør = (omgjørVedtak: VedtakId, vedtaksperiode: Periode): Om
     tidslinjeFørOgEtter: null,
     tiltakshistorikk: { innslag: [], harEndringEtterSistEndret: false },
     innvilgbarePerioder: [],
+    barnetilleggKandidater: [],
     valgteHjemler: [HjemmelForOpphør.DeltarIkkePåArbeidsmarkedstiltak],
     omgjørRammevedtak: [
         { vedtakId: omgjørVedtak, periode: vedtaksperiode, omgjøringsgrad: Omgjøringsgrad.HELT },
