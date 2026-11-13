@@ -15,8 +15,12 @@ import { TiltakshistorikkForTiltak } from '../tiltakshistorikk/TiltakshistorikkF
 import { TiltakshistorikkForBehandling } from '~/lib/rammebehandling/typer/Tiltakshistorikk';
 import { Tidspunkt } from '~/types/DatoTid';
 import { useCtrlHoldesInne } from '~/utils/useCtrlHoldesInne';
+import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
+import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
+
+import style from './BehandlingTiltakOpplysninger.module.css';
 
 type Historikk = {
     tiltakshistorikk: TiltakshistorikkForBehandling;
@@ -103,41 +107,45 @@ const TiltakSomFratarRettListe = ({
                 } = tiltak;
 
                 return (
-                    <VStack key={eksternDeltakelseId} gap={'space-4'} align={'start'}>
-                        <TiltakHeader typeNavn={typeNavn} />
-                        <GirIkkeRettTag />
-                        <div>
-                            <Tiltaksnavn tittel={tittel} />
-                            <BehandlingSaksopplysning
-                                navn={'Periode'}
-                                verdi={
-                                    erLukketPeriode(periode) ? formaterPeriode(periode) : 'Ukjent'
-                                }
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Registerkilde'}
-                                verdi={kildeTekst[kilde]}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Status'}
-                                verdi={tiltakDeltakerstatusTekst[deltakelseStatus]}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Antall dager i uka'}
-                                verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Deltakelsesprosent'}
-                                verdi={prosentTekst(deltakelseProsent)}
-                            />
-                            {visIder && (
+                    <RichTooltip
+                        key={eksternDeltakelseId}
+                        content={<TiltakIder eksternDeltakelseId={eksternDeltakelseId} />}
+                        placement={'right'}
+                        className={style.tiltakIder}
+                        deaktivert={!visIder}
+                    >
+                        <VStack gap={'space-4'} align={'start'}>
+                            <TiltakHeader typeNavn={typeNavn} />
+                            <GirIkkeRettTag />
+                            <div>
+                                <Tiltaksnavn tittel={tittel} />
                                 <BehandlingSaksopplysning
-                                    navn={'Deltakelse-id'}
-                                    verdi={eksternDeltakelseId}
+                                    navn={'Periode'}
+                                    verdi={
+                                        erLukketPeriode(periode)
+                                            ? formaterPeriode(periode)
+                                            : 'Ukjent'
+                                    }
                                 />
-                            )}
-                        </div>
-                    </VStack>
+                                <BehandlingSaksopplysning
+                                    navn={'Registerkilde'}
+                                    verdi={kildeTekst[kilde]}
+                                />
+                                <BehandlingSaksopplysning
+                                    navn={'Status'}
+                                    verdi={tiltakDeltakerstatusTekst[deltakelseStatus]}
+                                />
+                                <BehandlingSaksopplysning
+                                    navn={'Antall dager i uka'}
+                                    verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
+                                />
+                                <BehandlingSaksopplysning
+                                    navn={'Deltakelsesprosent'}
+                                    verdi={prosentTekst(deltakelseProsent)}
+                                />
+                            </div>
+                        </VStack>
+                    </RichTooltip>
                 );
             })}
         </VStack>
@@ -171,52 +179,57 @@ const TiltakListe = ({
                 } = tiltak;
 
                 return (
-                    <VStack key={eksternDeltagelseId} gap={'space-8'} align={'start'}>
-                        <TiltakHeader typeNavn={typeNavn} />
-                        <TiltakshistorikkForTiltak
-                            internDeltakelseId={internDeltakelseId}
-                            typeNavn={typeNavn}
-                            {...historikk}
-                        />
-                        <div>
-                            <Tiltaksnavn tittel={tittel} />
-                            {erLukketPeriode(periode) && (
+                    <RichTooltip
+                        key={eksternDeltagelseId}
+                        content={
+                            <TiltakIder
+                                eksternDeltakelseId={eksternDeltagelseId}
+                                gjennomføringId={gjennomføringId}
+                                internDeltakelseId={internDeltakelseId}
+                            />
+                        }
+                        placement={'right'}
+                        className={style.tiltakIder}
+                        deaktivert={!visIder}
+                    >
+                        <VStack gap={'space-8'} align={'start'}>
+                            <TiltakHeader typeNavn={typeNavn} />
+                            <TiltakshistorikkForTiltak
+                                internDeltakelseId={internDeltakelseId}
+                                typeNavn={typeNavn}
+                                {...historikk}
+                            />
+                            <div>
+                                <Tiltaksnavn tittel={tittel} />
+                                {erLukketPeriode(periode) && (
+                                    <BehandlingSaksopplysning
+                                        navn={'Periode'}
+                                        verdi={formaterPeriode(periode)}
+                                    />
+                                )}
                                 <BehandlingSaksopplysning
-                                    navn={'Periode'}
-                                    verdi={formaterPeriode(periode)}
+                                    navn={'Registerkilde'}
+                                    verdi={kildeTekst[kilde]}
                                 />
-                            )}
-                            <BehandlingSaksopplysning
-                                navn={'Registerkilde'}
-                                verdi={kildeTekst[kilde]}
-                            />
-                            <BehandlingSaksopplysning navn={'Status'} verdi={deltakelseStatus} />
-                            <BehandlingSaksopplysning
-                                navn={'Antall dager i uka'}
-                                verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Deltakelsesprosent'}
-                                verdi={prosentTekst(deltakelseProsent)}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Gjennomføringsprosent'}
-                                verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
-                            />
-                            {visIder && (
-                                <>
-                                    <BehandlingSaksopplysning
-                                        navn={'Gjennomføring-id'}
-                                        verdi={gjennomføringId ?? 'Ukjent'}
-                                    />
-                                    <BehandlingSaksopplysning
-                                        navn={'Deltakelse-id'}
-                                        verdi={eksternDeltagelseId ?? 'Ukjent'}
-                                    />
-                                </>
-                            )}
-                        </div>
-                    </VStack>
+                                <BehandlingSaksopplysning
+                                    navn={'Status'}
+                                    verdi={deltakelseStatus}
+                                />
+                                <BehandlingSaksopplysning
+                                    navn={'Antall dager i uka'}
+                                    verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
+                                />
+                                <BehandlingSaksopplysning
+                                    navn={'Deltakelsesprosent'}
+                                    verdi={prosentTekst(deltakelseProsent)}
+                                />
+                                <BehandlingSaksopplysning
+                                    navn={'Gjennomføringsprosent'}
+                                    verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
+                                />
+                            </div>
+                        </VStack>
+                    </RichTooltip>
                 );
             })}
         </VStack>
@@ -238,4 +251,34 @@ const Tiltaksnavn = ({ tittel }: { tittel: SladdbarVerdi<Nullable<string>> }) =>
         navn={'Tiltaksnavn'}
         verdi={formaterSladdbarVerdi(tittel, (tekst) => tekst, 'Ukjent')}
     />
+);
+
+/**
+ * Id-ene til deltakelsen, til feilsøking.
+ * Deltakelser som fratar rett har verken gjennomføring eller intern id.
+ */
+const TiltakIder = ({
+    eksternDeltakelseId,
+    gjennomføringId,
+    internDeltakelseId,
+}: {
+    eksternDeltakelseId: string;
+    gjennomføringId?: string | null;
+    internDeltakelseId?: string;
+}) => (
+    <VStack gap={'space-4'}>
+        <DetaljHorisontal navn={'Deltakelse-id:'} size={'small'}>
+            {eksternDeltakelseId}
+        </DetaljHorisontal>
+        {gjennomføringId !== undefined && (
+            <DetaljHorisontal navn={'Gjennomføring-id:'} size={'small'}>
+                {gjennomføringId ?? 'Ukjent'}
+            </DetaljHorisontal>
+        )}
+        {internDeltakelseId !== undefined && (
+            <DetaljHorisontal navn={'Intern id:'} size={'small'}>
+                {internDeltakelseId}
+            </DetaljHorisontal>
+        )}
+    </VStack>
 );

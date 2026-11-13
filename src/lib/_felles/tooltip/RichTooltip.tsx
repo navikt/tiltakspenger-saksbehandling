@@ -29,9 +29,18 @@ type Props = {
     placement?: PopoverProps['placement'];
     offset?: number;
     className?: string;
+    /** Hindrer at tooltipen vises, uten å endre elementet den forankres til. */
+    deaktivert?: boolean;
 };
 
-export const RichTooltip = ({ content, children, placement = 'top', offset, className }: Props) => {
+export const RichTooltip = ({
+    content,
+    children,
+    placement = 'top',
+    offset,
+    className,
+    deaktivert = false,
+}: Props) => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [open, setOpen] = useState(false);
 
@@ -75,7 +84,7 @@ export const RichTooltip = ({ content, children, placement = 'top', offset, clas
             {anchor}
             <Portal>
                 <Popover
-                    open={open && anchorEl !== null}
+                    open={open && !deaktivert && anchorEl !== null}
                     onClose={() => setOpen(false)}
                     anchorEl={anchorEl}
                     placement={placement}
