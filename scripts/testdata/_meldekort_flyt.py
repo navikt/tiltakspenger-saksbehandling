@@ -18,16 +18,22 @@ BASE_URL, TOKEN_SAKSBEHANDLER og TOKEN_BESLUTTER kan overstyres med miljøvariab
 import json
 import os
 import sys
-import urllib.parse
+import time
 import urllib.request
 from datetime import date, timedelta
 
 BASE = os.environ.get("BASE_URL", "http://localhost:8080")
 TOKEN_SAKSBEHANDLER = os.environ.get("TOKEN_SAKSBEHANDLER", "TokenMcTokenface")
 TOKEN_BESLUTTER = os.environ.get("TOKEN_BESLUTTER", "TokenMcTokenface2")
+SIMULERINGSFORSØK = 6
+SIMULERINGSPAUSE = 20
 
 
-def kall(metode, sti, token, body=None, tillatt_kode=None):
+class Feilkode(Exception):
+    pass
+
+
+def kall(metode, sti, token, body=None, tål=()):
     req = urllib.request.Request(
         BASE + sti,
         method=metode,
@@ -43,8 +49,12 @@ def kall(metode, sti, token, body=None, tillatt_kode=None):
             return json.loads(tekst) if tekst else None
     except urllib.error.HTTPError as e:
         kropp = e.read().decode()
-        if tillatt_kode and tillatt_kode in kropp:
-            return None
+        try:
+            kode = json.loads(kropp).get("kode")
+        except ValueError:
+            kode = None
+        if kode in tål:
+            raise Feilkode(kode)
         print(f"FEIL {metode} {sti} -> {e.code}: {kropp[:500]}", file=sys.stderr)
         sys.exit(1)
 
@@ -75,6 +85,16 @@ def dager_for_kjede(kjede, overrides):
     return dager
 
 
+def tilbake_til_saksbehandler(sak, sak_id, meldekort_id):
+    """En åpen behandling som står hos beslutter fra en avbrutt kjøring, sendes tilbake så den kan fylles ut på nytt."""
+    status = sak["meldekortbehandlinger"][meldekort_id]["status"]
+    if status == "KLAR_TIL_BESLUTNING":
+        kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/ta", TOKEN_BESLUTTER)
+        status = "UNDER_BESLUTNING"
+    if status == "UNDER_BESLUTNING":
+        kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/underkjenn", TOKEN_BESLUTTER, {"begrunnelse": "Fylles ut på nytt"})
+
+
 def main():
     if len(sys.argv) < 3 or sys.argv[1] not in ("iverksett", "korriger"):
         print(__doc__, file=sys.stderr)
@@ -86,41 +106,53 @@ def main():
 
     sak = kall("GET", f"/sak/{saksnummer}", TOKEN_SAKSBEHANDLER)
     sak_id = sak["sakId"]
-    kjede_id = sak["meldeperiodeKjeder"][kjedeindeks]["id"]
-    kjede_id_encoded = urllib.parse.quote(kjede_id, safe="")
-
-    kall(
-        "POST", f"/sak/{sak_id}/meldeperiode/{kjede_id_encoded}/opprettBehandling",
-        TOKEN_SAKSBEHANDLER, {"v2": False}, tillatt_kode="HAR_ÅPEN_BEHANDLING",
-    )
-    sak = kall("GET", f"/sak/{saksnummer}", TOKEN_SAKSBEHANDLER)
     kjede = sak["meldeperiodeKjeder"][kjedeindeks]
-    åpne = [b for b in kjede["meldekortbehandlinger"] if b["status"] == "UNDER_BEHANDLING"]
-    if not åpne:
-        ferdige = [b for b in kjede["meldekortbehandlinger"] if b["status"] in ("GODKJENT", "AUTOMATISK_BEHANDLET")]
-        if modus == "iverksett" and ferdige:
-            # Kjeden er allerede iverksatt fra en tidligere kjøring -- ingenting å gjøre.
-            print(ferdige[-1]["id"])
-            return
-        print("FEIL: fant ingen åpen meldekortbehandling etter opprettelse.", file=sys.stderr)
-        sys.exit(1)
-    meldekort_id = åpne[-1]["id"]
 
-    kall(
-        "POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/oppdater",
-        TOKEN_SAKSBEHANDLER,
-        {
-            "meldeperioder": [{"kjedeId": kjede["id"], "dager": dager_for_kjede(kjede, overrides)}],
-            "begrunnelse": None,
-            "tekstTilVedtaksbrev": None,
-            "skalSendeVedtaksbrev": False,
-        },
-    )
+    meldekort_id = kjede["åpenBehandlingId"]
+    if meldekort_id is None:
+        meldekort_id = kall(
+            "POST", f"/sak/{sak_id}/meldekort/opprettBehandling",
+            TOKEN_SAKSBEHANDLER, {"kjedeIder": [kjede["id"]]},
+        )["id"]
+    else:
+        tilbake_til_saksbehandler(sak, sak_id, meldekort_id)
 
-    if modus == "iverksett":
-        kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/sendtilbeslutning", TOKEN_SAKSBEHANDLER)
-        kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/ta", TOKEN_BESLUTTER)
-        kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/iverksett", TOKEN_BESLUTTER)
+    body = {
+        "meldeperioder": [{"kjedeId": kjede["id"], "dager": dager_for_kjede(kjede, overrides)}],
+        "begrunnelse": None,
+        "tekstTilVedtaksbrev": None,
+        "skalSendeVedtaksbrev": False,
+        "skalJournalføreNotat": False,
+    }
+
+    if modus == "korriger":
+        kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/oppdater", TOKEN_SAKSBEHANDLER, body)
+        print(meldekort_id)
+        return
+
+    # Simuleringen kan feile eller endre seg mens en tidligere utbetaling på saken er på vei til Oppdrag; da prøver vi på nytt.
+    for forsøk in range(1, SIMULERINGSFORSØK + 1):
+        try:
+            kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/oppdater", TOKEN_SAKSBEHANDLER, body)
+            sendt = kall(
+                "POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/sendtilbeslutning",
+                TOKEN_SAKSBEHANDLER, tål=("simulering_endret",),
+            )
+            # Etter underkjenning går behandlingen rett tilbake til samme beslutter.
+            if sendt["meldekortbehandlinger"][meldekort_id]["status"] == "KLAR_TIL_BESLUTNING":
+                kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/ta", TOKEN_BESLUTTER)
+            try:
+                kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/iverksett", TOKEN_BESLUTTER, tål=("må_simuleres",))
+                break
+            except Feilkode:
+                kall("POST", f"/sak/{sak_id}/meldekort/{meldekort_id}/underkjenn", TOKEN_BESLUTTER, {"begrunnelse": "Simuleringen mangler"})
+                raise
+        except Feilkode as feil:
+            if forsøk == SIMULERINGSFORSØK:
+                print(f"FEIL: {meldekort_id} ble ikke iverksatt etter {forsøk} forsøk ({feil})", file=sys.stderr)
+                sys.exit(1)
+            print(f"{feil}, prøver igjen om {SIMULERINGSPAUSE} sekunder ({forsøk}/{SIMULERINGSFORSØK})", file=sys.stderr)
+            time.sleep(SIMULERINGSPAUSE)
 
     print(meldekort_id)
 

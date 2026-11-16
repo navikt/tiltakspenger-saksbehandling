@@ -53,3 +53,8 @@ next-env.d.ts
 .worktrees/
 .worktree/
 worktrees/
+
+# dev-tokens fra scripts/testdata/dev-token.sh
+/scripts/testdata/.dev-tokens/
+# testbrukerlista fra Confluence, se scripts/testdata/README.md
+/scripts/testdata/.dev-testbrukere.json

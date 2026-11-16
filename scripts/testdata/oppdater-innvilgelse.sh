@@ -25,7 +25,7 @@ body="$(cat <<JSON
   "begrunnelseVilkårsvurdering":"test",
   "fritekstTilVedtaksbrev":"test",
   "innvilgelsesperioder":[{"periode":{"fraOgMed":"${fom}","tilOgMed":"${tom}"},"antallDagerPerMeldeperiode":10,"internDeltakelseId":"${intern_deltakelse_id}"}],
-  "barnetillegg":{"begrunnelse":null,"perioder":[]},
+  "barnetillegg":{"barn":[],"begrunnelse":null},
   "skalSendeVedtaksbrev":true
 }
 JSON

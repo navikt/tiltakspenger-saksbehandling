@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASE_URL="${BASE_URL:-http://localhost:8080}"
-TOKEN_SAKSBEHANDLER="${TOKEN_SAKSBEHANDLER:-TokenMcTokenface}"
-TOKEN_BESLUTTER="${TOKEN_BESLUTTER:-TokenMcTokenface2}"
-
 log() {
     printf '[%s] %s\n' "$(basename "${0:-script}")" "$*" >&2
 }
@@ -14,8 +10,62 @@ fail() {
     exit 1
 }
 
+# MILJO=dev kjører mot sb-api i dev med OBO-tokens fra filer (ASCII i navnet fordi bash ikke tillater æøå i variabelnavn).
+MILJO="${MILJO:-lokal}"
+LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEV_TOKEN_DIR="${DEV_TOKEN_DIR:-${LIB_DIR}/.dev-tokens}"
+
+# Gir identen til et gyldig OBO-token med rollen fra .dev-tokens/ (lagret med dev-token.sh), fra en annen ident enn $2.
+# DEV_SAKSBEHANDLER og DEV_BESLUTTER velger en bestemt ident.
+velg_dev_ident() {
+    local rolle="$1" unntatt="${2:-}" valgt="$3" fil
+    if [[ -n $valgt ]]; then
+        fil="${DEV_TOKEN_DIR}/dev-token-${valgt}"
+        python3 "${LIB_DIR}/_dev_token.py" beskriv "$fil" >/dev/null 2>&1 ||
+            fail "Mangler gyldig token for ${valgt} i ${DEV_TOKEN_DIR}. Kjør: ${LIB_DIR}/dev-token.sh"
+    else
+        fil="$(python3 "${LIB_DIR}/_dev_token.py" velg "$DEV_TOKEN_DIR" "$rolle" "$unntatt")" ||
+            fail "Ingen gyldige tokens med rollen ${rolle}${unntatt:+ fra en annen ident enn ${unntatt}} i ${DEV_TOKEN_DIR}. Kjør: ${LIB_DIR}/dev-token.sh (og ${LIB_DIR}/dev-token.sh liste for å se hva som finnes)"
+    fi
+    printf '%s' "${fil##*/dev-token-}"
+}
+
+case "$MILJO" in
+lokal)
+    BASE_URL="${BASE_URL:-http://localhost:8080}"
+    TOKEN_SAKSBEHANDLER="${TOKEN_SAKSBEHANDLER:-TokenMcTokenface}"
+    TOKEN_BESLUTTER="${TOKEN_BESLUTTER:-TokenMcTokenface2}"
+    ;;
+dev)
+    BASE_URL="${BASE_URL:-https://tiltakspenger-saksbehandling-api.intern.dev.nav.no}"
+    if [[ -z ${TOKEN_SAKSBEHANDLER:-} ]]; then
+        IDENT_SAKSBEHANDLER="$(velg_dev_ident saksbehandler "" "${DEV_SAKSBEHANDLER:-}")"
+        TOKEN_SAKSBEHANDLER="$(tr -d '[:space:]' <"${DEV_TOKEN_DIR}/dev-token-${IDENT_SAKSBEHANDLER}")"
+    fi
+    if [[ -z ${TOKEN_BESLUTTER:-} ]]; then
+        IDENT_BESLUTTER="$(velg_dev_ident beslutter "${IDENT_SAKSBEHANDLER:-}" "${DEV_BESLUTTER:-}")"
+        TOKEN_BESLUTTER="$(tr -d '[:space:]' <"${DEV_TOKEN_DIR}/dev-token-${IDENT_BESLUTTER}")"
+    fi
+    log "Dev: saksbehandler ${IDENT_SAKSBEHANDLER:-fra TOKEN_SAKSBEHANDLER}, beslutter ${IDENT_BESLUTTER:-fra TOKEN_BESLUTTER}"
+    ;;
+*) fail "Ukjent MILJO=${MILJO}. Bruk lokal eller dev." ;;
+esac
+# Eksporteres så _meldekort_flyt.py får de samme verdiene.
+export MILJO BASE_URL TOKEN_SAKSBEHANDLER TOKEN_BESLUTTER
+
 require_server() {
-    curl -sSf "${BASE_URL}/isready" >/dev/null || fail "LokalMain svarer ikke på ${BASE_URL}/isready."
+    curl -sSf "${BASE_URL}/isready" >/dev/null || fail "sb-api svarer ikke på ${BASE_URL}/isready."
+}
+
+# Bare syntetiske fnr slipper gjennom: Navs serie (måned + 40, tredje siffer 4–7, Dolly/testnorge) og Skatteetatens (måned + 80, tredje siffer 8–9).
+# Ekte fnr og D-nummer har 0 eller 1 som tredje siffer.
+# 4 og 5 som tredje siffer kan være H-nummer på ekte personer, så de avvises også.
+er_syntetisk_fnr() {
+    [[ "$1" =~ ^[0-9]{2}[4-9][0-9]{8}$ ]]
+}
+
+krev_syntetisk_fnr() {
+    er_syntetisk_fnr "$1" || fail "Fødselsnummeret er ikke i den syntetiske serien (4–9 som tredje siffer)."
 }
 
 http() {
@@ -24,14 +74,19 @@ http() {
     local path="$3"
     shift 3
 
-    local -a cmd=(curl -sSf -X "$method" "${BASE_URL}${path}")
+    local -a cmd=(curl -sS --fail-with-body -X "$method" "${BASE_URL}${path}")
     if [[ "$token" != "-" ]]; then
         cmd+=(-H "Authorization: Bearer ${token}")
     fi
     if [[ $# -gt 0 ]]; then
         cmd+=(-H "Content-Type: application/json" --data "$1")
     fi
-    "${cmd[@]}"
+    local svar
+    svar="$("${cmd[@]}")" || {
+        printf '%s %s: %s\n' "$method" "$path" "$svar" >&2
+        return 1
+    }
+    printf '%s' "$svar"
 }
 
 http_noauth() {

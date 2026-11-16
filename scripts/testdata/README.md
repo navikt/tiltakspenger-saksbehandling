@@ -19,7 +19,7 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
 - `start-soknadsbehandling.sh` – oppretter søknadsbehandling for digital søknad.
 - `oppdater-innvilgelse.sh` – oppdaterer behandling med resultat INNVILGELSE.
 - `send-til-beslutning.sh` – sender behandling til beslutning.
-- `ta-behandling.sh` – beslutter tar behandlingen (4-øyne).
+- `ta-behandling.sh` – beslutter tar behandlingen (4-øyne) via `POST /behandlinger/ta`.
 - `iverksett.sh` – beslutter iverksetter behandlingen.
 - `opprett-meldekortbehandling.sh` – oppretter meldekortbehandling for kjede.
 - `_meldekort_flyt.py` – delt driver for meldekortflyten (opprett, fyll ut,
@@ -64,6 +64,42 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
 - `forhandsvis-alle-pdfer.sh` – innvilget sak + forhåndsvisning av alle PDF-brev
   (vedtaksbrev, meldekortvedtaksbrev, klagebrev). PDF-ene lagres i `$PDF_UT_DIR`
   (default `/tmp/tiltakspenger-pdfer`), én fil per brev.
+
+## Dev
+
+Scriptene kan kjøre mot sb-api i dev med `MILJO=dev`.
+`send-soknad-dev.sh` og `helved-v3-scenarioer.sh` setter dette selv.
+
+Tokens lages av en person, ikke av scriptene, og varer én time.
+`dev-token.sh` åpner [tokengeneratoren](https://azure-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:tpts:tiltakspenger-saksbehandling-api), ber Entra spørre hvilken konto du vil bruke, leser tokenet fra utklippstavlen etter at du har kopiert det, og lagrer det som `.dev-tokens/dev-token-<NAVident>` ved siden av scriptet (ignorert av git).
+Kjør det én gang per ident du vil ha med.
+`dev-token.sh liste` viser de lagrede tokenene med ident, roller og utløpstid.
+
+```bash
+./dev-token.sh
+./dev-token.sh liste
+```
+
+Scriptene leser rollene fra `groups` i tokenet og velger selv en saksbehandler og en beslutter med en annen ident (fire øyne).
+Velg en bestemt ident med `DEV_SAKSBEHANDLER=<ident>` eller `DEV_BESLUTTER=<ident>`.
+En bruker med fortrolig eller strengt fortrolig adresse gir 403 med `tilgang_nektet_kode_7` eller `tilgang_nektet_kode_6`; begge identene må da ha tilgang til den graderingen, og tokenets `groups` viser ikke det.
+
+`_lib.sh` stopper og viser `dev-token.sh`-kommandoen når et token mangler eller har utløpt.
+
+Scriptene godtar bare syntetiske fødselsnumre: Navs serie fra Dolly og testnorge (måned + 40) og Skatteetatens (måned + 80), altså 4–9 som tredje siffer.
+`finn-testbrukere.sh` hopper over andre rader uten å skrive dem ut.
+
+- `finn-testbrukere.sh [FANE ...]` – lister saker fra benken med saksnummer, fnr, oppdragsversjon (V2/V3 utledet av datoen i saksnummeret), fane og status.
+- `sjekk-testbrukere.sh` – slår opp hver bruker i `.dev-testbrukere.json` (tiltak med rett på tiltakspenger fra `GET /tiltak` i soknad-api, og sak fra sb-api), lagrer svaret i fila og lister brukerne med søkbare tiltak. `V3-KLAR` er `ja` når brukeren ikke har sak og et tiltak startet minst fire uker tilbake og varer forbi kravfristen.
+- `send-soknad-dev.sh FNR [TILTAKSINDEKS]` – sender en søknad til soknad-api i dev som brukeren selv (TokenX-token fra tokengeneratoren) og venter til den er hos sb-api.
+- `fullfor-soknadsbehandling.sh SAKSNUMMER [FOM TOM]` – fører den nyeste søknadsbehandlingen fram til vedtak, også når den starter som automatisk behandling. Virker lokalt også.
+- `helved-v3-scenarioer.sh FNR|SAKSNUMMER` – innvilgelse, første utbetaling, ny meldeperiode, korrigering med feilutbetaling, korrigering med etterbetaling og stans på én sak. Kontroller resultatet i [Utbetalingsportalen](https://utbetalingsportalen.intern.dev.nav.no/oppdragsinfo/oppdrag) og [Peisen](https://peisen.intern.dev.nav.no/).
+
+Dev bruker V3 for saker opprettet fra 2026-11-10 kl. 15, så eldre saker utbetales med V2.
+Brukeren må ha en tiltaksdeltakelse som gir rett og har startet minst fire uker tilbake, ellers er meldeperiodene ikke klare.
+`.dev-testbrukere.json` er gitignored og bygges fra tabellene på Confluence-sidene «Gamle testbrukere - 1» og «- 2», «Test for brukerstøtte - Ny vedtaksløsning for tiltakspenger» og «Test i Øst-Viken» under «Test i tiltakspenger».
+Fila har én oppføring per fnr med `fnr`, `navn` og `forekomster` (side og tabellkolonner), og `sjekk-testbrukere.sh` legger til `sjekk`.
+Nye brukere lages manuelt i Dolly og Modia etter oppskriften «Hvordan opprette testbrukere med tiltaksdeltakelse i Modia» på teamets Confluence-område; det gjelder også identbytte.
 
 ## PDF-forhåndsvisning: forutsetninger
 

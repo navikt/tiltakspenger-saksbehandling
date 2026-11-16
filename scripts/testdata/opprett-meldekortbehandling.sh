@@ -17,14 +17,13 @@ kjede_id="$2"
 saksnummer="${3:-}"
 require_server
 
-encoded_kjede_id="$(urlencode "$kjede_id")"
 raw_response="$(
     curl -sS \
         -X POST \
-        "${BASE_URL}/sak/${sak_id}/meldeperiode/${encoded_kjede_id}/opprettBehandling" \
+        "${BASE_URL}/sak/${sak_id}/meldekort/opprettBehandling" \
         -H "Authorization: Bearer ${TOKEN_SAKSBEHANDLER}" \
         -H "Content-Type: application/json" \
-        --data '{"v2":false}' \
+        --data "{\"kjedeIder\":[\"${kjede_id}\"]}" \
         -w '__HTTP_STATUS__:%{http_code}'
 )"
 http_status="${raw_response##*__HTTP_STATUS__:}"
@@ -36,7 +35,7 @@ if [[ "$http_status" =~ ^2[0-9][0-9]$ && -n "$response" ]]; then
 fi
 if [[ ! "$http_status" =~ ^2[0-9][0-9]$ ]]; then
     kode="$(jval "$response" "kode" 2>/dev/null || true)"
-    if [[ "$http_status" != "400" || "$kode" != "HAR_ÅPEN_BEHANDLING" ]]; then
+    if [[ "$http_status" != "400" || "$kode" != "kjede_er_under_behandling" ]]; then
         fail "Kunne ikke opprette meldekortbehandling (HTTP ${http_status}): ${response}"
     fi
 fi
@@ -53,7 +52,10 @@ PY
         saksnummer="$(jval "$lookup_response" "saksnummer")"
     fi
     sak_json="$(http_saksbehandler GET "/sak/${saksnummer}")"
-    meldekortbehandling_id="$(jval "$sak_json" "meldeperiodeKjeder[0].meldekortbehandlinger[0].id")"
+    meldekortbehandling_id="$(python3 -c '
+import json, sys
+print(next(k["åpenBehandlingId"] or "" for k in json.loads(sys.argv[1])["meldeperiodeKjeder"] if k["id"] == sys.argv[2]))
+' "$sak_json" "$kjede_id")"
 fi
 
 [[ -n "$meldekortbehandling_id" ]] || fail "Mangler meldekortbehandlingId etter opprettelse."

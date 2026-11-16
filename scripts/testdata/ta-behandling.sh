@@ -16,5 +16,5 @@ sak_id="$1"
 behandling_id="$2"
 require_server
 
-http_beslutter POST "/sak/${sak_id}/behandling/${behandling_id}/ta" >/dev/null
+http_beslutter POST "/behandlinger/ta" "{\"behandlinger\":[{\"behandlingId\":\"${behandling_id}\",\"sakId\":\"${sak_id}\"}]}" >/dev/null
 printf '%s\n' "$behandling_id"
