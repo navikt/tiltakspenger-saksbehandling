@@ -6,7 +6,7 @@ import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
-import { TiltaksdataOppslag } from './useHentTiltaksdata';
+import { Tiltaksdata, TiltaksdataOppslag } from './useHentTiltaksdata';
 
 const sorterNyesteFørst = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
     const aDato = a.periode.fraOgMed ?? a.periode.tilOgMed;
@@ -53,13 +53,16 @@ export const kildeTekst: Record<TiltaksdeltakelseKilde, string> = {
     [TiltaksdeltakelseKilde.TEAM_TILTAK]: modiaTekst,
 } as const;
 
+export type TiltaksdataFelt = 'tittel' | 'gjennomføringsnavn';
+
 /**
- * Hele tiltaksnavnet til deltakelsen, slik det er slått opp i kilden.
- * Vises som ukjent når deltakelsen ikke har noen tittel, f.eks. ved adressebeskyttelse.
+ * Et felt fra tiltaksdataene til deltakelsen, slik det er slått opp i kilden.
+ * Vises som ukjent når deltakelsen ikke har noen verdi, f.eks. ved adressebeskyttelse.
  */
-export const tiltaksnavnTekst = (
+export const tiltaksdataTekst = (
     oppslag: TiltaksdataOppslag,
     eksternDeltakelseId: string,
+    felt: TiltaksdataFelt,
 ): string => {
     if (oppslag.isLoading) {
         return 'Henter...';
@@ -67,10 +70,26 @@ export const tiltaksnavnTekst = (
     if (oppslag.error) {
         return '<henting feilet>';
     }
-    const tiltaksdata = oppslag.tiltaksdata?.find(
+    const tiltaksdata: Tiltaksdata | undefined = oppslag.tiltaksdata?.find(
         (data) => data.eksternDeltakelseId === eksternDeltakelseId,
     );
     return tiltaksdata
-        ? formaterSladdbarVerdi(tiltaksdata.tittel, (tittel) => tittel, 'Ukjent')
+        ? formaterSladdbarVerdi(tiltaksdata[felt], (verdi) => verdi, 'Ukjent')
         : 'Ukjent';
 };
+
+const maksLengdeGjennomføringsnavn = 75;
+const avkortetLengdeGjennomføringsnavn = 72;
+
+/**
+ * Gjennomføringsnavnet er fritekst uten lengdegrense, så lange navn avkortes for å ikke sprenge visningen.
+ * Et navn over 75 tegn kuttes til 72 tegn og avsluttes med "...".
+ * `avkortet` er false når navnet vises i sin helhet.
+ */
+export const avkortGjennomføringsnavn = (navn: string): { visning: string; avkortet: boolean } =>
+    navn.length > maksLengdeGjennomføringsnavn
+        ? {
+              visning: `${navn.slice(0, avkortetLengdeGjennomføringsnavn).trimEnd()}...`,
+              avkortet: true,
+          }
+        : { visning: navn, avkortet: false };

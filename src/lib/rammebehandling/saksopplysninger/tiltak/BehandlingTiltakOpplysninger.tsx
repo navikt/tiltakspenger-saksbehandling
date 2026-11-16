@@ -10,10 +10,12 @@ import { BodyShort, Heading, ReadMore, VStack } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
+    avkortGjennomføringsnavn,
     delOppTiltaksdeltakelser,
     kildeTekst,
     prosentTekst,
-    tiltaksnavnTekst,
+    TiltaksdataFelt,
+    tiltaksdataTekst,
 } from './tiltaksdeltakelseVisning';
 import { GirIkkeRettTag } from './GirIkkeRettTag';
 import { TiltakshistorikkForTiltak } from '../tiltakshistorikk/TiltakshistorikkForTiltak';
@@ -35,9 +37,9 @@ type Historikk = {
 };
 
 /**
- * Slår opp hele tiltaksnavnet til en deltakelse, gitt den eksterne id-en.
+ * Slår opp et felt fra tiltaksdataene til en deltakelse, gitt den eksterne id-en.
  */
-type HentTiltaksnavn = (eksternDeltakelseId: string) => string;
+type HentTiltaksdataTekst = (eksternDeltakelseId: string, felt: TiltaksdataFelt) => string;
 
 type Props = {
     sakId: SakId;
@@ -57,8 +59,8 @@ export const BehandlingTiltakOpplysninger = ({
     historikk,
 }: Props) => {
     const tiltaksdataOppslag = useHentTiltaksdata(sakId, behandlingId, historikk.oppslagstidspunkt);
-    const tiltaksnavn: HentTiltaksnavn = (eksternDeltakelseId) =>
-        tiltaksnavnTekst(tiltaksdataOppslag, eksternDeltakelseId);
+    const tiltaksdata: HentTiltaksdataTekst = (eksternDeltakelseId, felt) =>
+        tiltaksdataTekst(tiltaksdataOppslag, eksternDeltakelseId, felt);
 
     return (
         <VStack gap="space-16">
@@ -66,12 +68,12 @@ export const BehandlingTiltakOpplysninger = ({
                 tiltaksdeltakelser={tiltaksdeltakelser}
                 vurderingsperiode={vurderingsperiode}
                 historikk={historikk}
-                tiltaksnavn={tiltaksnavn}
+                tiltaksdata={tiltaksdata}
             />
             {tiltaksdeltakelserSomFratarRett.length > 0 && (
                 <TiltakSomFratarRettListe
                     tiltaksdeltakelser={tiltaksdeltakelserSomFratarRett}
-                    tiltaksnavn={tiltaksnavn}
+                    tiltaksdata={tiltaksdata}
                 />
             )}
         </VStack>
@@ -82,9 +84,9 @@ const TiltakSomGirRett = ({
     tiltaksdeltakelser,
     vurderingsperiode,
     historikk,
-    tiltaksnavn,
+    tiltaksdata,
 }: Pick<Props, 'tiltaksdeltakelser' | 'vurderingsperiode' | 'historikk'> & {
-    tiltaksnavn: HentTiltaksnavn;
+    tiltaksdata: HentTiltaksdataTekst;
 }) => {
     if (tiltaksdeltakelser.length === 0) {
         return <BodyShort size={'small'}>{'Ingen relevante tiltaksdeltakelser'}</BodyShort>;
@@ -101,7 +103,7 @@ const TiltakSomGirRett = ({
                 <TiltakListe
                     tiltaksdeltakelser={aktuelle}
                     historikk={historikk}
-                    tiltaksnavn={tiltaksnavn}
+                    tiltaksdata={tiltaksdata}
                 />
             ) : (
                 <BodyShort size={'small'}>{'Ingen aktuelle tiltaksdeltakelser'}</BodyShort>
@@ -111,7 +113,7 @@ const TiltakSomGirRett = ({
                     <TiltakListe
                         tiltaksdeltakelser={historiske}
                         historikk={historikk}
-                        tiltaksnavn={tiltaksnavn}
+                        tiltaksdata={tiltaksdata}
                     />
                 </ReadMore>
             )}
@@ -121,10 +123,10 @@ const TiltakSomGirRett = ({
 
 const TiltakSomFratarRettListe = ({
     tiltaksdeltakelser,
-    tiltaksnavn,
+    tiltaksdata,
 }: {
     tiltaksdeltakelser: TiltaksdeltakelseSomFratarRett[];
-    tiltaksnavn: HentTiltaksnavn;
+    tiltaksdata: HentTiltaksdataTekst;
 }) => {
     const visIder = useCtrlHoldesInne();
 
@@ -148,6 +150,7 @@ const TiltakSomFratarRettListe = ({
                         placement={'right'}
                         className={style.tiltakIder}
                         deaktivert={!visIder}
+                        holdÅpenVedHover
                     >
                         <VStack gap={'space-4'} align={'start'}>
                             <TiltakHeader typeNavn={typeNavn} />
@@ -155,7 +158,10 @@ const TiltakSomFratarRettListe = ({
                             <div>
                                 <BehandlingSaksopplysning
                                     navn={'Tiltaksnavn'}
-                                    verdi={tiltaksnavn(eksternDeltakelseId)}
+                                    verdi={tiltaksdata(eksternDeltakelseId, 'tittel')}
+                                />
+                                <Gjennomføringsnavn
+                                    navn={tiltaksdata(eksternDeltakelseId, 'gjennomføringsnavn')}
                                 />
                                 <BehandlingSaksopplysning
                                     navn={'Periode'}
@@ -193,11 +199,11 @@ const TiltakSomFratarRettListe = ({
 const TiltakListe = ({
     tiltaksdeltakelser,
     historikk,
-    tiltaksnavn,
+    tiltaksdata,
 }: {
     tiltaksdeltakelser: Tiltaksdeltakelse[];
     historikk: Historikk;
-    tiltaksnavn: HentTiltaksnavn;
+    tiltaksdata: HentTiltaksdataTekst;
 }) => {
     const visIder = useCtrlHoldesInne();
 
@@ -230,6 +236,7 @@ const TiltakListe = ({
                         placement={'right'}
                         className={style.tiltakIder}
                         deaktivert={!visIder}
+                        holdÅpenVedHover
                     >
                         <VStack gap={'space-8'} align={'start'}>
                             <TiltakHeader typeNavn={typeNavn} />
@@ -241,7 +248,10 @@ const TiltakListe = ({
                             <div>
                                 <BehandlingSaksopplysning
                                     navn={'Tiltaksnavn'}
-                                    verdi={tiltaksnavn(eksternDeltagelseId)}
+                                    verdi={tiltaksdata(eksternDeltagelseId, 'tittel')}
+                                />
+                                <Gjennomføringsnavn
+                                    navn={tiltaksdata(eksternDeltagelseId, 'gjennomføringsnavn')}
                                 />
                                 {erLukketPeriode(periode) && (
                                     <BehandlingSaksopplysning
@@ -275,6 +285,22 @@ const TiltakListe = ({
                 );
             })}
         </VStack>
+    );
+};
+
+/**
+ * Lange gjennomføringsnavn avkortes, og hele navnet vises i en tooltip ved mouseover.
+ */
+const Gjennomføringsnavn = ({ navn }: { navn: string }) => {
+    const { visning, avkortet } = avkortGjennomføringsnavn(navn);
+    const opplysning = <BehandlingSaksopplysning navn={'Gjennomføringsnavn'} verdi={visning} />;
+
+    return avkortet ? (
+        <RichTooltip content={navn} holdÅpenVedHover>
+            <div>{opplysning}</div>
+        </RichTooltip>
+    ) : (
+        opplysning
     );
 };
 

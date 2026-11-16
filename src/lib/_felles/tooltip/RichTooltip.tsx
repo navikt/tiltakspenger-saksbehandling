@@ -8,6 +8,8 @@ import {
     ReactNode,
     Ref,
     useCallback,
+    useEffect,
+    useRef,
     useState,
 } from 'react';
 import { classNames } from '~/utils/classNames';
@@ -31,7 +33,14 @@ type Props = {
     className?: string;
     /** Hindrer at tooltipen vises, uten å endre elementet den forankres til. */
     deaktivert?: boolean;
+    /**
+     * Holder tooltipen åpen så lenge pekeren er over selve tooltipen, f.eks. for å kunne markere og kopiere innholdet.
+     * Lukkingen utsettes litt når pekeren forlater elementet, slik at den rekker å flyttes over i tooltipen.
+     */
+    holdÅpenVedHover?: boolean;
 };
+
+const lukkeforsinkelseMs = 150;
 
 export const RichTooltip = ({
     content,
@@ -40,9 +49,34 @@ export const RichTooltip = ({
     offset,
     className,
     deaktivert = false,
+    holdÅpenVedHover = false,
 }: Props) => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [open, setOpen] = useState(false);
+    const lukketimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const avbrytLukking = useCallback(() => {
+        if (lukketimer.current !== null) {
+            clearTimeout(lukketimer.current);
+            lukketimer.current = null;
+        }
+    }, []);
+
+    const åpne = useCallback(() => {
+        avbrytLukking();
+        setOpen(true);
+    }, [avbrytLukking]);
+
+    const lukk = useCallback(() => {
+        avbrytLukking();
+        if (holdÅpenVedHover) {
+            lukketimer.current = setTimeout(() => setOpen(false), lukkeforsinkelseMs);
+        } else {
+            setOpen(false);
+        }
+    }, [avbrytLukking, holdÅpenVedHover]);
+
+    useEffect(() => avbrytLukking, [avbrytLukking]);
 
     const child = isValidElement(children) ? children : null;
     const childRef = child?.props.ref;
@@ -63,19 +97,19 @@ export const RichTooltip = ({
         ref: setRef,
         onMouseEnter: (event: MouseEvent<HTMLElement>) => {
             child.props.onMouseEnter?.(event);
-            setOpen(true);
+            åpne();
         },
         onMouseLeave: (event: MouseEvent<HTMLElement>) => {
             child.props.onMouseLeave?.(event);
-            setOpen(false);
+            lukk();
         },
         onFocus: (event: FocusEvent<HTMLElement>) => {
             child.props.onFocus?.(event);
-            setOpen(true);
+            åpne();
         },
         onBlur: (event: FocusEvent<HTMLElement>) => {
             child.props.onBlur?.(event);
-            setOpen(false);
+            lukk();
         },
     });
 
@@ -85,10 +119,15 @@ export const RichTooltip = ({
             <Portal>
                 <Popover
                     open={open && !deaktivert && anchorEl !== null}
-                    onClose={() => setOpen(false)}
+                    onClose={() => {
+                        avbrytLukking();
+                        setOpen(false);
+                    }}
                     anchorEl={anchorEl}
                     placement={placement}
                     offset={offset}
+                    onMouseEnter={holdÅpenVedHover ? åpne : undefined}
+                    onMouseLeave={holdÅpenVedHover ? lukk : undefined}
                 >
                     <Popover.Content className={classNames(style.innhold, className)}>
                         {content}

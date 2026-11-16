@@ -18,6 +18,11 @@ export type Tiltaksdata = {
      * Er null når bruker har adressebeskyttelse, eller deltakelsen ikke har noen tittel i kilden.
      */
     tittel: SladdbarVerdi<Nullable<string>>;
+    /**
+     * Navnet på gjennomføringen, fritekst fra kilden som f.eks. et kursnavn.
+     * Er null i de samme tilfellene som tittelen, og når kilden ikke har noen gjennomføring.
+     */
+    gjennomføringsnavn: SladdbarVerdi<Nullable<string>>;
 };
 
 export type TiltaksdataOppslag = {

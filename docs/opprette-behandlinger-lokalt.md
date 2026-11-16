@@ -290,6 +290,8 @@ Slik legger du ett til en sak lokalt:
     for å få hele tiltaksnavnet i saksopplysningene. Tittelen kan også settes på deltakelser
     som gir rett. Tittelen lagres ikke i behandlingen, men slås opp når saksopplysningene vises,
     så en endret tittel på en eksisterende deltakelse vises når siden lastes på nytt.
+    **Gjennomføringsnavn** (f.eks. «AMO-kurs i sveis, Strandveien») fungerer på samme måte,
+    og vises under tiltaksnavnet i saksopplysningene.
 16. Oppdater saksopplysningene i behandlingen. Lønnstilskuddet vises med merket «Gir ikke
     rett til tiltakspenger».
 

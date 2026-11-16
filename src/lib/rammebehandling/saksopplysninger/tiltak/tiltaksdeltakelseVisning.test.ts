@@ -1,6 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
-import { delOppTiltaksdeltakelser, tiltaksnavnTekst } from './tiltaksdeltakelseVisning';
+import {
+    avkortGjennomføringsnavn,
+    delOppTiltaksdeltakelser,
+    tiltaksdataTekst,
+} from './tiltaksdeltakelseVisning';
 import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
@@ -60,36 +64,65 @@ test('tiltak uten sluttdato regnes alltid som aktuelt', () => {
     expect(historiske).toHaveLength(0);
 });
 
-describe('tiltaksnavnTekst', () => {
+describe('tiltaksdataTekst', () => {
     const oppslag = {
         tiltaksdata: [
             {
                 eksternDeltakelseId: 'a',
                 internDeltakelseId: 'a',
                 tittel: ikkeSladdet('Kurs hos A'),
+                gjennomføringsnavn: ikkeSladdet('Sveisekurs, Strandveien'),
             },
-            { eksternDeltakelseId: 'b', internDeltakelseId: null, tittel: ikkeSladdet(null) },
-            { eksternDeltakelseId: 'c', internDeltakelseId: 'c', tittel: sladdet },
+            {
+                eksternDeltakelseId: 'b',
+                internDeltakelseId: null,
+                tittel: ikkeSladdet(null),
+                gjennomføringsnavn: ikkeSladdet(null),
+            },
+            {
+                eksternDeltakelseId: 'c',
+                internDeltakelseId: 'c',
+                tittel: sladdet,
+                gjennomføringsnavn: sladdet,
+            },
         ],
         isLoading: false,
         error: undefined,
     };
 
-    test('viser tittelen til deltakelsen', () => {
-        expect(tiltaksnavnTekst(oppslag, 'a')).toBe('Kurs hos A');
+    test('viser tittelen og gjennomføringsnavnet til deltakelsen', () => {
+        expect(tiltaksdataTekst(oppslag, 'a', 'tittel')).toBe('Kurs hos A');
+        expect(tiltaksdataTekst(oppslag, 'a', 'gjennomføringsnavn')).toBe(
+            'Sveisekurs, Strandveien',
+        );
     });
 
-    test('viser ukjent når deltakelsen mangler tittel eller ikke finnes', () => {
-        expect(tiltaksnavnTekst(oppslag, 'b')).toBe('Ukjent');
-        expect(tiltaksnavnTekst(oppslag, 'x')).toBe('Ukjent');
+    test('viser ukjent når deltakelsen mangler verdien eller ikke finnes', () => {
+        expect(tiltaksdataTekst(oppslag, 'b', 'gjennomføringsnavn')).toBe('Ukjent');
+        expect(tiltaksdataTekst(oppslag, 'x', 'tittel')).toBe('Ukjent');
     });
 
-    test('viser sladdet tittel som sladdet', () => {
-        expect(tiltaksnavnTekst(oppslag, 'c')).toBe('[Sladdet]');
+    test('viser sladdet verdi som sladdet', () => {
+        expect(tiltaksdataTekst(oppslag, 'c', 'gjennomføringsnavn')).toBe('[Sladdet]');
     });
 
-    test('viser at tittelen hentes eller ikke kunne hentes', () => {
-        expect(tiltaksnavnTekst({ ...oppslag, isLoading: true }, 'a')).toBe('Henter...');
-        expect(tiltaksnavnTekst({ ...oppslag, error: new Error() }, 'a')).toBe('<henting feilet>');
+    test('viser at verdien hentes eller ikke kunne hentes', () => {
+        expect(tiltaksdataTekst({ ...oppslag, isLoading: true }, 'a', 'tittel')).toBe('Henter...');
+        expect(tiltaksdataTekst({ ...oppslag, error: new Error() }, 'a', 'tittel')).toBe(
+            '<henting feilet>',
+        );
+    });
+});
+
+describe('avkortGjennomføringsnavn', () => {
+    test('viser navn på inntil 75 tegn i sin helhet', () => {
+        const navn = 'a'.repeat(75);
+        expect(avkortGjennomføringsnavn(navn)).toEqual({ visning: navn, avkortet: false });
+    });
+
+    test('avkorter navn over 75 tegn til 72 tegn etterfulgt av ...', () => {
+        const { visning, avkortet } = avkortGjennomføringsnavn('a'.repeat(72) + 'bcde');
+        expect(visning).toBe('a'.repeat(72) + '...');
+        expect(avkortet).toBe(true);
     });
 });
