@@ -86,6 +86,7 @@ const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
     [MeldekortBehandletAutomatiskStatus.BEHANDLING_FEILET_PÅ_SAK]: MetaStatus.TekniskFeil,
     [MeldekortBehandletAutomatiskStatus.UTBETALING_FEILET_PÅ_SAK]: MetaStatus.TekniskFeil,
     [MeldekortBehandletAutomatiskStatus.UKJENT_FEIL]: MetaStatus.TekniskFeil,
+    [MeldekortBehandletAutomatiskStatus.SIMULERING_FEILET]: MetaStatus.TekniskFeil,
 
     [MeldekortBehandletAutomatiskStatus.HAR_JUSTERING]: MetaStatus.UtbetalingFeil,
     [MeldekortBehandletAutomatiskStatus.HAR_FEILUTBETALING]: MetaStatus.UtbetalingFeil,
@@ -123,4 +124,6 @@ const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
         'Simulering av utbetalingen viser justeringer',
     [MeldekortBehandletAutomatiskStatus.HAR_FEILUTBETALING]:
         'Simulering av utbetalingen viser feilutbetaling',
+    [MeldekortBehandletAutomatiskStatus.SIMULERING_FEILET]:
+        'Simulering av utbetalingen feilet, og er påkrevd for korrigeringer',
 } as const;

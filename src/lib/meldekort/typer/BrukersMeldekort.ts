@@ -50,6 +50,7 @@ export enum MeldekortBehandletAutomatiskStatus {
     INGEN_DAGER_GIR_RETT = 'INGEN_DAGER_GIR_RETT',
     HAR_JUSTERING = 'HAR_JUSTERING',
     HAR_FEILUTBETALING = 'HAR_FEILUTBETALING',
+    SIMULERING_FEILET = 'SIMULERING_FEILET',
 }
 
 export enum BrukersMeldekortKjedeStatus {
