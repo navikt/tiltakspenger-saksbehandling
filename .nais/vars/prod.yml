@@ -1,7 +1,9 @@
 ingress:
   - https://tiltakspenger-saksbehandling.intern.nav.no
-  - https://tiltakspenger-saksbehandling.ansatt.nav.no
-  - https://tiltakspenger-veileder.ansatt.nav.no
+#  - https://tiltakspenger-saksbehandling.ansatt.nav.no
+  - https://tiltakspenger-veileder.intern.nav.no
+#  - https://tiltakspenger-veileder.ansatt.nav.no
+# .ansatt ingresser er disablet midlertidig
 tenant: nav.no
 azure:
   groups:
