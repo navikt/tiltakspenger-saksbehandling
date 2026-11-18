@@ -54,7 +54,7 @@ export const RammebehandlingGjenåpne = ({
 
                     <Textarea
                         label={'Hvorfor gjenåpnes behandlingen? (valgfritt)'}
-                        maxLength={200}
+                        maxLength={500}
                         ref={begrunnelseRef}
                     />
 

@@ -58,7 +58,7 @@ export const MeldekortbehandlingAvslutt = ({
 
                     <Textarea
                         label={'Hvorfor avsluttes behandlingen? (obligatorisk)'}
-                        maxLength={200}
+                        maxLength={500}
                         onChange={() => {
                             if (valideringsfeil) {
                                 setValideringsfeil(null);
