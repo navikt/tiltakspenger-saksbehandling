@@ -43,7 +43,8 @@ const tilForhåndsvisningDTO = (
         resultat: RevurderingResultat.FORLENGELSE,
         fritekst: textAreas.brevtekst.getValue(),
         tilOgMed: nonNullish(hentForlengelseTilOgMed(skjema)),
-        internDeltakelseId: innvilgelse.innvilgelsesperioder.atNonNull(-1).internDeltakelseId,
+        internDeltakelseId:
+            innvilgelse.innvilgelsesperioder.tiltak.atNonNull(-1).internDeltakelseId,
         barnetillegg: harEndretBarnetillegg
             ? tilOppdaterBarnetilleggDTO(innvilgelse, textAreas.barnetilleggBegrunnelse.getValue())
             : null,

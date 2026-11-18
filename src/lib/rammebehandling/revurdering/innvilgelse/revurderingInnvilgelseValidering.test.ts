@@ -5,6 +5,7 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     barnetilleggKandidat,
     innvilgelsesperiode,
+    innvilgelsesperioder,
     periode,
     revurderingInnvilgelse,
     sak,
@@ -18,7 +19,7 @@ const skjemaUtenBarnetillegg: RevurderingInnvilgelseContext = {
     resultat: RevurderingResultat.INNVILGELSE,
     innvilgelse: {
         harValgtPeriode: true,
-        innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
+        innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
         harBarnetillegg: false,
         valgteBarn: [],
         manueltLagtTilBarn: [],
@@ -75,21 +76,34 @@ describe('revurderingInnvilgelseValidering', () => {
 
         const resultat = revurderingInnvilgelseValidering(
             revurderingInnvilgelse({
-                innvilgelsesperioder: [
-                    {
-                        ...innvilgelsesperiode(innvilgetPeriode),
-                        ugyldigTiltaksdeltakelse: {
-                            type: 'KAN_IKKE_INNVILGES',
-                            deltakelsesperiode: null,
+                innvilgelsesperioder: {
+                    ...innvilgelsesperioder([innvilgelsesperiode(innvilgetPeriode)]),
+                    tiltak: [
+                        {
+                            ...innvilgelsesperiode(innvilgetPeriode),
+                            perioder: [
+                                {
+                                    periode: innvilgetPeriode,
+                                    ugyldigTiltaksdeltakelse: {
+                                        type: 'KAN_IKKE_INNVILGES',
+                                        deltakelsesperiode: null,
+                                    },
+                                },
+                            ],
                         },
-                    },
-                ],
+                    ],
+                },
             }),
             {
                 ...skjemaUtenBarnetillegg,
                 innvilgelse: {
-                    ...skjemaUtenBarnetillegg.innvilgelse,
-                    innvilgelsesperioder: [innvilgelsesperiode(innvilgetPeriode)],
+                    harValgtPeriode: true,
+                    innvilgelsesperioder: innvilgelsesperioder([
+                        innvilgelsesperiode(innvilgetPeriode),
+                    ]),
+                    harBarnetillegg: false,
+                    valgteBarn: [],
+                    manueltLagtTilBarn: [],
                 },
             },
             sak(),

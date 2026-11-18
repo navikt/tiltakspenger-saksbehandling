@@ -1,54 +1,83 @@
 import { Periode } from '~/types/Periode';
+import { oppdaterPeriode, oppdaterPeriodiseringUtenOverlapp } from '~/utils/periode';
 import {
-    erFullstendigPeriode,
-    oppdaterPartialPeriode,
-    oppdaterPeriode,
-    oppdaterPeriodiseringUtenOverlapp,
-} from '~/utils/periode';
-import { InnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
+    InnvilgelseMedPerioderState,
+    InnvilgelseState,
+} from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { lagForhåndsutfyltInnvilgelse } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
-import { datoMin, nesteDag } from '~/utils/date';
-import { tilpassBarnTilInnvilgelsesperiodene } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
-import { hentTotalInnvilgbarPeriode } from '~/lib/rammebehandling/rammebehandlingUtils';
+import {
+    InnvilgelseForTiltak,
+    InnvilgelsesperiodeForTiltak,
+    Innvilgelsesperioder,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    lagBarnetilleggSkjemaState,
+    tilpassBarnTilInnvilgelsesperiodene,
+} from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { nonNullish } from '~/utils/object';
+import {
+    erSammeTiltak,
+    hentTiltakSomKanVelges,
+    lagInnvilgelseForTiltak,
+    lagNyPeriodeForTiltak,
+    sorterTiltak,
+    TiltakNøkkel,
+    tilpassAntallDager,
+} from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
 
 export type InnvilgelsesperioderActions =
     | {
-          type: 'oppdaterInnvilgelsesperiode';
+          type: 'velgTiltak';
           payload: {
-              periodeOppdatering: Partial<Periode>;
-              index: number;
+              tiltak: TiltakNøkkel;
+              valgt: boolean;
               behandling: Rammebehandling;
+              // Fra saken. Forhåndsutfylt antall dager er maks 10 når det ikke kan meldes for helg.
+              kanSendeInnHelgForMeldekort: boolean;
+              // Vedtaksperioden ved omgjøring. Reversert opphør kan bare velges innenfor den.
+              vedtaksperiode?: Partial<Periode>;
+              // Perioden et nytt valgt tiltak forhåndsutfylles innenfor
+              avgrensning?: Periode;
+          };
+      }
+    | {
+          type: 'oppdaterTiltakPeriode';
+          payload: {
+              tiltak: TiltakNøkkel;
+              index: number;
+              periodeOppdatering: Partial<Periode>;
+              behandling: Rammebehandling;
+              // Fra saken. Forhåndsutfylt antall dager er maks 10 når det ikke kan meldes for helg.
+              kanSendeInnHelgForMeldekort: boolean;
           };
       }
     | {
           type: 'settAntallDager';
           payload: {
+              // Index for delperioden, se hentDelperioder
+              index: number;
               antallDager: number;
-              index: number;
           };
       }
     | {
-          type: 'settTiltaksdeltakelse';
+          type: 'leggTilTiltakPeriode';
           payload: {
-              internDeltakelseId: string;
-              erReversertOpphør: boolean;
-              index: number;
-          };
-      }
-    | {
-          type: 'leggTilInnvilgelsesperiode';
-          payload: {
+              tiltak: TiltakNøkkel;
               behandling: Rammebehandling;
+              // Fra saken. Forhåndsutfylt antall dager er maks 10 når det ikke kan meldes for helg.
+              kanSendeInnHelgForMeldekort: boolean;
+              vedtaksperiode?: Partial<Periode>;
           };
       }
     | {
-          type: 'fjernInnvilgelsesperiode';
+          type: 'fjernTiltakPeriode';
           payload: {
+              tiltak: TiltakNøkkel;
               index: number;
               behandling: Rammebehandling;
+              // Fra saken. Forhåndsutfylt antall dager er maks 10 når det ikke kan meldes for helg.
+              kanSendeInnHelgForMeldekort: boolean;
           };
       };
 
@@ -58,148 +87,214 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 ) => {
     const { type, payload } = action;
 
-    const { harValgtPeriode } = state;
+    if (type === 'velgTiltak') {
+        return velgTiltak(state, payload);
+    }
 
-    if (!harValgtPeriode) {
-        if (type !== 'oppdaterInnvilgelsesperiode') {
-            throw Error(
-                'Første innvilgelsesperiode må være fullstendig utfylt før andre handlinger kan utføres',
-            );
-        }
-
-        const innvilgelsesperiode = nonNullish(
-            state.innvilgelsesperioder.at(0),
-            'Innvilgelsesperiode mangler',
-        );
-
-        const { periodeOppdatering, behandling } = payload;
-
-        const nyPeriode = oppdaterPartialPeriode(innvilgelsesperiode.periode, periodeOppdatering);
-
-        if (erFullstendigPeriode(nyPeriode)) {
-            return lagForhåndsutfyltInnvilgelse(behandling, nyPeriode);
-        }
-
-        return {
-            harValgtPeriode: false,
-            innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode,
-                    periode: nyPeriode,
-                },
-            ],
-        };
+    if (!state.harValgtPeriode) {
+        throw Error(`Et tiltak må være valgt før perioder kan endres (${type})`);
     }
 
     switch (type) {
-        case 'oppdaterInnvilgelsesperiode': {
-            const { periodeOppdatering, index } = payload;
+        case 'oppdaterTiltakPeriode': {
+            const { tiltak, index, periodeOppdatering, behandling, kanSendeInnHelgForMeldekort } =
+                payload;
 
-            const innvilgelsesperiode = nonNullish(
-                state.innvilgelsesperioder.at(index),
-                `Fant ikke innvilgelsesperiode med index ${index}`,
-            );
+            return oppdaterPerioderForTiltak(
+                state,
+                tiltak,
+                behandling,
+                kanSendeInnHelgForMeldekort,
+                (perioder) => {
+                    const innvilgelsesperiode = nonNullish(
+                        perioder.at(index),
+                        `Fant ikke periode med index ${index}`,
+                    );
 
-            const nyInnvilgelsesperiode = {
-                ...innvilgelsesperiode,
-                periode: oppdaterPeriode(innvilgelsesperiode.periode, periodeOppdatering),
-            };
-
-            const nyePerioder = oppdaterPeriodiseringUtenOverlapp(
-                state.innvilgelsesperioder,
-                nyInnvilgelsesperiode,
-                index,
-            );
-
-            return {
-                ...state,
-                innvilgelsesperioder: nyePerioder,
-                valgteBarn: tilpassBarnTilInnvilgelsesperiodene(state.valgteBarn, nyePerioder),
-            };
-        }
-
-        case 'leggTilInnvilgelsesperiode': {
-            const sisteInnvilgelsesperiode = nonNullish(
-                state.innvilgelsesperioder.at(-1),
-                'Skal alltid finnes minst en innvilgelsesperiode',
-            );
-
-            const { behandling } = payload;
-
-            const sistePeriode = sisteInnvilgelsesperiode.periode;
-
-            const totalInnvilgbarPeriode = nonNullish(hentTotalInnvilgbarPeriode(behandling));
-
-            const nyTilOgMed = totalInnvilgbarPeriode.tilOgMed;
-
-            const nyInnvilgelsesperiode = {
-                ...sisteInnvilgelsesperiode,
-                periode: {
-                    fraOgMed: datoMin(nesteDag(sistePeriode.tilOgMed), nyTilOgMed),
-                    tilOgMed: nyTilOgMed,
+                    return oppdaterPeriodiseringUtenOverlapp(
+                        perioder,
+                        {
+                            ...innvilgelsesperiode,
+                            periode: oppdaterPeriode(
+                                innvilgelsesperiode.periode,
+                                periodeOppdatering,
+                            ),
+                        },
+                        index,
+                    );
                 },
-            };
-
-            const nyeInnvilgelsesperioder = oppdaterPeriodiseringUtenOverlapp(
-                state.innvilgelsesperioder,
-                nyInnvilgelsesperiode,
-                state.innvilgelsesperioder.length,
             );
-
-            return {
-                ...state,
-                innvilgelsesperioder: nyeInnvilgelsesperioder,
-                valgteBarn: tilpassBarnTilInnvilgelsesperiodene(
-                    state.valgteBarn,
-                    nyeInnvilgelsesperioder,
-                ),
-            };
-        }
-
-        case 'fjernInnvilgelsesperiode': {
-            const { index } = payload;
-
-            const nyeInnvilgelsesperioder = state.innvilgelsesperioder.toSpliced(index, 1);
-
-            return {
-                ...state,
-                innvilgelsesperioder: nyeInnvilgelsesperioder,
-                valgteBarn: tilpassBarnTilInnvilgelsesperiodene(
-                    state.valgteBarn,
-                    nyeInnvilgelsesperioder,
-                ),
-            };
         }
 
         case 'settAntallDager': {
             const { index, antallDager } = payload;
-
-            const innvilgelsesperiode = state.innvilgelsesperioder.atNonNull(index);
+            const { antallDagerPerMeldeperiode } = state.innvilgelsesperioder;
 
             return {
                 ...state,
-                innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
-                    ...innvilgelsesperiode,
-                    antallDagerPerMeldeperiode: antallDager,
-                }),
+                innvilgelsesperioder: {
+                    ...state.innvilgelsesperioder,
+                    antallDagerPerMeldeperiode: antallDagerPerMeldeperiode.with(index, {
+                        ...antallDagerPerMeldeperiode.atNonNull(index),
+                        antallDagerPerMeldeperiode: antallDager,
+                    }),
+                },
             };
         }
 
-        case 'settTiltaksdeltakelse': {
-            const { index, internDeltakelseId, erReversertOpphør } = payload;
+        case 'leggTilTiltakPeriode': {
+            const { tiltak, behandling, kanSendeInnHelgForMeldekort, vedtaksperiode } = payload;
 
-            const innvilgelsesperiode = state.innvilgelsesperioder.atNonNull(index);
+            const innvilgbarePerioder =
+                hentTiltakSomKanVelges(behandling, [tiltak], vedtaksperiode).find((it) =>
+                    erSammeTiltak(it, tiltak),
+                )?.innvilgbarePerioder ?? [];
 
-            return {
-                ...state,
-                innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
-                    ...innvilgelsesperiode,
-                    internDeltakelseId: internDeltakelseId,
-                    erReversertOpphør,
-                }),
-            };
+            return oppdaterPerioderForTiltak(
+                state,
+                tiltak,
+                behandling,
+                kanSendeInnHelgForMeldekort,
+                (perioder) => {
+                    const nyPeriode = lagNyPeriodeForTiltak(perioder, innvilgbarePerioder);
+
+                    return nyPeriode
+                        ? oppdaterPeriodiseringUtenOverlapp(perioder, nyPeriode, perioder.length)
+                        : perioder;
+                },
+            );
+        }
+
+        case 'fjernTiltakPeriode': {
+            const { tiltak, index, behandling, kanSendeInnHelgForMeldekort } = payload;
+
+            return oppdaterPerioderForTiltak(
+                state,
+                tiltak,
+                behandling,
+                kanSendeInnHelgForMeldekort,
+                (perioder) => perioder.toSpliced(index, 1),
+            );
         }
     }
 
     throw new Error(`Ugyldig action: ${type satisfies never}`);
+};
+
+const velgTiltak = (
+    state: InnvilgelseState,
+    payload: Extract<InnvilgelsesperioderActions, { type: 'velgTiltak' }>['payload'],
+): InnvilgelseState => {
+    const { tiltak, valgt, behandling, kanSendeInnHelgForMeldekort, vedtaksperiode, avgrensning } =
+        payload;
+
+    const forrigeTiltak = state.innvilgelsesperioder.tiltak;
+    const erValgtFraFør = forrigeTiltak.some((it) => erSammeTiltak(it, tiltak));
+
+    if (valgt === erValgtFraFør) {
+        return state;
+    }
+
+    const tiltakSomKanVelges = hentTiltakSomKanVelges(
+        behandling,
+        [...forrigeTiltak, tiltak],
+        vedtaksperiode,
+    );
+
+    const nyeTiltak: InnvilgelseForTiltak[] = valgt
+        ? sorterTiltak(
+              [
+                  ...forrigeTiltak,
+                  lagInnvilgelseForTiltak(
+                      nonNullish(
+                          tiltakSomKanVelges.find((it) => it.erGyldig && erSammeTiltak(it, tiltak)),
+                          `Kan ikke velge tiltak ${tiltak.internDeltakelseId}`,
+                      ),
+                      avgrensning,
+                  ),
+              ],
+              tiltakSomKanVelges,
+          )
+        : forrigeTiltak.filter((it) => !erSammeTiltak(it, tiltak));
+
+    if (nyeTiltak.length === 0) {
+        return utenPerioder;
+    }
+
+    if (!state.harValgtPeriode) {
+        const innvilgelsesperioder = medAntallDager(
+            nyeTiltak,
+            state.innvilgelsesperioder,
+            behandling,
+            kanSendeInnHelgForMeldekort,
+        );
+
+        return {
+            harValgtPeriode: true,
+            innvilgelsesperioder,
+            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
+        };
+    }
+
+    return medTiltak(state, nyeTiltak, behandling, kanSendeInnHelgForMeldekort);
+};
+
+const oppdaterPerioderForTiltak = (
+    state: InnvilgelseMedPerioderState,
+    tiltak: TiltakNøkkel,
+    behandling: Rammebehandling,
+    kanSendeInnHelgForMeldekort: boolean,
+    oppdater: (perioder: InnvilgelsesperiodeForTiltak[]) => InnvilgelsesperiodeForTiltak[],
+): InnvilgelseState => {
+    const nyeTiltak = state.innvilgelsesperioder.tiltak
+        .map((it) => (erSammeTiltak(it, tiltak) ? { ...it, perioder: oppdater(it.perioder) } : it))
+        // Et tiltak uten perioder er ikke valgt
+        .filter((it) => it.perioder.length > 0);
+
+    if (nyeTiltak.length === 0) {
+        return utenPerioder;
+    }
+
+    return medTiltak(state, nyeTiltak, behandling, kanSendeInnHelgForMeldekort);
+};
+
+const utenPerioder: InnvilgelseState = {
+    harValgtPeriode: false,
+    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
+};
+
+const medAntallDager = (
+    tiltak: InnvilgelseForTiltak[],
+    forrige: Innvilgelsesperioder,
+    behandling: Rammebehandling,
+    kanSendeInnHelgForMeldekort: boolean,
+): Innvilgelsesperioder => ({
+    tiltak,
+    antallDagerPerMeldeperiode: tilpassAntallDager(
+        behandling,
+        tiltak,
+        forrige,
+        kanSendeInnHelgForMeldekort,
+    ),
+});
+
+// Antall dager og barnetillegget tilpasses de nye periodene for tiltakene
+const medTiltak = (
+    state: InnvilgelseMedPerioderState,
+    nyeTiltak: InnvilgelseForTiltak[],
+    behandling: Rammebehandling,
+    kanSendeInnHelgForMeldekort: boolean,
+): InnvilgelseMedPerioderState => {
+    const innvilgelsesperioder = medAntallDager(
+        nyeTiltak,
+        state.innvilgelsesperioder,
+        behandling,
+        kanSendeInnHelgForMeldekort,
+    );
+
+    return {
+        ...state,
+        innvilgelsesperioder,
+        valgteBarn: tilpassBarnTilInnvilgelsesperiodene(state.valgteBarn, innvilgelsesperioder),
+    };
 };

@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { innvilgelsesperiode, periode } from '~test/rammebehandling';
+import { innvilgelsesperiode, innvilgelsesperioder, periode } from '~test/rammebehandling';
 import {
     InnvilgelseMedPerioderState,
     innvilgelseReducer,
@@ -8,12 +8,14 @@ import {
 
 const utenPerioderState: InnvilgelseUtenPerioderState = {
     harValgtPeriode: false,
-    innvilgelsesperioder: [{ periode: {} }],
+    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
 };
 
 const medPerioderState: InnvilgelseMedPerioderState = {
     harValgtPeriode: true,
-    innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+    innvilgelsesperioder: innvilgelsesperioder([
+        innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+    ]),
     harBarnetillegg: false,
     valgteBarn: [],
     manueltLagtTilBarn: [],
@@ -26,11 +28,9 @@ describe('innvilgelseReducer', () => {
                 type: 'settAntallDager',
                 payload: { antallDager: 6, index: 0 },
             }).innvilgelsesperioder,
-        ).toEqual([
-            innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                antallDagerPerMeldeperiode: 6,
-            }),
-        ]);
+        ).toEqual(
+            innvilgelsesperioder([innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))], 6),
+        );
     });
 
     test('sender barnetillegg-actions videre', () => {

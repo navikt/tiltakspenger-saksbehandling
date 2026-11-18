@@ -1,9 +1,12 @@
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { UgyldigTiltaksdeltakelse } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import {
-    InnvilgelsesperiodePartial,
-    UgyldigTiltaksdeltakelse,
-} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+    erSammeTiltak,
+    TiltakNøkkel,
+} from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
+import { Periode } from '~/types/Periode';
+import { perioderErLike } from '~/utils/periode';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterPeriode } from '~/utils/date';
 
@@ -12,17 +15,12 @@ import { formaterPeriode } from '~/utils/date';
 // Endres bare valget av reversert opphør, er perioden også endret, siden reversert opphør ikke valideres mot tiltaksdeltakelsen.
 export const finnUgyldigTiltaksdeltakelse = (
     behandling: Rammebehandling,
-    innvilgelsesperiode: InnvilgelsesperiodePartial,
+    tiltak: TiltakNøkkel,
+    periode: Periode,
 ): Nullable<UgyldigTiltaksdeltakelse> => {
-    const { periode, internDeltakelseId, erReversertOpphør = false } = innvilgelsesperiode;
-
-    const lagret = rammebehandlingMedInnvilgelseEllerNull(behandling)?.innvilgelsesperioder?.find(
-        (it) =>
-            it.internDeltakelseId === internDeltakelseId &&
-            it.periode.fraOgMed === periode.fraOgMed &&
-            it.periode.tilOgMed === periode.tilOgMed &&
-            (it.erReversertOpphør ?? false) === erReversertOpphør,
-    );
+    const lagret = rammebehandlingMedInnvilgelseEllerNull(behandling)
+        ?.innvilgelsesperioder?.tiltak.find((it) => erSammeTiltak(it, tiltak))
+        ?.perioder.find((it) => perioderErLike(it.periode, periode));
 
     return lagret?.ugyldigTiltaksdeltakelse ?? null;
 };

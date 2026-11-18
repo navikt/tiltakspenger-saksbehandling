@@ -25,6 +25,7 @@ import {
     rettTilBarnetilleggPeriode,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { Periode } from '~/types/Periode';
+import { hentInnvilgedePerioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Dato } from '~/types/DatoTid';
 import {
     alderFraDato,
@@ -53,7 +54,9 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
-    const innvilgelsesperioder = innvilgelse.innvilgelsesperioder.map((it) => it.periode);
+    const innvilgelsesperioder = hentInnvilgedePerioder(innvilgelse.innvilgelsesperioder).map(
+        (it) => it.periode,
+    );
 
     const harSladdetFødselsdato = erSladdet(fødselsdato);
     const navn = formaterBarnNavn(barn) || 'Navn mangler';

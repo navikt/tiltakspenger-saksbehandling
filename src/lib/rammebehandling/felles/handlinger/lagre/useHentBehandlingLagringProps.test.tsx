@@ -31,6 +31,7 @@ import {
     barnetilleggV1,
     barnetilleggV2,
     innvilgelsesperiode,
+    innvilgelsesperioder,
     omgjøringIkkeValgt,
     omgjøringInnvilgelse,
     omgjøringOpphør,
@@ -183,7 +184,7 @@ describe('lagring av søknadsbehandling', () => {
             fritekstTilVedtaksbrev: null,
             skalJournalføreNotat: { vilkårsvurdering: true, barnetillegg: true },
             prioritering: null,
-            innvilgelsesperioder: [innvilgelsesperiode(førsteKvartal)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(førsteKvartal)]),
             barnetillegg: {
                 begrunnelse: 'Lagret begrunnelse for barnetillegg',
                 barn: [
@@ -538,7 +539,7 @@ describe('lagring av revurdering', () => {
         const behandling = revurderingInnvilgelse({
             ...saksbehandle,
             vedtaksperiode: førsteHalvår,
-            innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
             barnetillegg: barnetilleggV2([], [førsteHalvår]),
         });
         svar(200, behandling);
@@ -554,7 +555,7 @@ describe('lagring av revurdering', () => {
             fritekstTilVedtaksbrev: 'Du får tiltakspenger',
             skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
             prioritering: null,
-            innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
             barnetillegg: { begrunnelse: null, barn: [] },
             skalSendeVedtaksbrev: true,
         });
@@ -564,7 +565,7 @@ describe('lagring av revurdering', () => {
         const behandling = omgjøringInnvilgelse({
             ...saksbehandle,
             vedtaksperiode: førsteHalvår,
-            innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
             barnetillegg: barnetilleggV2([], [førsteHalvår]),
         });
         svar(200, behandling);
@@ -579,7 +580,7 @@ describe('lagring av revurdering', () => {
             fritekstTilVedtaksbrev: null,
             skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
             prioritering: null,
-            innvilgelsesperioder: [innvilgelsesperiode(førsteHalvår)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
             vedtaksperiode: førsteHalvår,
             barnetillegg: { begrunnelse: null, barn: [] },
             skalSendeVedtaksbrev: true,

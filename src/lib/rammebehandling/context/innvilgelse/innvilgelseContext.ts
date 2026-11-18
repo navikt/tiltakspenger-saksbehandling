@@ -21,23 +21,22 @@ import {
     erRammebehandlingInnvilgelseMedPerioderContext,
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { BarnetilleggBarnSkjema } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
-import {
-    Innvilgelsesperiode,
-    InnvilgelsesperiodePartial,
-} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { Innvilgelsesperioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { OmgjøringInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RevurderingForlengelseState } from '~/lib/rammebehandling/context/revurdering/revurderingForlengelseSkjemaContext';
 import { SøknadsbehandlingInnvilgelseState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
+// Ingen tiltak er valgt ennå
 export type InnvilgelseUtenPerioderState = {
     harValgtPeriode: false;
-    innvilgelsesperioder: [InnvilgelsesperiodePartial];
+    innvilgelsesperioder: { tiltak: []; antallDagerPerMeldeperiode: [] };
 };
 
+// Minst ett tiltak er valgt, hvert med minst én periode
 export type InnvilgelseMedPerioderState = {
     harValgtPeriode: true;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: Innvilgelsesperioder;
     harBarnetillegg: boolean;
     // Barna saksbehandler har valgt å gi barnetillegg for
     valgteBarn: BarnetilleggBarnSkjema[];
@@ -67,17 +66,17 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     const { harValgtPeriode } = state;
 
     switch (type) {
-        case 'oppdaterInnvilgelsesperiode':
-        case 'leggTilInnvilgelsesperiode':
-        case 'fjernInnvilgelsesperiode':
+        case 'velgTiltak':
+        case 'oppdaterTiltakPeriode':
         case 'settAntallDager':
-        case 'settTiltaksdeltakelse': {
+        case 'leggTilTiltakPeriode':
+        case 'fjernTiltakPeriode': {
             return innvilgelsesperioderReducer(state, action);
         }
     }
 
     if (!harValgtPeriode) {
-        throw Error('Kan ikke endre andre deler av innvilgelsen før innvilgelsesperioden er valgt');
+        throw Error('Kan ikke endre andre deler av innvilgelsen før et tiltak er valgt');
     }
 
     switch (type) {

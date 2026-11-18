@@ -1,6 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
 import {
     barnetilleggBarn,
+    antallDager,
+    innvilgedePerioderFraDTO,
     barnetilleggPeriode,
     barnetilleggV1,
     barnetilleggV2,
@@ -23,7 +25,7 @@ const blankInnvilgelse = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
     innvilgelse: {
         harValgtPeriode: false,
-        innvilgelsesperioder: [{ periode: {} }],
+        innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
     },
 };
 
@@ -60,12 +62,21 @@ describe('søknadsbehandlingInitialState', () => {
 
     describe('innvilgelse', () => {
         test('henter lagrede innvilgelsesperioder og de lagrede barna', () => {
-            const innvilgelsesperioder = [
-                innvilgelsesperiode(periode('2025-01-01', '2025-02-28')),
-                innvilgelsesperiode(periode('2025-03-01', '2025-03-31'), {
-                    antallDagerPerMeldeperiode: 6,
-                }),
-            ];
+            const innvilgelsesperioder = {
+                tiltak: [
+                    {
+                        ...innvilgelsesperiode(periode('2025-01-01', '2025-02-28')),
+                        perioder: [
+                            { periode: periode('2025-01-01', '2025-02-28') },
+                            { periode: periode('2025-03-01', '2025-03-31') },
+                        ],
+                    },
+                ],
+                antallDagerPerMeldeperiode: [
+                    antallDager(periode('2025-01-01', '2025-02-28'), 10),
+                    antallDager(periode('2025-03-01', '2025-03-31'), 6),
+                ],
+            };
 
             const overstyrtPeriode = periode('2025-01-01', '2025-01-31');
 
@@ -75,7 +86,7 @@ describe('søknadsbehandlingInitialState', () => {
                 søknad: søknad([søknadBarn('2015-03-01')]),
                 barnetillegg: barnetilleggV2(
                     [barnetilleggBarn('2020-01-01', { perioder: [overstyrtPeriode] })],
-                    innvilgelsesperioder.map((it) => it.periode),
+                    innvilgedePerioderFraDTO(innvilgelsesperioder),
                 ),
             });
 

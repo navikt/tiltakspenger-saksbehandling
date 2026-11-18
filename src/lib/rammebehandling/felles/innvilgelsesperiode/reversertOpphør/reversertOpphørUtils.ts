@@ -1,6 +1,5 @@
 import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PeriodeForReversertOpphør } from '~/lib/rammebehandling/typer/ReversertOpphør';
-import { InnvilgelsesperiodePartial } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 import { erFullstendigPeriode, inneholderHelePerioden, perioderOverlapper } from '~/utils/periode';
 
@@ -49,14 +48,9 @@ export const hentPerioderForReversertOpphørForDeltakelse = (
  */
 export const erInnenforPeriodeForReversertOpphør = (
     behandling: Rammebehandling,
-    innvilgelsesperiode: InnvilgelsesperiodePartial,
-): boolean => {
-    const { periode, internDeltakelseId } = innvilgelsesperiode;
-
-    return (
-        erFullstendigPeriode(periode) &&
-        hentPerioderForReversertOpphørForDeltakelse(behandling, internDeltakelseId).some((it) =>
-            inneholderHelePerioden(it.periode, periode),
-        )
+    internDeltakelseId: string,
+    periode: Periode,
+): boolean =>
+    hentPerioderForReversertOpphørForDeltakelse(behandling, internDeltakelseId).some((it) =>
+        inneholderHelePerioden(it.periode, periode),
     );
-};

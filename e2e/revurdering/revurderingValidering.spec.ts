@@ -1,5 +1,6 @@
 import { expect, fellesHandlere, forventOverskrift, test } from '../felles/e2eFelles';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { periode, tiltaksdeltakelse } from '~test/rammebehandling';
 import {
     behandlingUrl,
     lagFalskBackend,
@@ -72,16 +73,25 @@ test.describe('Validering av revurdering', () => {
         expect(backend.tilstand.antallSendTilBeslutning).toBe(0);
     });
 
-    test('revurdering av innvilgelse uten innvilgelsesperiode kan ikke sendes til beslutning', async ({
+    test('revurdering av innvilgelse uten valgt tiltak kan ikke sendes til beslutning', async ({
         page,
         msw,
     }) => {
-        const backend = lagFalskBackend(
-            lagStartetRevurdering({
-                revurderingType: RevurderingResultat.INNVILGELSE,
-                rammevedtakIdSomOmgjøres: null,
-            }),
-        );
+        // Med flere tiltak er ingen valgt på forhånd
+        const revurdering = lagStartetRevurdering({
+            revurderingType: RevurderingResultat.INNVILGELSE,
+            rammevedtakIdSomOmgjøres: null,
+        });
+        const jobbklubb = {
+            ...tiltaksdeltakelse('deltakelse_2', periode('2025-03-01', '2025-06-30')),
+            typeNavn: 'Jobbklubb',
+        };
+        revurdering.saksopplysninger.tiltaksdeltagelse.push(jobbklubb);
+        revurdering.innvilgbarePerioder.push({
+            internDeltakelseId: jobbklubb.internDeltakelseId,
+            periode: jobbklubb.periode,
+        });
+        const backend = lagFalskBackend(revurdering);
         msw.use(...fellesHandlere(), ...backend.handlere);
 
         await page.goto(behandlingUrl);
@@ -91,13 +101,13 @@ test.describe('Validering av revurdering', () => {
 
         await expect(page.getByText('Feil i behandlingen')).toBeVisible();
         await expect(
-            page.getByText('Minst en fullstendig innvilgelsesperiode må være valgt'),
+            page.getByText('Minst ett tiltak med en innvilgelsesperiode må være valgt'),
         ).toBeVisible();
         await expect(page.getByRole('dialog')).toHaveCount(0);
 
         await page.getByRole('button', { name: 'Lagre', exact: true }).click();
         await expect(
-            page.getByText('Minst en fullstendig innvilgelsesperiode må være valgt'),
+            page.getByText('Minst ett tiltak med en innvilgelsesperiode må være valgt'),
         ).toBeVisible();
 
         expect(backend.tilstand.oppdaterBodies).toEqual([]);

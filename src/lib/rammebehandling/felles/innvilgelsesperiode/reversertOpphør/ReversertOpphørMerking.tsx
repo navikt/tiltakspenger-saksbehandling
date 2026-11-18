@@ -1,6 +1,6 @@
 import { InlineMessage, Tag } from '@navikt/ds-react';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { InnvilgelsesperiodePartial } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { Periode } from '~/types/Periode';
 import {
     erInnenforPeriodeForReversertOpphør,
     hentPerioderForReversertOpphørForDeltakelse,
@@ -15,21 +15,26 @@ export const ReversertOpphørTag = () => (
 
 type Props = {
     behandling: Rammebehandling;
-    innvilgelsesperiode: InnvilgelsesperiodePartial;
+    internDeltakelseId: string;
+    perioder: Periode[];
 };
 
-export const ReversertOpphørMelding = ({ behandling, innvilgelsesperiode }: Props) => {
-    if (!erInnenforPeriodeForReversertOpphør(behandling, innvilgelsesperiode)) {
-        const perioder = hentPerioderForReversertOpphørForDeltakelse(
+export const ReversertOpphørMelding = ({ behandling, internDeltakelseId, perioder }: Props) => {
+    const erInnenfor = perioder.every((periode) =>
+        erInnenforPeriodeForReversertOpphør(behandling, internDeltakelseId, periode),
+    );
+
+    if (!erInnenfor) {
+        const perioderForReversertOpphør = hentPerioderForReversertOpphørForDeltakelse(
             behandling,
-            innvilgelsesperiode.internDeltakelseId,
+            internDeltakelseId,
         )
             .map((it) => formaterPeriode(it.periode))
             .join(', ');
 
         return (
             <InlineMessage status={'error'} size={'small'}>
-                {`Et reversert opphør må være innenfor en periode som tidligere har vært innvilget (${perioder})`}
+                {`Et reversert opphør må være innenfor en periode som tidligere har vært innvilget (${perioderForReversertOpphør})`}
             </InlineMessage>
         );
     }
@@ -37,7 +42,7 @@ export const ReversertOpphørMelding = ({ behandling, innvilgelsesperiode }: Pro
     return (
         <InlineMessage status={'warning'} size={'small'}>
             {
-                'Perioden har ikke lenger en gyldig tiltaksdeltakelse. Tiltaket fra den opprinnelige innvilgelsen brukes.'
+                'Tiltaksdeltakelsen er ikke lenger gyldig. Tiltaket fra den opprinnelige innvilgelsen brukes.'
             }
         </InlineMessage>
     );

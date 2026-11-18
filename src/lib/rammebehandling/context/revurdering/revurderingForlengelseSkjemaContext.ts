@@ -15,27 +15,32 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import {
-    antallDagerPerMeldeperiodeForPeriode,
-    BehandlingSkjemaType,
-} from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
+import { BehandlingSkjemaType } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { Innvilgelsesperioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    antallDagerForTiltak,
+    tilInnvilgelsesperioderSkjema,
+} from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
+import { Nullable } from '~/types/UtilTypes';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import {
     BarnetilleggSkjemaState,
     lagBarnetilleggSkjemaState,
     tilpassBarnTilInnvilgelsesperiodene,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
 // Innvilgelsen holdes synkron med valgt til og med-dato og tiltaksdeltakelse, slik at felles komponenter for barnetillegg,
 // validering og forhåndsvisning kan gjenbrukes. Backend utleder selv innvilgelsesperioden fra disse.
-// Inntil begge er valgt, ligger valgene i den ufullstendige innvilgelsesperioden.
+// Inntil begge er valgt, er ingen tiltak valgt i innvilgelsen.
 export type RevurderingForlengelseState = {
     resultat: RevurderingResultat.FORLENGELSE;
     forlengesFraOgMed: Dato;
+    tilOgMed?: Dato;
+    internDeltakelseId?: string;
     // Om saksbehandler har valgt barnetillegget selv.
     // Ellers utleder og lagrer backend barnetillegget fra vedtaket som forlenges hver gang behandlingen lagres.
     harEndretBarnetillegg: boolean;
@@ -82,7 +87,7 @@ export const revurderingForlengelseReducer: Reducer<
 
             return medInnvilgelsesperiode(
                 state,
-                { tilOgMed, internDeltakelseId: hentForlengelseTiltaksdeltakelse(state) },
+                { tilOgMed, internDeltakelseId: state.internDeltakelseId },
                 behandling,
                 sak,
             );
@@ -93,7 +98,7 @@ export const revurderingForlengelseReducer: Reducer<
 
             return medInnvilgelsesperiode(
                 state,
-                { tilOgMed: hentForlengelseTilOgMed(state), internDeltakelseId },
+                { tilOgMed: state.tilOgMed, internDeltakelseId },
                 behandling,
                 sak,
             );
@@ -101,9 +106,9 @@ export const revurderingForlengelseReducer: Reducer<
 
         case 'settHarValgtBarnetillegg': {
             const { harEndretBarnetillegg, behandling } = action.payload;
-            const { innvilgelse } = state;
+            const { innvilgelse, tilOgMed } = state;
 
-            if (harEndretBarnetillegg || !innvilgelse.harValgtPeriode) {
+            if (harEndretBarnetillegg || !innvilgelse.harValgtPeriode || !tilOgMed) {
                 return { ...state, harEndretBarnetillegg };
             }
 
@@ -132,11 +137,11 @@ export const revurderingForlengelseReducer: Reducer<
             };
         }
 
-        case 'oppdaterInnvilgelsesperiode':
-        case 'leggTilInnvilgelsesperiode':
-        case 'fjernInnvilgelsesperiode':
+        case 'velgTiltak':
+        case 'oppdaterTiltakPeriode':
         case 'settAntallDager':
-        case 'settTiltaksdeltakelse': {
+        case 'leggTilTiltakPeriode':
+        case 'fjernTiltakPeriode': {
             throw Error(`Innvilgelsesperioden kan ikke endres direkte ved forlengelse`);
         }
     }
@@ -156,53 +161,65 @@ export const forlengelseInitialState = (
             resultat: RevurderingResultat.FORLENGELSE,
             forlengesFraOgMed,
             harEndretBarnetillegg,
+            // Saksbehandler må velge selv når vedtaket kan forlenges for flere tiltak.
+            internDeltakelseId:
+                tiltaksdeltakelserSomKanForlenges.length === 1
+                    ? tiltaksdeltakelserSomKanForlenges[0]
+                    : undefined,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [
-                    {
-                        periode: { fraOgMed: forlengesFraOgMed },
-                        // Saksbehandler må velge selv når vedtaket kan forlenges for flere tiltak.
-                        internDeltakelseId:
-                            tiltaksdeltakelserSomKanForlenges.length === 1
-                                ? tiltaksdeltakelserSomKanForlenges[0]
-                                : undefined,
-                    },
-                ],
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
             },
         };
     }
 
     // Det lagrede barnetillegget er enten valgt av saksbehandler eller utledet av backend.
+    const skjemaperioder = tilInnvilgelsesperioderSkjema(innvilgelsesperioder);
+    const lagret = hentLagretForlengelse(innvilgelsesperioder);
+
     return {
         resultat: RevurderingResultat.FORLENGELSE,
         forlengesFraOgMed,
         harEndretBarnetillegg,
+        tilOgMed: lagret?.tilOgMed,
+        internDeltakelseId: lagret?.internDeltakelseId,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, innvilgelsesperioder),
+            innvilgelsesperioder: skjemaperioder,
+            ...lagBarnetilleggSkjemaState(behandling, skjemaperioder),
         },
     };
 };
 
+// En forlengelse innvilges for ett tiltak, fra dagen etter vedtaket som forlenges slutter
+const hentLagretForlengelse = (
+    innvilgelsesperioder: Nullable<Innvilgelsesperioder>,
+): { tilOgMed: Dato; internDeltakelseId: string } | undefined => {
+    const tiltak = innvilgelsesperioder?.tiltak.at(0);
+    const sistePeriode = tiltak?.perioder.at(-1);
+
+    return tiltak && sistePeriode
+        ? { tilOgMed: sistePeriode.periode.tilOgMed, internDeltakelseId: tiltak.internDeltakelseId }
+        : undefined;
+};
+
 export const hentForlengelseTilOgMed = (state: RevurderingForlengelseState): Dato | undefined =>
-    state.innvilgelse.innvilgelsesperioder.at(-1)?.periode.tilOgMed;
+    state.tilOgMed;
 
 export const hentForlengelseTiltaksdeltakelse = (
     state: RevurderingForlengelseState,
-): string | undefined => state.innvilgelse.innvilgelsesperioder.at(-1)?.internDeltakelseId;
+): string | undefined => state.internDeltakelseId;
 
 // Det lagrede barnetillegget gjelder bare så lenge verken til og med-datoen eller tiltaksdeltakelsen er endret siden behandlingen ble lagret.
 const erLagretMedSammePeriodeOgTiltak = (
     state: RevurderingForlengelseState,
     behandling: RevurderingForlengelse,
 ): boolean => {
-    const tilOgMed = hentForlengelseTilOgMed(state);
-    const lagret = behandling.innvilgelsesperioder?.at(-1);
+    const lagret = hentLagretForlengelse(behandling.innvilgelsesperioder);
     return (
-        tilOgMed !== undefined &&
-        tilOgMed === lagret?.periode.tilOgMed &&
-        hentForlengelseTiltaksdeltakelse(state) === lagret.internDeltakelseId
+        state.tilOgMed !== undefined &&
+        state.tilOgMed === lagret?.tilOgMed &&
+        state.internDeltakelseId === lagret.internDeltakelseId
     );
 };
 
@@ -227,14 +244,11 @@ const medInnvilgelsesperiode = (
     if (!tilOgMed || !internDeltakelseId) {
         return {
             ...state,
+            tilOgMed,
+            internDeltakelseId,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [
-                    {
-                        periode: { fraOgMed: state.forlengesFraOgMed, tilOgMed },
-                        internDeltakelseId,
-                    },
-                ],
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
             },
         };
     }
@@ -242,18 +256,19 @@ const medInnvilgelsesperiode = (
     const periode: Periode = { fraOgMed: state.forlengesFraOgMed, tilOgMed };
     const forrige = state.innvilgelse;
 
-    const innvilgelsesperioder: Innvilgelsesperiode[] = [
-        {
-            periode,
-            antallDagerPerMeldeperiode: hentAntallDagerPerMeldeperiode(
+    const innvilgelsesperioder: Innvilgelsesperioder = {
+        tiltak: [{ internDeltakelseId, erReversertOpphør: false, perioder: [{ periode }] }],
+        antallDagerPerMeldeperiode: [
+            {
                 periode,
-                internDeltakelseId,
-                behandling,
-                sak,
-            ),
-            internDeltakelseId,
-        },
-    ];
+                antallDagerPerMeldeperiode: hentAntallDagerPerMeldeperiode(
+                    internDeltakelseId,
+                    behandling,
+                    sak,
+                ),
+            },
+        ],
+    };
 
     // Barnetillegg saksbehandler har valgt, tilpasses den nye perioden.
     // Ellers tas det alltid utgangspunkt i det lagrede, slik at en periode som endres frem og tilbake ikke mister informasjon.
@@ -271,27 +286,38 @@ const medInnvilgelsesperiode = (
 
     return {
         ...state,
+        tilOgMed,
+        internDeltakelseId,
         innvilgelse: { harValgtPeriode: true, innvilgelsesperioder, ...barnetillegg },
     };
 };
 
 // Antall dager videreføres fra den siste perioden vedtaket som forlenges innvilget for tiltaksdeltakelsen, slik backend gjør.
 const hentAntallDagerPerMeldeperiode = (
-    periode: Periode,
     internDeltakelseId: string,
     behandling: RevurderingForlengelse,
     sak: SakProps,
 ): number => {
-    const erValgtTiltak = (innvilgelsesperiode: Innvilgelsesperiode) =>
-        innvilgelsesperiode.internDeltakelseId === internDeltakelseId;
+    const antallDagerForSistePeriode = (innvilgelsesperioder: Nullable<Innvilgelsesperioder>) => {
+        const sisteDag = innvilgelsesperioder?.tiltak
+            .filter((it) => it.internDeltakelseId === internDeltakelseId)
+            .flatMap((it) => it.perioder.map(({ periode }) => periode.tilOgMed))
+            .toSorted()
+            .at(-1);
 
-    const mal =
-        hentRammevedtak(sak, behandling.forlengerRammevedtakId)
-            .innvilgelsesperioder?.filter(erValgtTiltak)
-            .at(-1) ?? behandling.innvilgelsesperioder?.filter(erValgtTiltak).at(-1);
+        return sisteDag
+            ? innvilgelsesperioder?.antallDagerPerMeldeperiode.find((it) =>
+                  erDatoIPeriode(sisteDag, it.periode),
+              )?.antallDagerPerMeldeperiode
+            : undefined;
+    };
 
     return (
-        mal?.antallDagerPerMeldeperiode ?? antallDagerPerMeldeperiodeForPeriode(behandling, periode)
+        antallDagerForSistePeriode(
+            hentRammevedtak(sak, behandling.forlengerRammevedtakId).innvilgelsesperioder,
+        ) ??
+        antallDagerForSistePeriode(behandling.innvilgelsesperioder) ??
+        antallDagerForTiltak(behandling, internDeltakelseId)
     );
 };
 

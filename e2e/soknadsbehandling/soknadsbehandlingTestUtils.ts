@@ -2,10 +2,12 @@ import { http, HttpResponse } from '../felles/e2eFelles';
 import { ikkeSladdet } from '~test/sladdetVerdi';
 import {
     barnetilleggFraOppdaterDTO,
+    innvilgedePerioderFraDTO,
     periode,
     rammevedtak,
     sak,
     søknad,
+    tiltaksdeltakelse,
 } from '~test/rammebehandling';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
@@ -78,6 +80,26 @@ export const lagSøknad = (barn: SøknadBarn[] = []): InnvilgbarSøknad => ({
     ...søknad(barn),
     svar: lagSvar(barn.length > 0),
 });
+
+/** Legger til en deltakelse på Jobbklubb som overlapper den vanlige tiltaksdeltakelsen fra mars. */
+export const medJobbklubb = (behandling: Søknadsbehandling): Søknadsbehandling => {
+    const jobbklubb = {
+        ...tiltaksdeltakelse('deltakelse_2', periode('2025-03-01', '2025-06-30'), 2),
+        typeNavn: 'Jobbklubb',
+    };
+
+    return {
+        ...behandling,
+        saksopplysninger: {
+            ...behandling.saksopplysninger,
+            tiltaksdeltagelse: [...behandling.saksopplysninger.tiltaksdeltagelse, jobbklubb],
+        },
+        innvilgbarePerioder: [
+            ...behandling.innvilgbarePerioder,
+            { internDeltakelseId: jobbklubb.internDeltakelseId, periode: jobbklubb.periode },
+        ],
+    };
+};
 
 /** Saken slik backend returnerer den, med behandlingen som åpen behandling inntil den er vedtatt. */
 export const lagSak = (behandling: Søknadsbehandling): SakProps => {
@@ -172,11 +194,11 @@ const oppdaterBehandling = (
                 ...felles,
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
                 søknad: behandling.søknad as InnvilgbarSøknad,
-                vedtaksperiode: totalPeriode(dto.innvilgelsesperioder.map((p) => p.periode)),
+                vedtaksperiode: totalPeriode(innvilgedePerioderFraDTO(dto.innvilgelsesperioder)),
                 innvilgelsesperioder: dto.innvilgelsesperioder,
                 barnetillegg: barnetilleggFraOppdaterDTO(
                     dto.barnetillegg,
-                    dto.innvilgelsesperioder.map((p) => p.periode),
+                    innvilgedePerioderFraDTO(dto.innvilgelsesperioder),
                 ),
                 skalSendeVedtaksbrev: dto.skalSendeVedtaksbrev,
             };

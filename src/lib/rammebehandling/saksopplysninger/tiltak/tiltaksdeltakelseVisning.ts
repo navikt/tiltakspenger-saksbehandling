@@ -8,9 +8,10 @@ import { dateTilISOTekst } from '~/utils/date';
 import { formaterSladdbarVerdi } from '~/utils/sladdetVerdi';
 import { Tiltaksdata, TiltaksdataOppslag } from './useHentTiltaksdata';
 
-const sorterNyesteFørst = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
-    const aDato = a.periode.fraOgMed ?? a.periode.tilOgMed;
-    const bDato = b.periode.fraOgMed ?? b.periode.tilOgMed;
+/** Stigende etter fra og med-dato. Tiltak uten fra og med-dato kommer sist. */
+const sorterEtterFraOgMed = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
+    const aDato = a.periode.fraOgMed;
+    const bDato = b.periode.fraOgMed;
 
     if (aDato === bDato) {
         return 0;
@@ -22,7 +23,7 @@ const sorterNyesteFørst = (a: Tiltaksdeltakelse, b: Tiltaksdeltakelse) => {
         return -1;
     }
 
-    return aDato > bDato ? -1 : 1;
+    return aDato < bDato ? -1 : 1;
 };
 
 const erHistorisk = (tiltak: Tiltaksdeltakelse, skillelinje: string) =>
@@ -33,7 +34,7 @@ export const delOppTiltaksdeltakelser = (
     vurderingsperiode: Nullable<Periode>,
 ) => {
     const skillelinje = vurderingsperiode?.fraOgMed ?? dateTilISOTekst(new Date());
-    const sortert = tiltaksdeltakelser.toSorted(sorterNyesteFørst);
+    const sortert = tiltaksdeltakelser.toSorted(sorterEtterFraOgMed);
 
     return {
         aktuelle: sortert.filter((tiltak) => !erHistorisk(tiltak, skillelinje)),

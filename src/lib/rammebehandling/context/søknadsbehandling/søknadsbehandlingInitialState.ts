@@ -1,3 +1,4 @@
+import { tilInnvilgelsesperioderSkjema } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
 import {
     Søknadsbehandling,
     SøknadsbehandlingResultat,
@@ -45,21 +46,19 @@ const innvilgelseInitialState = (
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperioder: [
-                    {
-                        periode: {},
-                    },
-                ],
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
             },
         };
     }
+
+    const skjemaperioder = tilInnvilgelsesperioderSkjema(behandling.innvilgelsesperioder);
 
     return {
         resultat: SøknadsbehandlingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder: behandling.innvilgelsesperioder,
-            ...lagBarnetilleggSkjemaState(behandling, behandling.innvilgelsesperioder),
+            innvilgelsesperioder: skjemaperioder,
+            ...lagBarnetilleggSkjemaState(behandling, skjemaperioder),
         },
     };
 };

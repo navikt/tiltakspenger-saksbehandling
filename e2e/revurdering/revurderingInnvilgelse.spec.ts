@@ -36,15 +36,16 @@ test.describe('Revurdering av innvilgelse', () => {
             } satisfies StartRevurderingDTO,
         ]);
 
-        // Resten av skjemaet vises først når en hel innvilgelsesperiode er valgt
-        await expect(page.getByRole('heading', { name: 'Innvilgelsesperioder' })).toBeVisible();
-        await expect(page.getByLabel('Antall dager')).toHaveCount(0);
+        // Det eneste tiltaket er forhåndsvalgt, uten checkbox
+        const tiltak = page.getByRole('group', { name: 'Arbeidsmarkedsopplæring' });
+        await expect(tiltak).toBeVisible();
+        await expect(tiltak.getByRole('checkbox')).toHaveCount(0);
 
         // 2. Forleng innvilgelsen ut tiltaksdeltakelsen
-        await page.getByRole('textbox', { name: 'Fra og med' }).fill('01.04.2025');
-        await page.getByRole('textbox', { name: 'Til og med' }).fill('30.06.2025');
+        await tiltak.getByRole('textbox', { name: 'Fra og med' }).fill('01.04.2025');
+        await tiltak.getByRole('textbox', { name: 'Til og med' }).fill('30.06.2025');
 
-        await expect(page.getByLabel('Antall dager')).toHaveValue('10');
+        await expect(page.getByLabel('Dager per meldeperiode')).toHaveValue('10');
         await expect(
             page.getByRole('heading', { name: 'Vedtaksbrev for revurdering av innvilgelse' }),
         ).toBeVisible();
@@ -71,17 +72,31 @@ test.describe('Revurdering av innvilgelse', () => {
                     fritekstTilVedtaksbrev: 'Du får tiltakspenger lenger',
                     skalJournalføreNotat: { vilkårsvurdering: false, barnetillegg: false },
                     prioritering: null,
-                    innvilgelsesperioder: [
-                        {
-                            periode: {
-                                fraOgMed: tilDato('2025-04-01'),
-                                tilOgMed: tilDato('2025-06-30'),
+                    innvilgelsesperioder: {
+                        tiltak: [
+                            {
+                                internDeltakelseId: 'deltakelse_1',
+                                erReversertOpphør: false,
+                                perioder: [
+                                    {
+                                        periode: {
+                                            fraOgMed: tilDato('2025-04-01'),
+                                            tilOgMed: tilDato('2025-06-30'),
+                                        },
+                                    },
+                                ],
                             },
-                            antallDagerPerMeldeperiode: 10,
-                            internDeltakelseId: 'deltakelse_1',
-                            erReversertOpphør: false,
-                        },
-                    ],
+                        ],
+                        antallDagerPerMeldeperiode: [
+                            {
+                                periode: {
+                                    fraOgMed: tilDato('2025-04-01'),
+                                    tilOgMed: tilDato('2025-06-30'),
+                                },
+                                antallDagerPerMeldeperiode: 10,
+                            },
+                        ],
+                    },
                     barnetillegg: { begrunnelse: null, barn: [] },
                     skalSendeVedtaksbrev: true,
                 } satisfies OppdaterRevurderingInnvilgelseDTO,

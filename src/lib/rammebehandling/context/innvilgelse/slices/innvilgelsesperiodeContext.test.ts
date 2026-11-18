@@ -1,10 +1,13 @@
 import { describe, expect, test } from '@jest/globals';
 import {
+    antallDager,
     innvilgelsesperiode,
+    innvilgelsesperioder,
     periode,
     søknad,
     søknadBarn,
     søknadsbehandlingIkkeValgt,
+    tiltaksdeltakelse,
 } from '~test/rammebehandling';
 import {
     InnvilgelseMedPerioderState,
@@ -18,125 +21,325 @@ import { Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { tilDato } from '~/types/DatoTid';
 import { hentBarnFraSøknader } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
+import { TiltakNøkkel } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
+import { InnvilgelseForTiltak } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+
+const tiltak1: TiltakNøkkel = { internDeltakelseId: 'deltakelse_1', erReversertOpphør: false };
+const tiltak2: TiltakNøkkel = { internDeltakelseId: 'deltakelse_2', erReversertOpphør: false };
 
 // Barnet er under 16 år i hele tiltaksdeltakelsen (2025-01-01 - 2025-06-30)
 const behandlingMedBarnISøknad = søknadsbehandlingIkkeValgt({
     søknad: søknad([søknadBarn('2015-03-01')]),
 });
 
-const barnFraSøknaden = hentBarnFraSøknader(behandlingMedBarnISøknad, []).atNonNull(0).barn;
+const barnFraSøknaden = hentBarnFraSøknader(behandlingMedBarnISøknad, {
+    tiltak: [innvilgelsesperiode(periode('2025-01-01', '2025-06-30'))],
+}).atNonNull(0).barn;
+
+const deltakelse2 = tiltaksdeltakelse('deltakelse_2', periode('2025-03-01', '2025-06-30'), 3);
+
+const behandlingMedToTiltak: Rammebehandling = {
+    ...behandlingMedBarnISøknad,
+    saksopplysninger: {
+        ...behandlingMedBarnISøknad.saksopplysninger,
+        tiltaksdeltagelse: [
+            ...behandlingMedBarnISøknad.saksopplysninger.tiltaksdeltagelse,
+            deltakelse2,
+        ],
+    },
+    innvilgbarePerioder: [
+        ...behandlingMedBarnISøknad.innvilgbarePerioder,
+        { internDeltakelseId: deltakelse2.internDeltakelseId, periode: deltakelse2.periode },
+    ],
+};
 
 const utenPerioderState: InnvilgelseUtenPerioderState = {
     harValgtPeriode: false,
-    innvilgelsesperioder: [{ periode: {} }],
+    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
 };
 
 const medPerioderState = (
     overstyringer: Partial<InnvilgelseMedPerioderState> = {},
 ): InnvilgelseMedPerioderState => ({
     harValgtPeriode: true,
-    innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+    innvilgelsesperioder: innvilgelsesperioder([
+        innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+    ]),
     harBarnetillegg: true,
     valgteBarn: [barnFraSøknaden],
     manueltLagtTilBarn: [],
     ...overstyringer,
 });
 
-const oppdaterInnvilgelsesperiode = (
-    periodeOppdatering: Partial<Periode>,
-    index: number = 0,
-    behandling: Rammebehandling = behandlingMedBarnISøknad,
+// Ett tiltak med flere perioder
+const tiltakMedPerioder = (tiltak: TiltakNøkkel, ...perioder: Periode[]): InnvilgelseForTiltak => ({
+    ...tiltak,
+    perioder: perioder.map((periode) => ({ periode })),
+});
+
+const velgTiltak = (
+    tiltak: TiltakNøkkel,
+    valgt: boolean,
+    behandling: Rammebehandling = behandlingMedToTiltak,
+    avgrensning?: Periode,
+    kanSendeInnHelgForMeldekort = true,
 ): InnvilgelsesperioderActions => ({
-    type: 'oppdaterInnvilgelsesperiode',
-    payload: { periodeOppdatering, index, behandling },
+    type: 'velgTiltak',
+    payload: { tiltak, valgt, behandling, kanSendeInnHelgForMeldekort, avgrensning },
+});
+
+const oppdaterTiltakPeriode = (
+    periodeOppdatering: Partial<Periode>,
+    {
+        tiltak = tiltak1,
+        index = 0,
+        behandling = behandlingMedBarnISøknad,
+    }: {
+        tiltak?: TiltakNøkkel;
+        index?: number;
+        behandling?: Rammebehandling;
+    } = {},
+): InnvilgelsesperioderActions => ({
+    type: 'oppdaterTiltakPeriode',
+    payload: { tiltak, index, periodeOppdatering, behandling, kanSendeInnHelgForMeldekort: true },
+});
+
+const settAntallDager = (index: number, antallDager: number): InnvilgelsesperioderActions => ({
+    type: 'settAntallDager',
+    payload: { index, antallDager },
 });
 
 describe('innvilgelsesperioderReducer', () => {
-    describe('før innvilgelsesperioden er valgt', () => {
-        test('beholder en delvis utfylt periode', () => {
+    describe('velgTiltak', () => {
+        test('forhåndsutfyller tiltaket innenfor avgrensningen og barnetillegget fra søknaden', () => {
             expect(
                 innvilgelsesperioderReducer(
                     utenPerioderState,
-                    oppdaterInnvilgelsesperiode({ fraOgMed: tilDato('2025-01-06') }),
-                ),
-            ).toEqual({
-                harValgtPeriode: false,
-                innvilgelsesperioder: [{ periode: { fraOgMed: '2025-01-06' } }],
-            });
-        });
-
-        test('forhåndsutfyller innvilgelsen med barna fra søknaden når perioden blir fullstendig', () => {
-            const delvisUtfylt = innvilgelsesperioderReducer(
-                utenPerioderState,
-                oppdaterInnvilgelsesperiode({ fraOgMed: tilDato('2025-01-06') }),
-            );
-
-            expect(
-                innvilgelsesperioderReducer(
-                    delvisUtfylt,
-                    oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-03-31') }),
+                    velgTiltak(
+                        tiltak1,
+                        true,
+                        behandlingMedBarnISøknad,
+                        periode('2025-02-01', '2025-08-31'),
+                    ),
                 ),
             ).toEqual({
                 harValgtPeriode: true,
-                innvilgelsesperioder: [
-                    innvilgelsesperiode(periode('2025-01-06', '2025-03-31'), {
-                        erReversertOpphør: false,
-                    }),
-                ],
+                innvilgelsesperioder: innvilgelsesperioder([
+                    innvilgelsesperiode(periode('2025-02-01', '2025-06-30')),
+                ]),
                 harBarnetillegg: true,
                 valgteBarn: [barnFraSøknaden],
                 manueltLagtTilBarn: [],
             });
         });
 
-        test.each<InnvilgelsesperioderActions>([
-            { type: 'settAntallDager', payload: { antallDager: 8, index: 0 } },
-            {
-                type: 'leggTilInnvilgelsesperiode',
-                payload: { behandling: behandlingMedBarnISøknad },
-            },
-        ])('kaster feil for $type', (action) => {
-            expect(() => innvilgelsesperioderReducer(utenPerioderState, action)).toThrow();
-        });
-    });
-
-    describe('oppdaterInnvilgelsesperiode', () => {
-        test('beholder valgte barn med hele innvilgelsesperioden når perioden endres', () => {
+        test('forhåndsutfyller antall dager fra tiltaksdeltakelsen', () => {
             expect(
-                innvilgelsesperioderReducer(
-                    medPerioderState(),
-                    oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-28') }),
-                ),
-            ).toEqual(
+                innvilgelsesperioderReducer(utenPerioderState, velgTiltak(tiltak2, true))
+                    .innvilgelsesperioder,
+            ).toEqual({
+                tiltak: [tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30'))],
+                antallDagerPerMeldeperiode: [antallDager(periode('2025-03-01', '2025-06-30'), 6)],
+            });
+        });
+
+        test('tillater overlapp med andre tiltak, og sorterer tiltakene i visningsrekkefølge', () => {
+            const medTiltak1 = innvilgelsesperioderReducer(
+                utenPerioderState,
+                velgTiltak(tiltak1, true),
+            );
+
+            const nyState = innvilgelsesperioderReducer(medTiltak1, velgTiltak(tiltak2, true));
+
+            // Samme rekkefølge som i saksopplysningene, stigende etter fra og med-dato
+            expect(nyState).toMatchObject({
+                innvilgelsesperioder: {
+                    tiltak: [
+                        tiltakMedPerioder(tiltak1, periode('2025-01-01', '2025-06-30')),
+                        tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30')),
+                    ],
+                },
+            });
+        });
+
+        test('deler opp i delperioder, og forhåndsutfyller summen av antall dager der tiltakene overlapper', () => {
+            const medTiltak1 = innvilgelsesperioderReducer(
+                medPerioderState(),
+                settAntallDager(0, 8),
+            );
+
+            const nyState = innvilgelsesperioderReducer(medTiltak1, velgTiltak(tiltak2, true));
+
+            // Tiltak 1 beholder antall dager der det er alene.
+            // Der tiltakene overlapper, brukes summen fra tiltaksdeltakelsene (10 + 6), maks 14.
+            expect(nyState.innvilgelsesperioder.antallDagerPerMeldeperiode).toEqual([
+                antallDager(periode('2025-01-01', '2025-02-28'), 8),
+                antallDager(periode('2025-03-01', '2025-03-31'), 14),
+                antallDager(periode('2025-04-01', '2025-06-30'), 6),
+            ]);
+        });
+
+        test('forhåndsutfyller maks 10 dager der tiltakene overlapper når det ikke kan meldes for helg', () => {
+            const nyState = innvilgelsesperioderReducer(
+                medPerioderState(),
+                velgTiltak(tiltak2, true, behandlingMedToTiltak, undefined, false),
+            );
+
+            expect(nyState.innvilgelsesperioder.antallDagerPerMeldeperiode.at(1)).toEqual(
+                antallDager(periode('2025-03-01', '2025-03-31'), 10),
+            );
+        });
+
+        test('tilpasser barnetillegget når et tiltak velges bort', () => {
+            const state = medPerioderState({
+                innvilgelsesperioder: {
+                    tiltak: [
+                        tiltakMedPerioder(tiltak1, periode('2025-01-01', '2025-02-28')),
+                        tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30')),
+                    ],
+                    antallDagerPerMeldeperiode: [
+                        antallDager(periode('2025-01-01', '2025-02-28'), 10),
+                        antallDager(periode('2025-03-01', '2025-06-30'), 4),
+                    ],
+                },
+                valgteBarn: [
+                    { ...barnFraSøknaden, perioder: [periode('2025-01-01', '2025-06-30')] },
+                ],
+            });
+
+            expect(innvilgelsesperioderReducer(state, velgTiltak(tiltak1, false))).toEqual(
                 medPerioderState({
-                    innvilgelsesperioder: [
-                        innvilgelsesperiode(periode('2025-01-01', '2025-02-28')),
+                    innvilgelsesperioder: {
+                        tiltak: [tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30'))],
+                        antallDagerPerMeldeperiode: [
+                            antallDager(periode('2025-03-01', '2025-06-30'), 4),
+                        ],
+                    },
+                    valgteBarn: [
+                        { ...barnFraSøknaden, perioder: [periode('2025-03-01', '2025-06-30')] },
                     ],
                 }),
             );
         });
 
-        test('justerer andre innvilgelsesperioder slik at de ikke overlapper', () => {
+        test('går tilbake til ingen valgte tiltak når det siste velges bort', () => {
+            expect(
+                innvilgelsesperioderReducer(medPerioderState(), velgTiltak(tiltak1, false)),
+            ).toEqual(utenPerioderState);
+        });
+
+        test('kaster feil for et tiltak som ikke kan velges', () => {
+            expect(() =>
+                innvilgelsesperioderReducer(
+                    utenPerioderState,
+                    velgTiltak(tiltak2, true, behandlingMedBarnISøknad),
+                ),
+            ).toThrow();
+        });
+    });
+
+    test.each<InnvilgelsesperioderActions>([
+        { type: 'settAntallDager', payload: { antallDager: 8, index: 0 } },
+        {
+            type: 'leggTilTiltakPeriode',
+            payload: {
+                tiltak: tiltak1,
+                behandling: behandlingMedBarnISøknad,
+                kanSendeInnHelgForMeldekort: true,
+            },
+        },
+        oppdaterTiltakPeriode({ fraOgMed: tilDato('2025-01-06') }),
+    ])('kaster feil for $type før et tiltak er valgt', (action) => {
+        expect(() => innvilgelsesperioderReducer(utenPerioderState, action)).toThrow();
+    });
+
+    describe('oppdaterTiltakPeriode', () => {
+        test('beholder valgte barn med hele innvilgelsesperioden når perioden endres', () => {
+            expect(
+                innvilgelsesperioderReducer(
+                    medPerioderState(),
+                    oppdaterTiltakPeriode({ tilOgMed: tilDato('2025-02-28') }),
+                ),
+            ).toEqual(
+                medPerioderState({
+                    innvilgelsesperioder: innvilgelsesperioder([
+                        innvilgelsesperiode(periode('2025-01-01', '2025-02-28')),
+                    ]),
+                }),
+            );
+        });
+
+        test('justerer andre perioder for samme tiltak slik at de ikke overlapper, og beholder antall dager', () => {
             const state = medPerioderState({
-                innvilgelsesperioder: [
-                    innvilgelsesperiode(periode('2025-01-01', '2025-01-31')),
-                    innvilgelsesperiode(periode('2025-02-01', '2025-03-31'), {
-                        antallDagerPerMeldeperiode: 6,
-                    }),
-                ],
+                innvilgelsesperioder: {
+                    tiltak: [
+                        tiltakMedPerioder(
+                            tiltak1,
+                            periode('2025-01-01', '2025-01-31'),
+                            periode('2025-02-01', '2025-03-31'),
+                        ),
+                    ],
+                    antallDagerPerMeldeperiode: [
+                        antallDager(periode('2025-01-01', '2025-01-31'), 10),
+                        antallDager(periode('2025-02-01', '2025-03-31'), 6),
+                    ],
+                },
             });
 
             const nyState = innvilgelsesperioderReducer(
                 state,
-                oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-15') }),
+                oppdaterTiltakPeriode({ tilOgMed: tilDato('2025-02-15') }),
             );
 
-            expect(nyState).toMatchObject({
-                innvilgelsesperioder: [
-                    innvilgelsesperiode(periode('2025-01-01', '2025-02-15')),
-                    innvilgelsesperiode(periode('2025-02-16', '2025-03-31'), {
-                        antallDagerPerMeldeperiode: 6,
-                    }),
+            expect(nyState.innvilgelsesperioder).toEqual({
+                tiltak: [
+                    tiltakMedPerioder(
+                        tiltak1,
+                        periode('2025-01-01', '2025-02-15'),
+                        periode('2025-02-16', '2025-03-31'),
+                    ),
+                ],
+                antallDagerPerMeldeperiode: [
+                    antallDager(periode('2025-01-01', '2025-02-15'), 10),
+                    antallDager(periode('2025-02-16', '2025-03-31'), 6),
+                ],
+            });
+        });
+
+        test('endrer ikke perioder for andre tiltak, og beholder antall dager for delperioder med de samme tiltakene', () => {
+            const tiltak2Perioder = tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30'));
+
+            const state = medPerioderState({
+                innvilgelsesperioder: {
+                    tiltak: [
+                        tiltakMedPerioder(tiltak1, periode('2025-01-01', '2025-03-31')),
+                        tiltak2Perioder,
+                    ],
+                    antallDagerPerMeldeperiode: [
+                        antallDager(periode('2025-01-01', '2025-02-28'), 10),
+                        antallDager(periode('2025-03-01', '2025-03-31'), 12),
+                        antallDager(periode('2025-04-01', '2025-06-30'), 6),
+                    ],
+                },
+            });
+
+            const nyState = innvilgelsesperioderReducer(
+                state,
+                oppdaterTiltakPeriode(
+                    { tilOgMed: tilDato('2025-04-30') },
+                    { behandling: behandlingMedToTiltak },
+                ),
+            );
+
+            expect(nyState.innvilgelsesperioder).toEqual({
+                tiltak: [
+                    tiltakMedPerioder(tiltak1, periode('2025-01-01', '2025-04-30')),
+                    tiltak2Perioder,
+                ],
+                antallDagerPerMeldeperiode: [
+                    antallDager(periode('2025-01-01', '2025-02-28'), 10),
+                    antallDager(periode('2025-03-01', '2025-04-30'), 12),
+                    antallDager(periode('2025-05-01', '2025-06-30'), 6),
                 ],
             });
         });
@@ -150,7 +353,7 @@ describe('innvilgelsesperioderReducer', () => {
 
             const nyState = innvilgelsesperioderReducer(
                 state,
-                oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-28') }),
+                oppdaterTiltakPeriode({ tilOgMed: tilDato('2025-02-28') }),
             );
 
             expect(nyState).toMatchObject({
@@ -176,7 +379,7 @@ describe('innvilgelsesperioderReducer', () => {
 
             const nyState = innvilgelsesperioderReducer(
                 state,
-                oppdaterInnvilgelsesperiode({ tilOgMed: tilDato('2025-02-28') }),
+                oppdaterTiltakPeriode({ tilOgMed: tilDato('2025-02-28') }),
             );
 
             expect(nyState).toMatchObject({
@@ -193,47 +396,63 @@ describe('innvilgelsesperioderReducer', () => {
         });
     });
 
-    test('leggTilInnvilgelsesperiode legger til en kopi av siste periode ut tiltaksdeltakelsen', () => {
+    test('leggTilTiltakPeriode legger til en periode ut tiltaksdeltakelsen, med antall dager fra tiltaksdeltakelsen', () => {
         const state = medPerioderState({
-            innvilgelsesperioder: [
-                innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                    antallDagerPerMeldeperiode: 8,
-                }),
-            ],
+            innvilgelsesperioder: innvilgelsesperioder(
+                [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+                8,
+            ),
         });
 
         expect(
             innvilgelsesperioderReducer(state, {
-                type: 'leggTilInnvilgelsesperiode',
-                payload: { behandling: behandlingMedBarnISøknad },
+                type: 'leggTilTiltakPeriode',
+                payload: {
+                    tiltak: tiltak1,
+                    behandling: behandlingMedBarnISøknad,
+                    kanSendeInnHelgForMeldekort: true,
+                },
             }),
         ).toEqual(
             medPerioderState({
-                innvilgelsesperioder: [
-                    innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                        antallDagerPerMeldeperiode: 8,
-                    }),
-                    innvilgelsesperiode(periode('2025-04-01', '2025-06-30'), {
-                        antallDagerPerMeldeperiode: 8,
-                    }),
-                ],
+                innvilgelsesperioder: {
+                    tiltak: [
+                        tiltakMedPerioder(
+                            tiltak1,
+                            periode('2025-01-01', '2025-03-31'),
+                            periode('2025-04-01', '2025-06-30'),
+                        ),
+                    ],
+                    antallDagerPerMeldeperiode: [
+                        antallDager(periode('2025-01-01', '2025-03-31'), 8),
+                        antallDager(periode('2025-04-01', '2025-06-30'), 10),
+                    ],
+                },
             }),
         );
     });
 
-    test('fjernInnvilgelsesperiode fjerner perioden og tilpasser barnetillegget', () => {
+    test('fjernTiltakPeriode fjerner perioden og tilpasser barnetillegget', () => {
         const state = medPerioderState({
-            innvilgelsesperioder: [
-                innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
-                innvilgelsesperiode(periode('2025-04-01', '2025-06-30')),
-            ],
+            innvilgelsesperioder: innvilgelsesperioder([
+                tiltakMedPerioder(
+                    tiltak1,
+                    periode('2025-01-01', '2025-03-31'),
+                    periode('2025-04-01', '2025-06-30'),
+                ),
+            ]),
             valgteBarn: [{ ...barnFraSøknaden, perioder: [periode('2025-02-01', '2025-06-30')] }],
         });
 
         expect(
             innvilgelsesperioderReducer(state, {
-                type: 'fjernInnvilgelsesperiode',
-                payload: { index: 1, behandling: behandlingMedBarnISøknad },
+                type: 'fjernTiltakPeriode',
+                payload: {
+                    tiltak: tiltak1,
+                    index: 1,
+                    behandling: behandlingMedBarnISøknad,
+                    kanSendeInnHelgForMeldekort: true,
+                },
             }),
         ).toEqual(
             medPerioderState({
@@ -244,51 +463,36 @@ describe('innvilgelsesperioderReducer', () => {
         );
     });
 
-    test('settAntallDager endrer kun valgt periode', () => {
+    test('settAntallDager endrer kun valgt delperiode', () => {
+        const tiltak = [
+            tiltakMedPerioder(
+                tiltak1,
+                periode('2025-01-01', '2025-03-31'),
+                periode('2025-04-01', '2025-06-30'),
+            ),
+            tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30')),
+        ];
+
         const state = medPerioderState({
-            innvilgelsesperioder: [
-                innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
-                innvilgelsesperiode(periode('2025-04-01', '2025-06-30')),
-            ],
+            innvilgelsesperioder: {
+                tiltak,
+                antallDagerPerMeldeperiode: [
+                    antallDager(periode('2025-01-01', '2025-02-28'), 10),
+                    antallDager(periode('2025-03-01', '2025-03-31'), 14),
+                    antallDager(periode('2025-04-01', '2025-06-30'), 14),
+                ],
+            },
         });
 
         expect(
-            innvilgelsesperioderReducer(state, {
-                type: 'settAntallDager',
-                payload: { antallDager: 4, index: 1 },
-            }).innvilgelsesperioder,
-        ).toEqual([
-            innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
-            innvilgelsesperiode(periode('2025-04-01', '2025-06-30'), {
-                antallDagerPerMeldeperiode: 4,
-            }),
-        ]);
-    });
-
-    test('settTiltaksdeltakelse endrer kun valgt periode', () => {
-        expect(
-            innvilgelsesperioderReducer(medPerioderState(), {
-                type: 'settTiltaksdeltakelse',
-                payload: { internDeltakelseId: 'deltakelse_2', erReversertOpphør: false, index: 0 },
-            }).innvilgelsesperioder,
-        ).toEqual([
-            innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                internDeltakelseId: 'deltakelse_2',
-                erReversertOpphør: false,
-            }),
-        ]);
-    });
-
-    test('settTiltaksdeltakelse markerer perioden som reversert opphør', () => {
-        expect(
-            innvilgelsesperioderReducer(medPerioderState(), {
-                type: 'settTiltaksdeltakelse',
-                payload: { internDeltakelseId: 'deltakelse_1', erReversertOpphør: true, index: 0 },
-            }).innvilgelsesperioder,
-        ).toEqual([
-            innvilgelsesperiode(periode('2025-01-01', '2025-03-31'), {
-                erReversertOpphør: true,
-            }),
-        ]);
+            innvilgelsesperioderReducer(state, settAntallDager(1, 4)).innvilgelsesperioder,
+        ).toEqual({
+            tiltak,
+            antallDagerPerMeldeperiode: [
+                antallDager(periode('2025-01-01', '2025-02-28'), 10),
+                antallDager(periode('2025-03-01', '2025-03-31'), 4),
+                antallDager(periode('2025-04-01', '2025-06-30'), 14),
+            ],
+        });
     });
 });

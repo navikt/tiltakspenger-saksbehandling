@@ -1,7 +1,7 @@
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { inneholderHelePerioden, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { formaterDatotekst, formaterPeriode } from '~/utils/date';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { MedPeriode } from '~/types/Periode';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     BarnetilleggBarnSkjema,
@@ -23,7 +23,7 @@ const FNR_REGEX = /^\d{11}$/;
 export const validerBarnetillegg = (
     harBarnetillegg: boolean,
     valgteBarn: BarnetilleggBarnSkjema[],
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    innvilgelsesperioder: MedPeriode[],
     barnFraSøknader: BarnFraSøknad[],
 ): ValideringResultat => {
     const validering: ValideringResultat = {

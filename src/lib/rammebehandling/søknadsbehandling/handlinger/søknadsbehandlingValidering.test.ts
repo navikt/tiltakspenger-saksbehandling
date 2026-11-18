@@ -9,6 +9,7 @@ import {
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     innvilgelsesperiode,
+    innvilgelsesperioder,
     periode,
     sak,
     søknad,
@@ -88,9 +89,9 @@ describe('søknadsbehandlingValidering', () => {
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
                 innvilgelse: {
                     harValgtPeriode: true,
-                    innvilgelsesperioder: [
+                    innvilgelsesperioder: innvilgelsesperioder([
                         innvilgelsesperiode(periode('2025-01-01', '2025-07-31')),
-                    ],
+                    ]),
                     harBarnetillegg: false,
                     valgteBarn: [],
                     manueltLagtTilBarn: [],

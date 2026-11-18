@@ -196,10 +196,10 @@ test.describe('Omgjøring', () => {
         await expect(tilOgMed.first()).toHaveValue('31.03.2025');
 
         // 3. Innvilg hele perioden, men med 8 dager per meldeperiode
-        await expect(page.getByRole('heading', { name: 'Innvilgelsesperioder' })).toBeVisible();
+        await expect(page.getByText('Innvilgelsesperioder', { exact: true })).toBeVisible();
         await fraOgMed.last().fill('01.01.2025');
         await tilOgMed.last().fill('31.03.2025');
-        await page.getByLabel('Antall dager').selectOption('8');
+        await page.getByLabel('Dager per meldeperiode').selectOption('8');
 
         await page
             .getByRole('textbox', { name: 'Begrunnelse vilkårsvurdering' })
@@ -225,23 +225,37 @@ test.describe('Omgjøring', () => {
                         fraOgMed: tilDato('2025-01-01'),
                         tilOgMed: tilDato('2025-03-31'),
                     },
-                    innvilgelsesperioder: [
-                        {
-                            periode: {
-                                fraOgMed: tilDato('2025-01-01'),
-                                tilOgMed: tilDato('2025-03-31'),
+                    innvilgelsesperioder: {
+                        tiltak: [
+                            {
+                                internDeltakelseId: 'deltakelse_1',
+                                erReversertOpphør: false,
+                                perioder: [
+                                    {
+                                        periode: {
+                                            fraOgMed: tilDato('2025-01-01'),
+                                            tilOgMed: tilDato('2025-03-31'),
+                                        },
+                                    },
+                                ],
                             },
-                            antallDagerPerMeldeperiode: 8,
-                            internDeltakelseId: 'deltakelse_1',
-                            erReversertOpphør: false,
-                        },
-                    ],
+                        ],
+                        antallDagerPerMeldeperiode: [
+                            {
+                                periode: {
+                                    fraOgMed: tilDato('2025-01-01'),
+                                    tilOgMed: tilDato('2025-03-31'),
+                                },
+                                antallDagerPerMeldeperiode: 8,
+                            },
+                        ],
+                    },
                     barnetillegg: { begrunnelse: null, barn: [] },
                     skalSendeVedtaksbrev: true,
                 } satisfies OppdaterOmgjøringInnvilgelseDTO,
             ]);
         await expect(page.getByText('Behandlingen er lagret')).toBeVisible();
-        await expect(page.getByLabel('Antall dager')).toHaveValue('8');
+        await expect(page.getByLabel('Dager per meldeperiode')).toHaveValue('8');
 
         // 5. Send til beslutning
         await page.getByRole('button', { name: 'Send til beslutter' }).click();
@@ -284,38 +298,35 @@ test.describe('Omgjøring', () => {
         await page.getByRole('radio', { name: 'Innvilgelse' }).check();
         await page.getByRole('button', { name: 'Fyll inn periode' }).click();
 
-        const fraOgMed = page.getByRole('textbox', { name: 'Fra og med' });
-        const tilOgMed = page.getByRole('textbox', { name: 'Til og med' });
-        const reversertOpphørValg = page
-            .getByLabel('Tiltak')
-            .getByRole('option', { name: 'Reversert opphør: Arbeidsmarkedsopplæring' });
+        const vedtaksperiodeTilOgMed = page.getByRole('textbox', { name: 'Til og med' }).first();
+        const tiltak = page.getByRole('group', { name: 'Arbeidsmarkedsopplæring', exact: true });
+        const reversertOpphør = page.getByRole('group', {
+            name: 'Arbeidsmarkedsopplæring – reversert opphør',
+        });
 
-        // 1. Første periode innvilges for den gyldige tiltaksdeltakelsen
-        await fraOgMed.nth(1).fill('01.01.2025');
-        await tilOgMed.nth(1).fill('28.02.2025');
-        await expect(page.getByLabel('Tiltak')).toHaveValue('deltakelse_1');
-        await expect(page.getByText(/^Reversert opphør –/)).toHaveCount(0);
+        // 1. Med reversert opphør er det flere tiltak, og den gyldige tiltaksdeltakelsen velges manuelt
+        await expect(tiltak.getByRole('checkbox')).not.toBeChecked();
+        await tiltak.getByRole('checkbox').check();
+        await expect(tiltak.getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2025');
+        await expect(tiltak.getByRole('textbox', { name: 'Til og med' })).toHaveValue('28.02.2025');
 
         // 2. Reversert opphør kan bare velges når vedtaksperioden inkluderer den opphørte perioden
-        await expect(reversertOpphørValg).toHaveCount(1);
-        await tilOgMed.first().fill('28.02.2025');
-        await tilOgMed.first().blur();
-        await expect(reversertOpphørValg).toHaveCount(0);
-        await tilOgMed.first().fill('31.03.2025');
-        await tilOgMed.first().blur();
-        await expect(reversertOpphørValg).toHaveCount(1);
+        await expect(reversertOpphør).toHaveCount(1);
+        await vedtaksperiodeTilOgMed.fill('28.02.2025');
+        await vedtaksperiodeTilOgMed.blur();
+        await expect(reversertOpphør).toHaveCount(0);
+        await vedtaksperiodeTilOgMed.fill('31.03.2025');
+        await vedtaksperiodeTilOgMed.blur();
+        await expect(reversertOpphør).toHaveCount(1);
 
-        // 3. Legg til mars som reversert opphør
-        await page.getByRole('button', { name: 'Ny periode' }).click();
-        await page
-            .getByLabel('Tiltak')
-            .nth(1)
-            .selectOption({ label: 'Reversert opphør: Arbeidsmarkedsopplæring' });
-        await fraOgMed.nth(2).fill('01.03.2025');
-        await tilOgMed.nth(2).fill('31.03.2025');
-        await expect(
-            page.getByText('Reversert opphør – ingen gyldig tiltaksdeltakelse'),
-        ).toBeVisible();
+        // 3. Velg reversert opphør, som forhåndsutfylles med den opphørte perioden
+        await reversertOpphør.getByRole('checkbox').check();
+        await expect(reversertOpphør.getByRole('textbox', { name: 'Fra og med' })).toHaveValue(
+            '01.03.2025',
+        );
+        await expect(reversertOpphør.getByRole('textbox', { name: 'Til og med' })).toHaveValue(
+            '31.03.2025',
+        );
 
         await page
             .getByRole('textbox', { name: 'Begrunnelse vilkårsvurdering' })
@@ -333,26 +344,50 @@ test.describe('Omgjøring', () => {
                     fraOgMed: tilDato('2025-01-01'),
                     tilOgMed: tilDato('2025-03-31'),
                 },
-                innvilgelsesperioder: [
-                    {
-                        periode: {
-                            fraOgMed: tilDato('2025-01-01'),
-                            tilOgMed: tilDato('2025-02-28'),
+                innvilgelsesperioder: {
+                    tiltak: [
+                        {
+                            internDeltakelseId: 'deltakelse_1',
+                            erReversertOpphør: false,
+                            perioder: [
+                                {
+                                    periode: {
+                                        fraOgMed: tilDato('2025-01-01'),
+                                        tilOgMed: tilDato('2025-02-28'),
+                                    },
+                                },
+                            ],
                         },
-                        antallDagerPerMeldeperiode: 10,
-                        internDeltakelseId: 'deltakelse_1',
-                        erReversertOpphør: false,
-                    },
-                    {
-                        periode: {
-                            fraOgMed: tilDato('2025-03-01'),
-                            tilOgMed: tilDato('2025-03-31'),
+                        {
+                            internDeltakelseId: 'deltakelse_1',
+                            erReversertOpphør: true,
+                            perioder: [
+                                {
+                                    periode: {
+                                        fraOgMed: tilDato('2025-03-01'),
+                                        tilOgMed: tilDato('2025-03-31'),
+                                    },
+                                },
+                            ],
                         },
-                        antallDagerPerMeldeperiode: 10,
-                        internDeltakelseId: 'deltakelse_1',
-                        erReversertOpphør: true,
-                    },
-                ],
+                    ],
+                    antallDagerPerMeldeperiode: [
+                        {
+                            periode: {
+                                fraOgMed: tilDato('2025-01-01'),
+                                tilOgMed: tilDato('2025-02-28'),
+                            },
+                            antallDagerPerMeldeperiode: 10,
+                        },
+                        {
+                            periode: {
+                                fraOgMed: tilDato('2025-03-01'),
+                                tilOgMed: tilDato('2025-03-31'),
+                            },
+                            antallDagerPerMeldeperiode: 10,
+                        },
+                    ],
+                },
             } satisfies Partial<OppdaterOmgjøringInnvilgelseDTO>);
         await expect(page.getByText('Behandlingen er lagret')).toBeVisible();
         await expect(

@@ -6,8 +6,8 @@ import {
 } from './Rammebehandling';
 import { InnvilgbarSøknad, Søknad } from '~/lib/søknad/søknadTyper';
 import {
-    Innvilgelsesperiode,
-    LagretInnvilgelsesperiode,
+    Innvilgelsesperioder,
+    LagredeInnvilgelsesperioder,
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 type SøknadsbehandlingBase = RammebehandlingBase & {
@@ -24,7 +24,7 @@ export type SøknadsbehandlingIkkeValgt = SøknadsbehandlingBase & {
 
 export type SøknadsbehandlingInnvilgelse = SøknadsbehandlingBase & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelsesperioder: LagretInnvilgelsesperiode[];
+    innvilgelsesperioder: LagredeInnvilgelsesperioder;
     barnetillegg: Barnetillegg;
     søknad: InnvilgbarSøknad;
 };
@@ -45,7 +45,7 @@ export enum SøknadsbehandlingResultat {
 
 export type OppdaterSøknadsbehandlingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelsesperioder: Innvilgelsesperiode[];
+    innvilgelsesperioder: Innvilgelsesperioder;
     barnetillegg: OppdaterBarnetilleggDTO;
     skalSendeVedtaksbrev: boolean;
 };

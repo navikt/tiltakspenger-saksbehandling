@@ -13,12 +13,15 @@ import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 import { hentBarnFraSøknader } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggSkjemaUtils';
 import { Søknad } from '~/lib/søknad/søknadTyper';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { hentInnvilgedePerioder } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 const førsteKvartal = periode('2025-01-01', '2025-03-31');
-const innvilgelsesperioder = [innvilgelsesperiode(førsteKvartal)];
+const innvilgelsesperioder = [{ periode: førsteKvartal }];
 
 const hentBarnFraSøknad = (søknad: Søknad) =>
-    hentBarnFraSøknader(søknadsbehandlingIkkeValgt({ søknad }), innvilgelsesperioder);
+    hentBarnFraSøknader(søknadsbehandlingIkkeValgt({ søknad }), {
+        tiltak: [innvilgelsesperiode(førsteKvartal)],
+    });
 
 // Barnet er under 16 år i hele førsteKvartal
 const barnFraSøknad = hentBarnFraSøknad(søknad([søknadBarn('2020-05-05')]));
@@ -199,7 +202,14 @@ describe('validerBarnetillegg', () => {
             ];
             const barn = { ...valgtBarnFraSøknad, perioder: [periode('2025-02-01', '2025-02-28')] };
 
-            expect(validerBarnetillegg(true, [barn], perioderMedHull, [])).toEqual({
+            expect(
+                validerBarnetillegg(
+                    true,
+                    [barn],
+                    hentInnvilgedePerioder({ tiltak: perioderMedHull }),
+                    [],
+                ),
+            ).toEqual({
                 errors: [
                     'Barn Barnesen (født 05.05.2020): Perioden 01.02.2025 - 28.02.2025 overlapper ingen innvilgelsesperioder, og gir ikke barnetillegg',
                 ],

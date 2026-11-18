@@ -2,8 +2,10 @@ import { describe, expect, test } from '@jest/globals';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
 import {
     barnetilleggPeriode,
+    antallDager,
     barnetilleggV1,
     innvilgelsesperiode,
+    innvilgelsesperioder,
     omgjøringInnvilgelse,
     periode,
     rammevedtak,
@@ -11,12 +13,18 @@ import {
     sak,
     sakMedInnvilgetVedtak,
     søknadsbehandlingInnvilgelse,
+    tiltaksdeltakelse,
 } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    AntallDagerForPeriode,
+    InnvilgelseForTiltak,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { hentDelperioder } from '~/lib/rammebehandling/felles/innvilgelsesperiode/innvilgelseForTiltakUtils';
+import { Periode } from '~/types/Periode';
 import { BarnetilleggBarnSkjema } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 
@@ -26,37 +34,76 @@ const februar = periode('2025-02-01', '2025-02-28');
 const marsTilJuni = periode('2025-03-01', '2025-06-30');
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
 
+// Ett tiltak med flere perioder
+const tiltakMedPerioder = (
+    perioder: Periode[],
+    internDeltakelseId = 'deltakelse_1',
+): InnvilgelseForTiltak => ({
+    internDeltakelseId,
+    erReversertOpphør: false,
+    perioder: perioder.map((periode) => ({ periode })),
+});
+
+const deltakelse2 = tiltaksdeltakelse('deltakelse_2', førsteHalvår);
+
+const søknadsbehandlingMedToTiltak = () => {
+    const behandling = søknadsbehandlingInnvilgelse();
+
+    return {
+        ...behandling,
+        saksopplysninger: {
+            ...behandling.saksopplysninger,
+            tiltaksdeltagelse: [
+                ...behandling.saksopplysninger.tiltaksdeltagelse,
+                { ...deltakelse2, typeNavn: 'Jobbklubb' },
+            ],
+        },
+        innvilgbarePerioder: [
+            ...behandling.innvilgbarePerioder,
+            { internDeltakelseId: deltakelse2.internDeltakelseId, periode: deltakelse2.periode },
+        ],
+    };
+};
+
+// Antall dager er 10 for hver delperiode, med mindre det er satt
 const innvilgelse = (
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    tiltak: InnvilgelseForTiltak[],
     barnetillegg: BarnetilleggBarnSkjema[] = [],
+    antallDagerPerMeldeperiode: AntallDagerForPeriode[] = hentDelperioder(tiltak).map(
+        ({ periode }) => antallDager(periode, 10),
+    ),
 ) => ({
     harValgtPeriode: true as const,
-    innvilgelsesperioder,
+    innvilgelsesperioder: { tiltak, antallDagerPerMeldeperiode },
     harBarnetillegg: barnetillegg.length > 0,
     valgteBarn: barnetillegg,
     manueltLagtTilBarn: [],
 });
 
 const søknadsbehandlingSkjema = (
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    tiltak: InnvilgelseForTiltak[],
     barnetillegg: BarnetilleggBarnSkjema[] = [],
+    antallDagerPerMeldeperiode?: AntallDagerForPeriode[],
 ): BehandlingMedInnvilgelseState => ({
     resultat: SøknadsbehandlingResultat.INNVILGELSE,
-    innvilgelse: innvilgelse(innvilgelsesperioder, barnetillegg),
+    innvilgelse: innvilgelse(tiltak, barnetillegg, antallDagerPerMeldeperiode),
 });
 
 // Har fylt 16 år før innvilgelsesperiodene i testene
 const forGammeltBarn = skjemaBarn('2008-01-01');
 
 describe('validerInnvilgelse', () => {
-    test('krever valgt innvilgelsesperiode før noe annet valideres', () => {
+    test('krever valgt tiltak før noe annet valideres', () => {
         const resultat = validerInnvilgelse(sak(), søknadsbehandlingInnvilgelse(), {
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
-            innvilgelse: { harValgtPeriode: false, innvilgelsesperioder: [{ periode: {} }] },
+            innvilgelse: {
+                harValgtPeriode: false,
+                innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
+            },
         });
 
         expect(resultat).toEqual({
-            errors: ['Minst en fullstendig innvilgelsesperiode må være valgt'],
+            errors: ['Minst ett tiltak med en innvilgelsesperiode må være valgt'],
             warnings: [],
         });
     });
@@ -71,30 +118,97 @@ describe('validerInnvilgelse', () => {
         expect(resultat).toEqual({ errors: [], warnings: [] });
     });
 
-    test('avviser overlappende innvilgelsesperioder', () => {
+    test('avviser overlappende perioder for samme tiltak', () => {
         const resultat = validerInnvilgelse(
             sak(),
             søknadsbehandlingInnvilgelse(),
             søknadsbehandlingSkjema([
-                innvilgelsesperiode(periode('2025-01-01', '2025-03-01')),
-                innvilgelsesperiode(marsTilJuni),
+                tiltakMedPerioder([periode('2025-01-01', '2025-03-01'), marsTilJuni]),
             ]),
         );
 
-        expect(resultat.errors).toEqual(['Innvilgelsesperiodene må være uten overlapp']);
+        expect(resultat.errors).toEqual([
+            'Periodene for Arbeidsmarkedsopplæring kan ikke overlappe hverandre',
+        ]);
+    });
+
+    test('godtar overlappende perioder for ulike tiltak', () => {
+        const resultat = validerInnvilgelse(
+            sak(),
+            søknadsbehandlingMedToTiltak(),
+            søknadsbehandlingSkjema([
+                tiltakMedPerioder([førsteHalvår], 'deltakelse_1'),
+                tiltakMedPerioder([marsTilJuni], 'deltakelse_2'),
+            ]),
+        );
+
+        expect(resultat).toEqual({ errors: [], warnings: [] });
+    });
+
+    test('avviser antall dager per meldeperiode under 1 eller over 14 for en delperiode', () => {
+        const resultat = validerInnvilgelse(
+            sak(),
+            søknadsbehandlingMedToTiltak(),
+            søknadsbehandlingSkjema(
+                [
+                    tiltakMedPerioder([førsteHalvår], 'deltakelse_1'),
+                    tiltakMedPerioder([marsTilJuni], 'deltakelse_2'),
+                ],
+                [],
+                [antallDager(periode('2025-01-01', '2025-02-28'), 0), antallDager(marsTilJuni, 15)],
+            ),
+        );
+
+        expect(resultat.errors).toEqual([
+            'Antall dager per meldeperiode må være mellom 1 og 14 (01.01.2025 - 28.02.2025)',
+            'Antall dager per meldeperiode må være mellom 1 og 14 (01.03.2025 - 30.06.2025)',
+        ]);
+    });
+
+    test('avviser et tiltak som ikke kan innvilges', () => {
+        const resultat = validerInnvilgelse(
+            sak(),
+            søknadsbehandlingInnvilgelse(),
+            søknadsbehandlingSkjema([tiltakMedPerioder([førsteHalvår], 'deltakelse_2')]),
+        );
+
+        expect(resultat.errors).toEqual(['Kan ikke innvilge for Tiltak med id deltakelse_2']);
+    });
+
+    test('avviser reversert opphør som overlapper et vanlig tiltak', () => {
+        const resultat = validerInnvilgelse(
+            sak(),
+            søknadsbehandlingInnvilgelse(),
+            søknadsbehandlingSkjema([
+                tiltakMedPerioder([førsteHalvår]),
+                { ...tiltakMedPerioder([januar]), erReversertOpphør: true },
+            ]),
+        );
+
+        expect(resultat.errors).toContain(
+            'Reversert opphør kan ikke overlappe perioder med en gyldig tiltaksdeltakelse',
+        );
     });
 
     test('avviser en lagret innvilgelsesperiode som backend har validert at ikke passer med tiltaksdeltakelsen', () => {
         const behandling = søknadsbehandlingInnvilgelse({
-            innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode(førsteHalvår),
-                    ugyldigTiltaksdeltakelse: {
-                        type: 'DEKKER_IKKE_PERIODEN',
-                        deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
+            innvilgelsesperioder: {
+                ...innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
+                tiltak: [
+                    {
+                        ...innvilgelsesperiode(førsteHalvår),
+                        perioder: [
+                            {
+                                periode: førsteHalvår,
+                                ugyldigTiltaksdeltakelse: {
+                                    type: 'DEKKER_IKKE_PERIODEN',
+                                    deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
+                                },
+                            },
+                        ],
                     },
-                },
-            ],
+                ],
+            },
         });
 
         const resultat = validerInnvilgelse(
@@ -110,15 +224,23 @@ describe('validerInnvilgelse', () => {
 
     test('godtar en innvilgelsesperiode som er endret etter lagring, siden backend validerer den ved neste lagring', () => {
         const behandling = søknadsbehandlingInnvilgelse({
-            innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode(førsteHalvår),
-                    ugyldigTiltaksdeltakelse: {
-                        type: 'DEKKER_IKKE_PERIODEN',
-                        deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
+            innvilgelsesperioder: {
+                ...innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
+                tiltak: [
+                    {
+                        ...innvilgelsesperiode(førsteHalvår),
+                        perioder: [
+                            {
+                                periode: førsteHalvår,
+                                ugyldigTiltaksdeltakelse: {
+                                    type: 'DEKKER_IKKE_PERIODEN',
+                                    deltakelsesperiode: periode('2025-01-01', '2025-05-31'),
+                                },
+                            },
+                        ],
                     },
-                },
-            ],
+                ],
+            },
         });
 
         const resultat = validerInnvilgelse(
@@ -137,17 +259,30 @@ describe('validerInnvilgelse', () => {
             søknadsbehandlingSkjema([innvilgelsesperiode(periode('2025-03-01', '2025-02-01'))]),
         );
 
-        expect(resultat.errors).toEqual(['Til og med-dato må være etter fra og med-dato']);
+        expect(resultat.errors).toEqual([
+            'Til og med-dato må være etter fra og med-dato for Arbeidsmarkedsopplæring (01.03.2025 - 01.02.2025)',
+        ]);
     });
 
     test('tar med feil fra både valgte tiltaksdeltakelser og barnetillegg', () => {
         const behandling = søknadsbehandlingInnvilgelse({
-            innvilgelsesperioder: [
-                {
-                    ...innvilgelsesperiode(førsteHalvår),
-                    ugyldigTiltaksdeltakelse: { type: 'FINNES_IKKE', deltakelsesperiode: null },
-                },
-            ],
+            innvilgelsesperioder: {
+                ...innvilgelsesperioder([innvilgelsesperiode(førsteHalvår)]),
+                tiltak: [
+                    {
+                        ...innvilgelsesperiode(førsteHalvår),
+                        perioder: [
+                            {
+                                periode: førsteHalvår,
+                                ugyldigTiltaksdeltakelse: {
+                                    type: 'FINNES_IKKE',
+                                    deltakelsesperiode: null,
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
         });
 
         const resultat = validerInnvilgelse(
@@ -200,10 +335,7 @@ describe('validerInnvilgelse', () => {
     });
 
     describe('hull mellom innvilgelsesperiodene', () => {
-        const innvilgelsesperioderMedHullIFebruar = [
-            innvilgelsesperiode(januar),
-            innvilgelsesperiode(marsTilJuni),
-        ];
+        const innvilgelsesperioderMedHullIFebruar = [tiltakMedPerioder([januar, marsTilJuni])];
 
         test('godtas når det ikke finnes noen tidligere innvilgelse i hullet', () => {
             const resultat = validerInnvilgelse(

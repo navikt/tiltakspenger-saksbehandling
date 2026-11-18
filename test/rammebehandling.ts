@@ -38,7 +38,11 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { tilSaksnummer } from '~/lib/sak/Saksnummer';
 import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
-import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import {
+    AntallDagerForPeriode,
+    InnvilgelseForTiltak,
+    Innvilgelsesperioder,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import {
     BarnetilleggBarn,
     BarnetilleggBarnKilde,
@@ -62,14 +66,41 @@ export const periode = (fraOgMed: string, tilOgMed: string): Periode => ({
     tilOgMed: tilDato(tilOgMed),
 });
 
+// Ett tiltak med én periode
 export const innvilgelsesperiode = (
     p: Periode,
-    overstyringer: Partial<Innvilgelsesperiode> = {},
-): Innvilgelsesperiode => ({
+    {
+        internDeltakelseId = 'deltakelse_1',
+        erReversertOpphør = false,
+    }: {
+        internDeltakelseId?: string;
+        erReversertOpphør?: boolean;
+    } = {},
+): InnvilgelseForTiltak => ({
+    internDeltakelseId,
+    erReversertOpphør,
+    perioder: [{ periode: p }],
+});
+
+// Tiltakene med samme antall dager for hver periode. Overlappende tiltak må ha antall dager satt eksplisitt for delperiodene.
+export const innvilgelsesperioder = (
+    tiltak: InnvilgelseForTiltak[],
+    antallDagerPerMeldeperiode = 10,
+): Innvilgelsesperioder => ({
+    tiltak,
+    antallDagerPerMeldeperiode: tiltak
+        .flatMap((it) =>
+            it.perioder.map(({ periode }) => ({ periode, antallDagerPerMeldeperiode })),
+        )
+        .toSorted((a, b) => a.periode.fraOgMed.localeCompare(b.periode.fraOgMed)),
+});
+
+export const antallDager = (
+    p: Periode,
+    antallDagerPerMeldeperiode: number,
+): AntallDagerForPeriode => ({
     periode: p,
-    antallDagerPerMeldeperiode: 10,
-    internDeltakelseId: 'deltakelse_1',
-    ...overstyringer,
+    antallDagerPerMeldeperiode,
 });
 
 export const barnetilleggPeriode = (antallBarn: number, p: Periode): BarnetilleggPeriode => ({
@@ -191,6 +222,12 @@ export const barnetilleggV2 = (
 };
 
 // Barnetillegget backend lagrer fra barnetillegget som sendes inn
+// Periodene det innvilges for på tvers av tiltak, som kan overlappe
+export const innvilgedePerioderFraDTO = ({
+    tiltak,
+}: Pick<Innvilgelsesperioder, 'tiltak'>): Periode[] =>
+    tiltak.flatMap((t) => t.perioder.map((p) => p.periode));
+
 export const barnetilleggFraOppdaterDTO = (
     dto: OppdaterBarnetilleggDTO,
     innvilgelsesperioder: Periode[],
@@ -411,7 +448,9 @@ export const søknadsbehandlingInnvilgelse = (
             ...søknadsbehandlingBase(),
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
             vedtaksperiode: periode('2025-01-01', '2025-03-31'),
-            innvilgelsesperioder: [innvilgelsesperiode(periode('2025-01-01', '2025-03-31'))],
+            innvilgelsesperioder: innvilgelsesperioder([
+                innvilgelsesperiode(periode('2025-01-01', '2025-03-31')),
+            ]),
             barnetillegg: barnetilleggV2([], [periode('2025-01-01', '2025-03-31')]),
             ...overstyringer,
         },
@@ -568,7 +607,7 @@ export const sakMedInnvilgetVedtak = (
             status: Rammebehandlingsstatus.VEDTATT,
             iverksattTidspunkt: tilTidspunkt('2025-01-01T09:00:00'),
             vedtaksperiode,
-            innvilgelsesperioder: [innvilgelsesperiode(vedtaksperiode)],
+            innvilgelsesperioder: innvilgelsesperioder([innvilgelsesperiode(vedtaksperiode)]),
             ...(overstyringer.søknad && { søknad: overstyringer.søknad }),
         });
 

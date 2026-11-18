@@ -102,7 +102,7 @@ const lagRammevedtak = (): Rammevedtak => ({
     gjeldendeInnvilgetPerioder: [],
     saksbehandler: navIdent,
     beslutter: beslutterIdent,
-    innvilgelsesperioder: [],
+    innvilgelsesperioder: { tiltak: [], antallDagerPerMeldeperiode: [] },
     barnetillegg: null,
     gjeldendeBarnetilleggPerioder: [],
     erGjeldende: true,

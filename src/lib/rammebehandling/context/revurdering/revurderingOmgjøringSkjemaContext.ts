@@ -111,11 +111,11 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
             };
         }
 
-        case 'oppdaterInnvilgelsesperiode':
-        case 'fjernInnvilgelsesperiode':
-        case 'leggTilInnvilgelsesperiode':
-        case 'settTiltaksdeltakelse':
+        case 'velgTiltak':
+        case 'oppdaterTiltakPeriode':
         case 'settAntallDager':
+        case 'leggTilTiltakPeriode':
+        case 'fjernTiltakPeriode':
         case 'setHarSøktBarnetillegg':
         case 'velgBarnetilleggBarn':
         case 'settBarnetilleggPeriodevalg':
