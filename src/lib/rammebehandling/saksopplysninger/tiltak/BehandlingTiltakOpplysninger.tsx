@@ -156,10 +156,6 @@ const TiltakSomFratarRettListe = ({
                             <TiltakHeader typeNavn={typeNavn} />
                             <GirIkkeRettTag />
                             <div>
-                                <BehandlingSaksopplysning
-                                    navn={'Tiltaksnavn'}
-                                    verdi={tiltaksdata(eksternDeltakelseId, 'tittel')}
-                                />
                                 <Gjennomføringsnavn
                                     navn={tiltaksdata(eksternDeltakelseId, 'gjennomføringsnavn')}
                                 />
@@ -246,10 +242,6 @@ const TiltakListe = ({
                                 {...historikk}
                             />
                             <div>
-                                <BehandlingSaksopplysning
-                                    navn={'Tiltaksnavn'}
-                                    verdi={tiltaksdata(eksternDeltagelseId, 'tittel')}
-                                />
                                 <Gjennomføringsnavn
                                     navn={tiltaksdata(eksternDeltagelseId, 'gjennomføringsnavn')}
                                 />

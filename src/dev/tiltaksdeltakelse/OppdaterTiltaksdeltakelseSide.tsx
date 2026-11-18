@@ -353,7 +353,7 @@ const OppdaterTiltaksdeltakelseSkjema = ({
                                 {...field}
                                 error={fieldState.error?.message}
                                 label="Gjennomføringsnavn"
-                                description="Navnet på gjennomføringen, f.eks. «AMO-kurs i sveis, Strandveien». Vises under tiltaksnavnet i saksopplysningene. Tomt beholder dagens navn, og en ny deltakelse får ingen."
+                                description="Navnet på gjennomføringen, f.eks. «AMO-kurs i sveis, Strandveien». Vises i saksopplysningene. Tomt beholder dagens navn, og en ny deltakelse får ingen."
                                 size="small"
                             />
                         )}
