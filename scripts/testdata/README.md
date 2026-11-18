@@ -13,8 +13,8 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
 - `_lib.sh` – felles helpers (BASE_URL, tokens, HTTP, jval, server-sjekk, logging,
   `post_og_lagre_pdfer` for PDF-responser).
 - `seed-digital-soknad.sh` – oppretter digital søknad via `/dev/soknad/ny`.
-- `hent-eller-opprett-sak.sh` – oppretter/henter sak via `PUT /sak`.
-- `registrer-papir-soknad.sh` – registrerer papir-søknad og returnerer behandling/id.
+- `hent-eller-opprett-sak.sh FNR [V2|V3]` – oppretter/henter sak via `PUT /sak`; versjonen velger oppdragsversjon når saken opprettes, og avvises i prod.
+- `registrer-papir-soknad.sh SAKSNUMMER [SOKNADSTYPE]` – registrerer papirsøknad og returnerer behandling/id. Journalposten er `12345` lokalt og brukerens egen fra SAF i dev; `JOURNALPOST_ID` overstyrer. Tiltaket er fiktivt lokalt; i dev gjelder søknaden hele tiltaket med indeks `TILTAKSINDEKS` (default 0) fra `GET /tiltak` i soknad-api.
 - `hent-sak.sh` – henter sak og evt. trekker ut felt via uttrykk.
 - `start-soknadsbehandling.sh` – oppretter søknadsbehandling for digital søknad.
 - `oppdater-innvilgelse.sh` – oppdaterer behandling med resultat INNVILGELSE.
@@ -95,7 +95,21 @@ Scriptene godtar bare syntetiske fødselsnumre: Navs serie fra Dolly og testnorg
 - `fullfor-soknadsbehandling.sh SAKSNUMMER [FOM TOM]` – fører den nyeste søknadsbehandlingen fram til vedtak, også når den starter som automatisk behandling. Virker lokalt også.
 - `helved-v3-scenarioer.sh FNR|SAKSNUMMER` – innvilgelse, første utbetaling, ny meldeperiode, korrigering med feilutbetaling, korrigering med etterbetaling og stans på én sak. Kontroller resultatet i [Utbetalingsportalen](https://utbetalingsportalen.intern.dev.nav.no/oppdragsinfo/oppdrag) og [Peisen](https://peisen.intern.dev.nav.no/).
 
+En papirsøknad krever en journalpost i Joark som gjelder brukeren og har opprettelsesdato; sb-api sjekker det mot SAF.
+Samme journalpost kan brukes til flere søknader.
+Scriptene under snakker rett med SAF og dokarkiv i dev med maskintoken fra tokengeneratoren, så de trenger naisdevice, men ingen OBO-tokens.
+
+- `finn-journalpost.sh FNR` – skriver ut en av brukerens journalposter fra SAF, helst en søknad med tema IND, ellers den nyeste. `registrer-papir-soknad.sh` bruker den selv i dev.
+- `opprett-journalpost.sh FNR` – lager en inngående journalpost med en skannet testsøknad (tema IND, kanal SKAN_IM) i dokarkiv og skriver ut id-en. Bruk den når brukeren ikke har noen journalposter, i stedet for å lage en i Gosys. `tiltakspenger-journalposthendelser` journalfører den på brukerens sak, eller lager en journalføringsoppgave i Gosys i dev, som for en ekte papirsøknad.
+
+```bash
+MILJO=dev ./hent-eller-opprett-sak.sh <FNR> V2
+./finn-journalpost.sh <FNR> || ./opprett-journalpost.sh <FNR>
+MILJO=dev ./registrer-papir-soknad.sh <SAKSNUMMER>
+```
+
 Dev bruker V3 for saker opprettet fra 2026-11-10 kl. 15, så eldre saker utbetales med V2.
+En ny sak på V2 i dev lages med `MILJO=dev ./hent-eller-opprett-sak.sh FNR V2` før søknaden sendes; finnes saken allerede, beholder den versjonen den har.
 Brukeren må ha en tiltaksdeltakelse som gir rett og har startet minst fire uker tilbake, ellers er meldeperiodene ikke klare.
 `.dev-testbrukere.json` er gitignored og bygges fra tabellene på Confluence-sidene «Gamle testbrukere - 1» og «- 2», «Test for brukerstøtte - Ny vedtaksløsning for tiltakspenger» og «Test i Øst-Viken» under «Test i tiltakspenger».
 Fila har én oppføring per fnr med `fnr`, `navn` og `forekomster` (side og tabellkolonner), og `sjekk-testbrukere.sh` legger til `sjekk`.

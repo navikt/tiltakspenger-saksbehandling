@@ -68,6 +68,22 @@ krev_syntetisk_fnr() {
     er_syntetisk_fnr "$1" || fail "Fødselsnummeret er ikke i den syntetiske serien (4–9 som tredje siffer)."
 }
 
+SOKNAD_API_URL="${SOKNAD_API_URL:-https://tiltakspenger-soknad-api.intern.dev.nav.no}"
+
+# TokenX-token for brukeren mot soknad-api i dev, uten innlogging.
+borgertoken_dev() {
+    krev_syntetisk_fnr "$1"
+    curl -sSf -X POST https://tokenx-token-generator.intern.dev.nav.no/api/public/obo \
+        -d "aud=dev-gcp:tpts:tiltakspenger-soknad-api" -d "pid=$1" || fail "Fikk ikke TokenX-token for brukeren."
+}
+
+# Tiltakene som gir rett på tiltakspenger, slik brukeren ser dem i søknaden i dev (GET /tiltak i soknad-api).
+hent_tiltak_dev() {
+    local token
+    token="$(borgertoken_dev "$1")"
+    curl -sSf -H "Authorization: Bearer ${token}" "${SOKNAD_API_URL}/tiltak" || fail "GET /tiltak feilet i soknad-api."
+}
+
 http() {
     local method="$1"
     local token="$2"

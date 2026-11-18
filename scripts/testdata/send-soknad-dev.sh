@@ -20,13 +20,8 @@ tiltaksindeks="${2:-0}"
 krev_syntetisk_fnr "$fnr"
 require_server
 
-SOKNAD_API_URL="${SOKNAD_API_URL:-https://tiltakspenger-soknad-api.intern.dev.nav.no}"
-
-borgertoken="$(curl -sSf -X POST https://tokenx-token-generator.intern.dev.nav.no/api/public/obo \
-    -d "aud=dev-gcp:tpts:tiltakspenger-soknad-api" -d "pid=${fnr}")" || fail "Fikk ikke TokenX-token for brukeren."
-
-tiltak_json="$(curl -sSf -H "Authorization: Bearer ${borgertoken}" "${SOKNAD_API_URL}/tiltak")" ||
-    fail "GET /tiltak feilet i soknad-api."
+borgertoken="$(borgertoken_dev "$fnr")"
+tiltak_json="$(hent_tiltak_dev "$fnr")"
 
 soknad_json="$(python3 - "$tiltak_json" "$tiltaksindeks" <<'PY'
 import json, sys
