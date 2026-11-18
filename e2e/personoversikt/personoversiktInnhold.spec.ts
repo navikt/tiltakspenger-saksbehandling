@@ -1,4 +1,12 @@
 import { sak } from '~test/rammebehandling';
+import { brukersMeldekort, FØRSTE_MANDAG, meldeperiodekjede } from '~test/meldekort';
+import { ikkeSladdet } from '~test/sladdetVerdi';
+import {
+    BrukersMeldekortDagStatus,
+    BrukersMeldekortId,
+    BrukersMeldekortKjedeStatus,
+} from '~/lib/meldekort/typer/BrukersMeldekort';
+import { tilTidspunkt } from '~/types/DatoTid';
 import {
     expect,
     fellesHandlere,
@@ -135,6 +143,42 @@ test.describe('Personoversikten - innhold', () => {
         );
         await expect(
             page.getByRole('heading', { name: 'Aktive tilbakekrevingssaker' }),
+        ).toBeVisible();
+    });
+
+    test('viser prioriteringen på en korrigering av meldekort som venter på behandling', async ({
+        page,
+        msw,
+    }) => {
+        const deltatt = () => BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET;
+        const kjede = meldeperiodekjede(FØRSTE_MANDAG, {
+            brukersMeldekort: [
+                brukersMeldekort(FØRSTE_MANDAG, deltatt),
+                brukersMeldekort(FØRSTE_MANDAG, deltatt, {
+                    id: 'meldekort_bruker_korrigering' as BrukersMeldekortId,
+                    mottatt: tilTidspunkt('2025-01-20T10:00:00'),
+                }),
+            ],
+            brukersMeldekortStatus: BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING,
+            prioritering: {
+                begrunnelse: ikkeSladdet('Korrigert meldekort ble mottatt kort tid etter'),
+            },
+        });
+        msw.use(
+            http.get('*/sak/:saksnummer', () =>
+                HttpResponse.json({ ...sak(), meldeperiodeKjeder: [kjede] }),
+            ),
+            ...fellesHandlere(),
+        );
+
+        await page.goto(`/sak/${SAKSNUMMER}`);
+        await forventOverskrift(page, 'Personoversikt');
+
+        const korrigeringRad = page.getByRole('row').filter({ hasText: 'Korrigert meldekort' });
+        await expect(korrigeringRad.getByText('Prioritert')).toBeVisible();
+        await korrigeringRad.getByText('Prioritert').hover();
+        await expect(
+            page.getByText('Korrigert meldekort ble mottatt kort tid etter'),
         ).toBeVisible();
     });
 

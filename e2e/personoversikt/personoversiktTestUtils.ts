@@ -117,6 +117,7 @@ export const lagMeldeperiodekjede = (): MeldeperiodekjedeProps => {
         gjeldendeBeregning: null,
         kanIkkeBehandlesGrunn: null,
         åpenBehandlingId: null,
+        prioritering: null,
     };
 };
 

@@ -8,6 +8,7 @@ import { InternLenkeKnapp } from '~/lib/_felles/intern-lenke/InternLenkeKnapp';
 import { OpprettForUbehandledeMeldekort } from '~/lib/personoversikt/opprett-behandling/opprett-meldekortbehandling/OpprettForUbehandledeMeldekort';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 import { Saksnummer } from '~/lib/sak/Saksnummer';
+import { PrioritertBehandlingTag } from '~/lib/_felles/prioritering/PrioritertBehandlingTag';
 
 type Props = {
     saksnummer: Saksnummer;
@@ -53,6 +54,7 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
                                 brukersMeldekort,
                                 brukersMeldekortStatus,
                                 sisteMeldeperiode,
+                                prioritering,
                             } = kjede;
 
                             const { antallDager } = sisteMeldeperiode;
@@ -65,7 +67,14 @@ export const UbehandledeMeldekortOversikt = ({ saksnummer, meldeperiodeKjeder }:
                             return (
                                 <Table.Row shadeOnHover={false} key={id}>
                                     <Table.DataCell>
-                                        {innsendingstypeTekst[brukersMeldekortStatus]}
+                                        <HStack gap={'space-8'} align={'center'} wrap={false}>
+                                            {innsendingstypeTekst[brukersMeldekortStatus]}
+                                            {prioritering && (
+                                                <PrioritertBehandlingTag
+                                                    prioritering={prioritering}
+                                                />
+                                            )}
+                                        </HStack>
                                     </Table.DataCell>
                                     <Table.DataCell>
                                         {sistMottatt ? formaterTidspunkt(sistMottatt) : '-'}

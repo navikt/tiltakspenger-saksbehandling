@@ -195,6 +195,7 @@ export const lagKjede = (
     gjeldendeBeregning: null,
     kanIkkeBehandlesGrunn: null,
     åpenBehandlingId: null,
+    prioritering: null,
     ...overstyringer,
 });
 
@@ -418,6 +419,7 @@ export const lagMeldekortBackend = ({
             gjeldendeBeregning: godkjent?.meldeperioder.at(0)?.beregning ?? null,
             kanIkkeBehandlesGrunn: åpen ? KanIkkeBehandlesGrunn.HAR_ÅPEN_BEHANDLING : null,
             åpenBehandlingId: åpen?.id ?? null,
+            prioritering: null,
         });
     };
 

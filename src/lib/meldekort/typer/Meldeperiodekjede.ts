@@ -9,6 +9,7 @@ import {
 } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { MeldeperiodeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { Prioritering } from '~/lib/_felles/prioritering/prioriteringTyper';
 
 export type MeldeperiodeKjedeId = `${string}/${string}`;
 
@@ -26,6 +27,8 @@ export type MeldeperiodekjedeProps = {
     /** Satt kun når kjeden ikke kan behandles */
     kanIkkeBehandlesGrunn: KanIkkeBehandlesGrunn | null;
     åpenBehandlingId: MeldekortbehandlingId | null;
+    /** Satt når en korrigering fra bruker som ikke kunne behandles automatisk venter på behandling */
+    prioritering: Prioritering | null;
 };
 
 export enum KanIkkeBehandlesGrunn {

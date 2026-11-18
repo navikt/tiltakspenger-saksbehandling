@@ -95,6 +95,7 @@ export const meldeperiodekjede = (
         gjeldendeBeregning: null,
         kanIkkeBehandlesGrunn: null,
         åpenBehandlingId: null,
+        prioritering: null,
         ...overstyringer,
     };
 };
