@@ -63,7 +63,7 @@ export const RammebehandlingAvslutt = ({
 
                     <Textarea
                         label={`Hvorfor avsluttes ${erRevurdering ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`}
-                        maxLength={200}
+                        maxLength={500}
                         onChange={() => {
                             if (valideringsfeil) {
                                 setValideringsfeil(null);
