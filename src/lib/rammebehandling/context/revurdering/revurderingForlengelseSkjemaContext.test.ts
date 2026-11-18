@@ -10,6 +10,7 @@ import {
     periode,
     revurderingForlengelse,
     sakMedInnvilgetVedtak,
+    tiltaksdeltakelse,
 } from '~test/rammebehandling';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
 import {
@@ -271,15 +272,67 @@ describe('revurderingForlengelseReducer', () => {
         expect(visesUtledetBarnetillegg(state, lagretMedValgtBarnetillegg)).toBe(false);
     });
 
-    test('innvilgelsesperioden kan ikke endres direkte', () => {
-        expect(() =>
-            revurderingForlengelseReducer(forlengelseInitialState(lagretBehandling), {
-                superType,
-                type: 'settAntallDager',
-                payload: { antallDager: 2, index: 0 },
-            }),
-        ).toThrow();
+    test('antall dager valgt av saksbehandler beholdes når til og med-datoen endres', () => {
+        const state = reduser(
+            forlengelseInitialState(lagretBehandling),
+            { superType, type: 'settAntallDager', payload: { antallDager: 2, index: 0 } },
+            settTilOgMed('2025-05-31', lagretBehandling),
+        );
+
+        expect(state.innvilgelse).toMatchObject({
+            innvilgelsesperioder: medDeltakelseFraVedtak(periode('2025-04-01', '2025-05-31'), 2),
+        });
     });
+
+    test.each([
+        { antallDagerPerUke: 3, kanSendeInnHelgForMeldekort: false, forventet: 6 },
+        { antallDagerPerUke: 6, kanSendeInnHelgForMeldekort: false, forventet: 10 },
+        { antallDagerPerUke: 6, kanSendeInnHelgForMeldekort: true, forventet: 12 },
+    ])(
+        'antall dager utledes fra tiltaksdeltakelsen når vedtaket innvilget den sammen med et annet tiltak ($antallDagerPerUke dager per uke, kan melde helg: $kanSendeInnHelgForMeldekort)',
+        ({ antallDagerPerUke, kanSendeInnHelgForMeldekort, forventet }) => {
+            const sakMedToTiltak = {
+                ...sakMedInnvilgetVedtak(vedtaksperiode, {
+                    vedtak: {
+                        innvilgelsesperioder: innvilgelsesperioder(
+                            [
+                                innvilgelsesperiode(vedtaksperiode, {
+                                    internDeltakelseId: 'deltakelse_vedtak',
+                                }),
+                                innvilgelsesperiode(vedtaksperiode, {
+                                    internDeltakelseId: 'deltakelse_annen',
+                                }),
+                            ],
+                            14,
+                        ),
+                    },
+                }),
+                kanSendeInnHelgForMeldekort,
+            };
+            const behandling = revurderingForlengelse({
+                tiltaksdeltakelserSomKanForlenges: ['deltakelse_vedtak'],
+                saksopplysninger: {
+                    ...nyBehandling.saksopplysninger,
+                    tiltaksdeltagelse: [
+                        tiltaksdeltakelse(
+                            'deltakelse_vedtak',
+                            periode('2025-01-01', '2025-06-30'),
+                            antallDagerPerUke,
+                        ),
+                    ],
+                },
+            });
+
+            const state = revurderingForlengelseReducer(
+                forlengelseInitialState(behandling),
+                settTilOgMed('2025-06-30', behandling, sakMedToTiltak),
+            );
+
+            expect(state.innvilgelse).toMatchObject({
+                innvilgelsesperioder: medDeltakelseFraVedtak(forlengelsesperiode, forventet),
+            });
+        },
+    );
 });
 
 describe('valg av tiltaksdeltakelse ved forlengelse', () => {

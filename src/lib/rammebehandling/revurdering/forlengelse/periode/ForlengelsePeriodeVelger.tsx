@@ -5,6 +5,7 @@ import { dateTilISOTekst, formaterDatotekst, formaterPeriode } from '~/utils/dat
 import { useSak } from '~/lib/sak/SakContext';
 import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { hentInnvilgbarePerioder } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { AntallDagerVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { ForlengelseTiltakVelger } from '~/lib/rammebehandling/revurdering/forlengelse/periode/ForlengelseTiltakVelger';
 import {
     hentForlengelseTilOgMed,
@@ -36,7 +37,7 @@ export const ForlengelsePeriodeVelger = () => {
                 <VStack gap={'space-16'}>
                     <BodyLong size={'small'}>
                         {`Forlenger vedtaket med innvilgelse ${formaterPeriode(vedtak.opprinneligVedtaksperiode)}. `}
-                        {`Forlengelsen gjelder fra og med ${formaterDatotekst(skjema.forlengesFraOgMed)}, med samme antall dager per meldeperiode som tiltaket sist var innvilget med i vedtaket.`}
+                        {`Forlengelsen gjelder fra og med ${formaterDatotekst(skjema.forlengesFraOgMed)}.`}
                     </BodyLong>
                     <ForlengelseTiltakVelger
                         tiltaksdeltakelser={tiltaksdeltakelserSomKanForlenges}
@@ -64,6 +65,15 @@ export const ForlengelsePeriodeVelger = () => {
                             });
                         }}
                     />
+                    {skjema.innvilgelse.harValgtPeriode && (
+                        <AntallDagerVelger
+                            label={'Dager per meldeperiode'}
+                            index={0}
+                            antallDager={
+                                skjema.innvilgelse.innvilgelsesperioder.antallDagerPerMeldeperiode
+                            }
+                        />
+                    )}
                 </VStack>
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>

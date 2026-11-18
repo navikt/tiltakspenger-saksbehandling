@@ -470,7 +470,7 @@ type AntallDagerVelgerProps = {
     antallDager: AntallDagerForPeriode[];
 };
 
-const AntallDagerVelger = ({ label, hideLabel, index, antallDager }: AntallDagerVelgerProps) => {
+export const AntallDagerVelger = ({ label, hideLabel, index, antallDager }: AntallDagerVelgerProps) => {
     const { erReadonly } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 

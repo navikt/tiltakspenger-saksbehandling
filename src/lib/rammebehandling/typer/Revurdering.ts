@@ -166,6 +166,7 @@ export type OppdaterRevurderingForlengelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.FORLENGELSE;
     tilOgMed: Dato;
     internDeltakelseId: string;
+    antallDagerPerMeldeperiode: number;
     // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
     barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
     skalSendeVedtaksbrev: boolean;

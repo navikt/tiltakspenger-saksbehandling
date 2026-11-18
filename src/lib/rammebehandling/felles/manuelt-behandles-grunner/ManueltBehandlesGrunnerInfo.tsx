@@ -105,6 +105,8 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
     FORLENGELSE_OVERLAPPER_ANDRE_VEDTAK: 'Forlengelsen overlapper med andre vedtak på saken',
     FORLENGELSE_OVERLAPPENDE_TILTAK:
         'Bruker har overlappende tiltaksdeltakelser i forlengelsesperioden',
+    FORLENGELSE_FLERE_TILTAK_I_GJELDENDE_VEDTAK:
+        'Tiltaksdeltakelsen var innvilget sammen med andre tiltak i det gjeldende vedtaket, og antall dager per meldeperiode må vurderes',
     FORLENGELSE_ANDRE_YTELSER: 'Bruker mottar andre ytelser',
     FORLENGELSE_VEDTAK_I_ARENA: 'Det finnes tiltakspengevedtak i Arena',
     FORLENGELSE_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for forlengelsen mangler simulering',
@@ -137,6 +139,8 @@ const tekster: Record<ManueltBehandlesGrunn, string> = {
         'Deltakelsesmengden for tiltaksdeltakelsen er endret, og det må vurderes fra hvilken dato endringen gjelder',
     OMGJORING_ANDRE_ENDRINGER_I_TILTAKSDELTAKELSENE:
         'Tiltaksdeltakelsene i vedtaket har andre endringer enn ny sluttdato',
+    OMGJORING_AVKORTER_PERIODE_MED_FLERE_TILTAK:
+        'Tiltaksdeltakelsen er innvilget sammen med andre tiltak etter ny sluttdato, og antall dager per meldeperiode må vurderes',
     OMGJORING_HAR_REVERSERT_OPPHOR:
         'Vedtaket har perioder innvilget som reversert opphør (uten gyldig tiltaksdeltakelse)',
     OMGJORING_UTBETALING_SIMULERING_MANGLER: 'Utbetalingen for omgjøringen mangler simulering',

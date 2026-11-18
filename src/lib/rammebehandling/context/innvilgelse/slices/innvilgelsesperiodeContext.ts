@@ -21,6 +21,7 @@ import {
     hentTiltakSomKanVelges,
     lagInnvilgelseForTiltak,
     lagNyPeriodeForTiltak,
+    RedigertPeriode,
     sorterTiltak,
     TiltakNøkkel,
     tilpassAntallDager,
@@ -100,18 +101,20 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
             const { tiltak, index, periodeOppdatering, behandling, kanSendeInnHelgForMeldekort } =
                 payload;
 
+            const innvilgelsesperiode = nonNullish(
+                state.innvilgelsesperioder.tiltak
+                    .find((it) => erSammeTiltak(it, tiltak))
+                    ?.perioder.at(index),
+                `Fant ikke periode med index ${index}`,
+            );
+
             return oppdaterPerioderForTiltak(
                 state,
                 tiltak,
                 behandling,
                 kanSendeInnHelgForMeldekort,
-                (perioder) => {
-                    const innvilgelsesperiode = nonNullish(
-                        perioder.at(index),
-                        `Fant ikke periode med index ${index}`,
-                    );
-
-                    return oppdaterPeriodiseringUtenOverlapp(
+                (perioder) =>
+                    oppdaterPeriodiseringUtenOverlapp(
                         perioder,
                         {
                             ...innvilgelsesperiode,
@@ -121,8 +124,8 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                             ),
                         },
                         index,
-                    );
-                },
+                    ),
+                { tiltak, periode: innvilgelsesperiode.periode },
             );
         }
 
@@ -245,6 +248,7 @@ const oppdaterPerioderForTiltak = (
     behandling: Rammebehandling,
     kanSendeInnHelgForMeldekort: boolean,
     oppdater: (perioder: InnvilgelsesperiodeForTiltak[]) => InnvilgelsesperiodeForTiltak[],
+    redigert?: RedigertPeriode,
 ): InnvilgelseState => {
     const nyeTiltak = state.innvilgelsesperioder.tiltak
         .map((it) => (erSammeTiltak(it, tiltak) ? { ...it, perioder: oppdater(it.perioder) } : it))
@@ -255,7 +259,7 @@ const oppdaterPerioderForTiltak = (
         return utenPerioder;
     }
 
-    return medTiltak(state, nyeTiltak, behandling, kanSendeInnHelgForMeldekort);
+    return medTiltak(state, nyeTiltak, behandling, kanSendeInnHelgForMeldekort, redigert);
 };
 
 const utenPerioder: InnvilgelseState = {
@@ -268,6 +272,7 @@ const medAntallDager = (
     forrige: Innvilgelsesperioder,
     behandling: Rammebehandling,
     kanSendeInnHelgForMeldekort: boolean,
+    redigert?: RedigertPeriode,
 ): Innvilgelsesperioder => ({
     tiltak,
     antallDagerPerMeldeperiode: tilpassAntallDager(
@@ -275,6 +280,7 @@ const medAntallDager = (
         tiltak,
         forrige,
         kanSendeInnHelgForMeldekort,
+        redigert,
     ),
 });
 
@@ -284,12 +290,14 @@ const medTiltak = (
     nyeTiltak: InnvilgelseForTiltak[],
     behandling: Rammebehandling,
     kanSendeInnHelgForMeldekort: boolean,
+    redigert?: RedigertPeriode,
 ): InnvilgelseMedPerioderState => {
     const innvilgelsesperioder = medAntallDager(
         nyeTiltak,
         state.innvilgelsesperioder,
         behandling,
         kanSendeInnHelgForMeldekort,
+        redigert,
     );
 
     return {

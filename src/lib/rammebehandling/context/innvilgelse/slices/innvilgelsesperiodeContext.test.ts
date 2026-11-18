@@ -306,6 +306,54 @@ describe('innvilgelsesperioderReducer', () => {
             });
         });
 
+        test.each([
+            {
+                beskrivelse: 'fra og med-datoen til den andre perioden flyttes inn i den første',
+                index: 1,
+                periodeOppdatering: { fraOgMed: tilDato('2025-01-15') },
+                forventet: [
+                    antallDager(periode('2025-01-01', '2025-01-14'), 10),
+                    antallDager(periode('2025-01-15', '2025-03-31'), 6),
+                ],
+            },
+            {
+                beskrivelse:
+                    'til og med-datoen til den første perioden flyttes langt inn i den andre',
+                index: 0,
+                periodeOppdatering: { tilOgMed: tilDato('2025-03-15') },
+                forventet: [
+                    antallDager(periode('2025-01-01', '2025-03-15'), 10),
+                    antallDager(periode('2025-03-16', '2025-03-31'), 6),
+                ],
+            },
+        ])(
+            'beholder antall dager for perioden som endres, når $beskrivelse',
+            ({ index, periodeOppdatering, forventet }) => {
+                const state = medPerioderState({
+                    innvilgelsesperioder: {
+                        tiltak: [
+                            tiltakMedPerioder(
+                                tiltak1,
+                                periode('2025-01-01', '2025-01-31'),
+                                periode('2025-02-01', '2025-03-31'),
+                            ),
+                        ],
+                        antallDagerPerMeldeperiode: [
+                            antallDager(periode('2025-01-01', '2025-01-31'), 10),
+                            antallDager(periode('2025-02-01', '2025-03-31'), 6),
+                        ],
+                    },
+                });
+
+                const nyState = innvilgelsesperioderReducer(
+                    state,
+                    oppdaterTiltakPeriode(periodeOppdatering, { index }),
+                );
+
+                expect(nyState.innvilgelsesperioder.antallDagerPerMeldeperiode).toEqual(forventet);
+            },
+        );
+
         test('endrer ikke perioder for andre tiltak, og beholder antall dager for delperioder med de samme tiltakene', () => {
             const tiltak2Perioder = tiltakMedPerioder(tiltak2, periode('2025-03-01', '2025-06-30'));
 

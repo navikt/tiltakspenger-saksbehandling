@@ -7,6 +7,7 @@ import {
     RevurderingResultat,
 } from '~/lib/rammebehandling/typer/Revurdering';
 import {
+    hentForlengelseAntallDager,
     hentForlengelseTilOgMed,
     RevurderingForlengelseContext,
     useForlengelseBehandling,
@@ -46,6 +47,7 @@ const tilDTO = (
         tilOgMed,
         internDeltakelseId:
             innvilgelse.innvilgelsesperioder.tiltak.atNonNull(-1).internDeltakelseId,
+        antallDagerPerMeldeperiode: hentForlengelseAntallDager(innvilgelse),
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         skalJournalføreNotat: tilSkalJournalføreNotatDTO(skjema),
