@@ -406,8 +406,11 @@ const AntallDagerForDelperioder = ({
     innvilgelsesperioder,
     tiltakSomKanVelges,
 }: AntallDagerForDelperioderProps) => {
+    const { erReadonly } = useBehandlingInnvilgelseSkjema();
     const delperioder = hentDelperioder(innvilgelsesperioder.tiltak);
     const { antallDagerPerMeldeperiode } = innvilgelsesperioder;
+
+    const harOverlappendeTiltak = delperioder.some((it) => it.tiltak.length > 1);
 
     const tiltaksnavn = (tiltak: TiltakNøkkel) => {
         const typeNavn =
@@ -419,6 +422,13 @@ const AntallDagerForDelperioder = ({
 
     return (
         <VStack gap={'space-8'} className={style.tiltak}>
+            {harOverlappendeTiltak && !erReadonly && (
+                <Infokort variant={'info'} size={'small'}>
+                    {
+                        'Tiltaksdeltakelsene overlapper. Antall dager per meldeperiode er forhåndsutfylt med summen fra tiltaksdeltakelsene. Sjekk at antall dager stemmer for hver periode.'
+                    }
+                </Infokort>
+            )}
             <Table size={'small'}>
                 <Table.Header>
                     <Table.Row>
