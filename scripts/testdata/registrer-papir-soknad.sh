@@ -9,6 +9,7 @@ usage() {
     echo "Bruk: $(basename "$0") SAKSNUMMER [SOKNADSTYPE]" >&2
     echo "SOKNADSTYPE: PAPIR_SKJEMA (default), PAPIR_FRIHAND eller DIGITAL" >&2
     echo "JOURNALPOST_ID overstyrer journalposten. Lokalt er standard 12345; i dev hentes brukerens journalpost fra SAF med finn-journalpost.sh." >&2
+    echo "SOKNAD_MOTTATT_DATO (YYYY-MM-DD) er datoen søknaden ble mottatt; standard er tiltakets startdato, så søknaden kommer innenfor tremånedersfristen." >&2
     echo "I dev gjelder søknaden hele tiltaket med indeks TILTAKSINDEKS (default 0) fra GET /tiltak i soknad-api; lokalt brukes et fiktivt tiltak." >&2
     exit 1
 }
@@ -66,6 +67,7 @@ build_body() {
     cat <<JSON
 {
   "journalpostId": "${JOURNALPOST_ID}",
+  "manueltSattSøknadMottattDato": "${SOKNAD_MOTTATT_DATO:-${tiltak_fra}}",
   "manueltSattSøknadsperiode": {"fraOgMed":"${tiltak_fra}","tilOgMed":"${tiltak_til}"},
   "manueltSattTiltak": null,
   "antallVedlegg": 0,

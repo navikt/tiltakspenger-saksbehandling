@@ -14,7 +14,7 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
   `post_og_lagre_pdfer` for PDF-responser).
 - `seed-digital-soknad.sh` – oppretter digital søknad via `/dev/soknad/ny`.
 - `hent-eller-opprett-sak.sh FNR [V2|V3]` – oppretter/henter sak via `PUT /sak`; versjonen velger oppdragsversjon når saken opprettes, og avvises i prod.
-- `registrer-papir-soknad.sh SAKSNUMMER [SOKNADSTYPE]` – registrerer papirsøknad og returnerer behandling/id. Journalposten er `12345` lokalt og brukerens egen fra SAF i dev; `JOURNALPOST_ID` overstyrer. Tiltaket er fiktivt lokalt; i dev gjelder søknaden hele tiltaket med indeks `TILTAKSINDEKS` (default 0) fra `GET /tiltak` i soknad-api.
+- `registrer-papir-soknad.sh SAKSNUMMER [SOKNADSTYPE]` – registrerer papirsøknad og returnerer behandling/id. Journalposten er `12345` lokalt og brukerens egen fra SAF i dev; `JOURNALPOST_ID` overstyrer. Tiltaket er fiktivt lokalt; i dev gjelder søknaden hele tiltaket med indeks `TILTAKSINDEKS` (default 0) fra `GET /tiltak` i soknad-api. Mottatt dato er tiltakets startdato; `SOKNAD_MOTTATT_DATO` overstyrer.
 - `hent-sak.sh` – henter sak og evt. trekker ut felt via uttrykk.
 - `start-soknadsbehandling.sh` – oppretter søknadsbehandling for digital søknad.
 - `oppdater-innvilgelse.sh` – oppdaterer behandling med resultat INNVILGELSE.
