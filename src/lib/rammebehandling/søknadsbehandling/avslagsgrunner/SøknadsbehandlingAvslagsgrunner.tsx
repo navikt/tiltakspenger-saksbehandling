@@ -69,5 +69,5 @@ const AvslagsgrunnTekst: Record<Avslagsgrunn, string> = {
     [Avslagsgrunn.Institusjonsopphold]: 'Institusjonsopphold',
     [Avslagsgrunn.FremmetForSent]: 'Fremmet for sent',
     [Avslagsgrunn.RettTilDagpenger]: 'Sanksjonsperiode/Dagpenger',
-    [Avslagsgrunn.InnvilgetTiltakspenger]: 'Allerede innvilget tiltakspenger',
+    [Avslagsgrunn.InnvilgetTiltakspenger]: 'Tiltakspenger',
 } as const;
