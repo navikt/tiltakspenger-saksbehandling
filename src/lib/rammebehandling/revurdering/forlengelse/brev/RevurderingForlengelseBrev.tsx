@@ -4,6 +4,7 @@ import { tilOppdaterBarnetilleggDTO } from '~/lib/rammebehandling/felles/barneti
 import { RammebehandlingVedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/RammebehandlingVedtaksbrev';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
+    hentForlengelseAntallDager,
     hentForlengelseTilOgMed,
     RevurderingForlengelseContext,
     useForlengelseBehandling,
@@ -45,6 +46,7 @@ const tilForhåndsvisningDTO = (
         tilOgMed: nonNullish(hentForlengelseTilOgMed(skjema)),
         internDeltakelseId:
             innvilgelse.innvilgelsesperioder.tiltak.atNonNull(-1).internDeltakelseId,
+        antallDagerPerMeldeperiode: hentForlengelseAntallDager(innvilgelse),
         barnetillegg: harEndretBarnetillegg
             ? tilOppdaterBarnetilleggDTO(innvilgelse, textAreas.barnetilleggBegrunnelse.getValue())
             : null,

@@ -57,6 +57,7 @@ export type RevurderingForlengelseBrevForhåndsvisningDTO = {
     fritekst: Nullable<string>;
     tilOgMed: Dato;
     internDeltakelseId: string;
+    antallDagerPerMeldeperiode: number;
     // Null betyr at barnetillegget utledes fra vedtaket som forlenges.
     barnetillegg: Nullable<OppdaterBarnetilleggDTO>;
 };

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     AntallDagerForPeriode,
@@ -279,7 +280,7 @@ const harSammeTiltak = (a: TiltakNøkkel[], b: TiltakNøkkel[]) =>
  * Summen av antall dager for tiltakene, eller maks antall dager per meldeperiode dersom summen er høyere.
  * Maks er 10 dager når det ikke kan meldes for helg.
  */
-const antallDagerForTiltakene = (
+export const antallDagerForTiltakene = (
     behandling: Rammebehandling,
     tiltak: TiltakNøkkel[],
     kanMeldeHelg: boolean,
@@ -311,9 +312,22 @@ export const tilInnvilgelsesperioderSkjema = ({
     })),
 });
 
+/** Perioden for et tiltak slik den var før saksbehandler endret den. */
+export type RedigertPeriode = {
+    tiltak: TiltakNøkkel;
+    periode: Periode;
+};
+
+const antallDagerOverlapp = (a: Periode, b: Periode): number => {
+    const overlapp = overlappendePeriode(a, b);
+    return overlapp ? dayjs(overlapp.tilOgMed).diff(overlapp.fraOgMed, 'day') + 1 : 0;
+};
+
 /**
  * Antall dager per meldeperiode for hver delperiode av [tiltak], se hentDelperioder.
- * En delperiode beholder antall dager fra en overlappende delperiode i [forrige] med de samme tiltakene.
+ * En delperiode beholder antall dager fra den overlappende delperioden i [forrige] med de samme tiltakene som overlapper mest.
+ * Er en periode for et tiltak endret, foretrekkes delperiodene som overlappet perioden før den ble endret, se [redigert].
+ * Slik beholder perioden som endres sitt antall dager, også når den utvides inn i en annen periode.
  * Ellers forhåndsutfylles den med summen av antall dager fra tiltaksdeltakelsene i saksopplysningene,
  * maks 14, eller 10 dersom det ikke kan meldes for helg.
  */
@@ -322,23 +336,41 @@ export const tilpassAntallDager = (
     tiltak: InnvilgelseForTiltak[],
     forrige: Innvilgelsesperioder,
     kanMeldeHelg: boolean,
+    redigert?: RedigertPeriode,
 ): AntallDagerForPeriode[] => {
-    const forrigeDelperioder = hentDelperioder(forrige.tiltak);
     const forrigeAntallDager = tilInnvilgelsesperioderSkjema(forrige).antallDagerPerMeldeperiode;
+    const forrigeDelperioder = hentDelperioder(forrige.tiltak).map((delperiode, index) => ({
+        ...delperiode,
+        antallDagerPerMeldeperiode: forrigeAntallDager.atNonNull(index).antallDagerPerMeldeperiode,
+    }));
 
     return hentDelperioder(tiltak).map(({ periode, tiltak: tiltakIPerioden }) => {
-        const forrigeIndex = forrigeDelperioder.findIndex(
+        const overlappende = forrigeDelperioder.filter(
             (it) =>
                 harSammeTiltak(it.tiltak, tiltakIPerioden) &&
                 perioderOverlapper(it.periode, periode),
+        );
+        const fraRedigert =
+            redigert && tiltakIPerioden.some((it) => erSammeTiltak(it, redigert.tiltak))
+                ? overlappende.filter((it) => perioderOverlapper(it.periode, redigert.periode))
+                : [];
+        const kandidater = fraRedigert.length > 0 ? fraRedigert : overlappende;
+
+        const mestOverlappende = kandidater.reduce<(typeof kandidater)[number] | undefined>(
+            (mest, it) =>
+                !mest ||
+                antallDagerOverlapp(it.periode, periode) >
+                    antallDagerOverlapp(mest.periode, periode)
+                    ? it
+                    : mest,
+            undefined,
         );
 
         return {
             periode,
             antallDagerPerMeldeperiode:
-                forrigeIndex >= 0
-                    ? forrigeAntallDager.atNonNull(forrigeIndex).antallDagerPerMeldeperiode
-                    : antallDagerForTiltakene(behandling, tiltakIPerioden, kanMeldeHelg),
+                mestOverlappende?.antallDagerPerMeldeperiode ??
+                antallDagerForTiltakene(behandling, tiltakIPerioden, kanMeldeHelg),
         };
     });
 };
