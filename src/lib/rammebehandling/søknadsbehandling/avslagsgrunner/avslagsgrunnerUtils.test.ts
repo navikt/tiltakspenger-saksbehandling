@@ -4,7 +4,10 @@ import { Avslagsgrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
-import { skalVarsleOmFlereTidligereInnvilgelser } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
+import {
+    skalVarsleOmFlereTidligereInnvilgelser,
+    synligeAvslagsgrunner,
+} from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
 
 const søknadsperiode = periode('2025-01-01', '2025-06-30');
 
@@ -109,5 +112,26 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
         );
 
         expect(resultat).toBe(false);
+    });
+});
+
+describe('synligeAvslagsgrunner', () => {
+    test('skjuler InnvilgetTiltakspenger når toggle er av', () => {
+        const resultat = synligeAvslagsgrunner(false, []);
+
+        expect(resultat).not.toContain(Avslagsgrunn.InnvilgetTiltakspenger);
+        expect(resultat).toHaveLength(Object.values(Avslagsgrunn).length - 1);
+    });
+
+    test('viser InnvilgetTiltakspenger når toggle er på', () => {
+        const resultat = synligeAvslagsgrunner(true, []);
+
+        expect(resultat).toEqual(Object.values(Avslagsgrunn));
+    });
+
+    test('viser InnvilgetTiltakspenger når toggle er av, men grunnen allerede er valgt', () => {
+        const resultat = synligeAvslagsgrunner(false, [Avslagsgrunn.InnvilgetTiltakspenger]);
+
+        expect(resultat).toContain(Avslagsgrunn.InnvilgetTiltakspenger);
     });
 });

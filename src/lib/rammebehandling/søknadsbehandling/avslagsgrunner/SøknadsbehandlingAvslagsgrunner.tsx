@@ -7,7 +7,11 @@ import {
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { useSøknadsbehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import { skalVarsleOmFlereTidligereInnvilgelser } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
+import {
+    skalVarsleOmFlereTidligereInnvilgelser,
+    synligeAvslagsgrunner,
+} from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
+import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
@@ -16,6 +20,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const { behandling } = useSøknadsbehandling();
     const { avslagsgrunner, erReadonly } = useSøknadsbehandlingAvslagSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
+    const { avslagInnvilgetTiltakspengerToggle } = useFeatureToggles();
 
     const visFlereInnvilgelserVarsel = skalVarsleOmFlereTidligereInnvilgelser(
         sak,
@@ -40,11 +45,13 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                         });
                     }}
                 >
-                    {Object.values(Avslagsgrunn).map((grunn) => (
-                        <Checkbox key={grunn} value={grunn} size={'small'}>
-                            {AvslagsgrunnTekst[grunn]}
-                        </Checkbox>
-                    ))}
+                    {synligeAvslagsgrunner(avslagInnvilgetTiltakspengerToggle, avslagsgrunner).map(
+                        (grunn) => (
+                            <Checkbox key={grunn} value={grunn} size={'small'}>
+                                {AvslagsgrunnTekst[grunn]}
+                            </Checkbox>
+                        ),
+                    )}
                 </CheckboxGroup>
                 {visFlereInnvilgelserVarsel && (
                     <InlineMessage status={'warning'} size={'small'}>
