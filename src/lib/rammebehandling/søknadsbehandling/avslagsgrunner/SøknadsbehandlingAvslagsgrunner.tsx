@@ -24,7 +24,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
 
     const visFlereInnvilgelserVarsel = skalVarsleOmFlereTidligereInnvilgelser(
         sak,
-        behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm,
+        behandling,
         avslagsgrunner,
     );
 

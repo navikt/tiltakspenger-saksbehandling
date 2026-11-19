@@ -1,6 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
-import { periode, sak } from '~test/rammebehandling';
+import { periode, sak, søknad, søknadsbehandlingAvslag } from '~test/rammebehandling';
 import { Avslagsgrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
@@ -9,7 +10,10 @@ import {
     synligeAvslagsgrunner,
 } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
 
-const søknadsperiode = periode('2025-01-01', '2025-06-30');
+// Søknaden i testbehandlingen søker om 2025-01-01 til 2025-06-30.
+const behandling = søknadsbehandlingAvslag({
+    avslagsgrunner: [Avslagsgrunn.InnvilgetTiltakspenger],
+});
 
 const sakMedInnvilgelser = (...perioder: Periode[]): SakProps =>
     sak({
@@ -32,7 +36,7 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
 
         const resultat = skalVarsleOmFlereTidligereInnvilgelser(
             sakMedToInnvilgelser,
-            søknadsperiode,
+            behandling,
             avslagsgrunner,
         );
 
@@ -45,7 +49,7 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
 
         const resultat = skalVarsleOmFlereTidligereInnvilgelser(
             sakMedÉnInnvilgelse,
-            søknadsperiode,
+            behandling,
             avslagsgrunner,
         );
 
@@ -58,7 +62,7 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
 
         const resultat = skalVarsleOmFlereTidligereInnvilgelser(
             sakUtenInnvilgelser,
-            søknadsperiode,
+            behandling,
             avslagsgrunner,
         );
 
@@ -74,7 +78,7 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
 
         const resultat = skalVarsleOmFlereTidligereInnvilgelser(
             sakMedÉnInnvilgelseUtenfor,
-            søknadsperiode,
+            behandling,
             avslagsgrunner,
         );
 
@@ -90,7 +94,7 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
 
         const resultat = skalVarsleOmFlereTidligereInnvilgelser(
             sakMedToInnvilgelser,
-            søknadsperiode,
+            behandling,
             avslagsgrunner,
         );
 
@@ -103,16 +107,43 @@ describe('skalVarsleOmFlereTidligereInnvilgelser', () => {
             periode('2025-04-01', '2025-06-30'),
         );
         const avslagsgrunner = [Avslagsgrunn.InnvilgetTiltakspenger];
-        const søknadUtenPeriode = null;
+        const behandlingUtenSøknadsperiode = søknadsbehandlingAvslag({
+            søknad: {
+                ...søknad(),
+                kanInnvilges: false,
+                tiltak: null,
+                tiltaksdeltakelseperiodeDetErSøktOm: null,
+            },
+        });
 
         const resultat = skalVarsleOmFlereTidligereInnvilgelser(
             sakMedToInnvilgelser,
-            søknadUtenPeriode,
+            behandlingUtenSøknadsperiode,
             avslagsgrunner,
         );
 
         expect(resultat).toBe(false);
     });
+
+    test.each([Rammebehandlingsstatus.VEDTATT, Rammebehandlingsstatus.AVBRUTT])(
+        'varsler ikke når behandlingen er avsluttet med status %s',
+        (status) => {
+            const sakMedToInnvilgelser = sakMedInnvilgelser(
+                periode('2025-01-01', '2025-03-31'),
+                periode('2025-04-01', '2025-06-30'),
+            );
+            const avslagsgrunner = [Avslagsgrunn.InnvilgetTiltakspenger];
+            const avsluttetBehandling = { ...behandling, status };
+
+            const resultat = skalVarsleOmFlereTidligereInnvilgelser(
+                sakMedToInnvilgelser,
+                avsluttetBehandling,
+                avslagsgrunner,
+            );
+
+            expect(resultat).toBe(false);
+        },
+    );
 });
 
 describe('synligeAvslagsgrunner', () => {

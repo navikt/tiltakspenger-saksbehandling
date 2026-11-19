@@ -1,7 +1,6 @@
-import { Avslagsgrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Avslagsgrunn, Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { erAvsluttet } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { Periode } from '~/types/Periode';
-import { Nullable } from '~/types/UtilTypes';
 import { perioderOverlapper } from '~/utils/periode';
 
 /**
@@ -23,13 +22,21 @@ export const synligeAvslagsgrunner = (
  * Vedtaksbrevet oppgir periode og vedtaksdato for den tidligere innvilgelsen bare når søknadsperioden overlapper nøyaktig én innvilgelse.
  * Overlapper den flere, må saksbehandler skrive dette i teksten til vedtaksbrevet.
  * Tellingen speiler gjeldendeInnvilgelseForPeriode i backend, som bruker de samme elementene i innvilgetTidslinje.
+ * Varselet gjelder bare pågående behandlinger.
+ * For en avsluttet behandling er brevet allerede sendt, og dagens tidslinje kan være endret av senere vedtak.
  */
 export const skalVarsleOmFlereTidligereInnvilgelser = (
     sak: SakProps,
-    søknadsperiode: Nullable<Periode>,
+    behandling: Søknadsbehandling,
     avslagsgrunner: Avslagsgrunn[],
 ): boolean => {
-    if (!søknadsperiode || !avslagsgrunner.includes(Avslagsgrunn.InnvilgetTiltakspenger)) {
+    const søknadsperiode = behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
+
+    if (
+        erAvsluttet(behandling) ||
+        !søknadsperiode ||
+        !avslagsgrunner.includes(Avslagsgrunn.InnvilgetTiltakspenger)
+    ) {
         return false;
     }
 
