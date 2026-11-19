@@ -79,4 +79,5 @@ export enum Avslagsgrunn {
     Institusjonsopphold = 'Institusjonsopphold',
     FremmetForSent = 'FremmetForSent',
     RettTilDagpenger = 'RettTilDagpenger',
+    InnvilgetTiltakspenger = 'InnvilgetTiltakspenger',
 }
