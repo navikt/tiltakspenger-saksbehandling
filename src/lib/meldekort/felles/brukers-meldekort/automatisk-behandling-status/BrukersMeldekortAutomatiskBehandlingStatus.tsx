@@ -68,6 +68,10 @@ const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
     [MeldekortBehandletAutomatiskStatus.VENTER_BEHANDLING]: MetaStatus.Venter,
 
     [MeldekortBehandletAutomatiskStatus.ALLEREDE_BEHANDLET]: MetaStatus.SkalIkkeBehandles,
+    [MeldekortBehandletAutomatiskStatus.FOR_SENT_Å_KORRIGERE]: MetaStatus.SkalIkkeBehandles,
+    [MeldekortBehandletAutomatiskStatus.TIDLIGERE_BEHANDLET_MANUELT]: MetaStatus.SkalIkkeBehandles,
+    [MeldekortBehandletAutomatiskStatus.NYERE_INNSENDING_ER_BEHANDLET]:
+        MetaStatus.SkalIkkeBehandles,
     [MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK]:
         MetaStatus.SkalIkkeBehandles,
 
@@ -90,12 +94,20 @@ const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
 
     [MeldekortBehandletAutomatiskStatus.HAR_JUSTERING]: MetaStatus.UtbetalingFeil,
     [MeldekortBehandletAutomatiskStatus.HAR_FEILUTBETALING]: MetaStatus.UtbetalingFeil,
+    [MeldekortBehandletAutomatiskStatus.HAR_TIDLIGERE_UTBETALING]: MetaStatus.UtbetalingFeil,
 } as const;
 
 const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
     [MeldekortBehandletAutomatiskStatus.BEHANDLET]: 'Automatisk behandlet',
     [MeldekortBehandletAutomatiskStatus.VENTER_BEHANDLING]: 'Venter på automatisk behandling',
-    [MeldekortBehandletAutomatiskStatus.ALLEREDE_BEHANDLET]: 'Korrigering',
+    [MeldekortBehandletAutomatiskStatus.ALLEREDE_BEHANDLET]:
+        'Vi tillot ikke automatisk korrigering når dette meldekortet ble mottatt',
+    [MeldekortBehandletAutomatiskStatus.FOR_SENT_Å_KORRIGERE]:
+        'Korrigeringen kom etter fristen for automatisk korrigering',
+    [MeldekortBehandletAutomatiskStatus.TIDLIGERE_BEHANDLET_MANUELT]:
+        'Korrigeringen kan ikke behandles automatisk, fordi meldeperioden er behandlet manuelt tidligere',
+    [MeldekortBehandletAutomatiskStatus.NYERE_INNSENDING_ER_BEHANDLET]:
+        'Korrigeringen kan ikke behandles automatisk, fordi en nyere innsending for meldeperioden allerede er behandlet',
     [MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK]:
         'Markert som skal ikke behandles automatisk',
     [MeldekortBehandletAutomatiskStatus.UTDATERT_MELDEPERIODE]:
@@ -126,4 +138,6 @@ const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
         'Simulering av utbetalingen viser feilutbetaling',
     [MeldekortBehandletAutomatiskStatus.SIMULERING_FEILET]:
         'Simulering av utbetalingen feilet, og er påkrevd for korrigeringer',
+    [MeldekortBehandletAutomatiskStatus.HAR_TIDLIGERE_UTBETALING]:
+        'Simulering av utbetalingen viser at meldeperioden allerede er utbetalt',
 } as const;
