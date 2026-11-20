@@ -1,13 +1,26 @@
-import { BodyShort, Box, Button, Dialog, HStack, List, Tag, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
+import {
+    BodyShort,
+    Box,
+    Button,
+    Dialog,
+    HStack,
+    List,
+    ReadMore,
+    Tag,
+    VStack,
+} from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { kildeTekst, prosentTekst } from '../tiltak/tiltaksdeltakelseVisning';
 import { erNyEndring, erUtdatert, innslagForTiltak } from './tiltakshistorikkVisning';
 import {
     Tiltakshistorikkinnslag,
     TiltakshistorikkForBehandling,
+    TiltakshistorikkVerdi,
 } from '~/lib/rammebehandling/typer/Tiltakshistorikk';
 import { tiltakDeltakerstatusTekst } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { endringTekst } from '~/lib/rammebehandling/felles/tiltaksdeltaker-endring/tiltaksdeltakerEndringTekst';
+import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { formaterDatotekst, formaterTidspunktMedSekunder } from '~/utils/date';
 import { Tidspunkt } from '~/types/DatoTid';
 import { ÅpenPeriode } from '~/types/Periode';
@@ -24,7 +37,7 @@ type Props = {
 
 /**
  * Knapp som åpner tiltakshistorikken for tiltaket i en modal.
- * Er saksopplysningene utdaterte for tiltaket, vises også det nyeste innslaget.
+ * Er saksopplysningene utdaterte med relevante endringer for tiltaket, vises også det nyeste innslaget.
  */
 export const TiltakshistorikkForTiltak = ({
     internDeltakelseId,
@@ -77,6 +90,7 @@ export const TiltakshistorikkForTiltak = ({
                                     innslag={it}
                                     forrige={innslag[index + 1]}
                                     erNy={erNy(it)}
+                                    visDetaljer
                                 />
                             ))}
                         </VStack>
@@ -100,10 +114,12 @@ const TiltakshistorikkinnslagVisning = ({
     innslag,
     forrige,
     erNy,
+    visDetaljer = false,
 }: {
     innslag: Tiltakshistorikkinnslag;
     forrige: Tiltakshistorikkinnslag | undefined;
     erNy: boolean;
+    visDetaljer?: boolean;
 }) => {
     const {
         innhentet,
@@ -117,7 +133,9 @@ const TiltakshistorikkinnslagVisning = ({
         kilde,
         eksternDeltagelseId,
         endringer,
+        harRelevantEndring,
         utløsteBehandlingen,
+        verdi,
     } = innslag;
 
     return (
@@ -166,7 +184,7 @@ const TiltakshistorikkinnslagVisning = ({
                     <BehandlingSaksopplysning navn={'Deltakelse-id'} verdi={eksternDeltagelseId} />
                 )}
             </div>
-            {endringer.length > 0 && (
+            {harRelevantEndring && endringer.length > 0 && (
                 <div>
                     <BodyShort size={'small'}>{'Endringer som påvirker saken:'}</BodyShort>
                     <List size={'small'}>
@@ -176,7 +194,67 @@ const TiltakshistorikkinnslagVisning = ({
                     </List>
                 </div>
             )}
+            {visDetaljer && <TiltakshistorikkVerdiVisning verdi={verdi} />}
         </VStack>
+    );
+};
+
+const TiltakshistorikkVerdiVisning = ({ verdi }: { verdi: TiltakshistorikkVerdi }) => {
+    const [åpen, setÅpen] = useState(false);
+
+    return (
+        <ReadMore size={'small'} header={'Vis mer'} open={åpen} onOpenChange={setÅpen}>
+            {åpen && (
+                <div>
+                    <DetaljHorisontal navn={'Ekstern deltakelse-id:'} size={'small'}>
+                        {verdi.eksternDeltakelseId}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Gjennomføring-id:'} size={'small'}>
+                        {verdi.gjennomføringId ?? '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Tiltakstype:'} size={'small'}>
+                        {verdi.tiltakstype}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Tiltakstypenavn:'} size={'small'}>
+                        {verdi.tiltakstypenavn}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Tiltakskode fra kilden:'} size={'small'}>
+                        {verdi.tiltakskodeFraKilden}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Fra og med:'} size={'small'}>
+                        {verdi.fraOgMed ? formaterDatotekst(verdi.fraOgMed) : '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Til og med:'} size={'small'}>
+                        {verdi.tilOgMed ? formaterDatotekst(verdi.tilOgMed) : '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Kilde:'} size={'small'}>
+                        {verdi.kildestatus.kilde}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Kildestatus:'} size={'small'}>
+                        {verdi.kildestatus.kodeIKontrakten}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Statusårsak:'} size={'small'}>
+                        {verdi.kildestatus.årsak ?? '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Status opprettet:'} size={'small'}>
+                        {verdi.kildestatus.opprettet
+                            ? formaterTidspunktMedSekunder(verdi.kildestatus.opprettet)
+                            : '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Deltakelsesprosent:'} size={'small'}>
+                        {verdi.deltakelsesprosent !== null ? `${verdi.deltakelsesprosent}%` : '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Dager per uke:'} size={'small'}>
+                        {verdi.dagerPerUke?.toString() ?? '-'}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Deltidsprosent på gjennomføring:'} size={'small'}>
+                        {verdi.deltidsprosentPåGjennomføring !== null
+                            ? `${verdi.deltidsprosentPåGjennomføring}%`
+                            : '-'}
+                    </DetaljHorisontal>
+                </div>
+            )}
+        </ReadMore>
     );
 };
 

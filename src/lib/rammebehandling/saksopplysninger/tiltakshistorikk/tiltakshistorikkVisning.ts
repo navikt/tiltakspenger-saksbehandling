@@ -5,11 +5,13 @@ export const sorterNyesteFørst = (innslag: Tiltakshistorikkinnslag[]): Tiltaksh
     innslag.toSorted((a, b) => Date.parse(b.innhentet) - Date.parse(a.innhentet));
 
 /**
- * Om innslaget er en endring som er innhentet etter tidspunktet.
+ * Om innslaget har relevante endringer og er innhentet etter tidspunktet.
  * Innslaget som utløste behandlingen er alltid lagret etter at behandlingen ble opprettet, og regnes derfor ikke som en ny endring.
  */
 export const erNyEndring = (innslag: Tiltakshistorikkinnslag, tidspunkt: Tidspunkt): boolean =>
-    !innslag.utløsteBehandlingen && Date.parse(innslag.innhentet) > Date.parse(tidspunkt);
+    !innslag.utløsteBehandlingen &&
+    innslag.harRelevantEndring &&
+    Date.parse(innslag.innhentet) > Date.parse(tidspunkt);
 
 /** Innslagene for tiltaksdeltakelsen, med det nyeste først. */
 export const innslagForTiltak = (
@@ -19,10 +21,13 @@ export const innslagForTiltak = (
     sorterNyesteFørst(innslag.filter((it) => it.internDeltakelseId === internDeltakelseId));
 
 /**
- * Saksopplysningene er utdaterte når tiltakshistorikk er innhentet etter at de ble hentet.
+ * Saksopplysningene er utdaterte når det nyeste innslaget har relevante endringer og er innhentet etter at de ble hentet.
  * Innslaget som utløste behandlingen lagres etter at saksopplysningene ble hentet for den, og gjør dem ikke utdaterte.
  */
 export const erUtdatert = (
     innslag: Tiltakshistorikkinnslag[],
     oppslagstidspunkt: Tidspunkt,
-): boolean => innslag.some((it) => erNyEndring(it, oppslagstidspunkt));
+): boolean => {
+    const nyeste = sorterNyesteFørst(innslag)[0];
+    return nyeste !== undefined && erNyEndring(nyeste, oppslagstidspunkt);
+};
