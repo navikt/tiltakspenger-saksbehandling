@@ -8,7 +8,7 @@ import {
 import { useSak } from '~/lib/sak/SakContext';
 import { useSøknadsbehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
-    skalVarsleOmFlereTidligereInnvilgelser,
+    skalVarsleOmManglendeForhåndsutfylling,
     synligeAvslagsgrunner,
 } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
 import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
@@ -22,7 +22,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
     const { avslagInnvilgetTiltakspengerToggle } = useFeatureToggles();
 
-    const visFlereInnvilgelserVarsel = skalVarsleOmFlereTidligereInnvilgelser(
+    const visManglendeForhåndsutfyllingVarsel = skalVarsleOmManglendeForhåndsutfylling(
         sak,
         behandling,
         avslagsgrunner,
@@ -53,10 +53,10 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                         ),
                     )}
                 </CheckboxGroup>
-                {visFlereInnvilgelserVarsel && (
+                {visManglendeForhåndsutfyllingVarsel && (
                     <InlineMessage status={'warning'} size={'small'}>
                         {
-                            'Søknadsperioden overlapper flere innvilgelser. Vedtaksbrevet oppgir derfor ikke periode og vedtaksdato for innvilgelsen. Skriv dette i teksten til vedtaksbrevet.'
+                            'Søknadsperioden er ikke lik hele perioden i ett innvilget vedtak. Vedtaksbrevet oppgir derfor ikke periode og vedtaksdato for innvilgelsen. Skriv dette i teksten til vedtaksbrevet.'
                         }
                     </InlineMessage>
                 )}
