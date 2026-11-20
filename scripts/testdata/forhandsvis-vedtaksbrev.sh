@@ -23,7 +23,7 @@ require_server
 
 fritekst="Fritekst til vedtaksbrev fra testdata-script."
 periode='{"fraOgMed":"2025-04-01","tilOgMed":"2025-04-10"}'
-innvilgelsesperioder="[{\"periode\":${periode},\"antallDagerPerMeldeperiode\":10,\"internDeltakelseId\":\"${intern_deltakelse_id}\"}]"
+innvilgelsesperioder="{\"tiltak\":[{\"internDeltakelseId\":\"${intern_deltakelse_id}\",\"perioder\":[{\"periode\":${periode}}]}],\"antallDagerPerMeldeperiode\":[{\"periode\":${periode},\"antallDagerPerMeldeperiode\":10}]}"
 
 case "$resultat" in
 INNVILGELSE | REVURDERING_INNVILGELSE | OMGJØRING)

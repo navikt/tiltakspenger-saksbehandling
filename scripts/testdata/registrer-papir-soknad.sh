@@ -10,7 +10,7 @@ usage() {
     echo "SOKNADSTYPE: PAPIR_SKJEMA (default), PAPIR_FRIHAND eller DIGITAL" >&2
     echo "JOURNALPOST_ID overstyrer journalposten. Lokalt er standard 12345; i dev hentes brukerens journalpost fra SAF med finn-journalpost.sh." >&2
     echo "SOKNAD_MOTTATT_DATO (YYYY-MM-DD) er datoen søknaden ble mottatt; standard er tiltakets startdato, så søknaden kommer innenfor tremånedersfristen." >&2
-    echo "I dev gjelder søknaden hele tiltaket med indeks TILTAKSINDEKS (default 0) fra GET /tiltak i soknad-api; lokalt brukes et fiktivt tiltak." >&2
+    echo "I dev gjelder søknaden hele tiltaket med indeks TILTAKSINDEKS (default 0) fra tiltaksdeltakelsene på saken i sb-api (2023–2027); lokalt brukes et fiktivt tiltak." >&2
     exit 1
 }
 
@@ -27,7 +27,8 @@ esac
 require_server
 
 if [[ $MILJO == dev ]]; then
-    fnr="$(jval "$(http_saksbehandler GET "/sak/${saksnummer}")" "fnr.verdi")"
+    sak_json="$(http_saksbehandler GET "/sak/${saksnummer}")"
+    fnr="$(jval "$sak_json" "fnr.verdi")"
 fi
 
 if [[ -z ${JOURNALPOST_ID:-} ]]; then
@@ -39,19 +40,16 @@ if [[ -z ${JOURNALPOST_ID:-} ]]; then
     fi
 fi
 if [[ $MILJO == dev ]]; then
-    read -r ekstern_deltakelse_id tiltak_fra tiltak_til tiltakskode tiltak_typenavn < <(python3 - "$(hent_tiltak_dev "$fnr")" "${TILTAKSINDEKS:-0}" <<'PY'
+    tiltak_json="$(http_saksbehandler GET "/sak/$(jval "$sak_json" "sakId")/tiltaksdeltakelser?fraOgMed=2023-01-01&tilOgMed=2027-12-31")"
+    read -r ekstern_deltakelse_id tiltak_fra tiltak_til tiltakskode tiltak_typenavn < <(python3 - "$tiltak_json" "${TILTAKSINDEKS:-0}" <<'PY'
 import json, sys
-tiltak = json.loads(sys.argv[1]).get("tiltak", [])
+tiltak = [t for t in json.loads(sys.argv[1]) if not t["fratarRett"] and t["periode"].get("fraOgMed") and t["periode"].get("tilOgMed")]
 indeks = int(sys.argv[2])
 if indeks >= len(tiltak):
-    print(f"Brukeren har {len(tiltak)} tiltak som gir rett, fant ikke indeks {indeks}.", file=sys.stderr)
+    print(f"Brukeren har {len(tiltak)} tiltak med periode som gir rett, fant ikke indeks {indeks}.", file=sys.stderr)
     sys.exit(1)
 t = tiltak[indeks]
-periode = t.get("arenaRegistrertPeriode") or t.get("periode") or {}
-if not periode.get("fra") or not periode.get("til"):
-    print("Tiltaket mangler fra- eller til-dato og kan ikke søkes på fra scriptet.", file=sys.stderr)
-    sys.exit(1)
-print(t["aktivitetId"], periode["fra"], periode["til"], t["type"], t["typeNavn"].replace("\n", " "))
+print(t["eksternDeltakelseId"], t["periode"]["fraOgMed"], t["periode"]["tilOgMed"], t["tiltakskodeFraKilden"], t["typeNavn"].replace("\n", " "))
 PY
     ) || fail "Fant ikke noe tiltak å søke på for brukeren."
 else
