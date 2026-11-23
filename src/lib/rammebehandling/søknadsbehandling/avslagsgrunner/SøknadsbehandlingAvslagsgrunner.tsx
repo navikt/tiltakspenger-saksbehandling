@@ -8,7 +8,7 @@ import {
 import { useSak } from '~/lib/sak/SakContext';
 import { useSøknadsbehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
-    skalVarsleOmFlereTidligereInnvilgelser,
+    skalVarsleOmManglendeForhåndsutfylling,
     synligeAvslagsgrunner,
 } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
 import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
@@ -18,15 +18,13 @@ import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 export const SøknadsbehandlingAvslagsgrunner = () => {
     const { sak } = useSak();
     const { behandling } = useSøknadsbehandling();
-    const { avslagsgrunner, erReadonly } = useSøknadsbehandlingAvslagSkjema();
+    const { avslagsgrunner, erReadonly, skalSendeVedtaksbrev } = useSøknadsbehandlingAvslagSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
     const { avslagInnvilgetTiltakspengerToggle } = useFeatureToggles();
 
-    const visFlereInnvilgelserVarsel = skalVarsleOmFlereTidligereInnvilgelser(
-        sak,
-        behandling,
-        avslagsgrunner,
-    );
+    const visManglendeForhåndsutfyllingVarsel =
+        skalSendeVedtaksbrev &&
+        skalVarsleOmManglendeForhåndsutfylling(sak, behandling, avslagsgrunner);
 
     return (
         <VedtakSeksjon>
@@ -53,10 +51,10 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                         ),
                     )}
                 </CheckboxGroup>
-                {visFlereInnvilgelserVarsel && (
+                {visManglendeForhåndsutfyllingVarsel && (
                     <InlineMessage status={'warning'} size={'small'}>
                         {
-                            'Søknadsperioden overlapper flere innvilgelser. Vedtaksbrevet oppgir derfor ikke periode og vedtaksdato for innvilgelsen. Skriv dette i teksten til vedtaksbrevet.'
+                            'Søknadsperioden er ikke lik hele perioden i ett innvilget vedtak. Vedtaksbrevet oppgir derfor ikke periode og vedtaksdato for innvilgelsen. Skriv dette i teksten til vedtaksbrevet.'
                         }
                     </InlineMessage>
                 )}
