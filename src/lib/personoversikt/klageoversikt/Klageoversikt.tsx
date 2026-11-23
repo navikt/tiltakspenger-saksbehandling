@@ -56,7 +56,9 @@ export const Klageoversikt = () => {
                     <HStack gap={'space-8'} justify={'end'} align={'center'} wrap={false}>
                         <InternLenkeKnapp
                             href={finnSisteGyldigeStegForKlage(klagevedtakMedBehandling.behandling)}
-                        />
+                        >
+                            Se behandling
+                        </InternLenkeKnapp>
 
                         <KlageMeny klage={klagevedtakMedBehandling.behandling} />
                     </HStack>
