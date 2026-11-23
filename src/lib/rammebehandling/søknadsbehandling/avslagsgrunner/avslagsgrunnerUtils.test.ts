@@ -2,6 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import { periode, rammevedtak, sak, søknad, søknadsbehandlingAvslag } from '~test/rammebehandling';
 import { Avslagsgrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { TidslinjeResultat } from '~/lib/_felles/tidslinjer/tidslinjeTyper';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
@@ -51,6 +52,51 @@ const sakMedVedtak = (...vedtak: InnvilgetVedtak[]): SakProps => {
 const sakMedKortereInnvilgelse = () => sakMedVedtak(innvilget(periode('2025-01-01', '2025-03-31')));
 
 describe('skalVarsleOmManglendeForhåndsutfylling', () => {
+    test.each([
+        {
+            tilfelle: 'varsler ikke når omgjøringen innvilger hele vedtaksperioden',
+            vedtaksperiode: periode('2025-06-01', '2025-06-03'),
+            skalVarsle: false,
+        },
+        {
+            tilfelle: 'varsler når omgjøringen innvilger søknadsperioden og opphører resten',
+            vedtaksperiode: periode('2025-06-01', '2025-06-05'),
+            skalVarsle: true,
+        },
+    ])('$tilfelle', ({ vedtaksperiode, skalVarsle }) => {
+        const søknadsperiode = periode('2025-06-01', '2025-06-03');
+        const avslag = søknadsbehandlingAvslag({
+            søknad: { ...søknad(), tiltaksdeltakelseperiodeDetErSøktOm: søknadsperiode },
+            vedtaksperiode: søknadsperiode,
+            avslagsgrunner: [Avslagsgrunn.InnvilgetTiltakspenger],
+        });
+        const omgjøring = rammevedtak('vedtak_1', vedtaksperiode, {
+            resultat: RevurderingResultat.OMGJØRING,
+            opprinneligInnvilgetPerioder: [søknadsperiode],
+            gjeldendeInnvilgetPerioder: [søknadsperiode],
+        });
+        const sakMedOmgjøring = sak({
+            alleRammevedtak: [omgjøring],
+            innvilgetTidslinje: {
+                elementer: [
+                    {
+                        rammevedtakId: omgjøring.id,
+                        periode: søknadsperiode,
+                        tidslinjeResultat: TidslinjeResultat.OMGJØRING_INNVILGELSE,
+                    },
+                ],
+            },
+        });
+
+        const resultat = skalVarsleOmManglendeForhåndsutfylling(
+            sakMedOmgjøring,
+            avslag,
+            avslag.avslagsgrunner,
+        );
+
+        expect(resultat).toBe(skalVarsle);
+    });
+
     test('varsler ikke når søknadsperioden er lik hele perioden i vedtaket', () => {
         const sakMedLikInnvilgelse = sakMedVedtak(innvilget(periode('2025-01-01', '2025-06-30')));
 
