@@ -13,7 +13,11 @@ import {
 import { lagSakMedBlandetInnhold, SAKSNUMMER } from './personoversiktTestUtils';
 import { tilTidspunkt } from '~/types/DatoTid';
 
-type AvbrytRequest = { begrunnelse: string; behandlingId: string };
+type AvbrytRequest = {
+    begrunnelse: string;
+    behandlingId: string;
+    antallVisteAutomatiskOpprettedeGrunner: number;
+};
 
 /** Saken backend svarer med etter at den åpne søknadsbehandlingen er avsluttet */
 const sakEtterAvslutning = (): SakProps => {
@@ -87,7 +91,13 @@ test.describe('Personoversikten - avslutte behandling', () => {
 
         await expect
             .poll(() => avbrytKall)
-            .toEqual([{ begrunnelse: 'Søknaden er trukket', behandlingId: 'beh_apen' }]);
+            .toEqual([
+                {
+                    begrunnelse: 'Søknaden er trukket',
+                    behandlingId: 'beh_apen',
+                    antallVisteAutomatiskOpprettedeGrunner: 0,
+                },
+            ]);
 
         await expect(page.getByRole('dialog')).toBeHidden();
         await expect(page.getByText('Behandlingen er avsluttet')).toBeVisible();
