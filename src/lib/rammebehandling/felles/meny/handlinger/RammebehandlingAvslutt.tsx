@@ -12,6 +12,9 @@ type Props = {
     /** Styrer tekstvalg - revurderinger avsluttes uten å avslutte søknaden */
     erRevurdering: boolean;
     saksnummer: Saksnummer;
+    // Backenden avviser avslutningen dersom revurderingen har fått flere grunner enn saksbehandler har fått vist.
+    // Utelates der grunnene ikke vises, f.eks. fra benken.
+    antallVisteAutomatiskOpprettedeGrunner?: number;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
@@ -21,6 +24,7 @@ export const RammebehandlingAvslutt = ({
     behandlingId,
     erRevurdering,
     saksnummer,
+    antallVisteAutomatiskOpprettedeGrunner,
     åpen,
     onClose,
     onSuccess,
@@ -30,7 +34,11 @@ export const RammebehandlingAvslutt = ({
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
         SakProps,
-        { begrunnelse: string; behandlingId: RammebehandlingId }
+        {
+            begrunnelse: string;
+            behandlingId: RammebehandlingId;
+            antallVisteAutomatiskOpprettedeGrunner?: number;
+        }
     >(`/sak/${saksnummer}/avbryt-aktiv-behandling`, 'POST');
 
     const avslutt = () => {
@@ -40,7 +48,11 @@ export const RammebehandlingAvslutt = ({
             return;
         }
 
-        trigger({ begrunnelse: begrunnelseTrimmet, behandlingId }).then((oppdatertSak) => {
+        trigger({
+            begrunnelse: begrunnelseTrimmet,
+            behandlingId,
+            antallVisteAutomatiskOpprettedeGrunner,
+        }).then((oppdatertSak) => {
             if (oppdatertSak) {
                 onSuccess(oppdatertSak);
             }

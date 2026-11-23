@@ -12,7 +12,7 @@ import style from './RevurderingStansVedtak.module.css';
 import { BehandlingPrioritering } from '~/lib/rammebehandling/felles/prioritering/BehandlingPrioritering';
 
 export const RevurderingStansVedtak = () => {
-    const { automatiskOpprettetGrunn, manueltBehandlesGrunner } =
+    const { automatiskOpprettedeGrunner, manueltBehandlesGrunner } =
         useRevurderingBehandling().behandling;
 
     return (
@@ -20,10 +20,10 @@ export const RevurderingStansVedtak = () => {
             <Heading size={'medium'} level={'1'} className={style.heading}>
                 {'Revurdering til stans av tiltakspenger'}
             </Heading>
-            {automatiskOpprettetGrunn && (
+            {automatiskOpprettedeGrunner.length > 0 && (
                 <>
                     <RevurderingAutomatiskOpprettetGrunn
-                        automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                        automatiskOpprettedeGrunner={automatiskOpprettedeGrunner}
                         manueltBehandlesGrunner={manueltBehandlesGrunner}
                     />
                     <Separator />

@@ -51,6 +51,7 @@ const renderDialog = (til: KonverterRevurderingTil, alleRammevedtak: Rammevedtak
             behandlingId={'beh_test' as RammebehandlingId}
             til={til}
             alleRammevedtak={alleRammevedtak}
+            antallVisteAutomatiskOpprettedeGrunner={1}
             åpen={true}
             onClose={() => {}}
             onSuccess={onSuccess}
@@ -122,6 +123,7 @@ describe('RammebehandlingKonverter', () => {
         expect(sendtBody()).toEqual({
             revurderingType: 'REVURDERING_INNVILGELSE',
             rammevedtakIdSomForlenges: null,
+            antallVisteAutomatiskOpprettedeGrunner: 1,
         });
     });
 
@@ -143,6 +145,7 @@ describe('RammebehandlingKonverter', () => {
         expect(sendtBody()).toEqual({
             revurderingType: 'FORLENGELSE',
             rammevedtakIdSomForlenges: 'vedtak_forlengbart',
+            antallVisteAutomatiskOpprettedeGrunner: 1,
         });
     });
 
@@ -188,6 +191,7 @@ describe('RammebehandlingKonverter', () => {
             behandlingId: 'beh_test' as RammebehandlingId,
             til: RevurderingResultat.STANS,
             alleRammevedtak: [],
+            antallVisteAutomatiskOpprettedeGrunner: 1,
             onClose: () => {},
             onSuccess: () => {},
         } satisfies Omit<ComponentProps<typeof RammebehandlingKonverter>, 'åpen'>;

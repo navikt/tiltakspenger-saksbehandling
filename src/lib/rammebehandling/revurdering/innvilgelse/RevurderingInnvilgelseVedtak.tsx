@@ -19,7 +19,7 @@ export const RevurderingInnvilgelseVedtak = () => {
 
     const kanInnvilges = harInnvilgbarePerioder(behandling);
 
-    const { automatiskOpprettetGrunn, manueltBehandlesGrunner } = behandling;
+    const { automatiskOpprettedeGrunner, manueltBehandlesGrunner } = behandling;
 
     return (
         <>
@@ -27,10 +27,10 @@ export const RevurderingInnvilgelseVedtak = () => {
                 {klagebehandling ? 'Omgjøring etter klage - ' : ''}
                 {'Revurdering av innvilgelse'}
             </Heading>
-            {automatiskOpprettetGrunn && (
+            {automatiskOpprettedeGrunner.length > 0 && (
                 <>
                     <RevurderingAutomatiskOpprettetGrunn
-                        automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                        automatiskOpprettedeGrunner={automatiskOpprettedeGrunner}
                         manueltBehandlesGrunner={manueltBehandlesGrunner}
                     />
                     <Separator />

@@ -12,6 +12,7 @@ import {
     SøknadsbehandlingResultat,
 } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
+    AutomatiskOpprettetGrunn,
     OmgjøringIkkeValgt,
     OmgjøringInnvilgelse,
     OmgjøringOpphør,
@@ -461,6 +462,7 @@ const revurderingBase = () => ({
     ...rammebehandlingBase(),
     type: Rammebehandlingstype.REVURDERING as const,
     automatiskOpprettetGrunn: null,
+    automatiskOpprettedeGrunner: [],
     perioderForReversertOpphør: [],
 });
 
@@ -500,16 +502,27 @@ export const revurderingForlengelse = (
     ...overstyringer,
 });
 
-export const revurderingUbestemt = (
-    overstyringer: Partial<RevurderingUbestemt> = {},
-): RevurderingUbestemt => ({
-    ...revurderingBase(),
-    resultat: RevurderingResultat.UBESTEMT,
-    automatiskOpprettetGrunn: {
-        endringer: [{ type: TiltaksdeltakerEndringType.AVBRUTT_DELTAKELSE }],
-    },
+export const automatiskOpprettetGrunn = (
+    overstyringer: Partial<AutomatiskOpprettetGrunn> = {},
+): AutomatiskOpprettetGrunn => ({
+    endringer: [{ type: TiltaksdeltakerEndringType.AVBRUTT_DELTAKELSE }],
+    lagtTil: tilTidspunkt('2025-01-01T08:00:00'),
+    lagtTilEtterSistEndret: false,
     ...overstyringer,
 });
+
+export const revurderingUbestemt = (
+    overstyringer: Partial<RevurderingUbestemt> = {},
+): RevurderingUbestemt => {
+    const grunn = automatiskOpprettetGrunn();
+    return {
+        ...revurderingBase(),
+        resultat: RevurderingResultat.UBESTEMT,
+        automatiskOpprettetGrunn: grunn,
+        automatiskOpprettedeGrunner: [grunn],
+        ...overstyringer,
+    };
+};
 
 export const omgjøringIkkeValgt = (
     overstyringer: Partial<OmgjøringIkkeValgt> = {},

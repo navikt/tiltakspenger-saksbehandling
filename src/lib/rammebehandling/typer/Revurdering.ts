@@ -11,7 +11,7 @@ import {
     LagredeInnvilgelsesperioder,
 } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
-import { Dato } from '~/types/DatoTid';
+import { Dato, Tidspunkt } from '~/types/DatoTid';
 import { PeriodeForReversertOpphør } from '~/lib/rammebehandling/typer/ReversertOpphør';
 
 export enum TiltaksdeltakerEndringType {
@@ -41,12 +41,21 @@ export type TiltaksdeltakerEndring =
 
 export type AutomatiskOpprettetGrunn = {
     endringer: TiltaksdeltakerEndring[];
+    lagtTil: Tidspunkt;
+    // Grunnen er lagt til etter at behandlingen sist ble lagret, og saksbehandler har kanskje ikke sett den.
+    lagtTilEtterSistEndret: boolean;
 };
 
 type RevurderingBase = RammebehandlingBase & {
     type: Rammebehandlingstype.REVURDERING;
     resultat: RevurderingResultat;
+    /** Den første grunnen i automatiskOpprettedeGrunner. */
     automatiskOpprettetGrunn: Nullable<AutomatiskOpprettetGrunn>;
+    /**
+     * Alle grunnene revurderingen ble automatisk opprettet eller oppdatert for, i rekkefølgen de ble lagt til.
+     * En åpen ubestemt revurdering får en ny grunn når tiltaksdeltakelsen endres igjen.
+     */
+    automatiskOpprettedeGrunner: AutomatiskOpprettetGrunn[];
     /** Er bare utfylt for omgjøringer. */
     perioderForReversertOpphør: PeriodeForReversertOpphør[];
 };

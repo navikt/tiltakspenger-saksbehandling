@@ -35,7 +35,7 @@ export const RevurderingUbestemtVedtak = () => {
     const [konverterTil, setKonverterTil] = useState<KonverterRevurderingTil | null>(null);
     const [visAvslutt, setVisAvslutt] = useState(false);
 
-    const { gyldigeKommandoer, automatiskOpprettetGrunn, manueltBehandlesGrunner, status } =
+    const { gyldigeKommandoer, automatiskOpprettedeGrunner, manueltBehandlesGrunner, status } =
         behandling;
 
     const kanKonvertere = gyldigeKommandoer.includes(
@@ -49,10 +49,10 @@ export const RevurderingUbestemtVedtak = () => {
             <Heading size={'medium'} level={'1'} spacing={true}>
                 {'Ubestemt revurdering'}
             </Heading>
-            {automatiskOpprettetGrunn && (
+            {automatiskOpprettedeGrunner.length > 0 && (
                 <>
                     <RevurderingAutomatiskOpprettetGrunn
-                        automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                        automatiskOpprettedeGrunner={automatiskOpprettedeGrunner}
                         manueltBehandlesGrunner={manueltBehandlesGrunner}
                     />
                     <Separator />
@@ -117,6 +117,7 @@ export const RevurderingUbestemtVedtak = () => {
                     behandlingId={behandling.id}
                     til={konverterTil}
                     alleRammevedtak={sak.alleRammevedtak}
+                    antallVisteAutomatiskOpprettedeGrunner={automatiskOpprettedeGrunner.length}
                     åpen={true}
                     onClose={() => setKonverterTil(null)}
                     onSuccess={(oppdatertSak) => {
@@ -131,6 +132,7 @@ export const RevurderingUbestemtVedtak = () => {
                     behandlingId={behandling.id}
                     erRevurdering={true}
                     saksnummer={sak.saksnummer}
+                    antallVisteAutomatiskOpprettedeGrunner={automatiskOpprettedeGrunner.length}
                     åpen={visAvslutt}
                     onClose={() => setVisAvslutt(false)}
                     onSuccess={() => {

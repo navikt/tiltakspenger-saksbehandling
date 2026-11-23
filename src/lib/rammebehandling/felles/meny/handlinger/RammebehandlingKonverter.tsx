@@ -62,6 +62,7 @@ export const konverteringsalternativer = (
 type KonverterRevurderingBody = {
     revurderingType: KonverterRevurderingTil;
     rammevedtakIdSomForlenges: Nullable<VedtakId>;
+    antallVisteAutomatiskOpprettedeGrunner: number;
 };
 
 type Props = {
@@ -70,6 +71,8 @@ type Props = {
     behandlingId: RammebehandlingId;
     til: KonverterRevurderingTil;
     alleRammevedtak: Rammevedtak[];
+    // Backenden avviser konverteringen dersom revurderingen har fått flere grunner enn saksbehandler har fått vist.
+    antallVisteAutomatiskOpprettedeGrunner: number;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
@@ -86,6 +89,7 @@ export const RammebehandlingKonverter = ({
     behandlingId,
     til,
     alleRammevedtak,
+    antallVisteAutomatiskOpprettedeGrunner,
     åpen,
     onClose,
     onSuccess,
@@ -119,6 +123,7 @@ export const RammebehandlingKonverter = ({
         trigger({
             revurderingType: til,
             rammevedtakIdSomForlenges: erForlengelse ? valgtVedtakId : null,
+            antallVisteAutomatiskOpprettedeGrunner,
         }).then((oppdatertSak) => {
             if (oppdatertSak) {
                 setValgtVedtakId(null);

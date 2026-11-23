@@ -15,7 +15,14 @@ import {
     Rammebehandlingsstatus,
     Rammebehandling,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { revurderingStans, revurderingUbestemt, sak } from '~test/rammebehandling';
+import {
+    automatiskOpprettetGrunn,
+    revurderingStans,
+    revurderingUbestemt,
+    sak,
+} from '~test/rammebehandling';
+import { TiltaksdeltakerEndringType } from '~/lib/rammebehandling/typer/Revurdering';
+import { tilTidspunkt } from '~/types/DatoTid';
 import { nonNullish } from '~/utils/object';
 import { RevurderingUbestemtVedtak } from './RevurderingUbestemtVedtak';
 
@@ -75,6 +82,33 @@ describe('RevurderingUbestemtVedtak', () => {
             expect(screen.getByRole('button', { name: navn })).toBeInTheDocument(),
         );
         expect(screen.queryByText(/må tildeles deg/)).not.toBeInTheDocument();
+        expect(screen.getByText('Lagt til 01.01.2025 kl. 08:00')).toBeInTheDocument();
+        expect(screen.queryByText('Ny endring')).not.toBeInTheDocument();
+        expect(screen.queryByText(/endret igjen etter at behandlingen/)).not.toBeInTheDocument();
+    });
+
+    test('viser alle grunnene og varsler om grunner lagt til etter siste lagring', () => {
+        const første = automatiskOpprettetGrunn();
+        renderVedtak(
+            revurderingUbestemt({
+                automatiskOpprettetGrunn: første,
+                automatiskOpprettedeGrunner: [
+                    første,
+                    automatiskOpprettetGrunn({
+                        endringer: [{ type: TiltaksdeltakerEndringType.IKKE_AKTUELL_DELTAKELSE }],
+                        lagtTil: tilTidspunkt('2025-01-02T10:15:00'),
+                        lagtTilEtterSistEndret: true,
+                    }),
+                ],
+            }),
+        );
+
+        expect(screen.getByText('Deltakelsen er avbrutt')).toBeInTheDocument();
+        expect(screen.getByText('Lagt til 01.01.2025 kl. 08:00')).toBeInTheDocument();
+        expect(screen.getByText('Deltakelsen er ikke aktuell')).toBeInTheDocument();
+        expect(screen.getByText('Lagt til 02.01.2025 kl. 10:15')).toBeInTheDocument();
+        expect(screen.getAllByText('Ny endring')).toHaveLength(1);
+        expect(screen.getByText(/endret igjen etter at behandlingen/)).toBeInTheDocument();
     });
 
     test('viser valgene som deaktivert og ber om tildeling når revurderingen ikke kan konverteres', () => {
@@ -115,6 +149,7 @@ describe('RevurderingUbestemtVedtak', () => {
         expect(JSON.parse(nonNullish(fetchMock.mock.calls[0][1]).body as string)).toEqual({
             revurderingType: 'STANS',
             rammevedtakIdSomForlenges: null,
+            antallVisteAutomatiskOpprettedeGrunner: 1,
         });
     });
 
@@ -132,6 +167,30 @@ describe('RevurderingUbestemtVedtak', () => {
         expect(JSON.parse(nonNullish(fetchMock.mock.calls[0][1]).body as string)).toEqual({
             begrunnelse: 'Endringen krever ingen ny vurdering',
             behandlingId: tildelt.id,
+            antallVisteAutomatiskOpprettedeGrunner: 1,
         });
+    });
+
+    test('viser feilmeldingen fra backend når det er lagt til nye grunner siden revurderingen ble åpnet', async () => {
+        fetchMock.mockResolvedValue(
+            svar(409, {
+                melding: 'Tiltaksdeltakelsen er endret igjen siden du åpnet behandlingen.',
+                kode: 'har_nye_automatisk_opprettede_grunner',
+            }),
+        );
+        const router = renderVedtak(tildelt);
+
+        fireEvent.click(screen.getByRole('button', { name: 'Avslutt' }));
+        fireEvent.change(screen.getByRole('textbox'), {
+            target: { value: 'Endringen krever ingen ny vurdering' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: 'Avslutt behandling' }));
+
+        expect(
+            await screen.findByText(
+                /Tiltaksdeltakelsen er endret igjen siden du åpnet behandlingen/,
+            ),
+        ).toBeInTheDocument();
+        expect(router.push).not.toHaveBeenCalled();
     });
 });

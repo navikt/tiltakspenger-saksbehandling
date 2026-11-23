@@ -25,17 +25,17 @@ export const RevurderingOmgjøringVedtak = () => {
     const skjema = useOmgjøringSkjema();
     const { resultat } = skjema;
 
-    const { automatiskOpprettetGrunn, manueltBehandlesGrunner } =
+    const { automatiskOpprettedeGrunner, manueltBehandlesGrunner } =
         useRevurderingBehandling().behandling;
 
     return (
         <>
             <RevurderingOmgjøringHeader />
-            {automatiskOpprettetGrunn && (
+            {automatiskOpprettedeGrunner.length > 0 && (
                 <>
                     <Separator />
                     <RevurderingAutomatiskOpprettetGrunn
-                        automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                        automatiskOpprettedeGrunner={automatiskOpprettedeGrunner}
                         manueltBehandlesGrunner={manueltBehandlesGrunner}
                     />
                 </>

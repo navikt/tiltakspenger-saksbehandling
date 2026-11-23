@@ -96,6 +96,10 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
         };
 
     const erRevurdering = behandling.type === Rammebehandlingstype.REVURDERING;
+    const antallVisteAutomatiskOpprettedeGrunner =
+        behandling.type === Rammebehandlingstype.REVURDERING
+            ? behandling.automatiskOpprettedeGrunner.length
+            : 0;
 
     const konverteringsvalg =
         erRevurdering &&
@@ -222,6 +226,7 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                     behandlingId={behandling.id}
                     til={konverterTil}
                     alleRammevedtak={sak.alleRammevedtak}
+                    antallVisteAutomatiskOpprettedeGrunner={antallVisteAutomatiskOpprettedeGrunner}
                     åpen={aktivDialog === 'konverter'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
@@ -272,6 +277,7 @@ export const RammebehandlingMeny = ({ behandling, kallesFra, size }: Props) => {
                     behandlingId={behandling.id}
                     erRevurdering={erRevurdering}
                     saksnummer={sak.saksnummer}
+                    antallVisteAutomatiskOpprettedeGrunner={antallVisteAutomatiskOpprettedeGrunner}
                     åpen={aktivDialog === 'avslutt'}
                     onClose={onClose}
                     onSuccess={onSuccessTilPersonoversikt(
