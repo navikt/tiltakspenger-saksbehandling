@@ -18,15 +18,13 @@ import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 export const SøknadsbehandlingAvslagsgrunner = () => {
     const { sak } = useSak();
     const { behandling } = useSøknadsbehandling();
-    const { avslagsgrunner, erReadonly } = useSøknadsbehandlingAvslagSkjema();
+    const { avslagsgrunner, erReadonly, skalSendeVedtaksbrev } = useSøknadsbehandlingAvslagSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
     const { avslagInnvilgetTiltakspengerToggle } = useFeatureToggles();
 
-    const visManglendeForhåndsutfyllingVarsel = skalVarsleOmManglendeForhåndsutfylling(
-        sak,
-        behandling,
-        avslagsgrunner,
-    );
+    const visManglendeForhåndsutfyllingVarsel =
+        skalSendeVedtaksbrev &&
+        skalVarsleOmManglendeForhåndsutfylling(sak, behandling, avslagsgrunner);
 
     return (
         <VedtakSeksjon>
