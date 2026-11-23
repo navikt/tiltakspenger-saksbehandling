@@ -87,6 +87,17 @@ const Skjemafelter = () => {
             >
                 {'Journalfør notat'}
             </button>
+            <button
+                type={'button'}
+                onClick={() =>
+                    dispatch({
+                        type: 'setSkalSendeVedtaksbrev',
+                        payload: { skalSendeVedtaksbrev: true },
+                    })
+                }
+            >
+                {'Distribuer vedtaksbrev'}
+            </button>
             <p>{`Skrivebeskyttet: ${skjema.erReadonly}`}</p>
             <p>{`Kan endre journalføring: ${skjema.kanEndreSkalJournalføreNotat}`}</p>
         </>
@@ -168,6 +179,7 @@ describe('lagring av meldekortbehandling', () => {
             ],
             begrunnelse: ikkeSladdet('Begrunnelse'),
             tekstTilVedtaksbrev: ikkeSladdet('Brevtekst'),
+            skalDistribuereVedtaksbrev: true,
             skalJournalføreNotat: true,
             prioritering: { begrunnelse: ikkeSladdet('Haster') },
         });
@@ -181,6 +193,7 @@ describe('lagring av meldekortbehandling', () => {
         klikk('Deltatt første dag');
         klikk('Prioriter');
         klikk('Journalfør notat');
+        klikk('Distribuer vedtaksbrev');
         skrivI('Begrunnelse', '  Begrunnelse \n');
         skrivI('Brevtekst', 'Brevtekst');
         skrivI('Prioriteringsbegrunnelse', 'Haster');
@@ -200,7 +213,8 @@ describe('lagring av meldekortbehandling', () => {
                     ),
                 },
             ],
-            skalSendeVedtaksbrev: true,
+            skalJournalføreVedtaksbrev: true,
+            skalDistribuereVedtaksbrev: true,
             skalJournalføreNotat: true,
             begrunnelse: 'Begrunnelse',
             tekstTilVedtaksbrev: 'Brevtekst',

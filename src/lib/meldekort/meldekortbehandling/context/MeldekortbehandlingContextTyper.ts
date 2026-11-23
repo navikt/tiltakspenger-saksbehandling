@@ -19,7 +19,8 @@ export type MeldeperiodeSkjema = {
 
 export type MeldekortbehandlingSkjemaState = {
     meldeperioder: MeldeperiodeSkjema[];
-    skalSendeVedtaksbrev: boolean;
+    skalJournalføreVedtaksbrev: boolean;
+    skalDistribuereVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
     erPrioritert: boolean;
 };
@@ -28,6 +29,8 @@ export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & 
     erReadonly: boolean;
     /** Beslutter kan endre valget om journalføring av notat selv om resten av skjemaet er låst. */
     kanEndreSkalJournalføreNotat: boolean;
+    /** Beslutter kan endre valget om å sende vedtaksbrevet til bruker selv om resten av skjemaet er låst. */
+    kanEndreSkalDistribuereVedtaksbrev: boolean;
     begrunnelse: TextAreaInput;
     brevtekst: TextAreaInput;
     prioriteringBegrunnelse: TextAreaInput;

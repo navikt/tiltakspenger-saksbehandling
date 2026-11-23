@@ -34,6 +34,7 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
     const erReadonly = !kanSaksbehandle(meldekortbehandling);
 
     const kanEndreSkalJournalføreNotat = !erReadonly || kanBeslutte(meldekortbehandling);
+    const kanEndreSkalDistribuereVedtaksbrev = !erReadonly || kanBeslutte(meldekortbehandling);
 
     const [skjema, dispatch] = useReducer(
         meldekortbehandlingSkjemaReducer,
@@ -53,6 +54,7 @@ export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
                         ...skjema,
                         erReadonly,
                         kanEndreSkalJournalføreNotat,
+                        kanEndreSkalDistribuereVedtaksbrev,
                         begrunnelse,
                         brevtekst,
                         prioriteringBegrunnelse,

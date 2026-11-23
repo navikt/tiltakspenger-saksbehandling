@@ -74,3 +74,15 @@ export const journalførNotatEndringFraBeslutter = (
         skjemaValg,
         beslutterRedigerer,
     });
+
+export const distribuerVedtaksbrevEndringFraBeslutter = (
+    meldekortbehandling: MeldekortbehandlingProps,
+    skjemaValg: boolean,
+    beslutterRedigerer: boolean,
+): Nullable<EndringAvJournalførNotat> =>
+    beslutterEndringAvJournalførNotat({
+        lagretEndring: meldekortbehandling.beslutterEndringer.skalDistribuereVedtaksbrev,
+        lagretValg: meldekortbehandling.skalDistribuereVedtaksbrev,
+        skjemaValg,
+        beslutterRedigerer,
+    });

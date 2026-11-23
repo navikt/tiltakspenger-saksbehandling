@@ -16,19 +16,26 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 export const MeldekortbehandlingSendOgGodkjenn = () => {
     const { sak, setSak } = useSak();
     const meldekortbehandling = useMeldekortbehandling();
-    const { skalJournalføreNotat } = useMeldekortbehandlingSkjema();
+    const { skalJournalføreNotat, skalJournalføreVedtaksbrev, skalDistribuereVedtaksbrev } =
+        useMeldekortbehandlingSkjema();
 
-    const harUlagredeEndringer = skalJournalføreNotat !== meldekortbehandling.skalJournalføreNotat;
+    const harUlagredeEndringer =
+        skalJournalføreNotat !== meldekortbehandling.skalJournalføreNotat ||
+        skalJournalføreVedtaksbrev !== meldekortbehandling.skalJournalføreVedtaksbrev ||
+        skalDistribuereVedtaksbrev !== meldekortbehandling.skalDistribuereVedtaksbrev;
 
-    const lagreApi = useFetchJsonFraApi<SakProps, { skalJournalføreNotat: boolean }>(
-        `/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/beslutter/oppdater`,
-        'POST',
+    const lagreApi = useFetchJsonFraApi<
+        SakProps,
         {
-            onSuccess: (oppdatertSak) => {
-                setSak(oppdatertSak);
-            },
+            skalJournalføreNotat: boolean;
+            skalJournalføreVedtaksbrev: boolean;
+            skalDistribuereVedtaksbrev: boolean;
+        }
+    >(`/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/beslutter/oppdater`, 'POST', {
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
         },
-    );
+    });
 
     return (
         <MeldekortbehandlingSeksjon>
@@ -38,8 +45,8 @@ export const MeldekortbehandlingSendOgGodkjenn = () => {
                     <VStack gap={'space-8'} align={'end'}>
                         {harUlagredeEndringer && (
                             <Infokort variant={'info'} size={'small'}>
-                                Endringer i journalføring av notat må lagres før meldekortet kan
-                                godkjennes
+                                Endringer i journalføring av notat eller utsending av vedtaksbrev må
+                                lagres før meldekortet kan godkjennes
                             </Infokort>
                         )}
                         {lagreApi.error && (
@@ -54,7 +61,13 @@ export const MeldekortbehandlingSendOgGodkjenn = () => {
                                 <Button
                                     variant={'secondary'}
                                     loading={lagreApi.isMutating}
-                                    onClick={() => lagreApi.trigger({ skalJournalføreNotat })}
+                                    onClick={() =>
+                                        lagreApi.trigger({
+                                            skalJournalføreNotat,
+                                            skalJournalføreVedtaksbrev,
+                                            skalDistribuereVedtaksbrev,
+                                        })
+                                    }
                                 >
                                     Lagre
                                 </Button>

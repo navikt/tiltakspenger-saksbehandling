@@ -30,7 +30,8 @@ const forventetLagring = (
     begrunnelse: string | null = null,
 ): OppdaterMeldekortbehandlingDTO => ({
     meldeperioder: [{ kjedeId: KJEDE_ID, dager }],
-    skalSendeVedtaksbrev: false,
+    skalJournalføreVedtaksbrev: false,
+    skalDistribuereVedtaksbrev: false,
     skalJournalføreNotat: false,
     begrunnelse,
     tekstTilVedtaksbrev: null,

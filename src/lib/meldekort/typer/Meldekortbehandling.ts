@@ -84,7 +84,8 @@ export type OppdaterMeldekortbehandlingDTO = {
     meldeperioder: OppdatertMeldeperiodeDTO[];
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
-    skalSendeVedtaksbrev: boolean;
+    skalJournalføreVedtaksbrev: boolean;
+    skalDistribuereVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
     prioritering: Nullable<OppdaterPrioriteringDTO>;
 };
@@ -135,7 +136,8 @@ export type MeldekortbehandlingProps = {
     tekstTilVedtaksbrev: SladdbarVerdi<Nullable<string>>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     klagebehandlingId: Nullable<KlageId>;
-    skalSendeVedtaksbrev: boolean;
+    skalJournalføreVedtaksbrev: boolean;
+    skalDistribuereVedtaksbrev: boolean;
     skalJournalføreNotat: boolean;
     beslutterEndringer: MeldekortbehandlingBeslutterEndringer;
     /** Prioriterte behandlinger ligger alltid øverst i benken. */
@@ -147,6 +149,13 @@ export type MeldekortbehandlingProps = {
 /** Endringer beslutter har gjort i saksbehandlers valg, mens behandlingen er under beslutning. */
 export type MeldekortbehandlingBeslutterEndringer = {
     skalJournalføreNotat: Nullable<MeldekortbehandlingSkalJournalføreNotatEndring>;
+    skalDistribuereVedtaksbrev: Nullable<MeldekortbehandlingSkalDistribuereVedtaksbrevEndring>;
+};
+
+export type MeldekortbehandlingSkalDistribuereVedtaksbrevEndring = {
+    tidspunkt: Tidspunkt;
+    saksbehandler: boolean;
+    beslutter: boolean;
 };
 
 export type MeldekortbehandlingSkalJournalføreNotatEndring = {

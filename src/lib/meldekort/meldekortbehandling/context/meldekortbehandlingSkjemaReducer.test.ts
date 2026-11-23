@@ -35,7 +35,8 @@ const { IkkeBesvart, IkkeRettTilTiltakspenger, DeltattUtenLønnITiltaket, Fravæ
 
 const state: MeldekortbehandlingSkjemaState = {
     meldeperioder: [],
-    skalSendeVedtaksbrev: true,
+    skalJournalføreVedtaksbrev: true,
+    skalDistribuereVedtaksbrev: false,
     skalJournalføreNotat: false,
     erPrioritert: false,
 };
@@ -69,6 +70,44 @@ describe('meldekortbehandlingSkjemaReducer', () => {
                 payload: { erPrioritert: false },
             }),
         ).toEqual(state);
+    });
+
+    test('setSkalSendeVedtaksbrev journalfører og distribuerer vedtaksbrevet samlet', () => {
+        const ikkeSendt: MeldekortbehandlingSkjemaState = {
+            ...state,
+            skalJournalføreVedtaksbrev: false,
+            skalDistribuereVedtaksbrev: false,
+        };
+
+        const sendt = meldekortbehandlingSkjemaReducer(ikkeSendt, {
+            type: 'setSkalSendeVedtaksbrev',
+            payload: { skalSendeVedtaksbrev: true },
+        });
+
+        expect(sendt).toEqual({
+            ...state,
+            skalJournalføreVedtaksbrev: true,
+            skalDistribuereVedtaksbrev: true,
+        });
+        expect(
+            meldekortbehandlingSkjemaReducer(sendt, {
+                type: 'setSkalSendeVedtaksbrev',
+                payload: { skalSendeVedtaksbrev: false },
+            }),
+        ).toEqual(ikkeSendt);
+    });
+
+    test('setSkalSendeVedtaksbrev slår av journalføring også når brevet kun var journalført', () => {
+        expect(
+            meldekortbehandlingSkjemaReducer(state, {
+                type: 'setSkalSendeVedtaksbrev',
+                payload: { skalSendeVedtaksbrev: false },
+            }),
+        ).toEqual({
+            ...state,
+            skalJournalføreVedtaksbrev: false,
+            skalDistribuereVedtaksbrev: false,
+        });
     });
 
     test('oppdaterDagStatus endrer kun valgt dag i valgt meldeperiode, uten å mutere state', () => {
@@ -218,7 +257,8 @@ describe('meldekortbehandlingSkjemaInitialState', () => {
             meldekortbehandlingSkjemaInitialState(
                 meldekortbehandling({
                     meldeperioder: [meldeperiodebehandling(FØRSTE_MANDAG), korrigering],
-                    skalSendeVedtaksbrev: false,
+                    skalJournalføreVedtaksbrev: true,
+                    skalDistribuereVedtaksbrev: true,
                     skalJournalføreNotat: true,
                 }),
             ),
@@ -227,7 +267,8 @@ describe('meldekortbehandlingSkjemaInitialState', () => {
                 meldeperiodeSkjema(FØRSTE_MANDAG),
                 meldeperiodeSkjema(ANDRE_MANDAG, DeltattUtenLønnITiltaket),
             ],
-            skalSendeVedtaksbrev: false,
+            skalJournalføreVedtaksbrev: true,
+            skalDistribuereVedtaksbrev: true,
             skalJournalføreNotat: true,
             erPrioritert: false,
         });

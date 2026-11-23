@@ -16,7 +16,7 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
     const { sakId } = useSak().sak;
     const { id, erAvsluttet } = useMeldekortbehandling();
 
-    const { meldeperioder, brevtekst, skalSendeVedtaksbrev } = useMeldekortbehandlingSkjema();
+    const { meldeperioder, brevtekst, skalJournalføreVedtaksbrev } = useMeldekortbehandlingSkjema();
 
     const { trigger, error, isMutating } =
         useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevBody>(
@@ -35,7 +35,7 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
                 variant={'secondary'}
                 icon={<EnvelopeOpenIcon />}
                 loading={isMutating}
-                disabled={!skalSendeVedtaksbrev}
+                disabled={!skalJournalføreVedtaksbrev}
                 className={style.knapp}
                 onClick={async () => {
                     return trigger({
