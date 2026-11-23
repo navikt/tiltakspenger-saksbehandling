@@ -13,8 +13,8 @@ type Props = {
     erRevurdering: boolean;
     saksnummer: Saksnummer;
     // Backenden avviser avslutningen dersom revurderingen har fått flere grunner enn saksbehandler har fått vist.
-    // Utelates der grunnene ikke vises, f.eks. fra benken.
-    antallVisteAutomatiskOpprettedeGrunner?: number;
+    // 0 for behandlinger uten automatisk opprettede grunner.
+    antallVisteAutomatiskOpprettedeGrunner: number;
     åpen: boolean;
     onClose: () => void;
     onSuccess: (oppdatertSak: SakProps) => void;
@@ -37,7 +37,7 @@ export const RammebehandlingAvslutt = ({
         {
             begrunnelse: string;
             behandlingId: RammebehandlingId;
-            antallVisteAutomatiskOpprettedeGrunner?: number;
+            antallVisteAutomatiskOpprettedeGrunner: number;
         }
     >(`/sak/${saksnummer}/avbryt-aktiv-behandling`, 'POST');
 

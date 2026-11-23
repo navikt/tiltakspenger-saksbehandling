@@ -10,13 +10,11 @@ import { RammebehandlingGjenoppta } from '~/lib/rammebehandling/felles/meny/hand
 import { RammebehandlingLeggTilbake } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingLeggTilbake';
 import { RammebehandlingSettPåVent } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingSettPåVent';
 import { RammebehandlingOverta } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingOverta';
-import { RammebehandlingAvslutt } from '~/lib/rammebehandling/felles/meny/handlinger/RammebehandlingAvslutt';
 import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingTildelMeg';
 import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingGjenoppta';
 import { MeldekortbehandlingLeggTilbake } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingLeggTilbake';
 import { MeldekortbehandlingSettPåVent } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingSettPåVent';
 import { MeldekortbehandlingOverta } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingOverta';
-import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/felles/meny/handlinger/MeldekortbehandlingAvslutt';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { behandlingUrl, meldekortbehandlingUrl, personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
@@ -81,8 +79,6 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
     switch (behandling.type) {
         case BenkBehandlingstype.SØKNADSBEHANDLING:
         case BenkBehandlingstype.REVURDERING: {
-            const erRevurdering = behandling.type === BenkBehandlingstype.REVURDERING;
-
             const onSuccessTilBehandling = () => {
                 onClose();
                 router.push(
@@ -101,7 +97,6 @@ export const BenkBehandlingMeny = ({ behandling }: Props) => {
                         kapabiliteter={kapabiliteter}
                         aktivDialog={aktivDialog}
                         overtarFra={overtarFra}
-                        erRevurdering={erRevurdering}
                         onClose={onClose}
                         onSuccessTilBehandling={onSuccessTilBehandling}
                         onSuccessTilBenk={onSuccessTilBenk}
@@ -182,13 +177,11 @@ const RammeDialoger = ({
     kapabiliteter,
     aktivDialog,
     overtarFra,
-    erRevurdering,
     onClose,
     onSuccessTilBehandling,
     onSuccessTilBenk,
 }: DialogerProps & {
     behandling: BenkSøknadsbehandlingMedTilgang | BenkRevurderingMedTilgang;
-    erRevurdering: boolean;
 }) => {
     const { id } = behandling;
     const sakId = hentVerdi(behandling.sakId);
@@ -285,19 +278,6 @@ const RammeDialoger = ({
                     onSuccess={onSuccessTilBehandling}
                 />
             )}
-
-            {kapabiliteter.avslutt && (
-                <RammebehandlingAvslutt
-                    behandlingId={id}
-                    erRevurdering={erRevurdering}
-                    saksnummer={saksnummer}
-                    åpen={aktivDialog === 'avslutt'}
-                    onClose={onClose}
-                    onSuccess={onSuccessTilBenk(
-                        `${erRevurdering ? 'Revurderingen' : 'Behandlingen'} er avsluttet`,
-                    )}
-                />
-            )}
         </>
     );
 };
@@ -391,16 +371,6 @@ const MeldekortDialoger = ({
                     åpen={aktivDialog === 'overta'}
                     onClose={onClose}
                     onSuccess={onSuccessTilBehandling}
-                />
-            )}
-
-            {kapabiliteter.avslutt && (
-                <MeldekortbehandlingAvslutt
-                    meldekortId={id}
-                    sakId={sakId}
-                    åpen={aktivDialog === 'avslutt'}
-                    onClose={onClose}
-                    onSuccess={onSuccessTilBenk('Meldekortbehandlingen er avsluttet')}
                 />
             )}
         </>
