@@ -461,7 +461,6 @@ export const søknadsbehandlingInnvilgelse = (
 const revurderingBase = () => ({
     ...rammebehandlingBase(),
     type: Rammebehandlingstype.REVURDERING as const,
-    automatiskOpprettetGrunn: null,
     automatiskOpprettedeGrunner: [],
     perioderForReversertOpphør: [],
 });
@@ -514,12 +513,10 @@ export const automatiskOpprettetGrunn = (
 export const revurderingUbestemt = (
     overstyringer: Partial<RevurderingUbestemt> = {},
 ): RevurderingUbestemt => {
-    const grunn = automatiskOpprettetGrunn();
     return {
         ...revurderingBase(),
         resultat: RevurderingResultat.UBESTEMT,
-        automatiskOpprettetGrunn: grunn,
-        automatiskOpprettedeGrunner: [grunn],
+        automatiskOpprettedeGrunner: [automatiskOpprettetGrunn()],
         ...overstyringer,
     };
 };

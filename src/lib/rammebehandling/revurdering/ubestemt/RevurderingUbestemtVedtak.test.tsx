@@ -91,7 +91,6 @@ describe('RevurderingUbestemtVedtak', () => {
         const første = automatiskOpprettetGrunn();
         renderVedtak(
             revurderingUbestemt({
-                automatiskOpprettetGrunn: første,
                 automatiskOpprettedeGrunner: [
                     første,
                     automatiskOpprettetGrunn({

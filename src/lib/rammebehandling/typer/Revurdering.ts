@@ -49,8 +49,6 @@ export type AutomatiskOpprettetGrunn = {
 type RevurderingBase = RammebehandlingBase & {
     type: Rammebehandlingstype.REVURDERING;
     resultat: RevurderingResultat;
-    /** Den første grunnen i automatiskOpprettedeGrunner. */
-    automatiskOpprettetGrunn: Nullable<AutomatiskOpprettetGrunn>;
     /**
      * Alle grunnene revurderingen ble automatisk opprettet eller oppdatert for, i rekkefølgen de ble lagt til.
      * En åpen ubestemt revurdering får en ny grunn når tiltaksdeltakelsen endres igjen.
@@ -124,7 +122,6 @@ export type Omgjøring = OmgjøringInnvilgelse | OmgjøringOpphør | OmgjøringI
 // Saksbehandler må konvertere den til en annen type, eller avbryte den, før den kan behandles.
 export type RevurderingUbestemt = RevurderingBase & {
     resultat: RevurderingResultat.UBESTEMT;
-    automatiskOpprettetGrunn: AutomatiskOpprettetGrunn;
 };
 
 export type Revurdering =
