@@ -5,3 +5,9 @@
 .header {
     margin-bottom: 0.5rem;
 }
+
+.brevvalg {
+    flex: 1;
+    min-width: 0;
+    max-width: 40rem;
+}

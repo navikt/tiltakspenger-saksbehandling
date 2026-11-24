@@ -4,6 +4,7 @@ import {
     erMeldekortbehandlingUnderAktivOmgjøring,
     finnUbehandledeMeldekort,
     formaterMeldeperioder,
+    distribuerVedtaksbrevEndringFraBeslutter,
     journalførNotatEndringFraBeslutter,
 } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -115,6 +116,7 @@ describe('journalførNotatEndringFraBeslutter', () => {
                     saksbehandler: false,
                     beslutter: true,
                 },
+                skalDistribuereVedtaksbrev: null,
             },
         });
 
@@ -122,6 +124,41 @@ describe('journalførNotatEndringFraBeslutter', () => {
             tidspunkt: '2025-01-21T10:00:00',
             saksbehandler: false,
             beslutter: true,
+        });
+    });
+});
+
+describe('distribuerVedtaksbrevEndringFraBeslutter', () => {
+    test('sammenligner beslutters valg med saksbehandlers lagrede valg', () => {
+        const behandling = meldekortbehandling({
+            status: MeldekortbehandlingStatus.UNDER_BESLUTNING,
+            skalDistribuereVedtaksbrev: false,
+        });
+
+        expect(distribuerVedtaksbrevEndringFraBeslutter(behandling, true, true)).toEqual({
+            saksbehandler: false,
+            beslutter: true,
+        });
+        expect(distribuerVedtaksbrevEndringFraBeslutter(behandling, false, true)).toBeNull();
+    });
+
+    test('viser lagret endring fra beslutter når beslutter ikke redigerer', () => {
+        const behandling = meldekortbehandling({
+            skalDistribuereVedtaksbrev: false,
+            beslutterEndringer: {
+                skalJournalføreNotat: null,
+                skalDistribuereVedtaksbrev: {
+                    tidspunkt: tilTidspunkt('2025-01-21T10:00:00'),
+                    saksbehandler: true,
+                    beslutter: false,
+                },
+            },
+        });
+
+        expect(distribuerVedtaksbrevEndringFraBeslutter(behandling, false, false)).toEqual({
+            tidspunkt: '2025-01-21T10:00:00',
+            saksbehandler: true,
+            beslutter: false,
         });
     });
 });

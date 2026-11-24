@@ -121,7 +121,8 @@ def main():
         "meldeperioder": [{"kjedeId": kjede["id"], "dager": dager_for_kjede(kjede, overrides)}],
         "begrunnelse": None,
         "tekstTilVedtaksbrev": None,
-        "skalSendeVedtaksbrev": False,
+        "skalJournalføreVedtaksbrev": False,
+        "skalDistribuereVedtaksbrev": False,
         "skalJournalføreNotat": False,
     }
 

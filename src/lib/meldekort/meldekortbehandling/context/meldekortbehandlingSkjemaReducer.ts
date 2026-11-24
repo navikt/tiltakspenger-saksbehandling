@@ -25,7 +25,8 @@ export const meldekortbehandlingSkjemaInitialState = (
             status: dag.status,
         })),
     })),
-    skalSendeVedtaksbrev: meldekortbehandling.skalSendeVedtaksbrev,
+    skalJournalføreVedtaksbrev: meldekortbehandling.skalJournalføreVedtaksbrev,
+    skalDistribuereVedtaksbrev: meldekortbehandling.skalDistribuereVedtaksbrev,
     skalJournalføreNotat: meldekortbehandling.skalJournalføreNotat,
     erPrioritert: meldekortbehandling.prioritering !== null,
 });
@@ -67,7 +68,13 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
         }
 
         case 'setSkalSendeVedtaksbrev': {
-            return { ...state, skalSendeVedtaksbrev: action.payload.skalSendeVedtaksbrev };
+            const { skalSendeVedtaksbrev } = action.payload;
+
+            return {
+                ...state,
+                skalJournalføreVedtaksbrev: skalSendeVedtaksbrev,
+                skalDistribuereVedtaksbrev: skalSendeVedtaksbrev,
+            };
         }
 
         case 'setSkalJournalføreNotat': {

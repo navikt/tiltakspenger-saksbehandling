@@ -11,6 +11,8 @@ const feilmeldinger: Record<string, string> = {
     må_ha_beslutter_rolle:
         'Ingen tilgang. Må ha beslutter-rolle for å kunne gjennomføre handlingen',
     for_mange_dager_utfylt: 'Det er fylt ut flere dager enn tillatt på dette meldekortet',
+    kan_ikke_distribuere_vedtaksbrev_uten_journalføring:
+        'Vedtaksbrevet kan ikke sendes til bruker når det ikke skal journalføres',
     støtter_ikke_delvis_innvilgelse_eller_avslag:
         'Vi støtter ikke å opprette en behandling som vil føre til delvis innvilgelse eller avslag',
     beslutter_og_saksbehandler_kan_ikke_være_lik:
