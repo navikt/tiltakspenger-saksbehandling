@@ -7,11 +7,7 @@ import {
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { useSak } from '~/lib/sak/SakContext';
 import { useSøknadsbehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import {
-    skalVarsleOmManglendeForhåndsutfylling,
-    synligeAvslagsgrunner,
-} from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
-import { useFeatureToggles } from '~/lib/_felles/context/FeatureTogglesContext';
+import { skalVarsleOmManglendeForhåndsutfylling } from '~/lib/rammebehandling/søknadsbehandling/avslagsgrunner/avslagsgrunnerUtils';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
@@ -20,7 +16,6 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const { behandling } = useSøknadsbehandling();
     const { avslagsgrunner, erReadonly, skalSendeVedtaksbrev } = useSøknadsbehandlingAvslagSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
-    const { avslagInnvilgetTiltakspengerToggle } = useFeatureToggles();
 
     const visManglendeForhåndsutfyllingVarsel =
         skalSendeVedtaksbrev &&
@@ -43,13 +38,11 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                         });
                     }}
                 >
-                    {synligeAvslagsgrunner(avslagInnvilgetTiltakspengerToggle, avslagsgrunner).map(
-                        (grunn) => (
-                            <Checkbox key={grunn} value={grunn} size={'small'}>
-                                {AvslagsgrunnTekst[grunn]}
-                            </Checkbox>
-                        ),
-                    )}
+                    {Object.values(Avslagsgrunn).map((grunn) => (
+                        <Checkbox key={grunn} value={grunn} size={'small'}>
+                            {AvslagsgrunnTekst[grunn]}
+                        </Checkbox>
+                    ))}
                 </CheckboxGroup>
                 {visManglendeForhåndsutfyllingVarsel && (
                     <InlineMessage status={'warning'} size={'small'}>
