@@ -4,21 +4,6 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { perioderErLike } from '~/utils/periode';
 
 /**
- * InnvilgetTiltakspenger skjules bak avslagInnvilgetTiltakspengerToggle til den er klar for prod.
- * En grunn som allerede er valgt vises likevel, slik at en lagret behandling viser det som faktisk er valgt.
- */
-export const synligeAvslagsgrunner = (
-    avslagInnvilgetTiltakspengerToggle: boolean,
-    valgteAvslagsgrunner: Avslagsgrunn[],
-): Avslagsgrunn[] =>
-    Object.values(Avslagsgrunn).filter(
-        (grunn) =>
-            grunn !== Avslagsgrunn.InnvilgetTiltakspenger ||
-            avslagInnvilgetTiltakspengerToggle ||
-            valgteAvslagsgrunner.includes(grunn),
-    );
-
-/**
  * Vedtaksbrevet oppgir periode og vedtaksdato for den tidligere innvilgelsen bare når søknadsperioden er lik hele perioden i ett innvilget vedtak.
  * Er vedtaket stanset eller opphørt for en del av perioden, eller har det opphold, må saksbehandler skrive dette i teksten til vedtaksbrevet.
  * Det samme gjelder når søknaden dekker flere vedtak, bare delvis overlapper ett, eller når saken ikke har noen innvilgelse.

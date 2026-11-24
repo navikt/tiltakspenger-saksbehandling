@@ -63,4 +63,3 @@ Sladdebanneret øverst på siden styres direkte av feltet `sladdes` fra saksbeha
 - For å teste mot ekte behandlinger lokalt kan du generere testdata med scriptene i [`scripts/testdata/`](scripts/testdata/). Kjør `./scripts/testdata/opprett-alt-digital.sh` (digital søknad) eller `./scripts/testdata/opprett-alt-papir.sh` (papirsøknad) for å opprette en sak med innvilget vedtak, en meldekortbehandling og en klagebehandling. Scriptene skriver ut et saksnummer du kan søke opp i frontend.
 - Krever at `LokalMain` i `tiltakspenger-saksbehandling-api` kjører på `http://localhost:8080`.
 - Full forklaring av stegene (scripts, curl og GUI fra A til Å) ligger i [`docs/opprette-behandlinger-lokalt.md`](docs/opprette-behandlinger-lokalt.md).
-
