@@ -253,6 +253,23 @@ describe('validerBarnetillegg', () => {
             ]);
         });
 
+        test('krever fnr, men ikke navn eller søknad, for barn fra folkeregisteret', () => {
+            const fraFolkeregisteret = (fødselsdato: string, fnr: string | null) =>
+                skjemaBarn(fødselsdato, {
+                    fnr: ikkeSladdet(fnr),
+                    fornavn: ikkeSladdet(null),
+                    etternavn: ikkeSladdet(null),
+                    kilde: BarnetilleggBarnKilde.FOLKEREGISTER,
+                    søknadId: null,
+                });
+            const medFnr = fraFolkeregisteret('2021-01-01', '12345678901');
+            const utenFnr = fraFolkeregisteret('2022-01-01', null);
+
+            expect(valider([valgtBarnFraSøknad, medFnr, utenFnr]).errors).toEqual([
+                'Barn (født 01.01.2022): Barnet mangler fødselsnummer fra folkeregisteret',
+            ]);
+        });
+
         test('avviser barn med sladdet fødselsdato', () => {
             const sladdetBarn = { ...valgtBarnFraSøknad, key: 'sladdet', fødselsdato: sladdet };
 

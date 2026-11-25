@@ -20,6 +20,7 @@ import {
     BarnetilleggBarnSkjema,
     effektivePerioderForSkjemaBarn,
     erBarnFraSaksbehandler,
+    kildeTekst,
     formaterBarnNavn,
     gyldigPeriodeForBarn,
     rettTilBarnetilleggPeriode,
@@ -87,9 +88,7 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
                                 variant={'outline'}
                                 data-color={erBarnFraSaksbehandler(barn) ? 'neutral' : 'info'}
                             >
-                                {erBarnFraSaksbehandler(barn)
-                                    ? 'Lagt til av saksbehandler'
-                                    : 'Fra søknad'}
+                                {kildeTekst[barn.kilde]}
                             </Tag>
                         </HStack>
                     </Checkbox>

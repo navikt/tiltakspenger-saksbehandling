@@ -121,8 +121,16 @@ export const formaterBarnNavn = (barn: BarnIdentitet): string => {
         .join(' ');
 };
 
+/** Barn saksbehandler har lagt til, enten manuelt eller fra folkeregisteret. */
 export const erBarnFraSaksbehandler = (barn: Pick<BarnetilleggBarn, 'kilde'>) =>
-    barn.kilde === BarnetilleggBarnKilde.SAKSBEHANDLER;
+    barn.kilde === BarnetilleggBarnKilde.SAKSBEHANDLER ||
+    barn.kilde === BarnetilleggBarnKilde.FOLKEREGISTER;
+
+export const kildeTekst: Record<BarnetilleggBarnKilde, string> = {
+    [BarnetilleggBarnKilde.SØKNAD]: 'Fra søknad',
+    [BarnetilleggBarnKilde.SAKSBEHANDLER]: 'Lagt til av saksbehandler',
+    [BarnetilleggBarnKilde.FOLKEREGISTER]: 'Fra folkeregisteret',
+};
 
 /** Perioden barnet har rett til barnetillegg: fra fødselsdatoen til og med dagen før barnet fyller 16 år. */
 export const rettTilBarnetilleggPeriode = (fødselsdato: Dato): Periode => ({

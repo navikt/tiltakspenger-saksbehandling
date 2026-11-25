@@ -20,6 +20,8 @@ export enum BarnetilleggVersjon {
 export enum BarnetilleggBarnKilde {
     SØKNAD = 'SØKNAD',
     SAKSBEHANDLER = 'SAKSBEHANDLER',
+    // Lagt til av saksbehandler fra folkeregisteret, og verifisert som søkers barn.
+    FOLKEREGISTER = 'FOLKEREGISTER',
 }
 
 export type BarnetilleggBarn = {

@@ -76,6 +76,10 @@ export const validerBarnetillegg = (
             if (!hentVerdi(barn.fornavn)?.trim() || !hentVerdi(barn.etternavn)?.trim()) {
                 feil('Fornavn og etternavn må fylles ut');
             }
+        } else if (barn.kilde === BarnetilleggBarnKilde.FOLKEREGISTER) {
+            if (!fnr) {
+                feil('Barnet mangler fødselsnummer fra folkeregisteret');
+            }
         } else if (!barn.søknadId) {
             feil('Barnet mangler søknaden det er hentet fra');
         }
