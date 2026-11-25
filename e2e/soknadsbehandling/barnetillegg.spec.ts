@@ -190,16 +190,10 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
         await velgInnvilgelseForFørsteKvartal(page);
 
         await page.getByRole('button', { name: 'Legg til barn' }).click();
+        await page.getByRole('radio', { name: 'Skriv inn manuelt' }).check();
         await page.getByRole('textbox', { name: 'Fornavn' }).fill('Nytt');
         await page.getByRole('textbox', { name: 'Etternavn' }).fill('Barnesen');
         await page.getByRole('textbox', { name: 'Fødselsdato' }).fill('15.02.2025');
-        // Tegn som ikke er siffer fjernes, mens ledende 0 beholdes
-        await page
-            .getByRole('textbox', { name: 'Fødselsnummer (valgfritt)' })
-            .fill('0 502a25-12345');
-        await expect(page.getByRole('textbox', { name: 'Fødselsnummer (valgfritt)' })).toHaveValue(
-            '05022512345',
-        );
         await page.getByRole('button', { name: 'Legg til', exact: true }).click();
 
         // Barnet er født i innvilgelsesperioden, og gir barnetillegg fra fødselsdatoen
@@ -241,7 +235,7 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                         perioder: null,
                     },
                     {
-                        fnr: '05022512345',
+                        fnr: null,
                         fornavn: 'Nytt',
                         mellomnavn: null,
                         etternavn: 'Barnesen',
