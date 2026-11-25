@@ -5,7 +5,7 @@ Dette repoet følger monorepo-konvensjonene i AGENTS.md og TypeScript/React-fron
 ## Pakkehåndtering
 
 - Repoet bruker **pnpm** (det finnes `pnpm-lock.yaml`). Bruk `pnpm add` / `pnpm remove`, ikke `npm install`.
-- `devDependencies` pinnes til **eksakte versjoner** (uten `^`). Følg samme mønster når du legger til nye.
+- `devDependencies` låses til **eksakte versjoner** (uten `^`). Følg samme mønster når du legger til nye.
 - Ikke legg til avhengigheter som ikke brukes i `src/`. Oppdater lockfilen når `package.json` endres.
 
 ## Testing
