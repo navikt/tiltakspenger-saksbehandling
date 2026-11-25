@@ -75,20 +75,6 @@ export const BehandlingBarnetillegg = ({ headerHandling, varsel }: Props) => {
                         {headerHandling}
                     </HStack>
                     {varsel}
-                    <Infokort variant={'info'} size={'small'}>
-                        <VStack gap={'space-8'}>
-                            <BodyLong size={'small'}>
-                                {
-                                    'Nytt: Du velger nå hvilke barn det innvilges barnetillegg for, i stedet for å registrere antall barn per periode. Barna hentes fra søknaden og tidligere vedtak, og du kan legge til barn selv.'
-                                }
-                            </BodyLong>
-                            <BodyLong size={'small'}>
-                                {
-                                    'Barnetillegget gis for hele innvilgelsesperioden, og avkortes automatisk for barn som blir født eller fyller 16 år i perioden. Du kan også velge egne perioder for hvert barn.'
-                                }
-                            </BodyLong>
-                        </VStack>
-                    </Infokort>
                 </VStack>
 
                 <BarnetilleggTidslinje
