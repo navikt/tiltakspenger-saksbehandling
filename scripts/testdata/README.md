@@ -90,6 +90,7 @@ Scriptene godtar bare syntetiske fødselsnumre: Navs serie fra Dolly og testnorg
 `finn-testbrukere.sh` hopper over andre rader uten å skrive dem ut.
 
 - `finn-testbrukere.sh [FANE ...]` – lister saker fra benken med saksnummer, fnr, oppdragsversjon (V2/V3 utledet av datoen i saksnummeret), fane og status.
+- `migrer-uten-kontrollsimulering.sh SAKSNUMMER ...` – migrerer flere V2-saker parallelt, opphever sperren straks uten kontrollsimulering og iverksetter et meldekort etter OK fra Hel Ved.
 - `sjekk-testbrukere.sh` – slår opp hver bruker i `.dev-testbrukere.json` (tiltak med rett på tiltakspenger fra `GET /tiltak` i soknad-api, og sak fra sb-api), lagrer svaret i fila og lister brukerne med søkbare tiltak. `V3-KLAR` er `ja` når brukeren ikke har sak og et tiltak startet minst fire uker tilbake og varer forbi kravfristen.
 - `send-soknad-dev.sh FNR [TILTAKSINDEKS]` – sender en søknad til soknad-api i dev som brukeren selv (TokenX-token fra tokengeneratoren) og venter til den er hos sb-api.
 - `fullfor-soknadsbehandling.sh SAKSNUMMER [FOM TOM]` – fører den nyeste søknadsbehandlingen fram til vedtak, også når den starter som automatisk behandling. Virker lokalt også.
@@ -111,6 +112,10 @@ MILJO=dev ./registrer-papir-soknad.sh <SAKSNUMMER>
 Dev bruker V3 for saker opprettet fra 2026-11-10 kl. 15, så eldre saker utbetales med V2.
 En ny sak på V2 i dev lages med `MILJO=dev ./hent-eller-opprett-sak.sh FNR V2` før søknaden sendes; finnes saken allerede, beholder den versjonen den har.
 Brukeren må ha en tiltaksdeltakelse som gir rett og har startet minst fire uker tilbake, ellers er meldeperiodene ikke klare.
+`migrer-uten-kontrollsimulering.sh` tar saksnumre fra argumenter eller stdin, skriver TSV til stdout og kjører migreringene med fem samtidige kall som standard.
+Etter en vellykket migrering kjører skriptet `fyll-og-iverksett-meldekort.sh` for samme sak; utbetalingen sendes videre av den planlagte jobben, som kjører hvert tiende sekund i dev.
+Skriptet krever at første meldeperiode kan iverksettes, og skal bare brukes mot fiktive testdata i dev.
+For eksempel kan du lagre resultatene med `MILJO=dev ./scripts/testdata/migrer-uten-kontrollsimulering.sh 202611111001 202611111002 > migrering.tsv`.
 `.dev-testbrukere.json` er gitignored og bygges fra tabellene på Confluence-sidene «Gamle testbrukere - 1» og «- 2», «Test for brukerstøtte - Ny vedtaksløsning for tiltakspenger» og «Test i Øst-Viken» under «Test i tiltakspenger».
 Fila har én oppføring per fnr med `fnr`, `navn` og `forekomster` (side og tabellkolonner), og `sjekk-testbrukere.sh` legger til `sjekk`.
 Nye brukere lages manuelt i Dolly og Modia etter oppskriften «Hvordan opprette testbrukere med tiltaksdeltakelse i Modia» på teamets Confluence-område; det gjelder også identbytte.
