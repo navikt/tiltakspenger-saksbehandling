@@ -6,10 +6,19 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/_lib.sh"
 
 usage() {
-    echo "Bruk: $(basename "$0") FNR [V2|V3]" >&2
+    echo "Bruk: $(basename "$0") FNR [V2|V3] [--med-opprettelse]" >&2
     echo "Oppdragsversjonen gjelder bare når saken opprettes, og avvises i prod." >&2
     exit 1
 }
+
+med_opprettelse=false
+if [[ $# -eq 2 && "$2" == "--med-opprettelse" ]]; then
+    med_opprettelse=true
+    set -- "$1"
+elif [[ $# -eq 3 && "$3" == "--med-opprettelse" ]]; then
+    med_opprettelse=true
+    set -- "$1" "$2"
+fi
 
 [[ $# -eq 1 || $# -eq 2 ]] || usage
 
@@ -32,4 +41,11 @@ PY
 response="$(http_saksbehandler PUT "/sak" "$body")"
 saksnummer="$(jval "$response" "saksnummer")"
 [[ -n "$saksnummer" ]] || fail "Mangler saksnummer i responsen fra PUT /sak."
-printf '%s\n' "$saksnummer"
+if [[ "$med_opprettelse" == true ]]; then
+    if ! opprettet="$(jval "$response" "opprettet" 2>/dev/null)" || [[ "$opprettet" != "true" && "$opprettet" != "false" ]]; then
+        fail "Mangler boolsk opprettet i responsen fra PUT /sak."
+    fi
+    printf 'SAKSNUMMER=%s\nOPPRETTET=%s\n' "$saksnummer" "$opprettet"
+else
+    printf '%s\n' "$saksnummer"
+fi
