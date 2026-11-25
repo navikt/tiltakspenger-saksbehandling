@@ -133,7 +133,7 @@ describe('BeregningOgSimuleringHeader', () => {
         expect(screen.getByText(beløpTekst(596))).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Vedtaket påvirker beregningen av 2 meldeperioder i perioden 06.01.2025 - 02.02.2025',
+                'Vedtaket påvirker beregningen av 2 meldeperioder i perioden 06.01.2025 - 02.02.2025 (uke 2 - 5)',
             ),
         ).toBeInTheDocument();
     });
@@ -146,7 +146,7 @@ describe('BeregningOgSimuleringHeader', () => {
 
         expect(
             screen.getByText(
-                'Vedtaket påvirker beregningen av 1 meldeperiode i perioden 06.01.2025 - 19.01.2025',
+                'Vedtaket påvirker beregningen av 1 meldeperiode i perioden 06.01.2025 - 19.01.2025 (uke 2 - 3)',
             ),
         ).toBeInTheDocument();
     });

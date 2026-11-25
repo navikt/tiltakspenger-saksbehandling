@@ -38,7 +38,7 @@ test.describe('Meldekortbehandling - validering', () => {
         // Sammenhengende ubesvarte dager grupperes i feilmeldingen
         const synligTekst = (tekst: string) => page.getByText(tekst).filter({ visible: true });
         await expect(synligTekst('Feil eller mangler i behandlingen')).toBeVisible();
-        await expect(synligTekst('Meldeperiode 06.01 - 19.01.2025')).toBeVisible();
+        await expect(synligTekst('Meldeperiode 06.01 - 19.01.2025 (uke 2 og 3)')).toBeVisible();
         await expect(synligTekst('07.01 - 12.01.2025: Status må besvares')).toBeVisible();
         await expect(synligTekst('14.01 - 19.01.2025: Status må besvares')).toBeVisible();
         await expect(page.getByText(/06\.01\.2025: Status må besvares/)).toHaveCount(0);

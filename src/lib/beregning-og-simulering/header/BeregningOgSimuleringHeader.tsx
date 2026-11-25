@@ -3,7 +3,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
-import { formaterPeriode } from '~/utils/date';
+import { formaterPeriode, ukenummerFraPeriode } from '~/utils/date';
 import { UtbetalingStatus } from '~/lib/beregning-og-simulering/header/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
@@ -61,7 +61,7 @@ export const BeregningOgSimuleringHeader = ({
                 <InlineMessage
                     status={'info'}
                     size={'small'}
-                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${formaterPeriode(periode)}`}</InlineMessage>
+                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${formaterPeriode(periode)} (uke ${ukenummerFraPeriode(periode)})`}</InlineMessage>
             )}
 
             {kanIkkeIverksetteUtbetaling && (

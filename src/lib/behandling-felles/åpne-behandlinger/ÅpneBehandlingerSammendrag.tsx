@@ -17,6 +17,7 @@ import { BehandlingStatusTags } from '~/lib/behandling-felles/status/BehandlingS
 import { KlagebehandlingStatusTag } from '~/lib/klage/tags/KlagebehandlingStatusTag';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { MeldeperioderTabellVisning } from '~/lib/meldekort/felles/meldeperioder/MeldeperioderTabellVisning';
 import { classNames } from '~/utils/classNames';
 
 import style from './ÅpneBehandlingerSammendrag.module.css';
@@ -110,7 +111,7 @@ type RadProps = {
     typeTekst: string;
     statusTag: React.ReactNode;
     opprettet: Tidspunkt;
-    periodeTekst?: string;
+    periodeTekst?: React.ReactNode;
     info?: string;
     lenke?: React.ReactNode;
 };
@@ -172,9 +173,12 @@ const propsForRad = (åpenBehandling: ÅpenBehandling, sak: SakProps): RadProps 
                         size={'small'}
                     />
                 ),
-                periodeTekst: meldeperioder
-                    .map((meldeperiode) => formaterPeriode(meldeperiode.periode))
-                    .join(', '),
+                periodeTekst: (
+                    <MeldeperioderTabellVisning
+                        meldeperioder={meldeperioder.map((meldeperiode) => meldeperiode.periode)}
+                        align={'start'}
+                    />
+                ),
                 lenke: (
                     <InternLenke href={meldekortbehandlingUrl(saksnummer, id)}>
                         {'Til behandlingen'}

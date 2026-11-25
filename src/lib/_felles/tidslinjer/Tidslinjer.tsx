@@ -10,7 +10,12 @@ import {
 import { BodyShort, Button, Heading, Timeline, VStack } from '@navikt/ds-react';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
-import { dateTilISOTekst, formaterDatotekst, formaterPeriode } from '~/utils/date';
+import {
+    dateTilISOTekst,
+    formaterDatotekst,
+    formaterMeldeperiode,
+    formaterPeriode,
+} from '~/utils/date';
 import { formatterBeløp } from '~/lib/_felles/utbetaling/beløp/beløpUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/lib/_felles/tidslinjer/useTidslinjeDateRange';
@@ -189,7 +194,7 @@ const FaktiskeTidslinjer = ({ sak }: { sak: SakProps }) => {
                                 <VStack gap={'space-12'}>
                                     <InfoElement
                                         navn={'Meldeperiode'}
-                                        verdi={`${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`}
+                                        verdi={formaterMeldeperiode(periode)}
                                     />
                                     <div>
                                         {barnetillegg > 0 && (

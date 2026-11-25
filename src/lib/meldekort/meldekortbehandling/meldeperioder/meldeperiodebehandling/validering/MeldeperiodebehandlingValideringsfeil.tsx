@@ -1,6 +1,11 @@
 import { meldeperiodeKjedeIdTilPeriode } from '~/utils/periode';
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, formaterPeriodeKort, nesteDag } from '~/utils/date';
+import {
+    formaterDatotekst,
+    formaterMeldeperiodeKort,
+    formaterPeriodeKort,
+    nesteDag,
+} from '~/utils/date';
 import {
     MeldekortDagValideringsfeil,
     MeldeperiodeSkjemaValideringsfeil,
@@ -20,7 +25,7 @@ export const MeldeperiodebehandlingValideringsfeil = ({ valideringsfeil, classNa
     return (
         <VStack gap={'space-4'} className={className}>
             <BodyShort weight={'semibold'}>
-                {`Meldeperiode ${formaterPeriodeKort(periode)}`}
+                {`Meldeperiode ${formaterMeldeperiodeKort(periode)}`}
             </BodyShort>
 
             {overordnedeFeil.map((feil) => (
