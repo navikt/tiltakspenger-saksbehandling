@@ -86,7 +86,9 @@ export type OppdaterBarnetilleggDTO = {
  */
 export type BarnetilleggKandidatDTO = Omit<BarnetilleggBarn, 'perioder'> & {
     // Opplysningene om barnet fra den nyeste søknaden barnet finnes i, eller null om barnet ikke finnes i en søknad.
-    søknadsopplysninger: Nullable<Pick<SøknadBarn, 'oppholderSegIEØSSpm' | 'oppholdssted'>>;
+    søknadsopplysninger: Nullable<
+        Pick<SøknadBarn, 'oppholderSegIEØSSpm' | 'oppholdssted' | 'kilde'>
+    >;
     // Barnet er bare aktuelt når det innvilges for en av disse tiltaksdeltakelsene.
     // Null når barnet er aktuelt uansett hvilke tiltaksdeltakelser det innvilges for.
     internDeltakelseIder: Nullable<string[]>;

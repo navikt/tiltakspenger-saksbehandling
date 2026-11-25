@@ -21,6 +21,7 @@ import {
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SladdbarVerdi } from '~/types/SladdetVerdi';
+import { SøknadBarnKilde } from '~/lib/søknad/søknadTyper';
 
 /** Et barn i barnetilleggskjemaet. `key` identifiserer barnet på tvers av kildene barnet kan hentes fra. */
 export type BarnetilleggBarnSkjema = BarnetilleggBarn & {
@@ -121,15 +122,52 @@ export const formaterBarnNavn = (barn: BarnIdentitet): string => {
         .join(' ');
 };
 
+/** Fnr beholdes som tekst, slik at en ledende 0 ikke forsvinner. */
+export const kunSiffer = (verdi: string): string => verdi.replace(/\D/g, '').slice(0, 11);
+
 /** Barn saksbehandler har lagt til, enten manuelt eller fra folkeregisteret. */
 export const erBarnFraSaksbehandler = (barn: Pick<BarnetilleggBarn, 'kilde'>) =>
     barn.kilde === BarnetilleggBarnKilde.SAKSBEHANDLER ||
     barn.kilde === BarnetilleggBarnKilde.FOLKEREGISTER;
 
-export const kildeTekst: Record<BarnetilleggBarnKilde, string> = {
-    [BarnetilleggBarnKilde.SØKNAD]: 'Fra søknad',
-    [BarnetilleggBarnKilde.SAKSBEHANDLER]: 'Lagt til av saksbehandler',
-    [BarnetilleggBarnKilde.FOLKEREGISTER]: 'Fra folkeregisteret',
+export type BarnKildeTag = {
+    tekst: string;
+    farge: 'info' | 'neutral' | 'success';
+};
+
+const fraSøknad: BarnKildeTag = { tekst: 'Fra søknad', farge: 'info' };
+const lagtTilAvSaksbehandler: BarnKildeTag = {
+    tekst: 'Lagt til av saksbehandler',
+    farge: 'neutral',
+};
+const fraFolkeregisteret: BarnKildeTag = { tekst: 'Fra folkeregisteret', farge: 'success' };
+const manueltRegistrert: BarnKildeTag = { tekst: 'Manuelt registrert', farge: 'neutral' };
+
+/**
+ * Taggene som viser hvor barnet kommer fra.
+ * Den første viser om barnet kom fra søknaden eller ble lagt til av saksbehandler.
+ * Den andre viser om opplysningene om barnet er hentet fra folkeregisteret eller registrert manuelt.
+ * For barn fra søknaden vises den andre bare når søknadsopplysningene sier hvor barnet kom fra.
+ */
+export const barnKildeTags = (
+    barn: Pick<BarnetilleggBarn, 'kilde'>,
+    søknadsopplysninger: Nullable<{ kilde: SøknadBarnKilde }>,
+): BarnKildeTag[] => {
+    switch (barn.kilde) {
+        case BarnetilleggBarnKilde.SØKNAD:
+            switch (søknadsopplysninger?.kilde) {
+                case SøknadBarnKilde.PDL:
+                    return [fraSøknad, fraFolkeregisteret];
+                case SøknadBarnKilde.Manuell:
+                    return [fraSøknad, manueltRegistrert];
+                default:
+                    return [fraSøknad];
+            }
+        case BarnetilleggBarnKilde.SAKSBEHANDLER:
+            return [lagtTilAvSaksbehandler, manueltRegistrert];
+        case BarnetilleggBarnKilde.FOLKEREGISTER:
+            return [lagtTilAvSaksbehandler, fraFolkeregisteret];
+    }
 };
 
 /** Perioden barnet har rett til barnetillegg: fra fødselsdatoen til og med dagen før barnet fyller 16 år. */

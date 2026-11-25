@@ -4,6 +4,7 @@ import {
     BarnetilleggBarnSkjema,
     erSammeBarn,
     formaterBarnNavn,
+    kunSiffer,
     tilBarnetilleggBarnSkjema,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -143,6 +144,3 @@ const tilBarn = (person: Personopplysninger): BarnetilleggBarnSkjema =>
         },
         sladdbarTekst(person.fnr),
     );
-
-// Beholdes som tekst slik at ledende 0 ikke forsvinner.
-const kunSiffer = (verdi: string): string => verdi.replace(/\D/g, '').slice(0, 11);

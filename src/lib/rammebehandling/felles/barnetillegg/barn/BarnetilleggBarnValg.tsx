@@ -19,8 +19,7 @@ import { BarnetilleggKandidat } from '~/lib/rammebehandling/felles/barnetillegg/
 import {
     BarnetilleggBarnSkjema,
     effektivePerioderForSkjemaBarn,
-    erBarnFraSaksbehandler,
-    kildeTekst,
+    barnKildeTags,
     formaterBarnNavn,
     gyldigPeriodeForBarn,
     rettTilBarnetilleggPeriode,
@@ -83,13 +82,16 @@ export const BarnetilleggBarnValg = ({ kandidat }: Props) => {
                     >
                         <HStack gap={'space-8'} align={'center'}>
                             <span>{navn}</span>
-                            <Tag
-                                size={'xsmall'}
-                                variant={'outline'}
-                                data-color={erBarnFraSaksbehandler(barn) ? 'neutral' : 'info'}
-                            >
-                                {kildeTekst[barn.kilde]}
-                            </Tag>
+                            {barnKildeTags(barn, søknadsopplysninger).map(({ tekst, farge }) => (
+                                <Tag
+                                    key={tekst}
+                                    size={'xsmall'}
+                                    variant={'outline'}
+                                    data-color={farge}
+                                >
+                                    {tekst}
+                                </Tag>
+                            ))}
                         </HStack>
                     </Checkbox>
 

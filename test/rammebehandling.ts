@@ -264,7 +264,11 @@ export const barnetilleggKandidat = (
         fødselsdato: barn.fødselsdato,
         kilde: barn.kilde,
         søknadId: barn.søknadId,
-        søknadsopplysninger: { oppholderSegIEØSSpm: { svar: 'JA' }, oppholdssted: 'NORGE' },
+        søknadsopplysninger: {
+            oppholderSegIEØSSpm: { svar: 'JA' },
+            oppholdssted: 'NORGE',
+            kilde: SøknadBarnKilde.PDL,
+        },
         internDeltakelseIder: null,
         fraGjeldendeVedtak: false,
         ...overstyringer,
@@ -285,6 +289,7 @@ export const barnetilleggKandidaterFraSøknad = (søknad: Søknad): Barnetillegg
             søknadsopplysninger: {
                 oppholderSegIEØSSpm: barn.oppholderSegIEØSSpm,
                 oppholdssted: barn.oppholdssted,
+                kilde: barn.kilde,
             },
             internDeltakelseIder: null,
             fraGjeldendeVedtak: false,

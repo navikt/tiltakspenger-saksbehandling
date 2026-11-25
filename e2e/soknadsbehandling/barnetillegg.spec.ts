@@ -58,6 +58,8 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
         // Barnet fra søknaden er forhåndsvalgt, med hele innvilgelsesperioden
         const barnet = page.getByRole('checkbox', { name: /Barn Barnesen/ });
         await expect(barnet).toBeChecked();
+        // Søkeren hentet barnet fra folkeregisteret i søknaden
+        await expect(barnet).toHaveAccessibleName(/Fra søknad\s*Fra folkeregisteret/);
         await expect(page.getByRole('radio', { name: 'Hele innvilgelsesperioden' })).toBeChecked();
         await expect(
             page.getByText('Gir barnetillegg i perioden: 01.01.2025 - 31.03.2025'),
@@ -191,13 +193,32 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
 
         await page.getByRole('button', { name: 'Legg til barn' }).click();
         await page.getByRole('radio', { name: 'Skriv inn manuelt' }).check();
+        await expect(
+            page.getByText('Opplysningene om barnet kontrolleres ikke mot folkeregisteret.', {
+                exact: false,
+            }),
+        ).toBeVisible();
         await page.getByRole('textbox', { name: 'Fornavn' }).fill('Nytt');
         await page.getByRole('textbox', { name: 'Etternavn' }).fill('Barnesen');
         await page.getByRole('textbox', { name: 'Fødselsdato' }).fill('15.02.2025');
+
+        // Fødselsnummeret er valgfritt, men må være 11 siffer når det er fylt ut
+        const fnr = page.getByRole('textbox', { name: 'Fødselsnummer (valgfritt)' });
+        await fnr.fill('123');
+        await page.getByRole('button', { name: 'Legg til', exact: true }).click();
+        await expect(page.getByText('Fødselsnummer må være 11 siffer')).toBeVisible();
+
+        // Bare sifre beholdes, inkludert ledende 0
+        await fnr.fill('0 502a25-12345');
+        await expect(fnr).toHaveValue('05022512345');
         await page.getByRole('button', { name: 'Legg til', exact: true }).click();
 
         // Barnet er født i innvilgelsesperioden, og gir barnetillegg fra fødselsdatoen
-        await expect(page.getByRole('checkbox', { name: /Nytt Barnesen/ })).toBeChecked();
+        const nyttBarn = page.getByRole('checkbox', { name: /Nytt Barnesen/ });
+        await expect(nyttBarn).toBeChecked();
+        await expect(nyttBarn).toHaveAccessibleName(
+            /Lagt til av saksbehandler\s*Manuelt registrert/,
+        );
         await expect(
             page.getByText('Gir barnetillegg i perioden: 15.02.2025 - 31.03.2025'),
         ).toBeVisible();
@@ -235,7 +256,7 @@ test.describe('Søknadsbehandling - barnetillegg', () => {
                         perioder: null,
                     },
                     {
-                        fnr: null,
+                        fnr: '05022512345',
                         fornavn: 'Nytt',
                         mellomnavn: null,
                         etternavn: 'Barnesen',

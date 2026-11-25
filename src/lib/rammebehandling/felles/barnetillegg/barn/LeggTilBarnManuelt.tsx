@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Button, HStack, TextField, VStack } from '@navikt/ds-react';
+import { Button, HStack, InfoCard, TextField, VStack } from '@navikt/ds-react';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { v4 as uuidv4 } from 'uuid';
 import {
     BarnetilleggBarnSkjema,
     erSammeBarn,
+    kunSiffer,
     tilBarnetilleggBarnSkjema,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggBarnUtils';
 import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -12,12 +14,14 @@ import { Dato } from '~/types/DatoTid';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 import { IkkeSladdetVerdi } from '~/types/SladdetVerdi';
+import { hentVerdi } from '~/utils/sladdetVerdi';
 
 type Felter = {
     fornavn: string;
     mellomnavn: string;
     etternavn: string;
     fødselsdato: Nullable<Dato>;
+    fnr: string;
 };
 
 type Feil = Partial<Record<keyof Felter, string>>;
@@ -27,6 +31,7 @@ const TOMT_SKJEMA: Felter = {
     mellomnavn: '',
     etternavn: '',
     fødselsdato: null,
+    fnr: '',
 };
 
 type Props = {
@@ -35,7 +40,10 @@ type Props = {
     onAvbryt: () => void;
 };
 
-/** Barn som ikke finnes i folkeregisteret legges til med navn og fødselsdato, uten fnr. */
+/**
+ * Barn som ikke kan hentes fra folkeregisteret legges til med navn og fødselsdato.
+ * Fnr er valgfritt og kontrolleres ikke mot folkeregisteret.
+ */
 export const LeggTilBarnManuelt = ({ eksisterendeBarn, onLeggTil, onAvbryt }: Props) => {
     const [felter, setFelter] = useState<Felter>(TOMT_SKJEMA);
     const [feil, setFeil] = useState<Feil>({});
@@ -64,7 +72,7 @@ export const LeggTilBarnManuelt = ({ eksisterendeBarn, onLeggTil, onAvbryt }: Pr
 
         const barn = tilBarnetilleggBarnSkjema(
             {
-                fnr: { erSladdet: false, verdi: null },
+                fnr: tekst(felter.fnr),
                 fornavn: tekst(felter.fornavn),
                 mellomnavn: tekst(felter.mellomnavn),
                 etternavn: tekst(felter.etternavn),
@@ -76,8 +84,12 @@ export const LeggTilBarnManuelt = ({ eksisterendeBarn, onLeggTil, onAvbryt }: Pr
             uuidv4(),
         );
 
-        if (eksisterendeBarn.some((it) => erSammeBarn(it, barn))) {
-            setFeil({ fornavn: 'Barnet finnes allerede i listen' });
+        const eksisterende = eksisterendeBarn.find((it) => erSammeBarn(it, barn));
+
+        if (eksisterende) {
+            const erLiktFnr = !!hentVerdi(barn.fnr) && !!hentVerdi(eksisterende.fnr);
+
+            setFeil({ [erLiktFnr ? 'fnr' : 'fornavn']: 'Barnet finnes allerede i listen' });
             return;
         }
 
@@ -108,17 +120,35 @@ export const LeggTilBarnManuelt = ({ eksisterendeBarn, onLeggTil, onAvbryt }: Pr
                     onChange={(event) => oppdater({ etternavn: event.target.value })}
                 />
             </HStack>
-            <Datovelger
-                label={'Fødselsdato'}
-                size={'small'}
-                dropdownCaption={true}
-                maxDate={new Date()}
-                selected={felter.fødselsdato ?? undefined}
-                error={feil.fødselsdato}
-                onDateChange={(dato) =>
-                    oppdater({ fødselsdato: dato ? dateTilISOTekst(dato) : null })
-                }
-            />
+            <HStack gap={'space-16'} align={'start'}>
+                <Datovelger
+                    label={'Fødselsdato'}
+                    size={'small'}
+                    dropdownCaption={true}
+                    maxDate={new Date()}
+                    selected={felter.fødselsdato ?? undefined}
+                    error={feil.fødselsdato}
+                    onDateChange={(dato) =>
+                        oppdater({ fødselsdato: dato ? dateTilISOTekst(dato) : null })
+                    }
+                />
+                <TextField
+                    label={'Fødselsnummer (valgfritt)'}
+                    size={'small'}
+                    inputMode={'numeric'}
+                    autoComplete={'off'}
+                    value={felter.fnr}
+                    error={feil.fnr}
+                    onChange={(event) => oppdater({ fnr: kunSiffer(event.target.value) })}
+                />
+            </HStack>
+            <InfoCard data-color={'info'} size={'small'}>
+                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                    {
+                        'Opplysningene om barnet kontrolleres ikke mot folkeregisteret. Tilleggsinformasjon, som foreldrerelasjon og andre relevante opplysninger, kan dokumenteres i begrunnelsen.'
+                    }
+                </InfoCard.Message>
+            </InfoCard>
             <HStack gap={'space-12'}>
                 <Button type={'button'} variant={'primary'} size={'small'} onClick={leggTil}>
                     {'Legg til'}
@@ -146,6 +176,10 @@ const validerFelter = (felter: Felter): Feil => {
         feil.fødselsdato = 'Du må velge fødselsdato';
     } else if (felter.fødselsdato > dateTilISOTekst(new Date())) {
         feil.fødselsdato = 'Fødselsdato kan ikke være etter dagens dato';
+    }
+
+    if (felter.fnr && !/^\d{11}$/.test(felter.fnr)) {
+        feil.fnr = 'Fødselsnummer må være 11 siffer';
     }
 
     return feil;

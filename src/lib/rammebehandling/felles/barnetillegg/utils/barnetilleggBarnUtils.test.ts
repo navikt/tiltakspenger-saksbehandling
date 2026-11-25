@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import {
+    barnKildeTags,
     effektivePerioderForBarn,
     erSammeBarn,
     gyldigPeriodeForBarn,
@@ -11,6 +12,8 @@ import { barnetilleggBarn, barnetilleggPeriode, periode } from '~test/rammebehan
 import { tilDato } from '~/types/DatoTid';
 import { ikkeSladdet, sladdet } from '~test/sladdetVerdi';
 import { skjemaBarn } from '~test/barnetilleggSkjema';
+import { BarnetilleggBarnKilde } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { SøknadBarnKilde } from '~/lib/søknad/søknadTyper';
 
 const førsteHalvår = periode('2025-01-01', '2025-06-30');
 
@@ -232,5 +235,38 @@ describe('erSammeBarn', () => {
 
     test('er ikke samme barn når identiteten er sladdet', () => {
         expect(erSammeBarn(utenFnr, skjemaBarn('2020-01-01', { fnr: sladdet }))).toBe(false);
+    });
+});
+
+describe('barnKildeTags', () => {
+    const tekster = (
+        kilde: BarnetilleggBarnKilde,
+        søknadsopplysninger: Parameters<typeof barnKildeTags>[1],
+    ) => barnKildeTags({ kilde }, søknadsopplysninger).map((it) => it.tekst);
+
+    test('barn fra søknaden viser om søkeren hentet barnet fra folkeregisteret eller skrev det inn selv', () => {
+        expect(tekster(BarnetilleggBarnKilde.SØKNAD, { kilde: SøknadBarnKilde.PDL })).toEqual([
+            'Fra søknad',
+            'Fra folkeregisteret',
+        ]);
+        expect(tekster(BarnetilleggBarnKilde.SØKNAD, { kilde: SøknadBarnKilde.Manuell })).toEqual([
+            'Fra søknad',
+            'Manuelt registrert',
+        ]);
+    });
+
+    test('barn fra søknaden uten kjent opplysningskilde får bare søknadstaggen', () => {
+        expect(tekster(BarnetilleggBarnKilde.SØKNAD, null)).toEqual(['Fra søknad']);
+    });
+
+    test('barn lagt til av saksbehandler viser om det er hentet fra folkeregisteret eller skrevet inn manuelt', () => {
+        expect(tekster(BarnetilleggBarnKilde.FOLKEREGISTER, null)).toEqual([
+            'Lagt til av saksbehandler',
+            'Fra folkeregisteret',
+        ]);
+        expect(tekster(BarnetilleggBarnKilde.SAKSBEHANDLER, null)).toEqual([
+            'Lagt til av saksbehandler',
+            'Manuelt registrert',
+        ]);
     });
 });
