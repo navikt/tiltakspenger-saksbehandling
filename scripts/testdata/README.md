@@ -13,7 +13,7 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
 - `_lib.sh` – felles helpers (BASE_URL, tokens, HTTP, jval, server-sjekk, logging,
   `post_og_lagre_pdfer` for PDF-responser).
 - `seed-digital-soknad.sh` – oppretter digital søknad via `/dev/soknad/ny`.
-- `hent-eller-opprett-sak.sh FNR [V2|V3]` – oppretter/henter sak via `PUT /sak`; versjonen velger oppdragsversjon når saken opprettes, og avvises i prod.
+- `hent-eller-opprett-sak.sh FNR [V2|V3]` – oppretter/henter sak via `PUT /sak`; versjonen velger oppdragsversjon når saken opprettes, og avvises i produksjon.
 - `registrer-papir-soknad.sh SAKSNUMMER [SOKNADSTYPE]` – registrerer papirsøknad og returnerer behandling/id. Journalposten er `12345` lokalt og brukerens egen fra SAF i dev; `JOURNALPOST_ID` overstyrer. Tiltaket er fiktivt lokalt; i dev gjelder søknaden hele tiltaket med indeks `TILTAKSINDEKS` (default 0) blant tiltaksdeltakelsene på saken i sb-api (2023–2027) som gir rett. Mottatt dato er tiltakets startdato; `SOKNAD_MOTTATT_DATO` overstyrer.
 - `hent-sak.sh` – henter sak og evt. trekker ut felt via uttrykk.
 - `start-soknadsbehandling.sh` – oppretter søknadsbehandling for digital søknad.
@@ -99,6 +99,7 @@ Scriptene godtar bare syntetiske fødselsnumre: Navs serie fra Dolly og testnorg
 - `helved-v3-scenarioer.sh fullfor MANIFEST.tsv` – fører hver unike sak i første kolonne til VEDTATT og hopper over en allerede vedtatt nyeste papirsøknad.
 - `helved-v3-scenarioer.sh simuler-gate MANIFEST.tsv` – leser sakene og skriver blokkeringer uten å endre dem.
 - `helved-v3-scenarioer.sh utbetaling MANIFEST.tsv` – krever at alle sakene passerer den strengere simuleringsgaten før de seks V3-stegene kjøres sekvensielt.
+- `helved-v3-scenarioer.sh verifiser-helved MANIFEST.tsv` – leser Hel Ved-hendelser fra Peisschtappern med ett maskintoken, skriver en TSV-rapport per sak og er helt skrivebeskyttet.
 - Kontroller utbetalingene fra legacy-modusen og batchflyten i [Utbetalingsportalen](https://utbetalingsportalen.intern.dev.nav.no/oppdragsinfo/oppdrag) og [Peisen](https://peisen.intern.dev.nav.no/).
 
 En papirsøknad krever en journalpost i Joark som gjelder brukeren og har opprettelsesdato; sb-api sjekker det mot SAF.
@@ -115,9 +116,11 @@ MILJO=dev ./registrer-papir-soknad.sh <SAKSNUMMER>
 ```
 
 `hent-eller-opprett-sak.sh FNR [V2|V3] --med-opprettelse` skriver `SAKSNUMMER` og `OPPRETTET` fra samme respons; uten dette valget beholdes den gamle saksnummerutskriften.
-Dev bruker normalt V3 for saker opprettet fra 2026-11-10 kl. 15.
-Datoen i saksnummeret er bare et hint og skal ikke brukes alene som bevis for `VERSJON` i et manifest.
-Bruk `OPPDRAGSVERSJON` fra en vellykket `forbered-papir`-kjøring på en nyopprettet sak eller en annen autoritativ kontroll.
+`helved-v3-scenarioer.sh` bruker `GET /sak/{saksnummer}/oppdragstilstand` som autoritativ kilde for oppdragsversjon og sperrestatus i dev/lokalt.
+Skriptet stopper hvis dette endepunktet mangler, svarer 404 eller ikke kan tolkes sikkert.
+Datoen i saksnummeret er bare et hint og skal aldri brukes som versjonsbevis.
+Bruk `OPPDRAGSVERSJON` fra en vellykket `forbered-papir`-kjøring på en nyopprettet sak eller en annen autoritativ kontroll når du fyller manifestet.
+Oppdragstilstand-endepunktet brukes ikke i produksjon.
 En ny sak på V2 i dev lages med `MILJO=dev ./hent-eller-opprett-sak.sh FNR V2` før søknaden sendes; finnes saken allerede, beholder den versjonen den har.
 Brukeren må ha en tiltaksdeltakelse som gir rett og har startet minst fire uker tilbake, ellers er meldeperiodene ikke klare.
 `migrer-uten-kontrollsimulering.sh` tar saksnumre fra argumenter eller stdin, skriver TSV til stdout og kjører migreringene med fem samtidige kall som standard.
@@ -138,7 +141,8 @@ Bruk bare fiktive testbrukere i dev; Dolly- og Modia-oppretting, tokens og nødv
 `forbered-papir` krever eksplisitt `V2` eller `V3` og oppretter bare en ny sak.
 Skriptet avviser en eksisterende sak før papirregistrering fordi oppdragsversjonen ikke kan verifiseres fra `GET /sak`.
 Bruk legacy-modus eller `fullfor` for eksisterende saker først etter at oppdragsversjonen er verifisert fra en autoritativ kilde.
-En vellykket kjøring skriver ut `OPPDRAGSVERSJON=V2` eller `OPPDRAGSVERSJON=V3` som grunnlag for manifestets `VERSJON`.
+En vellykket kjøring skriver ut `OPPDRAGSVERSJON=V2` eller `OPPDRAGSVERSJON=V3` fra den eksplisitte opprettelsen, og dette er unntaket som ikke trenger oppdragstilstand-endepunktet.
+Bruk verdien som grunnlag for manifestets `VERSJON`.
 `TILTAKSINDEKS` påvirker bare registreringen av papirsøknaden.
 
 ```bash
@@ -146,6 +150,7 @@ En vellykket kjøring skriver ut `OPPDRAGSVERSJON=V2` eller `OPPDRAGSVERSJON=V3`
 ./helved-v3-scenarioer.sh fullfor papir-saker.tsv
 ./helved-v3-scenarioer.sh simuler-gate utbetaling.tsv
 ./helved-v3-scenarioer.sh utbetaling utbetaling.tsv
+./helved-v3-scenarioer.sh verifiser-helved helved-verifisering.tsv
 ```
 
 `fullfor` leser saksnummer fra første TSV-kolonne eller fra en linje med bare saksnummer, ignorerer tomme linjer og kommentarer som starter med `#`, og fjerner duplikater.
@@ -157,17 +162,31 @@ Den valgfrie overskriften må bruke de samme fire kolonnenavnene i samme rekkef�
 `VERSJON` er operatørens eksplisitte bevis og skal komme fra `OPPDRAGSVERSJON` på en nyopprettet sak eller en annen autoritativ kontroll, ikke fra datoen i saksnummeret alene.
 Kommentarer som starter med `#` og tomme linjer er tillatt, men feilformatert manifest avvises før saksbehandling.
 `simuler-gate` er skrivebeskyttet og kan kontrollere saker som allerede har meldekortbehandlinger.
+`simuler-gate` leser `GET /sak/{saksnummer}/oppdragstilstand` for hver rad, rapporterer blokkeringer per sak og stopper aldri tidlig i manifestet.
 `utbetaling` godtar bare `VERSJON=V3`, krever minst to kjeder, VEDTATT papirsøknadsbehandling, ingen åpne behandlinger og to hverdager som gir rett i hver av de første kjedene.
 `utbetaling` avviser også saker med eksisterende meldekortbehandlinger i de to første kjedene, slik at flyten bare kjører på urørte saker.
+`utbetaling` kjører den samme oppdragstilstand-kontrollen både i gaten og rett før første mutering i hver sak, og stopper hvis endepunktet ikke kan leses.
 Kjør først `simuler-gate` for å se blokkeringer uten mutering, og kjør deretter `utbetaling` først når alle radene er klare.
-`OPPDRAG_BEREGNET=ja` er operatørens bekreftelse på at den daglige Q1-beregningen er fullført, ikke en kontroll mot et Hel Ved-statusendepunkt.
-`SIMULERING_OK=ja` bekrefter en faktisk, separat simulering; skriptet finner ikke på eller kjører denne bekreftelsen.
-I Q1 beregner Oppdragssystemet vanligvis rundt kl. 17 Europe/Oslo, men tidspunktet varierer og det er ikke prod-lignende nedetid.
-Vent på en fullført daglig beregning etter VEDTATT, og kontroller resultatet med en faktisk simulering før utbetaling.
-Skriptet sover ikke til kl. 17 og poller ikke Oppdragssystemet.
+`OPPDRAG_BEREGNET=ja` betyr at operatøren har bekreftet at Oppdragssystemet fullførte en relevant Q1-beregning etter at saken ble `VEDTATT`.
+Beregningens faktiske tidsplan er ikke verifisert.
+Bekreftelsen er ikke en kontroll mot et Hel Ved-statusendepunkt.
+`SIMULERING_OK=ja` bekrefter at en faktisk, separat simulering viste forventet Q1-resultat.
+Før du iverksetter et meldekort, sender en V3-melding eller går videre med migrering, må simuleringen vise forventet Q1-resultat.
+Registrer forventet Q1-resultat og eventuelle avvik for hver sak og hvert scenario.
+Skriptet venter ikke på et klokkeslett og poller ikke Oppdragssystemet.
 Skriptet automatiserer ikke Dolly eller Modia, tokenfornyelse, eksterne statuser, duplikater, rekkefølgefeil, timeoutinjeksjon eller produksjon.
 Hel Ved V3-sakene er ikke migreringstester; normal migrering krever egne V2-saker og avklart historikk.
 Normal migrering skal aldri bruke `opphevSperrenStraks=true` eller `migrer-uten-kontrollsimulering.sh` som bevis.
+`verifiser-helved` leser en egen TSV med `SAKSNUMMER` og `FORVENTET_OK` og henter `GET /api/saker/<saksnummer>/TILTPENG` fra Peisschtappern for hver sak.
+`SAKSNUMMER` i verifiseringsmanifestet er det eksterne Hel Ved-saksnummeret, ikke id fra saksbehandlings-API-et på formen `sak_*`.
+Verifiseringen sjekker bare oppdragsstatus i Peisschtappern og er ikke bevis på simulering, migrering, driftsskjema eller fravær av personopplysninger.
+
+Eksempel på verifiseringsmanifest:
+
+```tsv
+SAKSNUMMER	FORVENTET_OK
+202611201001	1
+```
 
 ## PDF-forhåndsvisning: forutsetninger
 

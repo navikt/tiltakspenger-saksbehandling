@@ -18,19 +18,46 @@ fom="${2:-}"
 tom="${3:-}"
 require_server
 
-# Skriver SAK_ID BEHANDLING_ID STATUS INTERN_DELTAKELSE_ID FOM TOM for den nyeste søknadsbehandlingen.
+pinned_id_set="${SOKNADSBEHANDLING_ID+x}"
+pinned_id="${SOKNADSBEHANDLING_ID-}"
+
+# Skriver SAK_ID BEHANDLING_ID STATUS INTERN_DELTAKELSE_ID FOM TOM for valgt søknadsbehandling.
 nyeste_søknadsbehandling() {
-    python3 - "$(http_saksbehandler GET "/sak/${saksnummer}")" <<'PY'
-import json, sys
+    local sak_json
+    sak_json="$(http_saksbehandler GET "/sak/${saksnummer}")" || return 1
+    python3 - "$sak_json" "$pinned_id_set" "$pinned_id" <<'PY'
+import json
+import sys
+
 sak = json.loads(sys.argv[1])
-behandlinger = sorted(
-    (b for b in sak["rammebehandlinger"] if b["type"] == "SØKNADSBEHANDLING"),
-    key=lambda b: b["opprettet"],
-)
-if not behandlinger:
-    print(sak["sakId"], "-", "INGEN", "-", "-", "-")
-    sys.exit(0)
-b = behandlinger[-1]
+if sys.argv[2]:
+    pinned_id = sys.argv[3]
+    if not pinned_id:
+        print("FEIL: SOKNADSBEHANDLING_ID kan ikke være tom.", file=sys.stderr)
+        sys.exit(1)
+    behandlinger = [
+        behandling for behandling in sak["rammebehandlinger"]
+        if behandling.get("id") == pinned_id
+    ]
+    if not behandlinger:
+        print(f"FEIL: Behandling {pinned_id} finnes ikke på saken.", file=sys.stderr)
+        sys.exit(1)
+    if len(behandlinger) != 1:
+        print(f"FEIL: Behandling {pinned_id} finnes flere ganger på saken.", file=sys.stderr)
+        sys.exit(1)
+    b = behandlinger[0]
+    if b.get("type") != "SØKNADSBEHANDLING":
+        print(f"FEIL: Behandling {pinned_id} er ikke en SØKNADSBEHANDLING.", file=sys.stderr)
+        sys.exit(1)
+else:
+    behandlinger = sorted(
+        (b for b in sak["rammebehandlinger"] if b["type"] == "SØKNADSBEHANDLING"),
+        key=lambda b: b["opprettet"],
+    )
+    if not behandlinger:
+        print(sak["sakId"], "-", "INGEN", "-", "-", "-")
+        sys.exit(0)
+    b = behandlinger[-1]
 deltakelser = b["saksopplysninger"].get("tiltaksdeltagelse") or [{}]
 d = deltakelser[0]
 periode = d.get("periode") or {}
@@ -44,7 +71,10 @@ ta() {
 }
 
 for _ in $(seq 1 60); do
-    read -r sak_id behandling_id status intern_deltakelse_id deltakelse_fom deltakelse_tom <<<"$(nyeste_søknadsbehandling)"
+    if ! behandling_info="$(nyeste_søknadsbehandling)"; then
+        exit 1
+    fi
+    read -r sak_id behandling_id status intern_deltakelse_id deltakelse_fom deltakelse_tom <<<"$behandling_info"
     log "Søknadsbehandling ${behandling_id}: ${status}"
     case "$status" in
     INGEN | UNDER_AUTOMATISK_BEHANDLING) sleep 10 ;;
