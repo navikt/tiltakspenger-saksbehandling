@@ -106,6 +106,7 @@ export const brukersMeldekort = (
     overstyringer: Partial<BrukersMeldekortProps> = {},
 ): BrukersMeldekortProps => ({
     id: `meldekort_bruker_${fraOgMed}` as BrukersMeldekortId,
+    meldeperiodeId: `meldeperiode_${fraOgMed}_v1`,
     mottatt: tilTidspunkt(`${leggTilDager(fraOgMed, 13)}T18:00:00`),
     dager: meldeperiodeDatoer(fraOgMed).map((dato) => ({ dato, status: statusForDag(dato) })),
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK,

@@ -58,6 +58,8 @@ const BrukersMeldekortForMeldeperiode = ({
                 behandledeMeldekort.map((meldekort) => (
                     <BodyShort size={'small'} key={meldekort.id}>
                         {`Mottatt ${formaterTidspunkt(meldekort.mottatt)}`}
+                        {meldekort.meldeperiodeId !== meldeperiode.meldeperiodeId &&
+                            ' (gjelder en tidligere versjon av meldeperioden)'}
                     </BodyShort>
                 ))
             )}

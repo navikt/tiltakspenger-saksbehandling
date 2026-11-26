@@ -207,6 +207,7 @@ export const lagBrukersMeldekort = (
     overstyringer: Partial<BrukersMeldekortProps> = {},
 ): BrukersMeldekortProps => ({
     id: 'meldekort_bruker_1' as BrukersMeldekortId,
+    meldeperiodeId: 'meldeperiode_1',
     mottatt: tilTidspunkt('2025-01-20T08:00:00'),
     dager: DATOER.map((dato, index) => ({
         dato,

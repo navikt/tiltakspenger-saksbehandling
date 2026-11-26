@@ -23,7 +23,8 @@ import {
     lagMeldekortBackend,
     lagMeldekortbehandling,
 } from './meldekortTestUtils';
-import { tilDato } from '~/types/DatoTid';
+import { tilDato, tilTidspunkt } from '~/types/DatoTid';
+import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 const forventetLagring = (
     dager: OppdaterMeldekortbehandlingDTO['meldeperioder'][number]['dager'],
@@ -148,6 +149,44 @@ test.describe('Meldekortbehandling - saksbehandler', () => {
         await expect(
             page.getByRole('row').filter({ hasText: '06.01.2025 - 19.01.2025' }),
         ).toContainText('Klar til beslutning (1)');
+    });
+
+    test('merker meldekort fra bruker som gjelder en tidligere versjon av meldeperioden', async ({
+        page,
+        msw,
+    }) => {
+        const eldreMeldekort = lagBrukersMeldekort({
+            id: 'meldekort_bruker_0' as BrukersMeldekortId,
+            meldeperiodeId: 'meldeperiode_0',
+            mottatt: tilTidspunkt('2025-01-19T18:00:00'),
+        });
+        const gjeldendeMeldekort = lagBrukersMeldekort();
+        const behandling = lagMeldekortbehandling({ dager: fullUtfylling() });
+        const backend = lagMeldekortBackend({
+            behandlinger: [
+                {
+                    ...behandling,
+                    meldeperioder: behandling.meldeperioder.map((meldeperiode) => ({
+                        ...meldeperiode,
+                        brukersMeldekortIder: [eldreMeldekort.id, gjeldendeMeldekort.id],
+                    })),
+                },
+            ],
+            brukersMeldekort: [eldreMeldekort, gjeldendeMeldekort],
+        });
+        msw.use(...fellesHandlere(), ...backend.handlere);
+
+        await page.goto(behandlingUrl(behandling.id));
+        await forventOverskrift(page, 'Meldekortbehandling');
+        await gåTilSteg(page, /Begrunnelse, brev og innsending/);
+
+        await expect(
+            page.getByText(
+                'Mottatt 19.01.2025 kl. 18:00 (gjelder en tidligere versjon av meldeperioden)',
+                { exact: true },
+            ),
+        ).toBeVisible();
+        await expect(page.getByText('Mottatt 20.01.2025 kl. 08:00', { exact: true })).toBeVisible();
     });
 
     test('kan fylle ut dagene med hurtigutfylling, med både knapper og hurtigtaster', async ({

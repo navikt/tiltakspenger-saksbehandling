@@ -1,6 +1,7 @@
 import { Branded, Nullable } from '~/types/UtilTypes';
 import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
 import { Dato, Tidspunkt } from '~/types/DatoTid';
+import { MeldeperiodeId } from '~/lib/meldekort/typer/Meldeperiode';
 
 export type BrukersMeldekortId = Branded<MeldekortId, 'brukersMeldekortId'>;
 
@@ -24,6 +25,8 @@ export type BrukersMeldekortDagProps = {
 
 export type BrukersMeldekortProps = {
     id: BrukersMeldekortId;
+    /** Versjonen av meldeperioden bruker meldte for. */
+    meldeperiodeId: MeldeperiodeId;
     mottatt: Tidspunkt;
     dager: BrukersMeldekortDagProps[];
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus;
