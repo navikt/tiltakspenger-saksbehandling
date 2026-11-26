@@ -27,9 +27,8 @@ export type MeldekortbehandlingSkjemaState = {
 
 export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & {
     erReadonly: boolean;
-    /** Beslutter kan endre valget om journalføring av notat selv om resten av skjemaet er låst. */
     kanEndreSkalJournalføreNotat: boolean;
-    /** Beslutter kan endre valget om å sende vedtaksbrevet til bruker selv om resten av skjemaet er låst. */
+    kanEndreSkalJournalføreVedtaksbrev: boolean;
     kanEndreSkalDistribuereVedtaksbrev: boolean;
     begrunnelse: TextAreaInput;
     brevtekst: TextAreaInput;
@@ -42,7 +41,8 @@ export type MeldekortbehandlingSkjemaActions =
           { kjedeId: MeldeperiodeKjedeId; dagIndex: number; status: MeldekortbehandlingDagStatus }
       >
     | ReducerAction<'setDager', MeldeperiodeSkjema>
-    | ReducerAction<'setSkalSendeVedtaksbrev', { skalSendeVedtaksbrev: boolean }>
+    | ReducerAction<'setSkalJournalføreVedtaksbrev', { skalJournalføreVedtaksbrev: boolean }>
+    | ReducerAction<'setSkalDistribuereVedtaksbrev', { skalDistribuereVedtaksbrev: boolean }>
     | ReducerAction<'setSkalJournalføreNotat', { skalJournalføreNotat: boolean }>
     | ReducerAction<'setErPrioritert', { erPrioritert: boolean }>
     | ReducerAction<'leggTilMeldeperioder', { meldeperiodeKjeder: MeldeperiodekjedeProps[] }>

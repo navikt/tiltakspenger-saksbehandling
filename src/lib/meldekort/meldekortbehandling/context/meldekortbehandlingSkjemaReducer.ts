@@ -67,13 +67,22 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
             };
         }
 
-        case 'setSkalSendeVedtaksbrev': {
-            const { skalSendeVedtaksbrev } = action.payload;
+        case 'setSkalJournalføreVedtaksbrev': {
+            const { skalJournalføreVedtaksbrev } = action.payload;
 
             return {
                 ...state,
-                skalJournalføreVedtaksbrev: skalSendeVedtaksbrev,
-                skalDistribuereVedtaksbrev: skalSendeVedtaksbrev,
+                skalJournalføreVedtaksbrev,
+                skalDistribuereVedtaksbrev:
+                    skalJournalføreVedtaksbrev && state.skalDistribuereVedtaksbrev,
+            };
+        }
+
+        case 'setSkalDistribuereVedtaksbrev': {
+            return {
+                ...state,
+                skalDistribuereVedtaksbrev:
+                    state.skalJournalføreVedtaksbrev && action.payload.skalDistribuereVedtaksbrev,
             };
         }
 

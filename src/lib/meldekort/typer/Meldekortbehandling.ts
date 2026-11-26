@@ -149,7 +149,14 @@ export type MeldekortbehandlingProps = {
 /** Endringer beslutter har gjort i saksbehandlers valg, mens behandlingen er under beslutning. */
 export type MeldekortbehandlingBeslutterEndringer = {
     skalJournalføreNotat: Nullable<MeldekortbehandlingSkalJournalføreNotatEndring>;
+    skalJournalføreVedtaksbrev: Nullable<MeldekortbehandlingSkalJournalføreVedtaksbrevEndring>;
     skalDistribuereVedtaksbrev: Nullable<MeldekortbehandlingSkalDistribuereVedtaksbrevEndring>;
+};
+
+export type MeldekortbehandlingSkalJournalføreVedtaksbrevEndring = {
+    tidspunkt: Tidspunkt;
+    saksbehandler: boolean;
+    beslutter: boolean;
 };
 
 export type MeldekortbehandlingSkalDistribuereVedtaksbrevEndring = {

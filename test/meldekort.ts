@@ -174,7 +174,11 @@ export const meldekortbehandling = (
         skalJournalføreVedtaksbrev: true,
         skalDistribuereVedtaksbrev: false,
         skalJournalføreNotat: false,
-        beslutterEndringer: { skalJournalføreNotat: null, skalDistribuereVedtaksbrev: null },
+        beslutterEndringer: {
+            skalJournalføreNotat: null,
+            skalJournalføreVedtaksbrev: null,
+            skalDistribuereVedtaksbrev: null,
+        },
         prioritering: null,
         ventestatus: [],
         gyldigeKommandoer: [SaksbehandlerBehandlingKommando.Saksbehandle],

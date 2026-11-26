@@ -72,42 +72,72 @@ describe('meldekortbehandlingSkjemaReducer', () => {
         ).toEqual(state);
     });
 
-    test('setSkalSendeVedtaksbrev journalfører og distribuerer vedtaksbrevet samlet', () => {
-        const ikkeSendt: MeldekortbehandlingSkjemaState = {
+    test('setSkalJournalføreVedtaksbrev endrer kun journalføringen', () => {
+        const ikkeJournalført: MeldekortbehandlingSkjemaState = {
             ...state,
             skalJournalføreVedtaksbrev: false,
             skalDistribuereVedtaksbrev: false,
         };
 
-        const sendt = meldekortbehandlingSkjemaReducer(ikkeSendt, {
-            type: 'setSkalSendeVedtaksbrev',
-            payload: { skalSendeVedtaksbrev: true },
+        expect(
+            meldekortbehandlingSkjemaReducer(ikkeJournalført, {
+                type: 'setSkalJournalføreVedtaksbrev',
+                payload: { skalJournalføreVedtaksbrev: true },
+            }),
+        ).toEqual({
+            ...state,
+            skalJournalføreVedtaksbrev: true,
+            skalDistribuereVedtaksbrev: false,
         });
+    });
 
-        expect(sendt).toEqual({
+    test('setSkalJournalføreVedtaksbrev slår også av utsending når journalføring velges bort', () => {
+        const sendt: MeldekortbehandlingSkjemaState = {
             ...state,
             skalJournalføreVedtaksbrev: true,
             skalDistribuereVedtaksbrev: true,
-        });
+        };
+
         expect(
             meldekortbehandlingSkjemaReducer(sendt, {
-                type: 'setSkalSendeVedtaksbrev',
-                payload: { skalSendeVedtaksbrev: false },
-            }),
-        ).toEqual(ikkeSendt);
-    });
-
-    test('setSkalSendeVedtaksbrev slår av journalføring også når brevet kun var journalført', () => {
-        expect(
-            meldekortbehandlingSkjemaReducer(state, {
-                type: 'setSkalSendeVedtaksbrev',
-                payload: { skalSendeVedtaksbrev: false },
+                type: 'setSkalJournalføreVedtaksbrev',
+                payload: { skalJournalføreVedtaksbrev: false },
             }),
         ).toEqual({
             ...state,
             skalJournalføreVedtaksbrev: false,
             skalDistribuereVedtaksbrev: false,
         });
+    });
+
+    test('setSkalDistribuereVedtaksbrev endrer utsendingen når vedtaksbrevet journalføres', () => {
+        const sendt = meldekortbehandlingSkjemaReducer(state, {
+            type: 'setSkalDistribuereVedtaksbrev',
+            payload: { skalDistribuereVedtaksbrev: true },
+        });
+
+        expect(sendt).toEqual({ ...state, skalDistribuereVedtaksbrev: true });
+        expect(
+            meldekortbehandlingSkjemaReducer(sendt, {
+                type: 'setSkalDistribuereVedtaksbrev',
+                payload: { skalDistribuereVedtaksbrev: false },
+            }),
+        ).toEqual(state);
+    });
+
+    test('setSkalDistribuereVedtaksbrev kan ikke sende vedtaksbrevet uten journalføring', () => {
+        const ikkeJournalført: MeldekortbehandlingSkjemaState = {
+            ...state,
+            skalJournalføreVedtaksbrev: false,
+            skalDistribuereVedtaksbrev: false,
+        };
+
+        expect(
+            meldekortbehandlingSkjemaReducer(ikkeJournalført, {
+                type: 'setSkalDistribuereVedtaksbrev',
+                payload: { skalDistribuereVedtaksbrev: true },
+            }),
+        ).toEqual(ikkeJournalført);
     });
 
     test('oppdaterDagStatus endrer kun valgt dag i valgt meldeperiode, uten å mutere state', () => {

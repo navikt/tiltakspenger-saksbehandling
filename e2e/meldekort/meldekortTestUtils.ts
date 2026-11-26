@@ -279,7 +279,11 @@ export const lagMeldekortbehandling = ({
         skalJournalføreVedtaksbrev: false,
         skalDistribuereVedtaksbrev: false,
         skalJournalføreNotat: false,
-        beslutterEndringer: { skalJournalføreNotat: null, skalDistribuereVedtaksbrev: null },
+        beslutterEndringer: {
+            skalJournalføreNotat: null,
+            skalJournalføreVedtaksbrev: null,
+            skalDistribuereVedtaksbrev: null,
+        },
         prioritering: null,
         ventestatus: [],
         gyldigeKommandoer: [],

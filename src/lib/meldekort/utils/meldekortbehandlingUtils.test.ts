@@ -5,6 +5,7 @@ import {
     finnUbehandledeMeldekort,
     formaterMeldeperioder,
     distribuerVedtaksbrevEndringFraBeslutter,
+    journalførVedtaksbrevEndringFraBeslutter,
     journalførNotatEndringFraBeslutter,
 } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -116,6 +117,7 @@ describe('journalførNotatEndringFraBeslutter', () => {
                     saksbehandler: false,
                     beslutter: true,
                 },
+                skalJournalføreVedtaksbrev: null,
                 skalDistribuereVedtaksbrev: null,
             },
         });
@@ -124,6 +126,42 @@ describe('journalførNotatEndringFraBeslutter', () => {
             tidspunkt: '2025-01-21T10:00:00',
             saksbehandler: false,
             beslutter: true,
+        });
+    });
+});
+
+describe('journalførVedtaksbrevEndringFraBeslutter', () => {
+    test('sammenligner beslutters valg med saksbehandlers lagrede valg', () => {
+        const behandling = meldekortbehandling({
+            status: MeldekortbehandlingStatus.UNDER_BESLUTNING,
+            skalJournalføreVedtaksbrev: true,
+        });
+
+        expect(journalførVedtaksbrevEndringFraBeslutter(behandling, false, true)).toEqual({
+            saksbehandler: true,
+            beslutter: false,
+        });
+        expect(journalførVedtaksbrevEndringFraBeslutter(behandling, true, true)).toBeNull();
+    });
+
+    test('viser lagret endring fra beslutter når beslutter ikke redigerer', () => {
+        const behandling = meldekortbehandling({
+            skalJournalføreVedtaksbrev: false,
+            beslutterEndringer: {
+                skalJournalføreNotat: null,
+                skalJournalføreVedtaksbrev: {
+                    tidspunkt: tilTidspunkt('2025-01-21T10:00:00'),
+                    saksbehandler: true,
+                    beslutter: false,
+                },
+                skalDistribuereVedtaksbrev: null,
+            },
+        });
+
+        expect(journalførVedtaksbrevEndringFraBeslutter(behandling, false, false)).toEqual({
+            tidspunkt: '2025-01-21T10:00:00',
+            saksbehandler: true,
+            beslutter: false,
         });
     });
 });
@@ -147,6 +185,7 @@ describe('distribuerVedtaksbrevEndringFraBeslutter', () => {
             skalDistribuereVedtaksbrev: false,
             beslutterEndringer: {
                 skalJournalføreNotat: null,
+                skalJournalføreVedtaksbrev: null,
                 skalDistribuereVedtaksbrev: {
                     tidspunkt: tilTidspunkt('2025-01-21T10:00:00'),
                     saksbehandler: true,

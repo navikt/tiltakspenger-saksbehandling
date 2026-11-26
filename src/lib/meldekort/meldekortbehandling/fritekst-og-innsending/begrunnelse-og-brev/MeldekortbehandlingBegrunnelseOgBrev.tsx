@@ -11,12 +11,23 @@ import { JournalførNotatValg } from '~/lib/_felles/journalføring/JournalførNo
 import {
     distribuerVedtaksbrevEndringFraBeslutter,
     journalførNotatEndringFraBeslutter,
+    journalførVedtaksbrevEndringFraBeslutter,
 } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { EndringAvJournalførNotat } from '~/lib/_felles/journalføring/beslutterEndringAvJournalførNotat';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+
+import { Nullable } from '~/types/UtilTypes';
 
 import style from './MeldekortbehandlingBegrunnelseOgBrev.module.css';
 
 const jaNei = (valg: boolean) => (valg ? 'Ja' : 'Nei');
+
+const BeslutterEndring = ({ endring }: { endring: Nullable<EndringAvJournalførNotat> }) =>
+    endring && (
+        <Infokort variant={'info'} size={'small'}>
+            Beslutter endret valget fra {jaNei(endring.saksbehandler)} → {jaNei(endring.beslutter)}
+        </Infokort>
+    );
 
 export const MeldekortbehandlingBegrunnelseOgBrev = () => {
     const {
@@ -24,6 +35,7 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
         brevtekst,
         erReadonly,
         kanEndreSkalJournalføreNotat,
+        kanEndreSkalJournalføreVedtaksbrev,
         kanEndreSkalDistribuereVedtaksbrev,
         skalJournalføreVedtaksbrev,
         skalDistribuereVedtaksbrev,
@@ -32,6 +44,12 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
     const meldekortbehandling = useMeldekortbehandling();
 
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
+
+    const journalføringsendringFraBeslutter = journalførVedtaksbrevEndringFraBeslutter(
+        meldekortbehandling,
+        skalJournalføreVedtaksbrev,
+        erReadonly && kanEndreSkalJournalføreVedtaksbrev,
+    );
 
     const distribusjonsendringFraBeslutter = distribuerVedtaksbrevEndringFraBeslutter(
         meldekortbehandling,
@@ -106,30 +124,51 @@ export const MeldekortbehandlingBegrunnelseOgBrev = () => {
                     />
 
                     <HStack justify={'space-between'} align={'start'} gap={'space-16'} wrap={false}>
-                        <VStack className={style.brevvalg}>
-                            <Checkbox
-                                checked={skalJournalføreVedtaksbrev && skalDistribuereVedtaksbrev}
-                                readOnly={!kanEndreSkalDistribuereVedtaksbrev}
-                                size={'small'}
-                                description={
-                                    'Bruker får brevet på Ditt Nav eller i digital postkasse. Har bruker reservert seg mot digital kommunikasjon, sendes brevet som papirbrev.'
-                                }
-                                onChange={(e) =>
-                                    dispatch({
-                                        type: 'setSkalSendeVedtaksbrev',
-                                        payload: { skalSendeVedtaksbrev: e.target.checked },
-                                    })
-                                }
-                            >
-                                Journalfør og send vedtaksbrevet til bruker
-                            </Checkbox>
-                            {distribusjonsendringFraBeslutter && (
-                                <Infokort variant={'info'} size={'small'}>
-                                    Beslutter endret valget fra{' '}
-                                    {jaNei(distribusjonsendringFraBeslutter.saksbehandler)} →{' '}
-                                    {jaNei(distribusjonsendringFraBeslutter.beslutter)}
-                                </Infokort>
-                            )}
+                        <VStack className={style.brevvalg} gap={'space-8'}>
+                            <VStack>
+                                <Checkbox
+                                    checked={skalJournalføreVedtaksbrev}
+                                    readOnly={!kanEndreSkalJournalføreVedtaksbrev}
+                                    size={'small'}
+                                    onChange={(e) =>
+                                        dispatch({
+                                            type: 'setSkalJournalføreVedtaksbrev',
+                                            payload: {
+                                                skalJournalføreVedtaksbrev: e.target.checked,
+                                            },
+                                        })
+                                    }
+                                >
+                                    Journalfør vedtaksbrevet
+                                </Checkbox>
+                                <BeslutterEndring endring={journalføringsendringFraBeslutter} />
+                            </VStack>
+                            <VStack>
+                                <Checkbox
+                                    checked={
+                                        skalJournalføreVedtaksbrev && skalDistribuereVedtaksbrev
+                                    }
+                                    readOnly={!kanEndreSkalDistribuereVedtaksbrev}
+                                    disabled={!skalJournalføreVedtaksbrev}
+                                    size={'small'}
+                                    description={
+                                        skalJournalføreVedtaksbrev
+                                            ? 'Bruker får brevet på Ditt Nav eller i digital postkasse. Har bruker reservert seg mot digital kommunikasjon, sendes brevet som papirbrev.'
+                                            : 'Vedtaksbrevet må journalføres for å kunne sendes til bruker.'
+                                    }
+                                    onChange={(e) =>
+                                        dispatch({
+                                            type: 'setSkalDistribuereVedtaksbrev',
+                                            payload: {
+                                                skalDistribuereVedtaksbrev: e.target.checked,
+                                            },
+                                        })
+                                    }
+                                >
+                                    Send vedtaksbrevet til bruker
+                                </Checkbox>
+                                <BeslutterEndring endring={distribusjonsendringFraBeslutter} />
+                            </VStack>
                         </VStack>
 
                         <MeldekortbehandlingForhåndsvisBrev />

@@ -91,8 +91,8 @@ const Skjemafelter = () => {
                 type={'button'}
                 onClick={() =>
                     dispatch({
-                        type: 'setSkalSendeVedtaksbrev',
-                        payload: { skalSendeVedtaksbrev: true },
+                        type: 'setSkalDistribuereVedtaksbrev',
+                        payload: { skalDistribuereVedtaksbrev: true },
                     })
                 }
             >

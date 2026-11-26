@@ -69,6 +69,7 @@ const skjema = (
     erPrioritert: false,
     erReadonly: false,
     kanEndreSkalJournalføreNotat: true,
+    kanEndreSkalJournalføreVedtaksbrev: true,
     kanEndreSkalDistribuereVedtaksbrev: true,
     begrunnelse: fritekst(null),
     brevtekst: fritekst(null),
