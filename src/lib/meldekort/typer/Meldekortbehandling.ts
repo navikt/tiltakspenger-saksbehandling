@@ -103,7 +103,8 @@ type OppdaterMeldekortdagDTO = {
 export type MeldeperiodebehandlingProps = {
     meldeperiodeId: MeldeperiodeId;
     kjedeId: MeldeperiodeKjedeId;
-    brukersMeldekortId: BrukersMeldekortId[];
+    /** Meldekortene fra bruker som behandles, sortert eldst først. Oppdateres når behandlingen lagres. */
+    brukersMeldekortIder: BrukersMeldekortId[];
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning: Nullable<MeldeperiodeBeregningProps>;

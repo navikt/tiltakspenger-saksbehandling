@@ -117,6 +117,10 @@ test.describe('Meldekortbehandling - saksbehandler', () => {
         expect(backend.requester.oppdaterSimulering).toEqual(['meldekort_ny_1']);
 
         await gåTilSteg(page, /Begrunnelse, brev og innsending/);
+        await expect(
+            page.getByRole('heading', { name: 'Meldekort fra bruker som behandles' }),
+        ).toBeVisible();
+        await expect(page.getByText('Mottatt 20.01.2025 kl. 08:00', { exact: true })).toBeVisible();
         const sendTilBeslutning = page.getByRole('button', { name: 'Send til beslutning' });
         await expect(sendTilBeslutning).toBeEnabled();
 

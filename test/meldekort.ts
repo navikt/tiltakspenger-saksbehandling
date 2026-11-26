@@ -130,7 +130,7 @@ export const meldeperiodebehandling = (
 ): MeldeperiodebehandlingProps => ({
     meldeperiodeId: `meldeperiode_${fraOgMed}_v1`,
     kjedeId: kjedeIdFor(fraOgMed),
-    brukersMeldekortId: [],
+    brukersMeldekortIder: [],
     periode: meldeperiodePeriode(fraOgMed),
     dager: meldekortDager(fraOgMed),
     beregning: null,
