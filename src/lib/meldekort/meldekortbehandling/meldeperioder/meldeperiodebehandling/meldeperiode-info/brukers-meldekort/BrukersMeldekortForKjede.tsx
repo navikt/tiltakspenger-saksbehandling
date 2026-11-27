@@ -4,10 +4,12 @@ import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
 import { BrukersMeldekortUker } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortUker';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/meldekortForhåndsutfyllingUtils';
 import {
+    useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
+import { BrukersMeldekortBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortBehandlingStatus';
 import { useState } from 'react';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 
@@ -27,6 +29,7 @@ export const BrukersMeldekortForKjede = ({ meldeperiodeKjede }: Props) => {
     );
 
     const { erReadonly } = useMeldekortbehandlingSkjema();
+    const { id: gjeldendeBehandlingId } = useMeldekortbehandling();
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 
     if (!sisteBrukersMeldekort) {
@@ -66,6 +69,11 @@ export const BrukersMeldekortForKjede = ({ meldeperiodeKjede }: Props) => {
             </HStack>
 
             <BrukersMeldekortAutomatiskBehandlingStatus meldekort={valgtMeldekort} />
+
+            <BrukersMeldekortBehandlingStatus
+                meldekort={valgtMeldekort}
+                gjeldendeBehandlingId={gjeldendeBehandlingId}
+            />
 
             {!erReadonly && (
                 <Button

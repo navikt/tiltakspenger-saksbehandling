@@ -1,4 +1,6 @@
+import { Box, InfoCard, VStack } from '@navikt/ds-react';
 import { BenkTab } from '../typer/tabs';
+import { benkMeldekortTyper } from '../typer/meldekort';
 import { benkMeldekortTypeTekst, benkBehandlingsstatusTekst } from '../utils/benkTekster';
 import { useBenkFilterSkjema } from '../felles/filter/useBenkFilterSkjema';
 import BenkFilterSkjema from '../felles/filter/BenkFilterSkjema';
@@ -15,26 +17,52 @@ export const BenkMeldekortFilterSkjema = ({
     const { valgtFilter, endreFilter } = skjema;
 
     return (
-        <BenkFilterSkjema skjema={skjema} visKunTildeltMeg={true}>
-            <BenkFilterSelect
-                label={'Type'}
-                value={valgtFilter.type}
-                onChange={(type) => endreFilter({ type })}
-                alternativer={benkMeldekortTypeTekst}
-            />
+        <VStack gap={'space-16'}>
+            <BenkFilterSkjema skjema={skjema} visKunTildeltMeg={true}>
+                <BenkFilterSelect
+                    label={'Type'}
+                    value={valgtFilter.type}
+                    onChange={(type) => endreFilter({ type })}
+                    alternativer={benkMeldekortTypeTekst}
+                />
 
-            <BenkFilterSelect
-                label={'Status'}
-                value={valgtFilter.status}
-                onChange={(status) => endreFilter({ status })}
-                alternativer={benkBehandlingsstatusTekst}
-            />
+                <BenkFilterSelect
+                    label={'Status'}
+                    value={valgtFilter.status}
+                    onChange={(status) => endreFilter({ status })}
+                    alternativer={benkBehandlingsstatusTekst}
+                />
 
-            <BenkSaksbehandlerSelect
-                skjema={skjema}
-                saksbehandlere={saksbehandlere}
-                besluttere={besluttere}
-            />
-        </BenkFilterSkjema>
+                <BenkSaksbehandlerSelect
+                    skjema={skjema}
+                    saksbehandlere={saksbehandlere}
+                    besluttere={besluttere}
+                />
+            </BenkFilterSkjema>
+
+            {aktivtFilter.type === benkMeldekortTyper.MELDEKORT_TIL_ETTERKONTROLL && (
+                <MeldekortTilEtterkontrollInfo />
+            )}
+        </VStack>
     );
 };
+
+/**
+ * Forklarer den midlertidige kategorien når den er valgt.
+ * TODO: Fjernes sammen med kategorien når alle meldekortene er kontrollert.
+ */
+const MeldekortTilEtterkontrollInfo = () => (
+    <Box maxWidth={'80ch'}>
+        <InfoCard data-color={'info'} size={'small'}>
+            <InfoCard.Header>
+                <InfoCard.Title>{'Meldekort til etterkontroll'}</InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+                {
+                    'På grunn av en systemfeil ble korrigeringer som kom inn utenfor utbetalingssystemets åpningstid i noen tilfeller aldri vist i oversikten. '
+                }
+                {'Dette er en midlertidig kategori som viser disse meldekortene.'}
+            </InfoCard.Content>
+        </InfoCard>
+    </Box>
+);

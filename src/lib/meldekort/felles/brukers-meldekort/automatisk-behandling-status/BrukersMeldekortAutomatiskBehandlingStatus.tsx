@@ -74,6 +74,8 @@ const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
         MetaStatus.SkalIkkeBehandles,
     [MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK]:
         MetaStatus.SkalIkkeBehandles,
+    [MeldekortBehandletAutomatiskStatus.BEHANDLET_I_AVBRUTT_BEHANDLING]:
+        MetaStatus.SkalIkkeBehandles,
 
     [MeldekortBehandletAutomatiskStatus.UTDATERT_MELDEPERIODE]: MetaStatus.MeldekortFeil,
     [MeldekortBehandletAutomatiskStatus.FOR_MANGE_DAGER_REGISTRERT]: MetaStatus.MeldekortFeil,
@@ -110,6 +112,8 @@ const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
         'Korrigeringen kan ikke behandles automatisk, fordi en nyere innsending for meldeperioden allerede er behandlet',
     [MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK]:
         'Markert som skal ikke behandles automatisk',
+    [MeldekortBehandletAutomatiskStatus.BEHANDLET_I_AVBRUTT_BEHANDLING]:
+        'Meldekortet var med i en meldekortbehandling som ble avbrutt',
     [MeldekortBehandletAutomatiskStatus.UTDATERT_MELDEPERIODE]:
         'Meldekortet er basert på et utdatert vedtak',
     [MeldekortBehandletAutomatiskStatus.ER_UNDER_REVURDERING]: 'Saken er under revurdering',

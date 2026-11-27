@@ -1,6 +1,8 @@
 import { Branded, Nullable } from '~/types/UtilTypes';
 import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
 import { Dato, Tidspunkt } from '~/types/DatoTid';
+import { MeldeperiodeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export type BrukersMeldekortId = Branded<MeldekortId, 'brukersMeldekortId'>;
 
@@ -24,10 +26,14 @@ export type BrukersMeldekortDagProps = {
 
 export type BrukersMeldekortProps = {
     id: BrukersMeldekortId;
+    /** Versjonen av meldeperioden bruker meldte for. */
+    meldeperiodeId: MeldeperiodeId;
     mottatt: Tidspunkt;
     dager: BrukersMeldekortDagProps[];
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus;
     behandlesAutomatiskNesteForsøk: Nullable<Tidspunkt>;
+    /** Behandlingen som først behandlet meldekortet. Settes når behandlingen iverksettes eller avbrytes. */
+    behandlingId: Nullable<MeldekortbehandlingId>;
 };
 
 export enum MeldekortBehandletAutomatiskStatus {
@@ -47,6 +53,7 @@ export enum MeldekortBehandletAutomatiskStatus {
     TIDLIGERE_BEHANDLET_MANUELT = 'TIDLIGERE_BEHANDLET_MANUELT',
     NYERE_INNSENDING_ER_BEHANDLET = 'NYERE_INNSENDING_ER_BEHANDLET',
     UTDATERT_MELDEPERIODE = 'UTDATERT_MELDEPERIODE',
+    BEHANDLET_I_AVBRUTT_BEHANDLING = 'BEHANDLET_I_AVBRUTT_BEHANDLING',
     ER_UNDER_REVURDERING = 'ER_UNDER_REVURDERING',
     FOR_MANGE_DAGER_REGISTRERT = 'FOR_MANGE_DAGER_REGISTRERT',
     KAN_IKKE_MELDE_HELG = 'KAN_IKKE_MELDE_HELG',

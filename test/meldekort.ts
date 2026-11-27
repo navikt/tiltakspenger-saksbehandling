@@ -106,10 +106,12 @@ export const brukersMeldekort = (
     overstyringer: Partial<BrukersMeldekortProps> = {},
 ): BrukersMeldekortProps => ({
     id: `meldekort_bruker_${fraOgMed}` as BrukersMeldekortId,
+    meldeperiodeId: `meldeperiode_${fraOgMed}_v1`,
     mottatt: tilTidspunkt(`${leggTilDager(fraOgMed, 13)}T18:00:00`),
     dager: meldeperiodeDatoer(fraOgMed).map((dato) => ({ dato, status: statusForDag(dato) })),
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK,
     behandlesAutomatiskNesteForsøk: null,
+    behandlingId: null,
     ...overstyringer,
 });
 
@@ -130,7 +132,7 @@ export const meldeperiodebehandling = (
 ): MeldeperiodebehandlingProps => ({
     meldeperiodeId: `meldeperiode_${fraOgMed}_v1`,
     kjedeId: kjedeIdFor(fraOgMed),
-    brukersMeldekortId: [],
+    brukersMeldekortIder: [],
     periode: meldeperiodePeriode(fraOgMed),
     dager: meldekortDager(fraOgMed),
     beregning: null,

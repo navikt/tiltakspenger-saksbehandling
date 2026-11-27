@@ -5,6 +5,7 @@ import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/cont
 import { kanSaksbehandle } from '~/lib/saksbehandler/tilganger';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingKorrigeringUtfall } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/korrigering-utfall/MeldekortbehandlingKorrigeringUtfall';
+import { MeldekortbehandlingBrukersMeldekort } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/brukers-meldekort/MeldekortbehandlingBrukersMeldekort';
 import { MeldekortbehandlingPrioritering } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/prioritering/MeldekortbehandlingPrioritering';
 
 export const MeldekortbehandlingFritekstOgSendInn = () => {
@@ -26,6 +27,8 @@ export const MeldekortbehandlingFritekstOgSendInn = () => {
                     <Separator />
                 </>
             )}
+            <MeldekortbehandlingBrukersMeldekort />
+            <Separator />
             <MeldekortbehandlingBegrunnelseOgBrev />
             <Separator />
             <MeldekortbehandlingPrioritering />

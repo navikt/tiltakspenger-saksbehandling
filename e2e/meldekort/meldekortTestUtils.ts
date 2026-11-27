@@ -207,6 +207,7 @@ export const lagBrukersMeldekort = (
     overstyringer: Partial<BrukersMeldekortProps> = {},
 ): BrukersMeldekortProps => ({
     id: 'meldekort_bruker_1' as BrukersMeldekortId,
+    meldeperiodeId: 'meldeperiode_1',
     mottatt: tilTidspunkt('2025-01-20T08:00:00'),
     dager: DATOER.map((dato, index) => ({
         dato,
@@ -218,6 +219,7 @@ export const lagBrukersMeldekort = (
     })),
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK,
     behandlesAutomatiskNesteForsøk: null,
+    behandlingId: null,
     ...overstyringer,
 });
 
@@ -242,7 +244,7 @@ export const lagMeldekortbehandling = ({
     const meldeperiode: MeldeperiodebehandlingProps = {
         meldeperiodeId: 'meldeperiode_1',
         kjedeId: KJEDE_ID,
-        brukersMeldekortId: [],
+        brukersMeldekortIder: [],
         periode: KJEDE_PERIODE,
         dager,
         beregning,
@@ -448,6 +450,22 @@ export const lagMeldekortBackend = ({
 
     const hentBehandling = (id: string) => behandlinger.get(id as MeldekortbehandlingId) ?? null;
 
+    /**
+     * Brukers meldekort som ikke er knyttet til en annen behandling, slik backend knytter dem ved opprettelse og lagring.
+     * Avbrutte behandlinger regnes også som behandlet, slik som i backend.
+     */
+    const ubehandledeBrukersMeldekortIder = (id: MeldekortbehandlingId) => {
+        const behandlet = new Set(
+            sorterteBehandlinger()
+                .filter((behandling) => behandling.id !== id)
+                .flatMap((behandling) => behandling.meldeperioder)
+                .flatMap((meldeperiode) => meldeperiode.brukersMeldekortIder),
+        );
+        return brukersMeldekort
+            .map((meldekort) => meldekort.id)
+            .filter((meldekortId) => !behandlet.has(meldekortId));
+    };
+
     /** Oppdaterer en behandling og svarer med hele saken, slik backend gjør */
     const oppdaterOgSvar = (
         id: string,
@@ -490,6 +508,7 @@ export const lagMeldekortBackend = ({
                 ...nyBehandling,
                 meldeperioder: nyBehandling.meldeperioder.map((meldeperiode) => ({
                     ...meldeperiode,
+                    brukersMeldekortIder: ubehandledeBrukersMeldekortIder(id),
                     beregning: null,
                 })),
                 simulertBeregning: null,
@@ -511,6 +530,7 @@ export const lagMeldekortBackend = ({
                 return {
                     meldeperioder: behandling.meldeperioder.map((meldeperiode) => ({
                         ...meldeperiode,
+                        brukersMeldekortIder: ubehandledeBrukersMeldekortIder(behandling.id),
                         dager,
                         beregning,
                     })),
