@@ -61,7 +61,8 @@ export const benkMeldekortTypeTekst: Record<BenkMeldekortType, string> = {
     [benkMeldekortTyper.MELDEKORTBEHANDLING]: 'Meldekortbehandling',
     [benkMeldekortTyper.INNSENDT_MELDEKORT]: 'Innsendt meldekort',
     [benkMeldekortTyper.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
-    [benkMeldekortTyper.MELDEKORT_TIL_ETTERKONTROLL]: 'Meldekort til etterkontroll',
+    // TODO: Midlertidig kategori, fjernes når alle meldekortene er kontrollert.
+    [benkMeldekortTyper.MELDEKORT_TIL_ETTERKONTROLL]: 'Meldekort til etterkontroll (midlertidig)',
 } as const;
 
 export const benkTilbakekrevingKildeTekst: Record<BenkTilbakekrevingKilde, string> = {
