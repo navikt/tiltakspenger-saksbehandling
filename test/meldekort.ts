@@ -111,6 +111,7 @@ export const brukersMeldekort = (
     dager: meldeperiodeDatoer(fraOgMed).map((dato) => ({ dato, status: statusForDag(dato) })),
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK,
     behandlesAutomatiskNesteForsøk: null,
+    behandlingId: null,
     ...overstyringer,
 });
 

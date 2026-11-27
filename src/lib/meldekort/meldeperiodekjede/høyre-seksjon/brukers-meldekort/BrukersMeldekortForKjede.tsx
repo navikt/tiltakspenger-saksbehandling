@@ -5,15 +5,13 @@ import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/fell
 import { BrukersMeldekortUker } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortUker';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { BrukersMeldekortBehandling } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortBehandling';
-import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiodekjede';
 
 type Props = {
     meldekort: BrukersMeldekortProps;
-    kjede: MeldeperiodekjedeProps;
     className?: string;
 };
 
-export const BrukersMeldekortForKjede = ({ meldekort, kjede, className }: Props) => {
+export const BrukersMeldekortForKjede = ({ meldekort, className }: Props) => {
     const { mottatt } = meldekort;
 
     return (
@@ -23,7 +21,7 @@ export const BrukersMeldekortForKjede = ({ meldekort, kjede, className }: Props)
                     <DetaljHorisontal navn={'Mottatt:'}>
                         {formaterTidspunkt(mottatt)}
                     </DetaljHorisontal>
-                    <BrukersMeldekortBehandling meldekort={meldekort} kjede={kjede} />
+                    <BrukersMeldekortBehandling meldekort={meldekort} />
                 </VStack>
                 <BrukersMeldekortAutomatiskBehandlingStatus meldekort={meldekort} />
             </HStack>

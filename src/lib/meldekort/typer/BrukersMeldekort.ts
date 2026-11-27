@@ -2,6 +2,7 @@ import { Branded, Nullable } from '~/types/UtilTypes';
 import { MeldekortId } from '~/lib/meldekort/typer/MeldekortId';
 import { Dato, Tidspunkt } from '~/types/DatoTid';
 import { MeldeperiodeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export type BrukersMeldekortId = Branded<MeldekortId, 'brukersMeldekortId'>;
 
@@ -31,6 +32,8 @@ export type BrukersMeldekortProps = {
     dager: BrukersMeldekortDagProps[];
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus;
     behandlesAutomatiskNesteForsøk: Nullable<Tidspunkt>;
+    /** Behandlingen som først behandlet meldekortet. Settes når behandlingen iverksettes eller avbrytes. */
+    behandlingId: Nullable<MeldekortbehandlingId>;
 };
 
 export enum MeldekortBehandletAutomatiskStatus {

@@ -219,6 +219,7 @@ export const lagBrukersMeldekort = (
     })),
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus.SKAL_IKKE_BEHANDLES_AUTOMATISK,
     behandlesAutomatiskNesteForsøk: null,
+    behandlingId: null,
     ...overstyringer,
 });
 

@@ -36,7 +36,6 @@ import {
     MeldeperiodekjedeProps,
 } from '~/lib/meldekort/typer/Meldeperiodekjede';
 import { nonNullish } from '~/utils/object';
-import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps): SøknadsbehandlingInnvilgelse[] => {
     const { alleRammevedtak } = sak;
@@ -161,25 +160,6 @@ export const hentÅpneMeldekortbehandlinger = (sak: SakProps): Meldekortbehandli
     sak.åpneBehandlinger
         .filter((åpenBehandling) => åpenBehandling.type === ÅpenBehandlingType.MELDEKORT)
         .map((åpenBehandling) => hentMeldekortbehandling(sak, åpenBehandling.id));
-
-/**
- * Den første meldekortbehandlingen av kjeden som meldekortet fra bruker er knyttet til, også om den er åpen eller avbrutt.
- * Gir undefined om meldekortet ikke er knyttet til noen behandling.
- */
-export const finnBehandlingAvBrukersMeldekort = (
-    sak: SakProps,
-    kjede: MeldeperiodekjedeProps,
-    brukersMeldekortId: BrukersMeldekortId,
-): MeldekortbehandlingProps | undefined =>
-    kjede.meldekortbehandlingIder
-        .map((id) => hentMeldekortbehandling(sak, id))
-        .find((behandling) =>
-            behandling.meldeperioder.some(
-                (meldeperiode) =>
-                    meldeperiode.kjedeId === kjede.id &&
-                    meldeperiode.brukersMeldekortIder.includes(brukersMeldekortId),
-            ),
-        );
 
 export const hentKlagebehandling = (sak: SakProps, klageId: KlageId): Klagebehandling => {
     return nonNullish(

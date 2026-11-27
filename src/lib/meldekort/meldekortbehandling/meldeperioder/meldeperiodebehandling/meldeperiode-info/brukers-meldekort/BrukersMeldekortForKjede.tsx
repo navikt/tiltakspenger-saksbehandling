@@ -72,7 +72,6 @@ export const BrukersMeldekortForKjede = ({ meldeperiodeKjede }: Props) => {
 
             <BrukersMeldekortBehandling
                 meldekort={valgtMeldekort}
-                kjede={meldeperiodeKjede}
                 gjeldendeBehandlingId={gjeldendeBehandlingId}
             />
 
