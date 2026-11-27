@@ -23,6 +23,7 @@ export const benkMeldekortTyper = {
     MELDEKORTBEHANDLING: BenkBehandlingstype.MELDEKORTBEHANDLING,
     INNSENDT_MELDEKORT: BenkBehandlingstype.INNSENDT_MELDEKORT,
     KORRIGERT_MELDEKORT: BenkBehandlingstype.KORRIGERT_MELDEKORT,
+    MELDEKORT_TIL_ETTERKONTROLL: BenkBehandlingstype.MELDEKORT_TIL_ETTERKONTROLL,
 } as const;
 
 export type BenkMeldekortType = (typeof benkMeldekortTyper)[keyof typeof benkMeldekortTyper];

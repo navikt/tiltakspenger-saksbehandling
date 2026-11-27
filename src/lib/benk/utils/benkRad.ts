@@ -24,6 +24,7 @@ export const benkPrioritering = (behandling: BenkBehandling): Nullable<Prioriter
         case BenkBehandlingstype.MELDEKORTBEHANDLING:
         case BenkBehandlingstype.INNSENDT_MELDEKORT:
         case BenkBehandlingstype.KORRIGERT_MELDEKORT:
+        case BenkBehandlingstype.MELDEKORT_TIL_ETTERKONTROLL:
             return behandling.prioritering;
         default:
             return null;

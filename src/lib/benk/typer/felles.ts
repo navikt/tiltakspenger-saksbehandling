@@ -25,7 +25,7 @@ export enum BenkBehandlingsstatus {
 /**
  * Diskriminatoren backend setter på hver rad, slik at frontend kan mappe en rad
  * til riktig type uten å gjette på hvilke felter som finnes.
- * Meldekortfanens tre radtyper er egne verdier, så `type` alene sier nøyaktig hva raden er.
+ * Meldekortfanens radtyper er egne verdier, så `type` alene sier nøyaktig hva raden er.
  */
 export enum BenkBehandlingstype {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
@@ -33,6 +33,11 @@ export enum BenkBehandlingstype {
     MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
     INNSENDT_MELDEKORT = 'INNSENDT_MELDEKORT',
     KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
+    /**
+     * Midlertidig kategori for korrigeringer som feilaktig ble regnet som behandlet.
+     * TODO: Fjernes når alle er kontrollert.
+     */
+    MELDEKORT_TIL_ETTERKONTROLL = 'MELDEKORT_TIL_ETTERKONTROLL',
     KLAGEBEHANDLING = 'KLAGEBEHANDLING',
     TILBAKEKREVING = 'TILBAKEKREVING',
 }
