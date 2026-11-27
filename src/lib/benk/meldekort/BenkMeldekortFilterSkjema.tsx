@@ -1,4 +1,4 @@
-import { InfoCard, VStack } from '@navikt/ds-react';
+import { Box, InfoCard, VStack } from '@navikt/ds-react';
 import { BenkTab } from '../typer/tabs';
 import { benkMeldekortTyper } from '../typer/meldekort';
 import { benkMeldekortTypeTekst, benkBehandlingsstatusTekst } from '../utils/benkTekster';
@@ -52,19 +52,17 @@ export const BenkMeldekortFilterSkjema = ({
  * TODO: Fjernes sammen med kategorien når alle meldekortene er kontrollert.
  */
 const MeldekortTilEtterkontrollInfo = () => (
-    <InfoCard data-color={'info'} size={'small'}>
-        <InfoCard.Header>
-            <InfoCard.Title>{'Meldekort til etterkontroll'}</InfoCard.Title>
-        </InfoCard.Header>
-        <InfoCard.Content>
-            {
-                'Dette er korrigerte meldekort som kom inn før en tidligere innsending for samme periode var ferdig behandlet automatisk. '
-            }
-            {
-                'På grunn av en feil ble korrigeringene regnet som behandlet, og de ble derfor aldri vist i benken. '
-            }
-            {'Kontroller om korrigeringen endrer noe, og behandle meldekortet hvis det trengs. '}
-            {'Kategorien er midlertidig, og fjernes når alle meldekortene er kontrollert.'}
-        </InfoCard.Content>
-    </InfoCard>
+    <Box maxWidth={'80ch'}>
+        <InfoCard data-color={'info'} size={'small'}>
+            <InfoCard.Header>
+                <InfoCard.Title>{'Meldekort til etterkontroll'}</InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+                {
+                    'På grunn av en systemfeil ble korrigeringer som kom inn utenfor utbetalingssystemets åpningstid i noen tilfeller aldri vist i oversikten. '
+                }
+                {'Dette er en midlertidig kategori som viser disse meldekortene.'}
+            </InfoCard.Content>
+        </InfoCard>
+    </Box>
 );
