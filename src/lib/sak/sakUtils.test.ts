@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import {
+    finnBehandlingAvBrukersMeldekort,
     hentGjeldendeRammevedtak,
     hentGjeldendeRammevedtakIPeriode,
     hentKlagebehandling,
@@ -34,12 +35,18 @@ import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
+    MeldeperiodebehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Klagevedtak } from '~/lib/klage/typer/Klagevedtak';
 import { ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
 import { tilTidspunkt } from '~/types/DatoTid';
+import {
+    MeldeperiodeKjedeId,
+    MeldeperiodekjedeProps,
+} from '~/lib/meldekort/typer/Meldeperiodekjede';
+import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 // Oppslagene bryr seg bare om id-ene, så resten av feltene utelates for typer uten testdatabyggere
 const delvis = <T>(verdi: Partial<T>): T => verdi as T;
@@ -254,6 +261,51 @@ describe('hentÅpneMeldekortbehandlinger', () => {
         });
 
         expect(hentÅpneMeldekortbehandlinger(sakProps)).toEqual([åpen]);
+    });
+});
+
+describe('finnBehandlingAvBrukersMeldekort', () => {
+    const kjedeId = '2025-01-06/2025-01-19' as MeldeperiodeKjedeId;
+    const annenKjedeId = '2025-01-20/2025-02-02' as MeldeperiodeKjedeId;
+    const meldekortId = 'meldekort_bruker_1' as BrukersMeldekortId;
+
+    const behandling = (
+        id: string,
+        meldeperioder: {
+            kjedeId: MeldeperiodeKjedeId;
+            brukersMeldekortIder: BrukersMeldekortId[];
+        }[],
+    ) =>
+        delvis<MeldekortbehandlingProps>({
+            id: id as MeldekortbehandlingId,
+            meldeperioder: meldeperioder.map((it) => delvis<MeldeperiodebehandlingProps>(it)),
+        });
+
+    const finn = (...behandlinger: MeldekortbehandlingProps[]) => {
+        const kjede = delvis<MeldeperiodekjedeProps>({
+            id: kjedeId,
+            meldekortbehandlingIder: behandlinger.map((it) => it.id),
+        });
+        const sakProps = sak({
+            meldekortbehandlinger: Object.fromEntries(behandlinger.map((it) => [it.id, it])),
+        });
+        return finnBehandlingAvBrukersMeldekort(sakProps, kjede, meldekortId);
+    };
+
+    test('finner behandlingen av kjeden som meldekortet er knyttet til', () => {
+        const uten = behandling('meldekort_1', [{ kjedeId, brukersMeldekortIder: [] }]);
+        const med = behandling('meldekort_2', [{ kjedeId, brukersMeldekortIder: [meldekortId] }]);
+
+        expect(finn(med, uten)).toBe(med);
+    });
+
+    test('ser bort fra koblinger på andre kjeder', () => {
+        const annenKjede = behandling('meldekort_1', [
+            { kjedeId, brukersMeldekortIder: [] },
+            { kjedeId: annenKjedeId, brukersMeldekortIder: [meldekortId] },
+        ]);
+
+        expect(finn(annenKjede)).toBeUndefined();
     });
 });
 

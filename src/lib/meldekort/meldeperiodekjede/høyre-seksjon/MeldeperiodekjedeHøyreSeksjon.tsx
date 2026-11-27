@@ -85,6 +85,7 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                         .map((meldekort) => (
                             <BrukersMeldekortForKjede
                                 meldekort={meldekort}
+                                kjede={meldeperiodeKjede}
                                 className={style.panelElement}
                                 key={meldekort.id}
                             />
