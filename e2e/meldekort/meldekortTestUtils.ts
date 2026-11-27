@@ -450,15 +450,14 @@ export const lagMeldekortBackend = ({
 
     const hentBehandling = (id: string) => behandlinger.get(id as MeldekortbehandlingId) ?? null;
 
-    /** Brukers meldekort som ikke er knyttet til en annen behandling, slik backend knytter dem ved opprettelse og lagring */
+    /**
+     * Brukers meldekort som ikke er knyttet til en annen behandling, slik backend knytter dem ved opprettelse og lagring.
+     * Avbrutte behandlinger regnes også som behandlet, slik som i backend.
+     */
     const ubehandledeBrukersMeldekortIder = (id: MeldekortbehandlingId) => {
         const behandlet = new Set(
             sorterteBehandlinger()
-                .filter(
-                    (behandling) =>
-                        behandling.id !== id &&
-                        behandling.status !== MeldekortbehandlingStatus.AVBRUTT,
-                )
+                .filter((behandling) => behandling.id !== id)
                 .flatMap((behandling) => behandling.meldeperioder)
                 .flatMap((meldeperiode) => meldeperiode.brukersMeldekortIder),
         );
