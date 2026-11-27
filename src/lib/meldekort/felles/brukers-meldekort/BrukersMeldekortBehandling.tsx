@@ -32,7 +32,7 @@ export const BrukersMeldekortBehandling = ({ meldekort, kjede, gjeldendeBehandli
     return (
         <HStack gap={'space-6'} align={'center'}>
             <BodyShort size={'small'} weight={'semibold'}>
-                {'Behandling:'}
+                {'Første behandling:'}
             </BodyShort>
             {id === gjeldendeBehandlingId ? (
                 <BodyShort size={'small'}>{'Denne behandlingen'}</BodyShort>

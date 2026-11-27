@@ -163,7 +163,7 @@ export const hentÅpneMeldekortbehandlinger = (sak: SakProps): Meldekortbehandli
         .map((åpenBehandling) => hentMeldekortbehandling(sak, åpenBehandling.id));
 
 /**
- * Meldekortbehandlingen av kjeden som meldekortet fra bruker er knyttet til, også om den er åpen eller avbrutt.
+ * Den første meldekortbehandlingen av kjeden som meldekortet fra bruker er knyttet til, også om den er åpen eller avbrutt.
  * Gir undefined om meldekortet ikke er knyttet til noen behandling.
  */
 export const finnBehandlingAvBrukersMeldekort = (
@@ -173,7 +173,7 @@ export const finnBehandlingAvBrukersMeldekort = (
 ): MeldekortbehandlingProps | undefined =>
     kjede.meldekortbehandlingIder
         .map((id) => hentMeldekortbehandling(sak, id))
-        .findLast((behandling) =>
+        .find((behandling) =>
             behandling.meldeperioder.some(
                 (meldeperiode) =>
                     meldeperiode.kjedeId === kjede.id &&

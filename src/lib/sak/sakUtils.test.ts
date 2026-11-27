@@ -299,6 +299,15 @@ describe('finnBehandlingAvBrukersMeldekort', () => {
         expect(finn(med, uten)).toBe(med);
     });
 
+    test('velger den første behandlingen når meldekortet er knyttet til flere', () => {
+        const første = behandling('meldekort_1', [
+            { kjedeId, brukersMeldekortIder: [meldekortId] },
+        ]);
+        const andre = behandling('meldekort_2', [{ kjedeId, brukersMeldekortIder: [meldekortId] }]);
+
+        expect(finn(første, andre)).toBe(første);
+    });
+
     test('ser bort fra koblinger på andre kjeder', () => {
         const annenKjede = behandling('meldekort_1', [
             { kjedeId, brukersMeldekortIder: [] },
