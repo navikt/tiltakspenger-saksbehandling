@@ -9,7 +9,7 @@ import {
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
-import { BrukersMeldekortBehandling } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortBehandling';
+import { BrukersMeldekortBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortBehandlingStatus';
 import { useState } from 'react';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
 
@@ -70,7 +70,7 @@ export const BrukersMeldekortForKjede = ({ meldeperiodeKjede }: Props) => {
 
             <BrukersMeldekortAutomatiskBehandlingStatus meldekort={valgtMeldekort} />
 
-            <BrukersMeldekortBehandling
+            <BrukersMeldekortBehandlingStatus
                 meldekort={valgtMeldekort}
                 gjeldendeBehandlingId={gjeldendeBehandlingId}
             />

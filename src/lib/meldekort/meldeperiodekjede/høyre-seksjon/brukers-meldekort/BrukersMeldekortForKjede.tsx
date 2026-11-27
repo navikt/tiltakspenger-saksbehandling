@@ -4,7 +4,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
 import { BrukersMeldekortUker } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortUker';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
-import { BrukersMeldekortBehandling } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortBehandling';
+import { BrukersMeldekortBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/BrukersMeldekortBehandlingStatus';
 
 type Props = {
     meldekort: BrukersMeldekortProps;
@@ -21,7 +21,7 @@ export const BrukersMeldekortForKjede = ({ meldekort, className }: Props) => {
                     <DetaljHorisontal navn={'Mottatt:'}>
                         {formaterTidspunkt(mottatt)}
                     </DetaljHorisontal>
-                    <BrukersMeldekortBehandling meldekort={meldekort} />
+                    <BrukersMeldekortBehandlingStatus meldekort={meldekort} />
                 </VStack>
                 <BrukersMeldekortAutomatiskBehandlingStatus meldekort={meldekort} />
             </HStack>
