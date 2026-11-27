@@ -4,6 +4,8 @@ import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling
 import { useSak } from '~/lib/sak/SakContext';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
+import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
+import { formaterTidspunkt } from '~/utils/date';
 
 type Props = {
     meldekort: BrukersMeldekortProps;
@@ -19,10 +21,16 @@ export const BrukersMeldekortBehandling = ({ meldekort, gjeldendeBehandlingId }:
         return null;
     }
 
+    const { godkjentTidspunkt, avbrutt } = hentMeldekortbehandling(sak, behandlingId);
+    // Meldekortet markeres også som behandlet når behandlingen avbrytes
+    const behandletTidspunkt = godkjentTidspunkt ?? avbrutt?.avbruttTidspunkt;
+
     return (
         <HStack gap={'space-6'} align={'center'}>
             <BodyShort size={'small'} weight={'semibold'}>
-                {'Første behandling:'}
+                {behandletTidspunkt
+                    ? `Først behandlet ${formaterTidspunkt(behandletTidspunkt)}`
+                    : 'Først behandlet'}
             </BodyShort>
             {behandlingId === gjeldendeBehandlingId ? (
                 <BodyShort size={'small'}>{'Denne behandlingen'}</BodyShort>
